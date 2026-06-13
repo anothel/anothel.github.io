@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Codex/Superpowers local planning artifacts
+.superpowers/
