@@ -27,18 +27,19 @@ jobs:
           node scripts/update-packages.mjs
           node scripts/update-repos.mjs
           node scripts/update-links.mjs
+          node scripts/update-manifest.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit updated data
         run: |
-          if git diff --quiet -- data/trends.json data/packages.json data/repos.json data/links.json; then
+          if git diff --quiet -- data/trends.json data/packages.json data/repos.json data/links.json data/manifest.json; then
             echo "No data changes"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/trends.json data/packages.json data/repos.json data/links.json
+          git add data/trends.json data/packages.json data/repos.json data/links.json data/manifest.json
           git commit -m "chore: update dashboard data"
           git push

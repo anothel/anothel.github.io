@@ -1,0 +1,46 @@
+{
+  "updated": "2026-06-14",
+  "generatedAt": "2026-06-14T11:52:02.398Z",
+  "modules": [
+    {
+      "id": "trends",
+      "title": "Tech trends",
+      "route": "trends/index.html",
+      "data": "data/trends.json",
+      "source": "Hacker News, GitHub, npm",
+      "status": "ok",
+      "count": 11,
+      "updated": "2026-06-14"
+    },
+    {
+      "id": "packages",
+      "title": "Package watchlist",
+      "route": "packages/index.html",
+      "data": "data/packages.json",
+      "source": "npm",
+      "status": "ok",
+      "count": 8,
+      "updated": "2026-06-14"
+    },
+    {
+      "id": "repos",
+      "title": "Repo watchlist",
+      "route": "repos/index.html",
+      "data": "data/repos.json",
+      "source": "GitHub",
+      "status": "ok",
+      "count": 6,
+      "updated": "2026-06-14"
+    },
+    {
+      "id": "links",
+      "title": "Links queue",
+      "route": "links/index.html",
+      "data": "data/links.json",
+      "source": "manual",
+      "status": "ok",
+      "count": 8,
+      "updated": "2026-06-14"
+    }
+  ]
+}

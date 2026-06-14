@@ -9,7 +9,8 @@ test("data update workflow runs every data updater", () => {
         "scripts/update-trends.mjs",
         "scripts/update-packages.mjs",
         "scripts/update-repos.mjs",
-        "scripts/update-links.mjs"
+        "scripts/update-links.mjs",
+        "scripts/update-manifest.mjs"
     ]) {
         assert.match(workflow, new RegExp(`node ${script.replace("/", "\\/")}`));
     }
@@ -20,7 +21,8 @@ test("data update workflow commits every generated data file", () => {
         "data/trends.json",
         "data/packages.json",
         "data/repos.json",
-        "data/links.json"
+        "data/links.json",
+        "data/manifest.json"
     ]) {
         assert.match(workflow, new RegExp(file.replace("/", "\\/")));
     }

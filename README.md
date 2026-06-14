@@ -11,11 +11,13 @@ Static home hub and small dashboards served with GitHub Pages.
 - `links/index.html`: curated reference queue
 - `css/site.css`: site-specific styles
 - `data/trends.json`: static seed data
+- `data/manifest.json`: module index and data freshness summary
 - `js/dashboard.js`: filtering and rendering
 - `scripts/update-trends.mjs`: updates trend data from HN, GitHub, and npm
 - `scripts/update-packages.mjs`: updates package watchlist data from npm
 - `scripts/update-repos.mjs`: updates repository watchlist data from GitHub
 - `scripts/update-links.mjs`: updates curated links data from local definitions
+- `scripts/update-manifest.mjs`: updates the module manifest from generated data files
 - `tests/trend-data.test.mjs`: trend data helper tests
 - `.github/workflows/update-trends.yml`: scheduled data update workflow
 - `404.html`: GitHub Pages fallback page
@@ -45,6 +47,7 @@ node scripts/update-trends.mjs
 node scripts/update-packages.mjs
 node scripts/update-repos.mjs
 node scripts/update-links.mjs
+node scripts/update-manifest.mjs
 ```
 
 The GitHub Actions workflow can also update all generated JSON data once per day.
@@ -56,6 +59,7 @@ node --test tests/trend-data.test.mjs
 node --test tests/package-data.test.mjs
 node --test tests/repo-data.test.mjs
 node --test tests/link-data.test.mjs
+node --test tests/manifest.test.mjs
 node --test tests/site-structure.test.mjs
 node --test tests/serve.test.mjs
 node --test tests/workflow.test.mjs
@@ -63,6 +67,7 @@ node --check scripts/update-trends.mjs
 node --check scripts/update-packages.mjs
 node --check scripts/update-repos.mjs
 node --check scripts/update-links.mjs
+node --check scripts/update-manifest.mjs
 node --check scripts/serve.mjs
 node --check js/dashboard.js
 node --check js/package-watchlist.js
