@@ -48,6 +48,16 @@ test("public page headers use stable single-line titles without a brand button",
     assert.match(styles, /\.topbar h1\s*{[^}]*text-overflow: ellipsis/s);
 });
 
+test("public pages avoid indefinite loading placeholders in checked-in HTML", () => {
+    for (const [path] of pages) {
+        const html = read(path);
+
+        assert.doesNotMatch(html, />\s*loading\s*</i);
+        assert.doesNotMatch(html, />\s*Loading data\s*</);
+        assert.doesNotMatch(html, /Loading data status/);
+    }
+});
+
 test("root page is a hub and trends page owns the dashboard", () => {
     const root = read("index.html");
     const trends = read("trends/index.html");
@@ -78,22 +88,18 @@ test("today page owns the full digest module", () => {
     assert.match(today, /href="..\/index\.html"/);
 });
 
-test("root module cards use the same base-card styling", () => {
-    const root = read("index.html");
-    const moduleCards = root.match(/class="module-card"/g) || [];
-
-    assert.equal(moduleCards.length, 5);
-    assert.doesNotMatch(root, /module-card-live/);
-});
-
-test("root module cards can load manifest metadata", () => {
+test("root page avoids duplicate module entry cards below primary navigation", () => {
     const root = read("index.html");
 
     assert.match(root, /type="module" src="js\/home\.js" data-source="data\/manifest\.json"/);
-    for (const id of ["today", "trends", "packages", "repos", "links"]) {
-        assert.match(root, new RegExp(`data-module-id="${id}"`));
-    }
-    assert.equal((root.match(/data-module-meta/g) || []).length, 5);
+    assert.doesNotMatch(root, /Entry points/);
+    assert.doesNotMatch(root, /class="hub-intro"/);
+    assert.doesNotMatch(root, /class="module-grid"/);
+    assert.doesNotMatch(root, /class="module-card"/);
+    assert.doesNotMatch(root, /data-module-/);
+    assert.doesNotMatch(styles, /\.module-grid/);
+    assert.doesNotMatch(styles, /\.module-card/);
+    assert.doesNotMatch(styles, /\.module-meta/);
 });
 
 test("root page exposes data overview and current signal slots", () => {
@@ -102,7 +108,8 @@ test("root page exposes data overview and current signal slots", () => {
     for (const hook of ["data-home-total", "data-home-live", "data-home-updated", "data-home-signals"]) {
         assert.match(root, new RegExp(hook));
     }
-    assert.match(root, /Today/);
+    assert.match(root, /Current signals/);
+    assert.match(root, /Open full digest/);
     assert.match(root, /Data overview/);
     assert.match(root, /class="today-grid"/);
     assert.match(root, /class="signal-card"/);
@@ -111,10 +118,9 @@ test("root page exposes data overview and current signal slots", () => {
     assert.match(styles, /\.signal-card/);
 });
 
-test("home module cards only brighten on hover", () => {
-    assert.match(styles, /\.module-card:hover/);
-    assert.match(styles, /\.module-card:hover\s*{[^}]*background: var\(--panel-strong\)/s);
-    assert.doesNotMatch(styles, /module-card-live/);
+test("home signal cards brighten on hover", () => {
+    assert.match(styles, /\.signal-card:hover/);
+    assert.match(styles, /\.signal-card:hover\s*{[^}]*background: var\(--panel-strong\)/s);
 });
 
 test("packages page owns the package watchlist module", () => {
@@ -122,6 +128,19 @@ test("packages page owns the package watchlist module", () => {
 
     assert.match(packages, /data-package-list/);
     assert.match(packages, /..\/js\/package-watchlist\.js/);
+});
+
+test("source wording distinguishes origin filters from data status", () => {
+    const trends = read("trends/index.html");
+
+    assert.match(trends, /Origin\s*<select data-source>/);
+    assert.match(trends, /All origins/);
+    for (const path of ["packages/index.html", "repos/index.html", "links/index.html"]) {
+        const html = read(path);
+
+        assert.match(html, /<span>Data status<\/span>/);
+        assert.doesNotMatch(html, /<span>Source<\/span>/);
+    }
 });
 
 test("links page owns the links queue module", () => {

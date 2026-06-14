@@ -152,18 +152,15 @@ main {
     gap: 22px;
 }
 
-.hub-intro,
 .module-detail {
     max-width: 680px;
 }
 
-.hub-intro h2,
 .module-detail h2 {
     margin-bottom: 8px;
     font-size: 1rem;
 }
 
-.hub-intro p,
 .module-detail p {
     margin-bottom: 0;
     color: var(--muted);
@@ -173,18 +170,11 @@ main {
 .rank-panel,
 .health-panel,
 .stat-card,
-.module-card,
 .trend-card {
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background: var(--panel);
     box-shadow: var(--shadow);
-}
-
-.module-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
 }
 
 .home-overview {
@@ -268,50 +258,6 @@ main {
 .signal-card strong {
     font-size: 1rem;
     line-height: 1.25;
-}
-
-.module-card {
-    display: grid;
-    gap: 14px;
-    min-height: 230px;
-    padding: 18px;
-    text-decoration: none;
-}
-
-.module-card:hover {
-    border-color: var(--accent-soft);
-    background: var(--panel-strong);
-}
-
-.module-card span {
-    justify-self: start;
-    min-height: 26px;
-    padding: 5px 8px 0;
-    border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 0.78rem;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.module-card h2 {
-    margin-bottom: 0;
-    font-size: 1.18rem;
-}
-
-.module-card p {
-    margin-bottom: 0;
-    color: var(--muted);
-}
-
-.module-meta {
-    color: var(--muted);
-    font-size: 0.82rem;
-}
-
-.module-card strong {
-    align-self: end;
 }
 
 .link-card {
@@ -621,7 +567,6 @@ select {
 
     .home-overview,
     .link-grid,
-    .module-grid,
     .today-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -640,7 +585,6 @@ select {
     .panel,
     .source-health-grid,
     .link-grid,
-    .module-grid,
     .dashboard-grid,
     .today-grid {
         grid-template-columns: 1fr;

@@ -10,17 +10,6 @@ function escapeHtml(value) {
         .replaceAll('"', "&quot;");
 }
 
-export function formatModuleMeta(module) {
-    const countLabel = `${module.count} ${module.count === 1 ? "item" : "items"}`;
-    return `${countLabel} | ${module.source} | updated ${module.updated}`;
-}
-
-export function formatModuleStatus(status) {
-    if (status === "ok") return "Live";
-    if (status === "error") return "Check";
-    return "Unknown";
-}
-
 export function buildHomeOverview(manifest) {
     const modules = manifest.modules || [];
 
@@ -97,33 +86,6 @@ export function renderSignalCards(signals) {
     `).join("");
 }
 
-export function applyManifest(root, manifest) {
-    const modulesById = new Map(manifest.modules.map((module) => [module.id, module]));
-    const overview = buildHomeOverview(manifest);
-    modulesById.set("today", {
-        id: "today",
-        status: overview.liveModules === overview.totalModules ? "ok" : "error",
-        count: overview.totalItems,
-        source: "all modules",
-        updated: overview.updated
-    });
-    let updatedCards = 0;
-
-    for (const card of root.querySelectorAll("[data-module-card]")) {
-        const module = modulesById.get(card.dataset.moduleId);
-        if (!module) continue;
-
-        const status = card.querySelector("[data-module-status]");
-        const meta = card.querySelector("[data-module-meta]");
-
-        if (status) status.textContent = formatModuleStatus(module.status);
-        if (meta) meta.textContent = formatModuleMeta(module);
-        updatedCards += 1;
-    }
-
-    return updatedCards;
-}
-
 function applyOverview(root, manifest) {
     const overview = buildHomeOverview(manifest);
     const total = root.querySelector("[data-home-total]");
@@ -162,7 +124,6 @@ async function init() {
         const response = await fetch(manifestUrl);
         if (!response.ok) return;
         const manifest = await response.json();
-        applyManifest(document, manifest);
         applyOverview(document, manifest);
         await applySignals(document, manifest);
     } catch {

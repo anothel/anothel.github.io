@@ -274,7 +274,7 @@ async function init() {
     state.sourceMeta = data.sourceMeta || [];
     state.isFallback = isFallback;
     els.updated.textContent = data.updated;
-    fillSelect(els.source, uniqueValues(data.items, "source"), "All sources");
+    fillSelect(els.source, uniqueValues(data.items, "source"), "All origins");
     fillSelect(els.category, uniqueValues(data.items, "category"), "All categories");
     bindEvents();
     render();

@@ -36,11 +36,6 @@
         </header>
 
         <main class="hub-main">
-            <section class="hub-intro" aria-labelledby="hub-title">
-                <h2 id="hub-title">Entry points</h2>
-                <p>Each area can grow independently: one static page, one data file, one update job when needed.</p>
-            </section>
-
             <section class="home-overview" aria-label="Data overview">
                 <article class="stat-card">
                     <span>Total items</span>
@@ -56,13 +51,13 @@
                 </article>
             </section>
 
-            <section class="home-today" aria-labelledby="today-title">
+            <section class="home-today" aria-labelledby="signals-title">
                 <div class="section-heading">
                     <div>
-                        <h2 id="today-title">Today</h2>
-                        <p>Top items from the dashboards, loaded from the same static data files.</p>
+                        <h2 id="signals-title">Current signals</h2>
+                        <p>Top items from the dashboards. The full digest lives in Today.</p>
                     </div>
-                    <a href="today/index.html">Open today</a>
+                    <a href="today/index.html">Open full digest</a>
                 </div>
                 <div class="today-grid" data-home-signals>
                     <a class="signal-card" href="trends/index.html">
@@ -102,44 +97,6 @@
                         <p>Reference queue</p>
                     </a>
                 </div>
-            </section>
-
-            <section class="module-grid" aria-label="Site modules">
-                <a class="module-card" href="today/index.html" data-module-card data-module-id="today">
-                    <span data-module-status>Live</span>
-                    <h2>Today digest</h2>
-                    <p>Full list of current signals from trends, packages, repos, and links.</p>
-                    <small class="module-meta" data-module-meta>Static data available.</small>
-                    <strong>Open digest</strong>
-                </a>
-                <a class="module-card" href="trends/index.html" data-module-card data-module-id="trends">
-                    <span data-module-status>Live</span>
-                    <h2>Tech trends</h2>
-                    <p>HN, GitHub, and npm signals ranked into a compact dashboard.</p>
-                    <small class="module-meta" data-module-meta>Static data available.</small>
-                    <strong>Open dashboard</strong>
-                </a>
-                <a class="module-card" href="packages/index.html" data-module-card data-module-id="packages">
-                    <span data-module-status>Live</span>
-                    <h2>Package watchlist</h2>
-                    <p>Focused npm packages, release pace, weekly download changes.</p>
-                    <small class="module-meta" data-module-meta>Static data available.</small>
-                    <strong>Open dashboard</strong>
-                </a>
-                <a class="module-card" href="repos/index.html" data-module-card data-module-id="repos">
-                    <span data-module-status>Live</span>
-                    <h2>Repo watchlist</h2>
-                    <p>GitHub projects worth tracking without turning the homepage into a portfolio.</p>
-                    <small class="module-meta" data-module-meta>Static data available.</small>
-                    <strong>Open dashboard</strong>
-                </a>
-                <a class="module-card" href="links/index.html" data-module-card data-module-id="links">
-                    <span data-module-status>Live</span>
-                    <h2>Links queue</h2>
-                    <p>Useful docs, articles, and tools collected as navigable reference.</p>
-                    <small class="module-meta" data-module-meta>Static data available.</small>
-                    <strong>Open queue</strong>
-                </a>
             </section>
         </main>
     </div>
