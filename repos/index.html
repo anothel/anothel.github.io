@@ -3,53 +3,58 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Planned GitHub repository watchlist for anothel.">
+    <meta name="description" content="GitHub repository watchlist for selected projects and activity signals.">
     <meta name="author" content="anothel">
     <link rel="canonical" href="https://anothel.github.io/repos/">
     <meta property="og:site_name" content="anothel">
     <meta property="og:title" content="Repo Watchlist - anothel">
-    <meta property="og:description" content="Planned GitHub repository watchlist for selected projects and activity signals.">
+    <meta property="og:description" content="GitHub repository watchlist for selected projects and activity signals.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://anothel.github.io/repos/">
     <title>Repo Watchlist - anothel</title>
     <link rel="stylesheet" href="../css/site.css">
+    <script defer src="../js/repo-watchlist.js"></script>
 </head>
 <body>
     <div class="shell hub-shell">
         <header class="topbar">
             <a class="brand" href="../index.html" aria-label="anothel home">anothel</a>
             <div>
-                <p class="eyebrow">Planned module</p>
+                <p class="eyebrow">Live module</p>
                 <h1>Repo watchlist.</h1>
             </div>
-            <p class="stamp">github signals</p>
+            <p class="stamp">Updated <span data-updated>loading</span></p>
         </header>
 
         <main class="hub-main">
-            <section class="module-detail" aria-labelledby="module-title">
-                <h2 id="module-title">Planned shape</h2>
-                <p>Selected repositories with stars, recent pushes, releases, topics, and direct GitHub links.</p>
+            <section class="stats-grid" aria-label="Repo watchlist stats">
+                <article class="stat-card">
+                    <span>Total</span>
+                    <strong data-total>-</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Top repo</span>
+                    <strong data-top-repo>-</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Source</span>
+                    <strong data-source-status>-</strong>
+                </article>
             </section>
 
-            <section class="module-grid" aria-label="Repo watchlist plan">
-                <article class="module-card">
-                    <span>Data</span>
-                    <h2>Repo activity</h2>
-                    <p>Track selected repos instead of broad GitHub search results.</p>
-                    <strong>Planned</strong>
-                </article>
-                <article class="module-card">
-                    <span>Data</span>
-                    <h2>Release signals</h2>
-                    <p>Show release recency, stars, forks, and topic labels.</p>
-                    <strong>Planned</strong>
-                </article>
-                <article class="module-card">
-                    <span>View</span>
-                    <h2>Project cards</h2>
-                    <p>Small cards for projects worth returning to.</p>
-                    <strong>Planned</strong>
-                </article>
+            <section class="rank-panel" aria-labelledby="repo-title">
+                <div class="panel-heading">
+                    <h2 id="repo-title">GitHub watchlist</h2>
+                    <p>Selected repositories, stars, and why they are tracked.</p>
+                </div>
+                <div class="watch-head" aria-hidden="true">
+                    <span>#</span>
+                    <span>Repository</span>
+                    <span>Category</span>
+                    <span>Stars</span>
+                    <span>Focus</span>
+                </div>
+                <div class="watch-list" data-repo-list></div>
             </section>
         </main>
     </div>

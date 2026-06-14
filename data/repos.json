@@ -1,0 +1,161 @@
+{
+  "updated": "2026-06-14",
+  "generatedAt": "2026-06-14T03:33:38.789Z",
+  "sourceMeta": {
+    "name": "GitHub",
+    "status": "ok",
+    "count": 6,
+    "updatedAt": "2026-06-14T03:33:38.789Z"
+  },
+  "repos": [
+    {
+      "rank": 1,
+      "name": "react/react",
+      "category": "UI",
+      "focus": "frontend runtime",
+      "stars": 245821,
+      "starsLabel": "245.8K",
+      "forksLabel": "51.1K",
+      "pushedAt": "2026-06-14",
+      "url": "https://github.com/react/react",
+      "summary": "The library for web and native user interfaces.",
+      "topics": [
+        "declarative",
+        "frontend",
+        "javascript",
+        "library",
+        "react",
+        "ui"
+      ]
+    },
+    {
+      "rank": 2,
+      "name": "n8n-io/n8n",
+      "category": "Automation",
+      "focus": "workflow automation",
+      "stars": 192410,
+      "starsLabel": "192.4K",
+      "forksLabel": "58.5K",
+      "pushedAt": "2026-06-14",
+      "url": "https://github.com/n8n-io/n8n",
+      "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "topics": [
+        "ai",
+        "apis",
+        "automation",
+        "cli",
+        "data-flow",
+        "development",
+        "integration-framework",
+        "integrations",
+        "ipaas",
+        "low-code",
+        "low-code-platform",
+        "mcp",
+        "mcp-client",
+        "mcp-server",
+        "n8n",
+        "no-code",
+        "self-hosted",
+        "typescript",
+        "workflow",
+        "workflow-automation"
+      ]
+    },
+    {
+      "rank": 3,
+      "name": "vercel/next.js",
+      "category": "Framework",
+      "focus": "React framework",
+      "stars": 139986,
+      "starsLabel": "140K",
+      "forksLabel": "31.2K",
+      "pushedAt": "2026-06-14",
+      "url": "https://github.com/vercel/next.js",
+      "summary": "The React Framework",
+      "topics": [
+        "blog",
+        "browser",
+        "compiler",
+        "components",
+        "hybrid",
+        "nextjs",
+        "node",
+        "react",
+        "server-rendering",
+        "ssg",
+        "static",
+        "static-site-generator",
+        "universal",
+        "vercel"
+      ]
+    },
+    {
+      "rank": 4,
+      "name": "microsoft/playwright",
+      "category": "Testing",
+      "focus": "browser automation",
+      "stars": 90898,
+      "starsLabel": "90.9K",
+      "forksLabel": "5.9K",
+      "pushedAt": "2026-06-14",
+      "url": "https://github.com/microsoft/playwright",
+      "summary": "Playwright is a framework for Web Testing and Automation. It allows testing Chromium, Firefox and WebKit with a single API. ",
+      "topics": [
+        "automation",
+        "chrome",
+        "chromium",
+        "e2e-testing",
+        "electron",
+        "end-to-end-testing",
+        "firefox",
+        "javascript",
+        "playwright",
+        "test",
+        "test-automation",
+        "testing",
+        "testing-tools",
+        "web",
+        "webkit"
+      ]
+    },
+    {
+      "rank": 5,
+      "name": "vitejs/vite",
+      "category": "Tooling",
+      "focus": "build tool",
+      "stars": 81454,
+      "starsLabel": "81.5K",
+      "forksLabel": "8.3K",
+      "pushedAt": "2026-06-13",
+      "url": "https://github.com/vitejs/vite",
+      "summary": "Next generation frontend tooling. It's fast!",
+      "topics": [
+        "build-tool",
+        "dev-server",
+        "frontend",
+        "hmr",
+        "vite"
+      ]
+    },
+    {
+      "rank": 6,
+      "name": "colinhacks/zod",
+      "category": "Validation",
+      "focus": "schema validation",
+      "stars": 42964,
+      "starsLabel": "43K",
+      "forksLabel": "2K",
+      "pushedAt": "2026-06-13",
+      "url": "https://github.com/colinhacks/zod",
+      "summary": "TypeScript-first schema validation with static type inference",
+      "topics": [
+        "runtime-validation",
+        "schema-validation",
+        "static-types",
+        "type-inference",
+        "typescript"
+      ]
+    }
+  ]
+}

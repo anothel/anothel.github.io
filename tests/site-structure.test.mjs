@@ -24,7 +24,7 @@ test("root page is a hub and trends page owns the dashboard", () => {
 });
 
 test("planned modules have reachable route pages", () => {
-    for (const route of ["repos", "links"]) {
+    for (const route of ["links"]) {
         const page = read(`${route}/index.html`);
         assert.match(page, /href="..\/index\.html"/);
         assert.match(page, /Planned/);
@@ -36,4 +36,11 @@ test("packages page owns the package watchlist module", () => {
 
     assert.match(packages, /data-package-list/);
     assert.match(packages, /..\/js\/package-watchlist\.js/);
+});
+
+test("repos page owns the repo watchlist module", () => {
+    const repos = read("repos/index.html");
+
+    assert.match(repos, /data-repo-list/);
+    assert.match(repos, /..\/js\/repo-watchlist\.js/);
 });
