@@ -18,7 +18,13 @@ Static home hub and small dashboards served with GitHub Pages.
 
 ## Local Preview
 
-Open `index.html` in a browser. No build step or dependency install is required.
+Use the local static server so nested routes and JSON fetches work the same way as GitHub Pages:
+
+```powershell
+node scripts/serve.mjs
+```
+
+Then open `http://127.0.0.1:58117/`.
 
 ## Publishing
 
@@ -39,7 +45,9 @@ The GitHub Actions workflow can also update `data/trends.json` once per day.
 ```powershell
 node --test tests/trend-data.test.mjs
 node --test tests/site-structure.test.mjs
+node --test tests/serve.test.mjs
 node --check scripts/update-trends.mjs
+node --check scripts/serve.mjs
 node --check js/dashboard.js
 ```
 
