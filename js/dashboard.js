@@ -178,8 +178,8 @@ function renderStats(items) {
 
 function renderSourceHealth() {
     els.dataMode.textContent = state.isFallback
-        ? "Fallback data loaded because JSON fetch failed."
-        : "Static JSON loaded from data/trends.json.";
+        ? "Showing fallback data because checked-in data was unavailable."
+        : "Checked-in data loaded. Scheduled workflow keeps it fresh.";
 
     els.sourceHealth.innerHTML = state.sourceMeta.map((source) => `
         <article class="source-health-card status-${source.status}">
@@ -207,7 +207,7 @@ function renderCards(items) {
                 <span>${item.score}</span>
                 <span>${item.velocity}</span>
             </div>
-            <a href="${item.url}">Open source</a>
+            <a href="${item.url}">Open item</a>
         </article>
     `).join("");
 }

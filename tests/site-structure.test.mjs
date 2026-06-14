@@ -108,6 +108,8 @@ test("root page exposes data overview and current signal slots", () => {
     for (const hook of ["data-home-total", "data-home-live", "data-home-updated", "data-home-signals"]) {
         assert.match(root, new RegExp(hook));
     }
+    assert.match(root, /A small desk for deciding what to open next\./);
+    assert.match(root, /Technical signals from HN, GitHub, npm, and saved references\./);
     assert.match(root, /Current signals/);
     assert.match(root, /Open full digest/);
     assert.match(root, /Data overview/);
@@ -130,11 +132,38 @@ test("packages page owns the package watchlist module", () => {
     assert.match(packages, /..\/js\/package-watchlist\.js/);
 });
 
+test("public page copy states concrete page purpose", () => {
+    assert.match(read("today/index.html"), /Today's technical brief\./);
+    assert.match(read("today/index.html"), /One searchable list from every tracked area\./);
+    assert.match(read("trends/index.html"), /What is moving across HN, GitHub, and npm\./);
+    assert.match(read("trends/index.html"), /Ranked movement with origin, category, and momentum\./);
+    assert.match(read("packages/index.html"), /npm packages worth watching\./);
+    assert.match(read("packages/index.html"), /Weekly download movement for tools that may be useful later\./);
+    assert.match(read("repos/index.html"), /GitHub projects with useful traction\./);
+    assert.match(read("repos/index.html"), /Stars, recent activity, and why each project is on the list\./);
+    assert.match(read("links/index.html"), /References worth keeping close\./);
+    assert.match(read("links/index.html"), /Docs, APIs, and tools that support future work\./);
+});
+
+test("public page copy avoids implementation-first labels", () => {
+    for (const [path] of pages) {
+        const html = read(path);
+
+        assert.doesNotMatch(html, /Live module/);
+        assert.doesNotMatch(html, /Static JSON status/);
+        assert.doesNotMatch(html, /Small dashboards for things worth watching/);
+        assert.doesNotMatch(html, /Top items from the dashboards/);
+        assert.doesNotMatch(html, />[^<]*watchlist\.[^<]*</i);
+    }
+});
+
 test("source wording distinguishes origin filters from data status", () => {
     const trends = read("trends/index.html");
 
     assert.match(trends, /Origin\s*<select data-source>/);
     assert.match(trends, /All origins/);
+    assert.match(trends, /<span>Origin<\/span>/);
+    assert.doesNotMatch(trends, /<span>Source<\/span>/);
     for (const path of ["packages/index.html", "repos/index.html", "links/index.html"]) {
         const html = read(path);
 

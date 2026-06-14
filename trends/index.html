@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Tech signals from Hacker News, GitHub, and npm, ranked and filtered.">
+    <meta name="description" content="Ranked movement with origin, category, and momentum.">
     <meta name="author" content="anothel">
     <link rel="canonical" href="https://anothel.github.io/trends/">
     <meta property="og:site_name" content="anothel">
     <meta property="og:title" content="Tech Trends - anothel">
-    <meta property="og:description" content="Tech signals from Hacker News, GitHub, and npm, ranked and filtered.">
+    <meta property="og:description" content="Ranked movement with origin, category, and momentum.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://anothel.github.io/trends/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Tech Trends - anothel">
-    <meta name="twitter:description" content="Tech signals from Hacker News, GitHub, and npm, ranked and filtered.">
+    <meta name="twitter:description" content="Ranked movement with origin, category, and momentum.">
     <title>Tech Trends - anothel</title>
     <link rel="stylesheet" href="../css/site.css">
     <script defer src="../js/dashboard.js" data-source="../data/trends.json"></script>
@@ -22,8 +22,8 @@
     <div class="shell">
         <header class="topbar">
             <div>
-                <p class="eyebrow">Responsive dashboard</p>
-                <h1>Tech signals, ranked and filtered.</h1>
+                <p class="eyebrow">Cross-source movement</p>
+                <h1>What is moving across HN, GitHub, and npm.</h1>
             </div>
             <p class="stamp">Updated <span data-updated>2026-06-14</span></p>
             <nav class="site-nav" aria-label="Primary">
@@ -38,7 +38,7 @@
 
         <aside class="sidebar" aria-label="Dashboard filters">
             <div class="panel">
-                <h2>Filters</h2>
+                <h2>Refine signals</h2>
                 <label>
                     Origin
                     <select data-source>
@@ -53,7 +53,7 @@
                 </label>
                 <label>
                     Search
-                    <input data-query type="search" placeholder="agent, npm, sqlite">
+                    <input data-query type="search" placeholder="agent, package, repository">
                 </label>
                 <label>
                     Sort
@@ -69,44 +69,44 @@
         <main>
             <section class="stats-grid" aria-label="Dashboard stats">
                 <article class="stat-card">
-                    <span>Total</span>
+                    <span>Signals</span>
                     <strong data-total>-</strong>
                 </article>
                 <article class="stat-card">
-                    <span>Top score</span>
+                    <span>Highest score</span>
                     <strong data-top-score>-</strong>
                 </article>
                 <article class="stat-card">
-                    <span>Top category</span>
+                    <span>Leading category</span>
                     <strong data-top-category>-</strong>
                 </article>
             </section>
 
             <section class="health-panel" aria-labelledby="health-title">
                 <div class="panel-heading">
-                    <h2 id="health-title">Data health</h2>
-                    <p data-data-mode>Static JSON status.</p>
+                    <h2 id="health-title">Data freshness</h2>
+                    <p data-data-mode>Checked-in data, refreshed by workflow.</p>
                 </div>
                 <div class="source-health-grid" data-source-health></div>
             </section>
 
             <section class="dashboard-grid" aria-label="Trend cards" data-grid>
                 <article class="trend-card">
-                    <h3>Static trend data</h3>
-                    <p>Trend cards render from checked-in JSON.</p>
+                    <h3>Ranked movement</h3>
+                    <p>Signals render from the checked-in data feed.</p>
                 </article>
             </section>
 
             <section class="rank-panel" aria-labelledby="rank-title">
                 <div class="panel-heading">
-                    <h2 id="rank-title">Ranked list</h2>
-                    <p>Same data, compact table-like view.</p>
+                    <h2 id="rank-title">Signal table</h2>
+                    <p>Compact view of the same ranked items.</p>
                 </div>
                 <div class="rank-head" aria-hidden="true">
                     <span>#</span>
                     <span>Signal</span>
                     <span>Category</span>
-                    <span>Source</span>
+                    <span>Origin</span>
                     <span>Score</span>
                 </div>
                 <div class="rank-list" data-table></div>

@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Full daily digest from anothel dashboards.">
+    <meta name="description" content="One searchable brief from every tracked technical signal.">
     <meta name="author" content="anothel">
     <link rel="canonical" href="https://anothel.github.io/today/">
     <meta property="og:site_name" content="anothel">
     <meta property="og:title" content="Today - anothel">
-    <meta property="og:description" content="Daily digest from trends, packages, repos, and links.">
+    <meta property="og:description" content="One searchable brief from every tracked technical signal.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://anothel.github.io/today/">
     <title>Today - anothel</title>
@@ -18,10 +18,10 @@
     <div class="shell">
         <header class="topbar">
             <div>
-                <p class="eyebrow">Daily digest</p>
-                <h1>Today</h1>
+                <p class="eyebrow">Full brief</p>
+                <h1>Today's technical brief.</h1>
             </div>
-            <p class="stamp">static data digest</p>
+            <p class="stamp">all tracked data</p>
             <nav class="site-nav" aria-label="Primary">
                 <a href="../index.html">Home</a>
                 <a href="../today/index.html" aria-current="page">Today</a>
@@ -34,35 +34,35 @@
 
         <aside class="sidebar">
             <section class="panel">
-                <h2>Filter</h2>
+                <h2>Narrow list</h2>
                 <label>
-                    Module
+                    Area
                     <select data-today-module>
-                        <option value="all">All modules</option>
+                        <option value="all">All areas</option>
                     </select>
                 </label>
                 <label>
                     Search
-                    <input type="search" data-today-query placeholder="Search title, module, source">
+                    <input type="search" data-today-query placeholder="Search title, area, origin">
                 </label>
             </section>
         </aside>
 
         <main>
             <section class="module-detail">
-                <h2>Full signal list</h2>
-                <p><span data-today-total>0</span> items from the same JSON files used by the home page.</p>
+                <h2>One searchable list from every tracked area.</h2>
+                <p><span data-today-total>0</span> items collected from trends, packages, repos, and links.</p>
             </section>
 
             <section class="today-grid today-grid-wide" data-today-list aria-label="Today digest">
                 <a class="signal-card" href="../index.html">
                     <div>
-                        <span>Static</span>
-                        <em>static JSON</em>
+                        <span>Ready</span>
+                        <em>checked-in data</em>
                     </div>
-                    <strong>Daily digest</strong>
+                    <strong>Full brief</strong>
                     <small>trends / packages / repos / links</small>
-                    <p>Current signals load from local JSON files.</p>
+                    <p>Rows render from the same data files as home.</p>
                 </a>
             </section>
         </main>

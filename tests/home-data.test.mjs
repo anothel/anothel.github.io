@@ -76,10 +76,10 @@ test("collectHomeSignals normalizes module datasets into preview rows", () => {
     assert.deepEqual(
         signals.map((signal) => [signal.module, signal.title, signal.meta, signal.metric, signal.reason]),
         [
-            ["Trends", "Agent workflow", "HN / AI", "96 score", "Ranked trend signal"],
-            ["Packages", "typescript", "Language", "216.8M/week", "Weekly npm demand"],
-            ["Repos", "react/react", "UI", "245.8K stars", "Repository traction"],
-            ["Links", "GitHub REST API", "API / Docs", "reference", "Reference queue"]
+            ["Trends", "Agent workflow", "HN / AI", "96 score", "Cross-source movement"],
+            ["Packages", "typescript", "Language", "216.8M/week", "Weekly download movement"],
+            ["Repos", "react/react", "UI", "245.8K stars", "Project traction"],
+            ["Links", "GitHub REST API", "API / Docs", "reference", "Reference worth keeping"]
         ]
     );
 });
@@ -91,7 +91,7 @@ test("renderSignalCards emits stable links for home preview", () => {
             title: "Agent workflow",
             meta: "HN / AI",
             metric: "96 score",
-            reason: "Ranked trend signal",
+            reason: "Cross-source movement",
             url: "https://example.com/trend"
         }
     ]);
@@ -99,7 +99,7 @@ test("renderSignalCards emits stable links for home preview", () => {
     assert.match(html, /class="signal-card"/);
     assert.match(html, /href="https:\/\/example\.com\/trend"/);
     assert.match(html, /Agent workflow/);
-    assert.match(html, /Ranked trend signal/);
+    assert.match(html, /Cross-source movement/);
     assert.match(html, /96 score/);
 });
 

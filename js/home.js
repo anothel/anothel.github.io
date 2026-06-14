@@ -38,7 +38,7 @@ export function collectHomeSignals(datasets, limits = defaultSignalLimits) {
         title: item.title,
         meta: `${item.source} / ${item.category}`,
         metric: `${item.score} score`,
-        reason: "Ranked trend signal",
+        reason: "Cross-source movement",
         url: item.url
     }));
 
@@ -47,7 +47,7 @@ export function collectHomeSignals(datasets, limits = defaultSignalLimits) {
         title: item.name,
         meta: item.category,
         metric: item.downloadsLabel,
-        reason: "Weekly npm demand",
+        reason: "Weekly download movement",
         url: item.url
     }));
 
@@ -56,7 +56,7 @@ export function collectHomeSignals(datasets, limits = defaultSignalLimits) {
         title: item.name,
         meta: item.category,
         metric: `${item.starsLabel} stars`,
-        reason: "Repository traction",
+        reason: "Project traction",
         url: item.url
     }));
 
@@ -65,7 +65,7 @@ export function collectHomeSignals(datasets, limits = defaultSignalLimits) {
         title: item.title,
         meta: `${item.category} / ${item.kind}`,
         metric: "reference",
-        reason: "Reference queue",
+        reason: "Reference worth keeping",
         url: item.url
     }));
 
