@@ -164,6 +164,48 @@ main {
     gap: 14px;
 }
 
+.home-overview {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.home-signals {
+    overflow: hidden;
+}
+
+.signal-list {
+    display: grid;
+}
+
+.signal-row {
+    display: grid;
+    grid-template-columns: 110px minmax(180px, 1.4fr) minmax(130px, 1fr) minmax(110px, 0.8fr);
+    gap: 12px;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+}
+
+.signal-row:last-child {
+    border-bottom: 0;
+}
+
+.signal-row span {
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.signal-row small,
+.signal-row em {
+    color: var(--muted);
+    font-size: 0.86rem;
+    font-style: normal;
+}
+
 .link-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -523,6 +565,7 @@ select {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .home-overview,
     .link-grid,
     .module-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -537,6 +580,7 @@ select {
     }
 
     .topbar,
+    .home-overview,
     .stats-grid,
     .panel,
     .source-health-grid,
@@ -565,6 +609,7 @@ select {
 
     .rank-head,
     .rank-row,
+    .signal-row,
     .watch-head,
     .watch-row {
         min-width: 680px;

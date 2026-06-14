@@ -43,6 +43,16 @@ test("root module cards can load manifest metadata", () => {
     assert.equal((root.match(/data-module-meta/g) || []).length, 4);
 });
 
+test("root page exposes data overview and current signal slots", () => {
+    const root = read("index.html");
+
+    for (const hook of ["data-home-total", "data-home-live", "data-home-updated", "data-home-signals"]) {
+        assert.match(root, new RegExp(hook));
+    }
+    assert.match(root, /Current signals/);
+    assert.match(root, /Data overview/);
+});
+
 test("home module cards only brighten on hover", () => {
     assert.match(styles, /\.module-card:hover/);
     assert.match(styles, /\.module-card:hover\s*{[^}]*background: var\(--panel-strong\)/s);

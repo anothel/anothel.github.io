@@ -2,6 +2,14 @@ const manifestUrl = typeof document === "undefined"
     ? "data/manifest.json"
     : document.currentScript?.dataset.source || "data/manifest.json";
 
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+}
+
 export function formatModuleMeta(module) {
     const countLabel = `${module.count} ${module.count === 1 ? "item" : "items"}`;
     return `${countLabel} | ${module.source} | updated ${module.updated}`;
@@ -11,6 +19,64 @@ export function formatModuleStatus(status) {
     if (status === "ok") return "Live";
     if (status === "error") return "Check";
     return "Unknown";
+}
+
+export function buildHomeOverview(manifest) {
+    const modules = manifest.modules || [];
+
+    return {
+        totalItems: modules.reduce((sum, module) => sum + module.count, 0),
+        liveModules: modules.filter((module) => module.status === "ok").length,
+        totalModules: modules.length,
+        updated: modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || "-"
+    };
+}
+
+export function collectHomeSignals(datasets) {
+    const trendRows = (datasets.trends?.items || []).slice(0, 2).map((item) => ({
+        module: "Trends",
+        title: item.title,
+        meta: `${item.source} / ${item.category}`,
+        metric: `${item.score} score`,
+        url: item.url
+    }));
+
+    const packageRows = (datasets.packages?.packages || []).slice(0, 2).map((item) => ({
+        module: "Packages",
+        title: item.name,
+        meta: item.category,
+        metric: item.downloadsLabel,
+        url: item.url
+    }));
+
+    const repoRows = (datasets.repos?.repos || []).slice(0, 1).map((item) => ({
+        module: "Repos",
+        title: item.name,
+        meta: item.category,
+        metric: `${item.starsLabel} stars`,
+        url: item.url
+    }));
+
+    const linkRows = (datasets.links?.links || []).slice(0, 1).map((item) => ({
+        module: "Links",
+        title: item.title,
+        meta: `${item.category} / ${item.kind}`,
+        metric: "reference",
+        url: item.url
+    }));
+
+    return [...trendRows, ...packageRows, ...repoRows, ...linkRows];
+}
+
+export function renderSignalRows(signals) {
+    return signals.map((signal) => `
+        <a class="signal-row" href="${escapeHtml(signal.url)}">
+            <span>${escapeHtml(signal.module)}</span>
+            <strong>${escapeHtml(signal.title)}</strong>
+            <small>${escapeHtml(signal.meta)}</small>
+            <em>${escapeHtml(signal.metric)}</em>
+        </a>
+    `).join("");
 }
 
 export function applyManifest(root, manifest) {
@@ -32,12 +98,47 @@ export function applyManifest(root, manifest) {
     return updatedCards;
 }
 
+function applyOverview(root, manifest) {
+    const overview = buildHomeOverview(manifest);
+    const total = root.querySelector("[data-home-total]");
+    const live = root.querySelector("[data-home-live]");
+    const updated = root.querySelector("[data-home-updated]");
+
+    if (total) total.textContent = String(overview.totalItems);
+    if (live) live.textContent = `${overview.liveModules}/${overview.totalModules}`;
+    if (updated) updated.textContent = overview.updated;
+}
+
+async function readModuleData(module) {
+    const response = await fetch(module.data);
+    if (!response.ok) return null;
+    return response.json();
+}
+
+async function applySignals(root, manifest) {
+    const list = root.querySelector("[data-home-signals]");
+    if (!list) return;
+
+    const datasets = {};
+    for (const module of manifest.modules || []) {
+        const data = await readModuleData(module).catch(() => null);
+        if (data) datasets[module.id] = data;
+    }
+
+    const signals = collectHomeSignals(datasets);
+    if (signals.length > 0) {
+        list.innerHTML = renderSignalRows(signals);
+    }
+}
+
 async function init() {
     try {
         const response = await fetch(manifestUrl);
         if (!response.ok) return;
         const manifest = await response.json();
         applyManifest(document, manifest);
+        applyOverview(document, manifest);
+        await applySignals(document, manifest);
     } catch {
         // Static card copy remains useful when local file fetch is blocked.
     }

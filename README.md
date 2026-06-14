@@ -12,6 +12,7 @@ Static home hub and small dashboards served with GitHub Pages.
 - `css/site.css`: site-specific styles
 - `data/trends.json`: static seed data
 - `data/manifest.json`: module index and data freshness summary
+- `js/home.js`: home overview and current signal rendering
 - `js/dashboard.js`: filtering and rendering
 - `scripts/update-trends.mjs`: updates trend data from HN, GitHub, and npm
 - `scripts/update-packages.mjs`: updates package watchlist data from npm

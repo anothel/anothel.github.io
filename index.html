@@ -34,6 +34,57 @@
                 <p>Each area can grow independently: one static page, one data file, one update job when needed.</p>
             </section>
 
+            <section class="home-overview" aria-label="Data overview">
+                <article class="stat-card">
+                    <span>Total items</span>
+                    <strong data-home-total>33</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Live modules</span>
+                    <strong data-home-live>4/4</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Last update</span>
+                    <strong data-home-updated>2026-06-14</strong>
+                </article>
+            </section>
+
+            <section class="rank-panel home-signals" aria-labelledby="signals-title">
+                <div class="panel-heading">
+                    <div>
+                        <h2 id="signals-title">Current signals</h2>
+                        <p>Top items from the dashboards, loaded from the same static data files.</p>
+                    </div>
+                    <a href="trends/index.html">Open trends</a>
+                </div>
+                <div class="signal-list" data-home-signals>
+                    <a class="signal-row" href="trends/index.html">
+                        <span>Trends</span>
+                        <strong>Tech trends</strong>
+                        <small>HN / GitHub / npm</small>
+                        <em>open dashboard</em>
+                    </a>
+                    <a class="signal-row" href="packages/index.html">
+                        <span>Packages</span>
+                        <strong>Package watchlist</strong>
+                        <small>npm</small>
+                        <em>open dashboard</em>
+                    </a>
+                    <a class="signal-row" href="repos/index.html">
+                        <span>Repos</span>
+                        <strong>Repo watchlist</strong>
+                        <small>GitHub</small>
+                        <em>open dashboard</em>
+                    </a>
+                    <a class="signal-row" href="links/index.html">
+                        <span>Links</span>
+                        <strong>Links queue</strong>
+                        <small>manual</small>
+                        <em>open queue</em>
+                    </a>
+                </div>
+            </section>
+
             <section class="module-grid" aria-label="Site modules">
                 <a class="module-card" href="trends/index.html" data-module-card data-module-id="trends">
                     <span data-module-status>Live</span>
