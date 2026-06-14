@@ -6,13 +6,14 @@ Static home hub and small dashboards served with GitHub Pages.
 
 - `index.html`: home hub
 - `trends/index.html`: responsive tech trend dashboard
-- `packages/index.html`: planned npm package watchlist
+- `packages/index.html`: npm package watchlist
 - `repos/index.html`: planned GitHub repository watchlist
 - `links/index.html`: planned reference queue
 - `css/site.css`: site-specific styles
 - `data/trends.json`: static seed data
 - `js/dashboard.js`: filtering and rendering
 - `scripts/update-trends.mjs`: updates trend data from HN, GitHub, and npm
+- `scripts/update-packages.mjs`: updates package watchlist data from npm
 - `tests/trend-data.test.mjs`: trend data helper tests
 - `.github/workflows/update-trends.yml`: scheduled data update workflow
 - `404.html`: GitHub Pages fallback page
@@ -39,6 +40,7 @@ Run locally:
 
 ```powershell
 node scripts/update-trends.mjs
+node scripts/update-packages.mjs
 ```
 
 The GitHub Actions workflow can also update `data/trends.json` once per day.
@@ -47,11 +49,14 @@ The GitHub Actions workflow can also update `data/trends.json` once per day.
 
 ```powershell
 node --test tests/trend-data.test.mjs
+node --test tests/package-data.test.mjs
 node --test tests/site-structure.test.mjs
 node --test tests/serve.test.mjs
 node --check scripts/update-trends.mjs
+node --check scripts/update-packages.mjs
 node --check scripts/serve.mjs
 node --check js/dashboard.js
+node --check js/package-watchlist.js
 ```
 
 ## Notes

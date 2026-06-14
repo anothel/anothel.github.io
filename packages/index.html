@@ -3,53 +3,58 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Planned npm package watchlist for anothel.">
+    <meta name="description" content="npm package watchlist for release and download signals.">
     <meta name="author" content="anothel">
     <link rel="canonical" href="https://anothel.github.io/packages/">
     <meta property="og:site_name" content="anothel">
     <meta property="og:title" content="Package Watchlist - anothel">
-    <meta property="og:description" content="Planned npm package watchlist for release pace and download signals.">
+    <meta property="og:description" content="npm package watchlist for release and download signals.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://anothel.github.io/packages/">
     <title>Package Watchlist - anothel</title>
     <link rel="stylesheet" href="../css/site.css">
+    <script defer src="../js/package-watchlist.js"></script>
 </head>
 <body>
     <div class="shell hub-shell">
         <header class="topbar">
             <a class="brand" href="../index.html" aria-label="anothel home">anothel</a>
             <div>
-                <p class="eyebrow">Planned module</p>
+                <p class="eyebrow">Live module</p>
                 <h1>Package watchlist.</h1>
             </div>
-            <p class="stamp">npm signals</p>
+            <p class="stamp">Updated <span data-updated>loading</span></p>
         </header>
 
         <main class="hub-main">
-            <section class="module-detail" aria-labelledby="module-title">
-                <h2 id="module-title">Planned shape</h2>
-                <p>Focused npm packages with weekly downloads, release cadence, package age, and links to npm.</p>
+            <section class="stats-grid" aria-label="Package watchlist stats">
+                <article class="stat-card">
+                    <span>Total</span>
+                    <strong data-total>-</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Top package</span>
+                    <strong data-top-package>-</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Source</span>
+                    <strong data-source-status>-</strong>
+                </article>
             </section>
 
-            <section class="module-grid" aria-label="Package watchlist plan">
-                <article class="module-card">
-                    <span>Data</span>
-                    <h2>npm downloads</h2>
-                    <p>Track last-week download counts for selected packages.</p>
-                    <strong>Planned</strong>
-                </article>
-                <article class="module-card">
-                    <span>Data</span>
-                    <h2>Release pace</h2>
-                    <p>Show recent version activity and package freshness.</p>
-                    <strong>Planned</strong>
-                </article>
-                <article class="module-card">
-                    <span>View</span>
-                    <h2>Watchlist table</h2>
-                    <p>Compact sortable list, separate from broad tech trends.</p>
-                    <strong>Planned</strong>
-                </article>
+            <section class="rank-panel" aria-labelledby="package-title">
+                <div class="panel-heading">
+                    <h2 id="package-title">npm watchlist</h2>
+                    <p>Focused packages, weekly downloads, and why they are tracked.</p>
+                </div>
+                <div class="watch-head" aria-hidden="true">
+                    <span>#</span>
+                    <span>Package</span>
+                    <span>Category</span>
+                    <span>Downloads</span>
+                    <span>Focus</span>
+                </div>
+                <div class="watch-list" data-package-list></div>
             </section>
         </main>
     </div>

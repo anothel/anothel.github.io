@@ -1,0 +1,92 @@
+{
+  "updated": "2026-06-14",
+  "generatedAt": "2026-06-14T03:27:40.823Z",
+  "sourceMeta": {
+    "name": "npm",
+    "status": "ok",
+    "count": 8,
+    "updatedAt": "2026-06-14T03:27:40.823Z"
+  },
+  "packages": [
+    {
+      "rank": 1,
+      "name": "typescript",
+      "category": "Language",
+      "focus": "typed JavaScript",
+      "downloads": 216849566,
+      "downloadsLabel": "216.8M/week",
+      "period": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/typescript"
+    },
+    {
+      "rank": 2,
+      "name": "zod",
+      "category": "Validation",
+      "focus": "schema validation",
+      "downloads": 192517454,
+      "downloadsLabel": "192.5M/week",
+      "period": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/zod"
+    },
+    {
+      "rank": 3,
+      "name": "react",
+      "category": "UI",
+      "focus": "frontend runtime",
+      "downloads": 140918490,
+      "downloadsLabel": "140.9M/week",
+      "period": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/react"
+    },
+    {
+      "rank": 4,
+      "name": "vite",
+      "category": "Tooling",
+      "focus": "build tool",
+      "downloads": 137798950,
+      "downloadsLabel": "137.8M/week",
+      "period": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/vite"
+    },
+    {
+      "rank": 5,
+      "name": "eslint",
+      "category": "Tooling",
+      "focus": "linting",
+      "downloads": 137428332,
+      "downloadsLabel": "137.4M/week",
+      "period": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/eslint"
+    },
+    {
+      "rank": 6,
+      "name": "prettier",
+      "category": "Tooling",
+      "focus": "formatting",
+      "downloads": 114817190,
+      "downloadsLabel": "114.8M/week",
+      "period": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/prettier"
+    },
+    {
+      "rank": 7,
+      "name": "playwright",
+      "category": "Testing",
+      "focus": "browser automation",
+      "downloads": 61222474,
+      "downloadsLabel": "61.2M/week",
+      "period": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/playwright"
+    },
+    {
+      "rank": 8,
+      "name": "next",
+      "category": "Framework",
+      "focus": "React framework",
+      "downloads": 37366740,
+      "downloadsLabel": "37.4M/week",
+      "period": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/next"
+    }
+  ]
+}
