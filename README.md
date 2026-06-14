@@ -47,7 +47,7 @@ node scripts/update-repos.mjs
 node scripts/update-links.mjs
 ```
 
-The GitHub Actions workflow can also update `data/trends.json` once per day.
+The GitHub Actions workflow can also update all generated JSON data once per day.
 
 ## Verification
 
@@ -58,6 +58,7 @@ node --test tests/repo-data.test.mjs
 node --test tests/link-data.test.mjs
 node --test tests/site-structure.test.mjs
 node --test tests/serve.test.mjs
+node --test tests/workflow.test.mjs
 node --check scripts/update-trends.mjs
 node --check scripts/update-packages.mjs
 node --check scripts/update-repos.mjs
