@@ -205,6 +205,11 @@ main {
     color: var(--muted);
 }
 
+.module-meta {
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
 .module-card strong {
     align-self: end;
 }

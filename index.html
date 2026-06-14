@@ -35,32 +35,37 @@
             </section>
 
             <section class="module-grid" aria-label="Site modules">
-                <a class="module-card" href="trends/index.html">
-                    <span>Live</span>
+                <a class="module-card" href="trends/index.html" data-module-card data-module-id="trends">
+                    <span data-module-status>Live</span>
                     <h2>Tech trends</h2>
                     <p>HN, GitHub, and npm signals ranked into a compact dashboard.</p>
+                    <small class="module-meta" data-module-meta>Static data available.</small>
                     <strong>Open dashboard</strong>
                 </a>
-                <a class="module-card" href="packages/index.html">
-                    <span>Live</span>
+                <a class="module-card" href="packages/index.html" data-module-card data-module-id="packages">
+                    <span data-module-status>Live</span>
                     <h2>Package watchlist</h2>
                     <p>Focused npm packages, release pace, weekly download changes.</p>
+                    <small class="module-meta" data-module-meta>Static data available.</small>
                     <strong>Open dashboard</strong>
                 </a>
-                <a class="module-card" href="repos/index.html">
-                    <span>Live</span>
+                <a class="module-card" href="repos/index.html" data-module-card data-module-id="repos">
+                    <span data-module-status>Live</span>
                     <h2>Repo watchlist</h2>
                     <p>GitHub projects worth tracking without turning the homepage into a portfolio.</p>
+                    <small class="module-meta" data-module-meta>Static data available.</small>
                     <strong>Open dashboard</strong>
                 </a>
-                <a class="module-card" href="links/index.html">
-                    <span>Live</span>
+                <a class="module-card" href="links/index.html" data-module-card data-module-id="links">
+                    <span data-module-status>Live</span>
                     <h2>Links queue</h2>
                     <p>Useful docs, articles, and tools collected as navigable reference.</p>
+                    <small class="module-meta" data-module-meta>Static data available.</small>
                     <strong>Open queue</strong>
                 </a>
             </section>
         </main>
     </div>
+    <script type="module" src="js/home.js" data-source="data/manifest.json"></script>
 </body>
 </html>

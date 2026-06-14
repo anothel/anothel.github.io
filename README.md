@@ -59,6 +59,7 @@ node --test tests/trend-data.test.mjs
 node --test tests/package-data.test.mjs
 node --test tests/repo-data.test.mjs
 node --test tests/link-data.test.mjs
+node --test tests/home-data.test.mjs
 node --test tests/manifest.test.mjs
 node --test tests/site-structure.test.mjs
 node --test tests/serve.test.mjs
@@ -70,6 +71,7 @@ node --check scripts/update-links.mjs
 node --check scripts/update-manifest.mjs
 node --check scripts/serve.mjs
 node --check js/dashboard.js
+node --check js/home.js
 node --check js/package-watchlist.js
 node --check js/repo-watchlist.js
 node --check js/link-queue.js

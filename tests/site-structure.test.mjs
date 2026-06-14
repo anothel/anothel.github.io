@@ -33,6 +33,16 @@ test("root module cards use the same base-card styling", () => {
     assert.doesNotMatch(root, /module-card-live/);
 });
 
+test("root module cards can load manifest metadata", () => {
+    const root = read("index.html");
+
+    assert.match(root, /type="module" src="js\/home\.js" data-source="data\/manifest\.json"/);
+    for (const id of ["trends", "packages", "repos", "links"]) {
+        assert.match(root, new RegExp(`data-module-id="${id}"`));
+    }
+    assert.equal((root.match(/data-module-meta/g) || []).length, 4);
+});
+
 test("home module cards only brighten on hover", () => {
     assert.match(styles, /\.module-card:hover/);
     assert.match(styles, /\.module-card:hover\s*{[^}]*background: var\(--panel-strong\)/s);
