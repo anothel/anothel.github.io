@@ -7,6 +7,12 @@ export function formatModuleMeta(module) {
     return `${countLabel} | ${module.source} | updated ${module.updated}`;
 }
 
+export function formatModuleStatus(status) {
+    if (status === "ok") return "Live";
+    if (status === "error") return "Check";
+    return "Unknown";
+}
+
 export function applyManifest(root, manifest) {
     const modulesById = new Map(manifest.modules.map((module) => [module.id, module]));
     let updatedCards = 0;
@@ -18,7 +24,7 @@ export function applyManifest(root, manifest) {
         const status = card.querySelector("[data-module-status]");
         const meta = card.querySelector("[data-module-meta]");
 
-        if (status) status.textContent = module.status;
+        if (status) status.textContent = formatModuleStatus(module.status);
         if (meta) meta.textContent = formatModuleMeta(module);
         updatedCards += 1;
     }

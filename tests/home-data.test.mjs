@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { applyManifest, formatModuleMeta } from "../js/home.js";
+import { applyManifest, formatModuleMeta, formatModuleStatus } from "../js/home.js";
 
 test("formatModuleMeta summarizes module count, source, and freshness", () => {
     assert.equal(
@@ -22,6 +22,12 @@ test("formatModuleMeta uses singular item label", () => {
         }),
         "1 item | manual | updated 2026-06-14"
     );
+});
+
+test("formatModuleStatus maps data status to home badge copy", () => {
+    assert.equal(formatModuleStatus("ok"), "Live");
+    assert.equal(formatModuleStatus("error"), "Check");
+    assert.equal(formatModuleStatus("unknown"), "Unknown");
 });
 
 test("applyManifest updates matching module cards", () => {
@@ -55,6 +61,6 @@ test("applyManifest updates matching module cards", () => {
     });
 
     assert.equal(count, 1);
-    assert.equal(status.textContent, "ok");
+    assert.equal(status.textContent, "Live");
     assert.equal(meta.textContent, "11 items | Hacker News, GitHub, npm | updated 2026-06-14");
 });
