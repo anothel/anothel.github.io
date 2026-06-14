@@ -8,6 +8,8 @@ test("resolveStaticPath maps routes to static files", () => {
     const root = process.cwd();
 
     assert.equal(resolveStaticPath("/", root), resolve(root, "index.html"));
+    assert.equal(resolveStaticPath("/today/", root), resolve(root, "today/index.html"));
+    assert.equal(resolveStaticPath("/today", root), resolve(root, "today/index.html"));
     assert.equal(resolveStaticPath("/trends/", root), resolve(root, "trends/index.html"));
     assert.equal(resolveStaticPath("/trends", root), resolve(root, "trends/index.html"));
     assert.equal(resolveStaticPath("/css/site.css", root), resolve(root, "css/site.css"));

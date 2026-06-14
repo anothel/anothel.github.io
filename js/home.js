@@ -32,8 +32,19 @@ export function buildHomeOverview(manifest) {
     };
 }
 
-export function collectHomeSignals(datasets) {
-    const trendRows = (datasets.trends?.items || []).slice(0, 3).map((item) => ({
+const defaultSignalLimits = {
+    trends: 3,
+    packages: 2,
+    repos: 2,
+    links: 1
+};
+
+function take(items, limit) {
+    return items.slice(0, Number.isFinite(limit) ? limit : items.length);
+}
+
+export function collectHomeSignals(datasets, limits = defaultSignalLimits) {
+    const trendRows = take(datasets.trends?.items || [], limits.trends).map((item) => ({
         module: "Trends",
         title: item.title,
         meta: `${item.source} / ${item.category}`,
@@ -42,7 +53,7 @@ export function collectHomeSignals(datasets) {
         url: item.url
     }));
 
-    const packageRows = (datasets.packages?.packages || []).slice(0, 2).map((item) => ({
+    const packageRows = take(datasets.packages?.packages || [], limits.packages).map((item) => ({
         module: "Packages",
         title: item.name,
         meta: item.category,
@@ -51,7 +62,7 @@ export function collectHomeSignals(datasets) {
         url: item.url
     }));
 
-    const repoRows = (datasets.repos?.repos || []).slice(0, 2).map((item) => ({
+    const repoRows = take(datasets.repos?.repos || [], limits.repos).map((item) => ({
         module: "Repos",
         title: item.name,
         meta: item.category,
@@ -60,7 +71,7 @@ export function collectHomeSignals(datasets) {
         url: item.url
     }));
 
-    const linkRows = (datasets.links?.links || []).slice(0, 1).map((item) => ({
+    const linkRows = take(datasets.links?.links || [], limits.links).map((item) => ({
         module: "Links",
         title: item.title,
         meta: `${item.category} / ${item.kind}`,
@@ -88,6 +99,14 @@ export function renderSignalCards(signals) {
 
 export function applyManifest(root, manifest) {
     const modulesById = new Map(manifest.modules.map((module) => [module.id, module]));
+    const overview = buildHomeOverview(manifest);
+    modulesById.set("today", {
+        id: "today",
+        status: overview.liveModules === overview.totalModules ? "ok" : "error",
+        count: overview.totalItems,
+        source: "all modules",
+        updated: overview.updated
+    });
     let updatedCards = 0;
 
     for (const card of root.querySelectorAll("[data-module-card]")) {

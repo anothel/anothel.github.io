@@ -12,6 +12,7 @@ test("root page is a hub and trends page owns the dashboard", () => {
     const root = read("index.html");
     const trends = read("trends/index.html");
 
+    assert.match(root, /href="today\/index\.html"/);
     assert.match(root, /href="trends\/index\.html"/);
     assert.match(root, /href="packages\/index\.html"/);
     assert.match(root, /href="repos\/index\.html"/);
@@ -25,11 +26,23 @@ test("root page is a hub and trends page owns the dashboard", () => {
     assert.match(trends, /..\/data\/trends\.json/);
 });
 
+test("today page owns the full digest module", () => {
+    const today = read("today/index.html");
+
+    assert.match(today, /data-today-total/);
+    assert.match(today, /data-today-list/);
+    assert.match(today, /data-today-query/);
+    assert.match(today, /data-today-module/);
+    assert.match(today, /..\/js\/today\.js/);
+    assert.match(today, /..\/data\/manifest\.json/);
+    assert.match(today, /href="..\/index\.html"/);
+});
+
 test("root module cards use the same base-card styling", () => {
     const root = read("index.html");
     const moduleCards = root.match(/class="module-card"/g) || [];
 
-    assert.equal(moduleCards.length, 4);
+    assert.equal(moduleCards.length, 5);
     assert.doesNotMatch(root, /module-card-live/);
 });
 
@@ -37,10 +50,10 @@ test("root module cards can load manifest metadata", () => {
     const root = read("index.html");
 
     assert.match(root, /type="module" src="js\/home\.js" data-source="data\/manifest\.json"/);
-    for (const id of ["trends", "packages", "repos", "links"]) {
+    for (const id of ["today", "trends", "packages", "repos", "links"]) {
         assert.match(root, new RegExp(`data-module-id="${id}"`));
     }
-    assert.equal((root.match(/data-module-meta/g) || []).length, 4);
+    assert.equal((root.match(/data-module-meta/g) || []).length, 5);
 });
 
 test("root page exposes data overview and current signal slots", () => {

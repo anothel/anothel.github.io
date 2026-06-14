@@ -186,3 +186,21 @@ test("checked-in data powers the home overview and signal preview", () => {
         ["Trends", "Trends", "Trends", "Packages", "Packages", "Repos", "Repos", "Links"]
     );
 });
+
+test("collectHomeSignals can return full digest rows for today page", () => {
+    const signals = collectHomeSignals({
+        trends: readJson("data/trends.json"),
+        packages: readJson("data/packages.json"),
+        repos: readJson("data/repos.json"),
+        links: readJson("data/links.json")
+    }, {
+        trends: Infinity,
+        packages: Infinity,
+        repos: Infinity,
+        links: Infinity
+    });
+
+    assert.equal(signals.length, 33);
+    assert.equal(signals[0].module, "Trends");
+    assert.equal(signals.at(-1).module, "Links");
+});

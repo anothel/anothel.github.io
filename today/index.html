@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Full daily digest from anothel dashboards.">
+    <meta name="author" content="anothel">
+    <link rel="canonical" href="https://anothel.github.io/today/">
+    <meta property="og:site_name" content="anothel">
+    <meta property="og:title" content="Today - anothel">
+    <meta property="og:description" content="Daily digest from trends, packages, repos, and links.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anothel.github.io/today/">
+    <title>Today - anothel</title>
+    <link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+    <div class="shell">
+        <header class="topbar">
+            <a class="brand" href="../index.html" aria-label="anothel home">anothel</a>
+            <div>
+                <p class="eyebrow">Daily digest</p>
+                <h1>Today</h1>
+            </div>
+            <p class="stamp">static data digest</p>
+        </header>
+
+        <aside class="sidebar">
+            <section class="panel">
+                <h2>Filter</h2>
+                <label>
+                    Module
+                    <select data-today-module>
+                        <option value="all">All modules</option>
+                    </select>
+                </label>
+                <label>
+                    Search
+                    <input type="search" data-today-query placeholder="Search title, module, source">
+                </label>
+            </section>
+        </aside>
+
+        <main>
+            <section class="module-detail">
+                <h2>Full signal list</h2>
+                <p><span data-today-total>0</span> items from the same JSON files used by the home page.</p>
+            </section>
+
+            <section class="today-grid today-grid-wide" data-today-list aria-label="Today digest">
+                <a class="signal-card" href="../index.html">
+                    <div>
+                        <span>Loading</span>
+                        <em>static JSON</em>
+                    </div>
+                    <strong>Loading daily digest</strong>
+                    <small>trends / packages / repos / links</small>
+                    <p>Data will load from local JSON files.</p>
+                </a>
+            </section>
+        </main>
+    </div>
+    <script type="module" src="../js/today.js" data-source="../data/manifest.json"></script>
+</body>
+</html>

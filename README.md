@@ -5,6 +5,7 @@ Static home hub and small dashboards served with GitHub Pages.
 ## Structure
 
 - `index.html`: home hub
+- `today/index.html`: full daily digest from all dashboard data
 - `trends/index.html`: responsive tech trend dashboard
 - `packages/index.html`: npm package watchlist
 - `repos/index.html`: GitHub repository watchlist
@@ -13,6 +14,7 @@ Static home hub and small dashboards served with GitHub Pages.
 - `data/trends.json`: static seed data
 - `data/manifest.json`: module index and data freshness summary
 - `js/home.js`: home overview and current signal rendering
+- `js/today.js`: daily digest filtering and rendering
 - `js/dashboard.js`: filtering and rendering
 - `scripts/update-trends.mjs`: updates trend data from HN, GitHub, and npm
 - `scripts/update-packages.mjs`: updates package watchlist data from npm
@@ -61,6 +63,7 @@ node --test tests/package-data.test.mjs
 node --test tests/repo-data.test.mjs
 node --test tests/link-data.test.mjs
 node --test tests/home-data.test.mjs
+node --test tests/today-data.test.mjs
 node --test tests/manifest.test.mjs
 node --test tests/site-structure.test.mjs
 node --test tests/serve.test.mjs
@@ -73,6 +76,7 @@ node --check scripts/update-manifest.mjs
 node --check scripts/serve.mjs
 node --check js/dashboard.js
 node --check js/home.js
+node --check js/today.js
 node --check js/package-watchlist.js
 node --check js/repo-watchlist.js
 node --check js/link-queue.js
