@@ -7,7 +7,7 @@ import {
     collectHomeSignals,
     formatModuleMeta,
     formatModuleStatus,
-    renderSignalRows
+    renderSignalCards
 } from "../js/home.js";
 
 function readJson(path) {
@@ -140,30 +140,32 @@ test("collectHomeSignals normalizes module datasets into preview rows", () => {
     });
 
     assert.deepEqual(
-        signals.map((signal) => [signal.module, signal.title, signal.meta, signal.metric]),
+        signals.map((signal) => [signal.module, signal.title, signal.meta, signal.metric, signal.reason]),
         [
-            ["Trends", "Agent workflow", "HN / AI", "96 score"],
-            ["Packages", "typescript", "Language", "216.8M/week"],
-            ["Repos", "react/react", "UI", "245.8K stars"],
-            ["Links", "GitHub REST API", "API / Docs", "reference"]
+            ["Trends", "Agent workflow", "HN / AI", "96 score", "Ranked trend signal"],
+            ["Packages", "typescript", "Language", "216.8M/week", "Weekly npm demand"],
+            ["Repos", "react/react", "UI", "245.8K stars", "Repository traction"],
+            ["Links", "GitHub REST API", "API / Docs", "reference", "Reference queue"]
         ]
     );
 });
 
-test("renderSignalRows emits stable links for home preview", () => {
-    const html = renderSignalRows([
+test("renderSignalCards emits stable links for home preview", () => {
+    const html = renderSignalCards([
         {
             module: "Trends",
             title: "Agent workflow",
             meta: "HN / AI",
             metric: "96 score",
+            reason: "Ranked trend signal",
             url: "https://example.com/trend"
         }
     ]);
 
-    assert.match(html, /class="signal-row"/);
+    assert.match(html, /class="signal-card"/);
     assert.match(html, /href="https:\/\/example\.com\/trend"/);
     assert.match(html, /Agent workflow/);
+    assert.match(html, /Ranked trend signal/);
     assert.match(html, /96 score/);
 });
 
@@ -178,9 +180,9 @@ test("checked-in data powers the home overview and signal preview", () => {
 
     assert.equal(overview.totalItems, 33);
     assert.equal(overview.liveModules, 4);
-    assert.equal(signals.length, 6);
+    assert.equal(signals.length, 8);
     assert.deepEqual(
         signals.map((signal) => signal.module),
-        ["Trends", "Trends", "Packages", "Packages", "Repos", "Links"]
+        ["Trends", "Trends", "Trends", "Packages", "Packages", "Repos", "Repos", "Links"]
     );
 });

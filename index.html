@@ -49,38 +49,50 @@
                 </article>
             </section>
 
-            <section class="rank-panel home-signals" aria-labelledby="signals-title">
-                <div class="panel-heading">
+            <section class="home-today" aria-labelledby="today-title">
+                <div class="section-heading">
                     <div>
-                        <h2 id="signals-title">Current signals</h2>
+                        <h2 id="today-title">Today</h2>
                         <p>Top items from the dashboards, loaded from the same static data files.</p>
                     </div>
                     <a href="trends/index.html">Open trends</a>
                 </div>
-                <div class="signal-list" data-home-signals>
-                    <a class="signal-row" href="trends/index.html">
-                        <span>Trends</span>
+                <div class="today-grid" data-home-signals>
+                    <a class="signal-card" href="trends/index.html">
+                        <div>
+                            <span>Trends</span>
+                            <em>open dashboard</em>
+                        </div>
                         <strong>Tech trends</strong>
                         <small>HN / GitHub / npm</small>
-                        <em>open dashboard</em>
+                        <p>Ranked trend signal</p>
                     </a>
-                    <a class="signal-row" href="packages/index.html">
-                        <span>Packages</span>
+                    <a class="signal-card" href="packages/index.html">
+                        <div>
+                            <span>Packages</span>
+                            <em>open dashboard</em>
+                        </div>
                         <strong>Package watchlist</strong>
                         <small>npm</small>
-                        <em>open dashboard</em>
+                        <p>Weekly npm demand</p>
                     </a>
-                    <a class="signal-row" href="repos/index.html">
-                        <span>Repos</span>
+                    <a class="signal-card" href="repos/index.html">
+                        <div>
+                            <span>Repos</span>
+                            <em>open dashboard</em>
+                        </div>
                         <strong>Repo watchlist</strong>
                         <small>GitHub</small>
-                        <em>open dashboard</em>
+                        <p>Repository traction</p>
                     </a>
-                    <a class="signal-row" href="links/index.html">
-                        <span>Links</span>
+                    <a class="signal-card" href="links/index.html">
+                        <div>
+                            <span>Links</span>
+                            <em>open queue</em>
+                        </div>
                         <strong>Links queue</strong>
                         <small>manual</small>
-                        <em>open queue</em>
+                        <p>Reference queue</p>
                     </a>
                 </div>
             </section>

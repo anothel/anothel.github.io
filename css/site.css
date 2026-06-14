@@ -170,46 +170,81 @@ main {
     gap: 14px;
 }
 
-.home-signals {
-    overflow: hidden;
-}
-
-.signal-list {
-    display: grid;
-}
-
-.signal-row {
-    display: grid;
-    grid-template-columns: 110px minmax(180px, 1.4fr) minmax(130px, 1fr) minmax(110px, 0.8fr);
-    gap: 12px;
-    align-items: center;
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--line);
-    text-decoration: none;
-}
-
-.signal-row:last-child {
-    border-bottom: 0;
-}
-
-.signal-row span {
-    color: var(--accent);
-    font-size: 0.78rem;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.signal-row small,
-.signal-row em {
-    color: var(--muted);
-    font-size: 0.86rem;
-    font-style: normal;
-}
-
 .link-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.section-heading h2 {
+    margin-bottom: 6px;
+}
+
+.section-heading p {
+    margin-bottom: 0;
+    color: var(--muted);
+}
+
+.section-heading a {
+    flex: 0 0 auto;
+    font-weight: 900;
+}
+
+.today-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.signal-card {
+    display: grid;
+    gap: 12px;
+    min-height: 180px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+}
+
+.signal-card:hover {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+}
+
+.signal-card div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.signal-card span {
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.signal-card em,
+.signal-card small,
+.signal-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.84rem;
+    font-style: normal;
+}
+
+.signal-card strong {
+    font-size: 1rem;
+    line-height: 1.25;
 }
 
 .module-card {
@@ -567,7 +602,8 @@ select {
 
     .home-overview,
     .link-grid,
-    .module-grid {
+    .module-grid,
+    .today-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
@@ -586,7 +622,8 @@ select {
     .source-health-grid,
     .link-grid,
     .module-grid,
-    .dashboard-grid {
+    .dashboard-grid,
+    .today-grid {
         grid-template-columns: 1fr;
     }
 
@@ -609,7 +646,6 @@ select {
 
     .rank-head,
     .rank-row,
-    .signal-row,
     .watch-head,
     .watch-row {
         min-width: 680px;

@@ -33,11 +33,12 @@ export function buildHomeOverview(manifest) {
 }
 
 export function collectHomeSignals(datasets) {
-    const trendRows = (datasets.trends?.items || []).slice(0, 2).map((item) => ({
+    const trendRows = (datasets.trends?.items || []).slice(0, 3).map((item) => ({
         module: "Trends",
         title: item.title,
         meta: `${item.source} / ${item.category}`,
         metric: `${item.score} score`,
+        reason: "Ranked trend signal",
         url: item.url
     }));
 
@@ -46,14 +47,16 @@ export function collectHomeSignals(datasets) {
         title: item.name,
         meta: item.category,
         metric: item.downloadsLabel,
+        reason: "Weekly npm demand",
         url: item.url
     }));
 
-    const repoRows = (datasets.repos?.repos || []).slice(0, 1).map((item) => ({
+    const repoRows = (datasets.repos?.repos || []).slice(0, 2).map((item) => ({
         module: "Repos",
         title: item.name,
         meta: item.category,
         metric: `${item.starsLabel} stars`,
+        reason: "Repository traction",
         url: item.url
     }));
 
@@ -62,19 +65,23 @@ export function collectHomeSignals(datasets) {
         title: item.title,
         meta: `${item.category} / ${item.kind}`,
         metric: "reference",
+        reason: "Reference queue",
         url: item.url
     }));
 
     return [...trendRows, ...packageRows, ...repoRows, ...linkRows];
 }
 
-export function renderSignalRows(signals) {
+export function renderSignalCards(signals) {
     return signals.map((signal) => `
-        <a class="signal-row" href="${escapeHtml(signal.url)}">
-            <span>${escapeHtml(signal.module)}</span>
+        <a class="signal-card" href="${escapeHtml(signal.url)}">
+            <div>
+                <span>${escapeHtml(signal.module)}</span>
+                <em>${escapeHtml(signal.metric)}</em>
+            </div>
             <strong>${escapeHtml(signal.title)}</strong>
             <small>${escapeHtml(signal.meta)}</small>
-            <em>${escapeHtml(signal.metric)}</em>
+            <p>${escapeHtml(signal.reason)}</p>
         </a>
     `).join("");
 }
@@ -127,7 +134,7 @@ async function applySignals(root, manifest) {
 
     const signals = collectHomeSignals(datasets);
     if (signals.length > 0) {
-        list.innerHTML = renderSignalRows(signals);
+        list.innerHTML = renderSignalCards(signals);
     }
 }
 

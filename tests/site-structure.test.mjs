@@ -49,8 +49,13 @@ test("root page exposes data overview and current signal slots", () => {
     for (const hook of ["data-home-total", "data-home-live", "data-home-updated", "data-home-signals"]) {
         assert.match(root, new RegExp(hook));
     }
-    assert.match(root, /Current signals/);
+    assert.match(root, /Today/);
     assert.match(root, /Data overview/);
+    assert.match(root, /class="today-grid"/);
+    assert.match(root, /class="signal-card"/);
+    assert.doesNotMatch(root, /class="signal-row"/);
+    assert.match(styles, /\.today-grid/);
+    assert.match(styles, /\.signal-card/);
 });
 
 test("home module cards only brighten on hover", () => {
