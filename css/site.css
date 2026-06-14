@@ -164,6 +164,12 @@ main {
     gap: 14px;
 }
 
+.link-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
 .module-card {
     display: grid;
     gap: 14px;
@@ -200,6 +206,45 @@ main {
 
 .module-card-live {
     background: var(--panel-strong);
+}
+
+.link-card {
+    display: grid;
+    gap: 14px;
+    min-height: 210px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+}
+
+.link-card div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.link-card span {
+    min-height: 26px;
+    padding: 5px 8px 0;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.link-card h2 {
+    margin-bottom: 0;
+    font-size: 1.18rem;
+}
+
+.link-card p {
+    margin-bottom: 0;
+    color: var(--muted);
 }
 
 .panel {
@@ -472,6 +517,7 @@ select {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .link-grid,
     .module-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -488,6 +534,7 @@ select {
     .stats-grid,
     .panel,
     .source-health-grid,
+    .link-grid,
     .module-grid,
     .dashboard-grid {
         grid-template-columns: 1fr;
