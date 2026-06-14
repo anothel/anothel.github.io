@@ -1,0 +1,132 @@
+{
+  "updated": "2026-06-14",
+  "generatedAt": "2026-06-14T02:47:26.909Z",
+  "sources": [
+    "Hacker News",
+    "GitHub",
+    "npm"
+  ],
+  "items": [
+    {
+      "rank": 1,
+      "title": "openclaw/openclaw",
+      "source": "GitHub",
+      "category": "AI",
+      "score": 100,
+      "velocity": "378.6K stars",
+      "signal": "79.2K forks",
+      "url": "https://github.com/openclaw/openclaw",
+      "summary": "Your own personal AI assistant. Any OS. Any Platform. The lobster way. 🦞 "
+    },
+    {
+      "rank": 2,
+      "title": "typescript",
+      "source": "npm",
+      "category": "JavaScript",
+      "score": 100,
+      "velocity": "216.8M/week",
+      "signal": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/typescript",
+      "summary": "216.8M downloads over the last available week."
+    },
+    {
+      "rank": 3,
+      "title": "zod",
+      "source": "npm",
+      "category": "Developer tools",
+      "score": 99,
+      "velocity": "192.5M/week",
+      "signal": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/zod",
+      "summary": "192.5M downloads over the last available week."
+    },
+    {
+      "rank": 4,
+      "title": "react",
+      "source": "npm",
+      "category": "JavaScript",
+      "score": 98,
+      "velocity": "140.9M/week",
+      "signal": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/react",
+      "summary": "140.9M downloads over the last available week."
+    },
+    {
+      "rank": 5,
+      "title": "vite",
+      "source": "npm",
+      "category": "Developer tools",
+      "score": 98,
+      "velocity": "137.8M/week",
+      "signal": "2026-06-06 to 2026-06-12",
+      "url": "https://www.npmjs.com/package/vite",
+      "summary": "137.8M downloads over the last available week."
+    },
+    {
+      "rank": 6,
+      "title": "NousResearch/hermes-agent",
+      "source": "GitHub",
+      "category": "AI",
+      "score": 95,
+      "velocity": "192.8K stars",
+      "signal": "33.6K forks",
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "summary": "The agent that grows with you"
+    },
+    {
+      "rank": 7,
+      "title": "n8n-io/n8n",
+      "source": "GitHub",
+      "category": "AI",
+      "score": 95,
+      "velocity": "192.4K stars",
+      "signal": "58.5K forks",
+      "url": "https://github.com/n8n-io/n8n",
+      "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations."
+    },
+    {
+      "rank": 8,
+      "title": "Noise infusion banned from statistical products published by Census Bureau",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 94,
+      "velocity": "475 comments",
+      "signal": "752 points",
+      "url": "https://desfontain.es/blog/banning-noise.html",
+      "summary": "HN story by nl with 475 comments."
+    },
+    {
+      "rank": 9,
+      "title": "Every Frame Perfect",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 73,
+      "velocity": "191 comments",
+      "signal": "586 points",
+      "url": "https://tonsky.me/blog/every-frame-perfect/",
+      "summary": "HN story by ravenical with 191 comments."
+    },
+    {
+      "rank": 10,
+      "title": "GLM 5.2 Is Out",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 48,
+      "velocity": "213 comments",
+      "signal": "384 points",
+      "url": "https://twitter.com/jietang/status/2065784751345287314",
+      "summary": "HN story by aloknnikhil with 213 comments."
+    },
+    {
+      "rank": 11,
+      "title": "Pyodide 314.0: Python packages can now publish WebAssembly wheels to PyPI",
+      "source": "Hacker News",
+      "category": "Frontend",
+      "score": 11,
+      "velocity": "16 comments",
+      "signal": "90 points",
+      "url": "https://blog.pyodide.org/posts/314-release/",
+      "summary": "HN story by agriyakhetarpal with 16 comments."
+    }
+  ]
+}
