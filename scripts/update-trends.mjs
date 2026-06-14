@@ -1,4 +1,5 @@
 import { writeFile } from "node:fs/promises";
+import { pathToFileURL } from "node:url";
 
 const OUT_FILE = new URL("../data/trends.json", import.meta.url);
 const USER_AGENT = "anothel.github.io tech radar";
@@ -26,7 +27,7 @@ const githubQueries = [
     { query: "topic:frontend stars:>500", category: "Frontend" }
 ];
 
-function isoDate(date = new Date()) {
+export function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);
 }
 
@@ -153,27 +154,49 @@ async function fetchNpm() {
         }));
 }
 
-async function collect() {
+export function buildSourceMeta(items, results, generatedAt) {
+    const countBySource = new Map();
+    for (const item of items) {
+        countBySource.set(item.source, (countBySource.get(item.source) || 0) + 1);
+    }
+
+    return results.map((result) => {
+        const meta = {
+            name: result.name,
+            status: result.ok ? "ok" : "error",
+            count: countBySource.get(result.name) || 0,
+            updatedAt: generatedAt
+        };
+
+        if (!result.ok && result.error) {
+            meta.error = result.error;
+        }
+
+        return meta;
+    });
+}
+
+export async function collect() {
     const sourceJobs = [
         ["Hacker News", fetchHackerNews],
         ["GitHub", fetchGitHub],
         ["npm", fetchNpm]
     ];
 
-    const groups = await Promise.all(
+    const results = await Promise.all(
         sourceJobs.map(async ([name, fn]) => {
             try {
-                return await fn();
+                return { name, ok: true, items: await fn() };
             } catch (error) {
                 console.warn(`Skipping ${name}: ${error.message}`);
-                return [];
+                return { name, ok: false, error: error.message, items: [] };
             }
         })
     );
 
     const seen = new Set();
-    const items = groups
-        .flat()
+    const items = results
+        .flatMap((result) => result.items)
         .filter((item) => {
             const key = `${item.source}:${item.title}`;
             if (seen.has(key)) return false;
@@ -188,20 +211,29 @@ async function collect() {
         throw new Error("No trend items fetched");
     }
 
+    const generatedAt = new Date().toISOString();
+
     return {
         updated: isoDate(),
-        generatedAt: new Date().toISOString(),
-        sources: ["Hacker News", "GitHub", "npm"],
+        generatedAt,
+        sources: sourceJobs.map(([name]) => name),
+        sourceMeta: buildSourceMeta(items, results, generatedAt),
         items
     };
 }
 
-const data = await collect();
-const output = `${JSON.stringify(data, null, 2)}\n`;
+async function main() {
+    const data = await collect();
+    const output = `${JSON.stringify(data, null, 2)}\n`;
 
-if (process.argv.includes("--stdout")) {
-    console.log(output);
-} else {
-    await writeFile(OUT_FILE, output, "utf8");
-    console.log(`Wrote ${data.items.length} trend items to data/trends.json`);
+    if (process.argv.includes("--stdout")) {
+        console.log(output);
+    } else {
+        await writeFile(OUT_FILE, output, "utf8");
+        console.log(`Wrote ${data.items.length} trend items to data/trends.json`);
+    }
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    await main();
 }

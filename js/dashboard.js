@@ -1,5 +1,7 @@
 const state = {
     items: [],
+    sourceMeta: [],
+    isFallback: false,
     source: "all",
     category: "all",
     query: "",
@@ -8,6 +10,27 @@ const state = {
 
 const fallbackData = {
     updated: "2026-06-14",
+    generatedAt: "2026-06-14T00:00:00.000Z",
+    sourceMeta: [
+        {
+            name: "Hacker News",
+            status: "fallback",
+            count: 3,
+            updatedAt: "2026-06-14T00:00:00.000Z"
+        },
+        {
+            name: "GitHub",
+            status: "fallback",
+            count: 3,
+            updatedAt: "2026-06-14T00:00:00.000Z"
+        },
+        {
+            name: "npm",
+            status: "fallback",
+            count: 2,
+            updatedAt: "2026-06-14T00:00:00.000Z"
+        }
+    ],
     items: [
         {
             rank: 1,
@@ -45,7 +68,7 @@ const fallbackData = {
         {
             rank: 4,
             title: "SQLite at the edge",
-            source: "Developer tools",
+            source: "Hacker News",
             category: "Database",
             score: 84,
             velocity: "+12%",
@@ -78,7 +101,7 @@ const fallbackData = {
         {
             rank: 7,
             title: "Observability for small teams",
-            source: "Developer tools",
+            source: "GitHub",
             category: "Ops",
             score: 69,
             velocity: "+5%",
@@ -108,6 +131,8 @@ const els = {
     query: document.querySelector("[data-query]"),
     sort: document.querySelector("[data-sort]"),
     updated: document.querySelector("[data-updated]"),
+    dataMode: document.querySelector("[data-data-mode]"),
+    sourceHealth: document.querySelector("[data-source-health]"),
     total: document.querySelector("[data-total]"),
     topScore: document.querySelector("[data-top-score]"),
     topCategory: document.querySelector("[data-top-category]")
@@ -149,6 +174,23 @@ function renderStats(items) {
     els.topCategory.textContent = top ? top.category : "-";
 }
 
+function renderSourceHealth() {
+    els.dataMode.textContent = state.isFallback
+        ? "Fallback data loaded because JSON fetch failed."
+        : "Static JSON loaded from data/trends.json.";
+
+    els.sourceHealth.innerHTML = state.sourceMeta.map((source) => `
+        <article class="source-health-card status-${source.status}">
+            <div>
+                <strong>${source.name}</strong>
+                <span>${source.status}</span>
+            </div>
+            <p>${source.count} visible items</p>
+            <small>${source.error || source.updatedAt}</small>
+        </article>
+    `).join("");
+}
+
 function renderCards(items) {
     els.grid.innerHTML = items.map((item) => `
         <article class="trend-card">
@@ -183,6 +225,7 @@ function renderTable(items) {
 function render() {
     const items = getFilteredItems();
     renderStats(items);
+    renderSourceHealth();
     renderCards(items);
     renderTable(items);
 }
@@ -211,17 +254,23 @@ function bindEvents() {
 
 async function init() {
     let data = fallbackData;
+    let isFallback = false;
 
     try {
         const response = await fetch("data/trends.json");
         if (response.ok) {
             data = await response.json();
+        } else {
+            isFallback = true;
         }
     } catch {
         data = fallbackData;
+        isFallback = true;
     }
 
     state.items = data.items;
+    state.sourceMeta = data.sourceMeta || [];
+    state.isFallback = isFallback;
     els.updated.textContent = data.updated;
     fillSelect(els.source, uniqueValues(data.items, "source"), "All sources");
     fillSelect(els.category, uniqueValues(data.items, "category"), "All categories");

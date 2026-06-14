@@ -120,6 +120,7 @@ main {
 
 .panel,
 .rank-panel,
+.health-panel,
 .stat-card,
 .trend-card {
     border: 1px solid var(--line);
@@ -166,6 +167,54 @@ select {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
+}
+
+.health-panel {
+    overflow: hidden;
+}
+
+.source-health-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+}
+
+.source-health-card {
+    display: grid;
+    gap: 10px;
+    min-height: 120px;
+    padding: 16px 18px;
+    background: var(--panel);
+}
+
+.source-health-card div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.source-health-card span {
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.source-health-card p,
+.source-health-card small {
+    margin: 0;
+    color: var(--muted);
+}
+
+.source-health-card small {
+    font-size: 0.8rem;
+    overflow-wrap: anywhere;
+}
+
+.source-health-card.status-error span {
+    color: var(--warning);
 }
 
 .stat-card {
@@ -350,6 +399,7 @@ select {
     .topbar,
     .stats-grid,
     .panel,
+    .source-health-grid,
     .dashboard-grid {
         grid-template-columns: 1fr;
     }

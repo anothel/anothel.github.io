@@ -1,10 +1,30 @@
 {
   "updated": "2026-06-14",
-  "generatedAt": "2026-06-14T02:47:26.909Z",
+  "generatedAt": "2026-06-14T02:59:07.141Z",
   "sources": [
     "Hacker News",
     "GitHub",
     "npm"
+  ],
+  "sourceMeta": [
+    {
+      "name": "Hacker News",
+      "status": "ok",
+      "count": 4,
+      "updatedAt": "2026-06-14T02:59:07.141Z"
+    },
+    {
+      "name": "GitHub",
+      "status": "ok",
+      "count": 3,
+      "updatedAt": "2026-06-14T02:59:07.141Z"
+    },
+    {
+      "name": "npm",
+      "status": "ok",
+      "count": 4,
+      "updatedAt": "2026-06-14T02:59:07.141Z"
+    }
   ],
   "items": [
     {
@@ -91,7 +111,7 @@
       "category": "Developer tools",
       "score": 94,
       "velocity": "475 comments",
-      "signal": "752 points",
+      "signal": "753 points",
       "url": "https://desfontain.es/blog/banning-noise.html",
       "summary": "HN story by nl with 475 comments."
     },
@@ -100,33 +120,33 @@
       "title": "Every Frame Perfect",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 73,
-      "velocity": "191 comments",
-      "signal": "586 points",
+      "score": 74,
+      "velocity": "194 comments",
+      "signal": "591 points",
       "url": "https://tonsky.me/blog/every-frame-perfect/",
-      "summary": "HN story by ravenical with 191 comments."
+      "summary": "HN story by ravenical with 194 comments."
     },
     {
       "rank": 10,
       "title": "GLM 5.2 Is Out",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 48,
-      "velocity": "213 comments",
-      "signal": "384 points",
+      "score": 49,
+      "velocity": "215 comments",
+      "signal": "389 points",
       "url": "https://twitter.com/jietang/status/2065784751345287314",
-      "summary": "HN story by aloknnikhil with 213 comments."
+      "summary": "HN story by aloknnikhil with 215 comments."
     },
     {
       "rank": 11,
-      "title": "Pyodide 314.0: Python packages can now publish WebAssembly wheels to PyPI",
+      "title": "10th Gen Honda Civic Updates Are Signed with AOSP Test Keys",
       "source": "Hacker News",
-      "category": "Frontend",
-      "score": 11,
-      "velocity": "16 comments",
-      "signal": "90 points",
-      "url": "https://blog.pyodide.org/posts/314-release/",
-      "summary": "HN story by agriyakhetarpal with 16 comments."
+      "category": "Developer tools",
+      "score": 6,
+      "velocity": "5 comments",
+      "signal": "46 points",
+      "url": "https://juniperspring.org/posts/honda-evil-valet/",
+      "summary": "HN story by librick with 5 comments."
     }
   ]
 }
