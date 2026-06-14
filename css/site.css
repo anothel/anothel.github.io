@@ -204,10 +204,6 @@ main {
     align-self: end;
 }
 
-.module-card-live {
-    background: var(--panel-strong);
-}
-
 .link-card {
     display: grid;
     gap: 14px;

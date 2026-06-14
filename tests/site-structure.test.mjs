@@ -23,6 +23,14 @@ test("root page is a hub and trends page owns the dashboard", () => {
     assert.match(trends, /..\/data\/trends\.json/);
 });
 
+test("root module cards use the same base-card styling", () => {
+    const root = read("index.html");
+    const moduleCards = root.match(/class="module-card"/g) || [];
+
+    assert.equal(moduleCards.length, 4);
+    assert.doesNotMatch(root, /module-card-live/);
+});
+
 test("packages page owns the package watchlist module", () => {
     const packages = read("packages/index.html");
 
