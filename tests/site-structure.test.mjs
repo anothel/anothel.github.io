@@ -11,6 +11,9 @@ test("root page is a hub and trends page owns the dashboard", () => {
     const trends = read("trends/index.html");
 
     assert.match(root, /href="trends\/index\.html"/);
+    assert.match(root, /href="packages\/index\.html"/);
+    assert.match(root, /href="repos\/index\.html"/);
+    assert.match(root, /href="links\/index\.html"/);
     assert.doesNotMatch(root, /data-grid/);
     assert.doesNotMatch(root, /dashboard\.js/);
 
@@ -18,4 +21,12 @@ test("root page is a hub and trends page owns the dashboard", () => {
     assert.match(trends, /href="..\/index\.html"/);
     assert.match(trends, /..\/js\/dashboard\.js/);
     assert.match(trends, /..\/data\/trends\.json/);
+});
+
+test("planned modules have reachable route pages", () => {
+    for (const route of ["packages", "repos", "links"]) {
+        const page = read(`${route}/index.html`);
+        assert.match(page, /href="..\/index\.html"/);
+        assert.match(page, /Planned/);
+    }
 });

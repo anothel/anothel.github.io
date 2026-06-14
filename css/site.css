@@ -129,16 +129,19 @@ main {
     gap: 22px;
 }
 
-.hub-intro {
+.hub-intro,
+.module-detail {
     max-width: 680px;
 }
 
-.hub-intro h2 {
+.hub-intro h2,
+.module-detail h2 {
     margin-bottom: 8px;
     font-size: 1rem;
 }
 
-.hub-intro p {
+.hub-intro p,
+.module-detail p {
     margin-bottom: 0;
     color: var(--muted);
 }

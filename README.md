@@ -6,6 +6,9 @@ Static home hub and small dashboards served with GitHub Pages.
 
 - `index.html`: home hub
 - `trends/index.html`: responsive tech trend dashboard
+- `packages/index.html`: planned npm package watchlist
+- `repos/index.html`: planned GitHub repository watchlist
+- `links/index.html`: planned reference queue
 - `css/site.css`: site-specific styles
 - `data/trends.json`: static seed data
 - `js/dashboard.js`: filtering and rendering
