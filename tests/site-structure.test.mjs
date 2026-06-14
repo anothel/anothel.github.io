@@ -7,6 +7,46 @@ function read(path) {
 }
 
 const styles = read("css/site.css");
+const pages = [
+    ["index.html", "Home", ""],
+    ["today/index.html", "Today", "../"],
+    ["trends/index.html", "Trends", "../"],
+    ["packages/index.html", "Packages", "../"],
+    ["repos/index.html", "Repos", "../"],
+    ["links/index.html", "Links", "../"]
+];
+
+test("public pages expose shared primary navigation", () => {
+    for (const [path, label, prefix] of pages) {
+        const html = read(path);
+
+        assert.match(html, /class="site-nav"/);
+        assert.match(html, /aria-label="Primary"/);
+        for (const href of [
+            `${prefix}index.html`,
+            `${prefix}today/index.html`,
+            `${prefix}trends/index.html`,
+            `${prefix}packages/index.html`,
+            `${prefix}repos/index.html`,
+            `${prefix}links/index.html`
+        ]) {
+            assert.match(html, new RegExp(`href="${href.replaceAll("/", "\\/")}"`));
+        }
+        assert.match(html, new RegExp(`aria-current="page">${label}</a>`));
+    }
+});
+
+test("public page headers use stable single-line titles without a brand button", () => {
+    for (const [path] of pages) {
+        const html = read(path);
+
+        assert.doesNotMatch(html, /class="brand"/);
+    }
+    assert.doesNotMatch(styles, /\.brand\s*{/);
+    assert.match(styles, /\.topbar\s*{[^}]*grid-template-columns: minmax\(0, 1fr\) auto/s);
+    assert.match(styles, /\.topbar h1\s*{[^}]*white-space: nowrap/s);
+    assert.match(styles, /\.topbar h1\s*{[^}]*text-overflow: ellipsis/s);
+});
 
 test("root page is a hub and trends page owns the dashboard", () => {
     const root = read("index.html");

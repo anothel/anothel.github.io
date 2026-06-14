@@ -64,24 +64,11 @@ select:focus-visible {
 .topbar {
     grid-area: topbar;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px 24px;
     align-items: end;
     padding-bottom: 22px;
     border-bottom: 1px solid var(--line);
-}
-
-.brand {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 72px;
-    height: 72px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--panel);
-    font-weight: 900;
-    text-decoration: none;
 }
 
 .eyebrow {
@@ -108,11 +95,47 @@ h1 {
     letter-spacing: 0;
 }
 
+.topbar h1 {
+    max-width: none;
+    font-size: 2.4rem;
+    line-height: 1.08;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .stamp {
     margin: 0;
     color: var(--muted);
     font-size: 0.92rem;
     white-space: nowrap;
+}
+
+.site-nav {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 4px;
+}
+
+.site-nav a {
+    min-height: 34px;
+    padding: 7px 10px 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--muted);
+    font-size: 0.84rem;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+    color: var(--accent);
 }
 
 .sidebar {
@@ -579,11 +602,7 @@ select {
     }
 
     .topbar {
-        grid-template-columns: auto minmax(0, 1fr);
-    }
-
-    .stamp {
-        grid-column: 2;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .panel {
@@ -625,11 +644,6 @@ select {
     .dashboard-grid,
     .today-grid {
         grid-template-columns: 1fr;
-    }
-
-    .brand {
-        width: 64px;
-        height: 64px;
     }
 
     .stamp {
