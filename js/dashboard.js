@@ -8,6 +8,8 @@ const state = {
     sort: "rank"
 };
 
+const trendDataUrl = document.currentScript?.dataset.source || "data/trends.json";
+
 const fallbackData = {
     updated: "2026-06-14",
     generatedAt: "2026-06-14T00:00:00.000Z",
@@ -257,7 +259,7 @@ async function init() {
     let isFallback = false;
 
     try {
-        const response = await fetch("data/trends.json");
+        const response = await fetch(trendDataUrl);
         if (response.ok) {
             data = await response.json();
         } else {

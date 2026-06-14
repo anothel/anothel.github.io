@@ -1,10 +1,11 @@
 # anothel.github.io
 
-Responsive tech trend dashboard served with GitHub Pages.
+Static home hub and small dashboards served with GitHub Pages.
 
 ## Structure
 
-- `index.html`: responsive dashboard
+- `index.html`: home hub
+- `trends/index.html`: responsive tech trend dashboard
 - `css/site.css`: site-specific styles
 - `data/trends.json`: static seed data
 - `js/dashboard.js`: filtering and rendering
@@ -37,6 +38,7 @@ The GitHub Actions workflow can also update `data/trends.json` once per day.
 
 ```powershell
 node --test tests/trend-data.test.mjs
+node --test tests/site-structure.test.mjs
 node --check scripts/update-trends.mjs
 node --check js/dashboard.js
 ```

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Tech signals from Hacker News, GitHub, and npm, ranked and filtered.">
+    <meta name="author" content="anothel">
+    <link rel="canonical" href="https://anothel.github.io/trends/">
+    <meta property="og:site_name" content="anothel">
+    <meta property="og:title" content="Tech Trends - anothel">
+    <meta property="og:description" content="Tech signals from Hacker News, GitHub, and npm, ranked and filtered.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anothel.github.io/trends/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Tech Trends - anothel">
+    <meta name="twitter:description" content="Tech signals from Hacker News, GitHub, and npm, ranked and filtered.">
+    <title>Tech Trends - anothel</title>
+    <link rel="stylesheet" href="../css/site.css">
+    <script defer src="../js/dashboard.js" data-source="../data/trends.json"></script>
+</head>
+<body>
+    <div class="shell">
+        <header class="topbar">
+            <a class="brand" href="../index.html" aria-label="anothel home">anothel</a>
+            <div>
+                <p class="eyebrow">Responsive dashboard</p>
+                <h1>Tech signals, ranked and filtered.</h1>
+            </div>
+            <p class="stamp">Updated <span data-updated>loading</span></p>
+        </header>
+
+        <aside class="sidebar" aria-label="Dashboard filters">
+            <div class="panel">
+                <h2>Filters</h2>
+                <label>
+                    Source
+                    <select data-source>
+                        <option>Loading</option>
+                    </select>
+                </label>
+                <label>
+                    Category
+                    <select data-category>
+                        <option>Loading</option>
+                    </select>
+                </label>
+                <label>
+                    Search
+                    <input data-query type="search" placeholder="agent, npm, sqlite">
+                </label>
+                <label>
+                    Sort
+                    <select data-sort>
+                        <option value="rank">Rank</option>
+                        <option value="score">Score</option>
+                        <option value="velocity">Velocity</option>
+                    </select>
+                </label>
+            </div>
+        </aside>
+
+        <main>
+            <section class="stats-grid" aria-label="Dashboard stats">
+                <article class="stat-card">
+                    <span>Total</span>
+                    <strong data-total>-</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Top score</span>
+                    <strong data-top-score>-</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Top category</span>
+                    <strong data-top-category>-</strong>
+                </article>
+            </section>
+
+            <section class="health-panel" aria-labelledby="health-title">
+                <div class="panel-heading">
+                    <h2 id="health-title">Source health</h2>
+                    <p data-data-mode>Loading data status.</p>
+                </div>
+                <div class="source-health-grid" data-source-health></div>
+            </section>
+
+            <section class="dashboard-grid" aria-label="Trend cards" data-grid>
+                <article class="trend-card">
+                    <h3>Loading data</h3>
+                    <p>Trend cards appear here.</p>
+                </article>
+            </section>
+
+            <section class="rank-panel" aria-labelledby="rank-title">
+                <div class="panel-heading">
+                    <h2 id="rank-title">Ranked list</h2>
+                    <p>Same data, compact table-like view.</p>
+                </div>
+                <div class="rank-head" aria-hidden="true">
+                    <span>#</span>
+                    <span>Signal</span>
+                    <span>Category</span>
+                    <span>Source</span>
+                    <span>Score</span>
+                </div>
+                <div class="rank-list" data-table></div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
