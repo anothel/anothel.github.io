@@ -59,6 +59,76 @@ export const linkDefinitions = [
         kind: "Docs",
         url: "https://opentelemetry.io/docs/",
         summary: "Observability concepts, instrumentation, traces, metrics, and logs."
+    },
+    {
+        title: "Anthropic Agent Skills",
+        category: "Agent skills",
+        kind: "Repo",
+        url: "https://github.com/anthropics/skills",
+        summary: "Official examples, spec, templates, and install paths for Claude Agent Skills."
+    },
+    {
+        title: "Agent Skills standard",
+        category: "Agent skills",
+        kind: "Spec",
+        url: "https://agentskills.io/",
+        summary: "Open specification for packaging reusable instructions, scripts, and resources for agents."
+    },
+    {
+        title: "mattpocock/skills",
+        category: "Agent skills",
+        kind: "Repo",
+        url: "https://github.com/mattpocock/skills",
+        summary: "Practical engineering skills for agent work: grilling, TDD, diagnosis, handoff, and architecture review."
+    },
+    {
+        title: "Claude Skills docs",
+        category: "Agent skills",
+        kind: "Docs",
+        url: "https://support.claude.com/en/articles/11144907-what-are-skills",
+        summary: "User-facing guide to what skills are and how Claude loads them for repeatable work."
+    },
+    {
+        title: "Claude API Skills overview",
+        category: "Agent skills",
+        kind: "Docs",
+        url: "https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
+        summary: "Developer overview for using skills through the Claude API."
+    },
+    {
+        title: "GitHub Awesome Copilot",
+        category: "AI agents",
+        kind: "Repo",
+        url: "https://github.com/github/awesome-copilot",
+        summary: "Community agents, instructions, skills, hooks, workflows, and plugins for GitHub Copilot."
+    },
+    {
+        title: "Model Context Protocol servers",
+        category: "AI agents",
+        kind: "Repo",
+        url: "https://github.com/modelcontextprotocol/servers",
+        summary: "Reference MCP servers for connecting agents to tools and data sources."
+    },
+    {
+        title: "OpenAI Codex",
+        category: "AI agents",
+        kind: "Repo",
+        url: "https://github.com/openai/codex",
+        summary: "Lightweight coding agent that runs in the terminal."
+    },
+    {
+        title: "contains-studio/agents",
+        category: "AI agents",
+        kind: "Repo",
+        url: "https://github.com/contains-studio/agents",
+        summary: "Specialized Claude Code agent files grouped by engineering, design, product, testing, and operations."
+    },
+    {
+        title: "Karpathy GitHub",
+        category: "AI engineering",
+        kind: "Profile",
+        url: "https://github.com/karpathy",
+        summary: "High-signal AI engineering repos including nanoGPT, nanochat, llm.c, and llama2.c."
     }
 ];
 

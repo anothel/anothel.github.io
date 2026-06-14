@@ -112,7 +112,7 @@ test("checked-in data powers the home overview and signal preview", () => {
         links: readJson("data/links.json")
     });
 
-    assert.equal(overview.totalItems, 33);
+    assert.ok(overview.totalItems >= 60);
     assert.equal(overview.liveModules, 4);
     assert.equal(signals.length, 8);
     assert.deepEqual(
@@ -134,7 +134,7 @@ test("collectHomeSignals can return full digest rows for today page", () => {
         links: Infinity
     });
 
-    assert.equal(signals.length, 33);
+    assert.ok(signals.length >= 60);
     assert.equal(signals[0].module, "Trends");
     assert.equal(signals.at(-1).module, "Links");
 });

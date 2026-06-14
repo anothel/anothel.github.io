@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-14",
-  "generatedAt": "2026-06-14T03:33:38.789Z",
+  "generatedAt": "2026-06-14T13:07:42.715Z",
   "sourceMeta": {
     "name": "GitHub",
     "status": "ok",
-    "count": 6,
-    "updatedAt": "2026-06-14T03:33:38.789Z"
+    "count": 16,
+    "updatedAt": "2026-06-14T13:07:42.715Z"
   },
   "repos": [
     {
@@ -13,7 +13,7 @@
       "name": "react/react",
       "category": "UI",
       "focus": "frontend runtime",
-      "stars": 245821,
+      "stars": 245835,
       "starsLabel": "245.8K",
       "forksLabel": "51.1K",
       "pushedAt": "2026-06-14",
@@ -33,8 +33,8 @@
       "name": "n8n-io/n8n",
       "category": "Automation",
       "focus": "workflow automation",
-      "stars": 192410,
-      "starsLabel": "192.4K",
+      "stars": 192450,
+      "starsLabel": "192.5K",
       "forksLabel": "58.5K",
       "pushedAt": "2026-06-14",
       "url": "https://github.com/n8n-io/n8n",
@@ -64,10 +64,25 @@
     },
     {
       "rank": 3,
+      "name": "anthropics/skills",
+      "category": "Agent skills",
+      "focus": "official Agent Skills examples",
+      "stars": 150537,
+      "starsLabel": "150.5K",
+      "forksLabel": "17.8K",
+      "pushedAt": "2026-06-09",
+      "url": "https://github.com/anthropics/skills",
+      "summary": "Public repository for Agent Skills",
+      "topics": [
+        "agent-skills"
+      ]
+    },
+    {
+      "rank": 4,
       "name": "vercel/next.js",
       "category": "Framework",
       "focus": "React framework",
-      "stars": 139986,
+      "stars": 139995,
       "starsLabel": "140K",
       "forksLabel": "31.2K",
       "pushedAt": "2026-06-14",
@@ -91,11 +106,37 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 5,
+      "name": "mattpocock/skills",
+      "category": "Agent skills",
+      "focus": "engineering workflow skills",
+      "stars": 128337,
+      "starsLabel": "128.3K",
+      "forksLabel": "11.2K",
+      "pushedAt": "2026-06-12",
+      "url": "https://github.com/mattpocock/skills",
+      "summary": "Skills for Real Engineers. Straight from my .claude directory.",
+      "topics": []
+    },
+    {
+      "rank": 6,
+      "name": "openai/codex",
+      "category": "AI agents",
+      "focus": "terminal coding agent",
+      "stars": 90954,
+      "starsLabel": "91K",
+      "forksLabel": "13.4K",
+      "pushedAt": "2026-06-14",
+      "url": "https://github.com/openai/codex",
+      "summary": "Lightweight coding agent that runs in your terminal",
+      "topics": []
+    },
+    {
+      "rank": 7,
       "name": "microsoft/playwright",
       "category": "Testing",
       "focus": "browser automation",
-      "stars": 90898,
+      "stars": 90923,
       "starsLabel": "90.9K",
       "forksLabel": "5.9K",
       "pushedAt": "2026-06-14",
@@ -120,11 +161,24 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 8,
+      "name": "modelcontextprotocol/servers",
+      "category": "AI agents",
+      "focus": "MCP reference servers",
+      "stars": 87202,
+      "starsLabel": "87.2K",
+      "forksLabel": "11K",
+      "pushedAt": "2026-06-07",
+      "url": "https://github.com/modelcontextprotocol/servers",
+      "summary": "Model Context Protocol Servers",
+      "topics": []
+    },
+    {
+      "rank": 9,
       "name": "vitejs/vite",
       "category": "Tooling",
       "focus": "build tool",
-      "stars": 81454,
+      "stars": 81459,
       "starsLabel": "81.5K",
       "forksLabel": "8.3K",
       "pushedAt": "2026-06-13",
@@ -139,7 +193,33 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 10,
+      "name": "karpathy/nanoGPT",
+      "category": "AI engineering",
+      "focus": "small GPT training",
+      "stars": 59600,
+      "starsLabel": "59.6K",
+      "forksLabel": "10.3K",
+      "pushedAt": "2025-11-12",
+      "url": "https://github.com/karpathy/nanoGPT",
+      "summary": "The simplest, fastest repository for training/finetuning medium-sized GPTs.",
+      "topics": []
+    },
+    {
+      "rank": 11,
+      "name": "karpathy/nanochat",
+      "category": "AI engineering",
+      "focus": "minimal ChatGPT stack",
+      "stars": 55006,
+      "starsLabel": "55K",
+      "forksLabel": "7.5K",
+      "pushedAt": "2026-05-05",
+      "url": "https://github.com/karpathy/nanochat",
+      "summary": "The best ChatGPT that $100 can buy.",
+      "topics": []
+    },
+    {
+      "rank": 12,
       "name": "colinhacks/zod",
       "category": "Validation",
       "focus": "schema validation",
@@ -156,6 +236,67 @@
         "type-inference",
         "typescript"
       ]
+    },
+    {
+      "rank": 13,
+      "name": "github/awesome-copilot",
+      "category": "AI agents",
+      "focus": "Copilot agents and skills",
+      "stars": 34987,
+      "starsLabel": "35K",
+      "forksLabel": "4.3K",
+      "pushedAt": "2026-06-14",
+      "url": "https://github.com/github/awesome-copilot",
+      "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot.",
+      "topics": [
+        "agent-skills",
+        "agents",
+        "ai",
+        "awesome",
+        "custom-agents",
+        "github-copilot",
+        "hacktoberfest",
+        "prompt-engineering"
+      ]
+    },
+    {
+      "rank": 14,
+      "name": "karpathy/llm.c",
+      "category": "AI engineering",
+      "focus": "LLM training in C/CUDA",
+      "stars": 30211,
+      "starsLabel": "30.2K",
+      "forksLabel": "3.6K",
+      "pushedAt": "2025-06-26",
+      "url": "https://github.com/karpathy/llm.c",
+      "summary": "LLM training in simple, raw C/CUDA",
+      "topics": []
+    },
+    {
+      "rank": 15,
+      "name": "karpathy/llama2.c",
+      "category": "AI engineering",
+      "focus": "single-file Llama inference",
+      "stars": 19628,
+      "starsLabel": "19.6K",
+      "forksLabel": "2.6K",
+      "pushedAt": "2024-08-06",
+      "url": "https://github.com/karpathy/llama2.c",
+      "summary": "Inference Llama 2 in one file of pure C",
+      "topics": []
+    },
+    {
+      "rank": 16,
+      "name": "contains-studio/agents",
+      "category": "AI agents",
+      "focus": "Claude Code agent packs",
+      "stars": 12386,
+      "starsLabel": "12.4K",
+      "forksLabel": "2.5K",
+      "pushedAt": "2025-07-28",
+      "url": "https://github.com/contains-studio/agents",
+      "summary": "sharing current agents in use",
+      "topics": []
     }
   ]
 }

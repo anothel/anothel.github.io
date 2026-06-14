@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildLinkRows } from "../scripts/update-links.mjs";
+import { buildLinkRows, linkDefinitions } from "../scripts/update-links.mjs";
 
 test("buildLinkRows sorts links by category and title", () => {
     const rows = buildLinkRows([
@@ -39,4 +39,18 @@ test("buildLinkRows sorts links by category and title", () => {
             summary: "Reference for web platform APIs."
         }
     ]);
+});
+
+test("default links include AI skills and agent references", () => {
+    const titles = new Set(linkDefinitions.map((link) => link.title));
+    const categories = new Set(linkDefinitions.map((link) => link.category));
+
+    assert.ok(linkDefinitions.length >= 18);
+    assert.ok(categories.has("Agent skills"));
+    assert.ok(categories.has("AI agents"));
+    assert.ok(titles.has("Anthropic Agent Skills"));
+    assert.ok(titles.has("mattpocock/skills"));
+    assert.ok(titles.has("GitHub Awesome Copilot"));
+    assert.ok(titles.has("Model Context Protocol servers"));
+    assert.ok(titles.has("Karpathy GitHub"));
 });

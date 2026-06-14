@@ -10,7 +10,17 @@ export const repoDefinitions = [
     { fullName: "vitejs/vite", category: "Tooling", focus: "build tool" },
     { fullName: "microsoft/playwright", category: "Testing", focus: "browser automation" },
     { fullName: "n8n-io/n8n", category: "Automation", focus: "workflow automation" },
-    { fullName: "colinhacks/zod", category: "Validation", focus: "schema validation" }
+    { fullName: "colinhacks/zod", category: "Validation", focus: "schema validation" },
+    { fullName: "anthropics/skills", category: "Agent skills", focus: "official Agent Skills examples" },
+    { fullName: "mattpocock/skills", category: "Agent skills", focus: "engineering workflow skills" },
+    { fullName: "openai/codex", category: "AI agents", focus: "terminal coding agent" },
+    { fullName: "github/awesome-copilot", category: "AI agents", focus: "Copilot agents and skills" },
+    { fullName: "modelcontextprotocol/servers", category: "AI agents", focus: "MCP reference servers" },
+    { fullName: "contains-studio/agents", category: "AI agents", focus: "Claude Code agent packs" },
+    { fullName: "karpathy/nanoGPT", category: "AI engineering", focus: "small GPT training" },
+    { fullName: "karpathy/nanochat", category: "AI engineering", focus: "minimal ChatGPT stack" },
+    { fullName: "karpathy/llm.c", category: "AI engineering", focus: "LLM training in C/CUDA" },
+    { fullName: "karpathy/llama2.c", category: "AI engineering", focus: "single-file Llama inference" }
 ];
 
 function isoDate(date = new Date()) {

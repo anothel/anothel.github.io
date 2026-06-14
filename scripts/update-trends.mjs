@@ -3,9 +3,9 @@ import { pathToFileURL } from "node:url";
 
 const OUT_FILE = new URL("../data/trends.json", import.meta.url);
 const USER_AGENT = "anothel.github.io tech radar";
-const MAX_ITEMS = 12;
+export const MAX_ITEMS = 24;
 
-const npmPackages = [
+export const npmPackages = [
     "react",
     "typescript",
     "vite",
@@ -17,11 +17,20 @@ const npmPackages = [
     "playwright",
     "express",
     "fastify",
-    "tsx"
+    "tsx",
+    "ai",
+    "openai",
+    "@anthropic-ai/sdk",
+    "langchain",
+    "@langchain/core",
+    "@modelcontextprotocol/sdk"
 ];
 
-const githubQueries = [
+export const githubQueries = [
     { query: "topic:ai stars:>500", category: "AI" },
+    { query: "topic:ai-agent stars:>100", category: "AI agents" },
+    { query: "topic:mcp stars:>100", category: "AI agents" },
+    { query: "claude skills stars:>100", category: "Agent skills" },
     { query: "topic:typescript stars:>500", category: "TypeScript" },
     { query: "topic:developer-tools stars:>300", category: "Developer tools" },
     { query: "topic:frontend stars:>500", category: "Frontend" }
@@ -47,6 +56,10 @@ function clampScore(value) {
 
 function stripHtml(value = "") {
     return value.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+}
+
+export function buildNpmDownloadsUrl(packageName) {
+    return `https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(packageName)}`;
 }
 
 function classify(text) {
@@ -79,14 +92,14 @@ async function fetchJson(url, options = {}) {
 async function fetchHackerNews() {
     const ids = await fetchJson("https://hacker-news.firebaseio.com/v0/topstories.json");
     const stories = await Promise.all(
-        ids.slice(0, 35).map((id) =>
+        ids.slice(0, 50).map((id) =>
             fetchJson(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).catch(() => null)
         )
     );
 
     return stories
         .filter((story) => story && story.type === "story" && story.title && story.url)
-        .slice(0, 4)
+        .slice(0, 6)
         .map((story) => ({
             title: stripHtml(story.title),
             source: "Hacker News",
@@ -99,7 +112,7 @@ async function fetchHackerNews() {
         }));
 }
 
-async function fetchGitHub() {
+export async function fetchGitHub(fetcher = fetchJson) {
     const since = daysAgo(30);
     const headers = {};
     if (process.env.GITHUB_TOKEN) {
@@ -113,10 +126,13 @@ async function fetchGitHub() {
             q: `${item.query} pushed:>=${since}`,
             sort: "stars",
             order: "desc",
-            per_page: "3"
+            per_page: "5"
         });
 
-        const data = await fetchJson(`https://api.github.com/search/repositories?${params}`, { headers });
+        const data = await fetcher(`https://api.github.com/search/repositories?${params}`, { headers }).catch((error) => {
+            console.warn(`Skipping GitHub query ${item.query}: ${error.message}`);
+            return { items: [] };
+        });
         for (const repo of data.items || []) {
             results.push({
                 title: repo.full_name,
@@ -131,17 +147,23 @@ async function fetchGitHub() {
         }
     }
 
-    return results.slice(0, 4);
+    return results.slice(0, 10);
 }
 
 async function fetchNpm() {
-    const packages = npmPackages.join(",");
-    const data = await fetchJson(`https://api.npmjs.org/downloads/point/last-week/${packages}`);
+    const packageResults = await Promise.all(
+        npmPackages.map((packageName) =>
+            fetchJson(buildNpmDownloadsUrl(packageName)).catch((error) => {
+                console.warn(`Skipping npm package ${packageName}: ${error.message}`);
+                return null;
+            })
+        )
+    );
 
-    return Object.values(data)
+    return packageResults
         .filter((item) => item && item.package && typeof item.downloads === "number")
         .sort((a, b) => b.downloads - a.downloads)
-        .slice(0, 4)
+        .slice(0, 8)
         .map((item) => ({
             title: item.package,
             source: "npm",

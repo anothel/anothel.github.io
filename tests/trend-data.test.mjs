@@ -1,7 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildSourceMeta } from "../scripts/update-trends.mjs";
+import {
+    buildNpmDownloadsUrl,
+    buildSourceMeta,
+    fetchGitHub,
+    githubQueries,
+    MAX_ITEMS,
+    npmPackages
+} from "../scripts/update-trends.mjs";
 
 test("buildSourceMeta records source status and item counts", () => {
     const generatedAt = "2026-06-14T00:00:00.000Z";
@@ -37,4 +44,47 @@ test("buildSourceMeta records source status and item counts", () => {
             updatedAt: generatedAt
         }
     ]);
+});
+
+test("default trend inputs leave room for AI agent signals", () => {
+    assert.equal(MAX_ITEMS, 24);
+    assert.ok(npmPackages.includes("ai"));
+    assert.ok(npmPackages.includes("openai"));
+    assert.ok(npmPackages.includes("@anthropic-ai/sdk"));
+    assert.ok(npmPackages.includes("@modelcontextprotocol/sdk"));
+    assert.ok(githubQueries.some((item) => item.category === "AI agents"));
+    assert.ok(githubQueries.some((item) => item.category === "Agent skills"));
+});
+
+test("buildNpmDownloadsUrl supports scoped package names", () => {
+    assert.equal(
+        buildNpmDownloadsUrl("@anthropic-ai/sdk"),
+        "https://api.npmjs.org/downloads/point/last-week/%40anthropic-ai%2Fsdk"
+    );
+});
+
+test("fetchGitHub keeps successful query results when one query fails", async () => {
+    let calls = 0;
+    const rows = await fetchGitHub(async () => {
+        calls += 1;
+        if (calls === 2) {
+            throw new Error("rate limit exceeded");
+        }
+
+        return {
+            items: [
+                {
+                    full_name: `example/repo-${calls}`,
+                    stargazers_count: 1000 + calls,
+                    forks_count: 100 + calls,
+                    html_url: `https://github.com/example/repo-${calls}`,
+                    description: "Example repository."
+                }
+            ]
+        };
+    });
+
+    assert.equal(calls, githubQueries.length);
+    assert.ok(rows.length >= githubQueries.length - 1);
+    assert.ok(rows.every((row) => row.source === "GitHub"));
 });

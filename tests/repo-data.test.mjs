@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildRepoRows } from "../scripts/update-repos.mjs";
+import { buildRepoRows, repoDefinitions } from "../scripts/update-repos.mjs";
 
 test("buildRepoRows sorts repos by stars and formats rows", () => {
     const rows = buildRepoRows(
@@ -59,4 +59,23 @@ test("buildRepoRows sorts repos by stars and formats rows", () => {
             topics: ["frontend", "tooling"]
         }
     ]);
+});
+
+test("default repo watchlist tracks AI skills and agent projects", () => {
+    const names = new Set(repoDefinitions.map((repo) => repo.fullName));
+    const categories = new Set(repoDefinitions.map((repo) => repo.category));
+
+    assert.ok(repoDefinitions.length >= 16);
+    assert.ok(categories.has("Agent skills"));
+    assert.ok(categories.has("AI agents"));
+    assert.ok(categories.has("AI engineering"));
+    assert.ok(names.has("anthropics/skills"));
+    assert.ok(names.has("mattpocock/skills"));
+    assert.ok(names.has("openai/codex"));
+    assert.ok(names.has("github/awesome-copilot"));
+    assert.ok(names.has("modelcontextprotocol/servers"));
+    assert.ok(names.has("contains-studio/agents"));
+    assert.ok(names.has("karpathy/nanoGPT"));
+    assert.ok(names.has("karpathy/nanochat"));
+    assert.ok(names.has("karpathy/llm.c"));
 });
