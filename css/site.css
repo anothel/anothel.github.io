@@ -178,6 +178,11 @@ main {
     text-decoration: none;
 }
 
+.module-card:hover {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+}
+
 .module-card span {
     justify-self: start;
     min-height: 26px;

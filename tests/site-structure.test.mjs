@@ -6,6 +6,8 @@ function read(path) {
     return readFileSync(path, "utf8");
 }
 
+const styles = read("css/site.css");
+
 test("root page is a hub and trends page owns the dashboard", () => {
     const root = read("index.html");
     const trends = read("trends/index.html");
@@ -29,6 +31,12 @@ test("root module cards use the same base-card styling", () => {
 
     assert.equal(moduleCards.length, 4);
     assert.doesNotMatch(root, /module-card-live/);
+});
+
+test("home module cards only brighten on hover", () => {
+    assert.match(styles, /\.module-card:hover/);
+    assert.match(styles, /\.module-card:hover\s*{[^}]*background: var\(--panel-strong\)/s);
+    assert.doesNotMatch(styles, /module-card-live/);
 });
 
 test("packages page owns the package watchlist module", () => {
