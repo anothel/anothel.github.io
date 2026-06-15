@@ -128,7 +128,7 @@ const fallbackData = {
 const els = {
     grid: document.querySelector("[data-grid]"),
     table: document.querySelector("[data-table]"),
-    source: document.querySelector("[data-source]"),
+    source: document.querySelector("select[data-source]"),
     category: document.querySelector("[data-category]"),
     query: document.querySelector("[data-query]"),
     sort: document.querySelector("[data-sort]"),

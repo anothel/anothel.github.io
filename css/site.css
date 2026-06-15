@@ -191,6 +191,7 @@ main {
 
 .section-heading {
     display: flex;
+    min-width: 0;
     align-items: end;
     justify-content: space-between;
     gap: 18px;
@@ -235,6 +236,7 @@ main {
 
 .signal-card div {
     display: flex;
+    min-width: 0;
     justify-content: space-between;
     gap: 10px;
 }
@@ -258,6 +260,18 @@ main {
 .signal-card strong {
     font-size: 1rem;
     line-height: 1.25;
+}
+
+.signal-card strong,
+.signal-card small,
+.signal-card p,
+.link-card h2,
+.link-card p,
+.trend-card h3,
+.trend-card p,
+.rank-row span,
+.watch-row span {
+    overflow-wrap: anywhere;
 }
 
 .link-card {
@@ -360,6 +374,7 @@ select {
 
 .source-health-card div {
     display: flex;
+    min-width: 0;
     justify-content: space-between;
     gap: 10px;
 }
@@ -459,6 +474,7 @@ select {
 
 .panel-heading {
     display: flex;
+    min-width: 0;
     align-items: end;
     justify-content: space-between;
     gap: 18px;
@@ -592,6 +608,23 @@ select {
 
     .stamp {
         grid-column: auto;
+    }
+
+    .topbar h1 {
+        font-size: clamp(1.85rem, 10vw, 2.4rem);
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
+
+    .stamp {
+        white-space: normal;
+    }
+
+    .section-heading,
+    .panel-heading {
+        align-items: start;
+        flex-direction: column;
     }
 
     .trend-card {

@@ -48,6 +48,13 @@ test("public page headers use stable single-line titles without a brand button",
     assert.match(styles, /\.topbar h1\s*{[^}]*text-overflow: ellipsis/s);
 });
 
+test("mobile layout allows long titles and card text to wrap", () => {
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topbar h1\s*{[^}]*white-space: normal/s);
+    assert.match(styles, /\.signal-card strong,[\s\S]*\.trend-card h3[\s\S]*{[^}]*overflow-wrap: anywhere/s);
+    assert.match(styles, /\.signal-card div\s*{[^}]*min-width: 0/s);
+    assert.match(styles, /\.source-health-card div\s*{[^}]*min-width: 0/s);
+});
+
 test("public pages avoid indefinite loading placeholders in checked-in HTML", () => {
     for (const [path] of pages) {
         const html = read(path);
@@ -159,9 +166,11 @@ test("public page copy avoids implementation-first labels", () => {
 
 test("source wording distinguishes origin filters from data status", () => {
     const trends = read("trends/index.html");
+    const dashboardScript = read("js/dashboard.js");
 
     assert.match(trends, /Origin\s*<select data-source>/);
     assert.match(trends, /All origins/);
+    assert.match(dashboardScript, /document\.querySelector\("select\[data-source\]"\)/);
     assert.match(trends, /<span>Origin<\/span>/);
     assert.doesNotMatch(trends, /<span>Source<\/span>/);
     for (const path of ["packages/index.html", "repos/index.html", "links/index.html"]) {
