@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-14",
-  "generatedAt": "2026-06-14T13:09:10.649Z",
+  "generatedAt": "2026-06-14T22:21:33.514Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -11,19 +11,19 @@
       "name": "Hacker News",
       "status": "ok",
       "count": 6,
-      "updatedAt": "2026-06-14T13:09:10.649Z"
+      "updatedAt": "2026-06-14T22:21:33.514Z"
     },
     {
       "name": "GitHub",
       "status": "ok",
       "count": 9,
-      "updatedAt": "2026-06-14T13:09:10.649Z"
+      "updatedAt": "2026-06-14T22:21:33.514Z"
     },
     {
       "name": "npm",
       "status": "ok",
       "count": 8,
-      "updatedAt": "2026-06-14T13:09:10.649Z"
+      "updatedAt": "2026-06-14T22:21:33.514Z"
     }
   ],
   "items": [
@@ -33,7 +33,7 @@
       "source": "GitHub",
       "category": "AI",
       "score": 100,
-      "velocity": "378.6K stars",
+      "velocity": "378.7K stars",
       "signal": "79.2K forks",
       "url": "https://github.com/openclaw/openclaw",
       "summary": "Your own personal AI assistant. Any OS. Any Platform. The lobster way. 🦞 "
@@ -132,7 +132,7 @@
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "193.2K stars",
+      "velocity": "193.5K stars",
       "signal": "33.8K forks",
       "url": "https://github.com/NousResearch/hermes-agent",
       "summary": "The agent that grows with you"
@@ -144,7 +144,7 @@
       "category": "AI",
       "score": 95,
       "velocity": "192.5K stars",
-      "signal": "58.5K forks",
+      "signal": "58.6K forks",
       "url": "https://github.com/n8n-io/n8n",
       "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations."
     },
@@ -198,7 +198,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 85,
-      "velocity": "53.6K stars",
+      "velocity": "53.7K stars",
       "signal": "10.7K forks",
       "url": "https://github.com/santifer/career-ops",
       "summary": "AI-powered job search system built on Claude Code. 14 skill modes, Go dashboard, PDF generation, batch processing."
@@ -216,69 +216,69 @@
     },
     {
       "rank": 18,
-      "title": "GLM 5.2 Is Out",
+      "title": "Firewood Splitting Simulator",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 82,
-      "velocity": "375 comments",
-      "signal": "657 points",
-      "url": "https://twitter.com/jietang/status/2065784751345287314",
-      "summary": "HN story by aloknnikhil with 375 comments."
+      "score": 68,
+      "velocity": "181 comments",
+      "signal": "546 points",
+      "url": "https://screen.toys/firewood/",
+      "summary": "HN story by memalign with 181 comments."
     },
     {
       "rank": 19,
-      "title": "Honda Civics and the Evil Valet",
+      "title": "Show HN: Kage – Shadow any website to a single binary for offline viewing",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 40,
-      "velocity": "68 comments",
-      "signal": "320 points",
-      "url": "https://juniperspring.org/posts/honda-evil-valet/",
-      "summary": "HN story by librick with 68 comments."
+      "category": "Frontend",
+      "score": 38,
+      "velocity": "62 comments",
+      "signal": "305 points",
+      "url": "https://github.com/tamnd/kage",
+      "summary": "HN story by tamnd with 62 comments."
     },
     {
       "rank": 20,
-      "title": "Free SQL→ER diagram tool, runs in the browser, nothing uploaded",
+      "title": "Rio de Janeiro's \"homegrown\" LLM appears to be a merge of an existing model",
       "source": "Hacker News",
-      "category": "Frontend",
-      "score": 30,
-      "velocity": "44 comments",
-      "signal": "241 points",
-      "url": "https://sqltoerdiagram.com/",
-      "summary": "HN story by robhati with 44 comments."
+      "category": "AI",
+      "score": 29,
+      "velocity": "129 comments",
+      "signal": "234 points",
+      "url": "https://github.com/nex-agi/Nex-N2/issues/4",
+      "summary": "HN story by unrvl22 with 129 comments."
     },
     {
       "rank": 21,
-      "title": "500-year-old monasteries outperform at digital transformation (U. of Zurich)",
+      "title": "Yserver: A modern X11 server written in Rust",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 6,
-      "velocity": "31 comments",
-      "signal": "46 points",
-      "url": "https://phys.org/news/2026-05-historic-monasteries-digital-countries.html",
-      "summary": "HN story by indynz with 31 comments."
+      "score": 10,
+      "velocity": "53 comments",
+      "signal": "76 points",
+      "url": "https://github.com/joske/yserver",
+      "summary": "HN story by Venn1 with 53 comments."
     },
     {
       "rank": 22,
-      "title": "Windows 1.0 and the WinAPI, 40 Years Later",
+      "title": "Chaosnet (1981)",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 3,
-      "velocity": "12 comments",
-      "signal": "24 points",
-      "url": "https://medium.com/@stassaf.uae/windows-1-0-and-the-winapi-40-years-later-abaf64832918",
-      "summary": "HN story by jhack with 12 comments."
+      "score": 6,
+      "velocity": "5 comments",
+      "signal": "46 points",
+      "url": "https://tumbleweed.nu/r/lm-3/uv/amber.html",
+      "summary": "HN story by RGBCube with 5 comments."
     },
     {
       "rank": 23,
-      "title": "The Birth and Death of JavaScript (2014)",
+      "title": "Why Is Claude Turning into an a**Hole?",
       "source": "Hacker News",
-      "category": "JavaScript",
-      "score": 2,
-      "velocity": "6 comments",
-      "signal": "15 points",
-      "url": "https://www.destroyallsoftware.com/talks/the-birth-and-death-of-javascript",
-      "summary": "HN story by subset with 6 comments."
+      "category": "AI",
+      "score": 1,
+      "velocity": "1 comments",
+      "signal": "11 points",
+      "url": "https://bramcohen.com/p/why-is-claude-turning-into-an-asshole",
+      "summary": "HN story by drob518 with 1 comments."
     }
   ]
 }
