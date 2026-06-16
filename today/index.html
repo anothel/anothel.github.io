@@ -3,25 +3,25 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="One searchable brief from every tracked technical signal.">
+    <meta name="description" content="Thirteen generated picks from tracked technical signals.">
     <meta name="author" content="anothel">
     <link rel="canonical" href="https://anothel.github.io/today/">
     <meta property="og:site_name" content="anothel">
     <meta property="og:title" content="Today - anothel">
-    <meta property="og:description" content="One searchable brief from every tracked technical signal.">
+    <meta property="og:description" content="Thirteen generated picks from tracked technical signals.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://anothel.github.io/today/">
     <title>Today - anothel</title>
     <link rel="stylesheet" href="../css/site.css">
 </head>
 <body>
-    <div class="shell">
+    <div class="shell hub-shell">
         <header class="topbar">
             <div>
-                <p class="eyebrow">Full brief</p>
-                <h1>Today's technical brief.</h1>
+                <p class="eyebrow">Priority brief</p>
+                <h1>Today's priority brief.</h1>
             </div>
-            <p class="stamp">all tracked data</p>
+            <p class="stamp">updated <span data-today-updated>2026-06-15</span></p>
             <nav class="site-nav" aria-label="Primary">
                 <a href="../index.html">Home</a>
                 <a href="../today/index.html" aria-current="page">Today</a>
@@ -32,41 +32,26 @@
             </nav>
         </header>
 
-        <aside class="sidebar">
-            <section class="panel">
-                <h2>Narrow list</h2>
-                <label>
-                    Area
-                    <select data-today-module>
-                        <option value="all">All areas</option>
-                    </select>
-                </label>
-                <label>
-                    Search
-                    <input type="search" data-today-query placeholder="Search title, area, origin">
-                </label>
-            </section>
-        </aside>
-
-        <main>
+        <main class="hub-main">
             <section class="module-detail">
-                <h2>One searchable list from every tracked area.</h2>
-                <p><span data-today-total>0</span> items collected from trends, packages, repos, and links.</p>
+                <h2>Thirteen generated picks from tracked signals.</h2>
+                <p data-today-status>Generated static data from trends, packages, repos, and links.</p>
             </section>
 
-            <section class="today-grid today-grid-wide" data-today-list aria-label="Today digest">
-                <a class="signal-card" href="../index.html">
-                    <div>
-                        <span>Ready</span>
-                        <em>checked-in data</em>
+            <section class="today-brief" data-today-sections aria-label="Today priority sections">
+                <section class="today-section">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Start here</h2>
+                            <p>Generated priority picks render from checked-in data.</p>
+                        </div>
                     </div>
-                    <strong>Full brief</strong>
-                    <small>trends / packages / repos / links</small>
-                    <p>Rows render from the same data files as home.</p>
-                </a>
+                </section>
             </section>
+
+            <section class="explore-strip" data-today-explore aria-label="Explore full lists"></section>
         </main>
     </div>
-    <script type="module" src="../js/today.js" data-source="../data/manifest.json"></script>
+    <script type="module" src="../js/today.js" data-source="../data/today.json"></script>
 </body>
 </html>

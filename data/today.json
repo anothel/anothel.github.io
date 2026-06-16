@@ -1,0 +1,163 @@
+{
+  "updated": "2026-06-15",
+  "generatedAt": "2026-06-16T11:55:00.868Z",
+  "sourceMeta": {
+    "name": "generated",
+    "status": "ok",
+    "count": 13,
+    "updatedAt": "2026-06-16T11:55:00.868Z"
+  },
+  "sections": [
+    {
+      "id": "start",
+      "title": "Start here",
+      "summary": "Three signals worth opening first.",
+      "items": [
+        {
+          "title": "Iroh 1.0",
+          "module": "Trends",
+          "origin": "Hacker News",
+          "category": "Developer tools",
+          "metric": "100 score",
+          "reason": "267 comments / 852 points",
+          "url": "https://www.iroh.computer/blog/v1",
+          "score": 100
+        },
+        {
+          "title": "openclaw/openclaw",
+          "module": "Trends",
+          "origin": "GitHub",
+          "category": "AI",
+          "metric": "100 score",
+          "reason": "378.9K stars / 79.3K forks",
+          "url": "https://github.com/openclaw/openclaw",
+          "score": 100
+        },
+        {
+          "title": "typescript",
+          "module": "Trends",
+          "origin": "npm",
+          "category": "JavaScript",
+          "metric": "100 score",
+          "reason": "217.3M/week / 2026-06-08 to 2026-06-14",
+          "url": "https://www.npmjs.com/package/typescript",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "id": "skim",
+      "title": "Worth skimming",
+      "summary": "Useful movement that does not need first attention.",
+      "items": [
+        {
+          "title": "zod",
+          "module": "Trends",
+          "origin": "npm",
+          "category": "Developer tools",
+          "metric": "99 score",
+          "reason": "194.8M/week / 2026-06-08 to 2026-06-14",
+          "url": "https://www.npmjs.com/package/zod",
+          "score": 99
+        },
+        {
+          "title": "react/react",
+          "module": "Repos",
+          "origin": "GitHub",
+          "category": "UI",
+          "metric": "245.9K stars",
+          "reason": "frontend runtime",
+          "url": "https://github.com/react/react",
+          "score": 85
+        },
+        {
+          "title": "react",
+          "module": "Packages",
+          "origin": "npm",
+          "category": "UI",
+          "metric": "142.5M/week",
+          "reason": "frontend runtime",
+          "url": "https://www.npmjs.com/package/react",
+          "score": 73
+        },
+        {
+          "title": "eslint",
+          "module": "Trends",
+          "origin": "npm",
+          "category": "Developer tools",
+          "metric": "98 score",
+          "reason": "138.3M/week / 2026-06-08 to 2026-06-14",
+          "url": "https://www.npmjs.com/package/eslint",
+          "score": 98
+        },
+        {
+          "title": "n8n-io/n8n",
+          "module": "Repos",
+          "origin": "GitHub",
+          "category": "Automation",
+          "metric": "192.7K stars",
+          "reason": "workflow automation",
+          "url": "https://github.com/n8n-io/n8n",
+          "score": 84
+        },
+        {
+          "title": "vite",
+          "module": "Packages",
+          "origin": "npm",
+          "category": "Tooling",
+          "metric": "138.8M/week",
+          "reason": "build tool",
+          "url": "https://www.npmjs.com/package/vite",
+          "score": 72
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Reference shelf",
+      "summary": "Stable references and projects worth keeping nearby.",
+      "items": [
+        {
+          "title": "Agent Skills standard",
+          "module": "Links",
+          "origin": "Spec",
+          "category": "Agent skills",
+          "metric": "Spec",
+          "reason": "Open specification for packaging reusable instructions, scripts, and resources for agents.",
+          "url": "https://agentskills.io/",
+          "score": 65
+        },
+        {
+          "title": "Anthropic Agent Skills",
+          "module": "Links",
+          "origin": "Repo",
+          "category": "Agent skills",
+          "metric": "Repo",
+          "reason": "Official examples, spec, templates, and install paths for Claude Agent Skills.",
+          "url": "https://github.com/anthropics/skills",
+          "score": 64
+        },
+        {
+          "title": "Claude API Skills overview",
+          "module": "Links",
+          "origin": "Docs",
+          "category": "Agent skills",
+          "metric": "Docs",
+          "reason": "Developer overview for using skills through the Claude API.",
+          "url": "https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
+          "score": 63
+        },
+        {
+          "title": "Claude Skills docs",
+          "module": "Links",
+          "origin": "Docs",
+          "category": "Agent skills",
+          "metric": "Docs",
+          "reason": "User-facing guide to what skills are and how Claude loads them for repeatable work.",
+          "url": "https://support.claude.com/en/articles/11144907-what-are-skills",
+          "score": 62
+        }
+      ]
+    }
+  ]
+}

@@ -85,16 +85,30 @@ test("root page is a hub and trends page owns the dashboard", () => {
     assert.match(trends, /..\/data\/trends\.json/);
 });
 
-test("today page owns the full digest module", () => {
+test("today page owns the generated priority brief", () => {
     const today = read("today/index.html");
 
-    assert.match(today, /data-today-total/);
-    assert.match(today, /data-today-list/);
-    assert.match(today, /data-today-query/);
-    assert.match(today, /data-today-module/);
+    for (const hook of [
+        "data-today-updated",
+        "data-today-status",
+        "data-today-sections",
+        "data-today-explore"
+    ]) {
+        assert.match(today, new RegExp(hook));
+    }
+    for (const oldHook of [
+        "data-today-query",
+        "data-today-module",
+        "data-today-list"
+    ]) {
+        assert.doesNotMatch(today, new RegExp(oldHook));
+    }
     assert.match(today, /..\/js\/today\.js/);
-    assert.match(today, /..\/data\/manifest\.json/);
+    assert.match(today, /..\/data\/today\.json/);
+    assert.match(today, /type="module" src="..\/js\/today\.js" data-source="..\/data\/today\.json"/);
     assert.match(today, /href="..\/index\.html"/);
+    assert.match(today, /Today's priority brief\./);
+    assert.match(today, /Thirteen generated picks from tracked signals\./);
 });
 
 test("root page avoids duplicate module entry cards below primary navigation", () => {
@@ -120,7 +134,7 @@ test("root page exposes data overview and current signal slots", () => {
     assert.match(root, /A small desk for deciding what to open next\./);
     assert.match(root, /Technical signals from HN, GitHub, npm, and saved references\./);
     assert.match(root, /Current signals/);
-    assert.match(root, /Open full digest/);
+    assert.match(root, /Open priority brief/);
     assert.match(root, /Data overview/);
     assert.match(root, /class="today-grid"/);
     assert.match(root, /class="signal-card"/);
@@ -142,8 +156,8 @@ test("packages page owns the package watchlist module", () => {
 });
 
 test("public page copy states concrete page purpose", () => {
-    assert.match(read("today/index.html"), /Today's technical brief\./);
-    assert.match(read("today/index.html"), /One searchable list from every tracked area\./);
+    assert.match(read("today/index.html"), /Today's priority brief\./);
+    assert.match(read("today/index.html"), /Thirteen generated picks from tracked signals\./);
     assert.match(read("trends/index.html"), /What is moving across HN, GitHub, and npm\./);
     assert.match(read("trends/index.html"), /Ranked movement with origin, category, and momentum\./);
     assert.match(read("packages/index.html"), /npm packages worth watching\./);

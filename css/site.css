@@ -218,6 +218,79 @@ main {
     gap: 14px;
 }
 
+.today-brief {
+    display: grid;
+    gap: 24px;
+}
+
+.today-section {
+    display: grid;
+    gap: 14px;
+}
+
+.today-section .section-heading {
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+}
+
+.today-card {
+    min-height: 190px;
+}
+
+.explore-strip {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+
+.explore-strip h2 {
+    margin-bottom: 4px;
+    font-size: 1rem;
+}
+
+.explore-strip p {
+    margin-bottom: 0;
+    color: var(--muted);
+}
+
+.explore-strip nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.explore-strip a {
+    display: grid;
+    min-width: 120px;
+    min-height: 54px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    text-decoration: none;
+}
+
+.explore-strip a:hover {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+}
+
+.explore-strip strong {
+    color: var(--accent);
+    font-size: 0.86rem;
+}
+
+.explore-strip span {
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
 .signal-card {
     display: grid;
     gap: 12px;
@@ -660,9 +733,15 @@ button {
     }
 
     .section-heading,
-    .panel-heading {
+    .panel-heading,
+    .explore-strip {
         align-items: start;
         flex-direction: column;
+    }
+
+    .explore-strip nav,
+    .explore-strip a {
+        width: 100%;
     }
 
     .trend-card {

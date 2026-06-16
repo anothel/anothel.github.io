@@ -121,7 +121,7 @@ test("checked-in data powers the home overview and signal preview", () => {
     );
 });
 
-test("collectHomeSignals can return full digest rows for today page", () => {
+test("collectHomeSignals can return complete rows for shared callers", () => {
     const signals = collectHomeSignals({
         trends: readJson("data/trends.json"),
         packages: readJson("data/packages.json"),

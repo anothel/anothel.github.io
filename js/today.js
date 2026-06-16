@@ -1,149 +1,133 @@
-const manifestUrl = typeof document === "undefined"
-    ? "../data/manifest.json"
-    : document.currentScript?.dataset.source || "../data/manifest.json";
+const todayUrl = typeof document === "undefined"
+    ? "../data/today.json"
+    : document.currentScript?.dataset.source || "../data/today.json";
 
-const state = {
-    signals: [],
-    module: "all",
-    query: ""
+const fallbackData = {
+    updated: "unavailable",
+    sourceMeta: {
+        status: "fallback",
+        count: 0
+    },
+    sections: [
+        { id: "start", title: "Start here", summary: "Three signals worth opening first.", items: [] },
+        { id: "skim", title: "Worth skimming", summary: "Useful movement that does not need first attention.", items: [] },
+        { id: "reference", title: "Reference shelf", summary: "Stable references and projects worth keeping nearby.", items: [] }
+    ]
 };
 
+const exploreLinks = [
+    ["Trends", "../trends/index.html", "Ranked movement"],
+    ["Repos", "../repos/index.html", "GitHub traction"],
+    ["Packages", "../packages/index.html", "npm movement"],
+    ["Links", "../links/index.html", "Reference queue"]
+];
+
 const els = typeof document === "undefined" ? {} : {
-    list: document.querySelector("[data-today-list]"),
-    total: document.querySelector("[data-today-total]"),
-    module: document.querySelector("[data-today-module]"),
-    query: document.querySelector("[data-today-query]")
+    updated: document.querySelector("[data-today-updated]"),
+    status: document.querySelector("[data-today-status]"),
+    sections: document.querySelector("[data-today-sections]"),
+    explore: document.querySelector("[data-today-explore]")
 };
 
 function escapeHtml(value) {
-    return String(value)
+    return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;");
 }
 
-function takeAll(items) {
-    return Array.isArray(items) ? items : [];
+function sectionItems(section) {
+    return Array.isArray(section?.items) ? section.items : [];
 }
 
-function collectSignals(datasets) {
-    const trends = takeAll(datasets.trends?.items).map((item) => ({
-        module: "Trends",
-        title: item.title,
-        meta: `${item.source} / ${item.category}`,
-        metric: `${item.score} score`,
-        reason: "Ranked trend signal",
-        url: item.url
-    }));
-
-    const packages = takeAll(datasets.packages?.packages).map((item) => ({
-        module: "Packages",
-        title: item.name,
-        meta: item.category,
-        metric: item.downloadsLabel,
-        reason: "Weekly npm demand",
-        url: item.url
-    }));
-
-    const repos = takeAll(datasets.repos?.repos).map((item) => ({
-        module: "Repos",
-        title: item.name,
-        meta: item.category,
-        metric: `${item.starsLabel} stars`,
-        reason: "Repository traction",
-        url: item.url
-    }));
-
-    const links = takeAll(datasets.links?.links).map((item) => ({
-        module: "Links",
-        title: item.title,
-        meta: `${item.category} / ${item.kind}`,
-        metric: "reference",
-        reason: "Reference queue",
-        url: item.url
-    }));
-
-    return [...trends, ...packages, ...repos, ...links];
+export function totalSectionItems(sections) {
+    return (Array.isArray(sections) ? sections : []).reduce(
+        (total, section) => total + sectionItems(section).length,
+        0
+    );
 }
 
-export function moduleOptions(signals) {
-    return [...new Set(signals.map((signal) => signal.module))].sort();
-}
+function renderTodayCard(item) {
+    const context = [item.origin, item.category].filter(Boolean).join(" / ");
 
-export function filterSignals(signals, filters) {
-    const query = filters.query.trim().toLowerCase();
-
-    return signals
-        .filter((signal) => filters.module === "all" || signal.module === filters.module)
-        .filter((signal) => {
-            if (!query) return true;
-            return [signal.module, signal.title, signal.meta, signal.metric, signal.reason].some((value) =>
-                value.toLowerCase().includes(query)
-            );
-        });
-}
-
-function renderCards(signals) {
-    return signals.map((signal) => `
-        <a class="signal-card" href="${escapeHtml(signal.url)}">
+    return `
+        <a class="signal-card today-card" href="${escapeHtml(item.url)}">
             <div>
-                <span>${escapeHtml(signal.module)}</span>
-                <em>${escapeHtml(signal.metric)}</em>
+                <span>${escapeHtml(item.module)}</span>
+                <em>${escapeHtml(item.metric)}</em>
             </div>
-            <strong>${escapeHtml(signal.title)}</strong>
-            <small>${escapeHtml(signal.meta)}</small>
-            <p>${escapeHtml(signal.reason)}</p>
+            <strong>${escapeHtml(item.title)}</strong>
+            <small>${escapeHtml(context)}</small>
+            <p>${escapeHtml(item.reason)}</p>
         </a>
-    `).join("");
+    `;
 }
 
-function fillModuleFilter(signals) {
-    els.module.innerHTML = '<option value="all">All modules</option>' + moduleOptions(signals)
-        .map((module) => `<option value="${module}">${module}</option>`)
-        .join("");
+export function renderTodaySections(sections) {
+    return (Array.isArray(sections) ? sections : []).map((section) => {
+        const items = sectionItems(section);
+
+        return `
+            <section class="today-section" data-section-id="${escapeHtml(section.id)}">
+                <div class="section-heading">
+                    <div>
+                        <h2>${escapeHtml(section.title)}</h2>
+                        <p>${escapeHtml(section.summary || `${items.length} generated picks`)}</p>
+                    </div>
+                </div>
+                <div class="today-grid">
+                    ${items.map(renderTodayCard).join("")}
+                </div>
+            </section>
+        `;
+    }).join("");
 }
 
-function render() {
-    const signals = filterSignals(state.signals, {
-        module: state.module,
-        query: state.query
-    });
-
-    els.total.textContent = String(signals.length);
-    els.list.innerHTML = renderCards(signals);
+export function renderExploreLinks() {
+    return `
+        <div>
+            <h2>Explore full lists</h2>
+            <p>Open complete source lists when a brief item needs more context.</p>
+        </div>
+        <nav aria-label="Full module pages">
+            ${exploreLinks.map(([label, href, meta]) => `
+                <a href="${escapeHtml(href)}">
+                    <strong>${escapeHtml(label)}</strong>
+                    <span>${escapeHtml(meta)}</span>
+                </a>
+            `).join("")}
+        </nav>
+    `;
 }
 
-async function readJson(path) {
+function updatedLabel(data) {
+    if (data.updated) return data.updated;
+    if (data.generatedAt) return data.generatedAt.slice(0, 10);
+    return "unavailable";
+}
+
+function renderToday(data) {
+    const total = totalSectionItems(data.sections);
+    const status = data.sourceMeta?.status || "ok";
+
+    if (els.updated) els.updated.textContent = updatedLabel(data);
+    if (els.status) els.status.textContent = `${total} generated picks. Data status: ${status}.`;
+    if (els.sections) els.sections.innerHTML = renderTodaySections(data.sections);
+    if (els.explore) els.explore.innerHTML = renderExploreLinks();
+}
+
+async function readToday(path) {
     const response = await fetch(path);
-    if (!response.ok) return null;
+    if (!response.ok) return fallbackData;
     return response.json();
 }
 
 async function init() {
     try {
-        const manifest = await readJson(manifestUrl);
-        if (!manifest) return;
-
-        const datasets = {};
-        for (const module of manifest.modules || []) {
-            const data = await readJson(`../${module.data}`).catch(() => null);
-            if (data) datasets[module.id] = data;
-        }
-
-        state.signals = collectSignals(datasets);
-        fillModuleFilter(state.signals);
-        els.module.addEventListener("change", (event) => {
-            state.module = event.target.value;
-            render();
-        });
-        els.query.addEventListener("input", (event) => {
-            state.query = event.target.value;
-            render();
-        });
-        render();
+        renderToday(await readToday(todayUrl));
     } catch {
-        // Fallback card remains visible if static JSON fetch fails.
+        renderToday(fallbackData);
     }
 }
 

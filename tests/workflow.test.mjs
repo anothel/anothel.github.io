@@ -10,10 +10,21 @@ test("data update workflow runs every data updater", () => {
         "scripts/update-packages.mjs",
         "scripts/update-repos.mjs",
         "scripts/update-links.mjs",
+        "scripts/update-today.mjs",
         "scripts/update-manifest.mjs"
     ]) {
         assert.match(workflow, new RegExp(`node ${script.replace("/", "\\/")}`));
     }
+});
+
+test("today generator runs after links and before manifest", () => {
+    const linksIndex = workflow.indexOf("node scripts/update-links.mjs");
+    const todayIndex = workflow.indexOf("node scripts/update-today.mjs");
+    const manifestIndex = workflow.indexOf("node scripts/update-manifest.mjs");
+
+    assert.ok(linksIndex >= 0);
+    assert.ok(todayIndex > linksIndex);
+    assert.ok(manifestIndex > todayIndex);
 });
 
 test("data update workflow commits every generated data file", () => {
@@ -22,6 +33,7 @@ test("data update workflow commits every generated data file", () => {
         "data/packages.json",
         "data/repos.json",
         "data/links.json",
+        "data/today.json",
         "data/manifest.json"
     ]) {
         assert.match(workflow, new RegExp(file.replace("/", "\\/")));
