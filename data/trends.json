@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-14",
-  "generatedAt": "2026-06-14T22:21:33.514Z",
+  "updated": "2026-06-15",
+  "generatedAt": "2026-06-15T23:08:16.671Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -11,167 +11,178 @@
       "name": "Hacker News",
       "status": "ok",
       "count": 6,
-      "updatedAt": "2026-06-14T22:21:33.514Z"
+      "updatedAt": "2026-06-15T23:08:16.671Z"
     },
     {
       "name": "GitHub",
       "status": "ok",
       "count": 9,
-      "updatedAt": "2026-06-14T22:21:33.514Z"
+      "updatedAt": "2026-06-15T23:08:16.671Z"
     },
     {
       "name": "npm",
       "status": "ok",
       "count": 8,
-      "updatedAt": "2026-06-14T22:21:33.514Z"
+      "updatedAt": "2026-06-15T23:08:16.671Z"
     }
   ],
   "items": [
     {
       "rank": 1,
+      "title": "Iroh 1.0",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 100,
+      "velocity": "267 comments",
+      "signal": "852 points",
+      "url": "https://www.iroh.computer/blog/v1",
+      "summary": "HN story by chadfowler with 267 comments."
+    },
+    {
+      "rank": 2,
       "title": "openclaw/openclaw",
       "source": "GitHub",
       "category": "AI",
       "score": 100,
-      "velocity": "378.7K stars",
-      "signal": "79.2K forks",
+      "velocity": "378.9K stars",
+      "signal": "79.3K forks",
       "url": "https://github.com/openclaw/openclaw",
       "summary": "Your own personal AI assistant. Any OS. Any Platform. The lobster way. 🦞 "
     },
     {
-      "rank": 2,
+      "rank": 3,
       "title": "typescript",
       "source": "npm",
       "category": "JavaScript",
       "score": 100,
       "velocity": "217.3M/week",
-      "signal": "2026-06-07 to 2026-06-13",
+      "signal": "2026-06-08 to 2026-06-14",
       "url": "https://www.npmjs.com/package/typescript",
       "summary": "217.3M downloads over the last available week."
     },
     {
-      "rank": 3,
+      "rank": 4,
       "title": "zod",
       "source": "npm",
       "category": "Developer tools",
       "score": 99,
-      "velocity": "193.7M/week",
-      "signal": "2026-06-07 to 2026-06-13",
+      "velocity": "194.8M/week",
+      "signal": "2026-06-08 to 2026-06-14",
       "url": "https://www.npmjs.com/package/zod",
-      "summary": "193.7M downloads over the last available week."
+      "summary": "194.8M downloads over the last available week."
     },
     {
-      "rank": 4,
+      "rank": 5,
       "title": "react",
       "source": "npm",
       "category": "JavaScript",
       "score": 98,
-      "velocity": "142.1M/week",
-      "signal": "2026-06-07 to 2026-06-13",
+      "velocity": "142.5M/week",
+      "signal": "2026-06-08 to 2026-06-14",
       "url": "https://www.npmjs.com/package/react",
-      "summary": "142.1M downloads over the last available week."
+      "summary": "142.5M downloads over the last available week."
     },
     {
-      "rank": 5,
+      "rank": 6,
       "title": "vite",
       "source": "npm",
       "category": "Developer tools",
       "score": 98,
-      "velocity": "138.3M/week",
-      "signal": "2026-06-07 to 2026-06-13",
+      "velocity": "138.8M/week",
+      "signal": "2026-06-08 to 2026-06-14",
       "url": "https://www.npmjs.com/package/vite",
-      "summary": "138.3M downloads over the last available week."
+      "summary": "138.8M downloads over the last available week."
     },
     {
-      "rank": 6,
+      "rank": 7,
       "title": "eslint",
       "source": "npm",
       "category": "Developer tools",
       "score": 98,
-      "velocity": "138M/week",
-      "signal": "2026-06-07 to 2026-06-13",
+      "velocity": "138.3M/week",
+      "signal": "2026-06-08 to 2026-06-14",
       "url": "https://www.npmjs.com/package/eslint",
-      "summary": "138M downloads over the last available week."
+      "summary": "138.3M downloads over the last available week."
     },
     {
-      "rank": 7,
+      "rank": 8,
       "title": "tailwindcss",
       "source": "npm",
       "category": "AI",
       "score": 97,
-      "velocity": "116.9M/week",
-      "signal": "2026-06-07 to 2026-06-13",
+      "velocity": "117.3M/week",
+      "signal": "2026-06-08 to 2026-06-14",
       "url": "https://www.npmjs.com/package/tailwindcss",
-      "summary": "116.9M downloads over the last available week."
+      "summary": "117.3M downloads over the last available week."
     },
     {
-      "rank": 8,
+      "rank": 9,
       "title": "prettier",
       "source": "npm",
       "category": "Developer tools",
       "score": 97,
-      "velocity": "115.4M/week",
-      "signal": "2026-06-07 to 2026-06-13",
+      "velocity": "115.5M/week",
+      "signal": "2026-06-08 to 2026-06-14",
       "url": "https://www.npmjs.com/package/prettier",
-      "summary": "115.4M downloads over the last available week."
+      "summary": "115.5M downloads over the last available week."
     },
     {
-      "rank": 9,
+      "rank": 10,
       "title": "express",
       "source": "npm",
       "category": "Developer tools",
       "score": 97,
-      "velocity": "110.6M/week",
-      "signal": "2026-06-07 to 2026-06-13",
+      "velocity": "110.4M/week",
+      "signal": "2026-06-08 to 2026-06-14",
       "url": "https://www.npmjs.com/package/express",
-      "summary": "110.6M downloads over the last available week."
+      "summary": "110.4M downloads over the last available week."
     },
     {
-      "rank": 10,
+      "rank": 11,
       "title": "NousResearch/hermes-agent",
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "193.5K stars",
-      "signal": "33.8K forks",
+      "velocity": "194.4K stars",
+      "signal": "34.1K forks",
       "url": "https://github.com/NousResearch/hermes-agent",
       "summary": "The agent that grows with you"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "title": "n8n-io/n8n",
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "192.5K stars",
+      "velocity": "192.7K stars",
       "signal": "58.6K forks",
       "url": "https://github.com/n8n-io/n8n",
       "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations."
     },
     {
-      "rank": 12,
+      "rank": 13,
       "title": "Significant-Gravitas/AutoGPT",
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "184.9K stars",
+      "velocity": "185K stars",
       "signal": "46.1K forks",
       "url": "https://github.com/Significant-Gravitas/AutoGPT",
       "summary": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters."
     },
     {
-      "rank": 13,
+      "rank": 14,
       "title": "f/prompts.chat",
       "source": "GitHub",
       "category": "AI",
       "score": 94,
-      "velocity": "163.7K stars",
+      "velocity": "163.8K stars",
       "signal": "21.2K forks",
       "url": "https://github.com/f/prompts.chat",
       "summary": "f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts from the community. Free and open source — self-host for your organization with complete privacy."
     },
     {
-      "rank": 14,
+      "rank": 15,
       "title": "thedaviddias/Front-End-Checklist",
       "source": "GitHub",
       "category": "AI agents",
@@ -182,103 +193,92 @@
       "summary": "🗂 The essential checklist for modern web development, for humans and AI agents"
     },
     {
-      "rank": 15,
+      "rank": 16,
       "title": "shareAI-lab/learn-claude-code",
       "source": "GitHub",
       "category": "AI agents",
       "score": 87,
-      "velocity": "66.5K stars",
-      "signal": "10.8K forks",
+      "velocity": "66.7K stars",
+      "signal": "10.9K forks",
       "url": "https://github.com/shareAI-lab/learn-claude-code",
       "summary": "Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1"
     },
     {
-      "rank": 16,
+      "rank": 17,
       "title": "santifer/career-ops",
       "source": "GitHub",
       "category": "AI agents",
       "score": 85,
-      "velocity": "53.7K stars",
+      "velocity": "53.9K stars",
       "signal": "10.7K forks",
       "url": "https://github.com/santifer/career-ops",
       "summary": "AI-powered job search system built on Claude Code. 14 skill modes, Go dashboard, PDF generation, batch processing."
     },
     {
-      "rank": 17,
+      "rank": 18,
       "title": "CherryHQ/cherry-studio",
       "source": "GitHub",
       "category": "AI agents",
       "score": 84,
-      "velocity": "47.3K stars",
+      "velocity": "47.4K stars",
       "signal": "4.5K forks",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "summary": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
-      "rank": 18,
-      "title": "Firewood Splitting Simulator",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 68,
-      "velocity": "181 comments",
-      "signal": "546 points",
-      "url": "https://screen.toys/firewood/",
-      "summary": "HN story by memalign with 181 comments."
-    },
-    {
       "rank": 19,
-      "title": "Show HN: Kage – Shadow any website to a single binary for offline viewing",
+      "title": "TinyWind: A pixel pirate sailing game with real wind physics (380k+ kms sailed)",
       "source": "Hacker News",
-      "category": "Frontend",
-      "score": 38,
-      "velocity": "62 comments",
-      "signal": "305 points",
-      "url": "https://github.com/tamnd/kage",
-      "summary": "HN story by tamnd with 62 comments."
+      "category": "AI",
+      "score": 66,
+      "velocity": "108 comments",
+      "signal": "527 points",
+      "url": "https://tinywind.io",
+      "summary": "HN story by tinywind with 108 comments."
     },
     {
       "rank": 20,
-      "title": "Rio de Janeiro's \"homegrown\" LLM appears to be a merge of an existing model",
+      "title": "A backdoor in a LinkedIn job offer",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 29,
-      "velocity": "129 comments",
-      "signal": "234 points",
-      "url": "https://github.com/nex-agi/Nex-N2/issues/4",
-      "summary": "HN story by unrvl22 with 129 comments."
+      "category": "Developer tools",
+      "score": 57,
+      "velocity": "88 comments",
+      "signal": "458 points",
+      "url": "https://roman.pt/posts/linkedin-backdoor/",
+      "summary": "HN story by lwhsiao with 88 comments."
     },
     {
       "rank": 21,
-      "title": "Yserver: A modern X11 server written in Rust",
+      "title": "US battery manufacturing output continues to break records",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 10,
-      "velocity": "53 comments",
-      "signal": "76 points",
-      "url": "https://github.com/joske/yserver",
-      "summary": "HN story by Venn1 with 53 comments."
+      "score": 14,
+      "velocity": "75 comments",
+      "signal": "108 points",
+      "url": "https://fred.stlouisfed.org/series/IPG33591S",
+      "summary": "HN story by epistasis with 75 comments."
     },
     {
       "rank": 22,
-      "title": "Chaosnet (1981)",
+      "title": "I Love the Computer",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 6,
-      "velocity": "5 comments",
-      "signal": "46 points",
-      "url": "https://tumbleweed.nu/r/lm-3/uv/amber.html",
-      "summary": "HN story by RGBCube with 5 comments."
+      "score": 11,
+      "velocity": "54 comments",
+      "signal": "87 points",
+      "url": "https://michaelenger.com/blog/i-love-the-computer/",
+      "summary": "HN story by speckx with 54 comments."
     },
     {
       "rank": 23,
-      "title": "Why Is Claude Turning into an a**Hole?",
+      "title": "Banned Book Library in a Wi-Fi Smart Light Bulb",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 1,
-      "velocity": "1 comments",
-      "signal": "11 points",
-      "url": "https://bramcohen.com/p/why-is-claude-turning-into-an-asshole",
-      "summary": "HN story by drob518 with 1 comments."
+      "category": "Developer tools",
+      "score": 2,
+      "velocity": "0 comments",
+      "signal": "15 points",
+      "url": "https://www.richardosgood.com/posts/banned-book-library/",
+      "summary": "HN story by sohkamyung with 0 comments."
     }
   ]
 }
