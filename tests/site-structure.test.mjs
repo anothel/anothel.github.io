@@ -78,6 +78,8 @@ test("root page is a hub and trends page owns the dashboard", () => {
     assert.doesNotMatch(root, /dashboard\.js/);
 
     assert.match(trends, /data-grid/);
+    assert.match(trends, /data-filter-summary/);
+    assert.match(trends, /data-clear-filters/);
     assert.match(trends, /href="..\/index\.html"/);
     assert.match(trends, /..\/js\/dashboard\.js/);
     assert.match(trends, /..\/data\/trends\.json/);

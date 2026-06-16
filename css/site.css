@@ -37,7 +37,8 @@ a:hover {
 
 a:focus-visible,
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+button:focus-visible {
     outline: 3px solid var(--accent);
     outline-offset: 3px;
 }
@@ -336,7 +337,8 @@ label {
 }
 
 input,
-select {
+select,
+button {
     width: 100%;
     min-height: 42px;
     border: 1px solid var(--line);
@@ -345,6 +347,32 @@ select {
     background: var(--panel-strong);
     color: var(--text);
     font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.panel-actions {
+    display: grid;
+    gap: 10px;
+}
+
+.panel-actions p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.84rem;
+}
+
+.ghost-button {
+    background: var(--panel);
+    color: var(--accent);
+    font-weight: 900;
+}
+
+.ghost-button:hover {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
 }
 
 .stats-grid {
@@ -468,6 +496,11 @@ select {
     font-weight: 900;
 }
 
+.empty-card {
+    min-height: 180px;
+    border-style: dashed;
+}
+
 .rank-panel {
     overflow: hidden;
 }
@@ -522,6 +555,11 @@ select {
 
 .rank-row span,
 .watch-row span {
+    color: var(--muted);
+}
+
+.rank-empty {
+    padding: 18px;
     color: var(--muted);
 }
 

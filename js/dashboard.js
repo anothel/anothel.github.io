@@ -137,7 +137,9 @@ const els = {
     sourceHealth: document.querySelector("[data-source-health]"),
     total: document.querySelector("[data-total]"),
     topScore: document.querySelector("[data-top-score]"),
-    topCategory: document.querySelector("[data-top-category]")
+    topCategory: document.querySelector("[data-top-category]"),
+    filterSummary: document.querySelector("[data-filter-summary]"),
+    clearFilters: document.querySelector("[data-clear-filters]")
 };
 
 function uniqueValues(items, key) {
@@ -169,11 +171,24 @@ function getFilteredItems() {
         });
 }
 
+function activeFilterSummary() {
+    const parts = [];
+    if (state.source !== "all") parts.push(`Origin: ${state.source}`);
+    if (state.category !== "all") parts.push(`Category: ${state.category}`);
+    if (state.query) parts.push(`Search: ${state.query}`);
+    if (state.sort !== "rank") parts.push(`Sort: ${state.sort}`);
+    return parts.length > 0 ? parts.join(" / ") : "Showing all signals.";
+}
+
 function renderStats(items) {
     const top = items[0];
     els.total.textContent = String(items.length);
     els.topScore.textContent = top ? String(top.score) : "-";
     els.topCategory.textContent = top ? top.category : "-";
+}
+
+function renderFilterSummary() {
+    els.filterSummary.textContent = activeFilterSummary();
 }
 
 function renderSourceHealth() {
@@ -194,6 +209,16 @@ function renderSourceHealth() {
 }
 
 function renderCards(items) {
+    if (items.length === 0) {
+        els.grid.innerHTML = `
+        <article class="trend-card empty-card">
+            <h3>No matching signals</h3>
+            <p>Try a broader search, another origin, or clear the current filters.</p>
+        </article>
+    `;
+        return;
+    }
+
     els.grid.innerHTML = items.map((item) => `
         <article class="trend-card">
             <div class="card-topline">
@@ -213,6 +238,11 @@ function renderCards(items) {
 }
 
 function renderTable(items) {
+    if (items.length === 0) {
+        els.table.innerHTML = '<div class="rank-empty">No rows match the current filters.</div>';
+        return;
+    }
+
     els.table.innerHTML = items.map((item) => `
         <a class="rank-row" href="${item.url}">
             <span>${item.rank}</span>
@@ -227,9 +257,22 @@ function renderTable(items) {
 function render() {
     const items = getFilteredItems();
     renderStats(items);
+    renderFilterSummary();
     renderSourceHealth();
     renderCards(items);
     renderTable(items);
+}
+
+function clearFilters() {
+    state.source = "all";
+    state.category = "all";
+    state.query = "";
+    state.sort = "rank";
+    els.source.value = state.source;
+    els.category.value = state.category;
+    els.query.value = state.query;
+    els.sort.value = state.sort;
+    render();
 }
 
 function bindEvents() {
@@ -252,6 +295,8 @@ function bindEvents() {
         state.sort = event.target.value;
         render();
     });
+
+    els.clearFilters.addEventListener("click", clearFilters);
 }
 
 async function init() {
