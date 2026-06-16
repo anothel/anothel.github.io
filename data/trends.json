@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-15",
-  "generatedAt": "2026-06-15T23:08:16.671Z",
+  "updated": "2026-06-16",
+  "generatedAt": "2026-06-16T22:57:33.416Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -11,32 +11,32 @@
       "name": "Hacker News",
       "status": "ok",
       "count": 6,
-      "updatedAt": "2026-06-15T23:08:16.671Z"
+      "updatedAt": "2026-06-16T22:57:33.416Z"
     },
     {
       "name": "GitHub",
       "status": "ok",
       "count": 9,
-      "updatedAt": "2026-06-15T23:08:16.671Z"
+      "updatedAt": "2026-06-16T22:57:33.416Z"
     },
     {
       "name": "npm",
       "status": "ok",
       "count": 8,
-      "updatedAt": "2026-06-15T23:08:16.671Z"
+      "updatedAt": "2026-06-16T22:57:33.416Z"
     }
   ],
   "items": [
     {
       "rank": 1,
-      "title": "Iroh 1.0",
+      "title": "Running local models is good now",
       "source": "Hacker News",
-      "category": "Developer tools",
+      "category": "AI",
       "score": 100,
-      "velocity": "267 comments",
-      "signal": "852 points",
-      "url": "https://www.iroh.computer/blog/v1",
-      "summary": "HN story by chadfowler with 267 comments."
+      "velocity": "391 comments",
+      "signal": "910 points",
+      "url": "https://vickiboykis.com/2026/06/15/running-local-models-is-good-now/",
+      "summary": "HN story by jfb with 391 comments."
     },
     {
       "rank": 2,
@@ -44,7 +44,7 @@
       "source": "GitHub",
       "category": "AI",
       "score": 100,
-      "velocity": "378.9K stars",
+      "velocity": "379K stars",
       "signal": "79.3K forks",
       "url": "https://github.com/openclaw/openclaw",
       "summary": "Your own personal AI assistant. Any OS. Any Platform. The lobster way. 🦞 "
@@ -55,112 +55,123 @@
       "source": "npm",
       "category": "JavaScript",
       "score": 100,
-      "velocity": "217.3M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "218M/week",
+      "signal": "2026-06-09 to 2026-06-15",
       "url": "https://www.npmjs.com/package/typescript",
-      "summary": "217.3M downloads over the last available week."
+      "summary": "218M downloads over the last available week."
     },
     {
       "rank": 4,
       "title": "zod",
       "source": "npm",
       "category": "Developer tools",
-      "score": 99,
-      "velocity": "194.8M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "score": 100,
+      "velocity": "196.6M/week",
+      "signal": "2026-06-09 to 2026-06-15",
       "url": "https://www.npmjs.com/package/zod",
-      "summary": "194.8M downloads over the last available week."
+      "summary": "196.6M downloads over the last available week."
     },
     {
       "rank": 5,
+      "title": "SpaceX to buy Cursor for $60B",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 98,
+      "velocity": "1211 comments",
+      "signal": "785 points",
+      "url": "https://www.reuters.com/legal/transactional/spacex-buy-anysphere-60-billion-2026-06-16/",
+      "summary": "HN story by itsmarcelg with 1211 comments."
+    },
+    {
+      "rank": 6,
       "title": "react",
       "source": "npm",
       "category": "JavaScript",
       "score": 98,
-      "velocity": "142.5M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "143.6M/week",
+      "signal": "2026-06-09 to 2026-06-15",
       "url": "https://www.npmjs.com/package/react",
-      "summary": "142.5M downloads over the last available week."
+      "summary": "143.6M downloads over the last available week."
     },
     {
-      "rank": 6,
+      "rank": 7,
       "title": "vite",
       "source": "npm",
       "category": "Developer tools",
       "score": 98,
-      "velocity": "138.8M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "140M/week",
+      "signal": "2026-06-09 to 2026-06-15",
       "url": "https://www.npmjs.com/package/vite",
-      "summary": "138.8M downloads over the last available week."
+      "summary": "140M downloads over the last available week."
     },
     {
-      "rank": 7,
+      "rank": 8,
       "title": "eslint",
       "source": "npm",
       "category": "Developer tools",
       "score": 98,
-      "velocity": "138.3M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "139.1M/week",
+      "signal": "2026-06-09 to 2026-06-15",
       "url": "https://www.npmjs.com/package/eslint",
-      "summary": "138.3M downloads over the last available week."
+      "summary": "139.1M downloads over the last available week."
     },
     {
-      "rank": 8,
+      "rank": 9,
       "title": "tailwindcss",
       "source": "npm",
       "category": "AI",
       "score": 97,
-      "velocity": "117.3M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "118.1M/week",
+      "signal": "2026-06-09 to 2026-06-15",
       "url": "https://www.npmjs.com/package/tailwindcss",
-      "summary": "117.3M downloads over the last available week."
+      "summary": "118.1M downloads over the last available week."
     },
     {
-      "rank": 9,
+      "rank": 10,
       "title": "prettier",
       "source": "npm",
       "category": "Developer tools",
       "score": 97,
-      "velocity": "115.5M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "116.4M/week",
+      "signal": "2026-06-09 to 2026-06-15",
       "url": "https://www.npmjs.com/package/prettier",
-      "summary": "115.5M downloads over the last available week."
+      "summary": "116.4M downloads over the last available week."
     },
     {
-      "rank": 10,
+      "rank": 11,
       "title": "express",
       "source": "npm",
       "category": "Developer tools",
       "score": 97,
-      "velocity": "110.4M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "110.8M/week",
+      "signal": "2026-06-09 to 2026-06-15",
       "url": "https://www.npmjs.com/package/express",
-      "summary": "110.4M downloads over the last available week."
+      "summary": "110.8M downloads over the last available week."
     },
     {
-      "rank": 11,
+      "rank": 12,
       "title": "NousResearch/hermes-agent",
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "194.4K stars",
-      "signal": "34.1K forks",
+      "velocity": "195.3K stars",
+      "signal": "34.3K forks",
       "url": "https://github.com/NousResearch/hermes-agent",
       "summary": "The agent that grows with you"
     },
     {
-      "rank": 12,
+      "rank": 13,
       "title": "n8n-io/n8n",
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "192.7K stars",
+      "velocity": "192.8K stars",
       "signal": "58.6K forks",
       "url": "https://github.com/n8n-io/n8n",
       "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations."
     },
     {
-      "rank": 13,
+      "rank": 14,
       "title": "Significant-Gravitas/AutoGPT",
       "source": "GitHub",
       "category": "AI",
@@ -171,7 +182,7 @@
       "summary": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters."
     },
     {
-      "rank": 14,
+      "rank": 15,
       "title": "f/prompts.chat",
       "source": "GitHub",
       "category": "AI",
@@ -182,7 +193,7 @@
       "summary": "f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts from the community. Free and open source — self-host for your organization with complete privacy."
     },
     {
-      "rank": 15,
+      "rank": 16,
       "title": "thedaviddias/Front-End-Checklist",
       "source": "GitHub",
       "category": "AI agents",
@@ -193,29 +204,29 @@
       "summary": "🗂 The essential checklist for modern web development, for humans and AI agents"
     },
     {
-      "rank": 16,
+      "rank": 17,
       "title": "shareAI-lab/learn-claude-code",
       "source": "GitHub",
       "category": "AI agents",
       "score": 87,
-      "velocity": "66.7K stars",
+      "velocity": "66.9K stars",
       "signal": "10.9K forks",
       "url": "https://github.com/shareAI-lab/learn-claude-code",
       "summary": "Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1"
     },
     {
-      "rank": 17,
+      "rank": 18,
       "title": "santifer/career-ops",
       "source": "GitHub",
       "category": "AI agents",
       "score": 85,
-      "velocity": "53.9K stars",
-      "signal": "10.7K forks",
+      "velocity": "54.2K stars",
+      "signal": "10.8K forks",
       "url": "https://github.com/santifer/career-ops",
       "summary": "AI-powered job search system built on Claude Code. 14 skill modes, Go dashboard, PDF generation, batch processing."
     },
     {
-      "rank": 18,
+      "rank": 19,
       "title": "CherryHQ/cherry-studio",
       "source": "GitHub",
       "category": "AI agents",
@@ -226,59 +237,48 @@
       "summary": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
-      "rank": 19,
-      "title": "TinyWind: A pixel pirate sailing game with real wind physics (380k+ kms sailed)",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 66,
-      "velocity": "108 comments",
-      "signal": "527 points",
-      "url": "https://tinywind.io",
-      "summary": "HN story by tinywind with 108 comments."
-    },
-    {
       "rank": 20,
-      "title": "A backdoor in a LinkedIn job offer",
+      "title": "Calvin and Hobbes and the price of integrity",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 57,
-      "velocity": "88 comments",
-      "signal": "458 points",
-      "url": "https://roman.pt/posts/linkedin-backdoor/",
-      "summary": "HN story by lwhsiao with 88 comments."
+      "score": 26,
+      "velocity": "80 comments",
+      "signal": "209 points",
+      "url": "https://therepublicofletters.substack.com/p/calvin-and-hobbes-and-the-price-of",
+      "summary": "HN story by pseudolus with 80 comments."
     },
     {
       "rank": 21,
-      "title": "US battery manufacturing output continues to break records",
+      "title": "TIL: You can make HTTP requests without curl using Bash /dev/TCP",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 14,
-      "velocity": "75 comments",
-      "signal": "108 points",
-      "url": "https://fred.stlouisfed.org/series/IPG33591S",
-      "summary": "HN story by epistasis with 75 comments."
+      "score": 26,
+      "velocity": "112 comments",
+      "signal": "204 points",
+      "url": "https://mareksuppa.com/til/bash-dev-tcp-http-without-curl/",
+      "summary": "HN story by mrshu with 112 comments."
     },
     {
       "rank": 22,
-      "title": "I Love the Computer",
+      "title": "GrapheneOS has been ported to Android 17 and official releases are coming soon",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 11,
-      "velocity": "54 comments",
-      "signal": "87 points",
-      "url": "https://michaelenger.com/blog/i-love-the-computer/",
-      "summary": "HN story by speckx with 54 comments."
+      "score": 23,
+      "velocity": "72 comments",
+      "signal": "180 points",
+      "url": "https://discuss.grapheneos.org/d/36469-grapheneos-has-been-ported-to-android-17-and-official-releases-are-coming-soon",
+      "summary": "HN story by Cider9986 with 72 comments."
     },
     {
       "rank": 23,
-      "title": "Banned Book Library in a Wi-Fi Smart Light Bulb",
+      "title": "GPT‑NL: a sovereign language model for the Netherlands",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 2,
-      "velocity": "0 comments",
-      "signal": "15 points",
-      "url": "https://www.richardosgood.com/posts/banned-book-library/",
-      "summary": "HN story by sohkamyung with 0 comments."
+      "category": "AI",
+      "score": 15,
+      "velocity": "107 comments",
+      "signal": "116 points",
+      "url": "https://www.tno.nl/en/digital/artificial-intelligence/gpt-nl/",
+      "summary": "HN story by root-parent with 107 comments."
     }
   ]
 }
