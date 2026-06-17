@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-16",
-  "generatedAt": "2026-06-16T22:57:33.718Z",
+  "updated": "2026-06-17",
+  "generatedAt": "2026-06-17T22:52:35.437Z",
   "sourceMeta": {
     "name": "npm",
     "status": "ok",
     "count": 8,
-    "updatedAt": "2026-06-16T22:57:33.718Z"
+    "updatedAt": "2026-06-17T22:52:35.437Z"
   },
   "packages": [
     {
@@ -13,9 +13,9 @@
       "name": "typescript",
       "category": "Language",
       "focus": "typed JavaScript",
-      "downloads": 218034542,
-      "downloadsLabel": "218M/week",
-      "period": "2026-06-09 to 2026-06-15",
+      "downloads": 219990444,
+      "downloadsLabel": "220M/week",
+      "period": "2026-06-10 to 2026-06-16",
       "url": "https://www.npmjs.com/package/typescript"
     },
     {
@@ -23,9 +23,9 @@
       "name": "zod",
       "category": "Validation",
       "focus": "schema validation",
-      "downloads": 196577356,
-      "downloadsLabel": "196.6M/week",
-      "period": "2026-06-09 to 2026-06-15",
+      "downloads": 199976318,
+      "downloadsLabel": "200M/week",
+      "period": "2026-06-10 to 2026-06-16",
       "url": "https://www.npmjs.com/package/zod"
     },
     {
@@ -33,9 +33,9 @@
       "name": "react",
       "category": "UI",
       "focus": "frontend runtime",
-      "downloads": 143595274,
-      "downloadsLabel": "143.6M/week",
-      "period": "2026-06-09 to 2026-06-15",
+      "downloads": 146163328,
+      "downloadsLabel": "146.2M/week",
+      "period": "2026-06-10 to 2026-06-16",
       "url": "https://www.npmjs.com/package/react"
     },
     {
@@ -43,9 +43,9 @@
       "name": "vite",
       "category": "Tooling",
       "focus": "build tool",
-      "downloads": 139974183,
-      "downloadsLabel": "140M/week",
-      "period": "2026-06-09 to 2026-06-15",
+      "downloads": 141791010,
+      "downloadsLabel": "141.8M/week",
+      "period": "2026-06-10 to 2026-06-16",
       "url": "https://www.npmjs.com/package/vite"
     },
     {
@@ -53,9 +53,9 @@
       "name": "eslint",
       "category": "Tooling",
       "focus": "linting",
-      "downloads": 139051523,
-      "downloadsLabel": "139.1M/week",
-      "period": "2026-06-09 to 2026-06-15",
+      "downloads": 141107246,
+      "downloadsLabel": "141.1M/week",
+      "period": "2026-06-10 to 2026-06-16",
       "url": "https://www.npmjs.com/package/eslint"
     },
     {
@@ -63,9 +63,9 @@
       "name": "prettier",
       "category": "Tooling",
       "focus": "formatting",
-      "downloads": 116381365,
-      "downloadsLabel": "116.4M/week",
-      "period": "2026-06-09 to 2026-06-15",
+      "downloads": 117525518,
+      "downloadsLabel": "117.5M/week",
+      "period": "2026-06-10 to 2026-06-16",
       "url": "https://www.npmjs.com/package/prettier"
     },
     {
@@ -73,9 +73,9 @@
       "name": "playwright",
       "category": "Testing",
       "focus": "browser automation",
-      "downloads": 62308160,
-      "downloadsLabel": "62.3M/week",
-      "period": "2026-06-09 to 2026-06-15",
+      "downloads": 63322984,
+      "downloadsLabel": "63.3M/week",
+      "period": "2026-06-10 to 2026-06-16",
       "url": "https://www.npmjs.com/package/playwright"
     },
     {
@@ -83,9 +83,9 @@
       "name": "next",
       "category": "Framework",
       "focus": "React framework",
-      "downloads": 38202756,
-      "downloadsLabel": "38.2M/week",
-      "period": "2026-06-09 to 2026-06-15",
+      "downloads": 39651623,
+      "downloadsLabel": "39.7M/week",
+      "period": "2026-06-10 to 2026-06-16",
       "url": "https://www.npmjs.com/package/next"
     }
   ]

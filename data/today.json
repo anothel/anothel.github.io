@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-16",
-  "generatedAt": "2026-06-16T22:57:34.362Z",
+  "updated": "2026-06-17",
+  "generatedAt": "2026-06-17T22:52:35.942Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-16T22:57:34.362Z"
+    "updatedAt": "2026-06-17T22:52:35.942Z"
   },
   "sections": [
     {
@@ -14,23 +14,23 @@
       "summary": "Three signals worth opening first.",
       "items": [
         {
+          "title": "Lore – Open source version control system designed for scalability",
+          "module": "Trends",
+          "origin": "Hacker News",
+          "category": "Frontend",
+          "metric": "100 score",
+          "reason": "480 comments / 870 points",
+          "url": "https://lore.org/",
+          "score": 100
+        },
+        {
           "title": "openclaw/openclaw",
           "module": "Trends",
           "origin": "GitHub",
           "category": "AI",
           "metric": "100 score",
-          "reason": "379K stars / 79.3K forks",
+          "reason": "379.2K stars / 79.4K forks",
           "url": "https://github.com/openclaw/openclaw",
-          "score": 100
-        },
-        {
-          "title": "Running local models is good now",
-          "module": "Trends",
-          "origin": "Hacker News",
-          "category": "AI",
-          "metric": "100 score",
-          "reason": "391 comments / 910 points",
-          "url": "https://vickiboykis.com/2026/06/15/running-local-models-is-good-now/",
           "score": 100
         },
         {
@@ -39,7 +39,7 @@
           "origin": "npm",
           "category": "JavaScript",
           "metric": "100 score",
-          "reason": "218M/week / 2026-06-09 to 2026-06-15",
+          "reason": "220M/week / 2026-06-10 to 2026-06-16",
           "url": "https://www.npmjs.com/package/typescript",
           "score": 100
         }
@@ -56,7 +56,7 @@
           "origin": "npm",
           "category": "Developer tools",
           "metric": "100 score",
-          "reason": "196.6M/week / 2026-06-09 to 2026-06-15",
+          "reason": "200M/week / 2026-06-10 to 2026-06-16",
           "url": "https://www.npmjs.com/package/zod",
           "score": 100
         },
@@ -75,7 +75,7 @@
           "module": "Packages",
           "origin": "npm",
           "category": "UI",
-          "metric": "143.6M/week",
+          "metric": "146.2M/week",
           "reason": "frontend runtime",
           "url": "https://www.npmjs.com/package/react",
           "score": 73
@@ -86,7 +86,7 @@
           "origin": "npm",
           "category": "Developer tools",
           "metric": "98 score",
-          "reason": "139.1M/week / 2026-06-09 to 2026-06-15",
+          "reason": "141.1M/week / 2026-06-10 to 2026-06-16",
           "url": "https://www.npmjs.com/package/eslint",
           "score": 98
         },
@@ -95,7 +95,7 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Automation",
-          "metric": "192.8K stars",
+          "metric": "193K stars",
           "reason": "workflow automation",
           "url": "https://github.com/n8n-io/n8n",
           "score": 84
@@ -105,7 +105,7 @@
           "module": "Packages",
           "origin": "npm",
           "category": "Tooling",
-          "metric": "140M/week",
+          "metric": "141.8M/week",
           "reason": "build tool",
           "url": "https://www.npmjs.com/package/vite",
           "score": 72
