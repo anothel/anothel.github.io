@@ -9,6 +9,7 @@ const state = {
 };
 
 const trendDataUrl = document.currentScript?.dataset.source || "data/trends.json";
+const dataHealth = globalThis.DataHealth;
 
 const fallbackData = {
     updated: "2026-06-14",
@@ -222,19 +223,10 @@ function renderFilterSummary() {
 
 function renderSourceHealth() {
     els.dataMode.textContent = state.isFallback
-        ? "Showing fallback data because checked-in data was unavailable."
-        : "Checked-in data loaded. Scheduled workflow keeps it fresh.";
+        ? dataHealth.dataModeText({ status: "fallback" })
+        : dataHealth.dataModeText(state.sourceMeta);
 
-    els.sourceHealth.innerHTML = state.sourceMeta.map((source) => `
-        <article class="source-health-card status-${escapeHtml(source.status)}">
-            <div>
-                <strong>${escapeHtml(source.name)}</strong>
-                <span>${escapeHtml(source.status)}</span>
-            </div>
-            <p>${escapeHtml(source.count)} visible items</p>
-            <small>${escapeHtml(source.error || source.updatedAt)}</small>
-        </article>
-    `).join("");
+    els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(state.sourceMeta);
 }
 
 function renderCards(items) {

@@ -134,6 +134,7 @@ test("root page exposes command center slots", () => {
         "data-home-total",
         "data-home-live",
         "data-home-updated",
+        "data-home-freshness",
         "data-home-start",
         "data-home-skim",
         "data-home-routes"
@@ -152,6 +153,18 @@ test("root page exposes command center slots", () => {
     assert.match(root, /class="module-strip"/);
     assert.doesNotMatch(root, /class="today-grid"/);
     assert.doesNotMatch(root, /data-home-signals/);
+});
+
+test("module pages expose data health strips", () => {
+    for (const path of ["trends/index.html", "packages/index.html", "repos/index.html", "links/index.html"]) {
+        const html = read(path);
+
+        assert.match(html, /data-data-mode/);
+        assert.match(html, /data-source-health/);
+        assert.match(html, /js\/data-health\.js/);
+    }
+    assert.match(styles, /\.source-health-card\.status-partial/);
+    assert.match(styles, /\.source-health-card\.status-fallback/);
 });
 
 test("home command center cards brighten on hover", () => {

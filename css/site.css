@@ -9,6 +9,8 @@
     --accent: #2f6f63;
     --accent-soft: #d9e7e2;
     --warning: #8a5a1f;
+    --danger: #8d3333;
+    --neutral: #56606a;
     --radius: 8px;
     --shadow: 0 20px 60px rgba(35, 37, 33, 0.08);
 }
@@ -639,7 +641,20 @@ button {
 }
 
 .source-health-card.status-error span {
+    color: var(--danger);
+}
+
+.source-health-card.status-partial span,
+.source-health-card.status-fallback span {
     color: var(--warning);
+}
+
+.source-health-card.status-unknown span {
+    color: var(--neutral);
+}
+
+.compact-health .source-health-grid {
+    grid-template-columns: 1fr;
 }
 
 .stat-card {

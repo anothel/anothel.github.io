@@ -42,14 +42,39 @@ const routePurpose = {
     links: "Reference shelf"
 };
 
+function statusCounts(modules) {
+    return modules.reduce(
+        (counts, module) => {
+            const status = module.status || "unknown";
+            if (status === "ok") counts.ok += 1;
+            else if (status === "partial") counts.partial += 1;
+            else if (status === "error") counts.error += 1;
+            return counts;
+        },
+        { ok: 0, partial: 0, error: 0 }
+    );
+}
+
+function healthLabel(counts) {
+    return [
+        counts.ok > 0 ? `${counts.ok} ok` : "",
+        counts.partial > 0 ? `${counts.partial} partial` : "",
+        counts.error > 0 ? `${counts.error} error` : ""
+    ].filter(Boolean).join(" / ") || "0 ok";
+}
+
 export function buildHomeOverview(manifest) {
     const modules = manifest.modules || [];
+    const counts = statusCounts(modules);
 
     return {
         totalItems: modules.reduce((sum, module) => sum + module.count, 0),
-        liveModules: modules.filter((module) => module.status === "ok").length,
+        liveModules: counts.ok,
+        partialModules: counts.partial,
+        errorModules: counts.error,
         totalModules: modules.length,
-        updated: modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || "-"
+        updated: modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || "-",
+        healthLabel: healthLabel(counts)
     };
 }
 
@@ -102,7 +127,7 @@ export function renderModuleRoutes(routes) {
         <a class="module-route status-${escapeHtml(route.status)}" href="${safeHref(route.route)}">
             <span>${escapeHtml(route.title)}</span>
             <strong>${escapeHtml(route.purpose)}</strong>
-            <small>${escapeHtml(route.count)} items / ${escapeHtml(route.updated)}</small>
+            <small>${escapeHtml(route.count)} items / ${escapeHtml(route.updated)} / Status ${escapeHtml(route.status)}</small>
         </a>
     `).join("");
 }
@@ -112,10 +137,12 @@ function applyOverview(root, manifest) {
     const total = root.querySelector("[data-home-total]");
     const live = root.querySelector("[data-home-live]");
     const updated = root.querySelector("[data-home-updated]");
+    const freshness = root.querySelector("[data-home-freshness]");
 
     if (total) total.textContent = String(overview.totalItems);
-    if (live) live.textContent = `${overview.liveModules}/${overview.totalModules}`;
+    if (live) live.textContent = overview.healthLabel;
     if (updated) updated.textContent = overview.updated;
+    if (freshness) freshness.textContent = overview.updated === "-" ? "unknown" : "fresh";
 }
 
 function applyRoutes(root, manifest) {

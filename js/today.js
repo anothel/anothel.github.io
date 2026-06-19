@@ -128,12 +128,19 @@ function updatedLabel(data) {
     return "unavailable";
 }
 
-function renderToday(data) {
+export function renderTodayStatus(data) {
     const total = totalSectionItems(data.sections);
     const status = data.sourceMeta?.status || "ok";
 
+    if (status === "fallback") return `${total} generated picks. Showing fallback data.`;
+    if (status === "partial") return `${total} generated picks from partial source data.`;
+    if (status === "error") return `${total} generated picks from failed source refresh.`;
+    return `${total} generated picks. Data status: ${status}.`;
+}
+
+function renderToday(data) {
     if (els.updated) els.updated.textContent = updatedLabel(data);
-    if (els.status) els.status.textContent = `${total} generated picks. Data status: ${status}.`;
+    if (els.status) els.status.textContent = renderTodayStatus(data);
     if (els.sections) els.sections.innerHTML = renderTodaySections(data.sections);
     if (els.explore) els.explore.innerHTML = renderExploreLinks();
 }

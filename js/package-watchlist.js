@@ -37,6 +37,8 @@ const fallbackPackages = {
     ]
 };
 
+const dataHealth = globalThis.DataHealth;
+
 function escapeHtml(value) {
     return String(value ?? "")
         .replaceAll("&", "&amp;")
@@ -71,6 +73,8 @@ const els = {
     total: document.querySelector("[data-total]"),
     topPackage: document.querySelector("[data-top-package]"),
     sourceStatus: document.querySelector("[data-source-status]"),
+    dataMode: document.querySelector("[data-data-mode]"),
+    sourceHealth: document.querySelector("[data-source-health]"),
     list: document.querySelector("[data-package-list]")
 };
 
@@ -93,6 +97,8 @@ function render(data) {
     els.total.textContent = String(data.packages.length);
     els.topPackage.textContent = top ? top.name : "-";
     els.sourceStatus.textContent = data.sourceMeta.status;
+    els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta);
+    els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(data.sourceMeta);
     els.list.innerHTML = data.packages.map((item) => `
         <a class="watch-row" href="${safeHref(item.url)}">
             <span>#${escapeHtml(item.rank)}</span>

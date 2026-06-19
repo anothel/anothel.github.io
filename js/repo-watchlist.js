@@ -43,6 +43,8 @@ const fallbackRepos = {
     ]
 };
 
+const dataHealth = globalThis.DataHealth;
+
 function escapeHtml(value) {
     return String(value ?? "")
         .replaceAll("&", "&amp;")
@@ -77,6 +79,8 @@ const els = {
     total: document.querySelector("[data-total]"),
     topRepo: document.querySelector("[data-top-repo]"),
     sourceStatus: document.querySelector("[data-source-status]"),
+    dataMode: document.querySelector("[data-data-mode]"),
+    sourceHealth: document.querySelector("[data-source-health]"),
     list: document.querySelector("[data-repo-list]")
 };
 
@@ -99,6 +103,8 @@ function render(data) {
     els.total.textContent = String(data.repos.length);
     els.topRepo.textContent = top ? top.name.split("/")[1] : "-";
     els.sourceStatus.textContent = data.sourceMeta.status;
+    els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta);
+    els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(data.sourceMeta);
     els.list.innerHTML = data.repos.map((item) => `
         <a class="watch-row repo-row" href="${safeHref(item.url)}">
             <span>#${escapeHtml(item.rank)}</span>

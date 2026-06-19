@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { buildTodayBrief, sectionCounts } from "../scripts/update-today.mjs";
-import { renderExploreLinks, renderTodaySections, totalSectionItems } from "../js/today.js";
+import { renderExploreLinks, renderTodaySections, renderTodayStatus, totalSectionItems } from "../js/today.js";
 
 const todayData = JSON.parse(readFileSync("data/today.json", "utf8"));
 const expectedSectionCounts = [
@@ -207,6 +207,23 @@ test("renderExploreLinks links to all full module pages", () => {
     ]) {
         assert.match(html, new RegExp(`href="${href.replaceAll("/", "\\/")}"`));
     }
+});
+
+test("renderTodayStatus explains partial and fallback generated data", () => {
+    assert.equal(
+        renderTodayStatus({
+            sourceMeta: { status: "partial" },
+            sections: [{ items: [{}, {}] }]
+        }),
+        "2 generated picks from partial source data."
+    );
+    assert.equal(
+        renderTodayStatus({
+            sourceMeta: { status: "fallback" },
+            sections: []
+        }),
+        "0 generated picks. Showing fallback data."
+    );
 });
 
 test("buildTodayBrief promotes personal AI and agent workflow signals", () => {

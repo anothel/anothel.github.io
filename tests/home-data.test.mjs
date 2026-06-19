@@ -18,7 +18,7 @@ test("buildHomeOverview summarizes manifest modules", () => {
     const overview = buildHomeOverview({
         modules: [
             { status: "ok", count: 11, updated: "2026-06-14" },
-            { status: "error", count: 8, updated: "2026-06-13" },
+            { status: "partial", count: 8, updated: "2026-06-13" },
             { status: "ok", count: 6, updated: "2026-06-14" }
         ]
     });
@@ -26,8 +26,11 @@ test("buildHomeOverview summarizes manifest modules", () => {
     assert.deepEqual(overview, {
         totalItems: 25,
         liveModules: 2,
+        partialModules: 1,
+        errorModules: 0,
         totalModules: 3,
-        updated: "2026-06-14"
+        updated: "2026-06-14",
+        healthLabel: "2 ok / 1 partial"
     });
 });
 
@@ -115,6 +118,7 @@ test("home renderers emit command center markup", () => {
     assert.match(routeHtml, /class="module-route status-ok"/);
     assert.match(routeHtml, /href="trends\/index\.html"/);
     assert.match(routeHtml, /23 items/);
+    assert.match(routeHtml, /Status ok/);
 });
 
 test("home renderers escape text and block unsafe hrefs", () => {

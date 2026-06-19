@@ -51,6 +51,7 @@ async function runDashboard(data) {
         console
     };
 
+    vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/dashboard.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -113,9 +114,12 @@ test("dashboard escapes generated text and blocks unsafe item links", async () =
         sourceMeta: [
             {
                 name: "<script>source()</script>",
-                status: "ok",
+                status: "partial",
                 count: 1,
-                updatedAt: "bad \"time\""
+                updatedAt: "bad \"time\"",
+                errors: [
+                    { name: "bad-source", error: "bad \"timeout\"" }
+                ]
             }
         ],
         items: [
@@ -139,4 +143,7 @@ test("dashboard escapes generated text and blocks unsafe item links", async () =
     assert.match(html, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;quote&quot;/);
     assert.match(html, /&lt;script&gt;source\(\)&lt;\/script&gt;/);
+    assert.match(html, /status-partial/);
+    assert.match(html, /1 failed: bad-source/);
+    assert.match(html, /bad &quot;timeout&quot;/);
 });

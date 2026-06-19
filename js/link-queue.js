@@ -34,6 +34,8 @@ const fallbackLinks = {
     ]
 };
 
+const dataHealth = globalThis.DataHealth;
+
 function escapeHtml(value) {
     return String(value ?? "")
         .replaceAll("&", "&amp;")
@@ -74,6 +76,8 @@ const els = {
     total: document.querySelector("[data-total]"),
     topCategory: document.querySelector("[data-top-category]"),
     sourceStatus: document.querySelector("[data-source-status]"),
+    dataMode: document.querySelector("[data-data-mode]"),
+    sourceHealth: document.querySelector("[data-source-health]"),
     category: document.querySelector("[data-category]"),
     query: document.querySelector("[data-query]"),
     list: document.querySelector("[data-link-list]")
@@ -148,6 +152,8 @@ async function init() {
     state.links = data.links;
     els.updated.textContent = data.updated;
     els.sourceStatus.textContent = data.sourceMeta.status;
+    els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta);
+    els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(data.sourceMeta);
     fillCategorySelect(data.links);
     bindEvents();
     render();
