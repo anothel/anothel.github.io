@@ -24,6 +24,7 @@ Static home hub and small dashboards served with GitHub Pages.
 - `scripts/update-today.mjs`: builds the Today priority brief from generated data
 - `scripts/update-manifest.mjs`: updates the module manifest from generated data files
 - `tests/trend-data.test.mjs`: trend data helper tests
+- `tests/ops-docs.test.mjs`: data refresh operating docs tests
 - `.github/workflows/update-trends.yml`: scheduled data update workflow
 - `404.html`: GitHub Pages fallback page
 - `robots.txt`: crawler rules and sitemap location
@@ -45,7 +46,7 @@ Push changes to the GitHub Pages branch configured for this repository.
 
 ## Data Updates
 
-Run locally:
+Run locally in this order:
 
 ```powershell
 node scripts/update-trends.mjs
@@ -56,11 +57,23 @@ node scripts/update-today.mjs
 node scripts/update-manifest.mjs
 ```
 
-The GitHub Actions workflow can also update all generated JSON data once per day.
+The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pages does not need a server.
+
+## Data Refresh Automation
+
+`.github/workflows/update-trends.yml` keeps generated data warm.
+
+- Manual refresh: run `workflow_dispatch` from GitHub Actions.
+- Scheduled refresh: `schedule` runs `17 21 * * *` UTC, once per day.
+- Auth: GitHub API calls use `GITHUB_TOKEN` from the workflow environment.
+- Scope: only `data/trends.json`, `data/packages.json`, `data/repos.json`, `data/links.json`, `data/today.json`, and `data/manifest.json` are committed.
+- Safety: `concurrency` prevents overlapping data refresh jobs, and the workflow runs `node --test tests/*.test.mjs` before committing generated data.
+- Failure model: source fetch failures are stored as `error` or `partial` status where the updater can keep useful data. If a full updater cannot produce data, the workflow fails and the existing checked-in JSON remains published.
 
 ## Verification
 
 ```powershell
+node --test tests/*.test.mjs
 node --test tests/trend-data.test.mjs
 node --test tests/package-data.test.mjs
 node --test tests/repo-data.test.mjs
@@ -72,6 +85,7 @@ node --test tests/manifest.test.mjs
 node --test tests/site-structure.test.mjs
 node --test tests/serve.test.mjs
 node --test tests/workflow.test.mjs
+node --test tests/ops-docs.test.mjs
 node --check scripts/update-trends.mjs
 node --check scripts/update-packages.mjs
 node --check scripts/update-repos.mjs
