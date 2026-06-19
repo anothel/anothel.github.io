@@ -14,11 +14,15 @@ export const packageDefinitions = [
     { name: "eslint", category: "Tooling", focus: "linting" },
     { name: "prettier", category: "Tooling", focus: "formatting" },
     { name: "ai", category: "AI SDK", focus: "Vercel AI SDK" },
+    { name: "@ai-sdk/openai", category: "AI SDK", focus: "OpenAI provider for AI SDK" },
+    { name: "@ai-sdk/provider", category: "AI SDK", focus: "AI SDK provider interface" },
     { name: "openai", category: "AI SDK", focus: "OpenAI API SDK" },
     { name: "@anthropic-ai/sdk", category: "AI SDK", focus: "Anthropic API SDK" },
+    { name: "mastra", category: "AI agents", focus: "TypeScript agent framework" },
     { name: "langchain", category: "AI agents", focus: "LLM and agent orchestration" },
     { name: "@langchain/core", category: "AI agents", focus: "LangChain core primitives" },
-    { name: "@modelcontextprotocol/sdk", category: "MCP", focus: "Model Context Protocol SDK" }
+    { name: "@modelcontextprotocol/sdk", category: "MCP", focus: "Model Context Protocol SDK" },
+    { name: "inngest", category: "Workflow automation", focus: "durable workflow runtime" }
 ];
 
 function isoDate(date = new Date()) {

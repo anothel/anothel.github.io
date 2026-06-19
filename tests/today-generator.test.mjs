@@ -247,3 +247,32 @@ test("Reference shelf includes Links and excludes Hacker News trends", () => {
     assert.ok(referenceItems.some((item) => item.module === "Links"));
     assert.ok(referenceItems.every((item) => !(item.module === "Trends" && item.origin === "Hacker News")));
 });
+
+test("Start here limits generic baseline packages when agent signals exist", () => {
+    const brief = buildTodayBrief({
+        trends: {
+            items: [
+                { title: "typescript", source: "npm", category: "JavaScript", score: 100, velocity: "250M/week", signal: "last week", url: "https://example.com/typescript", summary: "Broad package movement." },
+                { title: "react", source: "npm", category: "JavaScript", score: 99, velocity: "150M/week", signal: "last week", url: "https://example.com/react", summary: "Broad package movement." },
+                { title: "MCP agent runtime", source: "GitHub", category: "MCP", score: 70, velocity: "2K stars", signal: "200 forks", url: "https://example.com/mcp-runtime", summary: "Runtime for MCP agents." }
+            ]
+        },
+        repos: {
+            repos: [
+                { name: "mattpocock/skills", category: "Agent skills", focus: "coding agent skills", starsLabel: "12K", url: "https://example.com/skills", summary: "Skills for coding agents." },
+                { name: "openai/codex", category: "AI agents", focus: "terminal coding agent", starsLabel: "90K", url: "https://example.com/codex", summary: "Coding agent." }
+            ]
+        },
+        packages: {
+            packages: [
+                { name: "mastra", category: "AI agents", focus: "TypeScript agent framework", downloadsLabel: "1M/week", url: "https://example.com/mastra" }
+            ]
+        },
+        links: { links: [] }
+    }, "2026-06-20T00:00:00.000Z");
+
+    const startItems = brief.sections.find((section) => section.id === "start").items;
+
+    assert.ok(startItems.filter((item) => ["typescript", "react"].includes(item.title)).length <= 1);
+    assert.ok(startItems.some((item) => /skills|codex|MCP|mastra/i.test(item.title)));
+});

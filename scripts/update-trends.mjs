@@ -19,21 +19,28 @@ export const npmPackages = [
     "fastify",
     "tsx",
     "ai",
+    "@ai-sdk/openai",
+    "@ai-sdk/provider",
     "openai",
     "@anthropic-ai/sdk",
+    "mastra",
     "langchain",
     "@langchain/core",
     "@modelcontextprotocol/sdk"
 ];
 
 export const githubQueries = [
-    { query: "topic:ai stars:>500", category: "AI" },
     { query: "topic:ai-agent stars:>100", category: "AI agents" },
-    { query: "topic:mcp stars:>100", category: "AI agents" },
+    { query: "coding agent stars:>100", category: "AI agents" },
+    { query: "claude code agents stars:>100", category: "AI agents" },
+    { query: "copilot agents stars:>100", category: "AI agents" },
+    { query: "topic:mcp stars:>100", category: "MCP" },
+    { query: "modelcontextprotocol stars:>100", category: "MCP" },
+    { query: "agent skills stars:>100", category: "Agent skills" },
     { query: "claude skills stars:>100", category: "Agent skills" },
+    { query: "topic:evals stars:>100", category: "AI evals" },
     { query: "topic:typescript stars:>500", category: "TypeScript" },
-    { query: "topic:developer-tools stars:>300", category: "Developer tools" },
-    { query: "topic:frontend stars:>500", category: "Frontend" }
+    { query: "topic:developer-tools ai stars:>300", category: "Developer tools" }
 ];
 
 export function isoDate(date = new Date()) {
@@ -64,12 +71,75 @@ export function buildNpmDownloadsUrl(packageName) {
 
 export function classify(text) {
     const value = text.toLowerCase();
+    if (/\b(agent skills?|skills? for agents?|claude skills?)\b/.test(value)) return "Agent skills";
+    if (/\b(mcp|modelcontextprotocol)\b/.test(value)) return "MCP";
+    if (/\b(evals?|evaluation|benchmarks?)\b/.test(value) && /\b(ai|llm|model)\b/.test(value)) return "AI evals";
     if (/\b(ai|llm|agents?|model|inference|openai|claude|anthropic|mcp|modelcontextprotocol)\b/.test(value)) return "AI";
     if (/(typescript|javascript|node|npm|bun|deno|react|vue|svelte)/.test(value)) return "JavaScript";
     if (/(database|sqlite|postgres|storage|sync|local-first)/.test(value)) return "Database";
     if (/(security|vulnerability|auth|supply chain)/.test(value)) return "Security";
     if (/(css|design|ui|frontend|browser|web)/.test(value)) return "Frontend";
     return "Developer tools";
+}
+
+function textForRepo(repo) {
+    return [
+        repo.full_name,
+        repo.description,
+        ...(repo.topics || [])
+    ].filter(Boolean).join(" ").toLowerCase();
+}
+
+function hasAny(text, patterns) {
+    return patterns.some((pattern) => pattern.test(text));
+}
+
+export function githubRepoQuality(repo, category) {
+    const text = textForRepo(repo);
+    const stars = Math.log10(Math.max(repo.stargazers_count || 0, 1)) * 14;
+    let boost = 0;
+    let required = [];
+    const broadFrontend = /\b(frontend|front-end|checklist|css)\b/.test(text);
+    const agentSpecific = /\b(agent skills?|coding agent|mcp|modelcontextprotocol|codex|claude)\b/.test(text);
+
+    if (broadFrontend && !agentSpecific) return 0;
+
+    if (category === "Agent skills") {
+        required = [/\bskills?\b/, /\bagents?\b/, /\bclaude\b/, /\bcodex\b/, /\bcopilot\b/];
+        if (/\bskills?\b/.test(text)) boost += 34;
+        if (/\b(agent|claude|codex|copilot)\b/.test(text)) boost += 18;
+    } else if (category === "MCP") {
+        required = [/\bmcp\b/, /\bmodelcontextprotocol\b/];
+        if (/\bmcp\b|\bmodelcontextprotocol\b/.test(text)) boost += 42;
+    } else if (category === "AI agents") {
+        required = [/\bagents?\b/, /\bcoding agent\b/, /\bclaude code\b/, /\bcodex\b/, /\bcopilot\b/, /\bmcp\b/, /\bworkflow automation\b/];
+        if (/\b(coding agent|claude code|codex|copilot)\b/.test(text)) boost += 30;
+        if (/\bagents?\b|\bworkflow automation\b/.test(text)) boost += 18;
+    } else if (category === "AI evals") {
+        required = [/\bevals?\b/, /\bevaluation\b/, /\bbenchmark\b/];
+        if (hasAny(text, required)) boost += 32;
+    } else {
+        required = [/\bai\b/, /\bllm\b/, /\bagents?\b/, /\bdeveloper tools?\b/, /\btypescript\b/];
+        if (hasAny(text, [/\bai\b/, /\bllm\b/, /\bagents?\b/])) boost += 18;
+    }
+
+    if (!hasAny(text, required)) return 0;
+    return clampScore(stars + boost);
+}
+
+export function scoreHackerNewsStory(story) {
+    const title = stripHtml(story.title || "");
+    const text = title.toLowerCase();
+    const base = (story.score || 0) / 16 + (story.descendants || 0) / 30;
+    const technicalBoost = hasAny(text, [
+        /\b(ai|llm|agent|agents|mcp|oauth|api|database|compiler|runtime|javascript|typescript|linux|security|github|open source|programming|developer)\b/,
+        /\b(postgres|sqlite|web|browser|code|software|server|protocol)\b/
+    ]) ? 34 : 0;
+    const generalNewsPenalty = hasAny(text, [
+        /\b(parliament|nuclear|telecom giant|controversy|politics|election|war|celebrity)\b/
+    ]) ? 55 : 0;
+
+    return clampScore(base + technicalBoost - generalNewsPenalty);
 }
 
 async function fetchJson(url, options = {}) {
@@ -99,12 +169,15 @@ async function fetchHackerNews() {
 
     return stories
         .filter((story) => story && story.type === "story" && story.title && story.url)
+        .map((story) => ({ story, qualityScore: scoreHackerNewsStory(story) }))
+        .filter((item) => item.qualityScore >= 12)
+        .sort((a, b) => b.qualityScore - a.qualityScore)
         .slice(0, 6)
-        .map((story) => ({
+        .map(({ story, qualityScore }) => ({
             title: stripHtml(story.title),
             source: "Hacker News",
             category: classify(story.title),
-            score: clampScore((story.score || 0) / 8),
+            score: qualityScore,
             velocity: `${story.descendants || 0} comments`,
             signal: `${story.score || 0} points`,
             url: story.url,
@@ -134,11 +207,14 @@ export async function fetchGitHub(fetcher = fetchJson) {
             return { items: [] };
         });
         for (const repo of data.items || []) {
+            const score = githubRepoQuality(repo, item.category);
+            if (score === 0) continue;
+
             results.push({
                 title: repo.full_name,
                 source: "GitHub",
                 category: item.category,
-                score: clampScore(Math.log10(Math.max(repo.stargazers_count, 1)) * 18),
+                score,
                 velocity: `${compactNumber(repo.stargazers_count)} stars`,
                 signal: `${compactNumber(repo.forks_count)} forks`,
                 url: repo.html_url,

@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T09:42:29.631Z",
+  "generatedAt": "2026-06-19T22:04:18.484Z",
   "sourceMeta": {
     "name": "npm",
     "status": "ok",
-    "count": 14,
-    "updatedAt": "2026-06-19T09:42:29.631Z"
+    "count": 18,
+    "updatedAt": "2026-06-19T22:04:18.484Z"
   },
   "packages": [
     {
@@ -23,9 +23,9 @@
       "name": "zod",
       "category": "Validation",
       "focus": "schema validation",
-      "downloads": 201655316,
-      "downloadsLabel": "201.7M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 201966959,
+      "downloadsLabel": "202M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/zod"
     },
     {
@@ -33,9 +33,9 @@
       "name": "react",
       "category": "UI",
       "focus": "frontend runtime",
-      "downloads": 147686985,
-      "downloadsLabel": "147.7M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 147487969,
+      "downloadsLabel": "147.5M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/react"
     },
     {
@@ -43,9 +43,9 @@
       "name": "vite",
       "category": "Tooling",
       "focus": "build tool",
-      "downloads": 142402157,
-      "downloadsLabel": "142.4M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 142305412,
+      "downloadsLabel": "142.3M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/vite"
     },
     {
@@ -83,9 +83,9 @@
       "name": "next",
       "category": "Framework",
       "focus": "React framework",
-      "downloads": 40258011,
-      "downloadsLabel": "40.3M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 40913007,
+      "downloadsLabel": "40.9M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/next"
     },
     {
@@ -120,6 +120,16 @@
     },
     {
       "rank": 12,
+      "name": "@ai-sdk/provider",
+      "category": "AI SDK",
+      "focus": "AI SDK provider interface",
+      "downloads": 23006938,
+      "downloadsLabel": "23M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider"
+    },
+    {
+      "rank": 13,
       "name": "ai",
       "category": "AI SDK",
       "focus": "Vercel AI SDK",
@@ -129,7 +139,17 @@
       "url": "https://www.npmjs.com/package/ai"
     },
     {
-      "rank": 13,
+      "rank": 14,
+      "name": "@ai-sdk/openai",
+      "category": "AI SDK",
+      "focus": "OpenAI provider for AI SDK",
+      "downloads": 7991588,
+      "downloadsLabel": "8M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai"
+    },
+    {
+      "rank": 15,
       "name": "@langchain/core",
       "category": "AI agents",
       "focus": "LangChain core primitives",
@@ -139,7 +159,7 @@
       "url": "https://www.npmjs.com/package/%40langchain%2Fcore"
     },
     {
-      "rank": 14,
+      "rank": 16,
       "name": "langchain",
       "category": "AI agents",
       "focus": "LLM and agent orchestration",
@@ -147,6 +167,26 @@
       "downloadsLabel": "2.5M/week",
       "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/langchain"
+    },
+    {
+      "rank": 17,
+      "name": "inngest",
+      "category": "Workflow automation",
+      "focus": "durable workflow runtime",
+      "downloads": 1144552,
+      "downloadsLabel": "1.1M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/inngest"
+    },
+    {
+      "rank": 18,
+      "name": "mastra",
+      "category": "AI agents",
+      "focus": "TypeScript agent framework",
+      "downloads": 440565,
+      "downloadsLabel": "440.6K/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/mastra"
     }
   ]
 }

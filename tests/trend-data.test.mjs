@@ -6,7 +6,9 @@ import {
     buildSourceMeta,
     classify,
     fetchGitHub,
+    githubRepoQuality,
     githubQueries,
+    scoreHackerNewsStory,
     MAX_ITEMS,
     npmPackages
 } from "../scripts/update-trends.mjs";
@@ -53,8 +55,12 @@ test("default trend inputs leave room for AI agent signals", () => {
     assert.ok(npmPackages.includes("openai"));
     assert.ok(npmPackages.includes("@anthropic-ai/sdk"));
     assert.ok(npmPackages.includes("@modelcontextprotocol/sdk"));
+    assert.ok(npmPackages.includes("mastra"));
+    assert.ok(npmPackages.includes("@ai-sdk/openai"));
     assert.ok(githubQueries.some((item) => item.category === "AI agents"));
     assert.ok(githubQueries.some((item) => item.category === "Agent skills"));
+    assert.ok(githubQueries.some((item) => item.category === "MCP"));
+    assert.ok(githubQueries.every((item) => item.category !== "Frontend"));
 });
 
 test("buildNpmDownloadsUrl supports scoped package names", () => {
@@ -86,7 +92,8 @@ test("fetchGitHub keeps successful query results when one query fails", async ()
                     stargazers_count: 1000 + calls,
                     forks_count: 100 + calls,
                     html_url: `https://github.com/example/repo-${calls}`,
-                    description: "Example repository."
+                    description: "AI agent skills, MCP eval benchmark, TypeScript developer tools workflow repository.",
+                    topics: ["ai-agent", "mcp", "skills", "evals", "typescript"]
                 }
             ]
         };
@@ -95,4 +102,32 @@ test("fetchGitHub keeps successful query results when one query fails", async ()
     assert.equal(calls, githubQueries.length);
     assert.ok(rows.length >= githubQueries.length - 1);
     assert.ok(rows.every((row) => row.source === "GitHub"));
+});
+
+test("githubRepoQuality promotes agent infrastructure over broad adjacent repos", () => {
+    const agentRepo = {
+        full_name: "mattpocock/skills",
+        description: "Reusable agent skills for coding workflows",
+        topics: ["agents", "skills"],
+        stargazers_count: 1200
+    };
+    const adjacentRepo = {
+        full_name: "thedaviddias/Front-End-Checklist",
+        description: "The essential checklist for modern web development, for humans and AI agents",
+        topics: ["frontend", "checklist"],
+        stargazers_count: 73000
+    };
+
+    assert.ok(
+        githubRepoQuality(agentRepo, "Agent skills") > githubRepoQuality(adjacentRepo, "Agent skills"),
+        "agent skills repo should outrank broad frontend checklist despite fewer stars"
+    );
+    assert.equal(githubRepoQuality(adjacentRepo, "AI agents"), 0);
+});
+
+test("scoreHackerNewsStory downranks general news without technical intent", () => {
+    assert.ok(
+        scoreHackerNewsStory({ title: "Zero-Touch OAuth for MCP", score: 80, descendants: 10 }) >
+        scoreHackerNewsStory({ title: "Swiss parliament lifts ban on new nuclear power plants", score: 638, descendants: 488 })
+    );
 });

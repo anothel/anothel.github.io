@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T09:42:44.529Z",
+  "generatedAt": "2026-06-19T22:04:41.317Z",
   "modules": [
     {
       "id": "trends",
@@ -9,8 +9,8 @@
       "data": "data/trends.json",
       "source": "Hacker News, GitHub, npm",
       "status": "ok",
-      "count": 23,
-      "updated": "2026-06-18"
+      "count": 22,
+      "updated": "2026-06-19"
     },
     {
       "id": "packages",
@@ -19,7 +19,7 @@
       "data": "data/packages.json",
       "source": "npm",
       "status": "ok",
-      "count": 14,
+      "count": 18,
       "updated": "2026-06-19"
     },
     {

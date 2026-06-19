@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T09:42:39.832Z",
+  "generatedAt": "2026-06-19T22:04:41.281Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-19T09:42:39.832Z"
+    "updatedAt": "2026-06-19T22:04:41.281Z"
   },
   "sections": [
     {
@@ -14,14 +14,51 @@
       "summary": "Three signals worth opening first.",
       "items": [
         {
+          "title": "affaan-m/ECC",
+          "module": "Trends",
+          "origin": "GitHub",
+          "category": "AI agents",
+          "metric": "100 score",
+          "reason": "AI and agent workflow signal worth opening early.",
+          "url": "https://github.com/affaan-m/ECC",
+          "score": 100
+        },
+        {
+          "title": "anomalyco/opencode",
+          "module": "Trends",
+          "origin": "GitHub",
+          "category": "AI agents",
+          "metric": "100 score",
+          "reason": "AI and agent workflow signal worth opening early.",
+          "url": "https://github.com/anomalyco/opencode",
+          "score": 100
+        },
+        {
+          "title": "CherryHQ/cherry-studio",
+          "module": "Trends",
+          "origin": "GitHub",
+          "category": "AI agents",
+          "metric": "100 score",
+          "reason": "AI and agent workflow signal worth opening early.",
+          "url": "https://github.com/CherryHQ/cherry-studio",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "id": "skim",
+      "title": "Worth skimming",
+      "summary": "Useful movement that does not need first attention.",
+      "items": [
+        {
           "title": "NousResearch/hermes-agent",
           "module": "Trends",
           "origin": "GitHub",
-          "category": "AI",
-          "metric": "95 score",
+          "category": "AI agents",
+          "metric": "100 score",
           "reason": "AI and agent workflow signal worth opening early.",
           "url": "https://github.com/NousResearch/hermes-agent",
-          "score": 95
+          "score": 100
         },
         {
           "title": "anthropics/skills",
@@ -34,43 +71,6 @@
           "score": 83
         },
         {
-          "title": "mattpocock/skills",
-          "module": "Repos",
-          "origin": "GitHub",
-          "category": "Agent skills",
-          "metric": "135.3K stars",
-          "reason": "Agent skills reference for reusable tool instructions.",
-          "url": "https://github.com/mattpocock/skills",
-          "score": 81
-        }
-      ]
-    },
-    {
-      "id": "skim",
-      "title": "Worth skimming",
-      "summary": "Useful movement that does not need first attention.",
-      "items": [
-        {
-          "title": "thedaviddias/Front-End-Checklist",
-          "module": "Trends",
-          "origin": "GitHub",
-          "category": "AI agents",
-          "metric": "88 score",
-          "reason": "AI and agent workflow signal worth opening early.",
-          "url": "https://github.com/thedaviddias/Front-End-Checklist",
-          "score": 88
-        },
-        {
-          "title": "n8n-io/n8n",
-          "module": "Repos",
-          "origin": "GitHub",
-          "category": "Automation",
-          "metric": "193.1K stars",
-          "reason": "Workflow automation signal connected to agent-style work.",
-          "url": "https://github.com/n8n-io/n8n",
-          "score": 84
-        },
-        {
           "title": "@modelcontextprotocol/sdk",
           "module": "Packages",
           "origin": "npm",
@@ -81,24 +81,24 @@
           "score": 67
         },
         {
-          "title": "shareAI-lab/learn-claude-code",
+          "title": "santifer/career-ops",
           "module": "Trends",
           "origin": "GitHub",
           "category": "AI agents",
-          "metric": "87 score",
+          "metric": "100 score",
           "reason": "AI and agent workflow signal worth opening early.",
-          "url": "https://github.com/shareAI-lab/learn-claude-code",
-          "score": 87
+          "url": "https://github.com/santifer/career-ops",
+          "score": 100
         },
         {
-          "title": "openai/codex",
+          "title": "mattpocock/skills",
           "module": "Repos",
           "origin": "GitHub",
-          "category": "AI agents",
-          "metric": "92K stars",
-          "reason": "Coding-agent ecosystem signal with practical workflow value.",
-          "url": "https://github.com/openai/codex",
-          "score": 80
+          "category": "Agent skills",
+          "metric": "135.3K stars",
+          "reason": "Agent skills reference for reusable tool instructions.",
+          "url": "https://github.com/mattpocock/skills",
+          "score": 81
         },
         {
           "title": "openai",

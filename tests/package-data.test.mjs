@@ -62,16 +62,18 @@ test("default package watchlist tracks AI and agent SDK packages", () => {
 
     for (const name of [
         "ai",
+        "@ai-sdk/openai",
         "openai",
         "@anthropic-ai/sdk",
         "langchain",
         "@langchain/core",
-        "@modelcontextprotocol/sdk"
+        "@modelcontextprotocol/sdk",
+        "mastra"
     ]) {
         assert.ok(names.has(name), `${name} should be tracked`);
     }
 
-    assert.ok(packageDefinitions.length >= 14);
+    assert.ok(packageDefinitions.length >= 18);
     assert.ok(categories.has("AI SDK"));
     assert.ok(categories.has("AI agents"));
     assert.ok(categories.has("MCP"));
@@ -81,11 +83,11 @@ test("checked-in packages include baseline and AI agent coverage", () => {
     const data = readJson("data/packages.json");
     const names = new Set(data.packages.map((item) => item.name));
 
-    for (const name of ["react", "typescript", "playwright", "ai", "openai", "@modelcontextprotocol/sdk"]) {
+    for (const name of ["react", "typescript", "playwright", "ai", "openai", "@modelcontextprotocol/sdk", "mastra"]) {
         assert.ok(names.has(name), `${name} should be present in generated packages`);
     }
 
-    assert.ok(data.packages.length >= 14);
+    assert.ok(data.packages.length >= 18);
     assert.equal(data.sourceMeta.count, data.packages.length);
 });
 
