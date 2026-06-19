@@ -200,6 +200,7 @@ test("renderExploreLinks links to all full module pages", () => {
     const html = renderExploreLinks();
 
     for (const href of [
+        "../explore/index.html",
         "../trends/index.html",
         "../repos/index.html",
         "../packages/index.html",
@@ -207,6 +208,9 @@ test("renderExploreLinks links to all full module pages", () => {
     ]) {
         assert.match(html, new RegExp(`href="${href.replaceAll("/", "\\/")}"`));
     }
+    assert.ok(html.indexOf("../explore/index.html") < html.indexOf("../trends/index.html"));
+    assert.match(html, /Continue in Explore/);
+    assert.match(html, /Search all tracked signals/);
 });
 
 test("renderTodayStatus explains partial and fallback generated data", () => {

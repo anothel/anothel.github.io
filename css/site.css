@@ -202,6 +202,30 @@ main {
     gap: 14px;
 }
 
+.explore-callout {
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.explore-callout h2 {
+    margin-bottom: 6px;
+    font-size: 1rem;
+}
+
+.explore-callout p {
+    margin-bottom: 0;
+    color: var(--muted);
+}
+
+.explore-callout a {
+    font-weight: 900;
+}
+
 .start-list,
 .skim-list,
 .module-strip {

@@ -184,6 +184,10 @@ test("root page exposes command center slots", () => {
     assert.match(root, /Worth skimming/);
     assert.match(root, /Data status/);
     assert.match(root, /Open priority brief/);
+    assert.match(root, /Explore workspace/);
+    assert.match(root, /Search all tracked signals/);
+    assert.match(root, /href="explore\/index\.html"/);
+    assert.match(root, /class="explore-callout"/);
     assert.match(root, /class="command-center"/);
     assert.match(root, /class="start-list"/);
     assert.match(root, /class="skim-list"/);
@@ -221,6 +225,8 @@ test("packages page owns the package watchlist module", () => {
 test("public page copy states concrete page purpose", () => {
     assert.match(read("today/index.html"), /Today's priority brief\./);
     assert.match(read("today/index.html"), /Thirteen generated picks from tracked signals\./);
+    assert.match(read("today/index.html"), /Continue in Explore/);
+    assert.match(read("index.html"), /Search all tracked signals/);
     assert.match(read("trends/index.html"), /What is moving across HN, GitHub, and npm\./);
     assert.match(read("trends/index.html"), /Ranked movement with origin, category, and momentum\./);
     assert.match(read("packages/index.html"), /npm packages worth watching\./);

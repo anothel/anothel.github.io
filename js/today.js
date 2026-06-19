@@ -16,6 +16,7 @@ const fallbackData = {
 };
 
 const exploreLinks = [
+    ["Explore", "../explore/index.html", "Search all tracked signals"],
     ["Trends", "../trends/index.html", "Ranked movement"],
     ["Repos", "../repos/index.html", "GitHub traction"],
     ["Packages", "../packages/index.html", "npm movement"],
@@ -108,10 +109,10 @@ export function renderTodaySections(sections) {
 export function renderExploreLinks() {
     return `
         <div>
-            <h2>Explore full lists</h2>
-            <p>Open complete source lists when a brief item needs more context.</p>
+            <h2>Continue in Explore</h2>
+            <p>Search all tracked signals, then save useful items locally.</p>
         </div>
-        <nav aria-label="Full module pages">
+        <nav aria-label="Explore and full module pages">
             ${exploreLinks.map(([label, href, meta]) => `
                 <a href="${escapeHtml(href)}">
                     <strong>${escapeHtml(label)}</strong>

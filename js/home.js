@@ -36,6 +36,7 @@ function safeHref(value) {
 }
 
 const routePurpose = {
+    explore: "Search and save across sources",
     trends: "Cross-source movement",
     packages: "npm package movement",
     repos: "GitHub project traction",
@@ -83,7 +84,8 @@ export function getTodaySection(today, id) {
 }
 
 export function buildModuleRoutes(manifest) {
-    return (manifest.modules || []).map((module) => ({
+    const modules = manifest.modules || [];
+    return withExploreRoute(modules.map((module) => ({
         id: module.id,
         title: module.title,
         route: module.route,
@@ -92,7 +94,31 @@ export function buildModuleRoutes(manifest) {
         updated: module.updated,
         status: module.status,
         purpose: routePurpose[module.id] || module.source || "Open module"
-    }));
+    })));
+}
+
+function withExploreRoute(routes) {
+    if (routes.some((route) => route.id === "explore")) return routes;
+
+    const modules = routes || [];
+    const updated = modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || "-";
+    const status = modules.some((module) => module.status === "error")
+        ? "error"
+        : modules.some((module) => module.status === "partial")
+            ? "partial"
+            : "ok";
+    const exploreRoute = {
+        id: "explore",
+        title: "Explore workspace",
+        route: "explore/index.html",
+        source: "All tracked signals",
+        count: modules.reduce((sum, module) => sum + module.count, 0),
+        updated,
+        status,
+        purpose: routePurpose.explore
+    };
+
+    return [exploreRoute, ...routes];
 }
 
 export function renderStartItems(items) {
@@ -123,7 +149,7 @@ export function renderSkimList(items) {
 }
 
 export function renderModuleRoutes(routes) {
-    return routes.map((route) => `
+    return withExploreRoute(routes).map((route) => `
         <a class="module-route status-${escapeHtml(route.status)}" href="${safeHref(route.route)}">
             <span>${escapeHtml(route.title)}</span>
             <strong>${escapeHtml(route.purpose)}</strong>
