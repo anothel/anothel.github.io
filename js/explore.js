@@ -317,6 +317,25 @@
         return sortExploreItems(filterExploreItems(items, filters), filters.sort || "priority", savedIds);
     }
 
+    function activeExploreSummary(filters, savedCount = 0) {
+        const parts = [];
+        if (filters.module !== "all") parts.push(`Module: ${filters.module}`);
+        if (filters.category !== "all") parts.push(`Category: ${filters.category}`);
+        if (filters.query) parts.push(`Search: ${filters.query}`);
+        if (filters.sort === "saved") parts.push("Sort: saved first");
+        if (savedCount > 0) parts.push(`Saved: ${savedCount}`);
+        return parts.length > 0 ? parts.join(" / ") : "Showing all tracked items.";
+    }
+
+    function clearedExploreState(filters) {
+        return {
+            module: "all",
+            category: "all",
+            query: "",
+            sort: filters.sort === "saved" ? "saved" : "priority"
+        };
+    }
+
     function renderExploreCards(items, savedIds = new Set()) {
         if (items.length === 0) {
             return `
@@ -341,7 +360,7 @@
                         <span>${escapeHtml(item.origin)}</span>
                         <span>${escapeHtml(item.metric)}</span>
                         <span>${escapeHtml(item.updated)}</span>
-                        <span aria-label="Quality score ${escapeHtml(item.qualityScore || item.score || 0)}">Q ${escapeHtml(item.qualityScore || item.score || 0)}</span>
+                        <span class="quality-marker" aria-label="Quality score ${escapeHtml(item.qualityScore || item.score || 0)}">Q ${escapeHtml(item.qualityScore || item.score || 0)}</span>
                     </div>
                     ${item.sourceContext ? `<p class="source-context">${escapeHtml(item.sourceContext)}</p>` : ""}
                     <div class="explore-card-actions">
@@ -358,7 +377,7 @@
     function renderSavedQueue(items, savedIds = new Set()) {
         const saved = items.filter((item) => savedIds.has(item.id));
         if (saved.length === 0) {
-            return '<p class="saved-empty">No saved items yet.</p>';
+            return '<p class="saved-empty">Save items from results to keep them here.</p>';
         }
 
         return saved.map((item) => `
@@ -446,13 +465,7 @@
         if (els.total) els.total.textContent = String(items.length);
         if (els.savedCount) els.savedCount.textContent = String(state.savedIds.size);
         if (els.categories) els.categories.textContent = String(categoryCount);
-        if (els.summary) {
-            const parts = [];
-            if (state.module !== "all") parts.push(`Module: ${state.module}`);
-            if (state.category !== "all") parts.push(`Category: ${state.category}`);
-            if (state.query) parts.push(`Search: ${state.query}`);
-            els.summary.textContent = parts.length > 0 ? parts.join(" / ") : "Showing all tracked items.";
-        }
+        if (els.summary) els.summary.textContent = activeExploreSummary(state, state.savedIds.size);
         if (els.results) els.results.innerHTML = renderExploreCards(items, state.savedIds);
         if (els.saved) els.saved.innerHTML = renderSavedQueue(state.items, state.savedIds);
         bindDynamicActions(els, store);
@@ -504,10 +517,11 @@
             render(els, store);
         });
         els.clearFilters?.addEventListener("click", () => {
-            state.module = "all";
-            state.category = "all";
-            state.query = "";
-            state.sort = "priority";
+            const cleared = clearedExploreState(state);
+            state.module = cleared.module;
+            state.category = cleared.category;
+            state.query = cleared.query;
+            state.sort = cleared.sort;
             if (els.module) els.module.value = state.module;
             if (els.category) els.category.value = state.category;
             if (els.query) els.query.value = state.query;
@@ -570,7 +584,9 @@
         renderSavedQueue,
         createExploreStore,
         qualityScoreForItem,
-        dedupeExploreItems
+        dedupeExploreItems,
+        activeExploreSummary,
+        clearedExploreState
     };
 
     if (typeof document !== "undefined") {

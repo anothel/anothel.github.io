@@ -850,6 +850,10 @@ button {
     font-weight: 800;
 }
 
+.quality-marker {
+    color: var(--neutral);
+}
+
 .explore-card-actions {
     display: flex;
     flex-wrap: wrap;

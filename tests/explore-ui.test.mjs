@@ -263,6 +263,54 @@ test("Explore renders merged source context in cards and saved queue", () => {
     assert.match(saved, /Also in Links/);
     assert.match(cards, /Reusable &quot;skills&quot;\./);
     assert.match(cards, /aria-label="Quality score 96"/);
+    assert.match(cards, /class="quality-marker"/);
+});
+
+test("Explore summarizes active saved workflow state", () => {
+    const app = loadExplore();
+
+    assert.equal(
+        app.activeExploreSummary({ module: "all", category: "all", query: "", sort: "priority" }, 0),
+        "Showing all tracked items."
+    );
+    assert.equal(
+        app.activeExploreSummary({ module: "Repos", category: "AI agents", query: "codex", sort: "saved" }, 2),
+        "Module: Repos / Category: AI agents / Search: codex / Sort: saved first / Saved: 2"
+    );
+});
+
+test("Explore clear behavior preserves saved-first sort only", () => {
+    const app = loadExplore();
+
+    assert.deepEqual(JSON.parse(JSON.stringify(app.clearedExploreState({
+        module: "Repos",
+        category: "AI",
+        query: "codex",
+        sort: "saved"
+    }))), {
+        module: "all",
+        category: "all",
+        query: "",
+        sort: "saved"
+    });
+
+    assert.deepEqual(JSON.parse(JSON.stringify(app.clearedExploreState({
+        module: "Repos",
+        category: "AI",
+        query: "codex",
+        sort: "module"
+    }))), {
+        module: "all",
+        category: "all",
+        query: "",
+        sort: "priority"
+    });
+});
+
+test("Explore saved queue empty state tells the user what to do", () => {
+    const app = loadExplore();
+
+    assert.match(app.renderSavedQueue([], new Set()), /Save items from results to keep them here\./);
 });
 
 test("Explore saved store reads, toggles, removes, and ignores broken storage", () => {
@@ -397,4 +445,95 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
     elements["[data-explore-query]"].dispatch("input", "missing");
     assert.equal(elements["[data-explore-total]"].textContent, "0");
     assert.match(elements["[data-explore-results]"].innerHTML, /No matching items/);
+});
+
+test("Explore browser flow keeps saved queue visible through filters and preserves saved-first on clear", async () => {
+    function createElement() {
+        return {
+            innerHTML: "",
+            textContent: "",
+            value: "all",
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
+            },
+            dispatch(type, value = this.value) {
+                this.value = value;
+                this.listeners[type]?.({ target: this });
+            }
+        };
+    }
+
+    const elements = Object.fromEntries([
+        "[data-explore-results]",
+        "[data-explore-saved]",
+        "[data-explore-module]",
+        "[data-explore-category]",
+        "[data-explore-query]",
+        "[data-explore-sort]",
+        "[data-explore-total]",
+        "[data-explore-saved-count]",
+        "[data-explore-categories]",
+        "[data-explore-summary]",
+        "[data-data-mode]",
+        "[data-source-health]",
+        "[data-clear-filters]"
+    ].map((selector) => [selector, createElement()]));
+
+    const sources = {
+        "../data/manifest.json": { modules: [] },
+        "../data/trends.json": {
+            updated: "2026-06-18",
+            sourceMeta: [{ name: "GitHub", status: "ok", count: 2 }],
+            items: [
+                { rank: 1, title: "Saved agent", source: "GitHub", category: "AI", score: 90, velocity: "+5%", url: "https://example.com/saved", summary: "Saved item." },
+                { rank: 2, title: "Other runtime", source: "npm", category: "Runtime", score: 70, velocity: "1M/week", url: "https://example.com/other", summary: "Other item." }
+            ]
+        },
+        "../data/packages.json": { updated: "2026-06-19", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        "../data/repos.json": { updated: "2026-06-18", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        "../data/links.json": { updated: "2026-06-18", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    };
+
+    const context = {
+        console,
+        document: {
+            currentScript: { dataset: {} },
+            querySelector(selector) {
+                return elements[selector] || null;
+            },
+            querySelectorAll() {
+                return [];
+            }
+        },
+        localStorage: {
+            getItem() {
+                return "[\"trends:https://example.com/saved\"]";
+            },
+            setItem() {}
+        },
+        fetch: async (path) => ({
+            ok: true,
+            json: async () => sources[path]
+        })
+    };
+
+    vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    elements["[data-explore-query]"].dispatch("input", "missing");
+    assert.equal(elements["[data-explore-total]"].textContent, "0");
+    assert.match(elements["[data-explore-results]"].innerHTML, /No matching items/);
+    assert.match(elements["[data-explore-saved]"].innerHTML, /Saved agent/);
+
+    elements["[data-explore-sort]"].dispatch("change", "saved");
+    assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
+    assert.match(elements["[data-explore-summary]"].textContent, /Saved: 1/);
+
+    elements["[data-clear-filters]"].listeners.click({ target: elements["[data-clear-filters]"] });
+    assert.equal(elements["[data-explore-query]"].value, "");
+    assert.equal(elements["[data-explore-sort]"].value, "saved");
+    assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
+    assert.equal(elements["[data-explore-total]"].textContent, "2");
 });
