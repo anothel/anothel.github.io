@@ -2,7 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { buildTodayBrief, sectionCounts } from "../scripts/update-today.mjs";
-import { renderExploreLinks, renderTodaySections, renderTodayStatus, totalSectionItems } from "../js/today.js";
+import {
+    renderExploreLinks,
+    renderTodaySections,
+    renderTodayStats,
+    renderTodayStatus,
+    totalSectionItems
+} from "../js/today.js";
 
 const todayData = JSON.parse(readFileSync("data/today.json", "utf8"));
 const expectedSectionCounts = [
@@ -163,7 +169,9 @@ test("renderTodaySections emits section cards and item links", () => {
     assert.match(html, /Trends/);
     assert.match(html, /Example source \/ Developer tools/);
     assert.match(html, /91 score/);
+    assert.match(html, /Why this matters/);
     assert.match(html, /Synthetic reason/);
+    assert.match(html, /Source context/);
 });
 
 test("renderTodaySections escapes text and blocks unsafe item links", () => {
@@ -211,6 +219,28 @@ test("renderExploreLinks links to all full module pages", () => {
     assert.ok(html.indexOf("../explore/index.html") < html.indexOf("../trends/index.html"));
     assert.match(html, /Continue in Explore/);
     assert.match(html, /Search all tracked signals/);
+    assert.match(html, /Explore AI agents/);
+    assert.match(html, /\.\.\/explore\/index\.html\?focus=AI%20agents/);
+    assert.match(html, /Explore MCP/);
+    assert.match(html, /\.\.\/explore\/index\.html\?focus=MCP/);
+    assert.match(html, /Explore skills/);
+    assert.match(html, /\.\.\/explore\/index\.html\?focus=Agent%20skills/);
+});
+
+test("renderTodayStats summarizes section counts", () => {
+    const html = renderTodayStats([
+        { id: "start", title: "Start here", items: [{}, {}, {}] },
+        { id: "skim", title: "Worth skimming", items: [{}, {}] },
+        { id: "reference", title: "Reference shelf", items: [{}] }
+    ]);
+
+    assert.match(html, /Start/);
+    assert.match(html, /3/);
+    assert.match(html, /Skim/);
+    assert.match(html, /2/);
+    assert.match(html, /Reference/);
+    assert.match(html, /1/);
+    assert.match(html, /Open first/);
 });
 
 test("renderTodayStatus explains partial and fallback generated data", () => {

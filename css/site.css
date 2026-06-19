@@ -404,8 +404,29 @@ main {
     border-bottom: 1px solid var(--line);
 }
 
+.today-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.today-stats .stat-card p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 0.84rem;
+}
+
 .today-card {
     min-height: 190px;
+}
+
+.today-card-context {
+    display: grid;
+    gap: 3px;
+}
+
+.today-card-context strong {
+    color: var(--text);
+    font-size: 0.76rem;
+    text-transform: uppercase;
 }
 
 .explore-strip {

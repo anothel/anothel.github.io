@@ -98,6 +98,7 @@ test("today page owns the generated priority brief", () => {
     for (const hook of [
         "data-today-updated",
         "data-today-status",
+        "data-today-stats",
         "data-today-sections",
         "data-today-explore"
     ]) {
@@ -116,6 +117,10 @@ test("today page owns the generated priority brief", () => {
     assert.match(today, /href="..\/index\.html"/);
     assert.match(today, /Today's priority brief\./);
     assert.match(today, /Thirteen generated picks from tracked signals\./);
+    assert.match(today, /Open first/);
+    assert.match(today, /Explore AI agents/);
+    assert.match(styles, /\.today-stats/);
+    assert.match(styles, /\.today-card-context/);
 });
 
 test("explore page owns the cross-module search surface", () => {

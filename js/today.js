@@ -17,15 +17,25 @@ const fallbackData = {
 
 const exploreLinks = [
     ["Explore", "../explore/index.html", "Search all tracked signals"],
+    ["Explore AI agents", "../explore/index.html?focus=AI%20agents", "Agent workflow signals"],
+    ["Explore MCP", "../explore/index.html?focus=MCP", "Protocol and server references"],
+    ["Explore skills", "../explore/index.html?focus=Agent%20skills", "Reusable agent instructions"],
     ["Trends", "../trends/index.html", "Ranked movement"],
     ["Repos", "../repos/index.html", "GitHub traction"],
     ["Packages", "../packages/index.html", "npm movement"],
     ["Links", "../links/index.html", "Reference queue"]
 ];
 
+const sectionStats = {
+    start: ["Start", "Open first"],
+    skim: ["Skim", "Scan next"],
+    reference: ["Reference", "Keep nearby"]
+};
+
 const els = typeof document === "undefined" ? {} : {
     updated: document.querySelector("[data-today-updated]"),
     status: document.querySelector("[data-today-status]"),
+    stats: document.querySelector("[data-today-stats]"),
     sections: document.querySelector("[data-today-sections]"),
     explore: document.querySelector("[data-today-explore]")
 };
@@ -80,8 +90,11 @@ function renderTodayCard(item) {
                 <em>${escapeHtml(item.metric)}</em>
             </div>
             <strong>${escapeHtml(item.title)}</strong>
-            <small>${escapeHtml(context)}</small>
-            <p>${escapeHtml(item.reason)}</p>
+            <small class="today-card-context">
+                <strong>Source context</strong>
+                ${escapeHtml(context)}
+            </small>
+            <p class="why-copy"><strong>Why this matters</strong> ${escapeHtml(item.reason)}</p>
         </a>
     `;
 }
@@ -102,6 +115,20 @@ export function renderTodaySections(sections) {
                     ${items.map(renderTodayCard).join("")}
                 </div>
             </section>
+        `;
+    }).join("");
+}
+
+export function renderTodayStats(sections) {
+    return (Array.isArray(sections) ? sections : []).map((section) => {
+        const [label, purpose] = sectionStats[section.id] || [section.title || "Section", "Generated picks"];
+
+        return `
+            <article class="stat-card">
+                <span>${escapeHtml(label)}</span>
+                <strong>${sectionItems(section).length}</strong>
+                <p>${escapeHtml(purpose)}</p>
+            </article>
         `;
     }).join("");
 }
@@ -142,6 +169,7 @@ export function renderTodayStatus(data) {
 function renderToday(data) {
     if (els.updated) els.updated.textContent = updatedLabel(data);
     if (els.status) els.status.textContent = renderTodayStatus(data);
+    if (els.stats) els.stats.innerHTML = renderTodayStats(data.sections);
     if (els.sections) els.sections.innerHTML = renderTodaySections(data.sections);
     if (els.explore) els.explore.innerHTML = renderExploreLinks();
 }
