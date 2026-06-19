@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-18",
-  "generatedAt": "2026-06-18T23:03:51.555Z",
+  "generatedAt": "2026-06-19T09:36:24.650Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-18T23:03:51.555Z"
+    "updatedAt": "2026-06-19T09:36:24.650Z"
   },
   "sections": [
     {
@@ -14,34 +14,34 @@
       "summary": "Three signals worth opening first.",
       "items": [
         {
-          "title": "openclaw/openclaw",
+          "title": "NousResearch/hermes-agent",
           "module": "Trends",
           "origin": "GitHub",
           "category": "AI",
-          "metric": "100 score",
-          "reason": "379.4K stars / 79.4K forks",
-          "url": "https://github.com/openclaw/openclaw",
-          "score": 100
+          "metric": "95 score",
+          "reason": "AI and agent workflow signal worth opening early.",
+          "url": "https://github.com/NousResearch/hermes-agent",
+          "score": 95
         },
         {
-          "title": "typescript",
-          "module": "Trends",
-          "origin": "npm",
-          "category": "JavaScript",
-          "metric": "100 score",
-          "reason": "220.4M/week / 2026-06-11 to 2026-06-17",
-          "url": "https://www.npmjs.com/package/typescript",
-          "score": 100
+          "title": "anthropics/skills",
+          "module": "Repos",
+          "origin": "GitHub",
+          "category": "Agent skills",
+          "metric": "152.5K stars",
+          "reason": "Agent skills reference for reusable tool instructions.",
+          "url": "https://github.com/anthropics/skills",
+          "score": 83
         },
         {
-          "title": "zod",
-          "module": "Trends",
-          "origin": "npm",
-          "category": "Developer tools",
-          "metric": "100 score",
-          "reason": "201.7M/week / 2026-06-11 to 2026-06-17",
-          "url": "https://www.npmjs.com/package/zod",
-          "score": 100
+          "title": "mattpocock/skills",
+          "module": "Repos",
+          "origin": "GitHub",
+          "category": "Agent skills",
+          "metric": "135.3K stars",
+          "reason": "Agent skills reference for reusable tool instructions.",
+          "url": "https://github.com/mattpocock/skills",
+          "score": 81
         }
       ]
     },
@@ -51,44 +51,14 @@
       "summary": "Useful movement that does not need first attention.",
       "items": [
         {
-          "title": "eslint",
+          "title": "thedaviddias/Front-End-Checklist",
           "module": "Trends",
-          "origin": "npm",
-          "category": "Developer tools",
-          "metric": "98 score",
-          "reason": "141.7M/week / 2026-06-11 to 2026-06-17",
-          "url": "https://www.npmjs.com/package/eslint",
-          "score": 98
-        },
-        {
-          "title": "react/react",
-          "module": "Repos",
           "origin": "GitHub",
-          "category": "UI",
-          "metric": "246K stars",
-          "reason": "frontend runtime",
-          "url": "https://github.com/react/react",
-          "score": 85
-        },
-        {
-          "title": "react",
-          "module": "Packages",
-          "origin": "npm",
-          "category": "UI",
-          "metric": "147.7M/week",
-          "reason": "frontend runtime",
-          "url": "https://www.npmjs.com/package/react",
-          "score": 73
-        },
-        {
-          "title": "vite",
-          "module": "Trends",
-          "origin": "npm",
-          "category": "Developer tools",
-          "metric": "98 score",
-          "reason": "142.4M/week / 2026-06-11 to 2026-06-17",
-          "url": "https://www.npmjs.com/package/vite",
-          "score": 98
+          "category": "AI agents",
+          "metric": "88 score",
+          "reason": "AI and agent workflow signal worth opening early.",
+          "url": "https://github.com/thedaviddias/Front-End-Checklist",
+          "score": 88
         },
         {
           "title": "n8n-io/n8n",
@@ -96,19 +66,49 @@
           "origin": "GitHub",
           "category": "Automation",
           "metric": "193.1K stars",
-          "reason": "workflow automation",
+          "reason": "Workflow automation signal connected to agent-style work.",
           "url": "https://github.com/n8n-io/n8n",
           "score": 84
         },
         {
-          "title": "prettier",
+          "title": "playwright",
           "module": "Packages",
           "origin": "npm",
-          "category": "Tooling",
-          "metric": "117.9M/week",
-          "reason": "formatting",
-          "url": "https://www.npmjs.com/package/prettier",
-          "score": 70
+          "category": "Testing",
+          "metric": "63.3M/week",
+          "reason": "browser automation",
+          "url": "https://www.npmjs.com/package/playwright",
+          "score": 69
+        },
+        {
+          "title": "shareAI-lab/learn-claude-code",
+          "module": "Trends",
+          "origin": "GitHub",
+          "category": "AI agents",
+          "metric": "87 score",
+          "reason": "AI and agent workflow signal worth opening early.",
+          "url": "https://github.com/shareAI-lab/learn-claude-code",
+          "score": 87
+        },
+        {
+          "title": "openai/codex",
+          "module": "Repos",
+          "origin": "GitHub",
+          "category": "AI agents",
+          "metric": "92K stars",
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "url": "https://github.com/openai/codex",
+          "score": 80
+        },
+        {
+          "title": "typescript",
+          "module": "Packages",
+          "origin": "npm",
+          "category": "Language",
+          "metric": "220.4M/week",
+          "reason": "typed JavaScript",
+          "url": "https://www.npmjs.com/package/typescript",
+          "score": 75
         }
       ]
     },
@@ -123,19 +123,9 @@
           "origin": "Spec",
           "category": "Agent skills",
           "metric": "Spec",
-          "reason": "Open specification for packaging reusable instructions, scripts, and resources for agents.",
+          "reason": "Agent skills reference for reusable tool instructions.",
           "url": "https://agentskills.io/",
           "score": 65
-        },
-        {
-          "title": "Anthropic Agent Skills",
-          "module": "Links",
-          "origin": "Repo",
-          "category": "Agent skills",
-          "metric": "Repo",
-          "reason": "Official examples, spec, templates, and install paths for Claude Agent Skills.",
-          "url": "https://github.com/anthropics/skills",
-          "score": 64
         },
         {
           "title": "Claude API Skills overview",
@@ -143,7 +133,7 @@
           "origin": "Docs",
           "category": "Agent skills",
           "metric": "Docs",
-          "reason": "Developer overview for using skills through the Claude API.",
+          "reason": "Agent skills reference for reusable tool instructions.",
           "url": "https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
           "score": 63
         },
@@ -153,9 +143,19 @@
           "origin": "Docs",
           "category": "Agent skills",
           "metric": "Docs",
-          "reason": "User-facing guide to what skills are and how Claude loads them for repeatable work.",
+          "reason": "Agent skills reference for reusable tool instructions.",
           "url": "https://support.claude.com/en/articles/11144907-what-are-skills",
           "score": 62
+        },
+        {
+          "title": "contains-studio/agents",
+          "module": "Links",
+          "origin": "Repo",
+          "category": "AI agents",
+          "metric": "Repo",
+          "reason": "AI and agent workflow signal worth opening early.",
+          "url": "https://github.com/contains-studio/agents",
+          "score": 60
         }
       ]
     }

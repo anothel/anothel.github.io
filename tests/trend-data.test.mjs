@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
     buildNpmDownloadsUrl,
     buildSourceMeta,
+    classify,
     fetchGitHub,
     githubQueries,
     MAX_ITEMS,
@@ -61,6 +62,13 @@ test("buildNpmDownloadsUrl supports scoped package names", () => {
         buildNpmDownloadsUrl("@anthropic-ai/sdk"),
         "https://api.npmjs.org/downloads/point/last-week/%40anthropic-ai%2Fsdk"
     );
+});
+
+test("classify matches AI as a real token, not inside unrelated package names", () => {
+    assert.equal(classify("tailwindcss"), "Frontend");
+    assert.equal(classify("ai"), "AI");
+    assert.equal(classify("@anthropic-ai/sdk"), "AI");
+    assert.equal(classify("claude code agents"), "AI");
 });
 
 test("fetchGitHub keeps successful query results when one query fails", async () => {

@@ -62,9 +62,9 @@ export function buildNpmDownloadsUrl(packageName) {
     return `https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(packageName)}`;
 }
 
-function classify(text) {
+export function classify(text) {
     const value = text.toLowerCase();
-    if (/(ai|llm|agent|model|inference|openai|claude)/.test(value)) return "AI";
+    if (/\b(ai|llm|agents?|model|inference|openai|claude|anthropic|mcp|modelcontextprotocol)\b/.test(value)) return "AI";
     if (/(typescript|javascript|node|npm|bun|deno|react|vue|svelte)/.test(value)) return "JavaScript";
     if (/(database|sqlite|postgres|storage|sync|local-first)/.test(value)) return "Database";
     if (/(security|vulnerability|auth|supply chain)/.test(value)) return "Security";

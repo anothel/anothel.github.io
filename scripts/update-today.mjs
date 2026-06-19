@@ -22,6 +22,41 @@ const sectionSummaries = {
     reference: "Stable references and projects worth keeping nearby."
 };
 
+const intentPatterns = [
+    /\bagent skills?\b/i,
+    /\bcoding agents?\b/i,
+    /\bagents?\b/i,
+    /\bskills?\b/i,
+    /\bmcp\b/i,
+    /\bmodelcontextprotocol\b/i,
+    /\bcodex\b/i,
+    /\bcopilot\b/i,
+    /\bclaude\b/i,
+    /\bopenai\b/i,
+    /\banthropic\b/i,
+    /\blangchain\b/i,
+    /\bllm\b/i,
+    /\bai skills?\b/i,
+    /\bai agents?\b/i,
+    /\bworkflow automation\b/i
+];
+
+const boostedCategories = new Set(["agent skills", "mcp", "coding agents"]);
+
+const baselineTitles = new Set([
+    "typescript",
+    "eslint",
+    "prettier",
+    "react",
+    "react/react",
+    "zod",
+    "tailwindcss",
+    "vite",
+    "next",
+    "next.js",
+    "vercel/next.js"
+]);
+
 function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);
 }
@@ -66,9 +101,83 @@ function linkScore(link) {
     return link.rank ? Math.max(50, 66 - link.rank) : 60;
 }
 
+function candidateText(item) {
+    return [
+        item.title,
+        item.module,
+        item.origin,
+        item.category,
+        item.metric,
+        item.reason,
+        item.url
+    ].filter(Boolean).join(" ");
+}
+
+function matchesIntent(item) {
+    const text = candidateText(item);
+    return intentPatterns.some((pattern) => pattern.test(text));
+}
+
+function matchesBaseline(item) {
+    const title = item.title.trim().toLowerCase();
+    const repoName = title.includes("/") ? title.split("/").at(-1) : title;
+    return baselineTitles.has(title) || baselineTitles.has(repoName);
+}
+
+function intentReason(item) {
+    const text = candidateText(item).toLowerCase();
+
+    if (text.includes("mcp") || text.includes("modelcontextprotocol")) {
+        return "MCP infrastructure worth tracking for agent workflows.";
+    }
+    if (text.includes("skills")) {
+        return "Agent skills reference for reusable tool instructions.";
+    }
+    if (text.includes("codex") || text.includes("coding agent")) {
+        return "Coding-agent ecosystem signal with practical workflow value.";
+    }
+    if (text.includes("workflow automation")) {
+        return "Workflow automation signal connected to agent-style work.";
+    }
+    return "AI and agent workflow signal worth opening early.";
+}
+
+function qualityPriority(item) {
+    let priority = item.score;
+
+    if (item.isIntentMatch) {
+        priority += item.module === "Links" ? 16 : 28;
+    }
+    if (boostedCategories.has(item.category.trim().toLowerCase())) {
+        priority += 10;
+    }
+    if (item.isBaseline) {
+        priority -= 26;
+    }
+
+    return priority;
+}
+
+function enrichCandidate(item) {
+    const isIntentMatch = matchesIntent(item);
+    const isBaseline = matchesBaseline(item);
+    const enriched = {
+        ...item,
+        isIntentMatch,
+        isBaseline
+    };
+
+    return {
+        ...enriched,
+        priority: qualityPriority(enriched),
+        reason: isIntentMatch ? intentReason(enriched) : item.reason
+    };
+}
+
 function stableSort(items) {
     return [...items].sort(
         (a, b) =>
+            (b.priority ?? b.score) - (a.priority ?? a.score) ||
             b.score - a.score ||
             a.module.localeCompare(b.module) ||
             a.title.localeCompare(b.title) ||
@@ -113,6 +222,44 @@ function createPicker(candidates) {
     }
 
     return { candidates, pickFrom, fill };
+}
+
+function baselineCount(items) {
+    return items.filter((item) => item.isBaseline).length;
+}
+
+function fillStartFrom(picker, startItems, pool, options = {}) {
+    const {
+        limit = sectionCounts.start,
+        enforceBaselineCap = true
+    } = options;
+
+    for (const item of pool) {
+        if (startItems.length >= limit) {
+            break;
+        }
+        if (enforceBaselineCap && item.isBaseline && baselineCount(startItems) >= 1) {
+            continue;
+        }
+
+        picker.fill(startItems, startItems.length + 1, [item]);
+    }
+
+    return startItems;
+}
+
+function pickStartItems(picker, intentPool, primaryPool, fallbackPool) {
+    const startItems = [];
+
+    fillStartFrom(picker, startItems, intentPool, { limit: 1 });
+    fillStartFrom(picker, startItems, primaryPool);
+    fillStartFrom(picker, startItems, fallbackPool);
+
+    if (startItems.length < sectionCounts.start) {
+        fillStartFrom(picker, startItems, fallbackPool, { enforceBaselineCap: false });
+    }
+
+    return startItems;
 }
 
 function stripItem(item) {
@@ -194,21 +341,18 @@ export function normalizeCandidates({ trends = {}, repos = {}, packages = {}, li
 }
 
 export function buildTodayBrief(sources = {}, generatedAt = new Date().toISOString()) {
-    const candidates = normalizeCandidates(sources);
+    const candidates = normalizeCandidates(sources).map(enrichCandidate);
     const picker = createPicker(candidates);
 
     const trends = stableSort(candidates.filter((item) => item.module === "Trends"));
     const repos = stableSort(candidates.filter((item) => item.module === "Repos"));
     const packages = stableSort(candidates.filter((item) => item.module === "Packages"));
     const links = stableSort(candidates.filter((item) => item.module === "Links"));
+    const intentItems = stableSort(candidates.filter((item) => item.isIntentMatch));
     const skimPool = stableSort(candidates.filter((item) => ["Trends", "Repos", "Packages"].includes(item.module)));
     const allByScore = stableSort(candidates);
 
-    const startItems = picker.fill(
-        picker.pickFrom(trends, sectionCounts.start),
-        sectionCounts.start,
-        allByScore
-    );
+    const startItems = pickStartItems(picker, intentItems, allByScore, allByScore);
 
     const skimItems = [];
     const skimModules = [trends, repos, packages];

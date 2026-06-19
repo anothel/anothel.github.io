@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { sectionCounts } from "../scripts/update-today.mjs";
+import { buildTodayBrief, sectionCounts } from "../scripts/update-today.mjs";
 import { renderExploreLinks, renderTodaySections, totalSectionItems } from "../js/today.js";
 
 const todayData = JSON.parse(readFileSync("data/today.json", "utf8"));
@@ -11,6 +11,119 @@ const expectedSectionCounts = [
     sectionCounts.reference
 ];
 const expectedItemFields = ["title", "module", "origin", "category", "metric", "reason", "url", "score"];
+
+function buildQualityFixture() {
+    return {
+        trends: {
+            updated: "2026-06-19",
+            sourceMeta: { status: "ok" },
+            items: [
+                {
+                    title: "tailwindcss",
+                    source: "npm",
+                    category: "AI",
+                    score: 101,
+                    velocity: "150M/week",
+                    signal: "misclassified baseline demand",
+                    url: "https://www.npmjs.com/package/tailwindcss"
+                },
+                {
+                    title: "typescript",
+                    source: "npm",
+                    category: "JavaScript",
+                    score: 100,
+                    velocity: "220M/week",
+                    signal: "baseline demand",
+                    url: "https://www.npmjs.com/package/typescript"
+                },
+                {
+                    title: "eslint",
+                    source: "npm",
+                    category: "Developer tools",
+                    score: 99,
+                    velocity: "140M/week",
+                    signal: "baseline demand",
+                    url: "https://www.npmjs.com/package/eslint"
+                },
+                {
+                    title: "react",
+                    source: "npm",
+                    category: "UI",
+                    score: 98,
+                    velocity: "147M/week",
+                    signal: "baseline demand",
+                    url: "https://www.npmjs.com/package/react"
+                }
+            ]
+        },
+        repos: {
+            updated: "2026-06-19",
+            sourceMeta: { status: "ok" },
+            repos: [
+                {
+                    name: "anthropics/skills",
+                    category: "Agent skills",
+                    starsLabel: "8K",
+                    focus: "official agent skills examples",
+                    url: "https://github.com/anthropics/skills",
+                    score: 72
+                },
+                {
+                    name: "modelcontextprotocol/servers",
+                    category: "MCP",
+                    starsLabel: "15K",
+                    focus: "MCP server ecosystem",
+                    url: "https://github.com/modelcontextprotocol/servers",
+                    score: 71
+                },
+                {
+                    name: "openai/codex",
+                    category: "Coding agents",
+                    starsLabel: "30K",
+                    focus: "coding agent tooling",
+                    url: "https://github.com/openai/codex",
+                    score: 70
+                }
+            ]
+        },
+        packages: {
+            updated: "2026-06-19",
+            sourceMeta: { status: "ok" },
+            packages: [
+                {
+                    name: "zod",
+                    category: "Developer tools",
+                    downloadsLabel: "200M/week",
+                    focus: "schema validation",
+                    url: "https://www.npmjs.com/package/zod",
+                    score: 97
+                },
+                {
+                    name: "@modelcontextprotocol/sdk",
+                    category: "MCP",
+                    downloadsLabel: "1M/week",
+                    focus: "MCP SDK",
+                    url: "https://www.npmjs.com/package/@modelcontextprotocol/sdk",
+                    score: 69
+                }
+            ]
+        },
+        links: {
+            updated: "2026-06-19",
+            sourceMeta: { status: "ok" },
+            links: [
+                {
+                    title: "Agent Skills standard",
+                    kind: "Spec",
+                    category: "Agent skills",
+                    summary: "Reusable instructions, scripts, and resources for agents.",
+                    url: "https://agentskills.io/",
+                    score: 65
+                }
+            ]
+        }
+    };
+}
 
 test("totalSectionItems counts generated brief items", () => {
     assert.equal(totalSectionItems([{ items: [{}, {}] }, { items: [{}] }]), 3);
@@ -93,6 +206,36 @@ test("renderExploreLinks links to all full module pages", () => {
         "../links/index.html"
     ]) {
         assert.match(html, new RegExp(`href="${href.replaceAll("/", "\\/")}"`));
+    }
+});
+
+test("buildTodayBrief promotes personal AI and agent workflow signals", () => {
+    const today = buildTodayBrief(buildQualityFixture(), "2026-06-19T00:00:00.000Z");
+    const startItems = today.sections.find((section) => section.id === "start").items;
+    const startTitles = startItems.map((item) => item.title);
+    const baselineTitles = new Set(["tailwindcss", "typescript", "eslint", "react", "zod"]);
+    const intentPattern = /skills|mcp|codex|agent/i;
+    const firstIntentIndex = startItems.findIndex((item) => intentPattern.test(item.title));
+    const eslintIndex = startItems.findIndex((item) => item.title === "eslint");
+
+    assert.notEqual(firstIntentIndex, -1, startTitles.join(", "));
+    assert.equal(startTitles.includes("tailwindcss"), false, startTitles.join(", "));
+    assert.ok(
+        startItems.filter((item) => baselineTitles.has(item.title)).length <= 1,
+        startTitles.join(", ")
+    );
+    assert.ok(eslintIndex === -1 || firstIntentIndex < eslintIndex, startTitles.join(", "));
+});
+
+test("buildTodayBrief strips internal quality fields from output items", () => {
+    const today = buildTodayBrief(buildQualityFixture(), "2026-06-19T00:00:00.000Z");
+    const items = today.sections.flatMap((section) => section.items);
+
+    for (const item of items) {
+        assert.deepEqual(Object.keys(item), expectedItemFields);
+        assert.equal(Object.hasOwn(item, "priority"), false);
+        assert.equal(Object.hasOwn(item, "isIntentMatch"), false);
+        assert.equal(Object.hasOwn(item, "isBaseline"), false);
     }
 });
 
