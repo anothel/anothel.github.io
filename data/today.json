@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-15",
-  "generatedAt": "2026-06-16T11:55:00.868Z",
+  "updated": "2026-06-18",
+  "generatedAt": "2026-06-18T23:03:51.555Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-16T11:55:00.868Z"
+    "updatedAt": "2026-06-18T23:03:51.555Z"
   },
   "sections": [
     {
@@ -14,22 +14,12 @@
       "summary": "Three signals worth opening first.",
       "items": [
         {
-          "title": "Iroh 1.0",
-          "module": "Trends",
-          "origin": "Hacker News",
-          "category": "Developer tools",
-          "metric": "100 score",
-          "reason": "267 comments / 852 points",
-          "url": "https://www.iroh.computer/blog/v1",
-          "score": 100
-        },
-        {
           "title": "openclaw/openclaw",
           "module": "Trends",
           "origin": "GitHub",
           "category": "AI",
           "metric": "100 score",
-          "reason": "378.9K stars / 79.3K forks",
+          "reason": "379.4K stars / 79.4K forks",
           "url": "https://github.com/openclaw/openclaw",
           "score": 100
         },
@@ -39,8 +29,18 @@
           "origin": "npm",
           "category": "JavaScript",
           "metric": "100 score",
-          "reason": "217.3M/week / 2026-06-08 to 2026-06-14",
+          "reason": "220.4M/week / 2026-06-11 to 2026-06-17",
           "url": "https://www.npmjs.com/package/typescript",
+          "score": 100
+        },
+        {
+          "title": "zod",
+          "module": "Trends",
+          "origin": "npm",
+          "category": "Developer tools",
+          "metric": "100 score",
+          "reason": "201.7M/week / 2026-06-11 to 2026-06-17",
+          "url": "https://www.npmjs.com/package/zod",
           "score": 100
         }
       ]
@@ -51,21 +51,21 @@
       "summary": "Useful movement that does not need first attention.",
       "items": [
         {
-          "title": "zod",
+          "title": "eslint",
           "module": "Trends",
           "origin": "npm",
           "category": "Developer tools",
-          "metric": "99 score",
-          "reason": "194.8M/week / 2026-06-08 to 2026-06-14",
-          "url": "https://www.npmjs.com/package/zod",
-          "score": 99
+          "metric": "98 score",
+          "reason": "141.7M/week / 2026-06-11 to 2026-06-17",
+          "url": "https://www.npmjs.com/package/eslint",
+          "score": 98
         },
         {
           "title": "react/react",
           "module": "Repos",
           "origin": "GitHub",
           "category": "UI",
-          "metric": "245.9K stars",
+          "metric": "246K stars",
           "reason": "frontend runtime",
           "url": "https://github.com/react/react",
           "score": 85
@@ -75,19 +75,19 @@
           "module": "Packages",
           "origin": "npm",
           "category": "UI",
-          "metric": "142.5M/week",
+          "metric": "147.7M/week",
           "reason": "frontend runtime",
           "url": "https://www.npmjs.com/package/react",
           "score": 73
         },
         {
-          "title": "eslint",
+          "title": "vite",
           "module": "Trends",
           "origin": "npm",
           "category": "Developer tools",
           "metric": "98 score",
-          "reason": "138.3M/week / 2026-06-08 to 2026-06-14",
-          "url": "https://www.npmjs.com/package/eslint",
+          "reason": "142.4M/week / 2026-06-11 to 2026-06-17",
+          "url": "https://www.npmjs.com/package/vite",
           "score": 98
         },
         {
@@ -95,20 +95,20 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Automation",
-          "metric": "192.7K stars",
+          "metric": "193.1K stars",
           "reason": "workflow automation",
           "url": "https://github.com/n8n-io/n8n",
           "score": 84
         },
         {
-          "title": "vite",
+          "title": "prettier",
           "module": "Packages",
           "origin": "npm",
           "category": "Tooling",
-          "metric": "138.8M/week",
-          "reason": "build tool",
-          "url": "https://www.npmjs.com/package/vite",
-          "score": 72
+          "metric": "117.9M/week",
+          "reason": "formatting",
+          "url": "https://www.npmjs.com/package/prettier",
+          "score": 70
         }
       ]
     },

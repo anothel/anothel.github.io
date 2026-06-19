@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-15",
-  "generatedAt": "2026-06-15T23:08:16.671Z",
+  "updated": "2026-06-18",
+  "generatedAt": "2026-06-18T23:03:50.490Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -11,156 +11,145 @@
       "name": "Hacker News",
       "status": "ok",
       "count": 6,
-      "updatedAt": "2026-06-15T23:08:16.671Z"
+      "updatedAt": "2026-06-18T23:03:50.490Z"
     },
     {
       "name": "GitHub",
       "status": "ok",
       "count": 9,
-      "updatedAt": "2026-06-15T23:08:16.671Z"
+      "updatedAt": "2026-06-18T23:03:50.490Z"
     },
     {
       "name": "npm",
       "status": "ok",
       "count": 8,
-      "updatedAt": "2026-06-15T23:08:16.671Z"
+      "updatedAt": "2026-06-18T23:03:50.490Z"
     }
   ],
   "items": [
     {
       "rank": 1,
-      "title": "Iroh 1.0",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 100,
-      "velocity": "267 comments",
-      "signal": "852 points",
-      "url": "https://www.iroh.computer/blog/v1",
-      "summary": "HN story by chadfowler with 267 comments."
-    },
-    {
-      "rank": 2,
       "title": "openclaw/openclaw",
       "source": "GitHub",
       "category": "AI",
       "score": 100,
-      "velocity": "378.9K stars",
-      "signal": "79.3K forks",
+      "velocity": "379.4K stars",
+      "signal": "79.4K forks",
       "url": "https://github.com/openclaw/openclaw",
       "summary": "Your own personal AI assistant. Any OS. Any Platform. The lobster way. 🦞 "
     },
     {
-      "rank": 3,
+      "rank": 2,
       "title": "typescript",
       "source": "npm",
       "category": "JavaScript",
       "score": 100,
-      "velocity": "217.3M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "220.4M/week",
+      "signal": "2026-06-11 to 2026-06-17",
       "url": "https://www.npmjs.com/package/typescript",
-      "summary": "217.3M downloads over the last available week."
+      "summary": "220.4M downloads over the last available week."
     },
     {
-      "rank": 4,
+      "rank": 3,
       "title": "zod",
       "source": "npm",
       "category": "Developer tools",
-      "score": 99,
-      "velocity": "194.8M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "score": 100,
+      "velocity": "201.7M/week",
+      "signal": "2026-06-11 to 2026-06-17",
       "url": "https://www.npmjs.com/package/zod",
-      "summary": "194.8M downloads over the last available week."
+      "summary": "201.7M downloads over the last available week."
     },
     {
-      "rank": 5,
+      "rank": 4,
       "title": "react",
       "source": "npm",
       "category": "JavaScript",
       "score": 98,
-      "velocity": "142.5M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "147.7M/week",
+      "signal": "2026-06-11 to 2026-06-17",
       "url": "https://www.npmjs.com/package/react",
-      "summary": "142.5M downloads over the last available week."
+      "summary": "147.7M downloads over the last available week."
     },
     {
-      "rank": 6,
+      "rank": 5,
       "title": "vite",
       "source": "npm",
       "category": "Developer tools",
       "score": 98,
-      "velocity": "138.8M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "142.4M/week",
+      "signal": "2026-06-11 to 2026-06-17",
       "url": "https://www.npmjs.com/package/vite",
-      "summary": "138.8M downloads over the last available week."
+      "summary": "142.4M downloads over the last available week."
     },
     {
-      "rank": 7,
+      "rank": 6,
       "title": "eslint",
       "source": "npm",
       "category": "Developer tools",
       "score": 98,
-      "velocity": "138.3M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "141.7M/week",
+      "signal": "2026-06-11 to 2026-06-17",
       "url": "https://www.npmjs.com/package/eslint",
-      "summary": "138.3M downloads over the last available week."
+      "summary": "141.7M downloads over the last available week."
     },
     {
-      "rank": 8,
+      "rank": 7,
       "title": "tailwindcss",
       "source": "npm",
       "category": "AI",
       "score": 97,
-      "velocity": "117.3M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "121.3M/week",
+      "signal": "2026-06-11 to 2026-06-17",
       "url": "https://www.npmjs.com/package/tailwindcss",
-      "summary": "117.3M downloads over the last available week."
+      "summary": "121.3M downloads over the last available week."
     },
     {
-      "rank": 9,
+      "rank": 8,
       "title": "prettier",
       "source": "npm",
       "category": "Developer tools",
       "score": 97,
-      "velocity": "115.5M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "117.9M/week",
+      "signal": "2026-06-11 to 2026-06-17",
       "url": "https://www.npmjs.com/package/prettier",
-      "summary": "115.5M downloads over the last available week."
+      "summary": "117.9M downloads over the last available week."
     },
     {
-      "rank": 10,
+      "rank": 9,
       "title": "express",
       "source": "npm",
       "category": "Developer tools",
       "score": 97,
-      "velocity": "110.4M/week",
-      "signal": "2026-06-08 to 2026-06-14",
+      "velocity": "111.9M/week",
+      "signal": "2026-06-11 to 2026-06-17",
       "url": "https://www.npmjs.com/package/express",
-      "summary": "110.4M downloads over the last available week."
+      "summary": "111.9M downloads over the last available week."
     },
     {
-      "rank": 11,
+      "rank": 10,
       "title": "NousResearch/hermes-agent",
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "194.4K stars",
-      "signal": "34.1K forks",
+      "velocity": "197K stars",
+      "signal": "34.8K forks",
       "url": "https://github.com/NousResearch/hermes-agent",
       "summary": "The agent that grows with you"
     },
     {
-      "rank": 12,
+      "rank": 11,
       "title": "n8n-io/n8n",
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "192.7K stars",
-      "signal": "58.6K forks",
+      "velocity": "193.1K stars",
+      "signal": "58.7K forks",
       "url": "https://github.com/n8n-io/n8n",
       "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations."
     },
     {
-      "rank": 13,
+      "rank": 12,
       "title": "Significant-Gravitas/AutoGPT",
       "source": "GitHub",
       "category": "AI",
@@ -171,114 +160,125 @@
       "summary": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters."
     },
     {
-      "rank": 14,
+      "rank": 13,
       "title": "f/prompts.chat",
       "source": "GitHub",
       "category": "AI",
       "score": 94,
-      "velocity": "163.8K stars",
-      "signal": "21.2K forks",
+      "velocity": "163.9K stars",
+      "signal": "21.3K forks",
       "url": "https://github.com/f/prompts.chat",
       "summary": "f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts from the community. Free and open source — self-host for your organization with complete privacy."
     },
     {
-      "rank": 15,
+      "rank": 14,
       "title": "thedaviddias/Front-End-Checklist",
       "source": "GitHub",
       "category": "AI agents",
       "score": 88,
-      "velocity": "72.9K stars",
+      "velocity": "73K stars",
       "signal": "6.7K forks",
       "url": "https://github.com/thedaviddias/Front-End-Checklist",
       "summary": "🗂 The essential checklist for modern web development, for humans and AI agents"
     },
     {
-      "rank": 16,
+      "rank": 15,
       "title": "shareAI-lab/learn-claude-code",
       "source": "GitHub",
       "category": "AI agents",
       "score": 87,
-      "velocity": "66.7K stars",
-      "signal": "10.9K forks",
+      "velocity": "67.4K stars",
+      "signal": "11K forks",
       "url": "https://github.com/shareAI-lab/learn-claude-code",
       "summary": "Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1"
     },
     {
-      "rank": 17,
+      "rank": 16,
       "title": "santifer/career-ops",
       "source": "GitHub",
       "category": "AI agents",
       "score": 85,
-      "velocity": "53.9K stars",
-      "signal": "10.7K forks",
+      "velocity": "54.6K stars",
+      "signal": "10.8K forks",
       "url": "https://github.com/santifer/career-ops",
       "summary": "AI-powered job search system built on Claude Code. 14 skill modes, Go dashboard, PDF generation, batch processing."
     },
     {
-      "rank": 18,
+      "rank": 17,
       "title": "CherryHQ/cherry-studio",
       "source": "GitHub",
       "category": "AI agents",
       "score": 84,
-      "velocity": "47.4K stars",
+      "velocity": "47.5K stars",
       "signal": "4.5K forks",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "summary": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
-      "rank": 19,
-      "title": "TinyWind: A pixel pirate sailing game with real wind physics (380k+ kms sailed)",
+      "rank": 18,
+      "title": "Swiss parliament lifts ban on new nuclear power plants",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 66,
-      "velocity": "108 comments",
-      "signal": "527 points",
-      "url": "https://tinywind.io",
-      "summary": "HN story by tinywind with 108 comments."
+      "category": "Developer tools",
+      "score": 80,
+      "velocity": "488 comments",
+      "signal": "638 points",
+      "url": "https://www.bluewin.ch/en/news/switzerland/parliament-lifts-ban-on-new-nuclear-power-plants-3257535.html",
+      "summary": "HN story by leonidasrup with 488 comments."
+    },
+    {
+      "rank": 19,
+      "title": "I found 10k GitHub repositories distributing Trojan malware",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 76,
+      "velocity": "138 comments",
+      "signal": "610 points",
+      "url": "https://orchidfiles.com/github-repositories-distributing-malware/",
+      "summary": "HN story by theorchid with 138 comments."
     },
     {
       "rank": 20,
-      "title": "A backdoor in a LinkedIn job offer",
+      "title": "Ubiquiti: Enterprise NAS, Built on ZFS",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 57,
-      "velocity": "88 comments",
-      "signal": "458 points",
-      "url": "https://roman.pt/posts/linkedin-backdoor/",
-      "summary": "HN story by lwhsiao with 88 comments."
+      "category": "Frontend",
+      "score": 29,
+      "velocity": "210 comments",
+      "signal": "229 points",
+      "url": "https://blog.ui.com/article/introducing-enterprise-nas",
+      "summary": "HN story by ksec with 210 comments."
     },
     {
       "rank": 21,
-      "title": "US battery manufacturing output continues to break records",
+      "title": "The Korean telecom giant at the center of Anthropic's Mythos controversy",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 14,
-      "velocity": "75 comments",
-      "signal": "108 points",
-      "url": "https://fred.stlouisfed.org/series/IPG33591S",
-      "summary": "HN story by epistasis with 75 comments."
+      "score": 9,
+      "velocity": "42 comments",
+      "signal": "70 points",
+      "url": "https://www.wired.com/story/sk-telecom-anthropic-mythos-export-controls/",
+      "summary": "HN story by dstala with 42 comments."
     },
     {
       "rank": 22,
-      "title": "I Love the Computer",
+      "title": "American Express: Cell-Based Architecture for Resilient Payment Systems",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 11,
-      "velocity": "54 comments",
-      "signal": "87 points",
-      "url": "https://michaelenger.com/blog/i-love-the-computer/",
-      "summary": "HN story by speckx with 54 comments."
+      "score": 6,
+      "velocity": "12 comments",
+      "signal": "50 points",
+      "url": "https://americanexpress.io/cell-based-architecture-for-resilient-payment-systems/",
+      "summary": "HN story by birdculture with 12 comments."
     },
     {
       "rank": 23,
-      "title": "Banned Book Library in a Wi-Fi Smart Light Bulb",
+      "title": "Zero-Touch OAuth for MCP",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 2,
-      "velocity": "0 comments",
-      "signal": "15 points",
-      "url": "https://www.richardosgood.com/posts/banned-book-library/",
-      "summary": "HN story by sohkamyung with 0 comments."
+      "category": "Security",
+      "score": 1,
+      "velocity": "3 comments",
+      "signal": "11 points",
+      "url": "https://blog.modelcontextprotocol.io/posts/enterprise-managed-auth/",
+      "summary": "HN story by niyikiza with 3 comments."
     }
   ]
 }
