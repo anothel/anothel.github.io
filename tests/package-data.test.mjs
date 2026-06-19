@@ -1,7 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
-import { buildPackageRows } from "../scripts/update-packages.mjs";
+import { buildPackageDownloadUrl, buildPackageRows, packageDefinitions } from "../scripts/update-packages.mjs";
+
+function readJson(path) {
+    return JSON.parse(readFileSync(path, "utf8"));
+}
 
 test("buildPackageRows sorts packages by downloads and formats rows", () => {
     const rows = buildPackageRows(
@@ -37,4 +42,44 @@ test("buildPackageRows sorts packages by downloads and formats rows", () => {
             url: "https://www.npmjs.com/package/vite"
         }
     ]);
+});
+
+test("buildPackageDownloadUrl encodes scoped package names", () => {
+    assert.equal(
+        buildPackageDownloadUrl("@modelcontextprotocol/sdk"),
+        "https://api.npmjs.org/downloads/point/last-week/%40modelcontextprotocol%2Fsdk"
+    );
+});
+
+test("default package watchlist tracks AI and agent SDK packages", () => {
+    const names = new Set(packageDefinitions.map((item) => item.name));
+    const categories = new Set(packageDefinitions.map((item) => item.category));
+
+    for (const name of [
+        "ai",
+        "openai",
+        "@anthropic-ai/sdk",
+        "langchain",
+        "@langchain/core",
+        "@modelcontextprotocol/sdk"
+    ]) {
+        assert.ok(names.has(name), `${name} should be tracked`);
+    }
+
+    assert.ok(packageDefinitions.length >= 14);
+    assert.ok(categories.has("AI SDK"));
+    assert.ok(categories.has("AI agents"));
+    assert.ok(categories.has("MCP"));
+});
+
+test("checked-in packages include baseline and AI agent coverage", () => {
+    const data = readJson("data/packages.json");
+    const names = new Set(data.packages.map((item) => item.name));
+
+    for (const name of ["react", "typescript", "playwright", "ai", "openai", "@modelcontextprotocol/sdk"]) {
+        assert.ok(names.has(name), `${name} should be present in generated packages`);
+    }
+
+    assert.ok(data.packages.length >= 14);
+    assert.equal(data.sourceMeta.count, data.packages.length);
 });

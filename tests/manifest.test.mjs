@@ -60,3 +60,14 @@ test("checked-in manifest points to existing pages and data", () => {
         assert.match(module.source, /\S/);
     }
 });
+
+test("checked-in manifest counts match generated data files", () => {
+    const manifest = readJson("data/manifest.json");
+    const packages = readJson("data/packages.json");
+    const today = readJson("data/today.json");
+    const packageModule = manifest.modules.find((module) => module.id === "packages");
+
+    assert.equal(packageModule.count, packages.packages.length);
+    assert.equal(packages.sourceMeta.count, packages.packages.length);
+    assert.equal(today.sourceMeta.count, today.sections.flatMap((section) => section.items).length);
+});

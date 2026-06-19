@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-18",
-  "generatedAt": "2026-06-19T09:36:24.650Z",
+  "updated": "2026-06-19",
+  "generatedAt": "2026-06-19T09:42:39.832Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-19T09:36:24.650Z"
+    "updatedAt": "2026-06-19T09:42:39.832Z"
   },
   "sections": [
     {
@@ -71,14 +71,14 @@
           "score": 84
         },
         {
-          "title": "playwright",
+          "title": "@modelcontextprotocol/sdk",
           "module": "Packages",
           "origin": "npm",
-          "category": "Testing",
-          "metric": "63.3M/week",
-          "reason": "browser automation",
-          "url": "https://www.npmjs.com/package/playwright",
-          "score": 69
+          "category": "MCP",
+          "metric": "39.4M/week",
+          "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
+          "score": 67
         },
         {
           "title": "shareAI-lab/learn-claude-code",
@@ -101,14 +101,14 @@
           "score": 80
         },
         {
-          "title": "typescript",
+          "title": "openai",
           "module": "Packages",
           "origin": "npm",
-          "category": "Language",
-          "metric": "220.4M/week",
-          "reason": "typed JavaScript",
-          "url": "https://www.npmjs.com/package/typescript",
-          "score": 75
+          "category": "AI SDK",
+          "metric": "26.4M/week",
+          "reason": "AI and agent workflow signal worth opening early.",
+          "url": "https://www.npmjs.com/package/openai",
+          "score": 66
         }
       ]
     },

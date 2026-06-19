@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-18",
-  "generatedAt": "2026-06-18T23:03:51.597Z",
+  "updated": "2026-06-19",
+  "generatedAt": "2026-06-19T09:42:44.529Z",
   "modules": [
     {
       "id": "trends",
@@ -19,8 +19,8 @@
       "data": "data/packages.json",
       "source": "npm",
       "status": "ok",
-      "count": 8,
-      "updated": "2026-06-18"
+      "count": 14,
+      "updated": "2026-06-19"
     },
     {
       "id": "repos",

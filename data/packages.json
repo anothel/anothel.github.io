@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-18",
-  "generatedAt": "2026-06-18T23:03:51.014Z",
+  "updated": "2026-06-19",
+  "generatedAt": "2026-06-19T09:42:29.631Z",
   "sourceMeta": {
     "name": "npm",
     "status": "ok",
-    "count": 8,
-    "updatedAt": "2026-06-18T23:03:51.014Z"
+    "count": 14,
+    "updatedAt": "2026-06-19T09:42:29.631Z"
   },
   "packages": [
     {
@@ -13,9 +13,9 @@
       "name": "typescript",
       "category": "Language",
       "focus": "typed JavaScript",
-      "downloads": 220448684,
-      "downloadsLabel": "220.4M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 219577663,
+      "downloadsLabel": "219.6M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/typescript"
     },
     {
@@ -53,9 +53,9 @@
       "name": "eslint",
       "category": "Tooling",
       "focus": "linting",
-      "downloads": 141710730,
+      "downloads": 141666127,
       "downloadsLabel": "141.7M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/eslint"
     },
     {
@@ -63,9 +63,9 @@
       "name": "prettier",
       "category": "Tooling",
       "focus": "formatting",
-      "downloads": 117948915,
-      "downloadsLabel": "117.9M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 117782745,
+      "downloadsLabel": "117.8M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/prettier"
     },
     {
@@ -73,9 +73,9 @@
       "name": "playwright",
       "category": "Testing",
       "focus": "browser automation",
-      "downloads": 63336844,
-      "downloadsLabel": "63.3M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 63535994,
+      "downloadsLabel": "63.5M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/playwright"
     },
     {
@@ -87,6 +87,66 @@
       "downloadsLabel": "40.3M/week",
       "period": "2026-06-11 to 2026-06-17",
       "url": "https://www.npmjs.com/package/next"
+    },
+    {
+      "rank": 9,
+      "name": "@modelcontextprotocol/sdk",
+      "category": "MCP",
+      "focus": "Model Context Protocol SDK",
+      "downloads": 39414026,
+      "downloadsLabel": "39.4M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk"
+    },
+    {
+      "rank": 10,
+      "name": "openai",
+      "category": "AI SDK",
+      "focus": "OpenAI API SDK",
+      "downloads": 26376505,
+      "downloadsLabel": "26.4M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/openai"
+    },
+    {
+      "rank": 11,
+      "name": "@anthropic-ai/sdk",
+      "category": "AI SDK",
+      "focus": "Anthropic API SDK",
+      "downloads": 23973403,
+      "downloadsLabel": "24M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk"
+    },
+    {
+      "rank": 12,
+      "name": "ai",
+      "category": "AI SDK",
+      "focus": "Vercel AI SDK",
+      "downloads": 15600520,
+      "downloadsLabel": "15.6M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/ai"
+    },
+    {
+      "rank": 13,
+      "name": "@langchain/core",
+      "category": "AI agents",
+      "focus": "LangChain core primitives",
+      "downloads": 4853698,
+      "downloadsLabel": "4.9M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/%40langchain%2Fcore"
+    },
+    {
+      "rank": 14,
+      "name": "langchain",
+      "category": "AI agents",
+      "focus": "LLM and agent orchestration",
+      "downloads": 2532053,
+      "downloadsLabel": "2.5M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/langchain"
     }
   ]
 }

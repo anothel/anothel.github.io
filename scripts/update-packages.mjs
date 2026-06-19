@@ -12,7 +12,13 @@ export const packageDefinitions = [
     { name: "zod", category: "Validation", focus: "schema validation" },
     { name: "playwright", category: "Testing", focus: "browser automation" },
     { name: "eslint", category: "Tooling", focus: "linting" },
-    { name: "prettier", category: "Tooling", focus: "formatting" }
+    { name: "prettier", category: "Tooling", focus: "formatting" },
+    { name: "ai", category: "AI SDK", focus: "Vercel AI SDK" },
+    { name: "openai", category: "AI SDK", focus: "OpenAI API SDK" },
+    { name: "@anthropic-ai/sdk", category: "AI SDK", focus: "Anthropic API SDK" },
+    { name: "langchain", category: "AI agents", focus: "LLM and agent orchestration" },
+    { name: "@langchain/core", category: "AI agents", focus: "LangChain core primitives" },
+    { name: "@modelcontextprotocol/sdk", category: "MCP", focus: "Model Context Protocol SDK" }
 ];
 
 function isoDate(date = new Date()) {
@@ -38,6 +44,10 @@ async function fetchJson(url) {
     return response.json();
 }
 
+export function buildPackageDownloadUrl(name) {
+    return `https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(name)}`;
+}
+
 export function buildPackageRows(downloadRecords, definitions = packageDefinitions) {
     const definitionByName = new Map(definitions.map((item) => [item.name, item]));
 
@@ -60,9 +70,10 @@ export function buildPackageRows(downloadRecords, definitions = packageDefinitio
 }
 
 export async function collectPackages() {
-    const names = packageDefinitions.map((item) => item.name).join(",");
-    const data = await fetchJson(`https://api.npmjs.org/downloads/point/last-week/${names}`);
-    const packages = buildPackageRows(Object.values(data));
+    const downloadRecords = await Promise.all(
+        packageDefinitions.map((definition) => fetchJson(buildPackageDownloadUrl(definition.name)))
+    );
+    const packages = buildPackageRows(downloadRecords);
     const generatedAt = new Date().toISOString();
 
     return {
