@@ -10,6 +10,7 @@ const styles = read("css/site.css");
 const pages = [
     ["index.html", "Home", ""],
     ["today/index.html", "Today", "../"],
+    ["explore/index.html", "Explore", "../"],
     ["trends/index.html", "Trends", "../"],
     ["packages/index.html", "Packages", "../"],
     ["repos/index.html", "Repos", "../"],
@@ -25,6 +26,7 @@ test("public pages expose shared primary navigation", () => {
         for (const href of [
             `${prefix}index.html`,
             `${prefix}today/index.html`,
+            `${prefix}explore/index.html`,
             `${prefix}trends/index.html`,
             `${prefix}packages/index.html`,
             `${prefix}repos/index.html`,
@@ -111,6 +113,41 @@ test("today page owns the generated priority brief", () => {
     assert.match(today, /href="..\/index\.html"/);
     assert.match(today, /Today's priority brief\./);
     assert.match(today, /Thirteen generated picks from tracked signals\./);
+});
+
+test("explore page owns the cross-module search surface", () => {
+    const explore = read("explore/index.html");
+    const sitemap = read("sitemap.xml");
+
+    for (const hook of [
+        "data-explore-results",
+        "data-explore-saved",
+        "data-explore-module",
+        "data-explore-category",
+        "data-explore-query",
+        "data-explore-sort",
+        "data-explore-total",
+        "data-explore-saved-count",
+        "data-explore-categories",
+        "data-explore-summary",
+        "data-data-mode",
+        "data-source-health",
+        "data-clear-filters"
+    ]) {
+        assert.match(explore, new RegExp(hook));
+    }
+
+    assert.match(explore, /Explore tracked signals\./);
+    assert.match(explore, /..\/js\/data-health\.js/);
+    assert.match(explore, /..\/js\/explore\.js/);
+    assert.match(explore, /..\/data\/trends\.json/);
+    assert.match(explore, /..\/data\/packages\.json/);
+    assert.match(explore, /..\/data\/repos\.json/);
+    assert.match(explore, /..\/data\/links\.json/);
+    assert.match(sitemap, /https:\/\/anothel\.github\.io\/explore\//);
+    assert.match(styles, /\.explore-results/);
+    assert.match(styles, /\.saved-panel/);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.explore-results[\s\S]*grid-template-columns: 1fr/s);
 });
 
 test("root page avoids duplicate module entry cards below primary navigation", () => {

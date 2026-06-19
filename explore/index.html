@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Search and save tracked technical signals across HN, GitHub, npm, and references.">
+    <meta name="author" content="anothel">
+    <link rel="canonical" href="https://anothel.github.io/explore/">
+    <meta property="og:site_name" content="anothel">
+    <meta property="og:title" content="Explore - anothel">
+    <meta property="og:description" content="Search and save tracked technical signals across HN, GitHub, npm, and references.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anothel.github.io/explore/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Explore - anothel">
+    <meta name="twitter:description" content="Search and save tracked technical signals across HN, GitHub, npm, and references.">
+    <title>Explore - anothel</title>
+    <link rel="stylesheet" href="../css/site.css">
+    <script defer src="../js/data-health.js"></script>
+    <script defer src="../js/explore.js" data-manifest="../data/manifest.json" data-trends="../data/trends.json" data-packages="../data/packages.json" data-repos="../data/repos.json" data-links="../data/links.json"></script>
+</head>
+<body>
+    <div class="shell explore-shell">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Cross-module search</p>
+                <h1>Explore tracked signals.</h1>
+            </div>
+            <p class="stamp">Search, filter, save</p>
+            <nav class="site-nav" aria-label="Primary">
+                <a href="../index.html">Home</a>
+                <a href="../today/index.html">Today</a>
+                <a href="../explore/index.html" aria-current="page">Explore</a>
+                <a href="../trends/index.html">Trends</a>
+                <a href="../packages/index.html">Packages</a>
+                <a href="../repos/index.html">Repos</a>
+                <a href="../links/index.html">Links</a>
+            </nav>
+        </header>
+
+        <aside class="sidebar" aria-label="Explore filters">
+            <div class="panel explore-controls">
+                <h2>Refine explore</h2>
+                <label>
+                    Module
+                    <select data-explore-module>
+                        <option value="all">All modules</option>
+                    </select>
+                </label>
+                <label>
+                    Category
+                    <select data-explore-category>
+                        <option value="all">All categories</option>
+                    </select>
+                </label>
+                <label>
+                    Search
+                    <input data-explore-query type="search" placeholder="agent, skills, runtime">
+                </label>
+                <label>
+                    Sort
+                    <select data-explore-sort>
+                        <option value="priority">Priority</option>
+                        <option value="saved">Saved first</option>
+                        <option value="module">Module</option>
+                        <option value="category">Category</option>
+                    </select>
+                </label>
+                <div class="panel-actions">
+                    <p data-explore-summary>Showing all tracked items.</p>
+                    <button class="ghost-button" type="button" data-clear-filters>Clear filters</button>
+                </div>
+            </div>
+        </aside>
+
+        <main>
+            <section class="stats-grid" aria-label="Explore stats">
+                <article class="stat-card">
+                    <span>Visible items</span>
+                    <strong data-explore-total>65</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Saved</span>
+                    <strong data-explore-saved-count>0</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Categories</span>
+                    <strong data-explore-categories>12</strong>
+                </article>
+            </section>
+
+            <section class="health-panel" aria-labelledby="explore-health-title">
+                <div class="panel-heading">
+                    <h2 id="explore-health-title">Data freshness</h2>
+                    <p data-data-mode>Checked-in data, refreshed by workflow.</p>
+                </div>
+                <div class="source-health-grid" data-source-health></div>
+            </section>
+
+            <section class="explore-workspace" aria-label="Explore workspace">
+                <aside class="saved-panel" aria-labelledby="saved-title">
+                    <div class="panel-heading">
+                        <h2 id="saved-title">Saved queue</h2>
+                        <p>Local to this browser.</p>
+                    </div>
+                    <div class="saved-list" data-explore-saved>
+                        <p class="saved-empty">No saved items yet.</p>
+                    </div>
+                </aside>
+
+                <section class="rank-panel" aria-labelledby="explore-results-title">
+                    <div class="panel-heading">
+                        <h2 id="explore-results-title">Results</h2>
+                        <p>Open items at their original source.</p>
+                    </div>
+                    <div class="explore-results" data-explore-results>
+                        <article class="explore-card">
+                            <div class="card-topline">
+                                <span>Today</span>
+                                <span>Tracked signals</span>
+                            </div>
+                            <h3>Search across all tracked data</h3>
+                            <p>Use module, category, and search filters to narrow HN, GitHub, npm, and saved references.</p>
+                            <div class="card-meta">
+                                <span>Static</span>
+                                <span>Checked-in data</span>
+                            </div>
+                            <div class="explore-card-actions">
+                                <a href="../today/index.html">Open priority brief</a>
+                                <button type="button" aria-pressed="false">Save</button>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
