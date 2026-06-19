@@ -15,6 +15,7 @@
         sourceMeta: [],
         module: "all",
         category: "all",
+        focus: "all",
         query: "",
         sort: "priority",
         savedIds: new Set()
@@ -289,10 +290,28 @@
             .some((value) => String(value || "").toLowerCase().includes(normalized));
     }
 
+    function focusMatches(item, focus = "all") {
+        if (!focus || focus === "all") return true;
+
+        const text = [item.title, item.module, item.category, item.origin, item.metric, item.summary, item.sourceContext, ...(item.sources || [])]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+
+        if (focus === "Packages") return item.module === "Packages";
+        if (focus === "MCP") return /\bmcp\b|\bmodelcontextprotocol\b/.test(text);
+        if (focus === "Agent skills") return /\b(agent skills?|skills?)\b/.test(text);
+        if (focus === "Security") return /\b(security|oauth|auth|malware|vulnerability|supply chain)\b/.test(text);
+        if (focus === "AI agents") return /\b(ai agents?|agentic|coding agent|codex|claude code|copilot|workflow automation)\b/.test(text);
+
+        return true;
+    }
+
     function filterExploreItems(items, filters) {
         return items
             .filter((item) => filters.module === "all" || item.module === filters.module)
             .filter((item) => filters.category === "all" || item.category === filters.category)
+            .filter((item) => focusMatches(item, filters.focus || "all"))
             .filter((item) => includesQuery(item, filters.query || ""));
     }
 
@@ -319,6 +338,7 @@
 
     function activeExploreSummary(filters, savedCount = 0) {
         const parts = [];
+        if (filters.focus && filters.focus !== "all") parts.push(`Focus: ${filters.focus}`);
         if (filters.module !== "all") parts.push(`Module: ${filters.module}`);
         if (filters.category !== "all") parts.push(`Category: ${filters.category}`);
         if (filters.query) parts.push(`Search: ${filters.query}`);
@@ -331,6 +351,7 @@
         return {
             module: "all",
             category: "all",
+            focus: "all",
             query: "",
             sort: filters.sort === "saved" ? "saved" : "priority"
         };
@@ -355,12 +376,12 @@
                         <span>${escapeHtml(item.category)}</span>
                     </div>
                     <h3>${escapeHtml(item.title)}</h3>
-                    <p>${escapeHtml(item.summary)}</p>
+                    <p class="why-copy"><strong>Why this matters</strong> ${escapeHtml(item.summary)}</p>
                     <div class="card-meta">
                         <span>${escapeHtml(item.origin)}</span>
                         <span>${escapeHtml(item.metric)}</span>
                         <span>${escapeHtml(item.updated)}</span>
-                        <span class="quality-marker" aria-label="Quality score ${escapeHtml(item.qualityScore || item.score || 0)}">Q ${escapeHtml(item.qualityScore || item.score || 0)}</span>
+                        <span class="quality-marker" aria-label="Signal fit score ${escapeHtml(item.qualityScore || item.score || 0)}">Signal fit ${escapeHtml(item.qualityScore || item.score || 0)}</span>
                     </div>
                     ${item.sourceContext ? `<p class="source-context">${escapeHtml(item.sourceContext)}</p>` : ""}
                     <div class="explore-card-actions">
@@ -377,7 +398,7 @@
     function renderSavedQueue(items, savedIds = new Set()) {
         const saved = items.filter((item) => savedIds.has(item.id));
         if (saved.length === 0) {
-            return '<p class="saved-empty">Save items from results to keep them here.</p>';
+            return '<p class="saved-empty">Save items to review later in this browser.</p>';
         }
 
         return saved.map((item) => `
@@ -448,6 +469,9 @@
             category: document.querySelector("[data-explore-category]"),
             query: document.querySelector("[data-explore-query]"),
             sort: document.querySelector("[data-explore-sort]"),
+            focusButtons: typeof document.querySelectorAll === "function"
+                ? [...document.querySelectorAll("[data-focus-filter]")]
+                : [],
             total: document.querySelector("[data-explore-total]"),
             savedCount: document.querySelector("[data-explore-saved-count]"),
             categories: document.querySelector("[data-explore-categories]"),
@@ -469,6 +493,12 @@
         if (els.results) els.results.innerHTML = renderExploreCards(items, state.savedIds);
         if (els.saved) els.saved.innerHTML = renderSavedQueue(state.items, state.savedIds);
         bindDynamicActions(els, store);
+    }
+
+    function updateFocusButtons(els) {
+        for (const button of els.focusButtons || []) {
+            button.setAttribute?.("aria-pressed", String(button.dataset.focusFilter === state.focus));
+        }
     }
 
     function renderHealth(els) {
@@ -516,16 +546,25 @@
             state.sort = event.target.value;
             render(els, store);
         });
+        for (const button of els.focusButtons || []) {
+            button.addEventListener("click", () => {
+                state.focus = button.dataset.focusFilter || "all";
+                updateFocusButtons(els);
+                render(els, store);
+            });
+        }
         els.clearFilters?.addEventListener("click", () => {
             const cleared = clearedExploreState(state);
             state.module = cleared.module;
             state.category = cleared.category;
+            state.focus = cleared.focus;
             state.query = cleared.query;
             state.sort = cleared.sort;
             if (els.module) els.module.value = state.module;
             if (els.category) els.category.value = state.category;
             if (els.query) els.query.value = state.query;
             if (els.sort) els.sort.value = state.sort;
+            updateFocusButtons(els);
             render(els, store);
         });
     }
@@ -570,6 +609,7 @@
 
         fillSelect(els.module, uniqueValues(state.items, "module"), "All modules");
         fillSelect(els.category, uniqueValues(state.items, "category"), "All categories");
+        updateFocusButtons(els);
         bindControls(els, store);
         renderHealth(els);
         render(els, store);
@@ -579,6 +619,7 @@
         normalizeExploreData,
         collectSourceMeta,
         filterExploreItems,
+        focusMatches,
         sortExploreItems,
         renderExploreCards,
         renderSavedQueue,

@@ -42,6 +42,15 @@
         <aside class="sidebar" aria-label="Explore filters">
             <div class="panel explore-controls">
                 <h2>Refine explore</h2>
+                <div class="quick-filter-group" aria-label="Signal focus">
+                    <span>Signal focus</span>
+                    <button type="button" data-focus-filter="all" aria-pressed="true">All</button>
+                    <button type="button" data-focus-filter="AI agents" aria-pressed="false">AI agents</button>
+                    <button type="button" data-focus-filter="MCP" aria-pressed="false">MCP</button>
+                    <button type="button" data-focus-filter="Agent skills" aria-pressed="false">Agent skills</button>
+                    <button type="button" data-focus-filter="Security" aria-pressed="false">Security</button>
+                    <button type="button" data-focus-filter="Packages" aria-pressed="false">Packages</button>
+                </div>
                 <label>
                     Module
                     <select data-explore-module>
@@ -101,11 +110,11 @@
             <section class="explore-workspace" aria-label="Explore workspace">
                 <aside class="saved-panel" aria-labelledby="saved-title">
                     <div class="panel-heading">
-                        <h2 id="saved-title">Saved queue</h2>
-                        <p>Local to this browser.</p>
+                        <h2 id="saved-title">Review later</h2>
+                        <p>Saved locally in this browser.</p>
                     </div>
                     <div class="saved-list" data-explore-saved>
-                        <p class="saved-empty">Save items from results to keep them here.</p>
+                        <p class="saved-empty">Save items to review later in this browser.</p>
                     </div>
                 </aside>
 
@@ -121,10 +130,11 @@
                                 <span>Tracked signals</span>
                             </div>
                             <h3>Search across all tracked data</h3>
-                            <p>Use module, category, and search filters to narrow HN, GitHub, npm, and saved references.</p>
+                            <p class="why-copy"><strong>Why this matters</strong> Use focus, module, category, and search filters to narrow HN, GitHub, npm, and saved references.</p>
                             <div class="card-meta">
                                 <span>Static</span>
                                 <span>Checked-in data</span>
+                                <span class="quality-marker">Signal fit 70</span>
                             </div>
                             <div class="explore-card-actions">
                                 <a href="../today/index.html">Open priority brief</a>

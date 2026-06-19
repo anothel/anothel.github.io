@@ -604,6 +604,36 @@ button {
     gap: 10px;
 }
 
+.quick-filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.quick-filter-group > span {
+    width: 100%;
+    color: var(--muted);
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
+.quick-filter-group button {
+    width: auto;
+    min-height: 34px;
+    padding: 0 10px;
+    background: var(--panel);
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+.quick-filter-group button:hover,
+.quick-filter-group button[aria-pressed="true"] {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+    color: var(--accent);
+}
+
 .panel-actions p {
     margin: 0;
     color: var(--muted);
@@ -899,6 +929,14 @@ button {
 .explore-card p {
     margin-bottom: 0;
     color: var(--muted);
+}
+
+.why-copy strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text);
+    font-size: 0.82rem;
+    text-transform: uppercase;
 }
 
 .source-context {

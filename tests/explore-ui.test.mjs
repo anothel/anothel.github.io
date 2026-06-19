@@ -93,6 +93,15 @@ test("Explore filters and sorts items with saved-first support", () => {
     );
 
     assert.deepEqual(
+        JSON.parse(JSON.stringify(app.filterExploreItems(items, { module: "all", category: "all", query: "", focus: "AI agents" }, new Set()).map((item) => item.id))),
+        ["repos:a"]
+    );
+    assert.deepEqual(
+        JSON.parse(JSON.stringify(app.filterExploreItems(items, { module: "all", category: "all", query: "", focus: "Packages" }, new Set()).map((item) => item.id))),
+        ["packages:b"]
+    );
+
+    assert.deepEqual(
         JSON.parse(JSON.stringify(app.sortExploreItems(items, "saved", new Set(["links:c"])).map((item) => item.id))),
         ["links:c", "packages:b", "repos:a"]
     );
@@ -262,7 +271,9 @@ test("Explore renders merged source context in cards and saved queue", () => {
     assert.match(cards, /Also in Links/);
     assert.match(saved, /Also in Links/);
     assert.match(cards, /Reusable &quot;skills&quot;\./);
-    assert.match(cards, /aria-label="Quality score 96"/);
+    assert.match(cards, /Why this matters/);
+    assert.match(cards, /aria-label="Signal fit score 96"/);
+    assert.match(cards, /Signal fit 96/);
     assert.match(cards, /class="quality-marker"/);
 });
 
@@ -274,8 +285,8 @@ test("Explore summarizes active saved workflow state", () => {
         "Showing all tracked items."
     );
     assert.equal(
-        app.activeExploreSummary({ module: "Repos", category: "AI agents", query: "codex", sort: "saved" }, 2),
-        "Module: Repos / Category: AI agents / Search: codex / Sort: saved first / Saved: 2"
+        app.activeExploreSummary({ module: "Repos", category: "AI agents", focus: "MCP", query: "codex", sort: "saved" }, 2),
+        "Focus: MCP / Module: Repos / Category: AI agents / Search: codex / Sort: saved first / Saved: 2"
     );
 });
 
@@ -285,11 +296,13 @@ test("Explore clear behavior preserves saved-first sort only", () => {
     assert.deepEqual(JSON.parse(JSON.stringify(app.clearedExploreState({
         module: "Repos",
         category: "AI",
+        focus: "MCP",
         query: "codex",
         sort: "saved"
     }))), {
         module: "all",
         category: "all",
+        focus: "all",
         query: "",
         sort: "saved"
     });
@@ -297,11 +310,13 @@ test("Explore clear behavior preserves saved-first sort only", () => {
     assert.deepEqual(JSON.parse(JSON.stringify(app.clearedExploreState({
         module: "Repos",
         category: "AI",
+        focus: "Agent skills",
         query: "codex",
         sort: "module"
     }))), {
         module: "all",
         category: "all",
+        focus: "all",
         query: "",
         sort: "priority"
     });
@@ -310,7 +325,7 @@ test("Explore clear behavior preserves saved-first sort only", () => {
 test("Explore saved queue empty state tells the user what to do", () => {
     const app = loadExplore();
 
-    assert.match(app.renderSavedQueue([], new Set()), /Save items from results to keep them here\./);
+    assert.match(app.renderSavedQueue([], new Set()), /Save items to review later in this browser\./);
 });
 
 test("Explore saved store reads, toggles, removes, and ignores broken storage", () => {
@@ -391,6 +406,7 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
         "[data-explore-category]",
         "[data-explore-query]",
         "[data-explore-sort]",
+        "[data-focus-filter]",
         "[data-explore-total]",
         "[data-explore-saved-count]",
         "[data-explore-categories]",
@@ -399,6 +415,10 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
         "[data-source-health]",
         "[data-clear-filters]"
     ].map((selector) => [selector, createElement()]));
+    const focusButtons = [
+        { dataset: { focusFilter: "all" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
+        { dataset: { focusFilter: "AI agents" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
+    ];
 
     const sources = {
         "../data/manifest.json": { modules: [] },
@@ -418,6 +438,10 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
             currentScript: { dataset: {} },
             querySelector(selector) {
                 return elements[selector] || null;
+            },
+            querySelectorAll(selector) {
+                if (selector === "[data-focus-filter]") return focusButtons;
+                return [];
             }
         },
         localStorage: {
@@ -441,6 +465,7 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
     assert.match(elements["[data-explore-results]"].innerHTML, /Agent trend/);
     assert.match(elements["[data-explore-saved]"].innerHTML, /Agent trend/);
     assert.match(elements["[data-source-health]"].innerHTML, /status-partial/);
+    assert.equal(focusButtons[0].ariaPressed, "true");
 
     elements["[data-explore-query]"].dispatch("input", "missing");
     assert.equal(elements["[data-explore-total]"].textContent, "0");
@@ -471,6 +496,7 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
         "[data-explore-category]",
         "[data-explore-query]",
         "[data-explore-sort]",
+        "[data-focus-filter]",
         "[data-explore-total]",
         "[data-explore-saved-count]",
         "[data-explore-categories]",
@@ -479,6 +505,10 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
         "[data-source-health]",
         "[data-clear-filters]"
     ].map((selector) => [selector, createElement()]));
+    const focusButtons = [
+        { dataset: { focusFilter: "all" }, listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute() {} },
+        { dataset: { focusFilter: "AI agents" }, listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute() {} }
+    ];
 
     const sources = {
         "../data/manifest.json": { modules: [] },
@@ -502,7 +532,8 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
             querySelector(selector) {
                 return elements[selector] || null;
             },
-            querySelectorAll() {
+            querySelectorAll(selector) {
+                if (selector === "[data-focus-filter]") return focusButtons;
                 return [];
             }
         },
@@ -530,6 +561,9 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
     elements["[data-explore-sort]"].dispatch("change", "saved");
     assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
     assert.match(elements["[data-explore-summary]"].textContent, /Saved: 1/);
+
+    focusButtons[1].listeners.click({ target: focusButtons[1] });
+    assert.match(elements["[data-explore-summary]"].textContent, /Focus: AI agents/);
 
     elements["[data-clear-filters]"].listeners.click({ target: elements["[data-clear-filters]"] });
     assert.equal(elements["[data-explore-query]"].value, "");

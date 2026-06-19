@@ -129,6 +129,7 @@ test("explore page owns the cross-module search surface", () => {
         "data-explore-category",
         "data-explore-query",
         "data-explore-sort",
+        "data-focus-filter",
         "data-explore-total",
         "data-explore-saved-count",
         "data-explore-categories",
@@ -141,6 +142,8 @@ test("explore page owns the cross-module search surface", () => {
     }
 
     assert.match(explore, /Explore tracked signals\./);
+    assert.match(explore, /Signal focus/);
+    assert.match(explore, /Review later/);
     assert.match(explore, /..\/js\/data-health\.js/);
     assert.match(explore, /..\/js\/explore\.js/);
     assert.match(explore, /..\/data\/trends\.json/);
