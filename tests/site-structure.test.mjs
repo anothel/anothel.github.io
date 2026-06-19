@@ -11,11 +11,18 @@ const pages = [
     ["index.html", "Home", ""],
     ["today/index.html", "Today", "../"],
     ["explore/index.html", "Explore", "../"],
+    ["review/index.html", "Review", "../"],
     ["status/index.html", "Status", "../"],
     ["trends/index.html", "Trends", "../"],
     ["packages/index.html", "Packages", "../"],
     ["repos/index.html", "Repos", "../"],
     ["links/index.html", "Links", "../"]
+];
+
+const topicPages = [
+    ["topics/ai-agents/index.html", "AI agents", "../../", "AI agent signals."],
+    ["topics/mcp/index.html", "MCP", "../../", "MCP signals."],
+    ["topics/agent-skills/index.html", "Agent skills", "../../", "Agent skills signals."]
 ];
 
 test("public pages expose shared primary navigation", () => {
@@ -28,6 +35,7 @@ test("public pages expose shared primary navigation", () => {
             `${prefix}index.html`,
             `${prefix}today/index.html`,
             `${prefix}explore/index.html`,
+            `${prefix}review/index.html`,
             `${prefix}status/index.html`,
             `${prefix}trends/index.html`,
             `${prefix}packages/index.html`,
@@ -76,6 +84,7 @@ test("root page is a hub and trends page owns the dashboard", () => {
     const trends = read("trends/index.html");
 
     assert.match(root, /href="today\/index\.html"/);
+    assert.match(root, /href="review\/index\.html"/);
     assert.match(root, /href="status\/index\.html"/);
     assert.match(root, /href="trends\/index\.html"/);
     assert.match(root, /href="packages\/index\.html"/);
@@ -149,6 +158,7 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(explore, /Explore tracked signals\./);
     assert.match(explore, /Signal focus/);
     assert.match(explore, /Review later/);
+    assert.match(explore, /href="..\/review\/index\.html"/);
     assert.match(explore, /..\/js\/data-health\.js/);
     assert.match(explore, /..\/js\/explore\.js/);
     assert.match(explore, /..\/data\/trends\.json/);
@@ -159,6 +169,93 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(styles, /\.explore-results/);
     assert.match(styles, /\.saved-panel/);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.explore-results[\s\S]*grid-template-columns: 1fr/s);
+});
+
+test("review page owns the saved follow-up surface", () => {
+    const review = read("review/index.html");
+    const sitemap = read("sitemap.xml");
+
+    for (const hook of [
+        "data-review-total",
+        "data-review-focus-count",
+        "data-review-source-count",
+        "data-review-queue",
+        "data-review-detail"
+    ]) {
+        assert.match(review, new RegExp(hook));
+    }
+
+    assert.match(review, /Review later\./);
+    assert.match(review, /Saved locally in this browser\./);
+    assert.match(review, /Queue/);
+    assert.match(review, /Selected item/);
+    assert.match(review, /..\/js\/explore\.js/);
+    assert.match(review, /..\/js\/review\.js/);
+    assert.match(review, /..\/data\/trends\.json/);
+    assert.match(review, /..\/data\/packages\.json/);
+    assert.match(review, /..\/data\/repos\.json/);
+    assert.match(review, /..\/data\/links\.json/);
+    assert.match(review, /href="..\/explore\/index\.html"/);
+    assert.match(sitemap, /https:\/\/anothel\.github\.io\/review\//);
+    assert.match(styles, /\.review-workspace/);
+    assert.match(styles, /\.review-detail/);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.review-workspace[\s\S]*grid-template-columns: 1fr/s);
+});
+
+test("topic focus pages expose focused landing pages", () => {
+    const sitemap = read("sitemap.xml");
+
+    for (const [path, label, prefix, title] of topicPages) {
+        const html = read(path);
+
+        assert.match(html, /class="site-nav"/);
+        assert.match(html, /aria-label="Primary"/);
+        for (const href of [
+            `${prefix}index.html`,
+            `${prefix}today/index.html`,
+            `${prefix}explore/index.html`,
+            `${prefix}review/index.html`,
+            `${prefix}status/index.html`,
+            `${prefix}trends/index.html`,
+            `${prefix}packages/index.html`,
+            `${prefix}repos/index.html`,
+            `${prefix}links/index.html`
+        ]) {
+            assert.match(html, new RegExp(`href="${href.replaceAll("/", "\\/")}"`));
+        }
+
+        assert.match(html, new RegExp(title.replaceAll(".", "\\.")));
+        assert.match(html, new RegExp(`data-topic="${label}"`));
+        assert.match(html, /data-topic-total/);
+        assert.match(html, /data-topic-modules/);
+        assert.match(html, /data-topic-updated/);
+        assert.match(html, /data-topic-list/);
+        assert.match(html, /..\/..\/js\/topics\.js/);
+        assert.match(html, /..\/..\/data\/trends\.json/);
+        assert.match(html, /..\/..\/data\/packages\.json/);
+        assert.match(html, /..\/..\/data\/repos\.json/);
+        assert.match(html, /..\/..\/data\/links\.json/);
+        assert.match(html, /Open focused Explore/);
+        assert.match(sitemap, new RegExp(`https:\\/\\/anothel\\.github\\.io\\/${path.replace("/index.html", "\\/")}`));
+    }
+
+    assert.match(styles, /\.topic-actions/);
+    assert.match(styles, /\.topic-grid/);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topic-grid[\s\S]*grid-template-columns: 1fr/s);
+});
+
+test("home and today pages link into topic focus pages", () => {
+    const home = read("index.html");
+    const today = read("today/index.html");
+
+    for (const href of [
+        "topics/ai-agents/index.html",
+        "topics/mcp/index.html",
+        "topics/agent-skills/index.html"
+    ]) {
+        assert.match(home, new RegExp(`href="${href.replaceAll("/", "\\/")}"`));
+        assert.match(today, new RegExp(`href="\\.\\.\\/${href.replaceAll("/", "\\/")}"`));
+    }
 });
 
 test("root page avoids duplicate module entry cards below primary navigation", () => {
@@ -198,6 +295,7 @@ test("root page exposes command center slots", () => {
     assert.match(root, /Explore workspace/);
     assert.match(root, /Search all tracked signals/);
     assert.match(root, /href="explore\/index\.html"/);
+    assert.match(root, /href="review\/index\.html"/);
     assert.match(root, /href="status\/index\.html"/);
     assert.match(root, /class="explore-callout"/);
     assert.match(root, /class="command-center"/);
@@ -239,6 +337,8 @@ test("public page copy states concrete page purpose", () => {
     assert.match(read("today/index.html"), /Thirteen generated picks from tracked signals\./);
     assert.match(read("today/index.html"), /Continue in Explore/);
     assert.match(read("index.html"), /Search all tracked signals/);
+    assert.match(read("review/index.html"), /Review later\./);
+    assert.match(read("review/index.html"), /Saved locally in this browser\./);
     assert.match(read("status/index.html"), /Source status\./);
     assert.match(read("status/index.html"), /Refresh health across tracked data sources\./);
     assert.match(read("trends/index.html"), /What is moving across HN, GitHub, and npm\./);

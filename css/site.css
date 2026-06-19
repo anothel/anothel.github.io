@@ -483,6 +483,24 @@ main {
     font-size: 0.8rem;
 }
 
+.topic-actions nav {
+    flex: 1 1 auto;
+}
+
+.topic-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.topic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.topic-card {
+    min-height: 250px;
+}
+
 .signal-card {
     display: grid;
     gap: 12px;
@@ -928,6 +946,108 @@ button {
     padding: 14px;
 }
 
+.review-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.review-workspace {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.5fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.review-queue-panel,
+.review-detail {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.review-queue {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+}
+
+.review-queue-item {
+    display: grid;
+    width: 100%;
+    min-height: 68px;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 0;
+    background: var(--panel);
+    color: var(--text);
+    text-align: left;
+}
+
+.review-queue-item:hover,
+.review-queue-item[aria-selected="true"] {
+    background: var(--panel-strong);
+}
+
+.review-queue-item strong {
+    margin-bottom: 3px;
+    overflow-wrap: anywhere;
+}
+
+.review-queue-item span {
+    color: var(--muted);
+    font-size: 0.84rem;
+    overflow-wrap: anywhere;
+}
+
+.review-detail > div:last-child {
+    padding: 18px;
+}
+
+.review-detail-card,
+.review-empty {
+    display: grid;
+    gap: 14px;
+}
+
+.review-detail-card h2,
+.review-empty h2 {
+    margin-bottom: 0;
+}
+
+.review-empty p {
+    margin-bottom: 0;
+    color: var(--muted);
+}
+
+.review-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.review-actions a,
+.review-actions button,
+.review-empty a {
+    width: auto;
+    min-height: 38px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--accent);
+    font-size: 0.86rem;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.review-actions a:hover,
+.review-actions button:hover,
+.review-empty a:hover {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+}
+
 .explore-results {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1120,6 +1240,7 @@ button {
     .status-stats,
     .link-grid,
     .today-grid,
+    .topic-grid,
     .module-strip {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -1141,7 +1262,9 @@ button {
     .link-grid,
     .dashboard-grid,
     .explore-results,
+    .review-workspace,
     .today-grid,
+    .topic-grid,
     .module-strip {
         grid-template-columns: 1fr;
     }
@@ -1169,7 +1292,10 @@ button {
     }
 
     .explore-strip nav,
-    .explore-strip a {
+    .explore-strip a,
+    .review-actions a,
+    .review-actions button,
+    .review-empty a {
         width: 100%;
     }
 

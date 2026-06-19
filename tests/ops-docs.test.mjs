@@ -12,6 +12,8 @@ test("README explains data refresh automation for operators", () => {
     assert.match(readme, /GITHUB_TOKEN/);
     assert.match(readme, /checked-in JSON/);
     assert.match(readme, /partial/);
+    assert.match(readme, /refresh-report/);
+    assert.match(readme, /GitHub Step Summary/);
     assert.match(readme, /node --test tests\/\*\.test\.mjs/);
 });
 
@@ -22,7 +24,8 @@ test("README keeps local and scheduled data update command order aligned", () =>
         "node scripts/update-repos.mjs",
         "node scripts/update-links.mjs",
         "node scripts/update-today.mjs",
-        "node scripts/update-manifest.mjs"
+        "node scripts/update-manifest.mjs",
+        "node --check scripts/report-refresh.mjs"
     ];
 
     let previousIndex = -1;

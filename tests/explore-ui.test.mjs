@@ -360,6 +360,33 @@ test("Explore saved store reads, toggles, removes, and ignores broken storage", 
     assert.deepEqual([...broken.read()], []);
 });
 
+test("Explore script does not auto-fetch on non-Explore pages", async () => {
+    let fetchCount = 0;
+    const context = {
+        console,
+        document: {
+            currentScript: { dataset: {} },
+            querySelector() {
+                return null;
+            },
+            querySelectorAll() {
+                return [];
+            }
+        },
+        fetch: async () => {
+            fetchCount += 1;
+            throw new Error("Explore init should not run without Explore hooks");
+        }
+    };
+
+    vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    assert.equal(fetchCount, 0);
+    assert.equal(typeof context.ExploreApp.normalizeExploreData, "function");
+});
+
 test("Explore rendering escapes generated text and blocks unsafe links", () => {
     const app = loadExplore();
     const html = app.renderExploreCards([
@@ -570,4 +597,85 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
     assert.equal(elements["[data-explore-sort]"].value, "saved");
     assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
     assert.equal(elements["[data-explore-total]"].textContent, "2");
+});
+
+test("Explore browser init applies focus from URL query", async () => {
+    function createElement() {
+        return {
+            innerHTML: "",
+            textContent: "",
+            value: "all",
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
+            }
+        };
+    }
+
+    const elements = Object.fromEntries([
+        "[data-explore-results]",
+        "[data-explore-saved]",
+        "[data-explore-module]",
+        "[data-explore-category]",
+        "[data-explore-query]",
+        "[data-explore-sort]",
+        "[data-explore-total]",
+        "[data-explore-saved-count]",
+        "[data-explore-categories]",
+        "[data-explore-summary]",
+        "[data-data-mode]",
+        "[data-source-health]",
+        "[data-clear-filters]"
+    ].map((selector) => [selector, createElement()]));
+    const focusButtons = [
+        { dataset: { focusFilter: "all" }, ariaPressed: "", addEventListener() {}, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
+        { dataset: { focusFilter: "MCP" }, ariaPressed: "", addEventListener() {}, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
+    ];
+    const sources = {
+        "../data/manifest.json": { modules: [] },
+        "../data/trends.json": {
+            updated: "2026-06-20",
+            sourceMeta: [],
+            items: [
+                { rank: 1, title: "MCP server", source: "GitHub", category: "MCP", score: 90, velocity: "+5%", url: "https://example.com/mcp", summary: "Model Context Protocol server." },
+                { rank: 2, title: "Other runtime", source: "npm", category: "Runtime", score: 70, velocity: "1M/week", url: "https://example.com/other", summary: "Other item." }
+            ]
+        },
+        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    };
+    const context = {
+        console,
+        URLSearchParams,
+        location: { search: "?focus=MCP" },
+        document: {
+            currentScript: { dataset: {} },
+            querySelector(selector) {
+                return elements[selector] || null;
+            },
+            querySelectorAll(selector) {
+                if (selector === "[data-focus-filter]") return focusButtons;
+                return [];
+            }
+        },
+        localStorage: {
+            getItem() {
+                return "[]";
+            },
+            setItem() {}
+        },
+        fetch: async (path) => ({
+            ok: true,
+            json: async () => sources[path]
+        })
+    };
+
+    vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    assert.equal(elements["[data-explore-total]"].textContent, "1");
+    assert.match(elements["[data-explore-summary]"].textContent, /Focus: MCP/);
+    assert.equal(focusButtons[1].ariaPressed, "true");
 });

@@ -17,6 +17,10 @@
         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
+        <loc>https://anothel.github.io/review/</loc>
+        <lastmod>2026-06-20</lastmod>
+    </url>
+    <url>
         <loc>https://anothel.github.io/status/</loc>
         <lastmod>2026-06-20</lastmod>
     </url>
@@ -31,5 +35,17 @@
     <url>
         <loc>https://anothel.github.io/links/</loc>
         <lastmod>2026-06-14</lastmod>
+    </url>
+    <url>
+        <loc>https://anothel.github.io/topics/ai-agents/</loc>
+        <lastmod>2026-06-20</lastmod>
+    </url>
+    <url>
+        <loc>https://anothel.github.io/topics/mcp/</loc>
+        <lastmod>2026-06-20</lastmod>
+    </url>
+    <url>
+        <loc>https://anothel.github.io/topics/agent-skills/</loc>
+        <lastmod>2026-06-20</lastmod>
     </url>
 </urlset>

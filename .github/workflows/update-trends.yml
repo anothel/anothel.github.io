@@ -2,6 +2,11 @@ name: Update data
 
 on:
   workflow_dispatch:
+    inputs:
+      reason:
+        description: "Optional note for the refresh report"
+        required: false
+        default: "manual refresh"
   schedule:
     - cron: "17 21 * * *"
 
@@ -27,17 +32,45 @@ jobs:
 
       - name: Fetch data
         run: |
-          node scripts/update-trends.mjs
-          node scripts/update-packages.mjs
-          node scripts/update-repos.mjs
-          node scripts/update-links.mjs
-          node scripts/update-today.mjs
-          node scripts/update-manifest.mjs
+          set -euo pipefail
+
+          for script in \
+            scripts/update-trends.mjs \
+            scripts/update-packages.mjs \
+            scripts/update-repos.mjs \
+            scripts/update-links.mjs \
+            scripts/update-today.mjs \
+            scripts/update-manifest.mjs
+          do
+            echo "::group::${script}"
+            if node "${script}"; then
+              echo "::endgroup::"
+            else
+              status=$?
+              echo "::endgroup::"
+              echo "::error::${script} failed with exit code ${status}"
+              exit "${status}"
+            fi
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify generated data
         run: node --test tests/*.test.mjs
+
+      - name: Summarize refresh
+        if: always()
+        run: |
+          node scripts/report-refresh.mjs --out-dir "${RUNNER_TEMP}/refresh-report" --stdout >> "${GITHUB_STEP_SUMMARY}"
+        env:
+          REFRESH_REASON: ${{ github.event_name == 'workflow_dispatch' && inputs.reason || github.event_name }}
+
+      - name: Upload refresh report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: refresh-report
+          path: ${{ runner.temp }}/refresh-report
 
       - name: Commit updated data
         run: |

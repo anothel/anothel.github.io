@@ -501,6 +501,18 @@
         }
     }
 
+    function focusFromLocation(focusButtons = []) {
+        try {
+            const Params = global.URLSearchParams;
+            if (!Params) return "all";
+            const requested = new Params(global.location?.search || "").get("focus");
+            const allowed = new Set(focusButtons.map((button) => button.dataset.focusFilter));
+            return requested && allowed.has(requested) ? requested : "all";
+        } catch {
+            return "all";
+        }
+    }
+
     function renderHealth(els) {
         if (!dataHealth) return;
         if (els.dataMode) els.dataMode.textContent = dataHealth.dataModeText(state.sourceMeta);
@@ -606,6 +618,7 @@
         state.items = normalizeExploreData(dataByModule);
         state.sourceMeta = collectSourceMeta(dataByModule);
         state.savedIds = store.read();
+        state.focus = focusFromLocation(els.focusButtons);
 
         fillSelect(els.module, uniqueValues(state.items, "module"), "All modules");
         fillSelect(els.category, uniqueValues(state.items, "category"), "All categories");
@@ -630,7 +643,7 @@
         clearedExploreState
     };
 
-    if (typeof document !== "undefined") {
+    if (typeof document !== "undefined" && document.querySelector("[data-explore-results]")) {
         init();
     }
 })(globalThis);
