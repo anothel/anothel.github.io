@@ -98,6 +98,173 @@ test("Explore filters and sorts items with saved-first support", () => {
     );
 });
 
+test("Explore normalizes quality scores so broad baseline packages do not dominate AI agent signals", () => {
+    const app = loadExplore();
+    const items = app.normalizeExploreData({
+        trends: { updated: "2026-06-18", sourceMeta: [], items: [] },
+        packages: {
+            updated: "2026-06-19",
+            sourceMeta: { name: "npm", status: "ok", count: 2 },
+            packages: [
+                {
+                    rank: 1,
+                    name: "typescript",
+                    category: "Language",
+                    focus: "typed JavaScript",
+                    downloads: 250000000,
+                    downloadsLabel: "250M/week",
+                    url: "https://www.npmjs.com/package/typescript"
+                },
+                {
+                    rank: 2,
+                    name: "ai",
+                    category: "AI SDK",
+                    focus: "Vercel AI SDK for agent workflows",
+                    downloads: 15000000,
+                    downloadsLabel: "15M/week",
+                    url: "https://www.npmjs.com/package/ai"
+                }
+            ]
+        },
+        repos: {
+            updated: "2026-06-18",
+            sourceMeta: { name: "GitHub", status: "ok", count: 1 },
+            repos: [
+                {
+                    rank: 1,
+                    name: "openai/codex",
+                    category: "AI agents",
+                    focus: "terminal coding agent",
+                    stars: 92000,
+                    starsLabel: "92K",
+                    url: "https://github.com/openai/codex",
+                    summary: "Lightweight coding agent."
+                }
+            ]
+        },
+        links: { updated: "2026-06-18", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    });
+
+    const sorted = app.sortExploreItems(items, "priority", new Set());
+    const byTitle = Object.fromEntries(items.map((item) => [item.title, item]));
+
+    assert.equal(sorted[0].title, "openai/codex");
+    assert.ok(byTitle.typescript.qualityScore <= 78);
+    assert.ok(byTitle.ai.qualityScore > byTitle.typescript.qualityScore);
+    assert.equal(byTitle.typescript.rawScore, 250000000);
+});
+
+test("Explore caps broad npm trend items before priority sorting", () => {
+    const app = loadExplore();
+    const items = app.normalizeExploreData({
+        trends: {
+            updated: "2026-06-18",
+            sourceMeta: [],
+            items: [
+                {
+                    rank: 1,
+                    title: "typescript",
+                    source: "npm",
+                    category: "JavaScript",
+                    score: 100,
+                    velocity: "250M/week",
+                    url: "https://www.npmjs.com/package/typescript",
+                    summary: "Broad package movement."
+                },
+                {
+                    rank: 2,
+                    title: "openai/codex",
+                    source: "GitHub",
+                    category: "AI agents",
+                    score: 90,
+                    velocity: "92K stars",
+                    url: "https://github.com/openai/codex",
+                    summary: "Terminal coding agent."
+                }
+            ]
+        },
+        packages: { updated: "2026-06-19", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        repos: { updated: "2026-06-18", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        links: { updated: "2026-06-18", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    });
+
+    const sorted = app.sortExploreItems(items, "priority", new Set());
+    const byTitle = Object.fromEntries(items.map((item) => [item.title, item]));
+
+    assert.equal(sorted[0].title, "openai/codex");
+    assert.ok(byTitle.typescript.qualityScore <= 78);
+});
+
+test("Explore merges duplicate URLs and preserves source context", () => {
+    const app = loadExplore();
+    const items = app.normalizeExploreData({
+        trends: { updated: "2026-06-18", sourceMeta: [], items: [] },
+        packages: { updated: "2026-06-19", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        repos: {
+            updated: "2026-06-18",
+            sourceMeta: { name: "GitHub", status: "ok", count: 1 },
+            repos: [
+                {
+                    rank: 1,
+                    name: "mattpocock/skills",
+                    category: "Agent skills",
+                    focus: "engineering workflow skills",
+                    stars: 135000,
+                    starsLabel: "135K",
+                    url: "https://github.com/mattpocock/skills",
+                    summary: "Skills for real engineers."
+                }
+            ]
+        },
+        links: {
+            updated: "2026-06-18",
+            sourceMeta: { name: "manual", status: "ok", count: 1 },
+            links: [
+                {
+                    rank: 1,
+                    title: "mattpocock/skills",
+                    category: "Agent skills",
+                    kind: "Repo",
+                    url: "https://github.com/mattpocock/skills",
+                    summary: "Practical engineering skills for agent work."
+                }
+            ]
+        }
+    });
+
+    assert.equal(items.length, 1);
+    assert.deepEqual(JSON.parse(JSON.stringify(items[0].sources)), ["Repos", "Links"]);
+    assert.equal(items[0].id, "repos:https://github.com/mattpocock/skills");
+    assert.match(items[0].sourceContext, /Also in Links/);
+});
+
+test("Explore renders merged source context in cards and saved queue", () => {
+    const app = loadExplore();
+    const item = {
+        id: "repos:https://example.com/skills",
+        module: "Repos",
+        title: "Skills repo",
+        category: "Agent skills",
+        origin: "GitHub",
+        metric: "135K stars",
+        summary: "Reusable \"skills\".",
+        url: "https://example.com/skills",
+        updated: "2026-06-18",
+        sources: ["Repos", "Links"],
+        sourceContext: "Also in Links",
+        score: 96,
+        qualityScore: 96
+    };
+
+    const cards = app.renderExploreCards([item], new Set([item.id]));
+    const saved = app.renderSavedQueue([item], new Set([item.id]));
+
+    assert.match(cards, /Also in Links/);
+    assert.match(saved, /Also in Links/);
+    assert.match(cards, /Reusable &quot;skills&quot;\./);
+    assert.match(cards, /aria-label="Quality score 96"/);
+});
+
 test("Explore saved store reads, toggles, removes, and ignores broken storage", () => {
     const app = loadExplore();
     const memory = new Map();

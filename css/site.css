@@ -821,6 +821,11 @@ button {
     color: var(--muted);
 }
 
+.source-context {
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
 .explore-card-actions {
     display: flex;
     flex-wrap: wrap;
