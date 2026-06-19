@@ -5,6 +5,7 @@ const manifestUrl = typeof document === "undefined"
 const todayUrl = typeof document === "undefined"
     ? "data/today.json"
     : document.currentScript?.dataset.today || "data/today.json";
+const savedStorageKey = "anothel.explore.saved.v1";
 
 function escapeHtml(value) {
     return String(value)
@@ -63,6 +64,32 @@ function healthLabel(counts) {
         counts.partial > 0 ? `${counts.partial} partial` : "",
         counts.error > 0 ? `${counts.error} error` : ""
     ].filter(Boolean).join(" / ") || "0 ok";
+}
+
+function safeCount(value) {
+    const count = Number(value);
+    return Number.isFinite(count) && count > 0 ? Math.floor(count) : 0;
+}
+
+export function buildSavedSummary(rawValue) {
+    try {
+        const parsed = JSON.parse(rawValue || "[]");
+        if (Array.isArray(parsed)) {
+            const saved = parsed.filter((id) => typeof id === "string").length;
+            return { saved, unread: saved };
+        }
+        if (parsed?.version === 2 && Array.isArray(parsed.items)) {
+            const records = parsed.items.filter((item) => item && typeof item.id === "string");
+            return {
+                saved: records.length,
+                unread: records.filter((item) => !item.status || item.status === "unread").length
+            };
+        }
+    } catch {
+        return { saved: 0, unread: 0 };
+    }
+
+    return { saved: 0, unread: 0 };
 }
 
 export function buildHomeOverview(manifest) {
@@ -171,6 +198,25 @@ export function renderModuleRoutes(routes) {
     `).join("");
 }
 
+export function renderSavedSummary(summary) {
+    const saved = safeCount(summary?.saved);
+    const unread = safeCount(summary?.unread);
+
+    return `
+        <div class="review-summary-grid">
+            <article>
+                <span>Saved items</span>
+                <strong data-home-review-saved>${saved}</strong>
+            </article>
+            <article>
+                <span>Unread</span>
+                <strong data-home-review-unread>${unread}</strong>
+            </article>
+        </div>
+        <a href="review/index.html">Open Review</a>
+    `;
+}
+
 function applyOverview(root, manifest) {
     const overview = buildHomeOverview(manifest);
     const total = root.querySelector("[data-home-total]");
@@ -209,6 +255,28 @@ function applyToday(root, today) {
     }
 }
 
+function applySavedSummary(root, storage) {
+    const summarySlot = root.querySelector("[data-home-review-summary]");
+    let rawValue = "[]";
+
+    try {
+        rawValue = storage?.getItem(savedStorageKey) || "[]";
+    } catch {
+        rawValue = "[]";
+    }
+
+    const summary = buildSavedSummary(rawValue);
+    if (summarySlot) {
+        summarySlot.innerHTML = renderSavedSummary(summary);
+        return;
+    }
+
+    const saved = root.querySelector("[data-home-review-saved]");
+    const unread = root.querySelector("[data-home-review-unread]");
+    if (saved) saved.textContent = String(summary.saved);
+    if (unread) unread.textContent = String(summary.unread);
+}
+
 async function readJson(path) {
     const response = await fetch(path);
     if (!response.ok) return null;
@@ -229,8 +297,10 @@ async function init() {
         if (today) {
             applyToday(document, today);
         }
+        applySavedSummary(document, globalThis.localStorage);
     } catch {
         // Static fallback remains useful when local file fetch is blocked.
+        applySavedSummary(document, globalThis.localStorage);
     }
 }
 

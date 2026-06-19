@@ -3,8 +3,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
     buildHomeOverview,
+    buildSavedSummary,
     buildModuleRoutes,
     getTodaySection,
+    renderSavedSummary,
     renderModuleRoutes,
     renderSkimList,
     renderStartItems
@@ -95,6 +97,42 @@ test("buildModuleRoutes maps manifest modules into route cards", () => {
             purpose: "Cross-source movement"
         }
     ]);
+});
+
+test("buildSavedSummary reads v1 and v2 saved payloads", () => {
+    assert.deepEqual(buildSavedSummary(JSON.stringify(["repos:a", "packages:b"])), {
+        saved: 2,
+        unread: 2
+    });
+    assert.deepEqual(buildSavedSummary(JSON.stringify({
+        version: 2,
+        items: [
+            { id: "repos:a", status: "unread" },
+            { id: "packages:b", status: "read" },
+            { id: "links:c", status: "done" }
+        ]
+    })), {
+        saved: 3,
+        unread: 1
+    });
+    assert.deepEqual(buildSavedSummary("broken"), { saved: 0, unread: 0 });
+});
+
+test("renderSavedSummary emits review workflow summary", () => {
+    const html = renderSavedSummary({ saved: 5, unread: 2 });
+
+    assert.match(html, /Saved items/);
+    assert.match(html, /5/);
+    assert.match(html, /Unread/);
+    assert.match(html, /2/);
+    assert.match(html, /href="review\/index\.html"/);
+});
+
+test("renderSavedSummary escapes text through numeric coercion", () => {
+    const html = renderSavedSummary({ saved: "<script>", unread: "bad" });
+
+    assert.match(html, />0</);
+    assert.doesNotMatch(html, /script/);
 });
 
 test("home renderers emit command center markup", () => {

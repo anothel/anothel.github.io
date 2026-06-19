@@ -45,8 +45,20 @@
 
             <section class="stats-grid review-stats" aria-label="Review stats">
                 <article class="stat-card">
-                    <span>Saved</span>
+                    <span>Visible</span>
                     <strong data-review-total>0</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Unread</span>
+                    <strong data-review-unread>0</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Read</span>
+                    <strong data-review-read>0</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Done</span>
+                    <strong data-review-done>0</strong>
                 </article>
                 <article class="stat-card">
                     <span>Focus areas</span>
@@ -56,6 +68,13 @@
                     <span>Sources</span>
                     <strong data-review-source-count>0</strong>
                 </article>
+            </section>
+
+            <section class="review-filters" aria-label="Review status filters">
+                <button type="button" data-review-filter="all" aria-pressed="true">All</button>
+                <button type="button" data-review-filter="unread" aria-pressed="false">Unread</button>
+                <button type="button" data-review-filter="read" aria-pressed="false">Read</button>
+                <button type="button" data-review-filter="done" aria-pressed="false">Done</button>
             </section>
 
             <section class="review-workspace" aria-label="Review workspace">

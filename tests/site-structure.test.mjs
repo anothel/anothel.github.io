@@ -177,8 +177,12 @@ test("review page owns the saved follow-up surface", () => {
 
     for (const hook of [
         "data-review-total",
+        "data-review-unread",
+        "data-review-read",
+        "data-review-done",
         "data-review-focus-count",
         "data-review-source-count",
+        "data-review-filter",
         "data-review-queue",
         "data-review-detail"
     ]) {
@@ -187,6 +191,10 @@ test("review page owns the saved follow-up surface", () => {
 
     assert.match(review, /Review later\./);
     assert.match(review, /Saved locally in this browser\./);
+    assert.match(review, /All/);
+    assert.match(review, /Unread/);
+    assert.match(review, /Read/);
+    assert.match(review, /Done/);
     assert.match(review, /Queue/);
     assert.match(review, /Selected item/);
     assert.match(review, /..\/js\/explore\.js/);
@@ -198,6 +206,7 @@ test("review page owns the saved follow-up surface", () => {
     assert.match(review, /href="..\/explore\/index\.html"/);
     assert.match(sitemap, /https:\/\/anothel\.github\.io\/review\//);
     assert.match(styles, /\.review-workspace/);
+    assert.match(styles, /\.review-filters/);
     assert.match(styles, /\.review-detail/);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.review-workspace[\s\S]*grid-template-columns: 1fr/s);
 });
@@ -280,6 +289,8 @@ test("root page exposes command center slots", () => {
         "data-home-live",
         "data-home-updated",
         "data-home-freshness",
+        "data-home-review-saved",
+        "data-home-review-unread",
         "data-home-start",
         "data-home-skim",
         "data-home-routes"
@@ -296,6 +307,8 @@ test("root page exposes command center slots", () => {
     assert.match(root, /Search all tracked signals/);
     assert.match(root, /href="explore\/index\.html"/);
     assert.match(root, /href="review\/index\.html"/);
+    assert.match(root, /Saved for review/);
+    assert.match(root, /Unread saved/);
     assert.match(root, /href="status\/index\.html"/);
     assert.match(root, /class="explore-callout"/);
     assert.match(root, /class="command-center"/);

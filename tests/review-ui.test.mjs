@@ -73,6 +73,43 @@ test("Review summarizes saved focus areas and sources", () => {
     });
 });
 
+test("Review workflow stats count statuses", () => {
+    const app = loadReview();
+
+    assert.deepEqual(JSON.parse(JSON.stringify(app.workflowStats([
+        { savedStatus: "unread" },
+        { savedStatus: "read" },
+        { savedStatus: "done" },
+        { savedStatus: "unread" }
+    ]))), {
+        unread: 2,
+        read: 1,
+        done: 1
+    });
+});
+
+test("Review filters and sorts workflow items by status priority", () => {
+    const app = loadReview();
+    const saved = [
+        { id: "done:new", savedAt: "2026-06-22T00:00:00.000Z", savedStatus: "done" },
+        { id: "read:old", savedAt: "2026-06-19T00:00:00.000Z", savedStatus: "read" },
+        { id: "unread:old", savedAt: "2026-06-18T00:00:00.000Z", savedStatus: "unread" },
+        { id: "unread:new", savedAt: "2026-06-20T00:00:00.000Z", savedStatus: "unread" }
+    ];
+
+    assert.deepEqual(app.filterReviewItems(saved, "all").map((item) => item.id), [
+        "unread:new",
+        "unread:old",
+        "read:old",
+        "done:new"
+    ]);
+    assert.deepEqual(app.filterReviewItems(saved, "unread").map((item) => item.id), [
+        "unread:new",
+        "unread:old"
+    ]);
+    assert.deepEqual(app.filterReviewItems(saved, "done").map((item) => item.id), ["done:new"]);
+});
+
 test("Review renders queue and selected detail with actions", () => {
     const app = loadReview();
     const queue = app.renderReviewQueue(items, "packages:https://example.com/mcp");
@@ -245,4 +282,94 @@ test("Review browser init renders saved queue and removes items", async () => {
     assert.deepEqual(JSON.parse(savedValue), { version: 2, items: [] });
     assert.equal(elements["[data-review-total]"].textContent, "0");
     assert.match(elements["[data-review-detail]"].innerHTML, /No saved items yet/);
+});
+
+test("Review browser filters workflow status", async () => {
+    function createElement() {
+        return {
+            innerHTML: "",
+            textContent: "",
+            ariaPressed: "",
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
+            },
+            setAttribute(name, value) {
+                if (name === "aria-pressed") this.ariaPressed = value;
+            }
+        };
+    }
+
+    const elements = Object.fromEntries([
+        "[data-review-total]",
+        "[data-review-unread]",
+        "[data-review-read]",
+        "[data-review-done]",
+        "[data-review-focus-count]",
+        "[data-review-source-count]",
+        "[data-review-queue]",
+        "[data-review-detail]"
+    ].map((selector) => [selector, createElement()]));
+    const filterButtons = [
+        { dataset: { reviewFilter: "all" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
+        { dataset: { reviewFilter: "done" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
+    ];
+    const sources = {
+        "../data/trends.json": {
+            updated: "2026-06-20",
+            sourceMeta: [],
+            items: [
+                { rank: 1, title: "Unread item", source: "GitHub", category: "AI agents", score: 90, velocity: "+5%", url: "https://example.com/unread", summary: "Unread summary." },
+                { rank: 2, title: "Done item", source: "GitHub", category: "AI agents", score: 80, velocity: "+3%", url: "https://example.com/done", summary: "Done summary." }
+            ]
+        },
+        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    };
+    const context = {
+        console,
+        document: {
+            currentScript: { dataset: {} },
+            querySelector(selector) {
+                return elements[selector] || null;
+            },
+            querySelectorAll(selector) {
+                if (selector === "[data-review-filter]") return filterButtons;
+                return [];
+            }
+        },
+        localStorage: {
+            getItem() {
+                return JSON.stringify({
+                    version: 2,
+                    items: [
+                        { id: "trends:https://example.com/unread", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" },
+                        { id: "trends:https://example.com/done", savedAt: "2026-06-21T00:00:00.000Z", status: "done" }
+                    ]
+                });
+            },
+            setItem() {}
+        },
+        fetch: async (path) => ({
+            ok: true,
+            json: async () => sources[path]
+        })
+    };
+
+    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    assert.equal(elements["[data-review-total]"].textContent, "2");
+    assert.equal(elements["[data-review-unread]"].textContent, "1");
+    assert.equal(elements["[data-review-done]"].textContent, "1");
+    assert.match(elements["[data-review-queue]"].innerHTML, /Unread item/);
+    assert.match(elements["[data-review-queue]"].innerHTML, /Done item/);
+
+    filterButtons[1].listeners.click();
+    assert.equal(filterButtons[1].ariaPressed, "true");
+    assert.equal(elements["[data-review-total]"].textContent, "1");
+    assert.doesNotMatch(elements["[data-review-queue]"].innerHTML, /Unread item/);
+    assert.match(elements["[data-review-queue]"].innerHTML, /Done item/);
 });

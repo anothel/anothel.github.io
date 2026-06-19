@@ -10,7 +10,8 @@
         items: [],
         savedIds: new Set(),
         savedRecords: new Map(),
-        selectedId: ""
+        selectedId: "",
+        statusFilter: "all"
     };
 
     function escapeHtml(value) {
@@ -52,8 +53,29 @@
         return value ? `Saved ${String(value).slice(0, 10)}` : "Saved date unknown";
     }
 
+    function statusRank(status = "unread") {
+        if (status === "done") return 2;
+        if (status === "read") return 1;
+        return 0;
+    }
+
+    function sortReviewItems(items) {
+        return (Array.isArray(items) ? items.slice() : []).sort((a, b) => (
+            statusRank(a.savedStatus) - statusRank(b.savedStatus)
+            || String(b.savedAt || "").localeCompare(String(a.savedAt || ""))
+        ));
+    }
+
+    function filterReviewItems(items, filter = "all") {
+        const sorted = sortReviewItems(Array.isArray(items) ? items : []);
+        if (filter === "read" || filter === "done" || filter === "unread") {
+            return sorted.filter((item) => (item.savedStatus || "unread") === filter);
+        }
+        return sorted;
+    }
+
     function matchSavedItems(items, savedIds = new Set(), savedRecords = new Map()) {
-        return (Array.isArray(items) ? items : [])
+        return sortReviewItems((Array.isArray(items) ? items : [])
             .filter((item) => savedIds.has(item.id))
             .map((item) => {
                 const record = savedRecords.get(item.id) || {};
@@ -62,8 +84,7 @@
                     savedAt: record.savedAt,
                     savedStatus: record.status || "unread"
                 };
-            })
-            .sort((a, b) => String(b.savedAt || "").localeCompare(String(a.savedAt || "")));
+            }));
     }
 
     function itemSources(item) {
@@ -75,6 +96,14 @@
             saved: items.length,
             focusAreas: new Set(items.map((item) => item.category).filter(Boolean)).size,
             sources: new Set(items.flatMap(itemSources)).size
+        };
+    }
+
+    function workflowStats(items) {
+        return {
+            unread: items.filter((item) => (item.savedStatus || "unread") === "unread").length,
+            read: items.filter((item) => item.savedStatus === "read").length,
+            done: items.filter((item) => item.savedStatus === "done").length
         };
     }
 
@@ -166,10 +195,16 @@
     function selectors() {
         return {
             total: document.querySelector("[data-review-total]"),
+            unread: document.querySelector("[data-review-unread]"),
+            read: document.querySelector("[data-review-read]"),
+            done: document.querySelector("[data-review-done]"),
             focusCount: document.querySelector("[data-review-focus-count]"),
             sourceCount: document.querySelector("[data-review-source-count]"),
             queue: document.querySelector("[data-review-queue]"),
-            detail: document.querySelector("[data-review-detail]")
+            detail: document.querySelector("[data-review-detail]"),
+            filterButtons: typeof document.querySelectorAll === "function"
+                ? [...document.querySelectorAll("[data-review-filter]")]
+                : []
         };
     }
 
@@ -177,8 +212,25 @@
         return savedItems.find((item) => item.id === state.selectedId) || savedItems[0] || null;
     }
 
+    function updateFilterButtons(els) {
+        (els.filterButtons || []).forEach((button) => {
+            const isCurrent = (button.dataset.reviewFilter || "all") === state.statusFilter;
+            button.setAttribute("aria-pressed", String(isCurrent));
+        });
+    }
+
     function bindActions(els, store) {
         if (typeof document.querySelectorAll !== "function") return;
+
+        (els.filterButtons || []).forEach((button) => {
+            if (button.dataset.reviewFilterBound === "true") return;
+            button.dataset.reviewFilterBound = "true";
+            button.addEventListener("click", () => {
+                state.statusFilter = button.dataset.reviewFilter || "all";
+                state.selectedId = "";
+                render(els, store);
+            });
+        });
 
         document.querySelectorAll("[data-review-select-id]").forEach((button) => {
             button.addEventListener("click", () => {
@@ -207,14 +259,20 @@
 
     function render(els, store) {
         const saved = matchSavedItems(state.items, state.savedIds, state.savedRecords);
-        const stats = reviewStats(saved);
-        const selected = selectedItem(saved);
+        const visible = filterReviewItems(saved, state.statusFilter);
+        const stats = reviewStats(visible);
+        const workflow = workflowStats(saved);
+        const selected = selectedItem(visible);
 
-        if (els.total) els.total.textContent = String(stats.saved);
+        if (els.total) els.total.textContent = String(visible.length);
+        if (els.unread) els.unread.textContent = String(workflow.unread);
+        if (els.read) els.read.textContent = String(workflow.read);
+        if (els.done) els.done.textContent = String(workflow.done);
         if (els.focusCount) els.focusCount.textContent = String(stats.focusAreas);
         if (els.sourceCount) els.sourceCount.textContent = String(stats.sources);
-        if (els.queue) els.queue.innerHTML = renderReviewQueue(saved, selected?.id || "");
+        if (els.queue) els.queue.innerHTML = renderReviewQueue(visible, selected?.id || "");
         if (els.detail) els.detail.innerHTML = renderReviewDetail(selected);
+        updateFilterButtons(els);
         bindActions(els, store);
     }
 
@@ -247,11 +305,14 @@
         state.savedIds = store.read();
         state.savedRecords = store.recordsById();
         state.selectedId = "";
+        state.statusFilter = "all";
         render(els, store);
     }
 
     global.ReviewApp = {
         matchSavedItems,
+        workflowStats,
+        filterReviewItems,
         reviewStats,
         renderReviewQueue,
         renderReviewDetail,
