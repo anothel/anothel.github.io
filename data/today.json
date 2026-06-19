@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T22:04:41.281Z",
+  "generatedAt": "2026-06-19T22:30:02.707Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-19T22:04:41.281Z"
+    "updatedAt": "2026-06-19T22:30:02.707Z"
   },
   "sections": [
     {
@@ -65,7 +65,7 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "152.5K stars",
+          "metric": "152.8K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "url": "https://github.com/anthropics/skills",
           "score": 83
@@ -95,7 +95,7 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "135.3K stars",
+          "metric": "136.8K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "url": "https://github.com/mattpocock/skills",
           "score": 81

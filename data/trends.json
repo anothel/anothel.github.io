@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T22:04:35.313Z",
+  "generatedAt": "2026-06-19T22:29:57.687Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -11,19 +11,19 @@
       "name": "Hacker News",
       "status": "ok",
       "count": 6,
-      "updatedAt": "2026-06-19T22:04:35.313Z"
+      "updatedAt": "2026-06-19T22:29:57.687Z"
     },
     {
       "name": "GitHub",
       "status": "ok",
       "count": 8,
-      "updatedAt": "2026-06-19T22:04:35.313Z"
+      "updatedAt": "2026-06-19T22:29:57.687Z"
     },
     {
       "name": "npm",
       "status": "ok",
       "count": 8,
-      "updatedAt": "2026-06-19T22:04:35.313Z"
+      "updatedAt": "2026-06-19T22:29:57.687Z"
     }
   ],
   "items": [
@@ -33,10 +33,10 @@
       "source": "Hacker News",
       "category": "Developer tools",
       "score": 100,
-      "velocity": "241 comments",
-      "signal": "930 points",
+      "velocity": "243 comments",
+      "signal": "931 points",
       "url": "https://orchidfiles.com/github-repositories-distributing-malware/",
-      "summary": "HN story by theorchid with 241 comments."
+      "summary": "HN story by theorchid with 243 comments."
     },
     {
       "rank": 2,
@@ -221,7 +221,7 @@
       "category": "MCP",
       "score": 54,
       "velocity": "99 comments",
-      "signal": "260 points",
+      "signal": "261 points",
       "url": "https://blog.modelcontextprotocol.io/posts/enterprise-managed-auth/",
       "summary": "HN story by niyikiza with 99 comments."
     },
@@ -232,42 +232,42 @@
       "category": "Developer tools",
       "score": 52,
       "velocity": "71 comments",
-      "signal": "255 points",
+      "signal": "258 points",
       "url": "https://clickhouse.com/blog/open-source-10",
       "summary": "HN story by saisrirampur with 71 comments."
     },
     {
       "rank": 20,
+      "title": "Norway imposes near ban on AI in elementary school",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 48,
+      "velocity": "110 comments",
+      "signal": "162 points",
+      "url": "https://www.reuters.com/technology/norway-imposes-near-ban-ai-elementary-school-2026-06-19/",
+      "summary": "HN story by ilreb with 110 comments."
+    },
+    {
+      "rank": 21,
       "title": "The AirPods Effect",
       "source": "Hacker News",
       "category": "Developer tools",
       "score": 44,
-      "velocity": "635 comments",
-      "signal": "361 points",
+      "velocity": "643 comments",
+      "signal": "363 points",
       "url": "https://www.theescapenewsletter.com/p/the-airpods-effect",
-      "summary": "HN story by herbertl with 635 comments."
+      "summary": "HN story by herbertl with 643 comments."
     },
     {
-      "rank": 21,
+      "rank": 22,
       "title": "Project Valhalla, Explained: How a Decade of Work Arrives in JDK 28",
       "source": "Hacker News",
       "category": "Developer tools",
       "score": 43,
-      "velocity": "311 comments",
-      "signal": "516 points",
+      "velocity": "321 comments",
+      "signal": "518 points",
       "url": "https://www.jvm-weekly.com/p/project-valhalla-explained-how-a",
-      "summary": "HN story by philonoist with 311 comments."
-    },
-    {
-      "rank": 22,
-      "title": "Norway imposes near ban on AI in elementary school",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 42,
-      "velocity": "67 comments",
-      "signal": "100 points",
-      "url": "https://www.reuters.com/technology/norway-imposes-near-ban-ai-elementary-school-2026-06-19/",
-      "summary": "HN story by ilreb with 67 comments."
+      "summary": "HN story by philonoist with 321 comments."
     }
   ]
 }
