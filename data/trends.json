@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-18",
-  "generatedAt": "2026-06-18T23:03:50.490Z",
+  "updated": "2026-06-19",
+  "generatedAt": "2026-06-19T22:13:03.302Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -11,19 +11,19 @@
       "name": "Hacker News",
       "status": "ok",
       "count": 6,
-      "updatedAt": "2026-06-18T23:03:50.490Z"
+      "updatedAt": "2026-06-19T22:13:03.302Z"
     },
     {
       "name": "GitHub",
       "status": "ok",
       "count": 9,
-      "updatedAt": "2026-06-18T23:03:50.490Z"
+      "updatedAt": "2026-06-19T22:13:03.302Z"
     },
     {
       "name": "npm",
       "status": "ok",
       "count": 8,
-      "updatedAt": "2026-06-18T23:03:50.490Z"
+      "updatedAt": "2026-06-19T22:13:03.302Z"
     }
   ],
   "items": [
@@ -33,8 +33,8 @@
       "source": "GitHub",
       "category": "AI",
       "score": 100,
-      "velocity": "379.4K stars",
-      "signal": "79.4K forks",
+      "velocity": "379.5K stars",
+      "signal": "79.5K forks",
       "url": "https://github.com/openclaw/openclaw",
       "summary": "Your own personal AI assistant. Any OS. Any Platform. The lobster way. 🦞 "
     },
@@ -44,10 +44,10 @@
       "source": "npm",
       "category": "JavaScript",
       "score": 100,
-      "velocity": "220.4M/week",
-      "signal": "2026-06-11 to 2026-06-17",
+      "velocity": "219.6M/week",
+      "signal": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/typescript",
-      "summary": "220.4M downloads over the last available week."
+      "summary": "219.6M downloads over the last available week."
     },
     {
       "rank": 3,
@@ -55,10 +55,10 @@
       "source": "npm",
       "category": "Developer tools",
       "score": 100,
-      "velocity": "201.7M/week",
-      "signal": "2026-06-11 to 2026-06-17",
+      "velocity": "202M/week",
+      "signal": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/zod",
-      "summary": "201.7M downloads over the last available week."
+      "summary": "202M downloads over the last available week."
     },
     {
       "rank": 4,
@@ -66,10 +66,10 @@
       "source": "npm",
       "category": "JavaScript",
       "score": 98,
-      "velocity": "147.7M/week",
-      "signal": "2026-06-11 to 2026-06-17",
+      "velocity": "147.5M/week",
+      "signal": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/react",
-      "summary": "147.7M downloads over the last available week."
+      "summary": "147.5M downloads over the last available week."
     },
     {
       "rank": 5,
@@ -77,10 +77,10 @@
       "source": "npm",
       "category": "Developer tools",
       "score": 98,
-      "velocity": "142.4M/week",
-      "signal": "2026-06-11 to 2026-06-17",
+      "velocity": "142.3M/week",
+      "signal": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/vite",
-      "summary": "142.4M downloads over the last available week."
+      "summary": "142.3M downloads over the last available week."
     },
     {
       "rank": 6,
@@ -89,67 +89,78 @@
       "category": "Developer tools",
       "score": 98,
       "velocity": "141.7M/week",
-      "signal": "2026-06-11 to 2026-06-17",
+      "signal": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/eslint",
       "summary": "141.7M downloads over the last available week."
     },
     {
       "rank": 7,
+      "title": "obra/superpowers",
+      "source": "GitHub",
+      "category": "AI",
+      "score": 97,
+      "velocity": "233.3K stars",
+      "signal": "20.7K forks",
+      "url": "https://github.com/obra/superpowers",
+      "summary": "An agentic skills framework & software development methodology that works."
+    },
+    {
+      "rank": 8,
       "title": "tailwindcss",
       "source": "npm",
       "category": "Frontend",
       "score": 97,
-      "velocity": "121.3M/week",
-      "signal": "2026-06-11 to 2026-06-17",
+      "velocity": "121.4M/week",
+      "signal": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/tailwindcss",
-      "summary": "121.3M downloads over the last available week."
+      "summary": "121.4M downloads over the last available week."
     },
     {
-      "rank": 8,
+      "rank": 9,
       "title": "prettier",
       "source": "npm",
       "category": "Developer tools",
       "score": 97,
-      "velocity": "117.9M/week",
-      "signal": "2026-06-11 to 2026-06-17",
+      "velocity": "117.8M/week",
+      "signal": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/prettier",
-      "summary": "117.9M downloads over the last available week."
+      "summary": "117.8M downloads over the last available week."
     },
     {
-      "rank": 9,
+      "rank": 10,
       "title": "express",
       "source": "npm",
       "category": "Developer tools",
       "score": 97,
-      "velocity": "111.9M/week",
-      "signal": "2026-06-11 to 2026-06-17",
+      "velocity": "111.3M/week",
+      "signal": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/express",
-      "summary": "111.9M downloads over the last available week."
+      "summary": "111.3M downloads over the last available week."
     },
     {
-      "rank": 10,
+      "rank": 11,
       "title": "NousResearch/hermes-agent",
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "197K stars",
-      "signal": "34.8K forks",
+      "velocity": "197.6K stars",
+      "signal": "35K forks",
       "url": "https://github.com/NousResearch/hermes-agent",
       "summary": "The agent that grows with you"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "title": "n8n-io/n8n",
       "source": "GitHub",
       "category": "AI",
       "score": 95,
-      "velocity": "193.1K stars",
+      "velocity": "193.2K stars",
       "signal": "58.7K forks",
       "url": "https://github.com/n8n-io/n8n",
       "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations."
     },
     {
-      "rank": 12,
+      "rank": 13,
       "title": "Significant-Gravitas/AutoGPT",
       "source": "GitHub",
       "category": "AI",
@@ -158,17 +169,6 @@
       "signal": "46.1K forks",
       "url": "https://github.com/Significant-Gravitas/AutoGPT",
       "summary": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters."
-    },
-    {
-      "rank": 13,
-      "title": "f/prompts.chat",
-      "source": "GitHub",
-      "category": "AI",
-      "score": 94,
-      "velocity": "163.9K stars",
-      "signal": "21.3K forks",
-      "url": "https://github.com/f/prompts.chat",
-      "summary": "f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts from the community. Free and open source — self-host for your organization with complete privacy."
     },
     {
       "rank": 14,
@@ -187,7 +187,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 87,
-      "velocity": "67.4K stars",
+      "velocity": "67.5K stars",
       "signal": "11K forks",
       "url": "https://github.com/shareAI-lab/learn-claude-code",
       "summary": "Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1"
@@ -198,8 +198,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 85,
-      "velocity": "54.6K stars",
-      "signal": "10.8K forks",
+      "velocity": "54.8K stars",
+      "signal": "10.9K forks",
       "url": "https://github.com/santifer/career-ops",
       "summary": "AI-powered job search system built on Claude Code. 14 skill modes, Go dashboard, PDF generation, batch processing."
     },
@@ -209,76 +209,76 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 84,
-      "velocity": "47.5K stars",
+      "velocity": "47.6K stars",
       "signal": "4.5K forks",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "summary": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
       "rank": 18,
-      "title": "Swiss parliament lifts ban on new nuclear power plants",
+      "title": "Hyundai buys Boston Dynamics",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 80,
-      "velocity": "488 comments",
-      "signal": "638 points",
-      "url": "https://www.bluewin.ch/en/news/switzerland/parliament-lifts-ban-on-new-nuclear-power-plants-3257535.html",
-      "summary": "HN story by leonidasrup with 488 comments."
+      "score": 66,
+      "velocity": "256 comments",
+      "signal": "524 points",
+      "url": "https://startupfortune.com/hyundai-takes-full-control-of-boston-dynamics-as-softbank-exits-for-325-million/",
+      "summary": "HN story by ck2 with 256 comments."
     },
     {
       "rank": 19,
-      "title": "I found 10k GitHub repositories distributing Trojan malware",
+      "title": "Project Valhalla, Explained: How a Decade of Work Arrives in JDK 28",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 76,
-      "velocity": "138 comments",
-      "signal": "610 points",
-      "url": "https://orchidfiles.com/github-repositories-distributing-malware/",
-      "summary": "HN story by theorchid with 138 comments."
+      "score": 65,
+      "velocity": "314 comments",
+      "signal": "517 points",
+      "url": "https://www.jvm-weekly.com/p/project-valhalla-explained-how-a",
+      "summary": "HN story by philonoist with 314 comments."
     },
     {
       "rank": 20,
-      "title": "Ubiquiti: Enterprise NAS, Built on ZFS",
+      "title": "There are no instances in ATProto",
       "source": "Hacker News",
-      "category": "Frontend",
-      "score": 29,
-      "velocity": "210 comments",
-      "signal": "229 points",
-      "url": "https://blog.ui.com/article/introducing-enterprise-nas",
-      "summary": "HN story by ksec with 210 comments."
+      "category": "Developer tools",
+      "score": 34,
+      "velocity": "168 comments",
+      "signal": "270 points",
+      "url": "https://overreacted.io/there-are-no-instances-in-atproto/",
+      "summary": "HN story by danabramov with 168 comments."
     },
     {
       "rank": 21,
-      "title": "The Korean telecom giant at the center of Anthropic's Mythos controversy",
+      "title": "How many of the 170k English words do you know?",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 9,
-      "velocity": "42 comments",
-      "signal": "70 points",
-      "url": "https://www.wired.com/story/sk-telecom-anthropic-mythos-export-controls/",
-      "summary": "HN story by dstala with 42 comments."
+      "score": 21,
+      "velocity": "274 comments",
+      "signal": "169 points",
+      "url": "https://vocabowl-870366514258.us-west1.run.app/",
+      "summary": "HN story by abnry with 274 comments."
     },
     {
       "rank": 22,
-      "title": "American Express: Cell-Based Architecture for Resilient Payment Systems",
+      "title": "Norway imposes near ban on AI in elementary school",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 6,
-      "velocity": "12 comments",
-      "signal": "50 points",
-      "url": "https://americanexpress.io/cell-based-architecture-for-resilient-payment-systems/",
-      "summary": "HN story by birdculture with 12 comments."
+      "category": "AI",
+      "score": 16,
+      "velocity": "80 comments",
+      "signal": "128 points",
+      "url": "https://www.reuters.com/technology/norway-imposes-near-ban-ai-elementary-school-2026-06-19/",
+      "summary": "HN story by ilreb with 80 comments."
     },
     {
       "rank": 23,
-      "title": "Zero-Touch OAuth for MCP",
+      "title": "I used sound waves to make espresso. It could cut coffee‑brewing energy use by ¾",
       "source": "Hacker News",
-      "category": "Security",
-      "score": 1,
-      "velocity": "3 comments",
-      "signal": "11 points",
-      "url": "https://blog.modelcontextprotocol.io/posts/enterprise-managed-auth/",
-      "summary": "HN story by niyikiza with 3 comments."
+      "category": "Developer tools",
+      "score": 16,
+      "velocity": "79 comments",
+      "signal": "129 points",
+      "url": "https://theconversation.com/i-used-sound-waves-to-make-espresso-it-could-cut-coffee-brewing-energy-use-by-75-284929",
+      "summary": "HN story by zeristor with 79 comments."
     }
   ]
 }

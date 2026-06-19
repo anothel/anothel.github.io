@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T09:42:39.832Z",
+  "generatedAt": "2026-06-19T22:13:03.976Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-19T09:42:39.832Z"
+    "updatedAt": "2026-06-19T22:13:03.976Z"
   },
   "sections": [
     {
@@ -28,7 +28,7 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "152.5K stars",
+          "metric": "152.8K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "url": "https://github.com/anthropics/skills",
           "score": 83
@@ -38,7 +38,7 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "135.3K stars",
+          "metric": "136.8K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "url": "https://github.com/mattpocock/skills",
           "score": 81
@@ -65,7 +65,7 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Automation",
-          "metric": "193.1K stars",
+          "metric": "193.2K stars",
           "reason": "Workflow automation signal connected to agent-style work.",
           "url": "https://github.com/n8n-io/n8n",
           "score": 84
@@ -95,7 +95,7 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "AI agents",
-          "metric": "92K stars",
+          "metric": "92.2K stars",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "url": "https://github.com/openai/codex",
           "score": 80

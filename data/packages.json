@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T09:42:29.631Z",
+  "generatedAt": "2026-06-19T22:13:03.337Z",
   "sourceMeta": {
     "name": "npm",
     "status": "ok",
     "count": 14,
-    "updatedAt": "2026-06-19T09:42:29.631Z"
+    "updatedAt": "2026-06-19T22:13:03.337Z"
   },
   "packages": [
     {
@@ -23,9 +23,9 @@
       "name": "zod",
       "category": "Validation",
       "focus": "schema validation",
-      "downloads": 201655316,
-      "downloadsLabel": "201.7M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 201966959,
+      "downloadsLabel": "202M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/zod"
     },
     {
@@ -33,9 +33,9 @@
       "name": "react",
       "category": "UI",
       "focus": "frontend runtime",
-      "downloads": 147686985,
-      "downloadsLabel": "147.7M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 147487969,
+      "downloadsLabel": "147.5M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/react"
     },
     {
@@ -43,9 +43,9 @@
       "name": "vite",
       "category": "Tooling",
       "focus": "build tool",
-      "downloads": 142402157,
-      "downloadsLabel": "142.4M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 142305412,
+      "downloadsLabel": "142.3M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/vite"
     },
     {
@@ -83,9 +83,9 @@
       "name": "next",
       "category": "Framework",
       "focus": "React framework",
-      "downloads": 40258011,
-      "downloadsLabel": "40.3M/week",
-      "period": "2026-06-11 to 2026-06-17",
+      "downloads": 40913007,
+      "downloadsLabel": "40.9M/week",
+      "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/next"
     },
     {
