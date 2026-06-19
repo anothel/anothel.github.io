@@ -53,6 +53,36 @@ test("renderTodaySections emits section cards and item links", () => {
     assert.match(html, /Synthetic reason/);
 });
 
+test("renderTodaySections escapes text and blocks unsafe item links", () => {
+    const sections = [
+        {
+            id: "start",
+            title: "<script>bad()</script>",
+            summary: "Open \"carefully\".",
+            items: [
+                {
+                    title: "<script>alert(\"x\")</script>",
+                    module: "Trends",
+                    origin: "Example source",
+                    category: "Developer tools",
+                    metric: "91 score",
+                    reason: "bad \"quote\"",
+                    url: "javascript:alert(1)",
+                    score: 91
+                }
+            ]
+        }
+    ];
+    const html = renderTodaySections(sections);
+
+    assert.match(html, /href="#"/);
+    assert.doesNotMatch(html, /javascript:alert/);
+    assert.match(html, /&lt;script&gt;bad\(\)&lt;\/script&gt;/);
+    assert.match(html, /Open &quot;carefully&quot;\./);
+    assert.match(html, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
+    assert.match(html, /bad &quot;quote&quot;/);
+});
+
 test("renderExploreLinks links to all full module pages", () => {
     const html = renderExploreLinks();
 

@@ -3,8 +3,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
     buildHomeOverview,
-    collectHomeSignals,
-    renderSignalCards
+    buildModuleRoutes,
+    getTodaySection,
+    renderModuleRoutes,
+    renderSkimList,
+    renderStartItems
 } from "../js/home.js";
 
 function readJson(path) {
@@ -28,113 +31,141 @@ test("buildHomeOverview summarizes manifest modules", () => {
     });
 });
 
-test("collectHomeSignals normalizes module datasets into preview rows", () => {
-    const signals = collectHomeSignals({
-        trends: {
-            items: [
-                {
-                    title: "Agent workflow",
-                    source: "HN",
-                    category: "AI",
-                    score: 96,
-                    url: "https://example.com/trend"
-                }
-            ]
-        },
-        packages: {
-            packages: [
-                {
-                    name: "typescript",
-                    category: "Language",
-                    downloadsLabel: "216.8M/week",
-                    url: "https://example.com/package"
-                }
-            ]
-        },
-        repos: {
-            repos: [
-                {
-                    name: "react/react",
-                    category: "UI",
-                    starsLabel: "245.8K",
-                    url: "https://example.com/repo"
-                }
-            ]
-        },
-        links: {
-            links: [
-                {
-                    title: "GitHub REST API",
-                    category: "API",
-                    kind: "Docs",
-                    url: "https://example.com/link"
-                }
-            ]
-        }
-    });
-
-    assert.deepEqual(
-        signals.map((signal) => [signal.module, signal.title, signal.meta, signal.metric, signal.reason]),
-        [
-            ["Trends", "Agent workflow", "HN / AI", "96 score", "Cross-source movement"],
-            ["Packages", "typescript", "Language", "216.8M/week", "Weekly download movement"],
-            ["Repos", "react/react", "UI", "245.8K stars", "Project traction"],
-            ["Links", "GitHub REST API", "API / Docs", "reference", "Reference worth keeping"]
+test("getTodaySection returns matching section items", () => {
+    const today = {
+        sections: [
+            { id: "start", items: [{ title: "First" }] },
+            { id: "skim", items: [{ title: "Second" }] }
         ]
-    );
+    };
+
+    assert.deepEqual(getTodaySection(today, "start"), [{ title: "First" }]);
+    assert.deepEqual(getTodaySection(today, "skim"), [{ title: "Second" }]);
+    assert.deepEqual(getTodaySection(today, "missing"), []);
+    assert.deepEqual(getTodaySection({}, "start"), []);
 });
 
-test("renderSignalCards emits stable links for home preview", () => {
-    const html = renderSignalCards([
+test("buildModuleRoutes maps manifest modules into route cards", () => {
+    const routes = buildModuleRoutes({
+        modules: [
+            {
+                id: "trends",
+                title: "Tech trends",
+                route: "trends/index.html",
+                source: "Hacker News, GitHub, npm",
+                count: 23,
+                updated: "2026-06-15",
+                status: "ok"
+            }
+        ]
+    });
+
+    assert.deepEqual(routes, [
         {
-            module: "Trends",
-            title: "Agent workflow",
-            meta: "HN / AI",
-            metric: "96 score",
-            reason: "Cross-source movement",
-            url: "https://example.com/trend"
+            id: "trends",
+            title: "Tech trends",
+            route: "trends/index.html",
+            source: "Hacker News, GitHub, npm",
+            count: 23,
+            updated: "2026-06-15",
+            status: "ok",
+            purpose: "Cross-source movement"
         }
     ]);
-
-    assert.match(html, /class="signal-card"/);
-    assert.match(html, /href="https:\/\/example\.com\/trend"/);
-    assert.match(html, /Agent workflow/);
-    assert.match(html, /Cross-source movement/);
-    assert.match(html, /96 score/);
 });
 
-test("checked-in data powers the home overview and signal preview", () => {
-    const overview = buildHomeOverview(readJson("data/manifest.json"));
-    const signals = collectHomeSignals({
-        trends: readJson("data/trends.json"),
-        packages: readJson("data/packages.json"),
-        repos: readJson("data/repos.json"),
-        links: readJson("data/links.json")
-    });
+test("home renderers emit command center markup", () => {
+    const items = [
+        {
+            title: "Iroh 1.0",
+            module: "Trends",
+            origin: "Hacker News",
+            category: "Developer tools",
+            metric: "100 score",
+            reason: "267 comments / 852 points",
+            url: "https://example.test/iroh"
+        }
+    ];
+    const routes = [
+        {
+            id: "trends",
+            title: "Tech trends",
+            route: "trends/index.html",
+            source: "Hacker News, GitHub, npm",
+            count: 23,
+            updated: "2026-06-15",
+            status: "ok",
+            purpose: "Cross-source movement"
+        }
+    ];
+
+    const startHtml = renderStartItems(items);
+    const skimHtml = renderSkimList(items);
+    const routeHtml = renderModuleRoutes(routes);
+
+    assert.match(startHtml, /class="start-item"/);
+    assert.match(startHtml, /href="https:\/\/example\.test\/iroh"/);
+    assert.match(startHtml, /Iroh 1\.0/);
+    assert.match(startHtml, /100 score/);
+    assert.match(startHtml, /267 comments/);
+    assert.match(skimHtml, /class="skim-item"/);
+    assert.match(skimHtml, /href="https:\/\/example\.test\/iroh"/);
+    assert.match(skimHtml, /Iroh 1\.0/);
+    assert.match(skimHtml, /Trends \/ 100 score/);
+    assert.match(routeHtml, /class="module-route status-ok"/);
+    assert.match(routeHtml, /href="trends\/index\.html"/);
+    assert.match(routeHtml, /23 items/);
+});
+
+test("home renderers escape text and block unsafe hrefs", () => {
+    const unsafeItems = [
+        {
+            title: "<script>alert(\"x\")</script>",
+            module: "Trends",
+            origin: "Hacker News",
+            category: "Developer tools",
+            metric: "100 score",
+            reason: "bad \"quote\"",
+            url: "javascript:alert(1)"
+        }
+    ];
+    const unsafeRoutes = [
+        {
+            id: "trends",
+            title: "Tech trends",
+            route: "javascript:alert(1)",
+            source: "Hacker News, GitHub, npm",
+            count: 23,
+            updated: "2026-06-15",
+            status: "ok",
+            purpose: "Cross-source movement"
+        }
+    ];
+
+    const startHtml = renderStartItems(unsafeItems);
+    const skimHtml = renderSkimList(unsafeItems);
+    const routeHtml = renderModuleRoutes(unsafeRoutes);
+
+    assert.match(startHtml, /href="#"/);
+    assert.match(skimHtml, /href="#"/);
+    assert.match(routeHtml, /href="#"/);
+    assert.doesNotMatch(`${startHtml}${skimHtml}${routeHtml}`, /javascript:alert/);
+    assert.match(startHtml, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
+    assert.match(startHtml, /bad &quot;quote&quot;/);
+});
+
+test("checked-in data powers the home command center", () => {
+    const manifest = readJson("data/manifest.json");
+    const today = readJson("data/today.json");
+    const overview = buildHomeOverview(manifest);
+    const startItems = getTodaySection(today, "start");
+    const skimItems = getTodaySection(today, "skim");
+    const routes = buildModuleRoutes(manifest);
 
     assert.ok(overview.totalItems >= 60);
     assert.equal(overview.liveModules, 4);
-    assert.equal(signals.length, 8);
-    assert.deepEqual(
-        signals.map((signal) => signal.module),
-        ["Trends", "Trends", "Trends", "Packages", "Packages", "Repos", "Repos", "Links"]
-    );
-});
-
-test("collectHomeSignals can return complete rows for shared callers", () => {
-    const signals = collectHomeSignals({
-        trends: readJson("data/trends.json"),
-        packages: readJson("data/packages.json"),
-        repos: readJson("data/repos.json"),
-        links: readJson("data/links.json")
-    }, {
-        trends: Infinity,
-        packages: Infinity,
-        repos: Infinity,
-        links: Infinity
-    });
-
-    assert.ok(signals.length >= 60);
-    assert.equal(signals[0].module, "Trends");
-    assert.equal(signals.at(-1).module, "Links");
+    assert.equal(startItems.length, 3);
+    assert.equal(skimItems.length, 6);
+    assert.equal(routes.length, 4);
+    assert.deepEqual(routes.map((route) => route.id), ["trends", "packages", "repos", "links"]);
 });

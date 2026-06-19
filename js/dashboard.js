@@ -125,6 +125,35 @@ const fallbackData = {
     ]
 };
 
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+}
+
+function safeHref(value) {
+    const href = String(value || "").trim();
+    if (!href || href.startsWith("//") || /[\u0000-\u001F\u007F]/.test(href)) {
+        return "#";
+    }
+
+    try {
+        const parsed = new URL(href, "https://anothel.github.io");
+        const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
+        if (hasScheme && parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+            return "#";
+        }
+        if (!hasScheme && parsed.origin !== "https://anothel.github.io") {
+            return "#";
+        }
+        return escapeHtml(href);
+    } catch {
+        return "#";
+    }
+}
+
 const els = {
     grid: document.querySelector("[data-grid]"),
     table: document.querySelector("[data-table]"),
@@ -148,7 +177,7 @@ function uniqueValues(items, key) {
 
 function fillSelect(select, values, label) {
     select.innerHTML = `<option value="all">${label}</option>` + values
-        .map((value) => `<option value="${value}">${value}</option>`)
+        .map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`)
         .join("");
 }
 
@@ -197,13 +226,13 @@ function renderSourceHealth() {
         : "Checked-in data loaded. Scheduled workflow keeps it fresh.";
 
     els.sourceHealth.innerHTML = state.sourceMeta.map((source) => `
-        <article class="source-health-card status-${source.status}">
+        <article class="source-health-card status-${escapeHtml(source.status)}">
             <div>
-                <strong>${source.name}</strong>
-                <span>${source.status}</span>
+                <strong>${escapeHtml(source.name)}</strong>
+                <span>${escapeHtml(source.status)}</span>
             </div>
-            <p>${source.count} visible items</p>
-            <small>${source.error || source.updatedAt}</small>
+            <p>${escapeHtml(source.count)} visible items</p>
+            <small>${escapeHtml(source.error || source.updatedAt)}</small>
         </article>
     `).join("");
 }
@@ -222,17 +251,17 @@ function renderCards(items) {
     els.grid.innerHTML = items.map((item) => `
         <article class="trend-card">
             <div class="card-topline">
-                <span>#${item.rank}</span>
-                <span>${item.source}</span>
+                <span>#${escapeHtml(item.rank)}</span>
+                <span>${escapeHtml(item.source)}</span>
             </div>
-            <h3>${item.title}</h3>
-            <p>${item.summary}</p>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.summary)}</p>
             <div class="card-meta">
-                <span>${item.category}</span>
-                <span>${item.score}</span>
-                <span>${item.velocity}</span>
+                <span>${escapeHtml(item.category)}</span>
+                <span>${escapeHtml(item.score)}</span>
+                <span>${escapeHtml(item.velocity)}</span>
             </div>
-            <a href="${item.url}">Open item</a>
+            <a href="${safeHref(item.url)}">Open item</a>
         </article>
     `).join("");
 }
@@ -244,12 +273,12 @@ function renderTable(items) {
     }
 
     els.table.innerHTML = items.map((item) => `
-        <a class="rank-row" href="${item.url}">
-            <span>${item.rank}</span>
-            <strong>${item.title}</strong>
-            <span>${item.category}</span>
-            <span>${item.source}</span>
-            <span>${item.score}</span>
+        <a class="rank-row" href="${safeHref(item.url)}">
+            <span>${escapeHtml(item.rank)}</span>
+            <strong>${escapeHtml(item.title)}</strong>
+            <span>${escapeHtml(item.category)}</span>
+            <span>${escapeHtml(item.source)}</span>
+            <span>${escapeHtml(item.score)}</span>
         </a>
     `).join("");
 }

@@ -37,6 +37,27 @@ function escapeHtml(value) {
         .replaceAll('"', "&quot;");
 }
 
+function safeHref(value) {
+    const href = String(value || "").trim();
+    if (!href || href.startsWith("//") || /[\u0000-\u001F\u007F]/.test(href)) {
+        return "#";
+    }
+
+    try {
+        const parsed = new URL(href, "https://anothel.github.io");
+        const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
+        if (hasScheme && parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+            return "#";
+        }
+        if (!hasScheme && parsed.origin !== "https://anothel.github.io") {
+            return "#";
+        }
+        return escapeHtml(href);
+    } catch {
+        return "#";
+    }
+}
+
 function sectionItems(section) {
     return Array.isArray(section?.items) ? section.items : [];
 }
@@ -52,7 +73,7 @@ function renderTodayCard(item) {
     const context = [item.origin, item.category].filter(Boolean).join(" / ");
 
     return `
-        <a class="signal-card today-card" href="${escapeHtml(item.url)}">
+        <a class="signal-card today-card" href="${safeHref(item.url)}">
             <div>
                 <span>${escapeHtml(item.module)}</span>
                 <em>${escapeHtml(item.metric)}</em>

@@ -106,3 +106,37 @@ test("dashboard fills filters, summarizes active filters, and clears them", asyn
     assert.equal(elements["[data-total]"].textContent, "2");
     assert.equal(elements["[data-filter-summary]"].textContent, "Showing all signals.");
 });
+
+test("dashboard escapes generated text and blocks unsafe item links", async () => {
+    const elements = await runDashboard({
+        updated: "2026-06-16",
+        sourceMeta: [
+            {
+                name: "<script>source()</script>",
+                status: "ok",
+                count: 1,
+                updatedAt: "bad \"time\""
+            }
+        ],
+        items: [
+            {
+                rank: 1,
+                title: "<script>alert(\"x\")</script>",
+                source: "GitHub",
+                category: "AI",
+                score: 95,
+                velocity: "10K stars",
+                url: "javascript:alert(1)",
+                summary: "bad \"quote\""
+            }
+        ]
+    });
+
+    const html = `${elements["[data-grid]"].innerHTML}${elements["[data-table]"].innerHTML}${elements["[data-source-health]"].innerHTML}`;
+
+    assert.doesNotMatch(html, /javascript:alert/);
+    assert.match(html, /href="#"/);
+    assert.match(html, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
+    assert.match(html, /bad &quot;quote&quot;/);
+    assert.match(html, /&lt;script&gt;source\(\)&lt;\/script&gt;/);
+});

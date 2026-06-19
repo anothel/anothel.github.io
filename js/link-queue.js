@@ -34,6 +34,35 @@ const fallbackLinks = {
     ]
 };
 
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+}
+
+function safeHref(value) {
+    const href = String(value || "").trim();
+    if (!href || href.startsWith("//") || /[\u0000-\u001F\u007F]/.test(href)) {
+        return "#";
+    }
+
+    try {
+        const parsed = new URL(href, "https://anothel.github.io");
+        const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
+        if (hasScheme && parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+            return "#";
+        }
+        if (!hasScheme && parsed.origin !== "https://anothel.github.io") {
+            return "#";
+        }
+        return escapeHtml(href);
+    } catch {
+        return "#";
+    }
+}
+
 const state = {
     links: [],
     category: "all",
@@ -56,7 +85,7 @@ function uniqueValues(items, key) {
 
 function fillCategorySelect(links) {
     els.category.innerHTML = `<option value="all">All categories</option>` + uniqueValues(links, "category")
-        .map((category) => `<option value="${category}">${category}</option>`)
+        .map((category) => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`)
         .join("");
 }
 
@@ -91,13 +120,13 @@ function render() {
     els.total.textContent = String(links.length);
     els.topCategory.textContent = top ? top.category : "-";
     els.list.innerHTML = links.map((link) => `
-        <a class="link-card" href="${link.url}">
+        <a class="link-card" href="${safeHref(link.url)}">
             <div>
-                <span>${link.category}</span>
-                <span>${link.kind}</span>
+                <span>${escapeHtml(link.category)}</span>
+                <span>${escapeHtml(link.kind)}</span>
             </div>
-            <h2>${link.title}</h2>
-            <p>${link.summary}</p>
+            <h2>${escapeHtml(link.title)}</h2>
+            <p>${escapeHtml(link.summary)}</p>
         </a>
     `).join("");
 }

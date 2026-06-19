@@ -37,6 +37,35 @@ const fallbackPackages = {
     ]
 };
 
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+}
+
+function safeHref(value) {
+    const href = String(value || "").trim();
+    if (!href || href.startsWith("//") || /[\u0000-\u001F\u007F]/.test(href)) {
+        return "#";
+    }
+
+    try {
+        const parsed = new URL(href, "https://anothel.github.io");
+        const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
+        if (hasScheme && parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+            return "#";
+        }
+        if (!hasScheme && parsed.origin !== "https://anothel.github.io") {
+            return "#";
+        }
+        return escapeHtml(href);
+    } catch {
+        return "#";
+    }
+}
+
 const els = {
     updated: document.querySelector("[data-updated]"),
     total: document.querySelector("[data-total]"),
@@ -65,12 +94,12 @@ function render(data) {
     els.topPackage.textContent = top ? top.name : "-";
     els.sourceStatus.textContent = data.sourceMeta.status;
     els.list.innerHTML = data.packages.map((item) => `
-        <a class="watch-row" href="${item.url}">
-            <span>#${item.rank}</span>
-            <strong>${item.name}</strong>
-            <span>${item.category}</span>
-            <span>${item.downloadsLabel}</span>
-            <span>${item.focus}</span>
+        <a class="watch-row" href="${safeHref(item.url)}">
+            <span>#${escapeHtml(item.rank)}</span>
+            <strong>${escapeHtml(item.name)}</strong>
+            <span>${escapeHtml(item.category)}</span>
+            <span>${escapeHtml(item.downloadsLabel)}</span>
+            <span>${escapeHtml(item.focus)}</span>
         </a>
     `).join("");
 }

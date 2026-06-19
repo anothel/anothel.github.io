@@ -22,7 +22,7 @@
         <header class="topbar">
             <div>
                 <p class="eyebrow">Personal start page</p>
-                <h1>A small desk for deciding what to open next.</h1>
+                <h1>What is worth opening now?</h1>
             </div>
             <p class="stamp">static data, daily refresh</p>
             <nav class="site-nav" aria-label="Primary">
@@ -36,70 +36,103 @@
         </header>
 
         <main class="hub-main">
-            <section class="home-overview" aria-label="Data overview">
-                <article class="stat-card">
-                    <span>Items tracked</span>
-                    <strong data-home-total>33</strong>
-                </article>
-                <article class="stat-card">
-                    <span>Healthy datasets</span>
-                    <strong data-home-live>4/4</strong>
-                </article>
-                <article class="stat-card">
-                    <span>Last refresh</span>
-                    <strong data-home-updated>2026-06-14</strong>
-                </article>
+            <section class="command-center" aria-label="Home command center">
+                <div class="start-panel">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Start here</h2>
+                            <p>Three generated picks worth opening first.</p>
+                        </div>
+                        <a href="today/index.html">Open priority brief</a>
+                    </div>
+                    <div class="start-list" data-home-start>
+                        <a class="start-item" href="today/index.html">
+                            <span>1</span>
+                            <div>
+                                <strong>Open the generated priority brief</strong>
+                                <small>Today / tracked signals</small>
+                                <p>Static fallback stays useful when local file fetch is blocked.</p>
+                            </div>
+                            <em>brief</em>
+                        </a>
+                        <a class="start-item" href="trends/index.html">
+                            <span>2</span>
+                            <div>
+                                <strong>Check cross-source movement</strong>
+                                <small>Trends / HN, GitHub, npm</small>
+                                <p>See what moved across tracked technical sources.</p>
+                            </div>
+                            <em>movement</em>
+                        </a>
+                        <a class="start-item" href="links/index.html">
+                            <span>3</span>
+                            <div>
+                                <strong>Keep references close</strong>
+                                <small>Links / saved references</small>
+                                <p>Open stable docs and tools that support future work.</p>
+                            </div>
+                            <em>reference</em>
+                        </a>
+                    </div>
+                </div>
+
+                <aside class="status-rail" aria-label="Data status and skim list">
+                    <section class="home-overview" aria-label="Data status">
+                        <article class="stat-card">
+                            <span>Items tracked</span>
+                            <strong data-home-total>65</strong>
+                        </article>
+                        <article class="stat-card">
+                            <span>Healthy datasets</span>
+                            <strong data-home-live>4/4</strong>
+                        </article>
+                        <article class="stat-card">
+                            <span>Last refresh</span>
+                            <strong data-home-updated>2026-06-15</strong>
+                        </article>
+                    </section>
+
+                    <section class="skim-panel" aria-labelledby="skim-title">
+                        <div class="section-heading">
+                            <div>
+                                <h2 id="skim-title">Worth skimming</h2>
+                                <p>Useful signals that do not need first attention.</p>
+                            </div>
+                        </div>
+                        <div class="skim-list" data-home-skim>
+                            <a class="skim-item" href="today/index.html">
+                                <strong>Open the full skim list</strong>
+                                <span>Today / generated picks</span>
+                            </a>
+                        </div>
+                    </section>
+                </aside>
             </section>
 
-            <section class="home-today" aria-labelledby="signals-title">
-                <div class="section-heading">
-                    <div>
-                        <h2 id="signals-title">Current signals</h2>
-                        <p>Technical signals from HN, GitHub, npm, and saved references.</p>
-                    </div>
-                    <a href="today/index.html">Open priority brief</a>
-                </div>
-                <div class="today-grid" data-home-signals>
-                    <a class="signal-card" href="trends/index.html">
-                        <div>
-                            <span>Trends</span>
-                            <em>open trends</em>
-                        </div>
-                        <strong>Cross-source movement</strong>
-                        <small>HN / GitHub / npm</small>
-                        <p>What is moving across tracked sources.</p>
-                    </a>
-                    <a class="signal-card" href="packages/index.html">
-                        <div>
-                            <span>Packages</span>
-                            <em>open packages</em>
-                        </div>
-                        <strong>npm package movement</strong>
-                        <small>npm</small>
-                        <p>Weekly download movement.</p>
-                    </a>
-                    <a class="signal-card" href="repos/index.html">
-                        <div>
-                            <span>Repos</span>
-                            <em>open repos</em>
-                        </div>
-                        <strong>GitHub project traction</strong>
-                        <small>GitHub</small>
-                        <p>Stars, activity, and focus areas.</p>
-                    </a>
-                    <a class="signal-card" href="links/index.html">
-                        <div>
-                            <span>Links</span>
-                            <em>open links</em>
-                        </div>
-                        <strong>Reference shelf</strong>
-                        <small>manual</small>
-                        <p>Docs and tools worth keeping close.</p>
-                    </a>
-                </div>
+            <section class="module-strip" aria-label="Module routes" data-home-routes>
+                <a class="module-route status-ok" href="trends/index.html">
+                    <span>Tech trends</span>
+                    <strong>Cross-source movement</strong>
+                    <small>23 items / 2026-06-15</small>
+                </a>
+                <a class="module-route status-ok" href="packages/index.html">
+                    <span>Package watchlist</span>
+                    <strong>npm package movement</strong>
+                    <small>8 items / 2026-06-15</small>
+                </a>
+                <a class="module-route status-ok" href="repos/index.html">
+                    <span>Repo watchlist</span>
+                    <strong>GitHub project traction</strong>
+                    <small>16 items / 2026-06-15</small>
+                </a>
+                <a class="module-route status-ok" href="links/index.html">
+                    <span>Links queue</span>
+                    <strong>Reference shelf</strong>
+                    <small>18 items / 2026-06-15</small>
+                </a>
             </section>
         </main>
     </div>
-    <script type="module" src="js/home.js" data-source="data/manifest.json"></script>
+    <script type="module" src="js/home.js" data-manifest="data/manifest.json" data-today="data/today.json"></script>
 </body>
 </html>

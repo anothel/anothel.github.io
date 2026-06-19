@@ -51,6 +51,8 @@ test("public page headers use stable single-line titles without a brand button",
 test("mobile layout allows long titles and card text to wrap", () => {
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topbar h1\s*{[^}]*white-space: normal/s);
     assert.match(styles, /\.signal-card strong,[\s\S]*\.trend-card h3[\s\S]*{[^}]*overflow-wrap: anywhere/s);
+    assert.match(styles, /\.start-item strong,[\s\S]*\.module-route strong[\s\S]*{[^}]*overflow-wrap: anywhere/s);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.command-center[\s\S]*grid-template-columns: 1fr/s);
     assert.match(styles, /\.signal-card div\s*{[^}]*min-width: 0/s);
     assert.match(styles, /\.source-health-card div\s*{[^}]*min-width: 0/s);
 });
@@ -114,7 +116,7 @@ test("today page owns the generated priority brief", () => {
 test("root page avoids duplicate module entry cards below primary navigation", () => {
     const root = read("index.html");
 
-    assert.match(root, /type="module" src="js\/home\.js" data-source="data\/manifest\.json"/);
+    assert.match(root, /type="module" src="js\/home\.js" data-manifest="data\/manifest\.json" data-today="data\/today\.json"/);
     assert.doesNotMatch(root, /Entry points/);
     assert.doesNotMatch(root, /class="hub-intro"/);
     assert.doesNotMatch(root, /class="module-grid"/);
@@ -125,27 +127,38 @@ test("root page avoids duplicate module entry cards below primary navigation", (
     assert.doesNotMatch(styles, /\.module-meta/);
 });
 
-test("root page exposes data overview and current signal slots", () => {
+test("root page exposes command center slots", () => {
     const root = read("index.html");
 
-    for (const hook of ["data-home-total", "data-home-live", "data-home-updated", "data-home-signals"]) {
+    for (const hook of [
+        "data-home-total",
+        "data-home-live",
+        "data-home-updated",
+        "data-home-start",
+        "data-home-skim",
+        "data-home-routes"
+    ]) {
         assert.match(root, new RegExp(hook));
     }
-    assert.match(root, /A small desk for deciding what to open next\./);
-    assert.match(root, /Technical signals from HN, GitHub, npm, and saved references\./);
-    assert.match(root, /Current signals/);
+
+    assert.match(root, /What is worth opening now\?/);
+    assert.match(root, /Start here/);
+    assert.match(root, /Worth skimming/);
+    assert.match(root, /Data status/);
     assert.match(root, /Open priority brief/);
-    assert.match(root, /Data overview/);
-    assert.match(root, /class="today-grid"/);
-    assert.match(root, /class="signal-card"/);
-    assert.doesNotMatch(root, /class="signal-row"/);
-    assert.match(styles, /\.today-grid/);
-    assert.match(styles, /\.signal-card/);
+    assert.match(root, /class="command-center"/);
+    assert.match(root, /class="start-list"/);
+    assert.match(root, /class="skim-list"/);
+    assert.match(root, /class="module-strip"/);
+    assert.doesNotMatch(root, /class="today-grid"/);
+    assert.doesNotMatch(root, /data-home-signals/);
 });
 
-test("home signal cards brighten on hover", () => {
-    assert.match(styles, /\.signal-card:hover/);
-    assert.match(styles, /\.signal-card:hover\s*{[^}]*background: var\(--panel-strong\)/s);
+test("home command center cards brighten on hover", () => {
+    assert.match(styles, /\.start-item:hover/);
+    assert.match(styles, /\.module-route:hover/);
+    assert.match(styles, /\.start-item:hover\s*{[^}]*background: var\(--panel-strong\)/s);
+    assert.match(styles, /\.module-route:hover\s*{[^}]*background: var\(--panel-strong\)/s);
 });
 
 test("packages page owns the package watchlist module", () => {
