@@ -6,6 +6,7 @@ Static home hub and small dashboards served with GitHub Pages.
 
 - `index.html`: home hub
 - `today/index.html`: generated priority brief from tracked dashboard data
+- `status/index.html`: source refresh and data health overview
 - `trends/index.html`: responsive tech trend dashboard
 - `packages/index.html`: npm package watchlist
 - `repos/index.html`: GitHub repository watchlist
@@ -16,6 +17,7 @@ Static home hub and small dashboards served with GitHub Pages.
 - `data/manifest.json`: module index and data freshness summary
 - `js/home.js`: home overview and current signal rendering
 - `js/today.js`: Today priority brief rendering
+- `js/status.js`: source status rendering
 - `js/dashboard.js`: filtering and rendering
 - `scripts/update-trends.mjs`: updates trend data from HN, GitHub, and npm
 - `scripts/update-packages.mjs`: updates package watchlist data from npm
@@ -83,6 +85,7 @@ node --test tests/today-data.test.mjs
 node --test tests/today-generator.test.mjs
 node --test tests/manifest.test.mjs
 node --test tests/site-structure.test.mjs
+node --test tests/status-ui.test.mjs
 node --test tests/serve.test.mjs
 node --test tests/workflow.test.mjs
 node --test tests/ops-docs.test.mjs
@@ -95,6 +98,7 @@ node --check scripts/update-manifest.mjs
 node --check scripts/serve.mjs
 node --check js/dashboard.js
 node --check js/home.js
+node --check js/status.js
 node --check js/today.js
 node --check js/package-watchlist.js
 node --check js/repo-watchlist.js

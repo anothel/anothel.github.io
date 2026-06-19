@@ -37,6 +37,7 @@ function safeHref(value) {
 
 const routePurpose = {
     explore: "Search and save across sources",
+    status: "Refresh health across sources",
     trends: "Cross-source movement",
     packages: "npm package movement",
     repos: "GitHub project traction",
@@ -85,7 +86,7 @@ export function getTodaySection(today, id) {
 
 export function buildModuleRoutes(manifest) {
     const modules = manifest.modules || [];
-    return withExploreRoute(modules.map((module) => ({
+    return withUtilityRoutes(modules.map((module) => ({
         id: module.id,
         title: module.title,
         route: module.route,
@@ -97,9 +98,7 @@ export function buildModuleRoutes(manifest) {
     })));
 }
 
-function withExploreRoute(routes) {
-    if (routes.some((route) => route.id === "explore")) return routes;
-
+function withUtilityRoutes(routes) {
     const modules = routes || [];
     const updated = modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || "-";
     const status = modules.some((module) => module.status === "error")
@@ -117,8 +116,22 @@ function withExploreRoute(routes) {
         status,
         purpose: routePurpose.explore
     };
+    const statusRoute = {
+        id: "status",
+        title: "Source status",
+        route: "status/index.html",
+        source: "All source metadata",
+        count: modules.reduce((sum, module) => sum + module.count, 0),
+        updated,
+        status,
+        purpose: routePurpose.status
+    };
 
-    return [exploreRoute, ...routes];
+    return [
+        ...(routes.some((route) => route.id === "explore") ? [] : [exploreRoute]),
+        ...(routes.some((route) => route.id === "status") ? [] : [statusRoute]),
+        ...routes
+    ];
 }
 
 export function renderStartItems(items) {
@@ -149,7 +162,7 @@ export function renderSkimList(items) {
 }
 
 export function renderModuleRoutes(routes) {
-    return withExploreRoute(routes).map((route) => `
+    return withUtilityRoutes(routes).map((route) => `
         <a class="module-route status-${escapeHtml(route.status)}" href="${safeHref(route.route)}">
             <span>${escapeHtml(route.title)}</span>
             <strong>${escapeHtml(route.purpose)}</strong>

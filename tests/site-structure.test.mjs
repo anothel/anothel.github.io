@@ -11,6 +11,7 @@ const pages = [
     ["index.html", "Home", ""],
     ["today/index.html", "Today", "../"],
     ["explore/index.html", "Explore", "../"],
+    ["status/index.html", "Status", "../"],
     ["trends/index.html", "Trends", "../"],
     ["packages/index.html", "Packages", "../"],
     ["repos/index.html", "Repos", "../"],
@@ -27,6 +28,7 @@ test("public pages expose shared primary navigation", () => {
             `${prefix}index.html`,
             `${prefix}today/index.html`,
             `${prefix}explore/index.html`,
+            `${prefix}status/index.html`,
             `${prefix}trends/index.html`,
             `${prefix}packages/index.html`,
             `${prefix}repos/index.html`,
@@ -74,6 +76,7 @@ test("root page is a hub and trends page owns the dashboard", () => {
     const trends = read("trends/index.html");
 
     assert.match(root, /href="today\/index\.html"/);
+    assert.match(root, /href="status\/index\.html"/);
     assert.match(root, /href="trends\/index\.html"/);
     assert.match(root, /href="packages\/index\.html"/);
     assert.match(root, /href="repos\/index\.html"/);
@@ -187,6 +190,7 @@ test("root page exposes command center slots", () => {
     assert.match(root, /Explore workspace/);
     assert.match(root, /Search all tracked signals/);
     assert.match(root, /href="explore\/index\.html"/);
+    assert.match(root, /href="status\/index\.html"/);
     assert.match(root, /class="explore-callout"/);
     assert.match(root, /class="command-center"/);
     assert.match(root, /class="start-list"/);
@@ -227,6 +231,8 @@ test("public page copy states concrete page purpose", () => {
     assert.match(read("today/index.html"), /Thirteen generated picks from tracked signals\./);
     assert.match(read("today/index.html"), /Continue in Explore/);
     assert.match(read("index.html"), /Search all tracked signals/);
+    assert.match(read("status/index.html"), /Source status\./);
+    assert.match(read("status/index.html"), /Refresh health across tracked data sources\./);
     assert.match(read("trends/index.html"), /What is moving across HN, GitHub, and npm\./);
     assert.match(read("trends/index.html"), /Ranked movement with origin, category, and momentum\./);
     assert.match(read("packages/index.html"), /npm packages worth watching\./);
@@ -235,6 +241,29 @@ test("public page copy states concrete page purpose", () => {
     assert.match(read("repos/index.html"), /Stars, recent activity, and why each project is on the list\./);
     assert.match(read("links/index.html"), /References worth keeping close\./);
     assert.match(read("links/index.html"), /Docs, APIs, and tools that support future work\./);
+});
+
+test("status page owns the source health overview", () => {
+    const status = read("status/index.html");
+    const sitemap = read("sitemap.xml");
+
+    for (const hook of [
+        "data-status-total",
+        "data-status-sources",
+        "data-status-health",
+        "data-status-updated",
+        "data-status-rows",
+        "data-source-health",
+        "data-data-mode"
+    ]) {
+        assert.match(status, new RegExp(hook));
+    }
+
+    assert.match(status, /..\/js\/data-health\.js/);
+    assert.match(status, /..\/js\/status\.js/);
+    assert.match(status, /..\/data\/manifest\.json/);
+    assert.match(sitemap, /https:\/\/anothel\.github\.io\/status\//);
+    assert.match(styles, /\.status-table/);
 });
 
 test("public page copy avoids implementation-first labels", () => {

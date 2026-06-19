@@ -75,6 +75,16 @@ test("buildModuleRoutes maps manifest modules into route cards", () => {
             purpose: "Search and save across sources"
         },
         {
+            id: "status",
+            title: "Source status",
+            route: "status/index.html",
+            source: "All source metadata",
+            count: 23,
+            updated: "2026-06-15",
+            status: "ok",
+            purpose: "Refresh health across sources"
+        },
+        {
             id: "trends",
             title: "Tech trends",
             route: "trends/index.html",
@@ -128,10 +138,13 @@ test("home renderers emit command center markup", () => {
     assert.match(routeHtml, /class="module-route status-ok"/);
     assert.match(routeHtml, /href="trends\/index\.html"/);
     assert.match(routeHtml, /href="explore\/index\.html"/);
+    assert.match(routeHtml, /href="status\/index\.html"/);
     assert.match(routeHtml, /Search and save across sources/);
+    assert.match(routeHtml, /Refresh health across sources/);
     assert.match(routeHtml, /23 items/);
     assert.match(routeHtml, /Status ok/);
     assert.ok(routeHtml.indexOf("explore/index.html") < routeHtml.indexOf("trends/index.html"));
+    assert.ok(routeHtml.indexOf("status/index.html") < routeHtml.indexOf("trends/index.html"));
 });
 
 test("home renderers escape text and block unsafe hrefs", () => {
@@ -183,6 +196,6 @@ test("checked-in data powers the home command center", () => {
     assert.equal(overview.liveModules, 4);
     assert.equal(startItems.length, 3);
     assert.equal(skimItems.length, 6);
-    assert.equal(routes.length, 5);
-    assert.deepEqual(routes.map((route) => route.id), ["explore", "trends", "packages", "repos", "links"]);
+    assert.equal(routes.length, 6);
+    assert.deepEqual(routes.map((route) => route.id), ["explore", "status", "trends", "packages", "repos", "links"]);
 });

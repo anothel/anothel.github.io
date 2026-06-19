@@ -226,6 +226,10 @@ main {
     font-weight: 900;
 }
 
+.status-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .start-list,
 .skim-list,
 .module-strip {
@@ -681,6 +685,58 @@ button {
     color: var(--neutral);
 }
 
+.status-head,
+.status-row {
+    display: grid;
+    grid-template-columns: minmax(130px, 0.9fr) minmax(120px, 0.8fr) 80px 90px minmax(150px, 1fr) minmax(180px, 1.2fr);
+    gap: 12px;
+    align-items: center;
+}
+
+.status-head {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.status-table {
+    display: grid;
+}
+
+.status-row {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+}
+
+.status-row:last-child {
+    border-bottom: 0;
+}
+
+.status-row strong,
+.status-row span,
+.status-row small {
+    overflow-wrap: anywhere;
+}
+
+.status-row span,
+.status-row small {
+    color: var(--muted);
+}
+
+.status-row.status-error strong {
+    color: var(--danger);
+}
+
+.status-row.status-partial strong,
+.status-row.status-fallback strong {
+    color: var(--warning);
+}
+
 .compact-health .source-health-grid {
     grid-template-columns: 1fr;
 }
@@ -1002,6 +1058,7 @@ button {
     }
 
     .home-overview,
+    .status-stats,
     .link-grid,
     .today-grid,
     .module-strip {
@@ -1076,6 +1133,8 @@ button {
 
     .rank-head,
     .rank-row,
+    .status-head,
+    .status-row,
     .watch-head,
     .watch-row {
         min-width: 680px;
