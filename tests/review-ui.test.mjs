@@ -50,6 +50,19 @@ test("Review matches saved ids against current normalized items", () => {
     assert.deepEqual(saved.map((item) => item.id), ["packages:https://example.com/mcp"]);
 });
 
+test("Review joins saved records and sorts newest first", () => {
+    const app = loadReview();
+    const saved = app.matchSavedItems(items, new Set(["repos:https://example.com/skills", "packages:https://example.com/mcp"]), new Map([
+        ["repos:https://example.com/skills", { id: "repos:https://example.com/skills", savedAt: "2026-06-19T00:00:00.000Z", status: "done" }],
+        ["packages:https://example.com/mcp", { id: "packages:https://example.com/mcp", savedAt: "2026-06-20T00:00:00.000Z", status: "read" }]
+    ]));
+
+    assert.deepEqual(saved.map((item) => [item.id, item.savedAt, item.savedStatus]), [
+        ["packages:https://example.com/mcp", "2026-06-20T00:00:00.000Z", "read"],
+        ["repos:https://example.com/skills", "2026-06-19T00:00:00.000Z", "done"]
+    ]);
+});
+
 test("Review summarizes saved focus areas and sources", () => {
     const app = loadReview();
 
@@ -74,6 +87,24 @@ test("Review renders queue and selected detail with actions", () => {
     assert.match(detail, /href="https:\/\/example\.com\/mcp"/);
     assert.match(detail, /data-review-remove-id="packages:https:\/\/example\.com\/mcp"/);
     assert.match(detail, /href="..\/explore\/index\.html\?focus=MCP"/);
+});
+
+test("Review renders status and saved date metadata", () => {
+    const app = loadReview();
+    const item = {
+        ...items[1],
+        savedAt: "2026-06-20T01:02:03.000Z",
+        savedStatus: "read"
+    };
+    const queue = app.renderReviewQueue([item], item.id);
+    const detail = app.renderReviewDetail(item);
+
+    assert.match(queue, /Read/);
+    assert.match(queue, /Saved 2026-06-20/);
+    assert.match(detail, /Read/);
+    assert.match(detail, /Saved 2026-06-20/);
+    assert.match(detail, /data-review-status-id="packages:https:\/\/example\.com\/mcp" data-review-status="read"/);
+    assert.match(detail, /data-review-status-id="packages:https:\/\/example\.com\/mcp" data-review-status="done"/);
 });
 
 test("Review renders useful empty state", () => {
@@ -126,7 +157,7 @@ test("Review browser init renders saved queue and removes items", async () => {
         "[data-review-detail]"
     ].map((selector) => [selector, createElement()]));
     let savedValue = "[\"trends:https://example.com/trend\"]";
-    let clickHandlers = [];
+    const clickHandlers = {};
     const sources = {
         "../data/trends.json": {
             updated: "2026-06-20",
@@ -158,9 +189,25 @@ test("Review browser init renders saved queue and removes items", async () => {
                     return [{
                         dataset: { reviewRemoveId: "trends:https://example.com/trend" },
                         addEventListener(type, listener) {
-                            clickHandlers.push(listener);
+                            clickHandlers.remove = listener;
                         }
                     }];
+                }
+                if (selector === "[data-review-status-id]") {
+                    return [
+                        {
+                            dataset: { reviewStatusId: "trends:https://example.com/trend", reviewStatus: "read" },
+                            addEventListener(type, listener) {
+                                clickHandlers.read = listener;
+                            }
+                        },
+                        {
+                            dataset: { reviewStatusId: "trends:https://example.com/trend", reviewStatus: "done" },
+                            addEventListener(type, listener) {
+                                clickHandlers.done = listener;
+                            }
+                        }
+                    ];
                 }
                 return [];
             }
@@ -188,9 +235,14 @@ test("Review browser init renders saved queue and removes items", async () => {
     assert.equal(elements["[data-review-source-count]"].textContent, "1");
     assert.match(elements["[data-review-queue]"].innerHTML, /Agent trend/);
     assert.match(elements["[data-review-detail]"].innerHTML, /Saved agent trend/);
+    assert.match(elements["[data-review-detail]"].innerHTML, /Unread/);
 
-    clickHandlers[0]();
-    assert.equal(savedValue, "[]");
+    clickHandlers.done();
+    assert.equal(JSON.parse(savedValue).items[0].status, "done");
+    assert.match(elements["[data-review-detail]"].innerHTML, /Done/);
+
+    clickHandlers.remove();
+    assert.deepEqual(JSON.parse(savedValue), { version: 2, items: [] });
     assert.equal(elements["[data-review-total]"].textContent, "0");
     assert.match(elements["[data-review-detail]"].innerHTML, /No saved items yet/);
 });

@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
 function loadExplore(extra = {}) {
-    const context = { console, ...extra };
+    const context = { console, Date, ...extra };
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     return context.ExploreApp;
@@ -360,6 +360,48 @@ test("Explore saved store reads, toggles, removes, and ignores broken storage", 
     assert.deepEqual([...broken.read()], []);
 });
 
+test("Explore saved store migrates v1 arrays and writes v2 metadata", () => {
+    const app = loadExplore({
+        Date: class extends Date {
+            constructor(...args) {
+                super(...(args.length > 0 ? args : ["2026-06-20T01:02:03.000Z"]));
+            }
+
+            static now() {
+                return new Date("2026-06-20T01:02:03.000Z").getTime();
+            }
+        }
+    });
+    const memory = new Map([["anothel.explore.saved.v1", JSON.stringify(["repos:a"])]]);
+    const storage = {
+        getItem(key) {
+            return memory.get(key) || null;
+        },
+        setItem(key, value) {
+            memory.set(key, value);
+        }
+    };
+    const store = app.createExploreStore(storage);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(store.readRecords())), [
+        { id: "repos:a", savedAt: "2026-06-20T01:02:03.000Z", status: "unread" }
+    ]);
+
+    store.toggle("packages:b");
+    assert.deepEqual(JSON.parse(memory.get("anothel.explore.saved.v1")), {
+        version: 2,
+        items: [
+            { id: "repos:a", savedAt: "2026-06-20T01:02:03.000Z", status: "unread" },
+            { id: "packages:b", savedAt: "2026-06-20T01:02:03.000Z", status: "unread" }
+        ]
+    });
+
+    store.setStatus("repos:a", "done");
+    assert.equal(store.recordsById().get("repos:a").status, "done");
+    store.setStatus("repos:a", "invalid");
+    assert.equal(store.recordsById().get("repos:a").status, "done");
+});
+
 test("Explore script does not auto-fetch on non-Explore pages", async () => {
     let fetchCount = 0;
     const context = {
@@ -473,7 +515,10 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
         },
         localStorage: {
             getItem() {
-                return "[\"trends:https://example.com/trend\"]";
+                return JSON.stringify({
+                    version: 2,
+                    items: [{ id: "trends:https://example.com/trend", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" }]
+                });
             },
             setItem() {}
         },
@@ -566,7 +611,10 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
         },
         localStorage: {
             getItem() {
-                return "[\"trends:https://example.com/saved\"]";
+                return JSON.stringify({
+                    version: 2,
+                    items: [{ id: "trends:https://example.com/saved", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" }]
+                });
             },
             setItem() {}
         },

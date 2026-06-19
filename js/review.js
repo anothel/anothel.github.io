@@ -9,6 +9,7 @@
     const state = {
         items: [],
         savedIds: new Set(),
+        savedRecords: new Map(),
         selectedId: ""
     };
 
@@ -41,8 +42,28 @@
         }
     }
 
-    function matchSavedItems(items, savedIds = new Set()) {
-        return (Array.isArray(items) ? items : []).filter((item) => savedIds.has(item.id));
+    function statusLabel(status = "unread") {
+        if (status === "done") return "Done";
+        if (status === "read") return "Read";
+        return "Unread";
+    }
+
+    function savedDateLabel(value) {
+        return value ? `Saved ${String(value).slice(0, 10)}` : "Saved date unknown";
+    }
+
+    function matchSavedItems(items, savedIds = new Set(), savedRecords = new Map()) {
+        return (Array.isArray(items) ? items : [])
+            .filter((item) => savedIds.has(item.id))
+            .map((item) => {
+                const record = savedRecords.get(item.id) || {};
+                return {
+                    ...item,
+                    savedAt: record.savedAt,
+                    savedStatus: record.status || "unread"
+                };
+            })
+            .sort((a, b) => String(b.savedAt || "").localeCompare(String(a.savedAt || "")));
     }
 
     function itemSources(item) {
@@ -88,6 +109,7 @@
             <button class="review-queue-item" type="button" data-review-select-id="${escapeHtml(item.id)}" aria-selected="${item.id === activeId ? "true" : "false"}">
                 <strong>${escapeHtml(item.title)}</strong>
                 <span>${escapeHtml([item.module, item.metric, item.category].filter(Boolean).join(" / "))}</span>
+                <small>${escapeHtml(statusLabel(item.savedStatus))} / ${escapeHtml(savedDateLabel(item.savedAt))}</small>
             </button>
         `).join("");
     }
@@ -112,6 +134,7 @@
             item.sourceContext
         ].filter(Boolean).join(" / ");
         const score = item.qualityScore || item.score || 0;
+        const status = item.savedStatus || "unread";
 
         return `
             <article class="review-detail-card">
@@ -125,10 +148,14 @@
                 <div class="card-meta">
                     <span>${escapeHtml(item.metric)}</span>
                     <span>${escapeHtml(item.updated)}</span>
+                    <span>${escapeHtml(savedDateLabel(item.savedAt))}</span>
+                    <span class="status-pill status-${escapeHtml(status)}">${escapeHtml(statusLabel(status))}</span>
                     <span class="quality-marker">Signal fit ${escapeHtml(score)}</span>
                 </div>
                 <div class="review-actions">
                     <a href="${safeHref(item.url)}">Open item</a>
+                    <button type="button" data-review-status-id="${escapeHtml(item.id)}" data-review-status="read">Mark read</button>
+                    <button type="button" data-review-status-id="${escapeHtml(item.id)}" data-review-status="done">Mark done</button>
                     <button type="button" data-review-remove-id="${escapeHtml(item.id)}">Remove</button>
                     <a href="${safeHref(similarExploreHref(item))}">Find similar in Explore</a>
                 </div>
@@ -163,14 +190,23 @@
         document.querySelectorAll("[data-review-remove-id]").forEach((button) => {
             button.addEventListener("click", () => {
                 state.savedIds = store.remove(button.dataset.reviewRemoveId);
+                state.savedRecords = store.recordsById();
                 if (state.selectedId === button.dataset.reviewRemoveId) state.selectedId = "";
+                render(els, store);
+            });
+        });
+
+        document.querySelectorAll("[data-review-status-id]").forEach((button) => {
+            button.addEventListener("click", () => {
+                state.savedIds = store.setStatus(button.dataset.reviewStatusId, button.dataset.reviewStatus);
+                state.savedRecords = store.recordsById();
                 render(els, store);
             });
         });
     }
 
     function render(els, store) {
-        const saved = matchSavedItems(state.items, state.savedIds);
+        const saved = matchSavedItems(state.items, state.savedIds, state.savedRecords);
         const stats = reviewStats(saved);
         const selected = selectedItem(saved);
 
@@ -209,6 +245,7 @@
 
         state.items = app.normalizeExploreData({ trends, packages, repos, links });
         state.savedIds = store.read();
+        state.savedRecords = store.recordsById();
         state.selectedId = "";
         render(els, store);
     }

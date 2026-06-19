@@ -849,7 +849,8 @@ button {
 }
 
 .card-topline span,
-.card-meta span {
+.card-meta span,
+.status-pill {
     display: inline-flex;
     align-items: center;
     min-height: 26px;
@@ -998,6 +999,13 @@ button {
     color: var(--muted);
     font-size: 0.84rem;
     overflow-wrap: anywhere;
+}
+
+.review-queue-item small {
+    margin-top: 5px;
+    color: var(--neutral);
+    font-size: 0.78rem;
+    font-weight: 900;
 }
 
 .review-detail > div:last-child {

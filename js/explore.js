@@ -413,37 +413,80 @@
     }
 
     function createExploreStore(storage) {
-        function read() {
+        const validStatuses = new Set(["unread", "read", "done"]);
+
+        function nowIso() {
+            return new Date().toISOString();
+        }
+
+        function normalizeRecord(record) {
+            if (!record || typeof record.id !== "string") return null;
+            return {
+                id: record.id,
+                savedAt: typeof record.savedAt === "string" ? record.savedAt : nowIso(),
+                status: validStatuses.has(record.status) ? record.status : "unread"
+            };
+        }
+
+        function readRecords() {
             try {
                 const parsed = JSON.parse(storage?.getItem(storageKey) || "[]");
-                return new Set(Array.isArray(parsed) ? parsed.filter((id) => typeof id === "string") : []);
+                if (Array.isArray(parsed)) {
+                    return parsed
+                        .filter((id) => typeof id === "string")
+                        .map((id) => ({ id, savedAt: nowIso(), status: "unread" }));
+                }
+                if (parsed?.version === 2 && Array.isArray(parsed.items)) {
+                    return parsed.items.map(normalizeRecord).filter(Boolean);
+                }
+                return [];
             } catch {
-                return new Set();
+                return [];
             }
         }
 
-        function write(ids) {
+        function writeRecords(records) {
             try {
-                storage?.setItem(storageKey, JSON.stringify([...ids]));
+                storage?.setItem(storageKey, JSON.stringify({ version: 2, items: records.map(normalizeRecord).filter(Boolean) }));
             } catch {
                 // Storage can be disabled in private or local file contexts.
             }
         }
 
+        function read() {
+            return new Set(readRecords().map((record) => record.id));
+        }
+
+        function recordsById() {
+            return new Map(readRecords().map((record) => [record.id, record]));
+        }
+
         return {
             read,
+            readRecords,
+            recordsById,
             toggle(id) {
-                const ids = read();
-                if (ids.has(id)) ids.delete(id);
-                else ids.add(id);
-                write(ids);
-                return ids;
+                const records = readRecords();
+                const index = records.findIndex((record) => record.id === id);
+                if (index >= 0) records.splice(index, 1);
+                else records.push({ id, savedAt: nowIso(), status: "unread" });
+                writeRecords(records);
+                return new Set(records.map((record) => record.id));
             },
             remove(id) {
-                const ids = read();
-                ids.delete(id);
-                write(ids);
-                return ids;
+                const records = readRecords().filter((record) => record.id !== id);
+                writeRecords(records);
+                return new Set(records.map((record) => record.id));
+            },
+            setStatus(id, status) {
+                if (!validStatuses.has(status)) return read();
+                const records = readRecords();
+                const record = records.find((item) => item.id === id);
+                if (record) {
+                    record.status = status;
+                    writeRecords(records);
+                }
+                return new Set(records.map((item) => item.id));
             }
         };
     }
