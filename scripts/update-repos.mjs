@@ -31,6 +31,27 @@ function compactNumber(value) {
     return Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
 
+function sourceStatus(successCount, totalCount) {
+    if (successCount === totalCount) return "ok";
+    if (successCount === 0) return "error";
+    return "partial";
+}
+
+function buildSourceMeta(count, totalCount, errors, generatedAt) {
+    const meta = {
+        name: "GitHub",
+        status: sourceStatus(count, totalCount),
+        count,
+        updatedAt: generatedAt
+    };
+
+    if (errors.length > 0) {
+        meta.errors = errors;
+    }
+
+    return meta;
+}
+
 async function fetchJson(url, options = {}) {
     const response = await fetch(url, {
         ...options,
@@ -72,29 +93,42 @@ export function buildRepoRows(repoRecords, definitions = repoDefinitions) {
         });
 }
 
-export async function collectRepos() {
+export async function collectRepos(
+    definitions = repoDefinitions,
+    fetcher = fetchJson,
+    generatedAt = new Date().toISOString()
+) {
     const headers = {};
     if (process.env.GITHUB_TOKEN) {
         headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
     }
 
-    const repoRecords = await Promise.all(
-        repoDefinitions.map((definition) =>
-            fetchJson(`https://api.github.com/repos/${definition.fullName}`, { headers })
-        )
+    const results = await Promise.all(
+        definitions.map(async (definition) => {
+            try {
+                return {
+                    ok: true,
+                    record: await fetcher(`https://api.github.com/repos/${definition.fullName}`, { headers }, definition)
+                };
+            } catch (error) {
+                return {
+                    ok: false,
+                    error: {
+                        name: definition.fullName,
+                        error: error.message
+                    }
+                };
+            }
+        })
     );
-    const repos = buildRepoRows(repoRecords);
-    const generatedAt = new Date().toISOString();
+    const repoRecords = results.filter((result) => result.ok).map((result) => result.record);
+    const errors = results.filter((result) => !result.ok).map((result) => result.error);
+    const repos = buildRepoRows(repoRecords, definitions);
 
     return {
-        updated: isoDate(),
+        updated: isoDate(new Date(generatedAt)),
         generatedAt,
-        sourceMeta: {
-            name: "GitHub",
-            status: "ok",
-            count: repos.length,
-            updatedAt: generatedAt
-        },
+        sourceMeta: buildSourceMeta(repos.length, definitions.length, errors, generatedAt),
         repos
     };
 }

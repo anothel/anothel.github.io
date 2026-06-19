@@ -48,6 +48,27 @@ export function buildPackageDownloadUrl(name) {
     return `https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(name)}`;
 }
 
+function sourceStatus(successCount, totalCount) {
+    if (successCount === totalCount) return "ok";
+    if (successCount === 0) return "error";
+    return "partial";
+}
+
+function buildSourceMeta(count, totalCount, errors, generatedAt) {
+    const meta = {
+        name: "npm",
+        status: sourceStatus(count, totalCount),
+        count,
+        updatedAt: generatedAt
+    };
+
+    if (errors.length > 0) {
+        meta.errors = errors;
+    }
+
+    return meta;
+}
+
 export function buildPackageRows(downloadRecords, definitions = packageDefinitions) {
     const definitionByName = new Map(definitions.map((item) => [item.name, item]));
 
@@ -69,22 +90,37 @@ export function buildPackageRows(downloadRecords, definitions = packageDefinitio
         });
 }
 
-export async function collectPackages() {
-    const downloadRecords = await Promise.all(
-        packageDefinitions.map((definition) => fetchJson(buildPackageDownloadUrl(definition.name)))
+export async function collectPackages(
+    definitions = packageDefinitions,
+    fetcher = fetchJson,
+    generatedAt = new Date().toISOString()
+) {
+    const results = await Promise.all(
+        definitions.map(async (definition) => {
+            try {
+                return {
+                    ok: true,
+                    record: await fetcher(buildPackageDownloadUrl(definition.name), definition)
+                };
+            } catch (error) {
+                return {
+                    ok: false,
+                    error: {
+                        name: definition.name,
+                        error: error.message
+                    }
+                };
+            }
+        })
     );
-    const packages = buildPackageRows(downloadRecords);
-    const generatedAt = new Date().toISOString();
+    const downloadRecords = results.filter((result) => result.ok).map((result) => result.record);
+    const errors = results.filter((result) => !result.ok).map((result) => result.error);
+    const packages = buildPackageRows(downloadRecords, definitions);
 
     return {
-        updated: isoDate(),
+        updated: isoDate(new Date(generatedAt)),
         generatedAt,
-        sourceMeta: {
-            name: "npm",
-            status: "ok",
-            count: packages.length,
-            updatedAt: generatedAt
-        },
+        sourceMeta: buildSourceMeta(packages.length, definitions.length, errors, generatedAt),
         packages
     };
 }

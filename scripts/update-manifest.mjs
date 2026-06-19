@@ -14,7 +14,7 @@ export const moduleDefinitions = [
             return data.sources.join(", ");
         },
         status(data) {
-            return data.sourceMeta.every((source) => source.status === "ok") ? "ok" : "error";
+            return aggregateStatus(data.sourceMeta.map((source) => source.status));
         }
     },
     {
@@ -50,6 +50,13 @@ function sourceName(data) {
 
 function sourceStatus(data) {
     return data.sourceMeta?.status || "unknown";
+}
+
+function aggregateStatus(statuses) {
+    if (statuses.length === 0) return "unknown";
+    if (statuses.every((status) => status === "ok")) return "ok";
+    if (statuses.every((status) => status === "error")) return "error";
+    return "partial";
 }
 
 function moduleCount(data, collection) {

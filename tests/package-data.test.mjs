@@ -2,7 +2,12 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import { buildPackageDownloadUrl, buildPackageRows, packageDefinitions } from "../scripts/update-packages.mjs";
+import {
+    buildPackageDownloadUrl,
+    buildPackageRows,
+    collectPackages,
+    packageDefinitions
+} from "../scripts/update-packages.mjs";
 
 function readJson(path) {
     return JSON.parse(readFileSync(path, "utf8"));
@@ -82,4 +87,51 @@ test("checked-in packages include baseline and AI agent coverage", () => {
 
     assert.ok(data.packages.length >= 14);
     assert.equal(data.sourceMeta.count, data.packages.length);
+});
+
+test("collectPackages keeps successful packages when one package fetch fails", async () => {
+    const data = await collectPackages(
+        [
+            { name: "react", category: "UI", focus: "frontend runtime" },
+            { name: "openai", category: "AI SDK", focus: "OpenAI API SDK" }
+        ],
+        async (url) => {
+            if (url.includes("openai")) {
+                throw new Error("npm timeout");
+            }
+
+            return {
+                package: "react",
+                downloads: 9000,
+                start: "2026-06-01",
+                end: "2026-06-07"
+            };
+        },
+        "2026-06-19T00:00:00.000Z"
+    );
+
+    assert.equal(data.sourceMeta.status, "partial");
+    assert.equal(data.sourceMeta.count, 1);
+    assert.deepEqual(data.sourceMeta.errors, [
+        { name: "openai", error: "npm timeout" }
+    ]);
+    assert.deepEqual(data.packages.map((item) => item.name), ["react"]);
+});
+
+test("collectPackages reports error when every package fetch fails", async () => {
+    const data = await collectPackages(
+        [
+            { name: "react", category: "UI", focus: "frontend runtime" },
+            { name: "openai", category: "AI SDK", focus: "OpenAI API SDK" }
+        ],
+        async () => {
+            throw new Error("npm unavailable");
+        },
+        "2026-06-19T00:00:00.000Z"
+    );
+
+    assert.equal(data.sourceMeta.status, "error");
+    assert.equal(data.sourceMeta.count, 0);
+    assert.equal(data.sourceMeta.errors.length, 2);
+    assert.deepEqual(data.packages, []);
 });

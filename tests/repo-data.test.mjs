@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildRepoRows, repoDefinitions } from "../scripts/update-repos.mjs";
+import { buildRepoRows, collectRepos, repoDefinitions } from "../scripts/update-repos.mjs";
 
 test("buildRepoRows sorts repos by stars and formats rows", () => {
     const rows = buildRepoRows(
@@ -78,4 +78,54 @@ test("default repo watchlist tracks AI skills and agent projects", () => {
     assert.ok(names.has("karpathy/nanoGPT"));
     assert.ok(names.has("karpathy/nanochat"));
     assert.ok(names.has("karpathy/llm.c"));
+});
+
+test("collectRepos keeps successful repos when one repo fetch fails", async () => {
+    const data = await collectRepos(
+        [
+            { fullName: "react/react", category: "UI", focus: "frontend runtime" },
+            { fullName: "openai/codex", category: "AI agents", focus: "terminal coding agent" }
+        ],
+        async (url) => {
+            if (url.includes("openai/codex")) {
+                throw new Error("GitHub rate limit");
+            }
+
+            return {
+                full_name: "react/react",
+                html_url: "https://github.com/react/react",
+                description: "The library for web and native user interfaces.",
+                stargazers_count: 240000,
+                forks_count: 48000,
+                pushed_at: "2026-06-03T12:00:00Z",
+                topics: ["javascript", "ui"]
+            };
+        },
+        "2026-06-19T00:00:00.000Z"
+    );
+
+    assert.equal(data.sourceMeta.status, "partial");
+    assert.equal(data.sourceMeta.count, 1);
+    assert.deepEqual(data.sourceMeta.errors, [
+        { name: "openai/codex", error: "GitHub rate limit" }
+    ]);
+    assert.deepEqual(data.repos.map((item) => item.name), ["react/react"]);
+});
+
+test("collectRepos reports error when every repo fetch fails", async () => {
+    const data = await collectRepos(
+        [
+            { fullName: "react/react", category: "UI", focus: "frontend runtime" },
+            { fullName: "openai/codex", category: "AI agents", focus: "terminal coding agent" }
+        ],
+        async () => {
+            throw new Error("GitHub unavailable");
+        },
+        "2026-06-19T00:00:00.000Z"
+    );
+
+    assert.equal(data.sourceMeta.status, "error");
+    assert.equal(data.sourceMeta.count, 0);
+    assert.equal(data.sourceMeta.errors.length, 2);
+    assert.deepEqual(data.repos, []);
 });

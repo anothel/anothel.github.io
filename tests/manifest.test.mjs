@@ -50,6 +50,46 @@ test("manifest describes every dashboard module", () => {
     assert.ok(manifest.modules.every((module) => module.status === "ok"));
 });
 
+test("manifest preserves partial source status", () => {
+    const manifest = buildManifest(moduleDefinitions, {
+        trends: {
+            updated: "2026-06-14",
+            sources: ["Hacker News", "GitHub", "npm"],
+            sourceMeta: [
+                { name: "Hacker News", status: "ok", count: 2 },
+                { name: "GitHub", status: "error", count: 0 },
+                { name: "npm", status: "ok", count: 1 }
+            ],
+            items: [{}, {}, {}]
+        },
+        packages: {
+            updated: "2026-06-14",
+            sourceMeta: { name: "npm", status: "partial", count: 1 },
+            packages: [{}]
+        },
+        repos: {
+            updated: "2026-06-14",
+            sourceMeta: { name: "GitHub", status: "error", count: 0 },
+            repos: []
+        },
+        links: {
+            updated: "2026-06-14",
+            sourceMeta: { name: "manual", status: "ok", count: 1 },
+            links: [{}]
+        }
+    }, "2026-06-14T00:00:00.000Z");
+
+    assert.deepEqual(
+        manifest.modules.map((module) => [module.id, module.status]),
+        [
+            ["trends", "partial"],
+            ["packages", "partial"],
+            ["repos", "error"],
+            ["links", "ok"]
+        ]
+    );
+});
+
 test("checked-in manifest points to existing pages and data", () => {
     const manifest = readJson("data/manifest.json");
 
