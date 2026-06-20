@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-20",
-  "generatedAt": "2026-06-20T00:00:46.401Z",
+  "generatedAt": "2026-06-20T22:21:54.035Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 1,
       "emitted": 6,
       "coverage": "6/1",
-      "updatedAt": "2026-06-20T00:00:46.401Z"
+      "updatedAt": "2026-06-20T22:21:54.035Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 13,
       "emitted": 10,
       "coverage": "10/13",
-      "updatedAt": "2026-06-20T00:00:46.401Z"
+      "updatedAt": "2026-06-20T22:21:54.035Z"
     },
     {
       "name": "npm",
@@ -32,56 +32,45 @@
       "tracked": 21,
       "emitted": 8,
       "coverage": "8/21",
-      "updatedAt": "2026-06-20T00:00:46.401Z"
+      "updatedAt": "2026-06-20T22:21:54.035Z"
     }
   ],
   "items": [
     {
       "rank": 1,
-      "title": "I found 10k GitHub repositories distributing Trojan malware",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 100,
-      "velocity": "243 comments",
-      "signal": "935 points",
-      "url": "https://orchidfiles.com/github-repositories-distributing-malware/",
-      "summary": "HN story by theorchid with 243 comments."
-    },
-    {
-      "rank": 2,
       "title": "NousResearch/hermes-agent",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "197.6K stars",
-      "signal": "35K forks",
+      "velocity": "198.3K stars",
+      "signal": "35.2K forks",
       "url": "https://github.com/NousResearch/hermes-agent",
       "summary": "The agent that grows with you"
     },
     {
-      "rank": 3,
+      "rank": 2,
       "title": "shareAI-lab/learn-claude-code",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "67.5K stars",
+      "velocity": "67.6K stars",
       "signal": "11K forks",
       "url": "https://github.com/shareAI-lab/learn-claude-code",
       "summary": "Bash is all you need - A nano claude codelike agent harness, built from 0 to 1"
     },
     {
-      "rank": 4,
+      "rank": 3,
       "title": "santifer/career-ops",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "54.8K stars",
+      "velocity": "54.9K stars",
       "signal": "10.9K forks",
       "url": "https://github.com/santifer/career-ops",
       "summary": "AI-powered job search system built on Claude Code. 14 skill modes, Go dashboard, PDF generation, batch processing."
     },
     {
-      "rank": 5,
+      "rank": 4,
       "title": "CherryHQ/cherry-studio",
       "source": "GitHub",
       "category": "AI agents",
@@ -92,18 +81,18 @@
       "summary": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
-      "rank": 6,
+      "rank": 5,
       "title": "affaan-m/ECC",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "218.3K stars",
-      "signal": "33.5K forks",
+      "velocity": "218.8K stars",
+      "signal": "33.6K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
     {
-      "rank": 7,
+      "rank": 6,
       "title": "ultraworkers/claw-code",
       "source": "GitHub",
       "category": "AI agents",
@@ -114,18 +103,18 @@
       "summary": "An agent-managed museum exhibit, built in Rust with Gajae-Code / LazyCodex developed and maintained with no human intervention."
     },
     {
-      "rank": 8,
+      "rank": 7,
       "title": "anomalyco/opencode",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "176.4K stars",
+      "velocity": "176.6K stars",
       "signal": "21.5K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
     },
     {
-      "rank": 9,
+      "rank": 8,
       "title": "x1xhlol/system-prompts-and-models-of-ai-tools",
       "source": "GitHub",
       "category": "AI agents",
@@ -136,169 +125,180 @@
       "summary": "FULL Augment Code, Claude Code, Cluely, CodeBuddy, Comet, Cursor, Devin AI, Junie, Kiro, Leap.new, Lovable, Manus, NotionAI, Orchids.app, Perplexity, Poke, Qoder, Replit, Same.dev, Trae, Traycer AI, VSCode Agent, Warp.dev, Windsurf, Xcode, Z.ai Code, Dia & v0. (And other Open Sourced) System Prompts, Internal Tools & AI Models"
     },
     {
-      "rank": 10,
+      "rank": 9,
       "title": "anthropics/claude-code",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "133.4K stars",
+      "velocity": "133.5K stars",
       "signal": "21.6K forks",
       "url": "https://github.com/anthropics/claude-code",
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
     },
     {
-      "rank": 11,
+      "rank": 10,
       "title": "farion1231/cc-switch",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "104.7K stars",
-      "signal": "6.9K forks",
+      "velocity": "105.2K stars",
+      "signal": "7K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
     },
     {
-      "rank": 12,
+      "rank": 11,
       "title": "typescript",
       "source": "npm",
       "category": "JavaScript",
       "score": 100,
-      "velocity": "219.6M/week",
-      "signal": "2026-06-12 to 2026-06-18",
+      "velocity": "215.9M/week",
+      "signal": "2026-06-13 to 2026-06-19",
       "url": "https://www.npmjs.com/package/typescript",
-      "summary": "219.6M downloads over the last available week."
+      "summary": "215.9M downloads over the last available week."
     },
     {
-      "rank": 13,
+      "rank": 12,
       "title": "zod",
       "source": "npm",
       "category": "Developer tools",
       "score": 100,
-      "velocity": "202M/week",
-      "signal": "2026-06-12 to 2026-06-18",
+      "velocity": "200.4M/week",
+      "signal": "2026-06-13 to 2026-06-19",
       "url": "https://www.npmjs.com/package/zod",
-      "summary": "202M downloads over the last available week."
+      "summary": "200.4M downloads over the last available week."
     },
     {
-      "rank": 14,
+      "rank": 13,
       "title": "react",
       "source": "npm",
       "category": "JavaScript",
       "score": 98,
-      "velocity": "147.5M/week",
-      "signal": "2026-06-12 to 2026-06-18",
+      "velocity": "145.6M/week",
+      "signal": "2026-06-13 to 2026-06-19",
       "url": "https://www.npmjs.com/package/react",
-      "summary": "147.5M downloads over the last available week."
+      "summary": "145.6M downloads over the last available week."
     },
     {
-      "rank": 15,
+      "rank": 14,
       "title": "vite",
       "source": "npm",
       "category": "Developer tools",
       "score": 98,
-      "velocity": "142.3M/week",
-      "signal": "2026-06-12 to 2026-06-18",
+      "velocity": "140.2M/week",
+      "signal": "2026-06-13 to 2026-06-19",
       "url": "https://www.npmjs.com/package/vite",
-      "summary": "142.3M downloads over the last available week."
+      "summary": "140.2M downloads over the last available week."
     },
     {
-      "rank": 16,
+      "rank": 15,
       "title": "eslint",
       "source": "npm",
       "category": "Developer tools",
       "score": 98,
-      "velocity": "141.7M/week",
-      "signal": "2026-06-12 to 2026-06-18",
+      "velocity": "140M/week",
+      "signal": "2026-06-13 to 2026-06-19",
       "url": "https://www.npmjs.com/package/eslint",
-      "summary": "141.7M downloads over the last available week."
+      "summary": "140M downloads over the last available week."
     },
     {
-      "rank": 17,
+      "rank": 16,
       "title": "tailwindcss",
       "source": "npm",
       "category": "Frontend",
       "score": 97,
-      "velocity": "121.4M/week",
-      "signal": "2026-06-12 to 2026-06-18",
+      "velocity": "120.4M/week",
+      "signal": "2026-06-13 to 2026-06-19",
       "url": "https://www.npmjs.com/package/tailwindcss",
-      "summary": "121.4M downloads over the last available week."
+      "summary": "120.4M downloads over the last available week."
     },
     {
-      "rank": 18,
+      "rank": 17,
       "title": "prettier",
       "source": "npm",
       "category": "Developer tools",
       "score": 97,
-      "velocity": "117.8M/week",
-      "signal": "2026-06-12 to 2026-06-18",
+      "velocity": "116.2M/week",
+      "signal": "2026-06-13 to 2026-06-19",
       "url": "https://www.npmjs.com/package/prettier",
-      "summary": "117.8M downloads over the last available week."
+      "summary": "116.2M downloads over the last available week."
     },
     {
-      "rank": 19,
+      "rank": 18,
       "title": "express",
       "source": "npm",
       "category": "Developer tools",
-      "score": 97,
-      "velocity": "111.3M/week",
-      "signal": "2026-06-12 to 2026-06-18",
+      "score": 96,
+      "velocity": "109.4M/week",
+      "signal": "2026-06-13 to 2026-06-19",
       "url": "https://www.npmjs.com/package/express",
-      "summary": "111.3M downloads over the last available week."
+      "summary": "109.4M downloads over the last available week."
+    },
+    {
+      "rank": 19,
+      "title": "Temporary Cloudflare accounts for AI agents",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 45,
+      "velocity": "83 comments",
+      "signal": "135 points",
+      "url": "https://blog.cloudflare.com/temporary-accounts/",
+      "summary": "HN story by farhadhf with 83 comments."
     },
     {
       "rank": 20,
-      "title": "Norway imposes near ban on AI in elementary school",
+      "title": "Bootimus A Self-Contained PXE and HTTP Boot Server",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 61,
-      "velocity": "201 comments",
-      "signal": "319 points",
-      "url": "https://www.reuters.com/technology/norway-imposes-near-ban-ai-elementary-school-2026-06-19/",
-      "summary": "HN story by ilreb with 201 comments."
+      "category": "Developer tools",
+      "score": 41,
+      "velocity": "36 comments",
+      "signal": "98 points",
+      "url": "https://bootimus.com",
+      "summary": "HN story by car with 36 comments."
     },
     {
       "rank": 21,
-      "title": "Zero-Touch OAuth for MCP",
+      "title": "PostgresBench: A Reproducible Benchmark for Postgres Services",
       "source": "Hacker News",
-      "category": "MCP",
-      "score": 54,
-      "velocity": "99 comments",
-      "signal": "263 points",
-      "url": "https://blog.modelcontextprotocol.io/posts/enterprise-managed-auth/",
-      "summary": "HN story by niyikiza with 99 comments."
+      "category": "Database",
+      "score": 38,
+      "velocity": "9 comments",
+      "signal": "54 points",
+      "url": "https://clickhouse.com/blog/postgresbench",
+      "summary": "HN story by saisrirampur with 9 comments."
     },
     {
       "rank": 22,
-      "title": "Ten years of ClickHouse in open source",
+      "title": "Show HN: Make PDFs look scanned (CLI or in the browser via WASM)",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 53,
-      "velocity": "71 comments",
-      "signal": "265 points",
-      "url": "https://clickhouse.com/blog/open-source-10",
-      "summary": "HN story by saisrirampur with 71 comments."
+      "category": "Frontend",
+      "score": 38,
+      "velocity": "24 comments",
+      "signal": "57 points",
+      "url": "https://github.com/overflowy/make-look-scanned",
+      "summary": "HN story by overflowy with 24 comments."
     },
     {
       "rank": 23,
-      "title": "Hyundai buys Boston Dynamics",
+      "title": "GPT-5.5 hallucinates 3x more than MIT-licensed GLM-5.2",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 47,
-      "velocity": "280 comments",
-      "signal": "597 points",
-      "url": "https://startupfortune.com/hyundai-takes-full-control-of-boston-dynamics-as-softbank-exits-for-325-million/",
-      "summary": "HN story by ck2 with 280 comments."
+      "score": 38,
+      "velocity": "241 comments",
+      "signal": "483 points",
+      "url": "https://arrowtsx.dev/bigger-models/",
+      "summary": "HN story by oshrimpton with 241 comments."
     },
     {
       "rank": 24,
-      "title": "The AirPods Effect",
+      "title": "Linux Eliminates the Strncpy API After Six Years of Work, 360 Patches",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 46,
-      "velocity": "670 comments",
-      "signal": "373 points",
-      "url": "https://www.theescapenewsletter.com/p/the-airpods-effect",
-      "summary": "HN story by herbertl with 670 comments."
+      "score": 37,
+      "velocity": "10 comments",
+      "signal": "38 points",
+      "url": "https://www.phoronix.com/news/Linux-7.2-Drops-strncpy",
+      "summary": "HN story by simonpure with 10 comments."
     }
   ]
 }
