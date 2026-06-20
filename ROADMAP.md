@@ -4,91 +4,134 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Direction
 
-- Keep the site static and GitHub Pages-friendly.
-- Track useful technical signals from HN, GitHub, npm, and curated references.
-- Make Home a calm entry point, not a marketing page.
-- Make Today useful for first-pass reading.
-- Make Explore useful for search, topic lenses, and saved follow-up.
-- Make Status useful for trusting the data refresh pipeline.
+- Static-first: must keep working on GitHub Pages.
+- Data-first: HN, GitHub, npm, and curated references should feed useful reading paths.
+- Calm home base: Home should answer "what should I open first?" without becoming a marketing page.
+- Repeat-use bias: each round should reduce repeated filtering, searching, or checking.
+- No accounts, sync, backend, resume content, or broad blog engine for now.
 
-## Current Baseline
+## Current Surface
 
-- Home hub exists.
-- Home decision layer exists.
-- Home Polish v1 makes the first action concrete, compresses topic movement to three cards, and removes the duplicated topic strip.
-- Today priority brief exists.
-- Explore cross-source search exists.
-- Topic lenses exist for recurring themes.
-- Topic focus pages now have top movers, related signals, source mix, and cross-topic routes.
-- Topic Depth v1 adds topic-specific context, why-now framing, and topic-specific action routes.
-- Data Expansion v1 covers AI agents, MCP, and Agent skills across repos, packages, and curated links.
-- Review later workflow exists in local browser storage.
-- Status page and refresh reporting exist.
-- Data refresh has fallback safety for empty or rate-limited refreshes.
+- Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, and 3 topic pages.
+- Core topics: AI agents, MCP, Agent skills.
+- Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata.
+- Local browser state: saved review items only.
 
-## Next Big Work
+## Planning Metrics
 
-### 1. Personalization
+- `Visit speed`: how many clicks from Home to a useful signal.
+- `Repeat friction`: how much state must be re-selected on every visit.
+- `Signal quality`: whether Today/Explore show specific agent-workflow signals over broad generic tooling.
+- `Trust`: whether stale, partial, or rate-limited data is visible and understandable.
+- `Static safety`: all features must degrade cleanly when fetch or localStorage is blocked.
 
-Local preferences may be useful now that Home, Today, Explore, Review, Status, and topic pages exist.
+## Next Work
 
-- pinned topics
-- hidden sources
-- preferred sort
-- saved searches
+### 1. Personalization v1: Pinned Topics
 
-Success check: preferences make repeat visits faster without adding accounts or sync.
+Goal: make repeat visits faster without accounts or sync.
 
-### 2. Data Expansion v2
+- Store up to 3 pinned topics in `localStorage`.
+- Add pin controls to Explore topic lenses and topic pages.
+- Show pinned topics first on Home and Explore.
+- Keep default topic ranking when no pins exist.
+- Storage key: `anothel.preferences.pinnedTopics.v1`.
 
-The source list is now useful for AI agents, MCP, and Agent skills. Later expansion should happen only after checking whether the current feed feels noisy.
+Done when:
+- Pin/unpin works after reload.
+- Home uses pinned topic before automatic top movement.
+- Explore renders pinned topic lenses first.
+- Topic pages show current pinned state.
+- Tests cover broken/disabled localStorage.
 
-- Add AI evals only if they improve Today or Explore.
-- Add workflow automation only if it connects to agent work.
-- Add developer tooling only when it supports the core signal dashboard.
-- Keep broad baseline packages from dominating priority views.
+Success metric:
+- A pinned topic should be reachable from Home in 1 click.
+- No existing saved-review behavior changes.
 
-Success check: added coverage increases useful saved/review items, not raw count only.
+### 2. Personalization v2: Preferred Explore State
 
-### 3. Topic Notes
+Goal: stop re-selecting the same Explore filters.
 
-Topic pages may need short notes only after the signal pages produce useful saved/review items.
+- Persist preferred sort.
+- Persist last selected focus.
+- Add reset-to-default behavior.
+- Do not persist search query unless Saved Searches exists.
 
-- one lightweight note per topic
-- linked from topic focus pages
-- no blog engine
+Done when:
+- Reload keeps preferred sort and focus.
+- Clear filters keeps explicit saved preference rules predictable.
+- URL `?focus=` still wins over stored preference.
 
-Success check: notes explain judgment, not raw source summaries.
+Success metric:
+- Repeat Explore visit restores useful state with 0 extra clicks.
 
-## Later Work
+### 3. Saved Searches v1
 
-### Notes
+Goal: make reusable queries first-class without building a full preferences panel.
 
-Add lightweight notes only when there is a clear use case. Avoid turning the site into a blog by default.
+- Save up to 5 Explore searches.
+- Each saved search stores focus, module, category, query, and sort.
+- Render saved searches near Explore controls.
+- Add remove action.
 
-Possible scope:
-- `/notes/` as short private-to-public writeups.
-- Notes linked from topics.
-- No full CMS unless writing volume justifies it.
+Done when:
+- Saved search can be applied in 1 click.
+- Saved searches survive reload.
+- Empty and full states are clear.
 
-### Visual Polish
+Success metric:
+- Common filtered view opens in 1 click from Explore.
 
-Improve density, spacing, and scan quality after the content model settles.
+### 4. Data Expansion v2
 
-Possible scope:
-- better topic cards
-- better mobile filter controls
-- compact mode for Explore
-- clearer source/status hierarchy
+Goal: add coverage only where it improves Today or Explore.
+
+- Add at most 2 new source groups in one round.
+- Candidate groups: AI evals, workflow automation, developer tooling.
+- Each new group needs at least 5 useful checked-in items.
+- Broad baseline packages must not dominate priority views.
+
+Done when:
+- Today still has fixed section counts.
+- Explore quality ranking keeps specific agent-workflow items above generic tooling.
+- Status reports new sources clearly.
+
+Success metric:
+- Added data creates at least 5 useful candidates without reducing Today specificity.
+
+### 5. Topic Notes v1
+
+Goal: add judgment only after topics have enough saved/review context.
+
+- Add 1 short note per core topic.
+- Each note must be under 500 words.
+- Notes must link to topic page and at least 2 current signals.
+- No CMS, tags, comments, or full blog index.
+
+Done when:
+- 3 topic notes exist.
+- Topic pages link to notes.
+- Notes explain judgment, not raw summaries.
+
+Success metric:
+- Notes answer "why do I care?" better than source cards alone.
+
+## Later
+
+- Hidden sources.
+- Compact Explore mode.
+- Better mobile filter controls.
+- More topic pages only when data justifies them.
+- Lightweight `/notes/` index only after multiple notes exist.
 
 ## Not Now
 
-- Full portfolio/resume content.
-- Company history content.
-- Server-side backend.
+- Full portfolio/resume.
+- Company history.
+- Backend/server functions.
 - Accounts or sync.
 - Large design-system rewrite.
-- Blog engine before actual notes exist.
+- Blog engine.
 
 ## Working Rules
 
@@ -96,4 +139,4 @@ Possible scope:
 - Public project docs live at repo root when they guide future work.
 - Private implementation plans stay under `.superpowers/`.
 - Before each large task, update or consult this roadmap.
-- After each large task, decide whether the roadmap changed.
+- After each large task, remove completed planning detail or move the next measurable step up.
