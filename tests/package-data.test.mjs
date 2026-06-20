@@ -71,13 +71,18 @@ test("default package watchlist tracks AI and agent SDK packages", () => {
         "@modelcontextprotocol/sdk",
         "mastra",
         "fastmcp",
+        "opencode-ai",
+        "@openai/agents",
+        "@modelcontextprotocol/server-filesystem",
+        "@modelcontextprotocol/server-github",
+        "mcp-agent",
         "evalite",
         "braintrust"
     ]) {
         assert.ok(names.has(name), `${name} should be tracked`);
     }
 
-    assert.ok(packageDefinitions.length >= 21);
+    assert.ok(packageDefinitions.length >= 26);
     assert.ok(categories.has("AI SDK"));
     assert.ok(categories.has("AI agents"));
     assert.ok(categories.has("MCP"));
@@ -88,11 +93,23 @@ test("checked-in packages include baseline and AI agent coverage", () => {
     const data = readJson("data/packages.json");
     const names = new Set(data.packages.map((item) => item.name));
 
-    for (const name of ["react", "typescript", "playwright", "ai", "openai", "@modelcontextprotocol/sdk", "mastra"]) {
+    for (const name of [
+        "react",
+        "typescript",
+        "playwright",
+        "ai",
+        "openai",
+        "@modelcontextprotocol/sdk",
+        "mastra",
+        "opencode-ai",
+        "@openai/agents",
+        "@modelcontextprotocol/server-filesystem",
+        "@modelcontextprotocol/server-github"
+    ]) {
         assert.ok(names.has(name), `${name} should be present in generated packages`);
     }
 
-    assert.ok(data.packages.length >= 18);
+    assert.ok(data.packages.length >= 23);
     assert.equal(data.sourceMeta.count, data.packages.length);
 });
 

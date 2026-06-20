@@ -1,7 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 import { buildRepoRows, collectRepos, prepareRepoDataForWrite, repoDefinitions } from "../scripts/update-repos.mjs";
+
+function readJson(path) {
+    return JSON.parse(readFileSync(path, "utf8"));
+}
 
 test("buildRepoRows sorts repos by stars and formats rows", () => {
     const rows = buildRepoRows(
@@ -64,10 +69,12 @@ test("buildRepoRows sorts repos by stars and formats rows", () => {
 test("default repo watchlist tracks AI skills and agent projects", () => {
     const names = new Set(repoDefinitions.map((repo) => repo.fullName));
     const categories = new Set(repoDefinitions.map((repo) => repo.category));
+    const categoryByName = new Map(repoDefinitions.map((repo) => [repo.fullName, repo.category]));
 
-    assert.ok(repoDefinitions.length >= 16);
+    assert.ok(repoDefinitions.length >= 28);
     assert.ok(categories.has("Agent skills"));
     assert.ok(categories.has("AI agents"));
+    assert.ok(categories.has("MCP"));
     assert.ok(categories.has("AI engineering"));
     assert.ok(names.has("anthropics/skills"));
     assert.ok(names.has("mattpocock/skills"));
@@ -80,6 +87,41 @@ test("default repo watchlist tracks AI skills and agent projects", () => {
     assert.ok(names.has("karpathy/nanoGPT"));
     assert.ok(names.has("karpathy/nanochat"));
     assert.ok(names.has("karpathy/llm.c"));
+    assert.ok(names.has("anomalyco/opencode"));
+    assert.ok(names.has("aaif-goose/goose"));
+    assert.ok(names.has("Aider-AI/aider"));
+    assert.ok(names.has("google-gemini/gemini-cli"));
+    assert.ok(names.has("openai/openai-agents-js"));
+    assert.ok(names.has("openai/openai-agents-python"));
+    assert.ok(names.has("modelcontextprotocol/python-sdk"));
+    assert.ok(names.has("modelcontextprotocol/registry"));
+    assert.ok(names.has("lastmile-ai/mcp-agent"));
+    assert.ok(names.has("punkpeye/awesome-mcp-servers"));
+    assert.equal(categoryByName.get("modelcontextprotocol/servers"), "MCP");
+});
+
+test("checked-in repos include expanded AI agent and MCP coverage", () => {
+    const data = readJson("data/repos.json");
+    const names = new Set(data.repos.map((item) => item.name));
+    const categoryByName = new Map(data.repos.map((item) => [item.name, item.category]));
+
+    for (const name of [
+        "anomalyco/opencode",
+        "aaif-goose/goose",
+        "Aider-AI/aider",
+        "google-gemini/gemini-cli",
+        "openai/openai-agents-js",
+        "openai/openai-agents-python",
+        "modelcontextprotocol/python-sdk",
+        "modelcontextprotocol/registry",
+        "lastmile-ai/mcp-agent",
+        "punkpeye/awesome-mcp-servers"
+    ]) {
+        assert.ok(names.has(name), `${name} should be present in generated repos`);
+    }
+
+    assert.equal(categoryByName.get("modelcontextprotocol/servers"), "MCP");
+    assert.equal(data.sourceMeta.count, data.repos.length);
 });
 
 test("collectRepos keeps successful repos when one repo fetch fails", async () => {

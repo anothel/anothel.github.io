@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-20",
-  "generatedAt": "2026-06-20T00:00:59.455Z",
+  "generatedAt": "2026-06-20T05:35:16.308Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-20T00:00:59.455Z"
+    "updatedAt": "2026-06-20T05:35:16.308Z"
   },
   "sections": [
     {
@@ -65,10 +65,10 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "152.8K stars",
+          "metric": "152.9K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "url": "https://github.com/anthropics/skills",
-          "score": 83
+          "score": 82
         },
         {
           "title": "@modelcontextprotocol/sdk",
@@ -95,19 +95,19 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "136.8K stars",
+          "metric": "137.1K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "url": "https://github.com/mattpocock/skills",
-          "score": 81
+          "score": 80
         },
         {
-          "title": "fastmcp",
+          "title": "@modelcontextprotocol/server-filesystem",
           "module": "Packages",
           "origin": "npm",
           "category": "MCP",
-          "metric": "460.1K/week",
+          "metric": "263.2K/week",
           "reason": "MCP infrastructure worth tracking for agent workflows.",
-          "url": "https://www.npmjs.com/package/fastmcp",
+          "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-filesystem",
           "score": 60
         }
       ]
@@ -148,14 +148,14 @@
           "score": 62
         },
         {
-          "title": "Model Context Protocol servers",
+          "title": "Aider",
           "module": "Links",
           "origin": "Repo",
           "category": "AI agents",
           "metric": "Repo",
-          "reason": "MCP infrastructure worth tracking for agent workflows.",
-          "url": "https://github.com/modelcontextprotocol/servers",
-          "score": 58
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "url": "https://github.com/Aider-AI/aider",
+          "score": 60
         }
       ]
     }

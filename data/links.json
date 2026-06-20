@@ -1,14 +1,14 @@
 {
-  "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T23:57:54.720Z",
+  "updated": "2026-06-20",
+  "generatedAt": "2026-06-20T05:35:02.487Z",
   "sourceMeta": {
     "name": "manual",
     "status": "ok",
-    "count": 21,
-    "tracked": 21,
-    "emitted": 21,
-    "coverage": "21/21",
-    "updatedAt": "2026-06-19T23:57:54.720Z"
+    "count": 28,
+    "tracked": 28,
+    "emitted": 28,
+    "coverage": "28/28",
+    "updatedAt": "2026-06-20T05:35:02.487Z"
   },
   "links": [
     {
@@ -53,6 +53,14 @@
     },
     {
       "rank": 6,
+      "title": "Aider",
+      "category": "AI agents",
+      "kind": "Repo",
+      "url": "https://github.com/Aider-AI/aider",
+      "summary": "Terminal AI pair programming tool for editing code in existing repositories."
+    },
+    {
+      "rank": 7,
       "title": "contains-studio/agents",
       "category": "AI agents",
       "kind": "Repo",
@@ -60,7 +68,15 @@
       "summary": "Specialized Claude Code agent files grouped by engineering, design, product, testing, and operations."
     },
     {
-      "rank": 7,
+      "rank": 8,
+      "title": "Gemini CLI",
+      "category": "AI agents",
+      "kind": "Repo",
+      "url": "https://github.com/google-gemini/gemini-cli",
+      "summary": "Open source Gemini terminal agent for coding and developer workflows."
+    },
+    {
+      "rank": 9,
       "title": "GitHub Awesome Copilot",
       "category": "AI agents",
       "kind": "Repo",
@@ -68,15 +84,15 @@
       "summary": "Community agents, instructions, skills, hooks, workflows, and plugins for GitHub Copilot."
     },
     {
-      "rank": 8,
-      "title": "Model Context Protocol servers",
+      "rank": 10,
+      "title": "Goose",
       "category": "AI agents",
       "kind": "Repo",
-      "url": "https://github.com/modelcontextprotocol/servers",
-      "summary": "Reference MCP servers for connecting agents to tools and data sources."
+      "url": "https://github.com/aaif-goose/goose",
+      "summary": "Local, extensible AI agent for installing, executing, editing, and testing with LLMs."
     },
     {
-      "rank": 9,
+      "rank": 11,
       "title": "OpenAI Agents SDK",
       "category": "AI agents",
       "kind": "Docs",
@@ -84,7 +100,7 @@
       "summary": "JavaScript/TypeScript SDK documentation for building OpenAI agent workflows."
     },
     {
-      "rank": 10,
+      "rank": 12,
       "title": "OpenAI Codex",
       "category": "AI agents",
       "kind": "Repo",
@@ -92,7 +108,15 @@
       "summary": "Lightweight coding agent that runs in the terminal."
     },
     {
-      "rank": 11,
+      "rank": 13,
+      "title": "OpenCode",
+      "category": "AI agents",
+      "kind": "Repo",
+      "url": "https://github.com/anomalyco/opencode",
+      "summary": "Open source terminal coding agent with npm, desktop, and package-manager installs."
+    },
+    {
+      "rank": 14,
       "title": "Karpathy GitHub",
       "category": "AI engineering",
       "kind": "Profile",
@@ -100,7 +124,7 @@
       "summary": "High-signal AI engineering repos including nanoGPT, nanochat, llm.c, and llama2.c."
     },
     {
-      "rank": 12,
+      "rank": 15,
       "title": "Evalite",
       "category": "AI evals",
       "kind": "Docs",
@@ -108,7 +132,7 @@
       "summary": "Evaluation toolkit for measuring LLM and agent behavior in TypeScript workflows."
     },
     {
-      "rank": 13,
+      "rank": 16,
       "title": "GitHub REST API",
       "category": "API",
       "kind": "Docs",
@@ -116,7 +140,7 @@
       "summary": "Reference for GitHub REST endpoints used by repo data scripts."
     },
     {
-      "rank": 14,
+      "rank": 17,
       "title": "Hacker News API",
       "category": "API",
       "kind": "Docs",
@@ -124,7 +148,7 @@
       "summary": "Official public API for Hacker News stories and metadata."
     },
     {
-      "rank": 15,
+      "rank": 18,
       "title": "npm Download Counts",
       "category": "API",
       "kind": "Docs",
@@ -132,7 +156,7 @@
       "summary": "Registry download-count API used by package watchlists."
     },
     {
-      "rank": 16,
+      "rank": 19,
       "title": "SQLite Docs",
       "category": "Data",
       "kind": "Docs",
@@ -140,7 +164,7 @@
       "summary": "Reference for small durable data stores and local-first experiments."
     },
     {
-      "rank": 17,
+      "rank": 20,
       "title": "MDN Web Docs",
       "category": "Frontend",
       "kind": "Docs",
@@ -148,7 +172,7 @@
       "summary": "Reference for web platform APIs, CSS, HTML, and JavaScript."
     },
     {
-      "rank": 18,
+      "rank": 21,
       "title": "web.dev",
       "category": "Frontend",
       "kind": "Guide",
@@ -156,7 +180,31 @@
       "summary": "Practical guides for web performance, UX, and platform features."
     },
     {
-      "rank": 19,
+      "rank": 22,
+      "title": "Awesome MCP Servers",
+      "category": "MCP",
+      "kind": "Repo",
+      "url": "https://github.com/punkpeye/awesome-mcp-servers",
+      "summary": "Curated directory of MCP servers across files, databases, APIs, and developer tools."
+    },
+    {
+      "rank": 23,
+      "title": "MCP Python SDK",
+      "category": "MCP",
+      "kind": "Repo",
+      "url": "https://github.com/modelcontextprotocol/python-sdk",
+      "summary": "Official Python SDK for building Model Context Protocol clients and servers."
+    },
+    {
+      "rank": 24,
+      "title": "MCP Registry",
+      "category": "MCP",
+      "kind": "Repo",
+      "url": "https://github.com/modelcontextprotocol/registry",
+      "summary": "Community-driven registry service for discovering and managing MCP servers."
+    },
+    {
+      "rank": 25,
       "title": "MCP TypeScript SDK",
       "category": "MCP",
       "kind": "Repo",
@@ -164,7 +212,15 @@
       "summary": "Official TypeScript SDK for building Model Context Protocol clients and servers."
     },
     {
-      "rank": 20,
+      "rank": 26,
+      "title": "Model Context Protocol servers",
+      "category": "MCP",
+      "kind": "Repo",
+      "url": "https://github.com/modelcontextprotocol/servers",
+      "summary": "Reference MCP servers for connecting agents to tools and data sources."
+    },
+    {
+      "rank": 27,
       "title": "OpenTelemetry Docs",
       "category": "Ops",
       "kind": "Docs",
@@ -172,7 +228,7 @@
       "summary": "Observability concepts, instrumentation, traces, metrics, and logs."
     },
     {
-      "rank": 21,
+      "rank": 28,
       "title": "Node.js API",
       "category": "Runtime",
       "kind": "Docs",

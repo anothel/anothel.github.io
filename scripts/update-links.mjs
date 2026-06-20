@@ -104,7 +104,7 @@ export const linkDefinitions = [
     },
     {
         title: "Model Context Protocol servers",
-        category: "AI agents",
+        category: "MCP",
         kind: "Repo",
         url: "https://github.com/modelcontextprotocol/servers",
         summary: "Reference MCP servers for connecting agents to tools and data sources."
@@ -115,6 +115,34 @@ export const linkDefinitions = [
         kind: "Repo",
         url: "https://github.com/openai/codex",
         summary: "Lightweight coding agent that runs in the terminal."
+    },
+    {
+        title: "OpenCode",
+        category: "AI agents",
+        kind: "Repo",
+        url: "https://github.com/anomalyco/opencode",
+        summary: "Open source terminal coding agent with npm, desktop, and package-manager installs."
+    },
+    {
+        title: "Goose",
+        category: "AI agents",
+        kind: "Repo",
+        url: "https://github.com/aaif-goose/goose",
+        summary: "Local, extensible AI agent for installing, executing, editing, and testing with LLMs."
+    },
+    {
+        title: "Aider",
+        category: "AI agents",
+        kind: "Repo",
+        url: "https://github.com/Aider-AI/aider",
+        summary: "Terminal AI pair programming tool for editing code in existing repositories."
+    },
+    {
+        title: "Gemini CLI",
+        category: "AI agents",
+        kind: "Repo",
+        url: "https://github.com/google-gemini/gemini-cli",
+        summary: "Open source Gemini terminal agent for coding and developer workflows."
     },
     {
         title: "OpenAI Agents SDK",
@@ -136,6 +164,27 @@ export const linkDefinitions = [
         kind: "Repo",
         url: "https://github.com/modelcontextprotocol/typescript-sdk",
         summary: "Official TypeScript SDK for building Model Context Protocol clients and servers."
+    },
+    {
+        title: "MCP Python SDK",
+        category: "MCP",
+        kind: "Repo",
+        url: "https://github.com/modelcontextprotocol/python-sdk",
+        summary: "Official Python SDK for building Model Context Protocol clients and servers."
+    },
+    {
+        title: "MCP Registry",
+        category: "MCP",
+        kind: "Repo",
+        url: "https://github.com/modelcontextprotocol/registry",
+        summary: "Community-driven registry service for discovering and managing MCP servers."
+    },
+    {
+        title: "Awesome MCP Servers",
+        category: "MCP",
+        kind: "Repo",
+        url: "https://github.com/punkpeye/awesome-mcp-servers",
+        summary: "Curated directory of MCP servers across files, databases, APIs, and developer tools."
     },
     {
         title: "Evalite",

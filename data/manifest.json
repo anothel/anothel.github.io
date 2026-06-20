@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-20",
-  "generatedAt": "2026-06-20T00:00:54.845Z",
+  "generatedAt": "2026-06-20T05:35:16.178Z",
   "modules": [
     {
       "id": "trends",
@@ -19,8 +19,8 @@
       "data": "data/packages.json",
       "source": "npm",
       "status": "ok",
-      "count": 21,
-      "updated": "2026-06-19"
+      "count": 26,
+      "updated": "2026-06-20"
     },
     {
       "id": "repos",
@@ -29,8 +29,8 @@
       "data": "data/repos.json",
       "source": "GitHub",
       "status": "ok",
-      "count": 16,
-      "updated": "2026-06-19"
+      "count": 28,
+      "updated": "2026-06-20"
     },
     {
       "id": "links",
@@ -39,8 +39,8 @@
       "data": "data/links.json",
       "source": "manual",
       "status": "ok",
-      "count": 21,
-      "updated": "2026-06-19"
+      "count": 28,
+      "updated": "2026-06-20"
     }
   ]
 }

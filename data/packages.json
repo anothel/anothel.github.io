@@ -1,14 +1,14 @@
 {
-  "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T23:57:54.024Z",
+  "updated": "2026-06-20",
+  "generatedAt": "2026-06-20T05:32:15.003Z",
   "sourceMeta": {
     "name": "npm",
     "status": "ok",
-    "count": 21,
-    "tracked": 21,
-    "emitted": 21,
-    "coverage": "21/21",
-    "updatedAt": "2026-06-19T23:57:54.024Z"
+    "count": 26,
+    "tracked": 26,
+    "emitted": 26,
+    "coverage": "26/26",
+    "updatedAt": "2026-06-20T05:32:15.003Z"
   },
   "packages": [
     {
@@ -163,6 +163,16 @@
     },
     {
       "rank": 16,
+      "name": "opencode-ai",
+      "category": "AI agents",
+      "focus": "OpenCode terminal agent package",
+      "downloads": 2870159,
+      "downloadsLabel": "2.9M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/opencode-ai"
+    },
+    {
+      "rank": 17,
       "name": "langchain",
       "category": "AI agents",
       "focus": "LLM and agent orchestration",
@@ -172,7 +182,17 @@
       "url": "https://www.npmjs.com/package/langchain"
     },
     {
-      "rank": 17,
+      "rank": 18,
+      "name": "@openai/agents",
+      "category": "AI agents",
+      "focus": "OpenAI Agents SDK for JavaScript",
+      "downloads": 1154572,
+      "downloadsLabel": "1.2M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/%40openai%2Fagents"
+    },
+    {
+      "rank": 19,
       "name": "inngest",
       "category": "Workflow automation",
       "focus": "durable workflow runtime",
@@ -182,7 +202,7 @@
       "url": "https://www.npmjs.com/package/inngest"
     },
     {
-      "rank": 18,
+      "rank": 20,
       "name": "braintrust",
       "category": "AI evals",
       "focus": "AI evals and observability",
@@ -192,7 +212,7 @@
       "url": "https://www.npmjs.com/package/braintrust"
     },
     {
-      "rank": 19,
+      "rank": 21,
       "name": "fastmcp",
       "category": "MCP",
       "focus": "MCP server framework",
@@ -202,7 +222,7 @@
       "url": "https://www.npmjs.com/package/fastmcp"
     },
     {
-      "rank": 20,
+      "rank": 22,
       "name": "mastra",
       "category": "AI agents",
       "focus": "TypeScript agent framework",
@@ -212,7 +232,7 @@
       "url": "https://www.npmjs.com/package/mastra"
     },
     {
-      "rank": 21,
+      "rank": 23,
       "name": "evalite",
       "category": "AI evals",
       "focus": "LLM evaluation toolkit",
@@ -220,6 +240,36 @@
       "downloadsLabel": "276.2K/week",
       "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/evalite"
+    },
+    {
+      "rank": 24,
+      "name": "@modelcontextprotocol/server-filesystem",
+      "category": "MCP",
+      "focus": "MCP filesystem server",
+      "downloads": 263182,
+      "downloadsLabel": "263.2K/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-filesystem"
+    },
+    {
+      "rank": 25,
+      "name": "@modelcontextprotocol/server-github",
+      "category": "MCP",
+      "focus": "MCP GitHub server",
+      "downloads": 148210,
+      "downloadsLabel": "148.2K/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-github"
+    },
+    {
+      "rank": 26,
+      "name": "mcp-agent",
+      "category": "MCP",
+      "focus": "MCP agent helper package",
+      "downloads": 3,
+      "downloadsLabel": "3/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/mcp-agent"
     }
   ]
 }

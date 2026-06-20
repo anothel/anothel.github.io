@@ -19,24 +19,14 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Explore cross-source search exists.
 - Topic lenses exist for recurring themes.
 - Topic focus pages now have top movers, related signals, source mix, and cross-topic routes.
+- Data Expansion v1 covers AI agents, MCP, and Agent skills across repos, packages, and curated links.
 - Review later workflow exists in local browser storage.
 - Status page and refresh reporting exist.
 - Data refresh has fallback safety for empty or rate-limited refreshes.
 
 ## Next Big Work
 
-### 1. Data Expansion
-
-The site needs more useful signal coverage, but only if the data stays reliable.
-
-- Expand tracked repos and packages for AI agents, MCP, evals, workflow automation, and developer tooling.
-- Add more curated links for stable references.
-- Keep broad baseline packages from dominating priority views.
-- Keep refresh fallback behavior intact.
-
-Success check: Explore and Today have enough useful items without becoming noisy.
-
-### 2. Home Polish
+### 1. Home Polish
 
 Home now has a decision layer. Later polish should be based on actual use, not more structure.
 
@@ -46,7 +36,7 @@ Home now has a decision layer. Later polish should be based on actual use, not m
 
 Success check: Home stays useful without becoming another dashboard.
 
-### 3. Topic Depth
+### 2. Topic Depth
 
 Topic pages now have a useful dashboard shape. Next improvements should depend on better data, not more layout.
 
@@ -55,6 +45,17 @@ Topic pages now have a useful dashboard shape. Next improvements should depend o
 - Consider one lightweight note per topic after there is something worth writing.
 
 Success check: topic pages explain the signal without repeating Explore.
+
+### 3. Data Expansion v2
+
+The source list is now useful for AI agents, MCP, and Agent skills. Later expansion should happen only after checking whether the current feed feels noisy.
+
+- Add AI evals only if they improve Today or Explore.
+- Add workflow automation only if it connects to agent work.
+- Add developer tooling only when it supports the core signal dashboard.
+- Keep broad baseline packages from dominating priority views.
+
+Success check: added coverage increases useful saved/review items, not raw count only.
 
 ## Later Work
 

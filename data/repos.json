@@ -1,11 +1,14 @@
 {
-  "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T22:13:03.573Z",
+  "updated": "2026-06-20",
+  "generatedAt": "2026-06-20T05:33:56.583Z",
   "sourceMeta": {
     "name": "GitHub",
     "status": "ok",
-    "count": 16,
-    "updatedAt": "2026-06-19T22:13:03.573Z"
+    "count": 28,
+    "tracked": 28,
+    "emitted": 28,
+    "coverage": "28/28",
+    "updatedAt": "2026-06-20T05:33:56.583Z"
   },
   "repos": [
     {
@@ -13,7 +16,7 @@
       "name": "react/react",
       "category": "UI",
       "focus": "frontend runtime",
-      "stars": 245951,
+      "stars": 245956,
       "starsLabel": "246K",
       "forksLabel": "51.1K",
       "pushedAt": "2026-06-19",
@@ -33,7 +36,7 @@
       "name": "n8n-io/n8n",
       "category": "Automation",
       "focus": "workflow automation",
-      "stars": 193197,
+      "stars": 193248,
       "starsLabel": "193.2K",
       "forksLabel": "58.7K",
       "pushedAt": "2026-06-19",
@@ -64,11 +67,24 @@
     },
     {
       "rank": 3,
+      "name": "anomalyco/opencode",
+      "category": "AI agents",
+      "focus": "open source coding agent",
+      "stars": 176422,
+      "starsLabel": "176.4K",
+      "forksLabel": "21.5K",
+      "pushedAt": "2026-06-20",
+      "url": "https://github.com/anomalyco/opencode",
+      "summary": "The open source coding agent.",
+      "topics": []
+    },
+    {
+      "rank": 4,
       "name": "anthropics/skills",
       "category": "Agent skills",
       "focus": "official Agent Skills examples",
-      "stars": 152840,
-      "starsLabel": "152.8K",
+      "stars": 152925,
+      "starsLabel": "152.9K",
       "forksLabel": "18K",
       "pushedAt": "2026-06-09",
       "url": "https://github.com/anthropics/skills",
@@ -78,14 +94,14 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 5,
       "name": "vercel/next.js",
       "category": "Framework",
       "focus": "React framework",
-      "stars": 140088,
+      "stars": 140093,
       "starsLabel": "140.1K",
       "forksLabel": "31.2K",
-      "pushedAt": "2026-06-19",
+      "pushedAt": "2026-06-20",
       "url": "https://github.com/vercel/next.js",
       "summary": "The React Framework",
       "topics": [
@@ -106,12 +122,12 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 6,
       "name": "mattpocock/skills",
       "category": "Agent skills",
       "focus": "engineering workflow skills",
-      "stars": 136766,
-      "starsLabel": "136.8K",
+      "stars": 137109,
+      "starsLabel": "137.1K",
       "forksLabel": "11.9K",
       "pushedAt": "2026-06-18",
       "url": "https://github.com/mattpocock/skills",
@@ -119,24 +135,45 @@
       "topics": []
     },
     {
-      "rank": 6,
+      "rank": 7,
+      "name": "google-gemini/gemini-cli",
+      "category": "AI agents",
+      "focus": "Gemini terminal coding agent",
+      "stars": 105418,
+      "starsLabel": "105.4K",
+      "forksLabel": "14.1K",
+      "pushedAt": "2026-06-20",
+      "url": "https://github.com/google-gemini/gemini-cli",
+      "summary": "An open-source AI agent that brings the power of Gemini directly into your terminal.",
+      "topics": [
+        "ai",
+        "ai-agents",
+        "cli",
+        "gemini",
+        "gemini-api",
+        "mcp-client",
+        "mcp-server"
+      ]
+    },
+    {
+      "rank": 8,
       "name": "openai/codex",
       "category": "AI agents",
       "focus": "terminal coding agent",
-      "stars": 92173,
+      "stars": 92218,
       "starsLabel": "92.2K",
       "forksLabel": "13.6K",
-      "pushedAt": "2026-06-19",
+      "pushedAt": "2026-06-20",
       "url": "https://github.com/openai/codex",
       "summary": "Lightweight coding agent that runs in your terminal",
       "topics": []
     },
     {
-      "rank": 7,
+      "rank": 9,
       "name": "microsoft/playwright",
       "category": "Testing",
       "focus": "browser automation",
-      "stars": 91260,
+      "stars": 91273,
       "starsLabel": "91.3K",
       "forksLabel": "5.9K",
       "pushedAt": "2026-06-19",
@@ -161,11 +198,27 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 10,
+      "name": "punkpeye/awesome-mcp-servers",
+      "category": "MCP",
+      "focus": "curated MCP server directory",
+      "stars": 89482,
+      "starsLabel": "89.5K",
+      "forksLabel": "11.8K",
+      "pushedAt": "2026-06-19",
+      "url": "https://github.com/punkpeye/awesome-mcp-servers",
+      "summary": "A collection of MCP servers.",
+      "topics": [
+        "ai",
+        "mcp"
+      ]
+    },
+    {
+      "rank": 11,
       "name": "modelcontextprotocol/servers",
-      "category": "AI agents",
+      "category": "MCP",
       "focus": "MCP reference servers",
-      "stars": 87455,
+      "stars": 87465,
       "starsLabel": "87.5K",
       "forksLabel": "11K",
       "pushedAt": "2026-06-17",
@@ -174,12 +227,12 @@
       "topics": []
     },
     {
-      "rank": 9,
+      "rank": 12,
       "name": "vitejs/vite",
       "category": "Tooling",
       "focus": "build tool",
-      "stars": 81549,
-      "starsLabel": "81.5K",
+      "stars": 81553,
+      "starsLabel": "81.6K",
       "forksLabel": "8.3K",
       "pushedAt": "2026-06-19",
       "url": "https://github.com/vitejs/vite",
@@ -193,11 +246,11 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 13,
       "name": "karpathy/nanoGPT",
       "category": "AI engineering",
       "focus": "small GPT training",
-      "stars": 59875,
+      "stars": 59885,
       "starsLabel": "59.9K",
       "forksLabel": "10.3K",
       "pushedAt": "2025-11-12",
@@ -206,11 +259,11 @@
       "topics": []
     },
     {
-      "rank": 11,
+      "rank": 14,
       "name": "karpathy/nanochat",
       "category": "AI engineering",
       "focus": "minimal ChatGPT stack",
-      "stars": 55230,
+      "stars": 55239,
       "starsLabel": "55.2K",
       "forksLabel": "7.6K",
       "pushedAt": "2026-05-05",
@@ -219,11 +272,56 @@
       "topics": []
     },
     {
-      "rank": 12,
+      "rank": 15,
+      "name": "aaif-goose/goose",
+      "category": "AI agents",
+      "focus": "local extensible AI agent",
+      "stars": 49860,
+      "starsLabel": "49.9K",
+      "forksLabel": "5.3K",
+      "pushedAt": "2026-06-19",
+      "url": "https://github.com/aaif-goose/goose",
+      "summary": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
+      "topics": [
+        "acp",
+        "ai",
+        "ai-agents",
+        "mcp"
+      ]
+    },
+    {
+      "rank": 16,
+      "name": "Aider-AI/aider",
+      "category": "AI agents",
+      "focus": "terminal AI pair programming",
+      "stars": 46486,
+      "starsLabel": "46.5K",
+      "forksLabel": "4.6K",
+      "pushedAt": "2026-05-22",
+      "url": "https://github.com/Aider-AI/aider",
+      "summary": "aider is AI pair programming in your terminal",
+      "topics": [
+        "anthropic",
+        "chatgpt",
+        "claude-3",
+        "cli",
+        "command-line",
+        "gemini",
+        "gpt-3",
+        "gpt-35-turbo",
+        "gpt-4",
+        "gpt-4o",
+        "llama",
+        "openai",
+        "sonnet"
+      ]
+    },
+    {
+      "rank": 17,
       "name": "colinhacks/zod",
       "category": "Validation",
       "focus": "schema validation",
-      "stars": 43012,
+      "stars": 43014,
       "starsLabel": "43K",
       "forksLabel": "2K",
       "pushedAt": "2026-06-13",
@@ -238,11 +336,11 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 18,
       "name": "github/awesome-copilot",
       "category": "AI agents",
       "focus": "Copilot agents and skills",
-      "stars": 35317,
+      "stars": 35323,
       "starsLabel": "35.3K",
       "forksLabel": "4.4K",
       "pushedAt": "2026-06-19",
@@ -260,7 +358,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 19,
       "name": "karpathy/llm.c",
       "category": "AI engineering",
       "focus": "LLM training in C/CUDA",
@@ -273,7 +371,41 @@
       "topics": []
     },
     {
-      "rank": 15,
+      "rank": 20,
+      "name": "openai/openai-agents-python",
+      "category": "AI agents",
+      "focus": "Python multi-agent framework",
+      "stars": 27272,
+      "starsLabel": "27.3K",
+      "forksLabel": "4.2K",
+      "pushedAt": "2026-06-19",
+      "url": "https://github.com/openai/openai-agents-python",
+      "summary": "A lightweight, powerful framework for multi-agent workflows",
+      "topics": [
+        "agents",
+        "ai",
+        "framework",
+        "harness",
+        "llm",
+        "openai",
+        "python"
+      ]
+    },
+    {
+      "rank": 21,
+      "name": "modelcontextprotocol/python-sdk",
+      "category": "MCP",
+      "focus": "MCP Python SDK",
+      "stars": 23377,
+      "starsLabel": "23.4K",
+      "forksLabel": "3.6K",
+      "pushedAt": "2026-06-19",
+      "url": "https://github.com/modelcontextprotocol/python-sdk",
+      "summary": "The official Python SDK for Model Context Protocol servers and clients",
+      "topics": []
+    },
+    {
+      "rank": 22,
       "name": "karpathy/llama2.c",
       "category": "AI engineering",
       "focus": "single-file Llama inference",
@@ -286,7 +418,20 @@
       "topics": []
     },
     {
-      "rank": 16,
+      "rank": 23,
+      "name": "modelcontextprotocol/typescript-sdk",
+      "category": "MCP",
+      "focus": "MCP TypeScript SDK",
+      "stars": 12701,
+      "starsLabel": "12.7K",
+      "forksLabel": "1.9K",
+      "pushedAt": "2026-06-20",
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk",
+      "summary": "The official TypeScript SDK for Model Context Protocol servers and clients",
+      "topics": []
+    },
+    {
+      "rank": 24,
       "name": "contains-studio/agents",
       "category": "AI agents",
       "focus": "Claude Code agent packs",
@@ -297,6 +442,76 @@
       "url": "https://github.com/contains-studio/agents",
       "summary": "sharing current agents in use",
       "topics": []
+    },
+    {
+      "rank": 25,
+      "name": "modelcontextprotocol/inspector",
+      "category": "MCP",
+      "focus": "MCP debugging and inspection",
+      "stars": 10135,
+      "starsLabel": "10.1K",
+      "forksLabel": "1.4K",
+      "pushedAt": "2026-06-19",
+      "url": "https://github.com/modelcontextprotocol/inspector",
+      "summary": "Visual testing tool for MCP servers",
+      "topics": []
+    },
+    {
+      "rank": 26,
+      "name": "lastmile-ai/mcp-agent",
+      "category": "MCP",
+      "focus": "MCP agent workflow framework",
+      "stars": 8376,
+      "starsLabel": "8.4K",
+      "forksLabel": "853",
+      "pushedAt": "2026-01-25",
+      "url": "https://github.com/lastmile-ai/mcp-agent",
+      "summary": "Build effective agents using Model Context Protocol and simple workflow patterns",
+      "topics": [
+        "agents",
+        "ai",
+        "ai-agents",
+        "llm",
+        "llms",
+        "mcp",
+        "model-context-protocol",
+        "python"
+      ]
+    },
+    {
+      "rank": 27,
+      "name": "modelcontextprotocol/registry",
+      "category": "MCP",
+      "focus": "MCP server registry",
+      "stars": 6942,
+      "starsLabel": "6.9K",
+      "forksLabel": "874",
+      "pushedAt": "2026-06-19",
+      "url": "https://github.com/modelcontextprotocol/registry",
+      "summary": "A community driven registry service for Model Context Protocol (MCP) servers.",
+      "topics": [
+        "mcp",
+        "mcp-servers"
+      ]
+    },
+    {
+      "rank": 28,
+      "name": "openai/openai-agents-js",
+      "category": "AI agents",
+      "focus": "TypeScript multi-agent framework",
+      "stars": 3250,
+      "starsLabel": "3.3K",
+      "forksLabel": "823",
+      "pushedAt": "2026-06-19",
+      "url": "https://github.com/openai/openai-agents-js",
+      "summary": "A lightweight, powerful framework for multi-agent workflows and voice agents",
+      "topics": [
+        "agents",
+        "openai",
+        "openai-api",
+        "realtime-api",
+        "typescript"
+      ]
     }
   ]
 }

@@ -44,16 +44,26 @@ test("buildLinkRows sorts links by category and title", () => {
 test("default links include AI skills and agent references", () => {
     const titles = new Set(linkDefinitions.map((link) => link.title));
     const categories = new Set(linkDefinitions.map((link) => link.category));
+    const categoryByTitle = new Map(linkDefinitions.map((link) => [link.title, link.category]));
 
-    assert.ok(linkDefinitions.length >= 18);
+    assert.ok(linkDefinitions.length >= 25);
     assert.ok(categories.has("Agent skills"));
     assert.ok(categories.has("AI agents"));
+    assert.ok(categories.has("MCP"));
     assert.ok(titles.has("Anthropic Agent Skills"));
     assert.ok(titles.has("mattpocock/skills"));
     assert.ok(titles.has("GitHub Awesome Copilot"));
     assert.ok(titles.has("Model Context Protocol servers"));
     assert.ok(titles.has("OpenAI Agents SDK"));
     assert.ok(titles.has("MCP TypeScript SDK"));
+    assert.ok(titles.has("OpenCode"));
+    assert.ok(titles.has("Goose"));
+    assert.ok(titles.has("Aider"));
+    assert.ok(titles.has("Gemini CLI"));
+    assert.ok(titles.has("MCP Python SDK"));
+    assert.ok(titles.has("MCP Registry"));
+    assert.ok(titles.has("Awesome MCP Servers"));
     assert.ok(titles.has("Evalite"));
     assert.ok(titles.has("Karpathy GitHub"));
+    assert.equal(categoryByTitle.get("Model Context Protocol servers"), "MCP");
 });
