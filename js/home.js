@@ -5,6 +5,18 @@ const manifestUrl = typeof document === "undefined"
 const todayUrl = typeof document === "undefined"
     ? "data/today.json"
     : document.currentScript?.dataset.today || "data/today.json";
+const trendsUrl = typeof document === "undefined"
+    ? "data/trends.json"
+    : document.currentScript?.dataset.trends || "data/trends.json";
+const packagesUrl = typeof document === "undefined"
+    ? "data/packages.json"
+    : document.currentScript?.dataset.packages || "data/packages.json";
+const reposUrl = typeof document === "undefined"
+    ? "data/repos.json"
+    : document.currentScript?.dataset.repos || "data/repos.json";
+const linksUrl = typeof document === "undefined"
+    ? "data/links.json"
+    : document.currentScript?.dataset.links || "data/links.json";
 const savedStorageKey = "anothel.explore.saved.v1";
 
 function escapeHtml(value) {
@@ -45,6 +57,51 @@ const routePurpose = {
     links: "Reference shelf"
 };
 
+const topicDefinitions = [
+    {
+        topic: "AI agents",
+        route: "topics/ai-agents/index.html",
+        exploreRoute: "explore/index.html?focus=AI%20agents",
+        match: /\b(ai agents?|agentic|coding agent|codex|claude code|copilot|workflow automation|agent framework)\b/
+    },
+    {
+        topic: "Agent skills",
+        route: "topics/agent-skills/index.html",
+        exploreRoute: "explore/index.html?focus=Agent%20skills",
+        match: /\b(agent skills?|skills?|instructions?)\b/
+    },
+    {
+        topic: "MCP",
+        route: "topics/mcp/index.html",
+        exploreRoute: "explore/index.html?focus=MCP",
+        match: /\bmcp\b|\bmodelcontextprotocol\b|\bmodel context protocol\b/
+    },
+    {
+        topic: "AI evals",
+        route: "explore/index.html?focus=AI%20evals",
+        exploreRoute: "explore/index.html?focus=AI%20evals",
+        match: /\b(eval|evals|evaluation|observability|braintrust|evalite)\b/
+    },
+    {
+        topic: "AI engineering",
+        route: "explore/index.html?focus=AI%20engineering",
+        exploreRoute: "explore/index.html?focus=AI%20engineering",
+        match: /\b(ai engineering|gpt|llm|llama|training|inference|cuda|model)\b/
+    },
+    {
+        topic: "Workflow automation",
+        route: "explore/index.html?focus=Workflow%20automation",
+        exploreRoute: "explore/index.html?focus=Workflow%20automation",
+        match: /\b(workflow automation|automation|durable workflow|n8n|inngest|integration)\b/
+    },
+    {
+        topic: "Developer tooling",
+        route: "explore/index.html?focus=Developer%20tooling",
+        exploreRoute: "explore/index.html?focus=Developer%20tooling",
+        match: /\b(developer tools?|tooling|build tool|lint|format|testing|browser automation|vite|eslint|prettier|playwright)\b/
+    }
+];
+
 function statusCounts(modules) {
     return modules.reduce(
         (counts, module) => {
@@ -69,6 +126,78 @@ function healthLabel(counts) {
 function safeCount(value) {
     const count = Number(value);
     return Number.isFinite(count) && count > 0 ? Math.floor(count) : 0;
+}
+
+function textBlob(item) {
+    return [
+        item.title,
+        item.name,
+        item.category,
+        item.focus,
+        item.summary,
+        item.source,
+        item.kind,
+        item.url
+    ].filter(Boolean).join(" ").toLowerCase();
+}
+
+function logScore(value, maxLog) {
+    const number = Math.max(0, Number(value || 0));
+    return Math.min(100, Math.round((Math.log10(number + 1) / maxLog) * 100));
+}
+
+function normalizeHomeSignals(dataByModule) {
+    const trends = (dataByModule.trends?.items || []).map((item) => ({
+        module: "Trends",
+        title: item.title,
+        category: item.category,
+        origin: item.source || "Tracked source",
+        metric: item.velocity || item.signal || `${item.score || 0} score`,
+        summary: item.summary || item.signal || "",
+        url: item.url,
+        updated: dataByModule.trends?.updated || "-",
+        score: Number(item.score || 0)
+    }));
+    const packages = (dataByModule.packages?.packages || []).map((item) => ({
+        module: "Packages",
+        title: item.name,
+        category: item.category,
+        origin: "npm",
+        metric: item.downloadsLabel || `${item.downloads || 0} downloads`,
+        summary: item.focus || item.period || "",
+        url: item.url,
+        updated: dataByModule.packages?.updated || "-",
+        score: logScore(item.downloads, 9)
+    }));
+    const repos = (dataByModule.repos?.repos || []).map((item) => ({
+        module: "Repos",
+        title: item.name,
+        category: item.category,
+        origin: "GitHub",
+        metric: item.starsLabel ? `${item.starsLabel} stars` : `${item.stars || 0} stars`,
+        summary: item.summary || item.focus || "",
+        url: item.url,
+        updated: dataByModule.repos?.updated || "-",
+        score: logScore(item.stars, 6)
+    }));
+    const links = (dataByModule.links?.links || []).map((item) => ({
+        module: "Links",
+        title: item.title,
+        category: item.category,
+        origin: item.kind || "Reference",
+        metric: item.kind || "Reference",
+        summary: item.summary || "",
+        url: item.url,
+        updated: dataByModule.links?.updated || "-",
+        score: Math.max(35, 80 - Number(item.rank || 0) * 2)
+    }));
+
+    return [...trends, ...packages, ...repos, ...links];
+}
+
+function topicMatches(item, definition) {
+    const category = String(item.category || "").toLowerCase();
+    return category === definition.topic.toLowerCase() || definition.match.test(textBlob(item));
 }
 
 export function buildSavedSummary(rawValue) {
@@ -109,6 +238,32 @@ export function buildHomeOverview(manifest) {
 
 export function getTodaySection(today, id) {
     return (today.sections || []).find((section) => section.id === id)?.items || [];
+}
+
+export function buildTopicMovements(dataByModule, limit = 4) {
+    const items = normalizeHomeSignals(dataByModule);
+    return topicDefinitions
+        .map((definition, index) => {
+            const matches = items
+                .filter((item) => topicMatches(item, definition))
+                .sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+            const modules = new Set(matches.map((item) => item.module));
+
+            return {
+                topic: definition.topic,
+                route: definition.route,
+                exploreRoute: definition.exploreRoute,
+                count: matches.length,
+                modules: modules.size,
+                updated: matches.map((item) => item.updated).filter(Boolean).sort().at(-1) || "-",
+                topItem: matches[0] || null,
+                order: index
+            };
+        })
+        .filter((movement) => movement.count > 0)
+        .sort((a, b) => Number(b.count) - Number(a.count) || Number(b.modules) - Number(a.modules) || a.order - b.order)
+        .slice(0, limit)
+        .map(({ order, ...movement }) => movement);
 }
 
 export function buildModuleRoutes(manifest) {
@@ -217,6 +372,60 @@ export function renderSavedSummary(summary) {
     `;
 }
 
+export function renderDecisionActions({ startCount = 0, saved = 0, unread = 0, topTopic = null } = {}) {
+    const topicLabel = topTopic?.topic || "Topic movement";
+    const topicHref = topTopic?.route || "explore/index.html";
+    const topicMeta = topTopic
+        ? `${topTopic.count} signals / ${topTopic.modules} modules`
+        : "Browse recurring themes";
+
+    return `
+        <a class="decision-card decision-primary" href="today/index.html">
+            <span>Open first</span>
+            <strong>Start with the generated priority brief</strong>
+            <small>${escapeHtml(startCount)} priority picks from tracked signals</small>
+        </a>
+        <a class="decision-card" href="${safeHref(topicHref)}">
+            <span>Browse topic movement</span>
+            <strong>${escapeHtml(topicLabel)}</strong>
+            <small>${escapeHtml(topicMeta)}</small>
+        </a>
+        <a class="decision-card" href="review/index.html">
+            <span>Review saved</span>
+            <strong>${escapeHtml(saved)} saved items</strong>
+            <small>${escapeHtml(unread)} unread follow-ups in this browser</small>
+        </a>
+    `;
+}
+
+export function renderTopicMovements(movements) {
+    if (!movements.length) {
+        return `
+            <article class="topic-movement-card empty-card">
+                <span>Topic movement</span>
+                <h3>No focused movement yet</h3>
+                <p>Open Explore to browse all tracked signals.</p>
+                <a href="explore/index.html">Open Explore</a>
+            </article>
+        `;
+    }
+
+    return movements.map((movement) => `
+        <article class="topic-movement-card">
+            <div>
+                <span>${escapeHtml(movement.count)} signals / ${escapeHtml(movement.modules)} modules</span>
+                <strong>${escapeHtml(movement.topic)}</strong>
+            </div>
+            <h3>${escapeHtml(movement.topItem?.title || "Open topic")}</h3>
+            <p>${escapeHtml([movement.topItem?.module, movement.topItem?.metric, movement.updated].filter(Boolean).join(" / "))}</p>
+            <div class="topic-movement-actions">
+                <a href="${safeHref(movement.route)}">Open topic</a>
+                <a href="${safeHref(movement.exploreRoute)}">Explore lens</a>
+            </div>
+        </article>
+    `).join("");
+}
+
 function applyOverview(root, manifest) {
     const overview = buildHomeOverview(manifest);
     const total = root.querySelector("[data-home-total]");
@@ -255,8 +464,12 @@ function applyToday(root, today) {
     }
 }
 
-function applySavedSummary(root, storage) {
-    const summarySlot = root.querySelector("[data-home-review-summary]");
+function applyTopicMovements(root, movements) {
+    const slot = root.querySelector("[data-home-topic-movements]");
+    if (slot) slot.innerHTML = renderTopicMovements(movements);
+}
+
+function readSavedSummary(storage) {
     let rawValue = "[]";
 
     try {
@@ -265,7 +478,11 @@ function applySavedSummary(root, storage) {
         rawValue = "[]";
     }
 
-    const summary = buildSavedSummary(rawValue);
+    return buildSavedSummary(rawValue);
+}
+
+function applySavedSummary(root, summary) {
+    const summarySlot = root.querySelector("[data-home-review-summary]");
     if (summarySlot) {
         summarySlot.innerHTML = renderSavedSummary(summary);
         return;
@@ -277,6 +494,18 @@ function applySavedSummary(root, storage) {
     if (unread) unread.textContent = String(summary.unread);
 }
 
+function applyDecisionActions(root, today, savedSummary, movements) {
+    const slot = root.querySelector("[data-home-decision-actions]");
+    if (!slot) return;
+
+    slot.innerHTML = renderDecisionActions({
+        startCount: getTodaySection(today || {}, "start").length,
+        saved: savedSummary.saved,
+        unread: savedSummary.unread,
+        topTopic: movements[0] || null
+    });
+}
+
 async function readJson(path) {
     const response = await fetch(path);
     if (!response.ok) return null;
@@ -285,10 +514,16 @@ async function readJson(path) {
 
 async function init() {
     try {
-        const [manifest, today] = await Promise.all([
+        const [manifest, today, trends, packages, repos, links] = await Promise.all([
             readJson(manifestUrl).catch(() => null),
-            readJson(todayUrl).catch(() => null)
+            readJson(todayUrl).catch(() => null),
+            readJson(trendsUrl).catch(() => null),
+            readJson(packagesUrl).catch(() => null),
+            readJson(reposUrl).catch(() => null),
+            readJson(linksUrl).catch(() => null)
         ]);
+        const savedSummary = readSavedSummary(globalThis.localStorage);
+        const topicMovements = buildTopicMovements({ trends, packages, repos, links }, 4);
 
         if (manifest) {
             applyOverview(document, manifest);
@@ -297,10 +532,14 @@ async function init() {
         if (today) {
             applyToday(document, today);
         }
-        applySavedSummary(document, globalThis.localStorage);
+        applyTopicMovements(document, topicMovements);
+        applyDecisionActions(document, today, savedSummary, topicMovements);
+        applySavedSummary(document, savedSummary);
     } catch {
         // Static fallback remains useful when local file fetch is blocked.
-        applySavedSummary(document, globalThis.localStorage);
+        const savedSummary = readSavedSummary(globalThis.localStorage);
+        applySavedSummary(document, savedSummary);
+        applyDecisionActions(document, null, savedSummary, []);
     }
 }
 

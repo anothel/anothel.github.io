@@ -8,6 +8,9 @@ import {
     getTodaySection,
     renderSavedSummary,
     renderModuleRoutes,
+    buildTopicMovements,
+    renderTopicMovements,
+    renderDecisionActions,
     renderSkimList,
     renderStartItems
 } from "../js/home.js";
@@ -135,6 +138,93 @@ test("renderSavedSummary escapes text through numeric coercion", () => {
     assert.doesNotMatch(html, /script/);
 });
 
+test("buildTopicMovements ranks recurring topic movement across checked-in data", () => {
+    const movements = buildTopicMovements({
+        trends: {
+            updated: "2026-06-20",
+            items: [
+                { title: "OpenAI Codex", source: "GitHub", category: "AI agents", score: 96, velocity: "92K stars", url: "https://example.com/codex", summary: "coding agent" },
+                { title: "Zero-Touch OAuth for MCP", source: "HN", category: "MCP", score: 80, velocity: "263 points", url: "https://example.com/mcp", summary: "MCP auth" }
+            ]
+        },
+        packages: {
+            updated: "2026-06-19",
+            packages: [
+                { name: "mastra", category: "AI agents", focus: "TypeScript agent framework", downloads: 440000, downloadsLabel: "440K/week", url: "https://example.com/mastra" },
+                { name: "evalite", category: "AI evals", focus: "LLM evaluation toolkit", downloads: 270000, downloadsLabel: "270K/week", url: "https://example.com/evalite" }
+            ]
+        },
+        repos: {
+            updated: "2026-06-19",
+            repos: [
+                { name: "mattpocock/skills", category: "Agent skills", focus: "engineering workflow skills", stars: 136000, starsLabel: "136K", url: "https://example.com/skills", summary: "skills" }
+            ]
+        },
+        links: {
+            updated: "2026-06-19",
+            links: [
+                { title: "Agents SDK", category: "AI agents", kind: "Docs", rank: 1, url: "https://example.com/agents", summary: "agent docs" }
+            ]
+        }
+    }, 3);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(movements.map((item) => [item.topic, item.count, item.modules, item.route]))), [
+        ["AI agents", 3, 3, "topics/ai-agents/index.html"],
+        ["Agent skills", 1, 1, "topics/agent-skills/index.html"],
+        ["MCP", 1, 1, "topics/mcp/index.html"]
+    ]);
+    assert.equal(movements[0].topItem.title, "OpenAI Codex");
+    assert.equal(movements[0].updated, "2026-06-20");
+});
+
+test("home decision renderers emit safe action and topic markup", () => {
+    const movements = [
+        {
+            topic: "AI agents",
+            count: 3,
+            modules: 2,
+            route: "topics/ai-agents/index.html",
+            exploreRoute: "explore/index.html?focus=AI%20agents",
+            updated: "2026-06-20",
+            topItem: {
+                title: "OpenAI \"Codex\"",
+                module: "Repos",
+                metric: "92K stars",
+                url: "https://example.com/codex"
+            }
+        },
+        {
+            topic: "<script>",
+            count: 1,
+            modules: 1,
+            route: "javascript:alert(1)",
+            exploreRoute: "javascript:alert(1)",
+            updated: "2026-06-19",
+            topItem: {
+                title: "<bad>",
+                module: "Links",
+                metric: "Docs",
+                url: "javascript:alert(1)"
+            }
+        }
+    ];
+    const actions = renderDecisionActions({ startCount: 3, saved: 4, unread: 2, topTopic: movements[0] });
+    const topics = renderTopicMovements(movements);
+
+    assert.match(actions, /Open first/);
+    assert.match(actions, /3 priority picks/);
+    assert.match(actions, /Browse topic movement/);
+    assert.match(actions, /AI agents/);
+    assert.match(actions, /Review saved/);
+    assert.match(actions, /2 unread/);
+    assert.match(topics, /href="topics\/ai-agents\/index\.html"/);
+    assert.match(topics, /OpenAI &quot;Codex&quot;/);
+    assert.match(topics, /3 signals \/ 2 modules/);
+    assert.match(topics, /href="#"/);
+    assert.doesNotMatch(`${actions}${topics}`, /javascript:alert/);
+    assert.doesNotMatch(`${actions}${topics}`, /<script>/);
+});
+
 test("home renderers emit command center markup", () => {
     const items = [
         {
@@ -225,15 +315,22 @@ test("home renderers escape text and block unsafe hrefs", () => {
 test("checked-in data powers the home command center", () => {
     const manifest = readJson("data/manifest.json");
     const today = readJson("data/today.json");
+    const trends = readJson("data/trends.json");
+    const packages = readJson("data/packages.json");
+    const repos = readJson("data/repos.json");
+    const links = readJson("data/links.json");
     const overview = buildHomeOverview(manifest);
     const startItems = getTodaySection(today, "start");
     const skimItems = getTodaySection(today, "skim");
     const routes = buildModuleRoutes(manifest);
+    const movements = buildTopicMovements({ trends, packages, repos, links }, 4);
 
     assert.ok(overview.totalItems >= 60);
     assert.equal(overview.liveModules, 4);
     assert.equal(startItems.length, 3);
     assert.equal(skimItems.length, 6);
     assert.equal(routes.length, 6);
+    assert.ok(movements.length >= 3);
+    assert.equal(movements[0].topic, "AI agents");
     assert.deepEqual(routes.map((route) => route.id), ["explore", "status", "trends", "packages", "repos", "links"]);
 });

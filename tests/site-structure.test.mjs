@@ -297,6 +297,8 @@ test("root page exposes command center slots", () => {
         "data-home-freshness",
         "data-home-review-saved",
         "data-home-review-unread",
+        "data-home-decision-actions",
+        "data-home-topic-movements",
         "data-home-start",
         "data-home-skim",
         "data-home-routes"
@@ -305,6 +307,8 @@ test("root page exposes command center slots", () => {
     }
 
     assert.match(root, /What is worth opening now\?/);
+    assert.match(root, /Decision layer/);
+    assert.match(root, /Topic movement/);
     assert.match(root, /Start here/);
     assert.match(root, /Worth skimming/);
     assert.match(root, /Data status/);
@@ -317,12 +321,18 @@ test("root page exposes command center slots", () => {
     assert.match(root, /Unread saved/);
     assert.match(root, /href="status\/index\.html"/);
     assert.match(root, /class="explore-callout"/);
+    assert.match(root, /class="decision-layer"/);
+    assert.match(root, /class="topic-movement-grid"/);
     assert.match(root, /class="command-center"/);
     assert.match(root, /class="start-list"/);
     assert.match(root, /class="skim-list"/);
     assert.match(root, /class="module-strip"/);
     assert.doesNotMatch(root, /class="today-grid"/);
     assert.doesNotMatch(root, /data-home-signals/);
+    assert.match(root, /data-trends="data\/trends\.json"/);
+    assert.match(root, /data-packages="data\/packages\.json"/);
+    assert.match(root, /data-repos="data\/repos\.json"/);
+    assert.match(root, /data-links="data\/links\.json"/);
 });
 
 test("module pages expose data health strips", () => {
