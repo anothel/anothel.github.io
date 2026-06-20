@@ -18,24 +18,14 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Today priority brief exists.
 - Explore cross-source search exists.
 - Topic lenses exist for recurring themes.
+- Topic focus pages now have top movers, related signals, source mix, and cross-topic routes.
 - Review later workflow exists in local browser storage.
 - Status page and refresh reporting exist.
 - Data refresh has fallback safety for empty or rate-limited refreshes.
 
 ## Next Big Work
 
-### 1. Topic Pages v2
-
-Topic pages should become focused dashboards, not just filtered lists.
-
-- Add top movers per topic.
-- Add related packages, repos, links, and Today picks.
-- Add "why this topic matters now" from current signals.
-- Add cross-links between related topics.
-
-Success check: `/topics/ai-agents/`, `/topics/mcp/`, and `/topics/agent-skills/` each feel worth opening directly.
-
-### 2. Data Expansion
+### 1. Data Expansion
 
 The site needs more useful signal coverage, but only if the data stays reliable.
 
@@ -46,7 +36,7 @@ The site needs more useful signal coverage, but only if the data stays reliable.
 
 Success check: Explore and Today have enough useful items without becoming noisy.
 
-### 3. Home Polish
+### 2. Home Polish
 
 Home now has a decision layer. Later polish should be based on actual use, not more structure.
 
@@ -55,6 +45,16 @@ Home now has a decision layer. Later polish should be based on actual use, not m
 - Improve mobile scan order after checking real viewport behavior.
 
 Success check: Home stays useful without becoming another dashboard.
+
+### 3. Topic Depth
+
+Topic pages now have a useful dashboard shape. Next improvements should depend on better data, not more layout.
+
+- Tune topic-specific copy after Data Expansion.
+- Add topic-specific saved/review prompts only if they help the review flow.
+- Consider one lightweight note per topic after there is something worth writing.
+
+Success check: topic pages explain the signal without repeating Explore.
 
 ## Later Work
 

@@ -309,10 +309,6 @@ main {
     background: var(--panel-strong);
 }
 
-.decision-primary {
-    background: var(--panel-strong);
-}
-
 .decision-card span,
 .topic-movement-card span {
     color: var(--accent);
@@ -649,6 +645,132 @@ main {
 
 .topic-card {
     min-height: 250px;
+}
+
+.topic-dashboard-panel {
+    display: grid;
+    gap: 12px;
+}
+
+.topic-dashboard-grid,
+.topic-related-grid,
+.topic-cross-link-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.topic-dashboard-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.topic-related-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.topic-cross-link-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.topic-why-card,
+.topic-mover-card,
+.topic-related-card,
+.topic-cross-link {
+    display: grid;
+    gap: 10px;
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.topic-why-card {
+    min-height: 118px;
+}
+
+.topic-mover-card {
+    min-height: 230px;
+}
+
+.topic-related-card {
+    align-content: start;
+    min-height: 190px;
+}
+
+.topic-cross-link {
+    min-height: 118px;
+    text-decoration: none;
+}
+
+.topic-mover-card:hover,
+.topic-cross-link:hover,
+.topic-related-list a:hover {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+}
+
+.topic-why-card span,
+.topic-related-card > span,
+.topic-cross-link strong {
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.topic-why-card p,
+.topic-mover-card p,
+.topic-cross-link span {
+    margin: 0;
+    color: var(--muted);
+}
+
+.topic-mover-card h3 {
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.25;
+}
+
+.topic-mover-card a,
+.topic-related-list a {
+    align-self: end;
+    color: var(--accent);
+    font-weight: 900;
+}
+
+.topic-mover-card a {
+    text-decoration: none;
+}
+
+.topic-related-list {
+    display: grid;
+    gap: 8px;
+}
+
+.topic-related-list a {
+    display: grid;
+    gap: 3px;
+    min-height: 58px;
+    padding: 8px 0;
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+}
+
+.topic-related-list small {
+    color: var(--muted);
+    font-size: 0.78rem;
+}
+
+.topic-why-card p,
+.topic-mover-card h3,
+.topic-mover-card p,
+.topic-related-list strong,
+.topic-related-list small,
+.topic-cross-link strong,
+.topic-cross-link span {
+    overflow-wrap: anywhere;
 }
 
 .topic-lens-panel {
@@ -1525,6 +1647,9 @@ button {
     .today-grid,
     .topic-lens-grid,
     .source-mix-grid,
+    .topic-dashboard-grid,
+    .topic-related-grid,
+    .topic-cross-link-grid,
     .topic-grid,
     .module-strip {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1548,6 +1673,9 @@ button {
     .source-health-grid,
     .topic-lens-grid,
     .source-mix-grid,
+    .topic-dashboard-grid,
+    .topic-related-grid,
+    .topic-cross-link-grid,
     .link-grid,
     .dashboard-grid,
     .explore-results,

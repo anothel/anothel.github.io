@@ -59,6 +59,41 @@
                 </article>
             </section>
 
+            <section class="topic-dashboard-panel" aria-label="Agent skills now">
+                <div class="section-heading">
+                    <div>
+                        <h2>Why this topic matters now</h2>
+                        <p>Current signals condensed into one direct read.</p>
+                    </div>
+                </div>
+                <div data-topic-why>
+                    <article class="topic-why-card">
+                        <span>Why now</span>
+                        <p>Agent skills signals are appearing across tracked sources.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="topic-dashboard-panel" aria-label="Agent skills top movers">
+                <div class="section-heading">
+                    <div>
+                        <h2>Top movers</h2>
+                        <p>The highest-fit signals for this topic.</p>
+                    </div>
+                </div>
+                <div class="topic-dashboard-grid" data-topic-top-movers>
+                    <article class="topic-mover-card">
+                        <div class="card-topline">
+                            <span>Topic</span>
+                            <span>#1</span>
+                        </div>
+                        <h3>Open focused Explore</h3>
+                        <p>Live data fills this card when checked-in JSON is available.</p>
+                        <a href="../../explore/index.html?focus=Agent%20skills">Open signal</a>
+                    </article>
+                </div>
+            </section>
+
             <section class="source-mix-panel" aria-label="Agent skills source mix">
                 <div class="section-heading">
                     <div>
@@ -72,6 +107,45 @@
                         <strong>Checked-in data</strong>
                     </article>
                 </div>
+            </section>
+
+            <section class="topic-dashboard-panel" aria-label="Agent skills related signals">
+                <div class="section-heading">
+                    <div>
+                        <h2>Related signals</h2>
+                        <p>Today picks, packages, repos, and references connected to this topic.</p>
+                    </div>
+                </div>
+                <div class="topic-related-grid" data-topic-related>
+                    <article class="topic-related-card">
+                        <span>Related</span>
+                        <div class="topic-related-list">
+                            <a href="../../explore/index.html?focus=Agent%20skills">
+                                <strong>Open focused Explore</strong>
+                                <small>Agent skills</small>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="topic-dashboard-panel" aria-label="Related topics">
+                <div class="section-heading">
+                    <div>
+                        <h2>Related topics</h2>
+                        <p>Move sideways when the signal overlaps another lens.</p>
+                    </div>
+                </div>
+                <nav class="topic-cross-link-grid" aria-label="Related topic routes" data-topic-cross-links>
+                    <a class="topic-cross-link" href="../../topics/ai-agents/index.html">
+                        <strong>AI agents</strong>
+                        <span>Coding and workflow agent signals.</span>
+                    </a>
+                    <a class="topic-cross-link" href="../../topics/mcp/index.html">
+                        <strong>MCP</strong>
+                        <span>Protocol and SDK signals.</span>
+                    </a>
+                </nav>
             </section>
 
             <section class="explore-strip topic-actions" aria-label="Agent skills topic actions">
@@ -114,6 +188,6 @@
             </section>
         </main>
     </div>
-    <script defer src="../../js/topics.js" data-topic="Agent skills" data-trends="../../data/trends.json" data-packages="../../data/packages.json" data-repos="../../data/repos.json" data-links="../../data/links.json"></script>
+    <script defer src="../../js/topics.js" data-topic="Agent skills" data-trends="../../data/trends.json" data-packages="../../data/packages.json" data-repos="../../data/repos.json" data-links="../../data/links.json" data-today="../../data/today.json"></script>
 </body>
 </html>

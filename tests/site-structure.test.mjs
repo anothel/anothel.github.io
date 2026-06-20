@@ -242,6 +242,10 @@ test("topic focus pages expose focused landing pages", () => {
         assert.match(html, /data-topic-modules/);
         assert.match(html, /data-topic-updated/);
         assert.match(html, /data-topic-lead/);
+        assert.match(html, /data-topic-why/);
+        assert.match(html, /data-topic-top-movers/);
+        assert.match(html, /data-topic-related/);
+        assert.match(html, /data-topic-cross-links/);
         assert.match(html, /data-topic-source-mix/);
         assert.match(html, /data-topic-actions-dynamic/);
         assert.match(html, /data-topic-list/);
@@ -250,12 +254,17 @@ test("topic focus pages expose focused landing pages", () => {
         assert.match(html, /..\/..\/data\/packages\.json/);
         assert.match(html, /..\/..\/data\/repos\.json/);
         assert.match(html, /..\/..\/data\/links\.json/);
+        assert.match(html, /..\/..\/data\/today\.json/);
         assert.match(html, /Open focused Explore/);
         assert.match(sitemap, new RegExp(`https:\\/\\/anothel\\.github\\.io\\/${path.replace("/index.html", "\\/")}`));
     }
 
     assert.match(styles, /\.topic-actions/);
+    assert.match(styles, /\.topic-dashboard-grid/);
+    assert.match(styles, /\.topic-related-grid/);
+    assert.match(styles, /\.topic-cross-link-grid/);
     assert.match(styles, /\.topic-grid/);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topic-dashboard-grid[\s\S]*grid-template-columns: 1fr/s);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topic-grid[\s\S]*grid-template-columns: 1fr/s);
 });
 
@@ -350,8 +359,11 @@ test("module pages expose data health strips", () => {
 test("home command center cards brighten on hover", () => {
     assert.match(styles, /\.start-item:hover/);
     assert.match(styles, /\.module-route:hover/);
+    assert.match(styles, /\.decision-card:hover/);
     assert.match(styles, /\.start-item:hover\s*{[^}]*background: var\(--panel-strong\)/s);
     assert.match(styles, /\.module-route:hover\s*{[^}]*background: var\(--panel-strong\)/s);
+    assert.match(styles, /\.decision-card:hover[\s\S]*background: var\(--panel-strong\)/s);
+    assert.doesNotMatch(styles, /\.decision-primary\s*{[^}]*background: var\(--panel-strong\)/s);
 });
 
 test("packages page owns the package watchlist module", () => {

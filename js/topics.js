@@ -3,7 +3,23 @@
         trends: "../../data/trends.json",
         packages: "../../data/packages.json",
         repos: "../../data/repos.json",
-        links: "../../data/links.json"
+        links: "../../data/links.json",
+        today: "../../data/today.json"
+    };
+
+    const topicRoutes = {
+        "AI agents": {
+            route: "../../topics/ai-agents/index.html",
+            summary: "Coding agents, workflow automation, and agent runtime movement."
+        },
+        MCP: {
+            route: "../../topics/mcp/index.html",
+            summary: "Protocol, SDK, server, and client signals for agent tooling."
+        },
+        "Agent skills": {
+            route: "../../topics/agent-skills/index.html",
+            summary: "Reusable instructions, skill specs, and agent workflow examples."
+        }
     };
 
     function escapeHtml(value) {
@@ -20,9 +36,13 @@
             return "#";
         }
 
+        const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
+        if (!hasScheme && (href.startsWith("../") || href.startsWith("./") || href.startsWith("/"))) {
+            return escapeHtml(href);
+        }
+
         try {
             const parsed = new URL(href, "https://anothel.github.io");
-            const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
             if (hasScheme && parsed.protocol !== "http:" && parsed.protocol !== "https:") {
                 return "#";
             }
@@ -160,6 +180,66 @@
         };
     }
 
+    function todayTopicItems(today, topic) {
+        return (today?.sections || [])
+            .flatMap((section) => (section.items || []).map((item) => ({ ...item, section: section.title || section.id || "Today" })))
+            .filter((item) => topicMatches(item, topic))
+            .map((item) => ({
+                module: "Today",
+                title: item.title,
+                category: item.category,
+                origin: item.origin || item.module || item.section || "Today",
+                metric: item.metric || `${item.score || 0} score`,
+                summary: item.reason || item.summary || "",
+                url: item.url,
+                updated: today?.updated || "-",
+                score: Number(item.score || 0)
+            }))
+            .sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+    }
+
+    function topicModuleGroup(items, module) {
+        return items.filter((item) => item.module === module).slice(0, 3);
+    }
+
+    function topicRelatedGroups(items, today, topic) {
+        return [
+            ["Today picks", todayTopicItems(today, topic).slice(0, 3)],
+            ["Packages", topicModuleGroup(items, "Packages")],
+            ["Repos", topicModuleGroup(items, "Repos")],
+            ["Links", topicModuleGroup(items, "Links")]
+        ]
+            .filter(([, groupItems]) => groupItems.length > 0)
+            .map(([label, groupItems]) => ({ label, items: groupItems }));
+    }
+
+    function relatedTopicLinks(topic) {
+        return Object.entries(topicRoutes)
+            .filter(([name]) => name !== topic)
+            .map(([name, detail]) => ({
+                topic: name,
+                route: detail.route,
+                summary: detail.summary
+            }));
+    }
+
+    function topicDashboard(items, today, topic) {
+        const rankedItems = [...items].sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+        const topMovers = rankedItems.slice(0, 3);
+        const modules = new Set(items.map((item) => item.module)).size;
+        const topItem = topMovers[0];
+        const moduleWord = modules === 1 ? "module" : "modules";
+        const signalWord = items.length === 1 ? "signal" : "signals";
+        const topText = topItem ? ` Top signal: ${topItem.title} from ${topItem.module}.` : " No top signal yet.";
+
+        return {
+            whyNow: `${items.length} ${topicSignalLabel(topic)} ${signalWord} across ${modules} source ${moduleWord}.${topText}`,
+            topMovers,
+            relatedGroups: topicRelatedGroups(items, today, topic),
+            crossLinks: relatedTopicLinks(topic)
+        };
+    }
+
     function renderSourceMix(mix) {
         if (mix.length === 0) {
             return '<p class="saved-empty">No source mix yet.</p>';
@@ -189,6 +269,71 @@
                 <span>Refresh health</span>
             </a>
         `;
+    }
+
+    function renderWhyNow(whyNow) {
+        return `
+            <article class="topic-why-card">
+                <span>Why now</span>
+                <p>${escapeHtml(whyNow)}</p>
+            </article>
+        `;
+    }
+
+    function renderTopMovers(items) {
+        if (items.length === 0) {
+            return '<p class="saved-empty">No top movers yet.</p>';
+        }
+
+        return items.map((item, index) => `
+            <article class="topic-mover-card">
+                <div class="card-topline">
+                    <span>${escapeHtml(item.module)}</span>
+                    <span>#${escapeHtml(index + 1)}</span>
+                </div>
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.summary)}</p>
+                <div class="card-meta">
+                    <span>${escapeHtml(item.origin)}</span>
+                    <span>${escapeHtml(item.metric)}</span>
+                    <span>Fit ${escapeHtml(item.score)}</span>
+                </div>
+                <a href="${safeHref(item.url)}">Open signal</a>
+            </article>
+        `).join("");
+    }
+
+    function renderRelatedGroups(groups) {
+        if (groups.length === 0) {
+            return '<p class="saved-empty">No related signals yet.</p>';
+        }
+
+        return groups.map((group) => `
+            <article class="topic-related-card">
+                <span>${escapeHtml(group.label)}</span>
+                <div class="topic-related-list">
+                    ${group.items.map((item) => `
+                        <a href="${safeHref(item.url)}">
+                            <strong>${escapeHtml(item.title)}</strong>
+                            <small>${escapeHtml(item.metric || item.origin || item.module)}</small>
+                        </a>
+                    `).join("")}
+                </div>
+            </article>
+        `).join("");
+    }
+
+    function renderCrossLinks(links) {
+        if (links.length === 0) {
+            return "";
+        }
+
+        return links.map((link) => `
+            <a class="topic-cross-link" href="${safeHref(link.route)}">
+                <strong>${escapeHtml(link.topic)}</strong>
+                <span>${escapeHtml(link.summary)}</span>
+            </a>
+        `).join("");
     }
 
     function renderTopicCards(items) {
@@ -234,6 +379,10 @@
             modules: document.querySelector("[data-topic-modules]"),
             updated: document.querySelector("[data-topic-updated]"),
             lead: document.querySelector("[data-topic-lead]"),
+            why: document.querySelector("[data-topic-why]"),
+            topMovers: document.querySelector("[data-topic-top-movers]"),
+            related: document.querySelector("[data-topic-related]"),
+            crossLinks: document.querySelector("[data-topic-cross-links]"),
             sourceMix: document.querySelector("[data-topic-source-mix]"),
             actions: document.querySelector("[data-topic-actions-dynamic]"),
             list: document.querySelector("[data-topic-list]")
@@ -247,26 +396,33 @@
             trends: script?.dataset.trends || defaultPaths.trends,
             packages: script?.dataset.packages || defaultPaths.packages,
             repos: script?.dataset.repos || defaultPaths.repos,
-            links: script?.dataset.links || defaultPaths.links
+            links: script?.dataset.links || defaultPaths.links,
+            today: script?.dataset.today || defaultPaths.today
         };
 
         try {
-            const [trends, packages, repos, links] = await Promise.all([
+            const [trends, packages, repos, links, today] = await Promise.all([
                 readJson(paths.trends).catch(() => null),
                 readJson(paths.packages).catch(() => null),
                 readJson(paths.repos).catch(() => null),
-                readJson(paths.links).catch(() => null)
+                readJson(paths.links).catch(() => null),
+                readJson(paths.today).catch(() => null)
             ]);
 
             const items = topicItems({ trends, packages, repos, links }, topic);
             const summary = topicSummary(items);
             const insight = topicInsight(items, topic);
+            const dashboard = topicDashboard(items, today, topic);
             const els = selectors();
 
             if (els.total) els.total.textContent = String(summary.total);
             if (els.modules) els.modules.textContent = String(summary.modules);
             if (els.updated) els.updated.textContent = summary.updated;
             if (els.lead) els.lead.textContent = insight.lead;
+            if (els.why) els.why.innerHTML = renderWhyNow(dashboard.whyNow);
+            if (els.topMovers) els.topMovers.innerHTML = renderTopMovers(dashboard.topMovers);
+            if (els.related) els.related.innerHTML = renderRelatedGroups(dashboard.relatedGroups);
+            if (els.crossLinks) els.crossLinks.innerHTML = renderCrossLinks(dashboard.crossLinks);
             if (els.sourceMix) els.sourceMix.innerHTML = renderSourceMix(insight.sourceMix);
             if (els.actions) els.actions.innerHTML = renderTopicActions(topic);
             if (els.list) els.list.innerHTML = renderTopicCards(items);
@@ -281,8 +437,13 @@
         renderTopicCards,
         topicMatches,
         topicInsight,
+        topicDashboard,
         renderSourceMix,
-        renderTopicActions
+        renderTopicActions,
+        renderWhyNow,
+        renderTopMovers,
+        renderRelatedGroups,
+        renderCrossLinks
     };
 
     if (typeof document !== "undefined") {

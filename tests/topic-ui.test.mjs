@@ -82,6 +82,73 @@ test("Topic pages summarize source mix and highlight the top signal", () => {
     assert.match(actionHtml, /Open Review/);
 });
 
+test("Topic dashboard model builds why-now text, top movers, related groups, and cross-links", () => {
+    const app = loadTopics();
+    const items = [
+        { module: "Trends", title: "Agent runtime", category: "AI agents", origin: "GitHub", metric: "+20%", summary: "Agent workflow.", url: "https://example.com/agent", score: 91, updated: "2026-06-19" },
+        { module: "Repos", title: "openai/codex", category: "AI agents", origin: "GitHub", metric: "92K stars", summary: "Coding agent.", url: "https://example.com/codex", score: 96, updated: "2026-06-19" },
+        { module: "Packages", title: "mastra", category: "AI agents", origin: "npm", metric: "440K/week", summary: "Agent framework.", url: "https://example.com/mastra", score: 78, updated: "2026-06-18" },
+        { module: "Links", title: "Agents SDK", category: "AI agents", origin: "Docs", metric: "Docs", summary: "Agent docs.", url: "https://example.com/docs", score: 60, updated: "2026-06-17" }
+    ];
+    const today = {
+        sections: [
+            {
+                id: "start",
+                items: [
+                    { title: "Today agent", module: "Today", category: "AI agents", metric: "100 score", reason: "Open first.", url: "https://example.com/today", score: 100 },
+                    { title: "Other", module: "Today", category: "MCP", metric: "80 score", reason: "Other.", url: "https://example.com/other", score: 80 }
+                ]
+            }
+        ]
+    };
+
+    const dashboard = app.topicDashboard(items, today, "AI agents");
+
+    assert.match(dashboard.whyNow, /4 AI agent signals across 4 source modules/);
+    assert.match(dashboard.whyNow, /openai\/codex/);
+    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.topMovers.map((item) => item.title))), ["openai/codex", "Agent runtime", "mastra"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.relatedGroups.map((group) => [group.label, group.items.map((item) => item.title)]))), [
+        ["Today picks", ["Today agent"]],
+        ["Packages", ["mastra"]],
+        ["Repos", ["openai/codex"]],
+        ["Links", ["Agents SDK"]]
+    ]);
+    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.crossLinks.map((link) => link.topic))), ["MCP", "Agent skills"]);
+});
+
+test("Topic dashboard renderers escape text and preserve safe topic routes", () => {
+    const app = loadTopics();
+    const dashboard = {
+        whyNow: "Top \"signal\" <now>",
+        topMovers: [
+            { title: "<bad>", module: "Repos", category: "AI agents", origin: "GitHub", metric: "92K stars", summary: "Bad \"summary\"", url: "javascript:alert(1)", score: 96 }
+        ],
+        relatedGroups: [
+            {
+                label: "Repos",
+                items: [
+                    { title: "openai/codex", module: "Repos", metric: "92K stars", url: "https://example.com/codex" }
+                ]
+            }
+        ],
+        crossLinks: [
+            { topic: "MCP", route: "../../topics/mcp/index.html", summary: "Protocol signals" }
+        ]
+    };
+
+    const why = app.renderWhyNow(dashboard.whyNow);
+    const movers = app.renderTopMovers(dashboard.topMovers);
+    const related = app.renderRelatedGroups(dashboard.relatedGroups);
+    const links = app.renderCrossLinks(dashboard.crossLinks);
+
+    assert.match(why, /Top &quot;signal&quot; &lt;now&gt;/);
+    assert.match(movers, /&lt;bad&gt;/);
+    assert.match(movers, /Bad &quot;summary&quot;/);
+    assert.match(movers, /href="#"/);
+    assert.match(related, /openai\/codex/);
+    assert.match(links, /href="..\/..\/topics\/mcp\/index\.html"/);
+});
+
 test("Topic rendering escapes text and blocks unsafe links", () => {
     const app = loadTopics();
     const html = app.renderTopicCards([
@@ -115,6 +182,10 @@ test("Topic browser init renders stats and cards", async () => {
         "[data-topic-modules]",
         "[data-topic-updated]",
         "[data-topic-lead]",
+        "[data-topic-why]",
+        "[data-topic-top-movers]",
+        "[data-topic-related]",
+        "[data-topic-cross-links]",
         "[data-topic-source-mix]",
         "[data-topic-actions-dynamic]",
         "[data-topic-list]"
@@ -128,6 +199,15 @@ test("Topic browser init renders stats and cards", async () => {
         "../../data/packages.json": { updated: "2026-06-18", packages: [] },
         "../../data/repos.json": { updated: "2026-06-17", repos: [] },
         "../../data/links.json": { updated: "2026-06-16", links: [] }
+        ,
+        "../../data/today.json": {
+            sections: [
+                {
+                    id: "start",
+                    items: [{ title: "Today agent", module: "Today", category: "AI agents", metric: "100 score", reason: "Open first.", url: "https://example.com/today", score: 100 }]
+                }
+            ]
+        }
     };
 
     const context = {
@@ -139,7 +219,8 @@ test("Topic browser init renders stats and cards", async () => {
                     trends: "../../data/trends.json",
                     packages: "../../data/packages.json",
                     repos: "../../data/repos.json",
-                    links: "../../data/links.json"
+                    links: "../../data/links.json",
+                    today: "../../data/today.json"
                 }
             },
             querySelector(selector) {
@@ -160,6 +241,10 @@ test("Topic browser init renders stats and cards", async () => {
     assert.equal(elements["[data-topic-modules]"].textContent, "1");
     assert.equal(elements["[data-topic-updated]"].textContent, "2026-06-19");
     assert.match(elements["[data-topic-lead]"].textContent, /1 source module tracking 1 AI agent signal\./);
+    assert.match(elements["[data-topic-why]"].innerHTML, /Agent runtime/);
+    assert.match(elements["[data-topic-top-movers]"].innerHTML, /Agent runtime/);
+    assert.match(elements["[data-topic-related]"].innerHTML, /Today agent/);
+    assert.match(elements["[data-topic-cross-links]"].innerHTML, /MCP/);
     assert.match(elements["[data-topic-source-mix]"].innerHTML, /Trends/);
     assert.match(elements["[data-topic-actions-dynamic]"].innerHTML, /Open Review/);
     assert.match(elements["[data-topic-list]"].innerHTML, /Agent runtime/);
