@@ -242,6 +242,7 @@ test("topic focus pages expose focused landing pages", () => {
         assert.match(html, /data-topic-modules/);
         assert.match(html, /data-topic-updated/);
         assert.match(html, /data-topic-lead/);
+        assert.match(html, /data-topic-guidance/);
         assert.match(html, /data-topic-why/);
         assert.match(html, /data-topic-top-movers/);
         assert.match(html, /data-topic-related/);
@@ -260,11 +261,14 @@ test("topic focus pages expose focused landing pages", () => {
     }
 
     assert.match(styles, /\.topic-actions/);
+    assert.match(styles, /\.topic-guidance-grid/);
+    assert.match(styles, /\.topic-guidance-card/);
     assert.match(styles, /\.topic-dashboard-grid/);
     assert.match(styles, /\.topic-related-grid/);
     assert.match(styles, /\.topic-cross-link-grid/);
     assert.match(styles, /\.topic-grid/);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topic-dashboard-grid[\s\S]*grid-template-columns: 1fr/s);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topic-guidance-grid[\s\S]*grid-template-columns: 1fr/s);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topic-grid[\s\S]*grid-template-columns: 1fr/s);
 });
 

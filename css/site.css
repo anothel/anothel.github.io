@@ -653,14 +653,41 @@ main {
 }
 
 .topic-dashboard-grid,
+.topic-guidance-grid,
 .topic-related-grid,
 .topic-cross-link-grid {
     display: grid;
     gap: 12px;
 }
 
-.topic-dashboard-grid {
+.topic-dashboard-grid,
+.topic-guidance-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.topic-guidance-card {
+    display: grid;
+    gap: 8px;
+    min-height: 132px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.topic-guidance-card span {
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.topic-guidance-card p {
+    margin: 0;
+    color: var(--muted);
+    overflow-wrap: anywhere;
 }
 
 .topic-related-grid {
@@ -1648,6 +1675,7 @@ button {
     .topic-lens-grid,
     .source-mix-grid,
     .topic-dashboard-grid,
+    .topic-guidance-grid,
     .topic-related-grid,
     .topic-cross-link-grid,
     .topic-grid,
@@ -1674,6 +1702,7 @@ button {
     .topic-lens-grid,
     .source-mix-grid,
     .topic-dashboard-grid,
+    .topic-guidance-grid,
     .topic-related-grid,
     .topic-cross-link-grid,
     .link-grid,

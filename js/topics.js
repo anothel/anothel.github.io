@@ -10,15 +10,48 @@
     const topicRoutes = {
         "AI agents": {
             route: "../../topics/ai-agents/index.html",
-            summary: "Coding agents, workflow automation, and agent runtime movement."
+            summary: "Coding agents, workflow automation, and agent runtime movement.",
+            whyPrefix: "Agent tooling is moving from demos into daily coding workflow.",
+            guidance: {
+                whatToWatch: "Coding agents, local CLIs, orchestration frameworks, and agent runtime patterns.",
+                whenToOpen: "Open when a tool changes how code gets written, reviewed, tested, or automated.",
+                nextAction: "Compare the strongest repo and package signals before saving follow-up items."
+            },
+            actions: [
+                ["Open focused Explore", "../../explore/index.html?focus=AI%20agents", "AI agents lens"],
+                ["Repos", "../../repos/index.html", "Coding-agent traction"],
+                ["Packages", "../../packages/index.html", "Agent framework demand"]
+            ]
         },
         MCP: {
             route: "../../topics/mcp/index.html",
-            summary: "Protocol, SDK, server, and client signals for agent tooling."
+            summary: "Protocol, SDK, server, and client signals for agent tooling.",
+            whyPrefix: "Protocol and server adoption is moving across SDKs, packages, and reference repos.",
+            guidance: {
+                whatToWatch: "SDKs, reference servers, registries, inspector tools, and server packages.",
+                whenToOpen: "Open when a protocol or server signal could change how agents connect to tools.",
+                nextAction: "Check packages for adoption, then keep stable server references nearby."
+            },
+            actions: [
+                ["Open focused Explore", "../../explore/index.html?focus=MCP", "MCP lens"],
+                ["Packages", "../../packages/index.html", "SDK and server demand"],
+                ["Links", "../../links/index.html", "Stable protocol references"]
+            ]
         },
         "Agent skills": {
             route: "../../topics/agent-skills/index.html",
-            summary: "Reusable instructions, skill specs, and agent workflow examples."
+            summary: "Reusable instructions, skill specs, and agent workflow examples.",
+            whyPrefix: "Reusable instruction patterns are becoming a practical layer above one-off prompting.",
+            guidance: {
+                whatToWatch: "Skill specs, reusable instructions, examples, and workflow checklists.",
+                whenToOpen: "Open when a skill pattern can become repeatable work instead of one-off prompting.",
+                nextAction: "Start from stable references, then save repos that look reusable."
+            },
+            actions: [
+                ["Open focused Explore", "../../explore/index.html?focus=Agent%20skills", "Agent skills lens"],
+                ["Links", "../../links/index.html", "Skill specs and docs"],
+                ["Review", "../../review/index.html", "Saved reusable patterns"]
+            ]
         }
     };
 
@@ -169,6 +202,14 @@
         return topic;
     }
 
+    function topicConfig(topic) {
+        return topicRoutes[topic] || topicRoutes["AI agents"];
+    }
+
+    function topicGuidance(topic) {
+        return { ...topicConfig(topic).guidance };
+    }
+
     function topicInsight(items, topic) {
         const mix = sourceMix(items);
         const moduleWord = mix.length === 1 ? "module" : "modules";
@@ -230,10 +271,12 @@
         const topItem = topMovers[0];
         const moduleWord = modules === 1 ? "module" : "modules";
         const signalWord = items.length === 1 ? "signal" : "signals";
+        const config = topicConfig(topic);
         const topText = topItem ? ` Top signal: ${topItem.title} from ${topItem.module}.` : " No top signal yet.";
 
         return {
-            whyNow: `${items.length} ${topicSignalLabel(topic)} ${signalWord} across ${modules} source ${moduleWord}.${topText}`,
+            whyNow: `${items.length} ${topicSignalLabel(topic)} ${signalWord} across ${modules} source ${moduleWord}. ${config.whyPrefix}${topText}`,
+            guidance: topicGuidance(topic),
             topMovers,
             relatedGroups: topicRelatedGroups(items, today, topic),
             crossLinks: relatedTopicLinks(topic)
@@ -254,21 +297,27 @@
     }
 
     function renderTopicActions(topic) {
-        const encoded = encodeURIComponent(topic);
-        return `
-            <a href="../../explore/index.html?focus=${encoded}">
-                <strong>Open focused Explore</strong>
-                <span>${escapeHtml(topic)} lens</span>
+        return topicConfig(topic).actions.map(([label, href, description]) => `
+            <a href="${safeHref(href)}">
+                <strong>${escapeHtml(label)}</strong>
+                <span>${escapeHtml(description)}</span>
             </a>
-            <a href="../../review/index.html">
-                <strong>Open Review</strong>
-                <span>Saved follow-up queue</span>
-            </a>
-            <a href="../../status/index.html">
-                <strong>Source status</strong>
-                <span>Refresh health</span>
-            </a>
-        `;
+        `).join("");
+    }
+
+    function renderTopicGuidance(guidance) {
+        const cards = [
+            ["What to watch", guidance.whatToWatch],
+            ["When to open", guidance.whenToOpen],
+            ["Good next action", guidance.nextAction]
+        ];
+
+        return cards.map(([label, copy]) => `
+            <article class="topic-guidance-card">
+                <span>${escapeHtml(label)}</span>
+                <p>${escapeHtml(copy)}</p>
+            </article>
+        `).join("");
     }
 
     function renderWhyNow(whyNow) {
@@ -379,6 +428,7 @@
             modules: document.querySelector("[data-topic-modules]"),
             updated: document.querySelector("[data-topic-updated]"),
             lead: document.querySelector("[data-topic-lead]"),
+            guidance: document.querySelector("[data-topic-guidance]"),
             why: document.querySelector("[data-topic-why]"),
             topMovers: document.querySelector("[data-topic-top-movers]"),
             related: document.querySelector("[data-topic-related]"),
@@ -419,6 +469,7 @@
             if (els.modules) els.modules.textContent = String(summary.modules);
             if (els.updated) els.updated.textContent = summary.updated;
             if (els.lead) els.lead.textContent = insight.lead;
+            if (els.guidance) els.guidance.innerHTML = renderTopicGuidance(dashboard.guidance);
             if (els.why) els.why.innerHTML = renderWhyNow(dashboard.whyNow);
             if (els.topMovers) els.topMovers.innerHTML = renderTopMovers(dashboard.topMovers);
             if (els.related) els.related.innerHTML = renderRelatedGroups(dashboard.relatedGroups);
@@ -438,8 +489,10 @@
         topicMatches,
         topicInsight,
         topicDashboard,
+        topicGuidance,
         renderSourceMix,
         renderTopicActions,
+        renderTopicGuidance,
         renderWhyNow,
         renderTopMovers,
         renderRelatedGroups,

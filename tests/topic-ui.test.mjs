@@ -79,7 +79,8 @@ test("Topic pages summarize source mix and highlight the top signal", () => {
     assert.match(mixHtml, /Repos/);
     assert.match(mixHtml, /2 items/);
     assert.match(actionHtml, /href="..\/..\/explore\/index\.html\?focus=AI%20agents"/);
-    assert.match(actionHtml, /Open Review/);
+    assert.match(actionHtml, /href="..\/..\/repos\/index\.html"/);
+    assert.match(actionHtml, /href="..\/..\/packages\/index\.html"/);
 });
 
 test("Topic dashboard model builds why-now text, top movers, related groups, and cross-links", () => {
@@ -114,6 +115,71 @@ test("Topic dashboard model builds why-now text, top movers, related groups, and
         ["Links", ["Agents SDK"]]
     ]);
     assert.deepEqual(JSON.parse(JSON.stringify(dashboard.crossLinks.map((link) => link.topic))), ["MCP", "Agent skills"]);
+});
+
+test("Topic guidance gives each topic concrete watch/open/action context", () => {
+    const app = loadTopics();
+
+    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("AI agents"))), {
+        whatToWatch: "Coding agents, local CLIs, orchestration frameworks, and agent runtime patterns.",
+        whenToOpen: "Open when a tool changes how code gets written, reviewed, tested, or automated.",
+        nextAction: "Compare the strongest repo and package signals before saving follow-up items."
+    });
+    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("MCP"))), {
+        whatToWatch: "SDKs, reference servers, registries, inspector tools, and server packages.",
+        whenToOpen: "Open when a protocol or server signal could change how agents connect to tools.",
+        nextAction: "Check packages for adoption, then keep stable server references nearby."
+    });
+    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("Agent skills"))), {
+        whatToWatch: "Skill specs, reusable instructions, examples, and workflow checklists.",
+        whenToOpen: "Open when a skill pattern can become repeatable work instead of one-off prompting.",
+        nextAction: "Start from stable references, then save repos that look reusable."
+    });
+});
+
+test("Topic dashboard why-now copy uses topic-specific meaning", () => {
+    const app = loadTopics();
+    const items = [
+        { module: "Repos", title: "modelcontextprotocol/python-sdk", category: "MCP", origin: "GitHub", metric: "23K stars", summary: "Python SDK.", url: "https://example.com/python", score: 87, updated: "2026-06-20" },
+        { module: "Packages", title: "@modelcontextprotocol/sdk", category: "MCP", origin: "npm", metric: "39M/week", summary: "TypeScript SDK.", url: "https://example.com/sdk", score: 70, updated: "2026-06-20" }
+    ];
+
+    const dashboard = app.topicDashboard(items, { sections: [] }, "MCP");
+
+    assert.match(dashboard.whyNow, /2 MCP signals across 2 source modules/);
+    assert.match(dashboard.whyNow, /Protocol and server adoption is moving/);
+    assert.match(dashboard.whyNow, /modelcontextprotocol\/python-sdk/);
+});
+
+test("Topic guidance renderer escapes copy", () => {
+    const app = loadTopics();
+    const html = app.renderTopicGuidance({
+        whatToWatch: "Watch <bad>",
+        whenToOpen: "Open \"now\"",
+        nextAction: "Save & compare"
+    });
+
+    assert.match(html, /Watch &lt;bad&gt;/);
+    assert.match(html, /Open &quot;now&quot;/);
+    assert.match(html, /Save &amp; compare/);
+    assert.match(html, /What to watch/);
+    assert.match(html, /When to open/);
+    assert.match(html, /Good next action/);
+});
+
+test("Topic actions use topic-specific routes", () => {
+    const app = loadTopics();
+    const ai = app.renderTopicActions("AI agents");
+    const mcp = app.renderTopicActions("MCP");
+    const skills = app.renderTopicActions("Agent skills");
+
+    assert.match(ai, /href="..\/..\/repos\/index\.html"/);
+    assert.match(ai, /href="..\/..\/packages\/index\.html"/);
+    assert.doesNotMatch(ai, /Open Review/);
+    assert.match(mcp, /href="..\/..\/packages\/index\.html"/);
+    assert.match(mcp, /href="..\/..\/links\/index\.html"/);
+    assert.match(skills, /href="..\/..\/links\/index\.html"/);
+    assert.match(skills, /href="..\/..\/review\/index\.html"/);
 });
 
 test("Topic dashboard renderers escape text and preserve safe topic routes", () => {
@@ -182,6 +248,7 @@ test("Topic browser init renders stats and cards", async () => {
         "[data-topic-modules]",
         "[data-topic-updated]",
         "[data-topic-lead]",
+        "[data-topic-guidance]",
         "[data-topic-why]",
         "[data-topic-top-movers]",
         "[data-topic-related]",
@@ -241,11 +308,12 @@ test("Topic browser init renders stats and cards", async () => {
     assert.equal(elements["[data-topic-modules]"].textContent, "1");
     assert.equal(elements["[data-topic-updated]"].textContent, "2026-06-19");
     assert.match(elements["[data-topic-lead]"].textContent, /1 source module tracking 1 AI agent signal\./);
+    assert.match(elements["[data-topic-guidance]"].innerHTML, /What to watch/);
     assert.match(elements["[data-topic-why]"].innerHTML, /Agent runtime/);
     assert.match(elements["[data-topic-top-movers]"].innerHTML, /Agent runtime/);
     assert.match(elements["[data-topic-related]"].innerHTML, /Today agent/);
     assert.match(elements["[data-topic-cross-links]"].innerHTML, /MCP/);
     assert.match(elements["[data-topic-source-mix]"].innerHTML, /Trends/);
-    assert.match(elements["[data-topic-actions-dynamic]"].innerHTML, /Open Review/);
+    assert.match(elements["[data-topic-actions-dynamic]"].innerHTML, /Repos/);
     assert.match(elements["[data-topic-list]"].innerHTML, /Agent runtime/);
 });

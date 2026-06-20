@@ -20,6 +20,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Explore cross-source search exists.
 - Topic lenses exist for recurring themes.
 - Topic focus pages now have top movers, related signals, source mix, and cross-topic routes.
+- Topic Depth v1 adds topic-specific context, why-now framing, and topic-specific action routes.
 - Data Expansion v1 covers AI agents, MCP, and Agent skills across repos, packages, and curated links.
 - Review later workflow exists in local browser storage.
 - Status page and refresh reporting exist.
@@ -27,15 +28,16 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Big Work
 
-### 1. Topic Depth
+### 1. Personalization
 
-Topic pages now have a useful dashboard shape. Next improvements should depend on better data, not more layout.
+Local preferences may be useful now that Home, Today, Explore, Review, Status, and topic pages exist.
 
-- Tune topic-specific copy after Data Expansion.
-- Add topic-specific saved/review prompts only if they help the review flow.
-- Consider one lightweight note per topic after there is something worth writing.
+- pinned topics
+- hidden sources
+- preferred sort
+- saved searches
 
-Success check: topic pages explain the signal without repeating Explore.
+Success check: preferences make repeat visits faster without adding accounts or sync.
 
 ### 2. Data Expansion v2
 
@@ -48,16 +50,15 @@ The source list is now useful for AI agents, MCP, and Agent skills. Later expans
 
 Success check: added coverage increases useful saved/review items, not raw count only.
 
-### 3. Personalization
+### 3. Topic Notes
 
-Local preferences may be useful now that Home, Today, Explore, Review, Status, and topic pages exist.
+Topic pages may need short notes only after the signal pages produce useful saved/review items.
 
-- pinned topics
-- hidden sources
-- preferred sort
-- saved searches
+- one lightweight note per topic
+- linked from topic focus pages
+- no blog engine
 
-Success check: preferences make repeat visits faster without adding accounts or sync.
+Success check: notes explain judgment, not raw source summaries.
 
 ## Later Work
 
