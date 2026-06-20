@@ -336,6 +336,8 @@ test("root page exposes command center slots", () => {
     assert.match(root, /class="start-list"/);
     assert.match(root, /class="skim-list"/);
     assert.match(root, /class="module-strip"/);
+    assert.doesNotMatch(root, /aria-label="Topic focus pages"/);
+    assert.doesNotMatch(root, />Topic focus</);
     assert.doesNotMatch(root, /class="today-grid"/);
     assert.doesNotMatch(root, /data-home-signals/);
     assert.match(root, /data-trends="data\/trends\.json"/);
@@ -364,6 +366,7 @@ test("home command center cards brighten on hover", () => {
     assert.match(styles, /\.module-route:hover\s*{[^}]*background: var\(--panel-strong\)/s);
     assert.match(styles, /\.decision-card:hover[\s\S]*background: var\(--panel-strong\)/s);
     assert.doesNotMatch(styles, /\.decision-primary\s*{[^}]*background: var\(--panel-strong\)/s);
+    assert.match(styles, /\.topic-movement-grid\s*{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/s);
 });
 
 test("packages page owns the package watchlist module", () => {

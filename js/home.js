@@ -240,7 +240,7 @@ export function getTodaySection(today, id) {
     return (today.sections || []).find((section) => section.id === id)?.items || [];
 }
 
-export function buildTopicMovements(dataByModule, limit = 4) {
+export function buildTopicMovements(dataByModule, limit = 3) {
     const items = normalizeHomeSignals(dataByModule);
     return topicDefinitions
         .map((definition, index) => {
@@ -372,18 +372,32 @@ export function renderSavedSummary(summary) {
     `;
 }
 
-export function renderDecisionActions({ startCount = 0, saved = 0, unread = 0, topTopic = null } = {}) {
+function pluralize(count, singular, plural = `${singular}s`) {
+    return count === 1 ? singular : plural;
+}
+
+export function renderDecisionActions({ startItems = null, startCount = 0, saved = 0, unread = 0, topTopic = null } = {}) {
+    const firstItem = Array.isArray(startItems) ? startItems[0] : null;
+    const resolvedStartCount = Array.isArray(startItems) ? startItems.length : startCount;
+    const firstTitle = firstItem?.title || "Open generated priority brief";
+    const firstMeta = firstItem
+        ? `Today priority brief / ${resolvedStartCount} generated ${pluralize(resolvedStartCount, "pick")}`
+        : `${resolvedStartCount} generated ${pluralize(resolvedStartCount, "pick")} from tracked signals`;
     const topicLabel = topTopic?.topic || "Topic movement";
     const topicHref = topTopic?.route || "explore/index.html";
     const topicMeta = topTopic
-        ? `${topTopic.count} signals / ${topTopic.modules} modules`
+        ? `${topTopic.topItem?.title || `${topTopic.count} signals`} / ${topTopic.count} signals / ${topTopic.modules} modules`
         : "Browse recurring themes";
+    const savedTitle = saved > 0 ? `${saved} saved items` : "No saved items yet";
+    const savedMeta = saved > 0
+        ? `${unread} unread follow-ups in this browser`
+        : "Save useful signals from Explore";
 
     return `
         <a class="decision-card decision-primary" href="today/index.html">
             <span>Open first</span>
-            <strong>Start with the generated priority brief</strong>
-            <small>${escapeHtml(startCount)} priority picks from tracked signals</small>
+            <strong>${escapeHtml(firstTitle)}</strong>
+            <small>${escapeHtml(firstMeta)}</small>
         </a>
         <a class="decision-card" href="${safeHref(topicHref)}">
             <span>Browse topic movement</span>
@@ -392,8 +406,8 @@ export function renderDecisionActions({ startCount = 0, saved = 0, unread = 0, t
         </a>
         <a class="decision-card" href="review/index.html">
             <span>Review saved</span>
-            <strong>${escapeHtml(saved)} saved items</strong>
-            <small>${escapeHtml(unread)} unread follow-ups in this browser</small>
+            <strong>${escapeHtml(savedTitle)}</strong>
+            <small>${escapeHtml(savedMeta)}</small>
         </a>
     `;
 }
@@ -499,7 +513,7 @@ function applyDecisionActions(root, today, savedSummary, movements) {
     if (!slot) return;
 
     slot.innerHTML = renderDecisionActions({
-        startCount: getTodaySection(today || {}, "start").length,
+        startItems: getTodaySection(today || {}, "start"),
         saved: savedSummary.saved,
         unread: savedSummary.unread,
         topTopic: movements[0] || null
@@ -523,7 +537,7 @@ async function init() {
             readJson(linksUrl).catch(() => null)
         ]);
         const savedSummary = readSavedSummary(globalThis.localStorage);
-        const topicMovements = buildTopicMovements({ trends, packages, repos, links }, 4);
+        const topicMovements = buildTopicMovements({ trends, packages, repos, links });
 
         if (manifest) {
             applyOverview(document, manifest);

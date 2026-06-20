@@ -15,6 +15,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 - Home hub exists.
 - Home decision layer exists.
+- Home Polish v1 makes the first action concrete, compresses topic movement to three cards, and removes the duplicated topic strip.
 - Today priority brief exists.
 - Explore cross-source search exists.
 - Topic lenses exist for recurring themes.
@@ -26,17 +27,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Big Work
 
-### 1. Home Polish
-
-Home now has a decision layer. Later polish should be based on actual use, not more structure.
-
-- Tune topic movement card density.
-- Remove duplicated route links if they stop helping.
-- Improve mobile scan order after checking real viewport behavior.
-
-Success check: Home stays useful without becoming another dashboard.
-
-### 2. Topic Depth
+### 1. Topic Depth
 
 Topic pages now have a useful dashboard shape. Next improvements should depend on better data, not more layout.
 
@@ -46,7 +37,7 @@ Topic pages now have a useful dashboard shape. Next improvements should depend o
 
 Success check: topic pages explain the signal without repeating Explore.
 
-### 3. Data Expansion v2
+### 2. Data Expansion v2
 
 The source list is now useful for AI agents, MCP, and Agent skills. Later expansion should happen only after checking whether the current feed feels noisy.
 
@@ -56,6 +47,17 @@ The source list is now useful for AI agents, MCP, and Agent skills. Later expans
 - Keep broad baseline packages from dominating priority views.
 
 Success check: added coverage increases useful saved/review items, not raw count only.
+
+### 3. Personalization
+
+Local preferences may be useful now that Home, Today, Explore, Review, Status, and topic pages exist.
+
+- pinned topics
+- hidden sources
+- preferred sort
+- saved searches
+
+Success check: preferences make repeat visits faster without adding accounts or sync.
 
 ## Later Work
 
@@ -67,16 +69,6 @@ Possible scope:
 - `/notes/` as short private-to-public writeups.
 - Notes linked from topics.
 - No full CMS unless writing volume justifies it.
-
-### Personalization
-
-Local preferences may be useful after the core reading flow is stable.
-
-Possible scope:
-- pinned topics
-- hidden sources
-- preferred sort
-- saved searches
 
 ### Visual Polish
 

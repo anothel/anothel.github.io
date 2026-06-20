@@ -178,6 +178,17 @@ test("buildTopicMovements ranks recurring topic movement across checked-in data"
 });
 
 test("home decision renderers emit safe action and topic markup", () => {
+    const startItems = [
+        {
+            title: "anomalyco/opencode",
+            module: "Trends",
+            origin: "GitHub",
+            category: "AI agents",
+            metric: "100 score",
+            reason: "Coding-agent ecosystem signal with practical workflow value.",
+            url: "https://example.com/opencode"
+        }
+    ];
     const movements = [
         {
             topic: "AI agents",
@@ -208,13 +219,15 @@ test("home decision renderers emit safe action and topic markup", () => {
             }
         }
     ];
-    const actions = renderDecisionActions({ startCount: 3, saved: 4, unread: 2, topTopic: movements[0] });
+    const actions = renderDecisionActions({ startItems, saved: 4, unread: 2, topTopic: movements[0] });
     const topics = renderTopicMovements(movements);
 
     assert.match(actions, /Open first/);
-    assert.match(actions, /3 priority picks/);
+    assert.match(actions, /anomalyco\/opencode/);
+    assert.match(actions, /Today priority brief \/ 1 generated pick/);
     assert.match(actions, /Browse topic movement/);
     assert.match(actions, /AI agents/);
+    assert.match(actions, /OpenAI &quot;Codex&quot;/);
     assert.match(actions, /Review saved/);
     assert.match(actions, /2 unread/);
     assert.match(topics, /href="topics\/ai-agents\/index\.html"/);
@@ -223,6 +236,14 @@ test("home decision renderers emit safe action and topic markup", () => {
     assert.match(topics, /href="#"/);
     assert.doesNotMatch(`${actions}${topics}`, /javascript:alert/);
     assert.doesNotMatch(`${actions}${topics}`, /<script>/);
+});
+
+test("home decision actions give useful empty review copy", () => {
+    const html = renderDecisionActions({ startItems: [], saved: 0, unread: 0, topTopic: null });
+
+    assert.match(html, /Open generated priority brief/);
+    assert.match(html, /No saved items yet/);
+    assert.match(html, /Save useful signals from Explore/);
 });
 
 test("home renderers emit command center markup", () => {
@@ -323,14 +344,14 @@ test("checked-in data powers the home command center", () => {
     const startItems = getTodaySection(today, "start");
     const skimItems = getTodaySection(today, "skim");
     const routes = buildModuleRoutes(manifest);
-    const movements = buildTopicMovements({ trends, packages, repos, links }, 4);
+    const movements = buildTopicMovements({ trends, packages, repos, links });
 
     assert.ok(overview.totalItems >= 60);
     assert.equal(overview.liveModules, 4);
     assert.equal(startItems.length, 3);
     assert.equal(skimItems.length, 6);
     assert.equal(routes.length, 6);
-    assert.ok(movements.length >= 3);
+    assert.equal(movements.length, 3);
     assert.equal(movements[0].topic, "AI agents");
     assert.deepEqual(routes.map((route) => route.id), ["explore", "status", "trends", "packages", "repos", "links"]);
 });
