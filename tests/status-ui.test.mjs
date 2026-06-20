@@ -98,3 +98,38 @@ test("status renderers escape text and block unsafe module links", () => {
     assert.match(html, /bad &quot;token&quot;/);
     assert.match(renderStatusSummary({ totalItems: 13, totalSources: 3, healthLabel: "2 ok / 1 error", updated: "2026-06-20" }), /13/);
 });
+
+test("status rows and summary surface fallback safety detail", () => {
+    const fallbackDatasets = {
+        packages: {
+            sourceMeta: {
+                name: "npm",
+                status: "fallback",
+                count: 4,
+                updatedAt: "2026-06-20T00:00:00.000Z",
+                fallbackUsed: true,
+                staleButSafe: true,
+                fallbackReason: "No package rows fetched",
+                previousUpdated: "2026-06-19",
+                rateLimited: true
+            }
+        }
+    };
+    const fallbackManifest = {
+        modules: [
+            {
+                id: "packages",
+                title: "Package watchlist",
+                route: "packages/index.html",
+                status: "fallback",
+                count: 4,
+                updated: "2026-06-19"
+            }
+        ]
+    };
+    const rows = collectSourceRows(fallbackManifest, fallbackDatasets);
+
+    assert.equal(rows[0].detail, "fallback used / stale but safe / rate limited / No package rows fetched / previous 2026-06-19");
+    assert.match(renderSourceRows(rows), /fallback used \/ stale but safe \/ rate limited/);
+    assert.equal(buildStatusSummary(fallbackManifest, fallbackDatasets).healthLabel, "1 fallback");
+});

@@ -1,5 +1,6 @@
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
 
 const OUT_FILE = new URL("../data/repos.json", import.meta.url);
 const USER_AGENT = "anothel.github.io repo watchlist";
@@ -138,8 +139,24 @@ export async function collectRepos(
     };
 }
 
+export function prepareRepoDataForWrite(data, previousData) {
+    return applyEmptyCollectionFallback(data, previousData, {
+        collection: "repos",
+        fallbackReason: "No repo rows fetched",
+        sourceName: "GitHub"
+    });
+}
+
+async function readPreviousData() {
+    try {
+        return JSON.parse(await readFile(OUT_FILE, "utf8"));
+    } catch {
+        return null;
+    }
+}
+
 async function main() {
-    const data = await collectRepos();
+    const data = prepareRepoDataForWrite(await collectRepos(), await readPreviousData());
     if (data.repos.length === 0) {
         throw new Error("No repo rows fetched; leaving existing data untouched");
     }

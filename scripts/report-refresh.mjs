@@ -19,6 +19,16 @@ function sourceErrors(source) {
     return source?.error ? [source.error] : [];
 }
 
+function safetyDetail(source) {
+    const details = [];
+    if (source?.fallbackUsed) details.push("fallback used");
+    if (source?.staleButSafe) details.push("stale but safe");
+    if (source?.rateLimited) details.push("rate limited");
+    if (source?.fallbackReason) details.push(source.fallbackReason);
+    if (source?.previousUpdated) details.push(`previous ${source.previousUpdated}`);
+    return details;
+}
+
 function statusRank(status) {
     return { error: 3, partial: 2, fallback: 1, unknown: 1, ok: 0 }[status] ?? 1;
 }
@@ -50,6 +60,12 @@ function summarizeSources(module, dataset) {
         count: source.count || 0,
         updatedAt: source.updatedAt || source.updated || "-",
         coverage: source.coverage || "",
+        fallbackUsed: Boolean(source.fallbackUsed),
+        staleButSafe: Boolean(source.staleButSafe),
+        rateLimited: Boolean(source.rateLimited),
+        fallbackReason: source.fallbackReason || "",
+        previousUpdated: source.previousUpdated || "",
+        safetyDetails: safetyDetail(source),
         errors: sourceErrors(source)
     }));
 }
@@ -105,7 +121,7 @@ export function renderRefreshMarkdown(report, context = {}) {
             source.status,
             source.count,
             source.updatedAt,
-            source.errors.join(" / ") || source.coverage || "-"
+            source.errors.join(" / ") || source.safetyDetails.join(" / ") || source.coverage || "-"
         ])
     );
     const reason = context.reason ? `\nReason: ${context.reason}\n` : "";

@@ -52,6 +52,7 @@ Push changes to the GitHub Pages branch configured for this repository.
 Run locally in this order:
 
 ```powershell
+$env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
 node scripts/update-trends.mjs
 node scripts/update-packages.mjs
 node scripts/update-repos.mjs
@@ -73,7 +74,9 @@ The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pag
 - Scope: only `data/trends.json`, `data/packages.json`, `data/repos.json`, `data/links.json`, `data/today.json`, and `data/manifest.json` are committed.
 - Safety: `concurrency` prevents overlapping data refresh jobs, each updater is grouped in logs, and the workflow runs `node --test tests/*.test.mjs` before committing generated data.
 - Run summary: every workflow run writes a GitHub Step Summary and uploads a `refresh-report` artifact with source status, counts, timestamps, and source errors.
-- Failure model: source fetch failures are stored as `error` or `partial` status where the updater can keep useful data. If a full updater cannot produce data, the workflow fails and the existing checked-in JSON remains published.
+- Failure model: source fetch failures are stored as `error` or `partial` status where the updater can keep useful data. If a full updater produces zero rows but previous checked-in data exists, the updater writes stale but safe fallback data instead of empty data.
+- Fallback markers: fallback source metadata uses `fallbackUsed`, `staleButSafe`, `fallbackReason`, and `rateLimited` when applicable. The Status page and refresh report surface those markers.
+- Local GitHub refresh: set `$env:GITHUB_TOKEN` before running GitHub-backed updaters to avoid low anonymous API limits. Without it, rate limits may appear as `rateLimited` fallback in the report.
 
 ## Verification
 

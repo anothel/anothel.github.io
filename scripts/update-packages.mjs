@@ -1,5 +1,6 @@
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
 
 const OUT_FILE = new URL("../data/packages.json", import.meta.url);
 const USER_AGENT = "anothel.github.io package watchlist";
@@ -135,8 +136,24 @@ export async function collectPackages(
     };
 }
 
+export function preparePackageDataForWrite(data, previousData) {
+    return applyEmptyCollectionFallback(data, previousData, {
+        collection: "packages",
+        fallbackReason: "No package rows fetched",
+        sourceName: "npm"
+    });
+}
+
+async function readPreviousData() {
+    try {
+        return JSON.parse(await readFile(OUT_FILE, "utf8"));
+    } catch {
+        return null;
+    }
+}
+
 async function main() {
-    const data = await collectPackages();
+    const data = preparePackageDataForWrite(await collectPackages(), await readPreviousData());
     if (data.packages.length === 0) {
         throw new Error("No package rows fetched; leaving existing data untouched");
     }

@@ -6,7 +6,8 @@ import {
     buildPackageDownloadUrl,
     buildPackageRows,
     collectPackages,
-    packageDefinitions
+    packageDefinitions,
+    preparePackageDataForWrite
 } from "../scripts/update-packages.mjs";
 
 function readJson(path) {
@@ -146,4 +147,36 @@ test("collectPackages reports error when every package fetch fails", async () =>
     assert.equal(data.sourceMeta.coverage, "0/2");
     assert.equal(data.sourceMeta.errors.length, 2);
     assert.deepEqual(data.packages, []);
+});
+
+test("preparePackageDataForWrite falls back to previous packages on empty refresh", () => {
+    const prepared = preparePackageDataForWrite(
+        {
+            updated: "2026-06-20",
+            generatedAt: "2026-06-20T00:00:00.000Z",
+            sourceMeta: {
+                name: "npm",
+                status: "error",
+                count: 0,
+                errors: [{ name: "react", error: "429 too many requests" }]
+            },
+            packages: []
+        },
+        {
+            updated: "2026-06-19",
+            generatedAt: "2026-06-19T00:00:00.000Z",
+            sourceMeta: {
+                name: "npm",
+                status: "ok",
+                count: 1
+            },
+            packages: [{ name: "react" }]
+        }
+    );
+
+    assert.equal(prepared.sourceMeta.status, "fallback");
+    assert.equal(prepared.sourceMeta.fallbackUsed, true);
+    assert.equal(prepared.sourceMeta.staleButSafe, true);
+    assert.equal(prepared.sourceMeta.rateLimited, true);
+    assert.deepEqual(prepared.packages, [{ name: "react" }]);
 });

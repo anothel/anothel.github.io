@@ -1,6 +1,7 @@
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { classifySignal, qualityBoost } from "./signal-taxonomy.mjs";
+import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
 
 const OUT_FILE = new URL("../data/trends.json", import.meta.url);
 const USER_AGENT = "anothel.github.io tech radar";
@@ -343,8 +344,46 @@ export async function collect() {
     };
 }
 
+export function prepareTrendDataForWrite(data, previousData) {
+    return applyEmptyCollectionFallback(data, previousData, {
+        collection: "items",
+        fallbackReason: "No trend items fetched",
+        sourceName: "trends"
+    });
+}
+
+export function buildTrendFailureData(error, generatedAt = new Date().toISOString()) {
+    return {
+        updated: isoDate(new Date(generatedAt)),
+        generatedAt,
+        sources: ["Hacker News", "GitHub", "npm"],
+        sourceMeta: [
+            {
+                name: "trends",
+                status: "error",
+                count: 0,
+                error: error.message,
+                updatedAt: generatedAt
+            }
+        ],
+        items: []
+    };
+}
+
+async function readPreviousData() {
+    try {
+        return JSON.parse(await readFile(OUT_FILE, "utf8"));
+    } catch {
+        return null;
+    }
+}
+
 async function main() {
-    const data = await collect();
+    const previousData = await readPreviousData();
+    const data = prepareTrendDataForWrite(
+        await collect().catch((error) => buildTrendFailureData(error)),
+        previousData
+    );
     const output = `${JSON.stringify(data, null, 2)}\n`;
 
     if (process.argv.includes("--stdout")) {

@@ -61,3 +61,22 @@ test("DataHealth describes fallback and partial modes", () => {
         "Checked-in data loaded with partial source failures."
     );
 });
+
+test("DataHealth renders fallback safety detail", () => {
+    const DataHealth = loadDataHealth();
+    const html = DataHealth.renderSourceHealth({
+        name: "GitHub",
+        status: "fallback",
+        count: 16,
+        fallbackUsed: true,
+        staleButSafe: true,
+        fallbackReason: "No repo rows fetched",
+        previousUpdated: "2026-06-19",
+        rateLimited: true
+    });
+
+    assert.match(html, /source-health-card status-fallback/);
+    assert.match(html, /fallback used \/ stale but safe \/ rate limited/);
+    assert.match(html, /No repo rows fetched/);
+    assert.match(html, /previous 2026-06-19/);
+});

@@ -86,6 +86,14 @@
     }
 
     function sourceDetail(source) {
+        const safety = [];
+        if (source?.fallbackUsed) safety.push("fallback used");
+        if (source?.staleButSafe) safety.push("stale but safe");
+        if (source?.rateLimited) safety.push("rate limited");
+        if (source?.fallbackReason) safety.push(source.fallbackReason);
+        if (source?.previousUpdated) safety.push(`previous ${source.previousUpdated}`);
+        if (safety.length > 0) return safety.join(" / ");
+
         const errors = Array.isArray(source?.errors) ? source.errors : [];
         if (errors.length > 0) {
             const names = errors.map((error) => error.name).filter(Boolean).join(", ");

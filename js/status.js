@@ -36,6 +36,14 @@ function sourceList(sourceMeta) {
 }
 
 function sourceDetail(source) {
+    const safety = [];
+    if (source?.fallbackUsed) safety.push("fallback used");
+    if (source?.staleButSafe) safety.push("stale but safe");
+    if (source?.rateLimited) safety.push("rate limited");
+    if (source?.fallbackReason) safety.push(source.fallbackReason);
+    if (source?.previousUpdated) safety.push(`previous ${source.previousUpdated}`);
+    if (safety.length > 0) return safety.join(" / ");
+
     const errors = Array.isArray(source?.errors) ? source.errors : [];
     if (errors.length > 0) {
         return errors.map((error) => [error.name, error.error].filter(Boolean).join(": ")).join(" / ");
@@ -184,7 +192,12 @@ function applyStatus(root, manifest, datasets) {
     if (summarySlots.updated) summarySlots.updated.textContent = summary.updated;
     if (rowList) rowList.innerHTML = renderSourceRows(rows, dataBase);
     if (sourceCards) sourceCards.innerHTML = renderSourceCards(rows);
-    if (dataMode) dataMode.textContent = "Checked-in data loaded. Scheduled workflow keeps it fresh.";
+    if (dataMode) {
+        const sourceMeta = rows.map((row) => ({ status: row.status }));
+        dataMode.textContent = globalThis.DataHealth?.dataModeText
+            ? globalThis.DataHealth.dataModeText(sourceMeta)
+            : "Checked-in data loaded. Scheduled workflow keeps it fresh.";
+    }
 }
 
 async function init() {

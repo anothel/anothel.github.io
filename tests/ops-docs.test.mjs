@@ -15,6 +15,10 @@ test("README explains data refresh automation for operators", () => {
     assert.match(readme, /refresh-report/);
     assert.match(readme, /GitHub Step Summary/);
     assert.match(readme, /node --test tests\/\*\.test\.mjs/);
+    assert.match(readme, /stale but safe/);
+    assert.match(readme, /fallbackUsed/);
+    assert.match(readme, /rateLimited/);
+    assert.match(readme, /\$env:GITHUB_TOKEN/);
 });
 
 test("README keeps local and scheduled data update command order aligned", () => {

@@ -95,3 +95,28 @@ test("refresh report renders optional source coverage", () => {
 
     assert.match(markdown, /\| packages \| npm \| partial \| 1 \| 2026-06-19T00:00:00.000Z \| 1\/3 \|/);
 });
+
+test("refresh report renders fallback safety flags", () => {
+    const report = buildRefreshReport(manifest, {
+        packages: {
+            sourceMeta: {
+                name: "npm",
+                status: "fallback",
+                count: 1,
+                updatedAt: "2026-06-20T00:00:00.000Z",
+                fallbackUsed: true,
+                staleButSafe: true,
+                fallbackReason: "No package rows fetched",
+                previousUpdated: "2026-06-19",
+                rateLimited: true
+            }
+        }
+    }, "2026-06-20T00:00:00.000Z");
+    const markdown = renderRefreshMarkdown(report);
+
+    assert.equal(report.modules[0].sources[0].fallbackUsed, true);
+    assert.match(markdown, /fallback used/);
+    assert.match(markdown, /stale but safe/);
+    assert.match(markdown, /rate limited/);
+    assert.match(markdown, /No package rows fetched/);
+});

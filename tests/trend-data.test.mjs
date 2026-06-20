@@ -4,10 +4,12 @@ import assert from "node:assert/strict";
 import {
     buildNpmDownloadsUrl,
     buildSourceMeta,
+    buildTrendFailureData,
     classify,
     fetchGitHub,
     githubRepoQuality,
     githubQueries,
+    prepareTrendDataForWrite,
     scoreHackerNewsStory,
     MAX_ITEMS,
     npmPackages
@@ -160,4 +162,48 @@ test("scoreHackerNewsStory downranks general news without technical intent", () 
         scoreHackerNewsStory({ title: "Zero-Touch OAuth for MCP", score: 80, descendants: 10 }) >
         scoreHackerNewsStory({ title: "Swiss parliament lifts ban on new nuclear power plants", score: 638, descendants: 488 })
     );
+});
+
+test("prepareTrendDataForWrite falls back to previous trends on empty refresh", () => {
+    const prepared = prepareTrendDataForWrite(
+        {
+            updated: "2026-06-20",
+            generatedAt: "2026-06-20T00:00:00.000Z",
+            sourceMeta: [
+                { name: "GitHub", status: "error", count: 0, error: "403 rate limit exceeded" }
+            ],
+            items: []
+        },
+        {
+            updated: "2026-06-19",
+            generatedAt: "2026-06-19T00:00:00.000Z",
+            sourceMeta: [
+                { name: "GitHub", status: "ok", count: 1 }
+            ],
+            items: [{ title: "openai/codex" }]
+        }
+    );
+
+    assert.equal(prepared.sourceMeta[0].status, "fallback");
+    assert.equal(prepared.sourceMeta[0].fallbackUsed, true);
+    assert.equal(prepared.sourceMeta[0].rateLimited, true);
+    assert.deepEqual(prepared.items, [{ title: "openai/codex" }]);
+});
+
+test("buildTrendFailureData creates empty fallback candidate when collection throws", () => {
+    assert.deepEqual(buildTrendFailureData(new Error("No trend items fetched"), "2026-06-20T00:00:00.000Z"), {
+        updated: "2026-06-20",
+        generatedAt: "2026-06-20T00:00:00.000Z",
+        sources: ["Hacker News", "GitHub", "npm"],
+        sourceMeta: [
+            {
+                name: "trends",
+                status: "error",
+                count: 0,
+                error: "No trend items fetched",
+                updatedAt: "2026-06-20T00:00:00.000Z"
+            }
+        ],
+        items: []
+    });
 });

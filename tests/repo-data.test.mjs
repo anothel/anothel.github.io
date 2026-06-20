@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildRepoRows, collectRepos, repoDefinitions } from "../scripts/update-repos.mjs";
+import { buildRepoRows, collectRepos, prepareRepoDataForWrite, repoDefinitions } from "../scripts/update-repos.mjs";
 
 test("buildRepoRows sorts repos by stars and formats rows", () => {
     const rows = buildRepoRows(
@@ -136,4 +136,35 @@ test("collectRepos reports error when every repo fetch fails", async () => {
     assert.equal(data.sourceMeta.coverage, "0/2");
     assert.equal(data.sourceMeta.errors.length, 2);
     assert.deepEqual(data.repos, []);
+});
+
+test("prepareRepoDataForWrite falls back to previous repos on empty refresh", () => {
+    const prepared = prepareRepoDataForWrite(
+        {
+            updated: "2026-06-20",
+            generatedAt: "2026-06-20T00:00:00.000Z",
+            sourceMeta: {
+                name: "GitHub",
+                status: "error",
+                count: 0,
+                errors: [{ name: "openai/codex", error: "403 rate limit exceeded" }]
+            },
+            repos: []
+        },
+        {
+            updated: "2026-06-19",
+            generatedAt: "2026-06-19T00:00:00.000Z",
+            sourceMeta: {
+                name: "GitHub",
+                status: "ok",
+                count: 1
+            },
+            repos: [{ name: "openai/codex" }]
+        }
+    );
+
+    assert.equal(prepared.sourceMeta.status, "fallback");
+    assert.equal(prepared.sourceMeta.fallbackReason, "No repo rows fetched");
+    assert.equal(prepared.sourceMeta.rateLimited, true);
+    assert.deepEqual(prepared.repos, [{ name: "openai/codex" }]);
 });
