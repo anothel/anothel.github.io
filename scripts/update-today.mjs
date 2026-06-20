@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { classifySignal, isBaselineSignal, qualityBoost, signalReason } from "./signal-taxonomy.mjs";
 
 const OUT_FILE = new URL("../data/today.json", import.meta.url);
 
@@ -22,40 +23,7 @@ const sectionSummaries = {
     reference: "Stable references and projects worth keeping nearby."
 };
 
-const intentPatterns = [
-    /\bagent skills?\b/i,
-    /\bcoding agents?\b/i,
-    /\bagents?\b/i,
-    /\bskills?\b/i,
-    /\bmcp\b/i,
-    /\bmodelcontextprotocol\b/i,
-    /\bcodex\b/i,
-    /\bcopilot\b/i,
-    /\bclaude\b/i,
-    /\bopenai\b/i,
-    /\banthropic\b/i,
-    /\blangchain\b/i,
-    /\bllm\b/i,
-    /\bai skills?\b/i,
-    /\bai agents?\b/i,
-    /\bworkflow automation\b/i
-];
-
-const boostedCategories = new Set(["agent skills", "mcp", "coding agents"]);
-
-const baselineTitles = new Set([
-    "typescript",
-    "eslint",
-    "prettier",
-    "react",
-    "react/react",
-    "zod",
-    "tailwindcss",
-    "vite",
-    "next",
-    "next.js",
-    "vercel/next.js"
-]);
+const boostedCategories = new Set(["agent skills", "mcp", "ai agents", "ai evals", "ai engineering"]);
 
 function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);
@@ -114,32 +82,15 @@ function candidateText(item) {
 }
 
 function matchesIntent(item) {
-    const text = candidateText(item);
-    return intentPatterns.some((pattern) => pattern.test(text));
+    return qualityBoost(candidateText(item)) >= 20;
 }
 
 function matchesBaseline(item) {
-    const title = item.title.trim().toLowerCase();
-    const repoName = title.includes("/") ? title.split("/").at(-1) : title;
-    return baselineTitles.has(title) || baselineTitles.has(repoName);
+    return isBaselineSignal(candidateText(item));
 }
 
 function intentReason(item) {
-    const text = candidateText(item).toLowerCase();
-
-    if (text.includes("mcp") || text.includes("modelcontextprotocol")) {
-        return "MCP infrastructure worth tracking for agent workflows.";
-    }
-    if (text.includes("skills")) {
-        return "Agent skills reference for reusable tool instructions.";
-    }
-    if (text.includes("codex") || text.includes("coding agent")) {
-        return "Coding-agent ecosystem signal with practical workflow value.";
-    }
-    if (text.includes("workflow automation")) {
-        return "Workflow automation signal connected to agent-style work.";
-    }
-    return "AI and agent workflow signal worth opening early.";
+    return signalReason(candidateText(item));
 }
 
 function qualityPriority(item) {
@@ -147,8 +98,9 @@ function qualityPriority(item) {
 
     if (item.isIntentMatch) {
         priority += item.module === "Links" ? 16 : 28;
+        priority += Math.max(0, qualityBoost(candidateText(item)));
     }
-    if (boostedCategories.has(item.category.trim().toLowerCase())) {
+    if (boostedCategories.has(classifySignal(candidateText(item)).trim().toLowerCase())) {
         priority += 10;
     }
     if (item.isBaseline) {

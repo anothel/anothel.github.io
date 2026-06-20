@@ -68,15 +68,19 @@ test("default package watchlist tracks AI and agent SDK packages", () => {
         "langchain",
         "@langchain/core",
         "@modelcontextprotocol/sdk",
-        "mastra"
+        "mastra",
+        "fastmcp",
+        "evalite",
+        "braintrust"
     ]) {
         assert.ok(names.has(name), `${name} should be tracked`);
     }
 
-    assert.ok(packageDefinitions.length >= 18);
+    assert.ok(packageDefinitions.length >= 21);
     assert.ok(categories.has("AI SDK"));
     assert.ok(categories.has("AI agents"));
     assert.ok(categories.has("MCP"));
+    assert.ok(categories.has("AI evals"));
 });
 
 test("checked-in packages include baseline and AI agent coverage", () => {
@@ -114,6 +118,9 @@ test("collectPackages keeps successful packages when one package fetch fails", a
 
     assert.equal(data.sourceMeta.status, "partial");
     assert.equal(data.sourceMeta.count, 1);
+    assert.equal(data.sourceMeta.tracked, 2);
+    assert.equal(data.sourceMeta.emitted, 1);
+    assert.equal(data.sourceMeta.coverage, "1/2");
     assert.deepEqual(data.sourceMeta.errors, [
         { name: "openai", error: "npm timeout" }
     ]);
@@ -134,6 +141,9 @@ test("collectPackages reports error when every package fetch fails", async () =>
 
     assert.equal(data.sourceMeta.status, "error");
     assert.equal(data.sourceMeta.count, 0);
+    assert.equal(data.sourceMeta.tracked, 2);
+    assert.equal(data.sourceMeta.emitted, 0);
+    assert.equal(data.sourceMeta.coverage, "0/2");
     assert.equal(data.sourceMeta.errors.length, 2);
     assert.deepEqual(data.packages, []);
 });

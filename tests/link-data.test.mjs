@@ -52,5 +52,8 @@ test("default links include AI skills and agent references", () => {
     assert.ok(titles.has("mattpocock/skills"));
     assert.ok(titles.has("GitHub Awesome Copilot"));
     assert.ok(titles.has("Model Context Protocol servers"));
+    assert.ok(titles.has("OpenAI Agents SDK"));
+    assert.ok(titles.has("MCP TypeScript SDK"));
+    assert.ok(titles.has("Evalite"));
     assert.ok(titles.has("Karpathy GitHub"));
 });

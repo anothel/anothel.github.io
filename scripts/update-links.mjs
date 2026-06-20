@@ -117,11 +117,32 @@ export const linkDefinitions = [
         summary: "Lightweight coding agent that runs in the terminal."
     },
     {
+        title: "OpenAI Agents SDK",
+        category: "AI agents",
+        kind: "Docs",
+        url: "https://openai.github.io/openai-agents-js/",
+        summary: "JavaScript/TypeScript SDK documentation for building OpenAI agent workflows."
+    },
+    {
         title: "contains-studio/agents",
         category: "AI agents",
         kind: "Repo",
         url: "https://github.com/contains-studio/agents",
         summary: "Specialized Claude Code agent files grouped by engineering, design, product, testing, and operations."
+    },
+    {
+        title: "MCP TypeScript SDK",
+        category: "MCP",
+        kind: "Repo",
+        url: "https://github.com/modelcontextprotocol/typescript-sdk",
+        summary: "Official TypeScript SDK for building Model Context Protocol clients and servers."
+    },
+    {
+        title: "Evalite",
+        category: "AI evals",
+        kind: "Docs",
+        url: "https://www.evalite.dev/",
+        summary: "Evaluation toolkit for measuring LLM and agent behavior in TypeScript workflows."
     },
     {
         title: "Karpathy GitHub",
@@ -160,6 +181,9 @@ export function collectLinks() {
             name: "manual",
             status: "ok",
             count: links.length,
+            tracked: linkDefinitions.length,
+            emitted: links.length,
+            coverage: `${links.length}/${linkDefinitions.length}`,
             updatedAt: generatedAt
         },
         links

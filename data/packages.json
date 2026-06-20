@@ -1,11 +1,14 @@
 {
   "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T22:29:53.331Z",
+  "generatedAt": "2026-06-19T23:57:54.024Z",
   "sourceMeta": {
     "name": "npm",
     "status": "ok",
-    "count": 18,
-    "updatedAt": "2026-06-19T22:29:53.331Z"
+    "count": 21,
+    "tracked": 21,
+    "emitted": 21,
+    "coverage": "21/21",
+    "updatedAt": "2026-06-19T23:57:54.024Z"
   },
   "packages": [
     {
@@ -180,6 +183,26 @@
     },
     {
       "rank": 18,
+      "name": "braintrust",
+      "category": "AI evals",
+      "focus": "AI evals and observability",
+      "downloads": 1115974,
+      "downloadsLabel": "1.1M/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/braintrust"
+    },
+    {
+      "rank": 19,
+      "name": "fastmcp",
+      "category": "MCP",
+      "focus": "MCP server framework",
+      "downloads": 460148,
+      "downloadsLabel": "460.1K/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/fastmcp"
+    },
+    {
+      "rank": 20,
       "name": "mastra",
       "category": "AI agents",
       "focus": "TypeScript agent framework",
@@ -187,6 +210,16 @@
       "downloadsLabel": "440.6K/week",
       "period": "2026-06-12 to 2026-06-18",
       "url": "https://www.npmjs.com/package/mastra"
+    },
+    {
+      "rank": 21,
+      "name": "evalite",
+      "category": "AI evals",
+      "focus": "LLM evaluation toolkit",
+      "downloads": 276159,
+      "downloadsLabel": "276.2K/week",
+      "period": "2026-06-12 to 2026-06-18",
+      "url": "https://www.npmjs.com/package/evalite"
     }
   ]
 }

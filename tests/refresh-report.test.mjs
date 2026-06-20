@@ -33,6 +33,9 @@ test("refresh report summarizes module and source health", () => {
                 name: "npm",
                 status: "partial",
                 count: 1,
+                tracked: 2,
+                emitted: 1,
+                coverage: "1/2",
                 updatedAt: "2026-06-19T00:00:00.000Z",
                 errors: [{ name: "vite", error: "503 Service Unavailable" }]
             }
@@ -50,6 +53,7 @@ test("refresh report summarizes module and source health", () => {
     assert.equal(report.totals.items, 3);
     assert.equal(report.totals.status, "partial");
     assert.equal(report.totals.errors, 1);
+    assert.equal(report.modules[0].sources[0].coverage, "1/2");
     assert.deepEqual(report.modules[0].sources[0].errors, ["vite: 503 Service Unavailable"]);
 });
 
@@ -71,4 +75,23 @@ test("refresh report renders markdown for GitHub step summary", () => {
     assert.match(markdown, /Reason: manual retry/);
     assert.match(markdown, /\| packages \| npm \| error \| 0 \| 2026-06-19T00:00:00.000Z \| timeout \\| retry later \|/);
     assert.match(markdown, /Non-ok sources: 2/);
+});
+
+test("refresh report renders optional source coverage", () => {
+    const report = buildRefreshReport(manifest, {
+        packages: {
+            sourceMeta: {
+                name: "npm",
+                status: "partial",
+                count: 1,
+                tracked: 3,
+                emitted: 1,
+                coverage: "1/3",
+                updatedAt: "2026-06-19T00:00:00.000Z"
+            }
+        }
+    }, "2026-06-20T00:00:00.000Z");
+    const markdown = renderRefreshMarkdown(report);
+
+    assert.match(markdown, /\| packages \| npm \| partial \| 1 \| 2026-06-19T00:00:00.000Z \| 1\/3 \|/);
 });

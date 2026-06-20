@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T22:30:02.767Z",
+  "updated": "2026-06-20",
+  "generatedAt": "2026-06-20T00:00:54.845Z",
   "modules": [
     {
       "id": "trends",
@@ -9,8 +9,8 @@
       "data": "data/trends.json",
       "source": "Hacker News, GitHub, npm",
       "status": "ok",
-      "count": 22,
-      "updated": "2026-06-19"
+      "count": 24,
+      "updated": "2026-06-20"
     },
     {
       "id": "packages",
@@ -19,7 +19,7 @@
       "data": "data/packages.json",
       "source": "npm",
       "status": "ok",
-      "count": 18,
+      "count": 21,
       "updated": "2026-06-19"
     },
     {
@@ -39,7 +39,7 @@
       "data": "data/links.json",
       "source": "manual",
       "status": "ok",
-      "count": 18,
+      "count": 21,
       "updated": "2026-06-19"
     }
   ]

@@ -22,6 +22,9 @@ export const packageDefinitions = [
     { name: "langchain", category: "AI agents", focus: "LLM and agent orchestration" },
     { name: "@langchain/core", category: "AI agents", focus: "LangChain core primitives" },
     { name: "@modelcontextprotocol/sdk", category: "MCP", focus: "Model Context Protocol SDK" },
+    { name: "fastmcp", category: "MCP", focus: "MCP server framework" },
+    { name: "evalite", category: "AI evals", focus: "LLM evaluation toolkit" },
+    { name: "braintrust", category: "AI evals", focus: "AI evals and observability" },
     { name: "inngest", category: "Workflow automation", focus: "durable workflow runtime" }
 ];
 
@@ -63,6 +66,9 @@ function buildSourceMeta(count, totalCount, errors, generatedAt) {
         name: "npm",
         status: sourceStatus(count, totalCount),
         count,
+        tracked: totalCount,
+        emitted: count,
+        coverage: `${count}/${totalCount}`,
         updatedAt: generatedAt
     };
 
@@ -131,6 +137,9 @@ export async function collectPackages(
 
 async function main() {
     const data = await collectPackages();
+    if (data.packages.length === 0) {
+        throw new Error("No package rows fetched; leaving existing data untouched");
+    }
     const output = `${JSON.stringify(data, null, 2)}\n`;
 
     if (process.argv.includes("--stdout")) {

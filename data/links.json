@@ -1,11 +1,14 @@
 {
   "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T22:13:03.937Z",
+  "generatedAt": "2026-06-19T23:57:54.720Z",
   "sourceMeta": {
     "name": "manual",
     "status": "ok",
-    "count": 18,
-    "updatedAt": "2026-06-19T22:13:03.937Z"
+    "count": 21,
+    "tracked": 21,
+    "emitted": 21,
+    "coverage": "21/21",
+    "updatedAt": "2026-06-19T23:57:54.720Z"
   },
   "links": [
     {
@@ -74,6 +77,14 @@
     },
     {
       "rank": 9,
+      "title": "OpenAI Agents SDK",
+      "category": "AI agents",
+      "kind": "Docs",
+      "url": "https://openai.github.io/openai-agents-js/",
+      "summary": "JavaScript/TypeScript SDK documentation for building OpenAI agent workflows."
+    },
+    {
+      "rank": 10,
       "title": "OpenAI Codex",
       "category": "AI agents",
       "kind": "Repo",
@@ -81,7 +92,7 @@
       "summary": "Lightweight coding agent that runs in the terminal."
     },
     {
-      "rank": 10,
+      "rank": 11,
       "title": "Karpathy GitHub",
       "category": "AI engineering",
       "kind": "Profile",
@@ -89,7 +100,15 @@
       "summary": "High-signal AI engineering repos including nanoGPT, nanochat, llm.c, and llama2.c."
     },
     {
-      "rank": 11,
+      "rank": 12,
+      "title": "Evalite",
+      "category": "AI evals",
+      "kind": "Docs",
+      "url": "https://www.evalite.dev/",
+      "summary": "Evaluation toolkit for measuring LLM and agent behavior in TypeScript workflows."
+    },
+    {
+      "rank": 13,
       "title": "GitHub REST API",
       "category": "API",
       "kind": "Docs",
@@ -97,7 +116,7 @@
       "summary": "Reference for GitHub REST endpoints used by repo data scripts."
     },
     {
-      "rank": 12,
+      "rank": 14,
       "title": "Hacker News API",
       "category": "API",
       "kind": "Docs",
@@ -105,7 +124,7 @@
       "summary": "Official public API for Hacker News stories and metadata."
     },
     {
-      "rank": 13,
+      "rank": 15,
       "title": "npm Download Counts",
       "category": "API",
       "kind": "Docs",
@@ -113,7 +132,7 @@
       "summary": "Registry download-count API used by package watchlists."
     },
     {
-      "rank": 14,
+      "rank": 16,
       "title": "SQLite Docs",
       "category": "Data",
       "kind": "Docs",
@@ -121,7 +140,7 @@
       "summary": "Reference for small durable data stores and local-first experiments."
     },
     {
-      "rank": 15,
+      "rank": 17,
       "title": "MDN Web Docs",
       "category": "Frontend",
       "kind": "Docs",
@@ -129,7 +148,7 @@
       "summary": "Reference for web platform APIs, CSS, HTML, and JavaScript."
     },
     {
-      "rank": 16,
+      "rank": 18,
       "title": "web.dev",
       "category": "Frontend",
       "kind": "Guide",
@@ -137,7 +156,15 @@
       "summary": "Practical guides for web performance, UX, and platform features."
     },
     {
-      "rank": 17,
+      "rank": 19,
+      "title": "MCP TypeScript SDK",
+      "category": "MCP",
+      "kind": "Repo",
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk",
+      "summary": "Official TypeScript SDK for building Model Context Protocol clients and servers."
+    },
+    {
+      "rank": 20,
       "title": "OpenTelemetry Docs",
       "category": "Ops",
       "kind": "Docs",
@@ -145,7 +172,7 @@
       "summary": "Observability concepts, instrumentation, traces, metrics, and logs."
     },
     {
-      "rank": 18,
+      "rank": 21,
       "title": "Node.js API",
       "category": "Runtime",
       "kind": "Docs",

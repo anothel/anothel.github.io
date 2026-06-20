@@ -32,19 +32,28 @@ test("buildSourceMeta records source status and item counts", () => {
             status: "error",
             count: 0,
             updatedAt: generatedAt,
+            tracked: 1,
+            emitted: 0,
+            coverage: "0/1",
             error: "fetch failed"
         },
         {
             name: "GitHub",
             status: "ok",
             count: 2,
-            updatedAt: generatedAt
+            updatedAt: generatedAt,
+            tracked: 1,
+            emitted: 2,
+            coverage: "2/1"
         },
         {
             name: "npm",
             status: "ok",
             count: 1,
-            updatedAt: generatedAt
+            updatedAt: generatedAt,
+            tracked: 1,
+            emitted: 1,
+            coverage: "1/1"
         }
     ]);
 });
@@ -60,6 +69,8 @@ test("default trend inputs leave room for AI agent signals", () => {
     assert.ok(githubQueries.some((item) => item.category === "AI agents"));
     assert.ok(githubQueries.some((item) => item.category === "Agent skills"));
     assert.ok(githubQueries.some((item) => item.category === "MCP"));
+    assert.ok(githubQueries.some((item) => item.category === "AI evals"));
+    assert.ok(githubQueries.some((item) => item.query.includes("opencode")));
     assert.ok(githubQueries.every((item) => item.category !== "Frontend"));
 });
 
@@ -102,6 +113,25 @@ test("fetchGitHub keeps successful query results when one query fails", async ()
     assert.equal(calls, githubQueries.length);
     assert.ok(rows.length >= githubQueries.length - 1);
     assert.ok(rows.every((row) => row.source === "GitHub"));
+});
+
+test("fetchGitHub strips non-ASCII mojibake from summaries", async () => {
+    const rows = await fetchGitHub(async () => ({
+        items: [
+            {
+                full_name: "example/agent",
+                stargazers_count: 1200,
+                forks_count: 120,
+                html_url: "https://github.com/example/agent",
+                description: "Claude Code agent harness ?\uBC47ike ?\uB61Egent workflow",
+                topics: ["ai-agent", "claude-code"]
+            }
+        ]
+    }));
+
+    assert.ok(rows.length > 0);
+    assert.doesNotMatch(rows[0].summary, /[^\x00-\x7F]/);
+    assert.match(rows[0].summary, /Claude Code agent harness/);
 });
 
 test("githubRepoQuality promotes agent infrastructure over broad adjacent repos", () => {

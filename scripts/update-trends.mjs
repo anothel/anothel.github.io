@@ -1,5 +1,6 @@
 import { writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { classifySignal, qualityBoost } from "./signal-taxonomy.mjs";
 
 const OUT_FILE = new URL("../data/trends.json", import.meta.url);
 const USER_AGENT = "anothel.github.io tech radar";
@@ -39,6 +40,8 @@ export const githubQueries = [
     { query: "agent skills stars:>100", category: "Agent skills" },
     { query: "claude skills stars:>100", category: "Agent skills" },
     { query: "topic:evals stars:>100", category: "AI evals" },
+    { query: "llm eval benchmark agent stars:>100", category: "AI evals" },
+    { query: "opencode coding agent stars:>100", category: "AI agents" },
     { query: "topic:typescript stars:>500", category: "TypeScript" },
     { query: "topic:developer-tools ai stars:>300", category: "Developer tools" }
 ];
@@ -65,11 +68,26 @@ function stripHtml(value = "") {
     return value.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
+function cleanGeneratedText(value = "") {
+    return stripHtml(value)
+        .replace(/[^\x00-\x7F]+/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
 export function buildNpmDownloadsUrl(packageName) {
     return `https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(packageName)}`;
 }
 
 export function classify(text) {
+    const taxonomyCategory = classifySignal(text);
+    if (taxonomyCategory === "Agent skills" || taxonomyCategory === "MCP" || taxonomyCategory === "AI evals") {
+        return taxonomyCategory;
+    }
+    if (taxonomyCategory === "AI agents" || taxonomyCategory === "AI engineering") {
+        return "AI";
+    }
+
     const value = text.toLowerCase();
     if (/\b(agent skills?|skills? for agents?|claude skills?)\b/.test(value)) return "Agent skills";
     if (/\b(mcp|modelcontextprotocol)\b/.test(value)) return "MCP";
@@ -79,7 +97,7 @@ export function classify(text) {
     if (/(database|sqlite|postgres|storage|sync|local-first)/.test(value)) return "Database";
     if (/(security|vulnerability|auth|supply chain)/.test(value)) return "Security";
     if (/(css|design|ui|frontend|browser|web)/.test(value)) return "Frontend";
-    return "Developer tools";
+    return taxonomyCategory === "Developer tooling" ? "Developer tools" : taxonomyCategory;
 }
 
 function textForRepo(repo) {
@@ -124,7 +142,7 @@ export function githubRepoQuality(repo, category) {
     }
 
     if (!hasAny(text, required)) return 0;
-    return clampScore(stars + boost);
+    return clampScore(stars + boost + Math.max(0, qualityBoost(text)) / 2);
 }
 
 export function scoreHackerNewsStory(story) {
@@ -174,7 +192,7 @@ async function fetchHackerNews() {
         .sort((a, b) => b.qualityScore - a.qualityScore)
         .slice(0, 6)
         .map(({ story, qualityScore }) => ({
-            title: stripHtml(story.title),
+            title: cleanGeneratedText(story.title),
             source: "Hacker News",
             category: classify(story.title),
             score: qualityScore,
@@ -218,12 +236,12 @@ export async function fetchGitHub(fetcher = fetchJson) {
                 velocity: `${compactNumber(repo.stargazers_count)} stars`,
                 signal: `${compactNumber(repo.forks_count)} forks`,
                 url: repo.html_url,
-                summary: repo.description || "Repository recently active in this topic."
+                summary: cleanGeneratedText(repo.description || "Repository recently active in this topic.")
             });
         }
     }
 
-    return results.slice(0, 10);
+    return results.slice(0, 12);
 }
 
 async function fetchNpm() {
@@ -259,10 +277,15 @@ export function buildSourceMeta(items, results, generatedAt) {
     }
 
     return results.map((result) => {
+        const emitted = countBySource.get(result.name) || 0;
+        const tracked = result.tracked || 1;
         const meta = {
             name: result.name,
             status: result.ok ? "ok" : "error",
-            count: countBySource.get(result.name) || 0,
+            count: emitted,
+            tracked,
+            emitted,
+            coverage: `${emitted}/${tracked}`,
             updatedAt: generatedAt
         };
 
@@ -276,18 +299,18 @@ export function buildSourceMeta(items, results, generatedAt) {
 
 export async function collect() {
     const sourceJobs = [
-        ["Hacker News", fetchHackerNews],
-        ["GitHub", fetchGitHub],
-        ["npm", fetchNpm]
+        ["Hacker News", fetchHackerNews, 1],
+        ["GitHub", fetchGitHub, githubQueries.length],
+        ["npm", fetchNpm, npmPackages.length]
     ];
 
     const results = await Promise.all(
-        sourceJobs.map(async ([name, fn]) => {
+        sourceJobs.map(async ([name, fn, tracked]) => {
             try {
-                return { name, ok: true, items: await fn() };
+                return { name, ok: true, tracked, items: await fn() };
             } catch (error) {
                 console.warn(`Skipping ${name}: ${error.message}`);
-                return { name, ok: false, error: error.message, items: [] };
+                return { name, ok: false, tracked, error: error.message, items: [] };
             }
         })
     );

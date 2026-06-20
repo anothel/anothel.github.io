@@ -49,6 +49,7 @@ function summarizeSources(module, dataset) {
         status: source.status || "unknown",
         count: source.count || 0,
         updatedAt: source.updatedAt || source.updated || "-",
+        coverage: source.coverage || "",
         errors: sourceErrors(source)
     }));
 }
@@ -104,7 +105,7 @@ export function renderRefreshMarkdown(report, context = {}) {
             source.status,
             source.count,
             source.updatedAt,
-            source.errors.join(" / ") || "-"
+            source.errors.join(" / ") || source.coverage || "-"
         ])
     );
     const reason = context.reason ? `\nReason: ${context.reason}\n` : "";

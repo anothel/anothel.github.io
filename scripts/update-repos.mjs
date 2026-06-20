@@ -16,6 +16,8 @@ export const repoDefinitions = [
     { fullName: "openai/codex", category: "AI agents", focus: "terminal coding agent" },
     { fullName: "github/awesome-copilot", category: "AI agents", focus: "Copilot agents and skills" },
     { fullName: "modelcontextprotocol/servers", category: "AI agents", focus: "MCP reference servers" },
+    { fullName: "modelcontextprotocol/typescript-sdk", category: "MCP", focus: "MCP TypeScript SDK" },
+    { fullName: "modelcontextprotocol/inspector", category: "MCP", focus: "MCP debugging and inspection" },
     { fullName: "contains-studio/agents", category: "AI agents", focus: "Claude Code agent packs" },
     { fullName: "karpathy/nanoGPT", category: "AI engineering", focus: "small GPT training" },
     { fullName: "karpathy/nanochat", category: "AI engineering", focus: "minimal ChatGPT stack" },
@@ -42,6 +44,9 @@ function buildSourceMeta(count, totalCount, errors, generatedAt) {
         name: "GitHub",
         status: sourceStatus(count, totalCount),
         count,
+        tracked: totalCount,
+        emitted: count,
+        coverage: `${count}/${totalCount}`,
         updatedAt: generatedAt
     };
 
@@ -135,6 +140,9 @@ export async function collectRepos(
 
 async function main() {
     const data = await collectRepos();
+    if (data.repos.length === 0) {
+        throw new Error("No repo rows fetched; leaving existing data untouched");
+    }
     const output = `${JSON.stringify(data, null, 2)}\n`;
 
     if (process.argv.includes("--stdout")) {

@@ -74,6 +74,8 @@ test("default repo watchlist tracks AI skills and agent projects", () => {
     assert.ok(names.has("openai/codex"));
     assert.ok(names.has("github/awesome-copilot"));
     assert.ok(names.has("modelcontextprotocol/servers"));
+    assert.ok(names.has("modelcontextprotocol/typescript-sdk"));
+    assert.ok(names.has("modelcontextprotocol/inspector"));
     assert.ok(names.has("contains-studio/agents"));
     assert.ok(names.has("karpathy/nanoGPT"));
     assert.ok(names.has("karpathy/nanochat"));
@@ -106,6 +108,9 @@ test("collectRepos keeps successful repos when one repo fetch fails", async () =
 
     assert.equal(data.sourceMeta.status, "partial");
     assert.equal(data.sourceMeta.count, 1);
+    assert.equal(data.sourceMeta.tracked, 2);
+    assert.equal(data.sourceMeta.emitted, 1);
+    assert.equal(data.sourceMeta.coverage, "1/2");
     assert.deepEqual(data.sourceMeta.errors, [
         { name: "openai/codex", error: "GitHub rate limit" }
     ]);
@@ -126,6 +131,9 @@ test("collectRepos reports error when every repo fetch fails", async () => {
 
     assert.equal(data.sourceMeta.status, "error");
     assert.equal(data.sourceMeta.count, 0);
+    assert.equal(data.sourceMeta.tracked, 2);
+    assert.equal(data.sourceMeta.emitted, 0);
+    assert.equal(data.sourceMeta.coverage, "0/2");
     assert.equal(data.sourceMeta.errors.length, 2);
     assert.deepEqual(data.repos, []);
 });

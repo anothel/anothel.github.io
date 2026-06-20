@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T22:29:57.687Z",
+  "updated": "2026-06-20",
+  "generatedAt": "2026-06-20T00:00:46.401Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -11,19 +11,28 @@
       "name": "Hacker News",
       "status": "ok",
       "count": 6,
-      "updatedAt": "2026-06-19T22:29:57.687Z"
+      "tracked": 1,
+      "emitted": 6,
+      "coverage": "6/1",
+      "updatedAt": "2026-06-20T00:00:46.401Z"
     },
     {
       "name": "GitHub",
       "status": "ok",
-      "count": 8,
-      "updatedAt": "2026-06-19T22:29:57.687Z"
+      "count": 10,
+      "tracked": 13,
+      "emitted": 10,
+      "coverage": "10/13",
+      "updatedAt": "2026-06-20T00:00:46.401Z"
     },
     {
       "name": "npm",
       "status": "ok",
       "count": 8,
-      "updatedAt": "2026-06-19T22:29:57.687Z"
+      "tracked": 21,
+      "emitted": 8,
+      "coverage": "8/21",
+      "updatedAt": "2026-06-20T00:00:46.401Z"
     }
   ],
   "items": [
@@ -34,7 +43,7 @@
       "category": "Developer tools",
       "score": 100,
       "velocity": "243 comments",
-      "signal": "931 points",
+      "signal": "935 points",
       "url": "https://orchidfiles.com/github-repositories-distributing-malware/",
       "summary": "HN story by theorchid with 243 comments."
     },
@@ -58,7 +67,7 @@
       "velocity": "67.5K stars",
       "signal": "11K forks",
       "url": "https://github.com/shareAI-lab/learn-claude-code",
-      "summary": "Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1"
+      "summary": "Bash is all you need - A nano claude codelike agent harness, built from 0 to 1"
     },
     {
       "rank": 4,
@@ -88,13 +97,24 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "218.2K stars",
+      "velocity": "218.3K stars",
       "signal": "33.5K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
     {
       "rank": 7,
+      "title": "ultraworkers/claw-code",
+      "source": "GitHub",
+      "category": "AI agents",
+      "score": 100,
+      "velocity": "194.1K stars",
+      "signal": "109.9K forks",
+      "url": "https://github.com/ultraworkers/claw-code",
+      "summary": "An agent-managed museum exhibit, built in Rust with Gajae-Code / LazyCodex developed and maintained with no human intervention."
+    },
+    {
+      "rank": 8,
       "title": "anomalyco/opencode",
       "source": "GitHub",
       "category": "AI agents",
@@ -105,7 +125,7 @@
       "summary": "The open source coding agent."
     },
     {
-      "rank": 8,
+      "rank": 9,
       "title": "x1xhlol/system-prompts-and-models-of-ai-tools",
       "source": "GitHub",
       "category": "AI agents",
@@ -116,7 +136,29 @@
       "summary": "FULL Augment Code, Claude Code, Cluely, CodeBuddy, Comet, Cursor, Devin AI, Junie, Kiro, Leap.new, Lovable, Manus, NotionAI, Orchids.app, Perplexity, Poke, Qoder, Replit, Same.dev, Trae, Traycer AI, VSCode Agent, Warp.dev, Windsurf, Xcode, Z.ai Code, Dia & v0. (And other Open Sourced) System Prompts, Internal Tools & AI Models"
     },
     {
-      "rank": 9,
+      "rank": 10,
+      "title": "anthropics/claude-code",
+      "source": "GitHub",
+      "category": "AI agents",
+      "score": 100,
+      "velocity": "133.4K stars",
+      "signal": "21.6K forks",
+      "url": "https://github.com/anthropics/claude-code",
+      "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
+    },
+    {
+      "rank": 11,
+      "title": "farion1231/cc-switch",
+      "source": "GitHub",
+      "category": "AI agents",
+      "score": 100,
+      "velocity": "104.7K stars",
+      "signal": "6.9K forks",
+      "url": "https://github.com/farion1231/cc-switch",
+      "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
+    },
+    {
+      "rank": 12,
       "title": "typescript",
       "source": "npm",
       "category": "JavaScript",
@@ -127,7 +169,7 @@
       "summary": "219.6M downloads over the last available week."
     },
     {
-      "rank": 10,
+      "rank": 13,
       "title": "zod",
       "source": "npm",
       "category": "Developer tools",
@@ -138,7 +180,7 @@
       "summary": "202M downloads over the last available week."
     },
     {
-      "rank": 11,
+      "rank": 14,
       "title": "react",
       "source": "npm",
       "category": "JavaScript",
@@ -149,7 +191,7 @@
       "summary": "147.5M downloads over the last available week."
     },
     {
-      "rank": 12,
+      "rank": 15,
       "title": "vite",
       "source": "npm",
       "category": "Developer tools",
@@ -160,7 +202,7 @@
       "summary": "142.3M downloads over the last available week."
     },
     {
-      "rank": 13,
+      "rank": 16,
       "title": "eslint",
       "source": "npm",
       "category": "Developer tools",
@@ -171,7 +213,7 @@
       "summary": "141.7M downloads over the last available week."
     },
     {
-      "rank": 14,
+      "rank": 17,
       "title": "tailwindcss",
       "source": "npm",
       "category": "Frontend",
@@ -182,7 +224,7 @@
       "summary": "121.4M downloads over the last available week."
     },
     {
-      "rank": 15,
+      "rank": 18,
       "title": "prettier",
       "source": "npm",
       "category": "Developer tools",
@@ -193,7 +235,7 @@
       "summary": "117.8M downloads over the last available week."
     },
     {
-      "rank": 16,
+      "rank": 19,
       "title": "express",
       "source": "npm",
       "category": "Developer tools",
@@ -204,70 +246,59 @@
       "summary": "111.3M downloads over the last available week."
     },
     {
-      "rank": 17,
-      "title": "ultraworkers/claw-code",
-      "source": "GitHub",
-      "category": "AI agents",
-      "score": 92,
-      "velocity": "194.1K stars",
-      "signal": "109.9K forks",
-      "url": "https://github.com/ultraworkers/claw-code",
-      "summary": "An agent-managed museum exhibit, built in Rust with Gajae-Code / LazyCodex — developed and maintained with no human intervention."
+      "rank": 20,
+      "title": "Norway imposes near ban on AI in elementary school",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 61,
+      "velocity": "201 comments",
+      "signal": "319 points",
+      "url": "https://www.reuters.com/technology/norway-imposes-near-ban-ai-elementary-school-2026-06-19/",
+      "summary": "HN story by ilreb with 201 comments."
     },
     {
-      "rank": 18,
+      "rank": 21,
       "title": "Zero-Touch OAuth for MCP",
       "source": "Hacker News",
       "category": "MCP",
       "score": 54,
       "velocity": "99 comments",
-      "signal": "261 points",
+      "signal": "263 points",
       "url": "https://blog.modelcontextprotocol.io/posts/enterprise-managed-auth/",
       "summary": "HN story by niyikiza with 99 comments."
     },
     {
-      "rank": 19,
+      "rank": 22,
       "title": "Ten years of ClickHouse in open source",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 52,
+      "score": 53,
       "velocity": "71 comments",
-      "signal": "258 points",
+      "signal": "265 points",
       "url": "https://clickhouse.com/blog/open-source-10",
       "summary": "HN story by saisrirampur with 71 comments."
     },
     {
-      "rank": 20,
-      "title": "Norway imposes near ban on AI in elementary school",
+      "rank": 23,
+      "title": "Hyundai buys Boston Dynamics",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 48,
-      "velocity": "110 comments",
-      "signal": "162 points",
-      "url": "https://www.reuters.com/technology/norway-imposes-near-ban-ai-elementary-school-2026-06-19/",
-      "summary": "HN story by ilreb with 110 comments."
+      "category": "Developer tools",
+      "score": 47,
+      "velocity": "280 comments",
+      "signal": "597 points",
+      "url": "https://startupfortune.com/hyundai-takes-full-control-of-boston-dynamics-as-softbank-exits-for-325-million/",
+      "summary": "HN story by ck2 with 280 comments."
     },
     {
-      "rank": 21,
+      "rank": 24,
       "title": "The AirPods Effect",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 44,
-      "velocity": "643 comments",
-      "signal": "363 points",
+      "score": 46,
+      "velocity": "670 comments",
+      "signal": "373 points",
       "url": "https://www.theescapenewsletter.com/p/the-airpods-effect",
-      "summary": "HN story by herbertl with 643 comments."
-    },
-    {
-      "rank": 22,
-      "title": "Project Valhalla, Explained: How a Decade of Work Arrives in JDK 28",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 43,
-      "velocity": "321 comments",
-      "signal": "518 points",
-      "url": "https://www.jvm-weekly.com/p/project-valhalla-explained-how-a",
-      "summary": "HN story by philonoist with 321 comments."
+      "summary": "HN story by herbertl with 670 comments."
     }
   ]
 }

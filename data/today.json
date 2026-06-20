@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-19",
-  "generatedAt": "2026-06-19T22:30:02.707Z",
+  "updated": "2026-06-20",
+  "generatedAt": "2026-06-20T00:00:59.455Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-19T22:30:02.707Z"
+    "updatedAt": "2026-06-20T00:00:59.455Z"
   },
   "sections": [
     {
@@ -19,7 +19,7 @@
           "origin": "GitHub",
           "category": "AI agents",
           "metric": "100 score",
-          "reason": "AI and agent workflow signal worth opening early.",
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "url": "https://github.com/affaan-m/ECC",
           "score": 100
         },
@@ -29,18 +29,18 @@
           "origin": "GitHub",
           "category": "AI agents",
           "metric": "100 score",
-          "reason": "AI and agent workflow signal worth opening early.",
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "url": "https://github.com/anomalyco/opencode",
           "score": 100
         },
         {
-          "title": "CherryHQ/cherry-studio",
+          "title": "anthropics/claude-code",
           "module": "Trends",
           "origin": "GitHub",
           "category": "AI agents",
           "metric": "100 score",
-          "reason": "AI and agent workflow signal worth opening early.",
-          "url": "https://github.com/CherryHQ/cherry-studio",
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "url": "https://github.com/anthropics/claude-code",
           "score": 100
         }
       ]
@@ -51,13 +51,13 @@
       "summary": "Useful movement that does not need first attention.",
       "items": [
         {
-          "title": "NousResearch/hermes-agent",
+          "title": "CherryHQ/cherry-studio",
           "module": "Trends",
           "origin": "GitHub",
           "category": "AI agents",
           "metric": "100 score",
-          "reason": "AI and agent workflow signal worth opening early.",
-          "url": "https://github.com/NousResearch/hermes-agent",
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "url": "https://github.com/CherryHQ/cherry-studio",
           "score": 100
         },
         {
@@ -81,13 +81,13 @@
           "score": 67
         },
         {
-          "title": "santifer/career-ops",
+          "title": "farion1231/cc-switch",
           "module": "Trends",
           "origin": "GitHub",
           "category": "AI agents",
           "metric": "100 score",
-          "reason": "AI and agent workflow signal worth opening early.",
-          "url": "https://github.com/santifer/career-ops",
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "url": "https://github.com/farion1231/cc-switch",
           "score": 100
         },
         {
@@ -101,14 +101,14 @@
           "score": 81
         },
         {
-          "title": "openai",
+          "title": "fastmcp",
           "module": "Packages",
           "origin": "npm",
-          "category": "AI SDK",
-          "metric": "26.4M/week",
-          "reason": "AI and agent workflow signal worth opening early.",
-          "url": "https://www.npmjs.com/package/openai",
-          "score": 66
+          "category": "MCP",
+          "metric": "460.1K/week",
+          "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "url": "https://www.npmjs.com/package/fastmcp",
+          "score": 60
         }
       ]
     },
@@ -148,14 +148,14 @@
           "score": 62
         },
         {
-          "title": "contains-studio/agents",
+          "title": "Model Context Protocol servers",
           "module": "Links",
           "origin": "Repo",
           "category": "AI agents",
           "metric": "Repo",
-          "reason": "AI and agent workflow signal worth opening early.",
-          "url": "https://github.com/contains-studio/agents",
-          "score": 60
+          "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "url": "https://github.com/modelcontextprotocol/servers",
+          "score": 58
         }
       ]
     }
