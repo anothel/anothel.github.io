@@ -148,6 +148,7 @@ test("explore page owns the cross-module search surface", () => {
         "data-explore-saved-count",
         "data-explore-categories",
         "data-explore-summary",
+        "data-topic-lenses",
         "data-data-mode",
         "data-source-health",
         "data-clear-filters"
@@ -157,6 +158,7 @@ test("explore page owns the cross-module search surface", () => {
 
     assert.match(explore, /Explore tracked signals\./);
     assert.match(explore, /Signal focus/);
+    assert.match(explore, /Topic lenses/);
     assert.match(explore, /Review later/);
     assert.match(explore, /href="..\/review\/index\.html"/);
     assert.match(explore, /..\/js\/data-health\.js/);
@@ -167,6 +169,7 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(explore, /..\/data\/links\.json/);
     assert.match(sitemap, /https:\/\/anothel\.github\.io\/explore\//);
     assert.match(styles, /\.explore-results/);
+    assert.match(styles, /\.topic-lens-grid/);
     assert.match(styles, /\.saved-panel/);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.explore-results[\s\S]*grid-template-columns: 1fr/s);
 });
@@ -238,6 +241,9 @@ test("topic focus pages expose focused landing pages", () => {
         assert.match(html, /data-topic-total/);
         assert.match(html, /data-topic-modules/);
         assert.match(html, /data-topic-updated/);
+        assert.match(html, /data-topic-lead/);
+        assert.match(html, /data-topic-source-mix/);
+        assert.match(html, /data-topic-actions-dynamic/);
         assert.match(html, /data-topic-list/);
         assert.match(html, /..\/..\/js\/topics\.js/);
         assert.match(html, /..\/..\/data\/trends\.json/);

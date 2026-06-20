@@ -58,6 +58,30 @@ test("Topic pages summarize item count, module count, and latest update", () => 
     });
 });
 
+test("Topic pages summarize source mix and highlight the top signal", () => {
+    const app = loadTopics();
+    const items = [
+        { module: "Repos", title: "openai/codex", category: "AI agents", origin: "GitHub", metric: "92K stars", score: 96, updated: "2026-06-19" },
+        { module: "Repos", title: "contains-studio/agents", category: "AI agents", origin: "GitHub", metric: "12K stars", score: 80, updated: "2026-06-18" },
+        { module: "Packages", title: "mastra", category: "AI agents", origin: "npm", metric: "440K/week", score: 78, updated: "2026-06-19" }
+    ];
+
+    const insight = app.topicInsight(items, "AI agents");
+    const mixHtml = app.renderSourceMix(insight.sourceMix);
+    const actionHtml = app.renderTopicActions("AI agents");
+
+    assert.equal(insight.lead, "2 source modules tracking 3 AI agent signals.");
+    assert.equal(insight.topItem.title, "openai/codex");
+    assert.deepEqual(JSON.parse(JSON.stringify(insight.sourceMix)), [
+        { module: "Repos", count: 2 },
+        { module: "Packages", count: 1 }
+    ]);
+    assert.match(mixHtml, /Repos/);
+    assert.match(mixHtml, /2 items/);
+    assert.match(actionHtml, /href="..\/..\/explore\/index\.html\?focus=AI%20agents"/);
+    assert.match(actionHtml, /Open Review/);
+});
+
 test("Topic rendering escapes text and blocks unsafe links", () => {
     const app = loadTopics();
     const html = app.renderTopicCards([
@@ -90,6 +114,9 @@ test("Topic browser init renders stats and cards", async () => {
         "[data-topic-total]",
         "[data-topic-modules]",
         "[data-topic-updated]",
+        "[data-topic-lead]",
+        "[data-topic-source-mix]",
+        "[data-topic-actions-dynamic]",
         "[data-topic-list]"
     ].map((selector) => [selector, createElement()]));
 
@@ -132,5 +159,8 @@ test("Topic browser init renders stats and cards", async () => {
     assert.equal(elements["[data-topic-total]"].textContent, "1");
     assert.equal(elements["[data-topic-modules]"].textContent, "1");
     assert.equal(elements["[data-topic-updated]"].textContent, "2026-06-19");
+    assert.match(elements["[data-topic-lead]"].textContent, /1 source module tracking 1 AI agent signal\./);
+    assert.match(elements["[data-topic-source-mix]"].innerHTML, /Trends/);
+    assert.match(elements["[data-topic-actions-dynamic]"].innerHTML, /Open Review/);
     assert.match(elements["[data-topic-list]"].innerHTML, /Agent runtime/);
 });

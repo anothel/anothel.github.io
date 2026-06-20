@@ -41,7 +41,7 @@
         <main class="hub-main">
             <section class="module-detail">
                 <h2>Reusable agent instruction signals across tracked sources.</h2>
-                <p>Focused view for skills specs, examples, repos, and reusable workflow instructions.</p>
+                <p data-topic-lead>Focused view for skills specs, examples, repos, and reusable workflow instructions.</p>
             </section>
 
             <section class="stats-grid topic-stats" aria-label="Agent skills topic summary">
@@ -59,12 +59,27 @@
                 </article>
             </section>
 
+            <section class="source-mix-panel" aria-label="Agent skills source mix">
+                <div class="section-heading">
+                    <div>
+                        <h2>Source mix</h2>
+                        <p>Where this topic is currently appearing.</p>
+                    </div>
+                </div>
+                <div class="source-mix-grid" data-topic-source-mix>
+                    <article class="source-mix-card">
+                        <span>Static fallback</span>
+                        <strong>Checked-in data</strong>
+                    </article>
+                </div>
+            </section>
+
             <section class="explore-strip topic-actions" aria-label="Agent skills topic actions">
                 <div>
                     <h2>Continue exploring agent skills</h2>
                     <p>Open the filtered Explore view, or inspect the source modules directly.</p>
                 </div>
-                <nav aria-label="Agent skills topic routes">
+                <nav aria-label="Agent skills topic routes" data-topic-actions-dynamic>
                     <a href="../../explore/index.html?focus=Agent%20skills">
                         <strong>Open focused Explore</strong>
                         <span>Agent skills filter</span>

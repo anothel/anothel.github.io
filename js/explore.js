@@ -21,6 +21,47 @@
         savedIds: new Set()
     };
 
+    const topicLensDefinitions = [
+        {
+            focus: "AI agents",
+            label: "AI agents",
+            description: "Coding agents, agent runtimes, and workflow automation.",
+            route: "../topics/ai-agents/index.html"
+        },
+        {
+            focus: "MCP",
+            label: "MCP",
+            description: "Protocol, SDK, server, and client signals.",
+            route: "../topics/mcp/index.html"
+        },
+        {
+            focus: "Agent skills",
+            label: "Agent skills",
+            description: "Reusable instructions, skills repos, and agent patterns.",
+            route: "../topics/agent-skills/index.html"
+        },
+        {
+            focus: "AI evals",
+            label: "AI evals",
+            description: "Evaluation, observability, and test harness tools."
+        },
+        {
+            focus: "AI engineering",
+            label: "AI engineering",
+            description: "Model training, inference, and practical AI systems."
+        },
+        {
+            focus: "Workflow automation",
+            label: "Workflow automation",
+            description: "Durable workflows, integrations, and local automation."
+        },
+        {
+            focus: "Developer tooling",
+            label: "Developer tooling",
+            description: "Tools that affect coding, testing, and build flow."
+        }
+    ];
+
     function escapeHtml(value) {
         return String(value ?? "")
             .replaceAll("&", "&amp;")
@@ -35,9 +76,13 @@
             return "#";
         }
 
+        const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
+        if (!hasScheme && (href.startsWith("../") || href.startsWith("./") || href.startsWith("/"))) {
+            return escapeHtml(href);
+        }
+
         try {
-            const parsed = new URL(href, "https://anothel.github.io");
-            const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
+            const parsed = new URL(href, "https://anothel.github.io/explore/");
             if (hasScheme && parsed.protocol !== "http:" && parsed.protocol !== "https:") {
                 return "#";
             }
@@ -301,10 +346,39 @@
         if (focus === "Packages") return item.module === "Packages";
         if (focus === "MCP") return /\bmcp\b|\bmodelcontextprotocol\b/.test(text);
         if (focus === "Agent skills") return /\b(agent skills?|skills?)\b/.test(text);
+        if (focus === "AI evals") return /\b(eval|evals|evaluation|observability|braintrust|evalite)\b/.test(text);
+        if (focus === "AI engineering") return /\b(ai engineering|gpt|llm|llama|training|inference|cuda|model)\b/.test(text);
+        if (focus === "Workflow automation") return /\b(workflow automation|automation|durable workflow|n8n|inngest|integration)\b/.test(text);
+        if (focus === "Developer tooling") return /\b(developer tools?|tooling|build tool|lint|format|testing|browser automation|vite|eslint|prettier|playwright)\b/.test(text);
         if (focus === "Security") return /\b(security|oauth|auth|malware|vulnerability|supply chain)\b/.test(text);
         if (focus === "AI agents") return /\b(ai agents?|agentic|coding agent|codex|claude code|copilot|workflow automation)\b/.test(text);
 
         return true;
+    }
+
+    function topicRouteFor(definition) {
+        return definition.route || `../explore/index.html?focus=${encodeURIComponent(definition.focus)}`;
+    }
+
+    function buildTopicLenses(items) {
+        return topicLensDefinitions.map((definition) => {
+            const matches = sortExploreItems(
+                items.filter((item) => focusMatches(item, definition.focus)),
+                "priority",
+                new Set()
+            );
+            const modules = new Set(matches.map((item) => item.module).filter(Boolean));
+
+            return {
+                focus: definition.focus,
+                label: definition.label,
+                description: definition.description,
+                route: topicRouteFor(definition),
+                count: matches.length,
+                modules: modules.size,
+                topItem: matches[0] || null
+            };
+        });
     }
 
     function filterExploreItems(items, filters) {
@@ -410,6 +484,28 @@
                 <button type="button" data-remove-id="${escapeHtml(item.id)}">Remove</button>
             </article>
         `).join("");
+    }
+
+    function renderTopicLenses(lenses, activeFocus = "all") {
+        return lenses.map((lens) => {
+            const pressed = lens.focus === activeFocus;
+            const top = lens.topItem ? `${lens.topItem.title} / ${lens.topItem.module}` : "No focused signal yet";
+
+            return `
+                <article class="topic-lens-card">
+                    <div>
+                        <span>${escapeHtml(lens.count)} items / ${escapeHtml(lens.modules)} modules</span>
+                        <strong>${escapeHtml(lens.label)}</strong>
+                    </div>
+                    <p>${escapeHtml(lens.description)}</p>
+                    <small>${escapeHtml(top)}</small>
+                    <div class="topic-lens-actions">
+                        <button type="button" data-focus-lens="${escapeHtml(lens.focus)}" aria-pressed="${pressed ? "true" : "false"}">Use lens</button>
+                        <a href="${safeHref(lens.route)}">Open topic</a>
+                    </div>
+                </article>
+            `;
+        }).join("");
     }
 
     function createExploreStore(storage) {
@@ -519,6 +615,7 @@
             savedCount: document.querySelector("[data-explore-saved-count]"),
             categories: document.querySelector("[data-explore-categories]"),
             summary: document.querySelector("[data-explore-summary]"),
+            topicLenses: document.querySelector("[data-topic-lenses]"),
             dataMode: document.querySelector("[data-data-mode]"),
             sourceHealth: document.querySelector("[data-source-health]"),
             clearFilters: document.querySelector("[data-clear-filters]")
@@ -533,6 +630,7 @@
         if (els.savedCount) els.savedCount.textContent = String(state.savedIds.size);
         if (els.categories) els.categories.textContent = String(categoryCount);
         if (els.summary) els.summary.textContent = activeExploreSummary(state, state.savedIds.size);
+        if (els.topicLenses) els.topicLenses.innerHTML = renderTopicLenses(buildTopicLenses(state.items), state.focus);
         if (els.results) els.results.innerHTML = renderExploreCards(items, state.savedIds);
         if (els.saved) els.saved.innerHTML = renderSavedQueue(state.items, state.savedIds);
         bindDynamicActions(els, store);
@@ -579,6 +677,14 @@
         document.querySelectorAll("[data-remove-id]").forEach((button) => {
             button.addEventListener("click", () => {
                 state.savedIds = store.remove(button.dataset.removeId);
+                render(els, store);
+            });
+        });
+
+        document.querySelectorAll("[data-focus-lens]").forEach((button) => {
+            button.addEventListener("click", () => {
+                state.focus = button.dataset.focusLens || "all";
+                updateFocusButtons(els);
                 render(els, store);
             });
         });
@@ -679,6 +785,8 @@
         sortExploreItems,
         renderExploreCards,
         renderSavedQueue,
+        buildTopicLenses,
+        renderTopicLenses,
         createExploreStore,
         qualityScoreForItem,
         dedupeExploreItems,

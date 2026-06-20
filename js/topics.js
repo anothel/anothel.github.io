@@ -133,6 +133,64 @@
         };
     }
 
+    function sourceMix(items) {
+        const counts = new Map();
+        for (const item of items) {
+            counts.set(item.module, (counts.get(item.module) || 0) + 1);
+        }
+        return [...counts.entries()]
+            .map(([module, count]) => ({ module, count }))
+            .sort((a, b) => Number(b.count) - Number(a.count) || a.module.localeCompare(b.module));
+    }
+
+    function topicSignalLabel(topic) {
+        if (topic === "AI agents") return "AI agent";
+        if (topic === "Agent skills") return "agent skill";
+        return topic;
+    }
+
+    function topicInsight(items, topic) {
+        const mix = sourceMix(items);
+        const moduleWord = mix.length === 1 ? "module" : "modules";
+        const signalWord = items.length === 1 ? "signal" : "signals";
+        return {
+            lead: `${mix.length} source ${moduleWord} tracking ${items.length} ${topicSignalLabel(topic)} ${signalWord}.`,
+            sourceMix: mix,
+            topItem: items[0] || null
+        };
+    }
+
+    function renderSourceMix(mix) {
+        if (mix.length === 0) {
+            return '<p class="saved-empty">No source mix yet.</p>';
+        }
+
+        return mix.map((entry) => `
+            <article class="source-mix-card">
+                <span>${escapeHtml(entry.module)}</span>
+                <strong>${escapeHtml(entry.count)} items</strong>
+            </article>
+        `).join("");
+    }
+
+    function renderTopicActions(topic) {
+        const encoded = encodeURIComponent(topic);
+        return `
+            <a href="../../explore/index.html?focus=${encoded}">
+                <strong>Open focused Explore</strong>
+                <span>${escapeHtml(topic)} lens</span>
+            </a>
+            <a href="../../review/index.html">
+                <strong>Open Review</strong>
+                <span>Saved follow-up queue</span>
+            </a>
+            <a href="../../status/index.html">
+                <strong>Source status</strong>
+                <span>Refresh health</span>
+            </a>
+        `;
+    }
+
     function renderTopicCards(items) {
         if (items.length === 0) {
             return `
@@ -155,6 +213,7 @@
                     <span>${escapeHtml(item.origin)}</span>
                     <span>${escapeHtml(item.metric)}</span>
                     <span>${escapeHtml(item.updated)}</span>
+                    <span class="quality-marker">Signal fit ${escapeHtml(item.score)}</span>
                 </div>
                 <div class="explore-card-actions">
                     <a href="${safeHref(item.url)}">Open item</a>
@@ -174,6 +233,9 @@
             total: document.querySelector("[data-topic-total]"),
             modules: document.querySelector("[data-topic-modules]"),
             updated: document.querySelector("[data-topic-updated]"),
+            lead: document.querySelector("[data-topic-lead]"),
+            sourceMix: document.querySelector("[data-topic-source-mix]"),
+            actions: document.querySelector("[data-topic-actions-dynamic]"),
             list: document.querySelector("[data-topic-list]")
         };
     }
@@ -198,11 +260,15 @@
 
             const items = topicItems({ trends, packages, repos, links }, topic);
             const summary = topicSummary(items);
+            const insight = topicInsight(items, topic);
             const els = selectors();
 
             if (els.total) els.total.textContent = String(summary.total);
             if (els.modules) els.modules.textContent = String(summary.modules);
             if (els.updated) els.updated.textContent = summary.updated;
+            if (els.lead) els.lead.textContent = insight.lead;
+            if (els.sourceMix) els.sourceMix.innerHTML = renderSourceMix(insight.sourceMix);
+            if (els.actions) els.actions.innerHTML = renderTopicActions(topic);
             if (els.list) els.list.innerHTML = renderTopicCards(items);
         } catch {
             // Checked-in HTML stays useful when local file fetch is blocked.
@@ -213,7 +279,10 @@
         topicItems,
         topicSummary,
         renderTopicCards,
-        topicMatches
+        topicMatches,
+        topicInsight,
+        renderSourceMix,
+        renderTopicActions
     };
 
     if (typeof document !== "undefined") {

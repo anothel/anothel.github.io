@@ -328,6 +328,34 @@ test("Explore saved queue empty state tells the user what to do", () => {
     assert.match(app.renderSavedQueue([], new Set()), /Save items to review later in this browser\./);
 });
 
+test("Explore builds topic lenses with counts, module spread, and topic routes", () => {
+    const app = loadExplore();
+    const items = [
+        { id: "repos:agent", module: "Repos", title: "openai/codex", category: "AI agents", origin: "GitHub", summary: "coding agent", score: 96 },
+        { id: "packages:agent", module: "Packages", title: "mastra", category: "AI agents", origin: "npm", summary: "agent framework", score: 84 },
+        { id: "packages:mcp", module: "Packages", title: "@modelcontextprotocol/sdk", category: "MCP", origin: "npm", summary: "MCP SDK", score: 90 },
+        { id: "repos:skills", module: "Repos", title: "mattpocock/skills", category: "Agent skills", origin: "GitHub", summary: "workflow skills", score: 88 },
+        { id: "links:evals", module: "Links", title: "Evalite docs", category: "AI evals", origin: "Docs", summary: "eval harness", score: 72 }
+    ];
+
+    const lenses = app.buildTopicLenses(items);
+    const byFocus = Object.fromEntries(lenses.map((lens) => [lens.focus, lens]));
+
+    assert.equal(byFocus["AI agents"].count, 2);
+    assert.equal(byFocus["AI agents"].modules, 2);
+    assert.equal(byFocus["AI agents"].topItem.title, "openai/codex");
+    assert.equal(byFocus.MCP.count, 1);
+    assert.equal(byFocus["Agent skills"].route, "../topics/agent-skills/index.html");
+    assert.equal(byFocus["AI evals"].route, "../explore/index.html?focus=AI%20evals");
+
+    const html = app.renderTopicLenses(lenses, "MCP");
+    assert.match(html, /data-focus-lens="MCP"/);
+    assert.match(html, /aria-pressed="true"/);
+    assert.match(html, /Open topic/);
+    assert.match(html, /2 items \/ 2 modules/);
+    assert.match(html, /href="..\/topics\/agent-skills\/index\.html"/);
+});
+
 test("Explore saved store reads, toggles, removes, and ignores broken storage", () => {
     const app = loadExplore();
     const memory = new Map();
@@ -480,6 +508,7 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
         "[data-explore-saved-count]",
         "[data-explore-categories]",
         "[data-explore-summary]",
+        "[data-topic-lenses]",
         "[data-data-mode]",
         "[data-source-health]",
         "[data-clear-filters]"
@@ -536,6 +565,8 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
     assert.equal(elements["[data-explore-saved-count]"].textContent, "1");
     assert.match(elements["[data-explore-results]"].innerHTML, /Agent trend/);
     assert.match(elements["[data-explore-saved]"].innerHTML, /Agent trend/);
+    assert.match(elements["[data-topic-lenses]"].innerHTML, /AI agents/);
+    assert.match(elements["[data-topic-lenses]"].innerHTML, /Use lens/);
     assert.match(elements["[data-source-health]"].innerHTML, /status-partial/);
     assert.equal(focusButtons[0].ariaPressed, "true");
 
@@ -573,6 +604,7 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
         "[data-explore-saved-count]",
         "[data-explore-categories]",
         "[data-explore-summary]",
+        "[data-topic-lenses]",
         "[data-data-mode]",
         "[data-source-health]",
         "[data-clear-filters]"
@@ -645,6 +677,102 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
     assert.equal(elements["[data-explore-sort]"].value, "saved");
     assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
     assert.equal(elements["[data-explore-total]"].textContent, "2");
+});
+
+test("Explore topic lens click applies the matching focus filter", async () => {
+    function createElement() {
+        return {
+            innerHTML: "",
+            textContent: "",
+            value: "all",
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
+            },
+            dispatch(type, value = this.value) {
+                this.value = value;
+                this.listeners[type]?.({ target: this });
+            }
+        };
+    }
+
+    const elements = Object.fromEntries([
+        "[data-explore-results]",
+        "[data-explore-saved]",
+        "[data-explore-module]",
+        "[data-explore-category]",
+        "[data-explore-query]",
+        "[data-explore-sort]",
+        "[data-explore-total]",
+        "[data-explore-saved-count]",
+        "[data-explore-categories]",
+        "[data-explore-summary]",
+        "[data-topic-lenses]",
+        "[data-data-mode]",
+        "[data-source-health]",
+        "[data-clear-filters]"
+    ].map((selector) => [selector, createElement()]));
+    const focusButtons = [
+        { dataset: { focusFilter: "all" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
+        { dataset: { focusFilter: "MCP" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
+    ];
+    let lensButton = null;
+    const sources = {
+        "../data/manifest.json": { modules: [] },
+        "../data/trends.json": {
+            updated: "2026-06-20",
+            sourceMeta: [],
+            items: [
+                { rank: 1, title: "MCP server", source: "GitHub", category: "MCP", score: 90, velocity: "+5%", url: "https://example.com/mcp", summary: "Model Context Protocol server." },
+                { rank: 2, title: "Other runtime", source: "npm", category: "Runtime", score: 70, velocity: "1M/week", url: "https://example.com/other", summary: "Other item." }
+            ]
+        },
+        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    };
+    const context = {
+        console,
+        document: {
+            currentScript: { dataset: {} },
+            querySelector(selector) {
+                return elements[selector] || null;
+            },
+            querySelectorAll(selector) {
+                if (selector === "[data-focus-filter]") return focusButtons;
+                if (selector === "[data-focus-lens]") {
+                    lensButton = {
+                        dataset: { focusLens: "MCP" },
+                        addEventListener(type, listener) {
+                            this.listeners = { [type]: listener };
+                        }
+                    };
+                    return [lensButton];
+                }
+                return [];
+            }
+        },
+        localStorage: {
+            getItem() {
+                return "[]";
+            },
+            setItem() {}
+        },
+        fetch: async (path) => ({
+            ok: true,
+            json: async () => sources[path]
+        })
+    };
+
+    vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    lensButton.listeners.click({ target: lensButton });
+
+    assert.equal(elements["[data-explore-total]"].textContent, "1");
+    assert.match(elements["[data-explore-summary]"].textContent, /Focus: MCP/);
+    assert.equal(focusButtons[1].ariaPressed, "true");
 });
 
 test("Explore browser init applies focus from URL query", async () => {
