@@ -9,6 +9,8 @@ import {
     renderSavedSummary,
     renderModuleRoutes,
     buildTopicMovements,
+    createPinnedTopicStore,
+    sortTopicMovementsByPins,
     renderTopicMovements,
     renderDecisionActions,
     renderSkimList,
@@ -175,6 +177,45 @@ test("buildTopicMovements ranks recurring topic movement across checked-in data"
     ]);
     assert.equal(movements[0].topItem.title, "OpenAI Codex");
     assert.equal(movements[0].updated, "2026-06-20");
+});
+
+test("pinned topic store reads, toggles, caps, and ignores broken storage", () => {
+    const memory = new Map();
+    const storage = {
+        getItem(key) { return memory.get(key) || null; },
+        setItem(key, value) { memory.set(key, value); }
+    };
+    const store = createPinnedTopicStore(storage);
+
+    assert.deepEqual(store.read(), []);
+    assert.deepEqual(store.toggle("MCP"), ["MCP"]);
+    assert.deepEqual(store.toggle("AI agents"), ["MCP", "AI agents"]);
+    assert.deepEqual(store.toggle("Agent skills"), ["MCP", "AI agents", "Agent skills"]);
+    assert.deepEqual(store.toggle("AI evals"), ["AI agents", "Agent skills", "AI evals"]);
+    assert.deepEqual(store.toggle("AI agents"), ["Agent skills", "AI evals"]);
+    assert.deepEqual(createPinnedTopicStore({ getItem() { throw new Error("blocked"); } }).read(), []);
+    assert.deepEqual(createPinnedTopicStore({ getItem() { return JSON.stringify({ version: 1, topics: ["MCP", "Unknown"] }); } }).read(), ["MCP"]);
+});
+
+test("pinned topics sort Home topic movement before automatic ranking", () => {
+    const movements = [
+        { topic: "AI agents", count: 8, modules: 4 },
+        { topic: "Agent skills", count: 4, modules: 2 },
+        { topic: "MCP", count: 3, modules: 3 }
+    ];
+
+    assert.deepEqual(
+        sortTopicMovementsByPins(movements, ["MCP"]).map((movement) => movement.topic),
+        ["MCP", "AI agents", "Agent skills"]
+    );
+    assert.deepEqual(
+        sortTopicMovementsByPins(movements, ["Agent skills", "MCP"]).map((movement) => movement.topic),
+        ["Agent skills", "MCP", "AI agents"]
+    );
+    assert.deepEqual(
+        sortTopicMovementsByPins(movements, []).map((movement) => movement.topic),
+        ["AI agents", "Agent skills", "MCP"]
+    );
 });
 
 test("home decision renderers emit safe action and topic markup", () => {

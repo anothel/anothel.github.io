@@ -1,4 +1,5 @@
 (function attachTopics(global) {
+    const pinnedTopicsStorageKey = "anothel.preferences.pinnedTopics.v1";
     const defaultPaths = {
         trends: "../../data/trends.json",
         packages: "../../data/packages.json",
@@ -54,6 +55,7 @@
             ]
         }
     };
+    const knownTopicNames = Object.keys(topicRoutes);
 
     function escapeHtml(value) {
         return String(value ?? "")
@@ -86,6 +88,48 @@
         } catch {
             return "#";
         }
+    }
+
+    function createPinnedTopicStore(storage) {
+        const validTopics = new Set(knownTopicNames);
+        const maxPinnedTopics = 3;
+
+        function normalize(topics) {
+            return [...new Set((topics || []).filter((topic) => validTopics.has(topic)))].slice(0, maxPinnedTopics);
+        }
+
+        function read() {
+            try {
+                const parsed = JSON.parse(storage?.getItem(pinnedTopicsStorageKey) || "[]");
+                if (Array.isArray(parsed)) return normalize(parsed);
+                if (parsed?.version === 1 && Array.isArray(parsed.topics)) return normalize(parsed.topics);
+            } catch {
+                return [];
+            }
+            return [];
+        }
+
+        function write(topics) {
+            const normalized = normalize(topics);
+            try {
+                storage?.setItem(pinnedTopicsStorageKey, JSON.stringify({ version: 1, topics: normalized }));
+            } catch {
+                // Storage can be disabled in private or local file contexts.
+            }
+            return normalized;
+        }
+
+        return {
+            read,
+            toggle(topic) {
+                if (!validTopics.has(topic)) return read();
+                const topics = read();
+                const next = topics.includes(topic)
+                    ? topics.filter((item) => item !== topic)
+                    : [...topics, topic].slice(-maxPinnedTopics);
+                return write(next);
+            }
+        };
     }
 
     function textBlob(item) {
@@ -305,6 +349,15 @@
         `).join("");
     }
 
+    function renderTopicPinAction(topic, pinnedTopics = new Set()) {
+        const pinned = pinnedTopics.has(topic);
+        return `
+            <button class="pin-topic-button" type="button" data-pin-topic="${escapeHtml(topic)}" aria-pressed="${pinned ? "true" : "false"}">
+                ${pinned ? "Pinned topic" : "Pin topic"}
+            </button>
+        `;
+    }
+
     function renderTopicGuidance(guidance) {
         const cards = [
             ["What to watch", guidance.whatToWatch],
@@ -434,9 +487,21 @@
             related: document.querySelector("[data-topic-related]"),
             crossLinks: document.querySelector("[data-topic-cross-links]"),
             sourceMix: document.querySelector("[data-topic-source-mix]"),
+            pin: document.querySelector("[data-topic-pin]"),
             actions: document.querySelector("[data-topic-actions-dynamic]"),
             list: document.querySelector("[data-topic-list]")
         };
+    }
+
+    function bindPinAction(els, store, topic) {
+        if (typeof document.querySelectorAll !== "function") return;
+        document.querySelectorAll("[data-pin-topic]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const pinnedTopics = new Set(store.toggle(button.dataset.pinTopic || topic));
+                if (els.pin) els.pin.innerHTML = renderTopicPinAction(topic, pinnedTopics);
+                bindPinAction(els, store, topic);
+            });
+        });
     }
 
     async function init() {
@@ -464,6 +529,8 @@
             const insight = topicInsight(items, topic);
             const dashboard = topicDashboard(items, today, topic);
             const els = selectors();
+            const pinnedStore = createPinnedTopicStore(global.localStorage);
+            const pinnedTopics = new Set(pinnedStore.read());
 
             if (els.total) els.total.textContent = String(summary.total);
             if (els.modules) els.modules.textContent = String(summary.modules);
@@ -475,8 +542,10 @@
             if (els.related) els.related.innerHTML = renderRelatedGroups(dashboard.relatedGroups);
             if (els.crossLinks) els.crossLinks.innerHTML = renderCrossLinks(dashboard.crossLinks);
             if (els.sourceMix) els.sourceMix.innerHTML = renderSourceMix(insight.sourceMix);
+            if (els.pin) els.pin.innerHTML = renderTopicPinAction(topic, pinnedTopics);
             if (els.actions) els.actions.innerHTML = renderTopicActions(topic);
             if (els.list) els.list.innerHTML = renderTopicCards(items);
+            bindPinAction(els, pinnedStore, topic);
         } catch {
             // Checked-in HTML stays useful when local file fetch is blocked.
         }
@@ -490,8 +559,10 @@
         topicInsight,
         topicDashboard,
         topicGuidance,
+        createPinnedTopicStore,
         renderSourceMix,
         renderTopicActions,
+        renderTopicPinAction,
         renderTopicGuidance,
         renderWhyNow,
         renderTopMovers,

@@ -248,6 +248,7 @@ test("topic focus pages expose focused landing pages", () => {
         assert.match(html, /data-topic-related/);
         assert.match(html, /data-topic-cross-links/);
         assert.match(html, /data-topic-source-mix/);
+        assert.match(html, /data-topic-pin/);
         assert.match(html, /data-topic-actions-dynamic/);
         assert.match(html, /data-topic-list/);
         assert.match(html, /..\/..\/js\/topics\.js/);
@@ -261,6 +262,7 @@ test("topic focus pages expose focused landing pages", () => {
     }
 
     assert.match(styles, /\.topic-actions/);
+    assert.match(styles, /\.pin-topic-button/);
     assert.match(styles, /\.topic-guidance-grid/);
     assert.match(styles, /\.topic-guidance-card/);
     assert.match(styles, /\.topic-dashboard-grid/);

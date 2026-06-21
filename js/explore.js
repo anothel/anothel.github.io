@@ -1,5 +1,6 @@
 (function attachExplore(global) {
     const storageKey = "anothel.explore.saved.v1";
+    const pinnedTopicsStorageKey = "anothel.preferences.pinnedTopics.v1";
     const dataHealth = global.DataHealth;
 
     const defaultPaths = {
@@ -18,7 +19,8 @@
         focus: "all",
         query: "",
         sort: "priority",
-        savedIds: new Set()
+        savedIds: new Set(),
+        pinnedTopics: new Set()
     };
 
     const topicLensDefinitions = [
@@ -61,6 +63,7 @@
             description: "Tools that affect coding, testing, and build flow."
         }
     ];
+    const knownTopicNames = topicLensDefinitions.map((definition) => definition.focus);
 
     function escapeHtml(value) {
         return String(value ?? "")
@@ -381,6 +384,61 @@
         });
     }
 
+    function createPinnedTopicStore(storage) {
+        const validTopics = new Set(knownTopicNames);
+        const maxPinnedTopics = 3;
+
+        function normalize(topics) {
+            return [...new Set((topics || []).filter((topic) => validTopics.has(topic)))].slice(0, maxPinnedTopics);
+        }
+
+        function read() {
+            try {
+                const parsed = JSON.parse(storage?.getItem(pinnedTopicsStorageKey) || "[]");
+                if (Array.isArray(parsed)) return normalize(parsed);
+                if (parsed?.version === 1 && Array.isArray(parsed.topics)) return normalize(parsed.topics);
+            } catch {
+                return [];
+            }
+            return [];
+        }
+
+        function write(topics) {
+            const normalized = normalize(topics);
+            try {
+                storage?.setItem(pinnedTopicsStorageKey, JSON.stringify({ version: 1, topics: normalized }));
+            } catch {
+                // Storage can be disabled in private or local file contexts.
+            }
+            return normalized;
+        }
+
+        return {
+            read,
+            toggle(topic) {
+                if (!validTopics.has(topic)) return read();
+                const topics = read();
+                const next = topics.includes(topic)
+                    ? topics.filter((item) => item !== topic)
+                    : [...topics, topic].slice(-maxPinnedTopics);
+                return write(next);
+            }
+        };
+    }
+
+    function sortTopicLensesByPins(lenses, pinnedTopics = new Set()) {
+        const pinRank = new Map([...pinnedTopics].map((topic, index) => [topic, index]));
+        return [...lenses].sort((a, b) => {
+            const aPinned = pinRank.has(a.focus);
+            const bPinned = pinRank.has(b.focus);
+            if (aPinned || bPinned) {
+                if (aPinned && bPinned) return pinRank.get(a.focus) - pinRank.get(b.focus);
+                return aPinned ? -1 : 1;
+            }
+            return 0;
+        });
+    }
+
     function filterExploreItems(items, filters) {
         return items
             .filter((item) => filters.module === "all" || item.module === filters.module)
@@ -486,9 +544,10 @@
         `).join("");
     }
 
-    function renderTopicLenses(lenses, activeFocus = "all") {
+    function renderTopicLenses(lenses, activeFocus = "all", pinnedTopics = new Set()) {
         return lenses.map((lens) => {
             const pressed = lens.focus === activeFocus;
+            const pinned = pinnedTopics.has(lens.focus);
             const top = lens.topItem ? `${lens.topItem.title} / ${lens.topItem.module}` : "No focused signal yet";
 
             return `
@@ -501,6 +560,7 @@
                     <small>${escapeHtml(top)}</small>
                     <div class="topic-lens-actions">
                         <button type="button" data-focus-lens="${escapeHtml(lens.focus)}" aria-pressed="${pressed ? "true" : "false"}">Use lens</button>
+                        <button class="pin-topic-button" type="button" data-pin-topic="${escapeHtml(lens.focus)}" aria-pressed="${pinned ? "true" : "false"}">${pinned ? "Pinned" : "Pin"}</button>
                         <a href="${safeHref(lens.route)}">Open topic</a>
                     </div>
                 </article>
@@ -622,7 +682,7 @@
         };
     }
 
-    function render(els, store) {
+    function render(els, store, pinnedStore) {
         const items = visibleItems(state.items, state, state.savedIds);
         const categoryCount = uniqueValues(items, "category").length;
 
@@ -630,10 +690,10 @@
         if (els.savedCount) els.savedCount.textContent = String(state.savedIds.size);
         if (els.categories) els.categories.textContent = String(categoryCount);
         if (els.summary) els.summary.textContent = activeExploreSummary(state, state.savedIds.size);
-        if (els.topicLenses) els.topicLenses.innerHTML = renderTopicLenses(buildTopicLenses(state.items), state.focus);
+        if (els.topicLenses) els.topicLenses.innerHTML = renderTopicLenses(sortTopicLensesByPins(buildTopicLenses(state.items), state.pinnedTopics), state.focus, state.pinnedTopics);
         if (els.results) els.results.innerHTML = renderExploreCards(items, state.savedIds);
         if (els.saved) els.saved.innerHTML = renderSavedQueue(state.items, state.savedIds);
-        bindDynamicActions(els, store);
+        bindDynamicActions(els, store, pinnedStore);
     }
 
     function updateFocusButtons(els) {
@@ -660,7 +720,7 @@
         if (els.sourceHealth) els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(state.sourceMeta);
     }
 
-    function bindDynamicActions(els, store) {
+    function bindDynamicActions(els, store, pinnedStore) {
         for (const button of [els.results, els.saved]) {
             if (!button?.innerHTML) continue;
         }
@@ -670,14 +730,14 @@
         document.querySelectorAll("[data-save-id]").forEach((button) => {
             button.addEventListener("click", () => {
                 state.savedIds = store.toggle(button.dataset.saveId);
-                render(els, store);
+                render(els, store, pinnedStore);
             });
         });
 
         document.querySelectorAll("[data-remove-id]").forEach((button) => {
             button.addEventListener("click", () => {
                 state.savedIds = store.remove(button.dataset.removeId);
-                render(els, store);
+                render(els, store, pinnedStore);
             });
         });
 
@@ -685,33 +745,40 @@
             button.addEventListener("click", () => {
                 state.focus = button.dataset.focusLens || "all";
                 updateFocusButtons(els);
-                render(els, store);
+                render(els, store, pinnedStore);
+            });
+        });
+
+        document.querySelectorAll("[data-pin-topic]").forEach((button) => {
+            button.addEventListener("click", () => {
+                state.pinnedTopics = new Set(pinnedStore.toggle(button.dataset.pinTopic));
+                render(els, store, pinnedStore);
             });
         });
     }
 
-    function bindControls(els, store) {
+    function bindControls(els, store, pinnedStore) {
         els.module?.addEventListener("change", (event) => {
             state.module = event.target.value;
-            render(els, store);
+            render(els, store, pinnedStore);
         });
         els.category?.addEventListener("change", (event) => {
             state.category = event.target.value;
-            render(els, store);
+            render(els, store, pinnedStore);
         });
         els.query?.addEventListener("input", (event) => {
             state.query = event.target.value;
-            render(els, store);
+            render(els, store, pinnedStore);
         });
         els.sort?.addEventListener("change", (event) => {
             state.sort = event.target.value;
-            render(els, store);
+            render(els, store, pinnedStore);
         });
         for (const button of els.focusButtons || []) {
             button.addEventListener("click", () => {
                 state.focus = button.dataset.focusFilter || "all";
                 updateFocusButtons(els);
-                render(els, store);
+                render(els, store, pinnedStore);
             });
         }
         els.clearFilters?.addEventListener("click", () => {
@@ -726,7 +793,7 @@
             if (els.query) els.query.value = state.query;
             if (els.sort) els.sort.value = state.sort;
             updateFocusButtons(els);
-            render(els, store);
+            render(els, store, pinnedStore);
         });
     }
 
@@ -763,18 +830,20 @@
         };
         const els = selectors();
         const store = createExploreStore(global.localStorage);
+        const pinnedStore = createPinnedTopicStore(global.localStorage);
 
         state.items = normalizeExploreData(dataByModule);
         state.sourceMeta = collectSourceMeta(dataByModule);
         state.savedIds = store.read();
+        state.pinnedTopics = new Set(pinnedStore.read());
         state.focus = focusFromLocation(els.focusButtons);
 
         fillSelect(els.module, uniqueValues(state.items, "module"), "All modules");
         fillSelect(els.category, uniqueValues(state.items, "category"), "All categories");
         updateFocusButtons(els);
-        bindControls(els, store);
+        bindControls(els, store, pinnedStore);
         renderHealth(els);
-        render(els, store);
+        render(els, store, pinnedStore);
     }
 
     global.ExploreApp = {
@@ -786,8 +855,10 @@
         renderExploreCards,
         renderSavedQueue,
         buildTopicLenses,
+        sortTopicLensesByPins,
         renderTopicLenses,
         createExploreStore,
+        createPinnedTopicStore,
         qualityScoreForItem,
         dedupeExploreItems,
         activeExploreSummary,

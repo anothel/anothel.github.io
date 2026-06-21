@@ -182,6 +182,29 @@ test("Topic actions use topic-specific routes", () => {
     assert.match(skills, /href="..\/..\/review\/index\.html"/);
 });
 
+test("Topic pinned store and renderer expose current topic state", () => {
+    const app = loadTopics();
+    const memory = new Map();
+    const storage = {
+        getItem(key) { return memory.get(key) || null; },
+        setItem(key, value) { memory.set(key, value); }
+    };
+    const store = app.createPinnedTopicStore(storage);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(store.toggle("MCP"))), ["MCP"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(store.toggle("MCP"))), []);
+    assert.deepEqual(JSON.parse(JSON.stringify(app.createPinnedTopicStore({ getItem() { throw new Error("blocked"); } }).read())), []);
+
+    const pinned = app.renderTopicPinAction("MCP", new Set(["MCP"]));
+    const unpinned = app.renderTopicPinAction("AI agents", new Set(["MCP"]));
+
+    assert.match(pinned, /data-pin-topic="MCP"/);
+    assert.match(pinned, /Pinned topic/);
+    assert.match(pinned, /aria-pressed="true"/);
+    assert.match(unpinned, /Pin topic/);
+    assert.match(unpinned, /aria-pressed="false"/);
+});
+
 test("Topic dashboard renderers escape text and preserve safe topic routes", () => {
     const app = loadTopics();
     const dashboard = {
@@ -239,7 +262,11 @@ test("Topic browser init renders stats and cards", async () => {
     function createElement() {
         return {
             innerHTML: "",
-            textContent: ""
+            textContent: "",
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
+            }
         };
     }
 
@@ -254,9 +281,11 @@ test("Topic browser init renders stats and cards", async () => {
         "[data-topic-related]",
         "[data-topic-cross-links]",
         "[data-topic-source-mix]",
+        "[data-topic-pin]",
         "[data-topic-actions-dynamic]",
         "[data-topic-list]"
     ].map((selector) => [selector, createElement()]));
+    let pinButton = null;
 
     const sources = {
         "../../data/trends.json": {
@@ -292,7 +321,25 @@ test("Topic browser init renders stats and cards", async () => {
             },
             querySelector(selector) {
                 return elements[selector] || null;
+            },
+            querySelectorAll(selector) {
+                if (selector === "[data-pin-topic]") {
+                    pinButton = {
+                        dataset: { pinTopic: "AI agents" },
+                        addEventListener(type, listener) {
+                            this.listeners = { [type]: listener };
+                        }
+                    };
+                    return [pinButton];
+                }
+                return [];
             }
+        },
+        localStorage: {
+            getItem() {
+                return JSON.stringify({ version: 1, topics: ["AI agents"] });
+            },
+            setItem() {}
         },
         fetch: async (path) => ({
             ok: true,
@@ -314,6 +361,97 @@ test("Topic browser init renders stats and cards", async () => {
     assert.match(elements["[data-topic-related]"].innerHTML, /Today agent/);
     assert.match(elements["[data-topic-cross-links]"].innerHTML, /MCP/);
     assert.match(elements["[data-topic-source-mix]"].innerHTML, /Trends/);
+    assert.match(elements["[data-topic-pin]"].innerHTML, /Pinned topic/);
     assert.match(elements["[data-topic-actions-dynamic]"].innerHTML, /Repos/);
     assert.match(elements["[data-topic-list]"].innerHTML, /Agent runtime/);
+});
+
+test("Topic pin click updates local storage and rerenders pin state", async () => {
+    function createElement() {
+        return {
+            innerHTML: "",
+            textContent: "",
+            addEventListener() {}
+        };
+    }
+
+    const elements = Object.fromEntries([
+        "[data-topic-total]",
+        "[data-topic-modules]",
+        "[data-topic-updated]",
+        "[data-topic-lead]",
+        "[data-topic-guidance]",
+        "[data-topic-why]",
+        "[data-topic-top-movers]",
+        "[data-topic-related]",
+        "[data-topic-cross-links]",
+        "[data-topic-source-mix]",
+        "[data-topic-pin]",
+        "[data-topic-actions-dynamic]",
+        "[data-topic-list]"
+    ].map((selector) => [selector, createElement()]));
+    let pinButton = null;
+    const memory = new Map();
+    const sources = {
+        "../../data/trends.json": {
+            updated: "2026-06-19",
+            items: [{ title: "MCP server", category: "MCP", source: "GitHub", score: 91, velocity: "+20%", url: "https://example.com/mcp", summary: "MCP server." }]
+        },
+        "../../data/packages.json": { updated: "2026-06-18", packages: [] },
+        "../../data/repos.json": { updated: "2026-06-17", repos: [] },
+        "../../data/links.json": { updated: "2026-06-16", links: [] },
+        "../../data/today.json": { sections: [] }
+    };
+
+    const context = {
+        console,
+        document: {
+            currentScript: {
+                dataset: {
+                    topic: "MCP",
+                    trends: "../../data/trends.json",
+                    packages: "../../data/packages.json",
+                    repos: "../../data/repos.json",
+                    links: "../../data/links.json",
+                    today: "../../data/today.json"
+                }
+            },
+            querySelector(selector) {
+                return elements[selector] || null;
+            },
+            querySelectorAll(selector) {
+                if (selector === "[data-pin-topic]") {
+                    pinButton = {
+                        dataset: { pinTopic: "MCP" },
+                        addEventListener(type, listener) {
+                            this.listeners = { [type]: listener };
+                        }
+                    };
+                    return [pinButton];
+                }
+                return [];
+            }
+        },
+        localStorage: {
+            getItem(key) {
+                return memory.get(key) || "[]";
+            },
+            setItem(key, value) {
+                memory.set(key, value);
+            }
+        },
+        fetch: async (path) => ({
+            ok: true,
+            json: async () => sources[path]
+        }),
+        setTimeout
+    };
+
+    vm.runInNewContext(readFileSync("js/topics.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    pinButton.listeners.click({ target: pinButton });
+
+    assert.match(memory.get("anothel.preferences.pinnedTopics.v1"), /MCP/);
+    assert.match(elements["[data-topic-pin]"].innerHTML, /Pinned topic/);
 });

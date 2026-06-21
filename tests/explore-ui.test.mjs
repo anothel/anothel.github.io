@@ -356,6 +356,47 @@ test("Explore builds topic lenses with counts, module spread, and topic routes",
     assert.match(html, /href="..\/topics\/agent-skills\/index\.html"/);
 });
 
+test("Explore pinned topics store and lens sorting prioritize repeat topics", () => {
+    const app = loadExplore();
+    const memory = new Map();
+    const storage = {
+        getItem(key) { return memory.get(key) || null; },
+        setItem(key, value) { memory.set(key, value); }
+    };
+    const store = app.createPinnedTopicStore(storage);
+    const lenses = [
+        { focus: "AI agents", label: "AI agents", count: 8 },
+        { focus: "Agent skills", label: "Agent skills", count: 4 },
+        { focus: "MCP", label: "MCP", count: 3 }
+    ];
+
+    assert.deepEqual(JSON.parse(JSON.stringify(store.toggle("MCP"))), ["MCP"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(store.toggle("AI agents"))), ["MCP", "AI agents"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(store.toggle("Agent skills"))), ["MCP", "AI agents", "Agent skills"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(store.toggle("AI evals"))), ["AI agents", "Agent skills", "AI evals"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(app.createPinnedTopicStore({ getItem() { throw new Error("blocked"); } }).read())), []);
+    assert.deepEqual(
+        JSON.parse(JSON.stringify(app.sortTopicLensesByPins(lenses, new Set(["MCP"])).map((lens) => lens.focus))),
+        ["MCP", "AI agents", "Agent skills"]
+    );
+});
+
+test("Explore topic lenses render pin state", () => {
+    const app = loadExplore();
+    const lenses = [
+        { focus: "MCP", label: "MCP", description: "Protocol.", route: "../topics/mcp/index.html", count: 3, modules: 2, topItem: null },
+        { focus: "AI agents", label: "AI agents", description: "Agents.", route: "../topics/ai-agents/index.html", count: 8, modules: 4, topItem: null }
+    ];
+    const html = app.renderTopicLenses(lenses, "all", new Set(["MCP"]));
+
+    assert.match(html, /data-pin-topic="MCP"/);
+    assert.match(html, /Pinned/);
+    assert.match(html, /aria-pressed="true"/);
+    assert.match(html, /data-pin-topic="AI agents"/);
+    assert.match(html, />Pin</);
+    assert.match(html, /aria-pressed="false"/);
+});
+
 test("Explore saved store reads, toggles, removes, and ignores broken storage", () => {
     const app = loadExplore();
     const memory = new Map();
@@ -773,6 +814,104 @@ test("Explore topic lens click applies the matching focus filter", async () => {
     assert.equal(elements["[data-explore-total]"].textContent, "1");
     assert.match(elements["[data-explore-summary]"].textContent, /Focus: MCP/);
     assert.equal(focusButtons[1].ariaPressed, "true");
+});
+
+test("Explore topic pin click updates stored pins and rerenders lenses", async () => {
+    function createElement() {
+        return {
+            innerHTML: "",
+            textContent: "",
+            value: "all",
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
+            },
+            dispatch(type, value = this.value) {
+                this.value = value;
+                this.listeners[type]?.({ target: this });
+            }
+        };
+    }
+
+    const elements = Object.fromEntries([
+        "[data-explore-results]",
+        "[data-explore-saved]",
+        "[data-explore-module]",
+        "[data-explore-category]",
+        "[data-explore-query]",
+        "[data-explore-sort]",
+        "[data-explore-total]",
+        "[data-explore-saved-count]",
+        "[data-explore-categories]",
+        "[data-explore-summary]",
+        "[data-topic-lenses]",
+        "[data-data-mode]",
+        "[data-source-health]",
+        "[data-clear-filters]"
+    ].map((selector) => [selector, createElement()]));
+    const focusButtons = [
+        { dataset: { focusFilter: "all" }, addEventListener() {}, setAttribute() {} },
+        { dataset: { focusFilter: "MCP" }, addEventListener() {}, setAttribute() {} }
+    ];
+    let pinButton = null;
+    const memory = new Map();
+    const sources = {
+        "../data/manifest.json": { modules: [] },
+        "../data/trends.json": {
+            updated: "2026-06-20",
+            sourceMeta: [],
+            items: [
+                { rank: 1, title: "MCP server", source: "GitHub", category: "MCP", score: 90, velocity: "+5%", url: "https://example.com/mcp", summary: "Model Context Protocol server." },
+                { rank: 2, title: "Agent runtime", source: "GitHub", category: "AI agents", score: 80, velocity: "+4%", url: "https://example.com/agent", summary: "Coding agent." }
+            ]
+        },
+        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    };
+    const context = {
+        console,
+        document: {
+            currentScript: { dataset: {} },
+            querySelector(selector) {
+                return elements[selector] || null;
+            },
+            querySelectorAll(selector) {
+                if (selector === "[data-focus-filter]") return focusButtons;
+                if (selector === "[data-pin-topic]") {
+                    pinButton = {
+                        dataset: { pinTopic: "MCP" },
+                        addEventListener(type, listener) {
+                            this.listeners = { [type]: listener };
+                        }
+                    };
+                    return [pinButton];
+                }
+                return [];
+            }
+        },
+        localStorage: {
+            getItem(key) {
+                return memory.get(key) || "[]";
+            },
+            setItem(key, value) {
+                memory.set(key, value);
+            }
+        },
+        fetch: async (path) => ({
+            ok: true,
+            json: async () => sources[path]
+        })
+    };
+
+    vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    pinButton.listeners.click({ target: pinButton });
+
+    assert.match(memory.get("anothel.preferences.pinnedTopics.v1"), /MCP/);
+    assert.match(elements["[data-topic-lenses]"].innerHTML, /Pinned/);
 });
 
 test("Explore browser init applies focus from URL query", async () => {

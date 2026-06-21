@@ -18,6 +18,7 @@ const linksUrl = typeof document === "undefined"
     ? "data/links.json"
     : document.currentScript?.dataset.links || "data/links.json";
 const savedStorageKey = "anothel.explore.saved.v1";
+const pinnedTopicsStorageKey = "anothel.preferences.pinnedTopics.v1";
 
 function escapeHtml(value) {
     return String(value)
@@ -101,6 +102,49 @@ const topicDefinitions = [
         match: /\b(developer tools?|tooling|build tool|lint|format|testing|browser automation|vite|eslint|prettier|playwright)\b/
     }
 ];
+const knownTopicNames = topicDefinitions.map((definition) => definition.topic);
+
+export function createPinnedTopicStore(storage) {
+    const validTopics = new Set(knownTopicNames);
+    const maxPinnedTopics = 3;
+
+    function normalize(topics) {
+        return [...new Set((topics || []).filter((topic) => validTopics.has(topic)))].slice(0, maxPinnedTopics);
+    }
+
+    function read() {
+        try {
+            const parsed = JSON.parse(storage?.getItem(pinnedTopicsStorageKey) || "[]");
+            if (Array.isArray(parsed)) return normalize(parsed);
+            if (parsed?.version === 1 && Array.isArray(parsed.topics)) return normalize(parsed.topics);
+        } catch {
+            return [];
+        }
+        return [];
+    }
+
+    function write(topics) {
+        const normalized = normalize(topics);
+        try {
+            storage?.setItem(pinnedTopicsStorageKey, JSON.stringify({ version: 1, topics: normalized }));
+        } catch {
+            // Storage can be blocked in private or local file contexts.
+        }
+        return normalized;
+    }
+
+    return {
+        read,
+        toggle(topic) {
+            if (!validTopics.has(topic)) return read();
+            const topics = read();
+            const next = topics.includes(topic)
+                ? topics.filter((item) => item !== topic)
+                : [...topics, topic].slice(-maxPinnedTopics);
+            return write(next);
+        }
+    };
+}
 
 function statusCounts(modules) {
     return modules.reduce(
@@ -264,6 +308,19 @@ export function buildTopicMovements(dataByModule, limit = 3) {
         .sort((a, b) => Number(b.count) - Number(a.count) || Number(b.modules) - Number(a.modules) || a.order - b.order)
         .slice(0, limit)
         .map(({ order, ...movement }) => movement);
+}
+
+export function sortTopicMovementsByPins(movements, pinnedTopics = []) {
+    const pinRank = new Map(pinnedTopics.map((topic, index) => [topic, index]));
+    return [...movements].sort((a, b) => {
+        const aPinned = pinRank.has(a.topic);
+        const bPinned = pinRank.has(b.topic);
+        if (aPinned || bPinned) {
+            if (aPinned && bPinned) return pinRank.get(a.topic) - pinRank.get(b.topic);
+            return aPinned ? -1 : 1;
+        }
+        return 0;
+    });
 }
 
 export function buildModuleRoutes(manifest) {
@@ -537,7 +594,8 @@ async function init() {
             readJson(linksUrl).catch(() => null)
         ]);
         const savedSummary = readSavedSummary(globalThis.localStorage);
-        const topicMovements = buildTopicMovements({ trends, packages, repos, links });
+        const pinnedTopics = createPinnedTopicStore(globalThis.localStorage).read();
+        const topicMovements = sortTopicMovementsByPins(buildTopicMovements({ trends, packages, repos, links }), pinnedTopics);
 
         if (manifest) {
             applyOverview(document, manifest);

@@ -633,6 +633,32 @@ main {
     flex: 1 1 auto;
 }
 
+.topic-actions [data-topic-pin] {
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.pin-topic-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    min-width: 92px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel-strong);
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+.pin-topic-button[aria-pressed="true"],
+.pin-topic-button:hover {
+    border-color: var(--accent-soft);
+    background: var(--accent-soft);
+}
+
 .topic-stats {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -846,7 +872,7 @@ main {
 
 .topic-lens-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
     align-self: end;
 }
@@ -1738,6 +1764,8 @@ button {
     }
 
     .explore-strip nav,
+    .topic-actions [data-topic-pin],
+    .pin-topic-button,
     .explore-strip a,
     .review-actions a,
     .review-actions button,
