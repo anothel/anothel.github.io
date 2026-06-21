@@ -14,7 +14,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 - Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, and 3 topic pages.
 - Core topics: AI agents, MCP, Agent skills.
-- Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata.
+- Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata, with expanded AI evals and workflow automation coverage.
 - Local browser state: saved review items, up to 3 pinned topics, explicit Explore defaults, and up to 5 saved Explore searches.
 
 ## Planning Metrics
@@ -27,24 +27,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work
 
-### 1. Data Expansion v2
-
-Goal: add coverage only where it improves Today or Explore.
-
-- Add at most 2 new source groups in one round.
-- Candidate groups: AI evals, workflow automation, developer tooling.
-- Each new group needs at least 5 useful checked-in items.
-- Broad baseline packages must not dominate priority views.
-
-Done when:
-- Today still has fixed section counts.
-- Explore quality ranking keeps specific agent-workflow items above generic tooling.
-- Status reports new sources clearly.
-
-Success metric:
-- Added data creates at least 5 useful candidates without reducing Today specificity.
-
-### 2. Topic Notes v1
+### 1. Topic Notes v1
 
 Goal: add judgment only after topics have enough saved/review context.
 

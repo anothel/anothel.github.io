@@ -31,7 +31,14 @@ export const packageDefinitions = [
     { name: "mcp-agent", category: "MCP", focus: "MCP agent helper package" },
     { name: "evalite", category: "AI evals", focus: "LLM evaluation toolkit" },
     { name: "braintrust", category: "AI evals", focus: "AI evals and observability" },
-    { name: "inngest", category: "Workflow automation", focus: "durable workflow runtime" }
+    { name: "promptfoo", category: "AI evals", focus: "LLM evals and prompt testing" },
+    { name: "autoevals", category: "AI evals", focus: "AI eval scoring helpers" },
+    { name: "langfuse", category: "AI evals", focus: "LLM observability and evals" },
+    { name: "inngest", category: "Workflow automation", focus: "durable workflow runtime" },
+    { name: "@trigger.dev/sdk", category: "Workflow automation", focus: "durable workflow SDK" },
+    { name: "@temporalio/workflow", category: "Workflow automation", focus: "Temporal workflow runtime" },
+    { name: "@temporalio/client", category: "Workflow automation", focus: "Temporal workflow client" },
+    { name: "n8n-workflow", category: "Workflow automation", focus: "n8n workflow primitives" }
 ];
 
 function isoDate(date = new Date()) {

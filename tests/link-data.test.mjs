@@ -67,3 +67,18 @@ test("default links include AI skills and agent references", () => {
     assert.ok(titles.has("Karpathy GitHub"));
     assert.equal(categoryByTitle.get("Model Context Protocol servers"), "MCP");
 });
+
+test("default links include AI evals and workflow automation references", () => {
+    const expanded = linkDefinitions.filter((item) =>
+        ["AI evals", "Workflow automation"].includes(item.category)
+    );
+    const titles = new Set(expanded.map((item) => item.title));
+
+    assert.ok(expanded.length >= 6);
+    assert.ok(titles.has("Promptfoo"));
+    assert.ok(titles.has("DeepEval"));
+    assert.ok(titles.has("Langfuse"));
+    assert.ok(titles.has("Trigger.dev"));
+    assert.ok(titles.has("Temporal TypeScript SDK"));
+    assert.ok(titles.has("Pipedream"));
+});

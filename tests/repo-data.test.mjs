@@ -100,9 +100,26 @@ test("default repo watchlist tracks AI skills and agent projects", () => {
     assert.equal(categoryByName.get("modelcontextprotocol/servers"), "MCP");
 });
 
+test("default repo watchlist expands AI evals and workflow automation", () => {
+    const expanded = repoDefinitions.filter((item) =>
+        ["AI evals", "Workflow automation"].includes(item.category)
+    );
+    const names = new Set(expanded.map((item) => item.fullName));
+
+    assert.ok(expanded.length >= 8);
+    assert.ok(names.has("promptfoo/promptfoo"));
+    assert.ok(names.has("confident-ai/deepeval"));
+    assert.ok(names.has("langfuse/langfuse"));
+    assert.ok(names.has("microsoft/promptflow"));
+    assert.ok(names.has("temporalio/sdk-typescript"));
+    assert.ok(names.has("triggerdotdev/trigger.dev"));
+    assert.ok(names.has("pipedreamhq/pipedream"));
+});
+
 test("checked-in repos include expanded AI agent and MCP coverage", () => {
     const data = readJson("data/repos.json");
     const names = new Set(data.repos.map((item) => item.name));
+    const categories = new Set(data.repos.map((item) => item.category));
     const categoryByName = new Map(data.repos.map((item) => [item.name, item.category]));
 
     for (const name of [
@@ -120,7 +137,18 @@ test("checked-in repos include expanded AI agent and MCP coverage", () => {
         assert.ok(names.has(name), `${name} should be present in generated repos`);
     }
 
+    for (const name of [
+        "promptfoo/promptfoo",
+        "langfuse/langfuse",
+        "triggerdotdev/trigger.dev",
+        "temporalio/sdk-typescript"
+    ]) {
+        assert.ok(names.has(name), `${name} should be present in generated repos`);
+    }
+
     assert.equal(categoryByName.get("modelcontextprotocol/servers"), "MCP");
+    assert.ok(categories.has("AI evals"));
+    assert.ok(categories.has("Workflow automation"));
     assert.equal(data.sourceMeta.count, data.repos.length);
 });
 

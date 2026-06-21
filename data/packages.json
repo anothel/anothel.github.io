@@ -1,14 +1,24 @@
 {
-  "updated": "2026-06-20",
-  "generatedAt": "2026-06-20T22:21:54.097Z",
+  "updated": "2026-06-21",
+  "generatedAt": "2026-06-21T04:42:23.625Z",
   "sourceMeta": {
     "name": "npm",
-    "status": "ok",
-    "count": 26,
-    "tracked": 26,
-    "emitted": 26,
-    "coverage": "26/26",
-    "updatedAt": "2026-06-20T22:21:54.097Z"
+    "status": "partial",
+    "count": 31,
+    "tracked": 33,
+    "emitted": 31,
+    "coverage": "31/33",
+    "updatedAt": "2026-06-21T04:42:23.625Z",
+    "errors": [
+      {
+        "name": "braintrust",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/braintrust"
+      },
+      {
+        "name": "n8n-workflow",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
+      }
+    ]
   },
   "packages": [
     {
@@ -183,6 +193,36 @@
     },
     {
       "rank": 18,
+      "name": "@temporalio/client",
+      "category": "Workflow automation",
+      "focus": "Temporal workflow client",
+      "downloads": 2340093,
+      "downloadsLabel": "2.3M/week",
+      "period": "2026-06-13 to 2026-06-19",
+      "url": "https://www.npmjs.com/package/%40temporalio%2Fclient"
+    },
+    {
+      "rank": 19,
+      "name": "@temporalio/workflow",
+      "category": "Workflow automation",
+      "focus": "Temporal workflow runtime",
+      "downloads": 2109986,
+      "downloadsLabel": "2.1M/week",
+      "period": "2026-06-13 to 2026-06-19",
+      "url": "https://www.npmjs.com/package/%40temporalio%2Fworkflow"
+    },
+    {
+      "rank": 20,
+      "name": "langfuse",
+      "category": "AI evals",
+      "focus": "LLM observability and evals",
+      "downloads": 1556811,
+      "downloadsLabel": "1.6M/week",
+      "period": "2026-06-13 to 2026-06-19",
+      "url": "https://www.npmjs.com/package/langfuse"
+    },
+    {
+      "rank": 21,
       "name": "@openai/agents",
       "category": "AI agents",
       "focus": "OpenAI Agents SDK for JavaScript",
@@ -192,7 +232,7 @@
       "url": "https://www.npmjs.com/package/%40openai%2Fagents"
     },
     {
-      "rank": 19,
+      "rank": 22,
       "name": "inngest",
       "category": "Workflow automation",
       "focus": "durable workflow runtime",
@@ -202,17 +242,27 @@
       "url": "https://www.npmjs.com/package/inngest"
     },
     {
-      "rank": 20,
-      "name": "braintrust",
-      "category": "AI evals",
-      "focus": "AI evals and observability",
-      "downloads": 1061857,
-      "downloadsLabel": "1.1M/week",
+      "rank": 23,
+      "name": "@trigger.dev/sdk",
+      "category": "Workflow automation",
+      "focus": "durable workflow SDK",
+      "downloads": 608100,
+      "downloadsLabel": "608.1K/week",
       "period": "2026-06-13 to 2026-06-19",
-      "url": "https://www.npmjs.com/package/braintrust"
+      "url": "https://www.npmjs.com/package/%40trigger.dev%2Fsdk"
     },
     {
-      "rank": 21,
+      "rank": 24,
+      "name": "autoevals",
+      "category": "AI evals",
+      "focus": "AI eval scoring helpers",
+      "downloads": 511534,
+      "downloadsLabel": "511.5K/week",
+      "period": "2026-06-13 to 2026-06-19",
+      "url": "https://www.npmjs.com/package/autoevals"
+    },
+    {
+      "rank": 25,
       "name": "fastmcp",
       "category": "MCP",
       "focus": "MCP server framework",
@@ -222,7 +272,7 @@
       "url": "https://www.npmjs.com/package/fastmcp"
     },
     {
-      "rank": 22,
+      "rank": 26,
       "name": "mastra",
       "category": "AI agents",
       "focus": "TypeScript agent framework",
@@ -232,7 +282,17 @@
       "url": "https://www.npmjs.com/package/mastra"
     },
     {
-      "rank": 23,
+      "rank": 27,
+      "name": "promptfoo",
+      "category": "AI evals",
+      "focus": "LLM evals and prompt testing",
+      "downloads": 384010,
+      "downloadsLabel": "384K/week",
+      "period": "2026-06-13 to 2026-06-19",
+      "url": "https://www.npmjs.com/package/promptfoo"
+    },
+    {
+      "rank": 28,
       "name": "@modelcontextprotocol/server-filesystem",
       "category": "MCP",
       "focus": "MCP filesystem server",
@@ -242,7 +302,7 @@
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-filesystem"
     },
     {
-      "rank": 24,
+      "rank": 29,
       "name": "evalite",
       "category": "AI evals",
       "focus": "LLM evaluation toolkit",
@@ -252,7 +312,7 @@
       "url": "https://www.npmjs.com/package/evalite"
     },
     {
-      "rank": 25,
+      "rank": 30,
       "name": "@modelcontextprotocol/server-github",
       "category": "MCP",
       "focus": "MCP GitHub server",
@@ -262,7 +322,7 @@
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-github"
     },
     {
-      "rank": 26,
+      "rank": 31,
       "name": "mcp-agent",
       "category": "MCP",
       "focus": "MCP agent helper package",

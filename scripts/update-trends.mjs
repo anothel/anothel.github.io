@@ -6,6 +6,7 @@ import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
 const OUT_FILE = new URL("../data/trends.json", import.meta.url);
 const USER_AGENT = "anothel.github.io tech radar";
 export const MAX_ITEMS = 24;
+export const requiredTrendCategories = ["AI evals", "Workflow automation"];
 
 export const npmPackages = [
     "react",
@@ -28,7 +29,14 @@ export const npmPackages = [
     "mastra",
     "langchain",
     "@langchain/core",
-    "@modelcontextprotocol/sdk"
+    "@modelcontextprotocol/sdk",
+    "promptfoo",
+    "autoevals",
+    "langfuse",
+    "@trigger.dev/sdk",
+    "@temporalio/workflow",
+    "@temporalio/client",
+    "n8n-workflow"
 ];
 
 export const githubQueries = [
@@ -42,6 +50,9 @@ export const githubQueries = [
     { query: "claude skills stars:>100", category: "Agent skills" },
     { query: "topic:evals stars:>100", category: "AI evals" },
     { query: "llm eval benchmark agent stars:>100", category: "AI evals" },
+    { query: "llm observability evals stars:>100", category: "AI evals" },
+    { query: "workflow automation ai agents stars:>100", category: "Workflow automation" },
+    { query: "durable workflow typescript stars:>100", category: "Workflow automation" },
     { query: "opencode coding agent stars:>100", category: "AI agents" },
     { query: "topic:typescript stars:>500", category: "TypeScript" },
     { query: "topic:developer-tools ai stars:>300", category: "Developer tools" }
@@ -82,7 +93,7 @@ export function buildNpmDownloadsUrl(packageName) {
 
 export function classify(text) {
     const taxonomyCategory = classifySignal(text);
-    if (taxonomyCategory === "Agent skills" || taxonomyCategory === "MCP" || taxonomyCategory === "AI evals") {
+    if (taxonomyCategory === "Agent skills" || taxonomyCategory === "MCP" || taxonomyCategory === "AI evals" || taxonomyCategory === "Workflow automation") {
         return taxonomyCategory;
     }
     if (taxonomyCategory === "AI agents" || taxonomyCategory === "AI engineering") {
@@ -92,7 +103,9 @@ export function classify(text) {
     const value = text.toLowerCase();
     if (/\b(agent skills?|skills? for agents?|claude skills?)\b/.test(value)) return "Agent skills";
     if (/\b(mcp|modelcontextprotocol)\b/.test(value)) return "MCP";
+    if (/\b(promptfoo|autoevals|evalite|braintrust|langfuse)\b/.test(value)) return "AI evals";
     if (/\b(evals?|evaluation|benchmarks?)\b/.test(value) && /\b(ai|llm|model)\b/.test(value)) return "AI evals";
+    if (/\b(trigger\.dev|@trigger|temporalio|inngest|n8n|n8n-workflow|pipedream)\b/.test(value)) return "Workflow automation";
     if (/\b(ai|llm|agents?|model|inference|openai|claude|anthropic|mcp|modelcontextprotocol)\b/.test(value)) return "AI";
     if (/(typescript|javascript|node|npm|bun|deno|react|vue|svelte)/.test(value)) return "JavaScript";
     if (/(database|sqlite|postgres|storage|sync|local-first)/.test(value)) return "Database";
@@ -137,6 +150,9 @@ export function githubRepoQuality(repo, category) {
     } else if (category === "AI evals") {
         required = [/\bevals?\b/, /\bevaluation\b/, /\bbenchmark\b/];
         if (hasAny(text, required)) boost += 32;
+    } else if (category === "Workflow automation") {
+        required = [/\bworkflow\b/, /\bautomation\b/, /\bdurable\b/, /\borchestration\b/, /\btrigger\.dev\b/, /\btemporal\b/, /\binngest\b/, /\bn8n\b/, /\bpipedream\b/];
+        if (hasAny(text, required)) boost += 28;
     } else {
         required = [/\bai\b/, /\bllm\b/, /\bagents?\b/, /\bdeveloper tools?\b/, /\btypescript\b/];
         if (hasAny(text, [/\bai\b/, /\bllm\b/, /\bagents?\b/])) boost += 18;
@@ -144,6 +160,44 @@ export function githubRepoQuality(repo, category) {
 
     if (!hasAny(text, required)) return 0;
     return clampScore(stars + boost + Math.max(0, qualityBoost(text)) / 2);
+}
+
+function trendSort(a, b) {
+    return b.score - a.score
+        || a.source.localeCompare(b.source)
+        || a.title.localeCompare(b.title)
+        || a.url.localeCompare(b.url);
+}
+
+function trendKey(item) {
+    return item.url || `${item.source}:${item.title}`;
+}
+
+export function selectTrendItems(items, limit, requiredCategories = requiredTrendCategories) {
+    const sorted = [...items].sort(trendSort);
+    const picked = [];
+    const pickedKeys = new Set();
+
+    function pick(item) {
+        const key = trendKey(item);
+        if (pickedKeys.has(key)) return;
+        pickedKeys.add(key);
+        picked.push(item);
+    }
+
+    for (const category of requiredCategories) {
+        const representative = sorted.find((item) => item.category === category);
+        if (representative) {
+            pick(representative);
+        }
+    }
+
+    for (const item of sorted) {
+        if (picked.length >= limit) break;
+        pick(item);
+    }
+
+    return picked.sort(trendSort).slice(0, limit);
 }
 
 export function scoreHackerNewsStory(story) {
@@ -242,7 +296,7 @@ export async function fetchGitHub(fetcher = fetchJson) {
         }
     }
 
-    return results.slice(0, 12);
+    return selectTrendItems(results, 12);
 }
 
 async function fetchNpm() {
@@ -255,10 +309,9 @@ async function fetchNpm() {
         )
     );
 
-    return packageResults
+    const items = packageResults
         .filter((item) => item && item.package && typeof item.downloads === "number")
         .sort((a, b) => b.downloads - a.downloads)
-        .slice(0, 8)
         .map((item) => ({
             title: item.package,
             source: "npm",
@@ -269,6 +322,8 @@ async function fetchNpm() {
             url: `https://www.npmjs.com/package/${encodeURIComponent(item.package)}`,
             summary: `${compactNumber(item.downloads)} downloads over the last available week.`
         }));
+
+    return selectTrendItems(items, 8);
 }
 
 export function buildSourceMeta(items, results, generatedAt) {
@@ -317,16 +372,15 @@ export async function collect() {
     );
 
     const seen = new Set();
-    const items = results
+    const dedupedItems = results
         .flatMap((result) => result.items)
         .filter((item) => {
             const key = `${item.source}:${item.title}`;
             if (seen.has(key)) return false;
             seen.add(key);
             return true;
-        })
-        .sort((a, b) => b.score - a.score)
-        .slice(0, MAX_ITEMS)
+        });
+    const items = selectTrendItems(dedupedItems, MAX_ITEMS)
         .map((item, index) => ({ rank: index + 1, ...item }));
 
     if (items.length === 0) {

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-20",
-  "generatedAt": "2026-06-20T22:21:54.035Z",
+  "updated": "2026-06-21",
+  "generatedAt": "2026-06-21T04:54:19.791Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -10,122 +10,56 @@
     {
       "name": "Hacker News",
       "status": "ok",
-      "count": 6,
+      "count": 4,
       "tracked": 1,
-      "emitted": 6,
-      "coverage": "6/1",
-      "updatedAt": "2026-06-20T22:21:54.035Z"
+      "emitted": 4,
+      "coverage": "4/1",
+      "updatedAt": "2026-06-21T04:54:19.791Z"
     },
     {
       "name": "GitHub",
       "status": "ok",
-      "count": 10,
-      "tracked": 13,
-      "emitted": 10,
-      "coverage": "10/13",
-      "updatedAt": "2026-06-20T22:21:54.035Z"
+      "count": 12,
+      "tracked": 16,
+      "emitted": 12,
+      "coverage": "12/16",
+      "updatedAt": "2026-06-21T04:54:19.791Z"
     },
     {
       "name": "npm",
       "status": "ok",
       "count": 8,
-      "tracked": 21,
+      "tracked": 28,
       "emitted": 8,
-      "coverage": "8/21",
-      "updatedAt": "2026-06-20T22:21:54.035Z"
+      "coverage": "8/28",
+      "updatedAt": "2026-06-21T04:54:19.791Z"
     }
   ],
   "items": [
     {
       "rank": 1,
-      "title": "NousResearch/hermes-agent",
-      "source": "GitHub",
-      "category": "AI agents",
-      "score": 100,
-      "velocity": "198.3K stars",
-      "signal": "35.2K forks",
-      "url": "https://github.com/NousResearch/hermes-agent",
-      "summary": "The agent that grows with you"
-    },
-    {
-      "rank": 2,
-      "title": "shareAI-lab/learn-claude-code",
-      "source": "GitHub",
-      "category": "AI agents",
-      "score": 100,
-      "velocity": "67.6K stars",
-      "signal": "11K forks",
-      "url": "https://github.com/shareAI-lab/learn-claude-code",
-      "summary": "Bash is all you need - A nano claude codelike agent harness, built from 0 to 1"
-    },
-    {
-      "rank": 3,
-      "title": "santifer/career-ops",
-      "source": "GitHub",
-      "category": "AI agents",
-      "score": 100,
-      "velocity": "54.9K stars",
-      "signal": "10.9K forks",
-      "url": "https://github.com/santifer/career-ops",
-      "summary": "AI-powered job search system built on Claude Code. 14 skill modes, Go dashboard, PDF generation, batch processing."
-    },
-    {
-      "rank": 4,
-      "title": "CherryHQ/cherry-studio",
-      "source": "GitHub",
-      "category": "AI agents",
-      "score": 100,
-      "velocity": "47.6K stars",
-      "signal": "4.5K forks",
-      "url": "https://github.com/CherryHQ/cherry-studio",
-      "summary": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
-    },
-    {
-      "rank": 5,
       "title": "affaan-m/ECC",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "218.8K stars",
+      "velocity": "218.9K stars",
       "signal": "33.6K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
     {
-      "rank": 6,
-      "title": "ultraworkers/claw-code",
-      "source": "GitHub",
-      "category": "AI agents",
-      "score": 100,
-      "velocity": "194.1K stars",
-      "signal": "109.9K forks",
-      "url": "https://github.com/ultraworkers/claw-code",
-      "summary": "An agent-managed museum exhibit, built in Rust with Gajae-Code / LazyCodex developed and maintained with no human intervention."
-    },
-    {
-      "rank": 7,
+      "rank": 2,
       "title": "anomalyco/opencode",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "176.6K stars",
+      "velocity": "176.7K stars",
       "signal": "21.5K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
     },
     {
-      "rank": 8,
-      "title": "x1xhlol/system-prompts-and-models-of-ai-tools",
-      "source": "GitHub",
-      "category": "AI agents",
-      "score": 100,
-      "velocity": "140.9K stars",
-      "signal": "34.7K forks",
-      "url": "https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools",
-      "summary": "FULL Augment Code, Claude Code, Cluely, CodeBuddy, Comet, Cursor, Devin AI, Junie, Kiro, Leap.new, Lovable, Manus, NotionAI, Orchids.app, Perplexity, Poke, Qoder, Replit, Same.dev, Trae, Traycer AI, VSCode Agent, Warp.dev, Windsurf, Xcode, Z.ai Code, Dia & v0. (And other Open Sourced) System Prompts, Internal Tools & AI Models"
-    },
-    {
-      "rank": 9,
+      "rank": 3,
       "title": "anthropics/claude-code",
       "source": "GitHub",
       "category": "AI agents",
@@ -136,18 +70,106 @@
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
     },
     {
-      "rank": 10,
+      "rank": 4,
+      "title": "anthropics/skills",
+      "source": "GitHub",
+      "category": "Agent skills",
+      "score": 100,
+      "velocity": "153.3K stars",
+      "signal": "18.1K forks",
+      "url": "https://github.com/anthropics/skills",
+      "summary": "Public repository for Agent Skills"
+    },
+    {
+      "rank": 5,
+      "title": "Arize-ai/phoenix",
+      "source": "GitHub",
+      "category": "AI evals",
+      "score": 100,
+      "velocity": "10.2K stars",
+      "signal": "938 forks",
+      "url": "https://github.com/Arize-ai/phoenix",
+      "summary": "AI Observability & Evaluation"
+    },
+    {
+      "rank": 6,
+      "title": "awslabs/mcp",
+      "source": "GitHub",
+      "category": "MCP",
+      "score": 100,
+      "velocity": "9.3K stars",
+      "signal": "1.6K forks",
+      "url": "https://github.com/awslabs/mcp",
+      "summary": "Open source MCP Servers for AWS"
+    },
+    {
+      "rank": 7,
+      "title": "CherryHQ/cherry-studio",
+      "source": "GitHub",
+      "category": "AI agents",
+      "score": 100,
+      "velocity": "47.6K stars",
+      "signal": "4.5K forks",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "summary": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
+    },
+    {
+      "rank": 8,
       "title": "farion1231/cc-switch",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "105.2K stars",
+      "velocity": "105.3K stars",
       "signal": "7K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
     },
     {
+      "rank": 9,
+      "title": "github/awesome-copilot",
+      "source": "GitHub",
+      "category": "AI agents",
+      "score": 100,
+      "velocity": "35.4K stars",
+      "signal": "4.4K forks",
+      "url": "https://github.com/github/awesome-copilot",
+      "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot."
+    },
+    {
+      "rank": 10,
+      "title": "Kiln-AI/Kiln",
+      "source": "GitHub",
+      "category": "AI evals",
+      "score": 100,
+      "velocity": "4.9K stars",
+      "signal": "370 forks",
+      "url": "https://github.com/Kiln-AI/Kiln",
+      "summary": "Build, Evaluate, and Optimize AI Systems. Includes evals, RAG, agents, fine-tuning, synthetic data generation, dataset management, MCP, and more."
+    },
+    {
       "rank": 11,
+      "title": "langgenius/dify",
+      "source": "GitHub",
+      "category": "MCP",
+      "score": 100,
+      "velocity": "146K stars",
+      "signal": "23K forks",
+      "url": "https://github.com/langgenius/dify",
+      "summary": "Production-ready platform for agentic workflow development."
+    },
+    {
+      "rank": 12,
+      "title": "lobehub/lobehub",
+      "source": "GitHub",
+      "category": "Agent skills",
+      "score": 100,
+      "velocity": "78.9K stars",
+      "signal": "15.5K forks",
+      "url": "https://github.com/lobehub/lobehub",
+      "summary": "LobeHub is your Chief Agent Operator, organizing your agents into 724 operations by hiring, scheduling, and reporting on your entire AI team."
+    },
+    {
+      "rank": 13,
       "title": "typescript",
       "source": "npm",
       "category": "JavaScript",
@@ -158,7 +180,7 @@
       "summary": "215.9M downloads over the last available week."
     },
     {
-      "rank": 12,
+      "rank": 14,
       "title": "zod",
       "source": "npm",
       "category": "Developer tools",
@@ -167,28 +189,6 @@
       "signal": "2026-06-13 to 2026-06-19",
       "url": "https://www.npmjs.com/package/zod",
       "summary": "200.4M downloads over the last available week."
-    },
-    {
-      "rank": 13,
-      "title": "react",
-      "source": "npm",
-      "category": "JavaScript",
-      "score": 98,
-      "velocity": "145.6M/week",
-      "signal": "2026-06-13 to 2026-06-19",
-      "url": "https://www.npmjs.com/package/react",
-      "summary": "145.6M downloads over the last available week."
-    },
-    {
-      "rank": 14,
-      "title": "vite",
-      "source": "npm",
-      "category": "Developer tools",
-      "score": 98,
-      "velocity": "140.2M/week",
-      "signal": "2026-06-13 to 2026-06-19",
-      "url": "https://www.npmjs.com/package/vite",
-      "summary": "140.2M downloads over the last available week."
     },
     {
       "rank": 15,
@@ -203,17 +203,28 @@
     },
     {
       "rank": 16,
-      "title": "tailwindcss",
+      "title": "react",
       "source": "npm",
-      "category": "Frontend",
-      "score": 97,
-      "velocity": "120.4M/week",
+      "category": "JavaScript",
+      "score": 98,
+      "velocity": "145.6M/week",
       "signal": "2026-06-13 to 2026-06-19",
-      "url": "https://www.npmjs.com/package/tailwindcss",
-      "summary": "120.4M downloads over the last available week."
+      "url": "https://www.npmjs.com/package/react",
+      "summary": "145.6M downloads over the last available week."
     },
     {
       "rank": 17,
+      "title": "vite",
+      "source": "npm",
+      "category": "Developer tools",
+      "score": 98,
+      "velocity": "140.2M/week",
+      "signal": "2026-06-13 to 2026-06-19",
+      "url": "https://www.npmjs.com/package/vite",
+      "summary": "140.2M downloads over the last available week."
+    },
+    {
+      "rank": 18,
       "title": "prettier",
       "source": "npm",
       "category": "Developer tools",
@@ -224,81 +235,70 @@
       "summary": "116.2M downloads over the last available week."
     },
     {
-      "rank": 18,
-      "title": "express",
-      "source": "npm",
-      "category": "Developer tools",
-      "score": 96,
-      "velocity": "109.4M/week",
-      "signal": "2026-06-13 to 2026-06-19",
-      "url": "https://www.npmjs.com/package/express",
-      "summary": "109.4M downloads over the last available week."
-    },
-    {
       "rank": 19,
-      "title": "Temporary Cloudflare accounts for AI agents",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 45,
-      "velocity": "83 comments",
-      "signal": "135 points",
-      "url": "https://blog.cloudflare.com/temporary-accounts/",
-      "summary": "HN story by farhadhf with 83 comments."
+      "title": "@temporalio/client",
+      "source": "npm",
+      "category": "Workflow automation",
+      "score": 76,
+      "velocity": "2.3M/week",
+      "signal": "2026-06-13 to 2026-06-19",
+      "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
+      "summary": "2.3M downloads over the last available week."
     },
     {
       "rank": 20,
-      "title": "Bootimus A Self-Contained PXE and HTTP Boot Server",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 41,
-      "velocity": "36 comments",
-      "signal": "98 points",
-      "url": "https://bootimus.com",
-      "summary": "HN story by car with 36 comments."
+      "title": "langfuse",
+      "source": "npm",
+      "category": "AI evals",
+      "score": 74,
+      "velocity": "1.6M/week",
+      "signal": "2026-06-13 to 2026-06-19",
+      "url": "https://www.npmjs.com/package/langfuse",
+      "summary": "1.6M downloads over the last available week."
     },
     {
       "rank": 21,
-      "title": "PostgresBench: A Reproducible Benchmark for Postgres Services",
+      "title": "Temporary Cloudflare accounts for AI agents",
       "source": "Hacker News",
-      "category": "Database",
-      "score": 38,
-      "velocity": "9 comments",
-      "signal": "54 points",
-      "url": "https://clickhouse.com/blog/postgresbench",
-      "summary": "HN story by saisrirampur with 9 comments."
+      "category": "AI",
+      "score": 49,
+      "velocity": "101 comments",
+      "signal": "187 points",
+      "url": "https://blog.cloudflare.com/temporary-accounts/",
+      "summary": "HN story by farhadhf with 101 comments."
     },
     {
       "rank": 22,
-      "title": "Show HN: Make PDFs look scanned (CLI or in the browser via WASM)",
+      "title": "Linux eliminates the strncpy API after six years of work, 360 patches",
       "source": "Hacker News",
-      "category": "Frontend",
-      "score": 38,
-      "velocity": "24 comments",
-      "signal": "57 points",
-      "url": "https://github.com/overflowy/make-look-scanned",
-      "summary": "HN story by overflowy with 24 comments."
+      "category": "Developer tools",
+      "score": 46,
+      "velocity": "110 comments",
+      "signal": "133 points",
+      "url": "https://www.phoronix.com/news/Linux-7.2-Drops-strncpy",
+      "summary": "HN story by simonpure with 110 comments."
     },
     {
       "rank": 23,
-      "title": "GPT-5.5 hallucinates 3x more than MIT-licensed GLM-5.2",
+      "title": "Bootimus A Self-Contained PXE and HTTP Boot Server",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 38,
-      "velocity": "241 comments",
-      "signal": "483 points",
-      "url": "https://arrowtsx.dev/bigger-models/",
-      "summary": "HN story by oshrimpton with 241 comments."
+      "score": 42,
+      "velocity": "37 comments",
+      "signal": "108 points",
+      "url": "https://bootimus.com",
+      "summary": "HN story by car with 37 comments."
     },
     {
       "rank": 24,
-      "title": "Linux Eliminates the Strncpy API After Six Years of Work, 360 Patches",
+      "title": "Show HN: Make PDFs look scanned (CLI or in the browser via WASM)",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 37,
-      "velocity": "10 comments",
-      "signal": "38 points",
-      "url": "https://www.phoronix.com/news/Linux-7.2-Drops-strncpy",
-      "summary": "HN story by simonpure with 10 comments."
+      "category": "Frontend",
+      "score": 42,
+      "velocity": "49 comments",
+      "signal": "99 points",
+      "url": "https://github.com/overflowy/make-look-scanned",
+      "summary": "HN story by overflowy with 49 comments."
     }
   ]
 }

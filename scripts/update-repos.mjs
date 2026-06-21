@@ -10,7 +10,7 @@ export const repoDefinitions = [
     { fullName: "vercel/next.js", category: "Framework", focus: "React framework" },
     { fullName: "vitejs/vite", category: "Tooling", focus: "build tool" },
     { fullName: "microsoft/playwright", category: "Testing", focus: "browser automation" },
-    { fullName: "n8n-io/n8n", category: "Automation", focus: "workflow automation" },
+    { fullName: "n8n-io/n8n", category: "Workflow automation", focus: "workflow automation" },
     { fullName: "colinhacks/zod", category: "Validation", focus: "schema validation" },
     { fullName: "anthropics/skills", category: "Agent skills", focus: "official Agent Skills examples" },
     { fullName: "mattpocock/skills", category: "Agent skills", focus: "engineering workflow skills" },
@@ -33,7 +33,14 @@ export const repoDefinitions = [
     { fullName: "karpathy/nanoGPT", category: "AI engineering", focus: "small GPT training" },
     { fullName: "karpathy/nanochat", category: "AI engineering", focus: "minimal ChatGPT stack" },
     { fullName: "karpathy/llm.c", category: "AI engineering", focus: "LLM training in C/CUDA" },
-    { fullName: "karpathy/llama2.c", category: "AI engineering", focus: "single-file Llama inference" }
+    { fullName: "karpathy/llama2.c", category: "AI engineering", focus: "single-file Llama inference" },
+    { fullName: "promptfoo/promptfoo", category: "AI evals", focus: "LLM evals and prompt testing" },
+    { fullName: "confident-ai/deepeval", category: "AI evals", focus: "LLM evaluation framework" },
+    { fullName: "langfuse/langfuse", category: "AI evals", focus: "LLM observability and evals" },
+    { fullName: "microsoft/promptflow", category: "AI evals", focus: "LLM app evaluation workflows" },
+    { fullName: "triggerdotdev/trigger.dev", category: "Workflow automation", focus: "durable workflow platform" },
+    { fullName: "temporalio/sdk-typescript", category: "Workflow automation", focus: "TypeScript workflow SDK" },
+    { fullName: "pipedreamhq/pipedream", category: "Workflow automation", focus: "integration and workflow automation" }
 ];
 
 function isoDate(date = new Date()) {

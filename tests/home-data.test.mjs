@@ -388,7 +388,8 @@ test("checked-in data powers the home command center", () => {
     const movements = buildTopicMovements({ trends, packages, repos, links });
 
     assert.ok(overview.totalItems >= 60);
-    assert.equal(overview.liveModules, 4);
+    assert.equal(overview.liveModules + overview.partialModules, 4);
+    assert.equal(overview.errorModules, 0);
     assert.equal(startItems.length, 3);
     assert.equal(skimItems.length, 6);
     assert.equal(routes.length, 6);

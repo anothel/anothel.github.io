@@ -194,6 +194,48 @@ export const linkDefinitions = [
         summary: "Evaluation toolkit for measuring LLM and agent behavior in TypeScript workflows."
     },
     {
+        title: "Promptfoo",
+        category: "AI evals",
+        kind: "Docs",
+        url: "https://www.promptfoo.dev/",
+        summary: "Prompt and model eval framework for testing LLM app behavior."
+    },
+    {
+        title: "DeepEval",
+        category: "AI evals",
+        kind: "Docs",
+        url: "https://docs.confident-ai.com/",
+        summary: "LLM evaluation framework for test cases, metrics, and regression checks."
+    },
+    {
+        title: "Langfuse",
+        category: "AI evals",
+        kind: "Docs",
+        url: "https://langfuse.com/docs",
+        summary: "LLM observability and eval platform for tracing and measuring AI apps."
+    },
+    {
+        title: "Trigger.dev",
+        category: "Workflow automation",
+        kind: "Docs",
+        url: "https://trigger.dev/docs",
+        summary: "Durable background jobs and workflow automation for TypeScript apps."
+    },
+    {
+        title: "Temporal TypeScript SDK",
+        category: "Workflow automation",
+        kind: "Docs",
+        url: "https://docs.temporal.io/develop/typescript",
+        summary: "Durable workflow runtime and TypeScript SDK for reliable async processes."
+    },
+    {
+        title: "Pipedream",
+        category: "Workflow automation",
+        kind: "Docs",
+        url: "https://pipedream.com/docs",
+        summary: "Workflow automation and integration platform for APIs, events, and scripts."
+    },
+    {
         title: "Karpathy GitHub",
         category: "AI engineering",
         kind: "Profile",

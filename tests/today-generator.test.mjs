@@ -150,6 +150,13 @@ test("buildTodayBrief creates fixed sections from checked-in data", () => {
     assert.equal(new Set(urls).size, urls.length);
 });
 
+test("buildTodayBrief surfaces expanded eval or workflow coverage from checked-in data", () => {
+    const brief = buildTodayBrief(checkedInSources(), "2026-06-15T00:00:00.000Z");
+    const categories = new Set(brief.sections.flatMap((section) => section.items.map((item) => item.category)));
+
+    assert.ok(categories.has("AI evals") || categories.has("Workflow automation"));
+});
+
 test("buildTodayBrief removes URL and title collisions from output", () => {
     const brief = buildTodayBrief({
         trends: {
@@ -210,6 +217,55 @@ test("buildTodayBrief reports actual emitted item count for sparse input", () =>
         [0, 0, 0]
     );
     assert.equal(brief.sourceMeta.count, 0);
+    assert.equal(brief.sourceMeta.status, "partial");
+});
+
+test("buildTodayBrief reports partial status when full brief uses partial upstream data", () => {
+    const brief = buildTodayBrief({
+        trends: {
+            updated: "2026-06-15",
+            sourceMeta: [
+                { name: "GitHub", status: "ok" },
+                { name: "npm", status: "partial" }
+            ],
+            items: Array.from({ length: 9 }, (_, index) => ({
+                title: `Trend ${index}`,
+                source: "GitHub",
+                category: index === 0 ? "AI evals" : "AI agents",
+                score: 90 - index,
+                velocity: "1K stars",
+                signal: "100 forks",
+                url: `https://example.com/trend-${index}`,
+                summary: "Generated trend item."
+            }))
+        },
+        repos: {
+            updated: "2026-06-15",
+            sourceMeta: { status: "ok" },
+            repos: Array.from({ length: 4 }, (_, index) => ({
+                name: `owner/repo-${index}`,
+                category: "AI agents",
+                focus: "agent workflow",
+                starsLabel: "1K",
+                url: `https://example.com/repo-${index}`,
+                summary: "Generated repo item."
+            }))
+        },
+        packages: { updated: "2026-06-15", sourceMeta: { status: "ok" }, packages: [] },
+        links: {
+            updated: "2026-06-15",
+            sourceMeta: { status: "ok" },
+            links: Array.from({ length: 4 }, (_, index) => ({
+                title: `Reference ${index}`,
+                category: "Docs",
+                kind: "Docs",
+                url: `https://example.com/reference-${index}`,
+                summary: "Generated reference item."
+            }))
+        }
+    }, "2026-06-15T00:00:00.000Z");
+
+    assert.equal(brief.sourceMeta.count, 13);
     assert.equal(brief.sourceMeta.status, "partial");
 });
 
@@ -275,4 +331,37 @@ test("Start here limits generic baseline packages when agent signals exist", () 
 
     assert.ok(startItems.filter((item) => ["typescript", "react"].includes(item.title)).length <= 1);
     assert.ok(startItems.some((item) => /skills|codex|MCP|mastra/i.test(item.title)));
+});
+
+test("Today brief promotes AI evals and workflow automation signals over generic tooling", () => {
+    const brief = buildTodayBrief({
+        trends: {
+            items: [
+                { title: "typescript", source: "npm", category: "JavaScript", score: 100, velocity: "250M/week", signal: "last week", url: "https://example.com/typescript", summary: "Broad package movement." },
+                { title: "promptfoo eval workflow", source: "GitHub", category: "AI evals", score: 76, velocity: "8K stars", signal: "1K forks", url: "https://example.com/promptfoo", summary: "LLM evals and prompt testing." },
+                { title: "trigger.dev durable workflow", source: "GitHub", category: "Workflow automation", score: 74, velocity: "10K stars", signal: "900 forks", url: "https://example.com/trigger", summary: "Durable workflow automation for agents." }
+            ]
+        },
+        repos: {
+            repos: [
+                { name: "langfuse/langfuse", category: "AI evals", focus: "LLM observability and evals", starsLabel: "15K", url: "https://example.com/langfuse", summary: "LLM observability and evaluation." },
+                { name: "temporalio/sdk-typescript", category: "Workflow automation", focus: "durable workflow SDK", starsLabel: "4K", url: "https://example.com/temporal", summary: "TypeScript workflow runtime." }
+            ]
+        },
+        packages: {
+            packages: [
+                { name: "react", category: "UI", focus: "frontend runtime", downloadsLabel: "100M/week", url: "https://example.com/react" },
+                { name: "promptfoo", category: "AI evals", focus: "LLM evals and prompt testing", downloadsLabel: "500K/week", url: "https://example.com/promptfoo-npm" },
+                { name: "@trigger.dev/sdk", category: "Workflow automation", focus: "durable workflow SDK", downloadsLabel: "200K/week", url: "https://example.com/trigger-npm" }
+            ]
+        },
+        links: { links: [] }
+    }, "2026-06-20T00:00:00.000Z");
+    const allItems = brief.sections.flatMap((section) => section.items);
+    const categories = new Set(allItems.map((item) => item.category));
+
+    assert.equal(allItems.length, brief.sourceMeta.count);
+    assert.ok(categories.has("AI evals"));
+    assert.ok(categories.has("Workflow automation"));
+    assert.ok(brief.sections.find((section) => section.id === "start").items.some((item) => item.category === "AI evals"));
 });

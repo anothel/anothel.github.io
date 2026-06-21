@@ -1,14 +1,14 @@
 {
-  "updated": "2026-06-20",
-  "generatedAt": "2026-06-20T22:21:55.064Z",
+  "updated": "2026-06-21",
+  "generatedAt": "2026-06-21T04:42:42.149Z",
   "sourceMeta": {
     "name": "manual",
     "status": "ok",
-    "count": 28,
-    "tracked": 28,
-    "emitted": 28,
-    "coverage": "28/28",
-    "updatedAt": "2026-06-20T22:21:55.064Z"
+    "count": 34,
+    "tracked": 34,
+    "emitted": 34,
+    "coverage": "34/34",
+    "updatedAt": "2026-06-21T04:42:42.149Z"
   },
   "links": [
     {
@@ -125,6 +125,14 @@
     },
     {
       "rank": 15,
+      "title": "DeepEval",
+      "category": "AI evals",
+      "kind": "Docs",
+      "url": "https://docs.confident-ai.com/",
+      "summary": "LLM evaluation framework for test cases, metrics, and regression checks."
+    },
+    {
+      "rank": 16,
       "title": "Evalite",
       "category": "AI evals",
       "kind": "Docs",
@@ -132,7 +140,23 @@
       "summary": "Evaluation toolkit for measuring LLM and agent behavior in TypeScript workflows."
     },
     {
-      "rank": 16,
+      "rank": 17,
+      "title": "Langfuse",
+      "category": "AI evals",
+      "kind": "Docs",
+      "url": "https://langfuse.com/docs",
+      "summary": "LLM observability and eval platform for tracing and measuring AI apps."
+    },
+    {
+      "rank": 18,
+      "title": "Promptfoo",
+      "category": "AI evals",
+      "kind": "Docs",
+      "url": "https://www.promptfoo.dev/",
+      "summary": "Prompt and model eval framework for testing LLM app behavior."
+    },
+    {
+      "rank": 19,
       "title": "GitHub REST API",
       "category": "API",
       "kind": "Docs",
@@ -140,7 +164,7 @@
       "summary": "Reference for GitHub REST endpoints used by repo data scripts."
     },
     {
-      "rank": 17,
+      "rank": 20,
       "title": "Hacker News API",
       "category": "API",
       "kind": "Docs",
@@ -148,7 +172,7 @@
       "summary": "Official public API for Hacker News stories and metadata."
     },
     {
-      "rank": 18,
+      "rank": 21,
       "title": "npm Download Counts",
       "category": "API",
       "kind": "Docs",
@@ -156,7 +180,7 @@
       "summary": "Registry download-count API used by package watchlists."
     },
     {
-      "rank": 19,
+      "rank": 22,
       "title": "SQLite Docs",
       "category": "Data",
       "kind": "Docs",
@@ -164,7 +188,7 @@
       "summary": "Reference for small durable data stores and local-first experiments."
     },
     {
-      "rank": 20,
+      "rank": 23,
       "title": "MDN Web Docs",
       "category": "Frontend",
       "kind": "Docs",
@@ -172,7 +196,7 @@
       "summary": "Reference for web platform APIs, CSS, HTML, and JavaScript."
     },
     {
-      "rank": 21,
+      "rank": 24,
       "title": "web.dev",
       "category": "Frontend",
       "kind": "Guide",
@@ -180,7 +204,7 @@
       "summary": "Practical guides for web performance, UX, and platform features."
     },
     {
-      "rank": 22,
+      "rank": 25,
       "title": "Awesome MCP Servers",
       "category": "MCP",
       "kind": "Repo",
@@ -188,7 +212,7 @@
       "summary": "Curated directory of MCP servers across files, databases, APIs, and developer tools."
     },
     {
-      "rank": 23,
+      "rank": 26,
       "title": "MCP Python SDK",
       "category": "MCP",
       "kind": "Repo",
@@ -196,7 +220,7 @@
       "summary": "Official Python SDK for building Model Context Protocol clients and servers."
     },
     {
-      "rank": 24,
+      "rank": 27,
       "title": "MCP Registry",
       "category": "MCP",
       "kind": "Repo",
@@ -204,7 +228,7 @@
       "summary": "Community-driven registry service for discovering and managing MCP servers."
     },
     {
-      "rank": 25,
+      "rank": 28,
       "title": "MCP TypeScript SDK",
       "category": "MCP",
       "kind": "Repo",
@@ -212,7 +236,7 @@
       "summary": "Official TypeScript SDK for building Model Context Protocol clients and servers."
     },
     {
-      "rank": 26,
+      "rank": 29,
       "title": "Model Context Protocol servers",
       "category": "MCP",
       "kind": "Repo",
@@ -220,7 +244,7 @@
       "summary": "Reference MCP servers for connecting agents to tools and data sources."
     },
     {
-      "rank": 27,
+      "rank": 30,
       "title": "OpenTelemetry Docs",
       "category": "Ops",
       "kind": "Docs",
@@ -228,12 +252,36 @@
       "summary": "Observability concepts, instrumentation, traces, metrics, and logs."
     },
     {
-      "rank": 28,
+      "rank": 31,
       "title": "Node.js API",
       "category": "Runtime",
       "kind": "Docs",
       "url": "https://nodejs.org/api/",
       "summary": "Node.js runtime API documentation for scripts and tooling."
+    },
+    {
+      "rank": 32,
+      "title": "Pipedream",
+      "category": "Workflow automation",
+      "kind": "Docs",
+      "url": "https://pipedream.com/docs",
+      "summary": "Workflow automation and integration platform for APIs, events, and scripts."
+    },
+    {
+      "rank": 33,
+      "title": "Temporal TypeScript SDK",
+      "category": "Workflow automation",
+      "kind": "Docs",
+      "url": "https://docs.temporal.io/develop/typescript",
+      "summary": "Durable workflow runtime and TypeScript SDK for reliable async processes."
+    },
+    {
+      "rank": 34,
+      "title": "Trigger.dev",
+      "category": "Workflow automation",
+      "kind": "Docs",
+      "url": "https://trigger.dev/docs",
+      "summary": "Durable background jobs and workflow automation for TypeScript apps."
     }
   ]
 }

@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-20",
-  "generatedAt": "2026-06-20T22:21:55.109Z",
+  "updated": "2026-06-21",
+  "generatedAt": "2026-06-21T04:54:34.292Z",
   "sourceMeta": {
     "name": "generated",
-    "status": "ok",
+    "status": "partial",
     "count": 13,
-    "updatedAt": "2026-06-20T22:21:55.109Z"
+    "updatedAt": "2026-06-21T04:54:34.292Z"
   },
   "sections": [
     {
@@ -14,33 +14,33 @@
       "summary": "Three signals worth opening first.",
       "items": [
         {
-          "title": "affaan-m/ECC",
+          "title": "anthropics/skills",
           "module": "Trends",
           "origin": "GitHub",
-          "category": "AI agents",
+          "category": "Agent skills",
           "metric": "100 score",
-          "reason": "Coding-agent ecosystem signal with practical workflow value.",
-          "url": "https://github.com/affaan-m/ECC",
+          "reason": "Agent skills reference for reusable tool instructions.",
+          "url": "https://github.com/anthropics/skills",
           "score": 100
         },
         {
-          "title": "anomalyco/opencode",
+          "title": "lobehub/lobehub",
           "module": "Trends",
           "origin": "GitHub",
-          "category": "AI agents",
+          "category": "Agent skills",
           "metric": "100 score",
-          "reason": "Coding-agent ecosystem signal with practical workflow value.",
-          "url": "https://github.com/anomalyco/opencode",
+          "reason": "Agent skills reference for reusable tool instructions.",
+          "url": "https://github.com/lobehub/lobehub",
           "score": 100
         },
         {
-          "title": "anthropics/claude-code",
+          "title": "awslabs/mcp",
           "module": "Trends",
           "origin": "GitHub",
-          "category": "AI agents",
+          "category": "MCP",
           "metric": "100 score",
-          "reason": "Coding-agent ecosystem signal with practical workflow value.",
-          "url": "https://github.com/anthropics/claude-code",
+          "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "url": "https://github.com/awslabs/mcp",
           "score": 100
         }
       ]
@@ -51,24 +51,34 @@
       "summary": "Useful movement that does not need first attention.",
       "items": [
         {
-          "title": "CherryHQ/cherry-studio",
+          "title": "Arize-ai/phoenix",
           "module": "Trends",
           "origin": "GitHub",
-          "category": "AI agents",
+          "category": "AI evals",
           "metric": "100 score",
-          "reason": "Coding-agent ecosystem signal with practical workflow value.",
-          "url": "https://github.com/CherryHQ/cherry-studio",
+          "reason": "Evaluation signal for measuring agent and model behavior.",
+          "url": "https://github.com/Arize-ai/phoenix",
           "score": 100
         },
         {
-          "title": "anthropics/skills",
+          "title": "langgenius/dify",
+          "module": "Trends",
+          "origin": "GitHub",
+          "category": "MCP",
+          "metric": "100 score",
+          "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "url": "https://github.com/langgenius/dify",
+          "score": 100
+        },
+        {
+          "title": "mattpocock/skills",
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "153.2K stars",
+          "metric": "138.4K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
-          "url": "https://github.com/anthropics/skills",
-          "score": 82
+          "url": "https://github.com/mattpocock/skills",
+          "score": 80
         },
         {
           "title": "@modelcontextprotocol/sdk",
@@ -81,34 +91,24 @@
           "score": 67
         },
         {
-          "title": "farion1231/cc-switch",
+          "title": "affaan-m/ECC",
           "module": "Trends",
           "origin": "GitHub",
           "category": "AI agents",
           "metric": "100 score",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
-          "url": "https://github.com/farion1231/cc-switch",
+          "url": "https://github.com/affaan-m/ECC",
           "score": 100
         },
         {
-          "title": "mattpocock/skills",
+          "title": "anomalyco/opencode",
           "module": "Repos",
           "origin": "GitHub",
-          "category": "Agent skills",
-          "metric": "138.1K stars",
-          "reason": "Agent skills reference for reusable tool instructions.",
-          "url": "https://github.com/mattpocock/skills",
-          "score": 80
-        },
-        {
-          "title": "@modelcontextprotocol/server-filesystem",
-          "module": "Packages",
-          "origin": "npm",
-          "category": "MCP",
-          "metric": "271.8K/week",
-          "reason": "MCP infrastructure worth tracking for agent workflows.",
-          "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-filesystem",
-          "score": 60
+          "category": "AI agents",
+          "metric": "176.7K stars",
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "url": "https://github.com/anomalyco/opencode",
+          "score": 83
         }
       ]
     },

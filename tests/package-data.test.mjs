@@ -89,9 +89,26 @@ test("default package watchlist tracks AI and agent SDK packages", () => {
     assert.ok(categories.has("AI evals"));
 });
 
+test("default package watchlist expands AI evals and workflow automation", () => {
+    const expanded = packageDefinitions.filter((item) =>
+        ["AI evals", "Workflow automation"].includes(item.category)
+    );
+    const names = new Set(expanded.map((item) => item.name));
+
+    assert.ok(expanded.length >= 8);
+    assert.ok(names.has("promptfoo"));
+    assert.ok(names.has("autoevals"));
+    assert.ok(names.has("langfuse"));
+    assert.ok(names.has("@trigger.dev/sdk"));
+    assert.ok(names.has("@temporalio/workflow"));
+    assert.ok(names.has("@temporalio/client"));
+    assert.ok(names.has("n8n-workflow"));
+});
+
 test("checked-in packages include baseline and AI agent coverage", () => {
     const data = readJson("data/packages.json");
     const names = new Set(data.packages.map((item) => item.name));
+    const categories = new Set(data.packages.map((item) => item.category));
 
     for (const name of [
         "react",
@@ -109,6 +126,19 @@ test("checked-in packages include baseline and AI agent coverage", () => {
         assert.ok(names.has(name), `${name} should be present in generated packages`);
     }
 
+    for (const name of [
+        "promptfoo",
+        "autoevals",
+        "langfuse",
+        "@trigger.dev/sdk",
+        "@temporalio/workflow",
+        "@temporalio/client"
+    ]) {
+        assert.ok(names.has(name), `${name} should be present in generated packages`);
+    }
+
+    assert.ok(categories.has("AI evals"));
+    assert.ok(categories.has("Workflow automation"));
     assert.ok(data.packages.length >= 23);
     assert.equal(data.sourceMeta.count, data.packages.length);
 });

@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 import {
     buildNpmDownloadsUrl,
@@ -11,9 +12,14 @@ import {
     githubQueries,
     prepareTrendDataForWrite,
     scoreHackerNewsStory,
+    selectTrendItems,
     MAX_ITEMS,
     npmPackages
 } from "../scripts/update-trends.mjs";
+
+function readJson(path) {
+    return JSON.parse(readFileSync(path, "utf8"));
+}
 
 test("buildSourceMeta records source status and item counts", () => {
     const generatedAt = "2026-06-14T00:00:00.000Z";
@@ -68,12 +74,47 @@ test("default trend inputs leave room for AI agent signals", () => {
     assert.ok(npmPackages.includes("@modelcontextprotocol/sdk"));
     assert.ok(npmPackages.includes("mastra"));
     assert.ok(npmPackages.includes("@ai-sdk/openai"));
+    assert.ok(npmPackages.includes("promptfoo"));
+    assert.ok(npmPackages.includes("@trigger.dev/sdk"));
     assert.ok(githubQueries.some((item) => item.category === "AI agents"));
     assert.ok(githubQueries.some((item) => item.category === "Agent skills"));
     assert.ok(githubQueries.some((item) => item.category === "MCP"));
     assert.ok(githubQueries.some((item) => item.category === "AI evals"));
+    assert.ok(githubQueries.some((item) => item.category === "Workflow automation"));
     assert.ok(githubQueries.some((item) => item.query.includes("opencode")));
     assert.ok(githubQueries.every((item) => item.category !== "Frontend"));
+});
+
+test("selectTrendItems preserves expanded coverage before filling by score", () => {
+    const items = [
+        ...Array.from({ length: 12 }, (_, index) => ({
+            title: `agent-${index}`,
+            source: "GitHub",
+            category: "AI agents",
+            score: 100 - index,
+            url: `https://example.com/agent-${index}`
+        })),
+        {
+            title: "promptfoo",
+            source: "npm",
+            category: "AI evals",
+            score: 54,
+            url: "https://example.com/promptfoo"
+        },
+        {
+            title: "trigger.dev",
+            source: "GitHub",
+            category: "Workflow automation",
+            score: 53,
+            url: "https://example.com/trigger"
+        }
+    ];
+    const selected = selectTrendItems(items, 12);
+    const categories = new Set(selected.map((item) => item.category));
+
+    assert.equal(selected.length, 12);
+    assert.ok(categories.has("AI evals"));
+    assert.ok(categories.has("Workflow automation"));
 });
 
 test("buildNpmDownloadsUrl supports scoped package names", () => {
@@ -88,6 +129,16 @@ test("classify matches AI as a real token, not inside unrelated package names", 
     assert.equal(classify("ai"), "AI");
     assert.equal(classify("@anthropic-ai/sdk"), "AI");
     assert.equal(classify("claude code agents"), "AI");
+    assert.equal(classify("promptfoo"), "AI evals");
+    assert.equal(classify("@trigger.dev/sdk"), "Workflow automation");
+});
+
+test("checked-in trends include expanded coverage categories", () => {
+    const data = readJson("data/trends.json");
+    const categories = new Set(data.items.map((item) => item.category));
+
+    assert.ok(categories.has("AI evals"));
+    assert.ok(categories.has("Workflow automation"));
 });
 
 test("fetchGitHub keeps successful query results when one query fails", async () => {
@@ -113,7 +164,7 @@ test("fetchGitHub keeps successful query results when one query fails", async ()
     });
 
     assert.equal(calls, githubQueries.length);
-    assert.ok(rows.length >= githubQueries.length - 1);
+    assert.equal(rows.length, Math.min(12, githubQueries.length - 1));
     assert.ok(rows.every((row) => row.source === "GitHub"));
 });
 

@@ -23,7 +23,8 @@ const sectionSummaries = {
     reference: "Stable references and projects worth keeping nearby."
 };
 
-const boostedCategories = new Set(["agent skills", "mcp", "ai agents", "ai evals", "ai engineering"]);
+const boostedCategories = new Set(["agent skills", "mcp", "ai agents", "ai evals", "ai engineering", "workflow automation"]);
+const expandedCoverageCategories = new Set(["AI evals", "Workflow automation"]);
 
 function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);
@@ -31,10 +32,24 @@ function isoDate(date = new Date()) {
 
 function sourceStatus(source) {
     if (Array.isArray(source?.sourceMeta)) {
-        return source.sourceMeta.every((item) => item.status === "ok") ? "ok" : "error";
+        return aggregateStatuses(source.sourceMeta.map((item) => item.status));
     }
 
     return source?.sourceMeta?.status || "unknown";
+}
+
+function aggregateStatuses(statuses) {
+    if (statuses.length === 0) {
+        return "unknown";
+    }
+    if (statuses.every((value) => value === "ok")) {
+        return "ok";
+    }
+    if (statuses.every((value) => value === "error")) {
+        return "error";
+    }
+
+    return "partial";
 }
 
 function newestDate(values) {
@@ -229,7 +244,7 @@ function stripItem(item) {
 
 function sourceMetaFor(sources, generatedAt, count) {
     const statuses = Object.values(sources).map(sourceStatus);
-    const sourceStatusValue = statuses.every((value) => value === "ok") ? "ok" : "error";
+    const sourceStatusValue = aggregateStatuses(statuses);
     const status = count === sectionCounts.start + sectionCounts.skim + sectionCounts.reference
         ? sourceStatusValue
         : "partial";
@@ -301,12 +316,13 @@ export function buildTodayBrief(sources = {}, generatedAt = new Date().toISOStri
     const packages = stableSort(candidates.filter((item) => item.module === "Packages"));
     const links = stableSort(candidates.filter((item) => item.module === "Links"));
     const intentItems = stableSort(candidates.filter((item) => item.isIntentMatch));
+    const expandedCoverageItems = stableSort(candidates.filter((item) => expandedCoverageCategories.has(item.category)));
     const skimPool = stableSort(candidates.filter((item) => ["Trends", "Repos", "Packages"].includes(item.module)));
     const allByScore = stableSort(candidates);
 
     const startItems = pickStartItems(picker, intentItems, allByScore, allByScore);
 
-    const skimItems = [];
+    const skimItems = picker.pickFrom(expandedCoverageItems, 1);
     const skimModules = [trends, repos, packages];
     while (skimItems.length < sectionCounts.skim) {
         const before = skimItems.length;
