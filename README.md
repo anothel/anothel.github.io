@@ -2,11 +2,11 @@
 
 Static home hub and small dashboards served with GitHub Pages.
 
-See `ROADMAP.md` for product direction and next large work items.
+See `docs/ROADMAP.md` for product direction and next large work items.
 
 ## Structure
 
-- `ROADMAP.md`: direction and next large work items
+- `docs/ROADMAP.md`: direction and next large work items
 - `index.html`: home hub
 - `today/index.html`: generated priority brief from tracked dashboard data
 - `status/index.html`: source refresh and data health overview

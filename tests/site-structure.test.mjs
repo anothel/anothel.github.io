@@ -90,6 +90,7 @@ test("root page is a hub and trends page owns the dashboard", () => {
     assert.match(root, /href="packages\/index\.html"/);
     assert.match(root, /href="repos\/index\.html"/);
     assert.match(root, /href="links\/index\.html"/);
+    assert.doesNotMatch(root, /ROADMAP\.md/);
     assert.doesNotMatch(root, /data-grid/);
     assert.doesNotMatch(root, /dashboard\.js/);
 
