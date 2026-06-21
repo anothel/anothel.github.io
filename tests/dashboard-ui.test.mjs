@@ -48,6 +48,7 @@ async function runDashboard(data) {
             ok: true,
             json: async () => data
         }),
+        URL,
         console
     };
 
@@ -146,4 +147,26 @@ test("dashboard escapes generated text and blocks unsafe item links", async () =
     assert.match(html, /status-partial/);
     assert.match(html, /1 failed: bad-source/);
     assert.match(html, /bad &quot;timeout&quot;/);
+});
+
+test("dashboard trend cards are directly clickable links", async () => {
+    const elements = await runDashboard({
+        updated: "2026-06-16",
+        sourceMeta: [],
+        items: [
+            {
+                rank: 1,
+                title: "Clickable trend",
+                source: "GitHub",
+                category: "AI agents",
+                score: 95,
+                velocity: "10K stars",
+                url: "https://example.com/clickable",
+                summary: "Card should open directly."
+            }
+        ]
+    });
+
+    assert.match(elements["[data-grid]"].innerHTML, /<a class="trend-card" href="https:\/\/example\.com\/clickable">/);
+    assert.doesNotMatch(elements["[data-grid]"].innerHTML, />Open item<\/a>/);
 });

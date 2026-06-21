@@ -12,7 +12,6 @@ import {
     createPinnedTopicStore,
     sortTopicMovementsByPins,
     renderTopicMovements,
-    renderDecisionActions,
     renderSkimList,
     renderStartItems
 } from "../js/home.js";
@@ -123,6 +122,29 @@ test("buildSavedSummary reads v1 and v2 saved payloads", () => {
     assert.deepEqual(buildSavedSummary("broken"), { saved: 0, unread: 0 });
 });
 
+test("buildSavedSummary ignores stale local saved ids when current data ids are known", () => {
+    const validIds = new Set(["repos:https://example.com/current", "trends:https://example.com/trend"]);
+
+    assert.deepEqual(buildSavedSummary(JSON.stringify([
+        "repos:https://example.com/current",
+        "repos:https://example.com/stale"
+    ]), validIds), {
+        saved: 1,
+        unread: 1
+    });
+    assert.deepEqual(buildSavedSummary(JSON.stringify({
+        version: 2,
+        items: [
+            { id: "repos:https://example.com/current", status: "unread" },
+            { id: "trends:https://example.com/trend", status: "read" },
+            { id: "packages:https://example.com/stale", status: "unread" }
+        ]
+    }), validIds), {
+        saved: 2,
+        unread: 1
+    });
+});
+
 test("renderSavedSummary emits review workflow summary", () => {
     const html = renderSavedSummary({ saved: 5, unread: 2 });
 
@@ -130,6 +152,7 @@ test("renderSavedSummary emits review workflow summary", () => {
     assert.match(html, /5/);
     assert.match(html, /Unread/);
     assert.match(html, /2/);
+    assert.match(html, /Local to this browser/);
     assert.match(html, /href="review\/index\.html"/);
 });
 
@@ -218,18 +241,7 @@ test("pinned topics sort Home topic movement before automatic ranking", () => {
     );
 });
 
-test("home decision renderers emit safe action and topic markup", () => {
-    const startItems = [
-        {
-            title: "anomalyco/opencode",
-            module: "Trends",
-            origin: "GitHub",
-            category: "AI agents",
-            metric: "100 score",
-            reason: "Coding-agent ecosystem signal with practical workflow value.",
-            url: "https://example.com/opencode"
-        }
-    ];
+test("home topic movement renderer emits safe topic markup", () => {
     const movements = [
         {
             topic: "AI agents",
@@ -260,31 +272,14 @@ test("home decision renderers emit safe action and topic markup", () => {
             }
         }
     ];
-    const actions = renderDecisionActions({ startItems, saved: 4, unread: 2, topTopic: movements[0] });
     const topics = renderTopicMovements(movements);
 
-    assert.match(actions, /Open first/);
-    assert.match(actions, /anomalyco\/opencode/);
-    assert.match(actions, /Today priority brief \/ 1 generated pick/);
-    assert.match(actions, /Browse topic movement/);
-    assert.match(actions, /AI agents/);
-    assert.match(actions, /OpenAI &quot;Codex&quot;/);
-    assert.match(actions, /Review saved/);
-    assert.match(actions, /2 unread/);
     assert.match(topics, /href="topics\/ai-agents\/index\.html"/);
     assert.match(topics, /OpenAI &quot;Codex&quot;/);
     assert.match(topics, /3 signals \/ 2 modules/);
     assert.match(topics, /href="#"/);
-    assert.doesNotMatch(`${actions}${topics}`, /javascript:alert/);
-    assert.doesNotMatch(`${actions}${topics}`, /<script>/);
-});
-
-test("home decision actions give useful empty review copy", () => {
-    const html = renderDecisionActions({ startItems: [], saved: 0, unread: 0, topTopic: null });
-
-    assert.match(html, /Open generated priority brief/);
-    assert.match(html, /No saved items yet/);
-    assert.match(html, /Save useful signals from Explore/);
+    assert.doesNotMatch(topics, /javascript:alert/);
+    assert.doesNotMatch(topics, /<script>/);
 });
 
 test("home renderers emit command center markup", () => {

@@ -239,20 +239,39 @@ function normalizeHomeSignals(dataByModule) {
     return [...trends, ...packages, ...repos, ...links];
 }
 
+function itemId(moduleKey, item) {
+    return `${moduleKey}:${item.url || item.name || item.title || item.rank}`;
+}
+
+function buildValidSavedIds(dataByModule) {
+    const ids = [
+        ...(dataByModule.trends?.items || []).map((item) => itemId("trends", item)),
+        ...(dataByModule.packages?.packages || []).map((item) => itemId("packages", item)),
+        ...(dataByModule.repos?.repos || []).map((item) => itemId("repos", item)),
+        ...(dataByModule.links?.links || []).map((item) => itemId("links", item))
+    ];
+
+    return new Set(ids);
+}
+
 function topicMatches(item, definition) {
     const category = String(item.category || "").toLowerCase();
     return category === definition.topic.toLowerCase() || definition.match.test(textBlob(item));
 }
 
-export function buildSavedSummary(rawValue) {
+export function buildSavedSummary(rawValue, validIds = null) {
+    function isCurrent(id) {
+        return !validIds || validIds.has(id);
+    }
+
     try {
         const parsed = JSON.parse(rawValue || "[]");
         if (Array.isArray(parsed)) {
-            const saved = parsed.filter((id) => typeof id === "string").length;
+            const saved = parsed.filter((id) => typeof id === "string" && isCurrent(id)).length;
             return { saved, unread: saved };
         }
         if (parsed?.version === 2 && Array.isArray(parsed.items)) {
-            const records = parsed.items.filter((item) => item && typeof item.id === "string");
+            const records = parsed.items.filter((item) => item && typeof item.id === "string" && isCurrent(item.id));
             return {
                 saved: records.length,
                 unread: records.filter((item) => !item.status || item.status === "unread").length
@@ -425,47 +444,8 @@ export function renderSavedSummary(summary) {
                 <strong data-home-review-unread>${unread}</strong>
             </article>
         </div>
+        <p class="review-summary-note">Local to this browser. Stale saved ids are ignored when current data loads.</p>
         <a href="review/index.html">Open Review</a>
-    `;
-}
-
-function pluralize(count, singular, plural = `${singular}s`) {
-    return count === 1 ? singular : plural;
-}
-
-export function renderDecisionActions({ startItems = null, startCount = 0, saved = 0, unread = 0, topTopic = null } = {}) {
-    const firstItem = Array.isArray(startItems) ? startItems[0] : null;
-    const resolvedStartCount = Array.isArray(startItems) ? startItems.length : startCount;
-    const firstTitle = firstItem?.title || "Open generated priority brief";
-    const firstMeta = firstItem
-        ? `Today priority brief / ${resolvedStartCount} generated ${pluralize(resolvedStartCount, "pick")}`
-        : `${resolvedStartCount} generated ${pluralize(resolvedStartCount, "pick")} from tracked signals`;
-    const topicLabel = topTopic?.topic || "Topic movement";
-    const topicHref = topTopic?.route || "explore/index.html";
-    const topicMeta = topTopic
-        ? `${topTopic.topItem?.title || `${topTopic.count} signals`} / ${topTopic.count} signals / ${topTopic.modules} modules`
-        : "Browse recurring themes";
-    const savedTitle = saved > 0 ? `${saved} saved items` : "No saved items yet";
-    const savedMeta = saved > 0
-        ? `${unread} unread follow-ups in this browser`
-        : "Save useful signals from Explore";
-
-    return `
-        <a class="decision-card decision-primary" href="today/index.html">
-            <span>Open first</span>
-            <strong>${escapeHtml(firstTitle)}</strong>
-            <small>${escapeHtml(firstMeta)}</small>
-        </a>
-        <a class="decision-card" href="${safeHref(topicHref)}">
-            <span>Browse topic movement</span>
-            <strong>${escapeHtml(topicLabel)}</strong>
-            <small>${escapeHtml(topicMeta)}</small>
-        </a>
-        <a class="decision-card" href="review/index.html">
-            <span>Review saved</span>
-            <strong>${escapeHtml(savedTitle)}</strong>
-            <small>${escapeHtml(savedMeta)}</small>
-        </a>
     `;
 }
 
@@ -540,7 +520,7 @@ function applyTopicMovements(root, movements) {
     if (slot) slot.innerHTML = renderTopicMovements(movements);
 }
 
-function readSavedSummary(storage) {
+function readSavedSummary(storage, validIds = null) {
     let rawValue = "[]";
 
     try {
@@ -549,7 +529,7 @@ function readSavedSummary(storage) {
         rawValue = "[]";
     }
 
-    return buildSavedSummary(rawValue);
+    return buildSavedSummary(rawValue, validIds);
 }
 
 function applySavedSummary(root, summary) {
@@ -563,18 +543,6 @@ function applySavedSummary(root, summary) {
     const unread = root.querySelector("[data-home-review-unread]");
     if (saved) saved.textContent = String(summary.saved);
     if (unread) unread.textContent = String(summary.unread);
-}
-
-function applyDecisionActions(root, today, savedSummary, movements) {
-    const slot = root.querySelector("[data-home-decision-actions]");
-    if (!slot) return;
-
-    slot.innerHTML = renderDecisionActions({
-        startItems: getTodaySection(today || {}, "start"),
-        saved: savedSummary.saved,
-        unread: savedSummary.unread,
-        topTopic: movements[0] || null
-    });
 }
 
 async function readJson(path) {
@@ -593,9 +561,10 @@ async function init() {
             readJson(reposUrl).catch(() => null),
             readJson(linksUrl).catch(() => null)
         ]);
-        const savedSummary = readSavedSummary(globalThis.localStorage);
+        const dataByModule = { trends, packages, repos, links };
+        const savedSummary = readSavedSummary(globalThis.localStorage, buildValidSavedIds(dataByModule));
         const pinnedTopics = createPinnedTopicStore(globalThis.localStorage).read();
-        const topicMovements = sortTopicMovementsByPins(buildTopicMovements({ trends, packages, repos, links }), pinnedTopics);
+        const topicMovements = sortTopicMovementsByPins(buildTopicMovements(dataByModule), pinnedTopics);
 
         if (manifest) {
             applyOverview(document, manifest);
@@ -605,13 +574,11 @@ async function init() {
             applyToday(document, today);
         }
         applyTopicMovements(document, topicMovements);
-        applyDecisionActions(document, today, savedSummary, topicMovements);
         applySavedSummary(document, savedSummary);
     } catch {
         // Static fallback remains useful when local file fetch is blocked.
         const savedSummary = readSavedSummary(globalThis.localStorage);
         applySavedSummary(document, savedSummary);
-        applyDecisionActions(document, null, savedSummary, []);
     }
 }
 

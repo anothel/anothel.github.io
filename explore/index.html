@@ -40,70 +40,89 @@
             </nav>
         </header>
 
-        <aside class="sidebar" aria-label="Explore filters">
-            <div class="panel explore-controls">
-                <h2>Refine explore</h2>
-                <div class="quick-filter-group" aria-label="Signal focus">
-                    <span>Signal focus</span>
-                    <button type="button" data-focus-filter="all" aria-pressed="true">All</button>
-                    <button type="button" data-focus-filter="AI agents" aria-pressed="false">AI agents</button>
-                    <button type="button" data-focus-filter="MCP" aria-pressed="false">MCP</button>
-                    <button type="button" data-focus-filter="Agent skills" aria-pressed="false">Agent skills</button>
-                    <button type="button" data-focus-filter="AI evals" aria-pressed="false">AI evals</button>
-                    <button type="button" data-focus-filter="AI engineering" aria-pressed="false">AI engineering</button>
-                    <button type="button" data-focus-filter="Workflow automation" aria-pressed="false">Automation</button>
-                    <button type="button" data-focus-filter="Developer tooling" aria-pressed="false">Tooling</button>
-                    <button type="button" data-focus-filter="Security" aria-pressed="false">Security</button>
-                    <button type="button" data-focus-filter="Packages" aria-pressed="false">Packages</button>
-                </div>
-                <label>
-                    Module
-                    <select data-explore-module>
-                        <option value="all">All modules</option>
-                    </select>
-                </label>
-                <label>
-                    Category
-                    <select data-explore-category>
-                        <option value="all">All categories</option>
-                    </select>
-                </label>
-                <label>
-                    Search
-                    <input data-explore-query type="search" placeholder="agent, skills, runtime">
-                </label>
-                <div class="saved-searches" aria-label="Saved searches">
-                    <div class="saved-searches-header">
-                        <strong>Saved searches</strong>
-                        <button type="button" data-save-search>Save search</button>
+        <main class="explore-main">
+            <section class="explore-command-bar" aria-labelledby="explore-command-title">
+                <div class="explore-command-header">
+                    <div>
+                        <h2 id="explore-command-title">Find signals</h2>
+                        <p data-explore-summary>Showing all tracked items.</p>
                     </div>
-                    <div data-saved-searches>
-                        <p class="saved-search-empty">Save reusable filter sets here.</p>
+                    <div class="explore-command-actions">
+                        <button class="ghost-button" type="button" data-clear-filters>Clear filters</button>
+                        <a href="../review/index.html">Review later</a>
                     </div>
-                    <p class="saved-search-status" data-saved-search-status>Save reusable filter sets here.</p>
                 </div>
-                <label>
-                    Sort
-                    <select data-explore-sort>
-                        <option value="priority">Priority</option>
-                        <option value="saved">Saved first</option>
-                        <option value="module">Module</option>
-                        <option value="category">Category</option>
-                    </select>
-                </label>
-                <div class="panel-actions">
-                    <p data-explore-summary>Showing all tracked items.</p>
-                    <button class="ghost-button" type="button" data-clear-filters>Clear filters</button>
-                </div>
-                <div class="preference-actions" aria-label="Explore defaults">
-                    <button type="button" data-save-explore-default>Set as default</button>
-                    <button type="button" data-reset-explore-default>Reset default</button>
-                </div>
-                <p class="preference-status" data-explore-default-status>Default: All / priority</p>
-            </div>
-        </aside>
 
-        <main>
+                <div class="explore-workbench">
+                    <div class="explore-filter-board">
+                        <div class="explore-controls">
+                            <label class="explore-search-field">
+                                Search
+                                <input data-explore-query type="search" placeholder="agent, skills, runtime">
+                            </label>
+                            <label>
+                                Module
+                                <select data-explore-module>
+                                    <option value="all">All modules</option>
+                                </select>
+                            </label>
+                            <label>
+                                Sort
+                                <select data-explore-sort>
+                                    <option value="priority">Priority</option>
+                                    <option value="saved">Saved first</option>
+                                    <option value="module">Module</option>
+                                    <option value="category">Category</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="advanced-filter-grid" aria-label="Primary filters">
+                            <label>
+                                Category
+                                <select data-explore-category>
+                                    <option value="all">All categories</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="quick-filter-group explore-focus-chips" aria-label="Signal focus">
+                            <span>Signal focus</span>
+                            <button type="button" data-focus-filter="all" aria-pressed="true">All</button>
+                            <button type="button" data-focus-filter="AI agents" aria-pressed="false">AI agents</button>
+                            <button type="button" data-focus-filter="MCP" aria-pressed="false">MCP</button>
+                            <button type="button" data-focus-filter="Agent skills" aria-pressed="false">Agent skills</button>
+                            <button type="button" data-focus-filter="AI evals" aria-pressed="false">AI evals</button>
+                            <button type="button" data-focus-filter="AI engineering" aria-pressed="false">AI engineering</button>
+                            <button type="button" data-focus-filter="Workflow automation" aria-pressed="false">Automation</button>
+                            <button type="button" data-focus-filter="Developer tooling" aria-pressed="false">Tooling</button>
+                            <button type="button" data-focus-filter="Security" aria-pressed="false">Security</button>
+                            <button type="button" data-focus-filter="Packages" aria-pressed="false">Packages</button>
+                        </div>
+                    </div>
+
+                    <aside class="explore-saved-tools" aria-label="Saved explore tools">
+                        <div class="saved-searches" aria-label="Saved searches">
+                            <div class="saved-searches-header">
+                                <strong>Saved searches</strong>
+                                <button type="button" data-save-search>Save search</button>
+                            </div>
+                            <div data-saved-searches>
+                                <p class="saved-search-empty">Save reusable filter sets here.</p>
+                            </div>
+                            <p class="saved-search-status" data-saved-search-status>Save reusable filter sets here.</p>
+                        </div>
+                        <div class="explore-defaults">
+                            <div class="preference-actions" aria-label="Explore defaults">
+                                <button type="button" data-save-explore-default>Set as default</button>
+                                <button type="button" data-reset-explore-default>Reset default</button>
+                            </div>
+                            <p class="preference-status" data-explore-default-status>Default: All / priority</p>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
             <section class="stats-grid" aria-label="Explore stats">
                 <article class="stat-card">
                     <span>Visible items</span>

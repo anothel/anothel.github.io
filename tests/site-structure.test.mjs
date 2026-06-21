@@ -60,11 +60,42 @@ test("public page headers use stable single-line titles without a brand button",
     assert.match(styles, /\.topbar h1\s*{[^}]*text-overflow: ellipsis/s);
 });
 
+test("primary navigation remains reachable while scrolling", () => {
+    assert.match(styles, /\.topbar\s*{[^}]*position: sticky/s);
+    assert.match(styles, /\.topbar\s*{[^}]*top: 0/s);
+    assert.match(styles, /\.topbar\s*{[^}]*z-index:/s);
+    assert.match(styles, /\.site-nav\s*{[^}]*overflow-x: auto/s);
+});
+
+test("sidebar filters avoid overlapping the sticky navigation", () => {
+    const trends = read("trends/index.html");
+    const links = read("links/index.html");
+
+    assert.match(trends, /<aside class="sidebar" aria-label="Dashboard filters">/);
+    assert.match(links, /<aside class="sidebar" aria-label="Link filters">/);
+    assert.match(styles, /\.sidebar \.panel\s*{[^}]*top: 148px/s);
+    assert.match(styles, /\.sidebar \.panel\s*{[^}]*max-height: calc\(100vh - 172px\)/s);
+    assert.match(styles, /\.sidebar \.panel\s*{[^}]*overflow-y: auto/s);
+    assert.match(styles, /@media \(max-width: 1040px\)\s*{[\s\S]*\.panel\s*{[^}]*top: auto/s);
+});
+
+test("desktop layout uses a wider workbench instead of stretched mobile stacks", () => {
+    const explore = read("explore/index.html");
+
+    assert.match(explore, /<div class="explore-workbench">/);
+    assert.match(styles, /\.shell\s*{[^}]*grid-template-columns: 300px minmax\(0, 1fr\)/s);
+    assert.match(styles, /\.shell\s*{[^}]*width: min\(100% - 56px, 1440px\)/s);
+    assert.match(styles, /\.explore-command-bar\s*{[^}]*background: color-mix\(in srgb, var\(--panel\) 86%, var\(--bg\)\)/s);
+    assert.match(styles, /\.explore-filter-board\s*{[^}]*grid-template-columns: minmax\(220px, 0\.32fr\) minmax\(0, 1fr\)/s);
+    assert.match(styles, /\.explore-saved-tools\s*{[^}]*align-content: start/s);
+    assert.match(styles, /@media \(max-width: 1040px\)\s*{[\s\S]*\.explore-workbench,[\s\S]*\.advanced-filter-grid\s*{[^}]*grid-template-columns: 1fr/s);
+});
+
 test("mobile layout allows long titles and card text to wrap", () => {
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topbar h1\s*{[^}]*white-space: normal/s);
     assert.match(styles, /\.signal-card strong,[\s\S]*\.trend-card h3[\s\S]*{[^}]*overflow-wrap: anywhere/s);
     assert.match(styles, /\.start-item strong,[\s\S]*\.module-route strong[\s\S]*{[^}]*overflow-wrap: anywhere/s);
-    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.command-center[\s\S]*grid-template-columns: 1fr/s);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.home-command-board[\s\S]*grid-template-columns: 1fr/s);
     assert.match(styles, /\.signal-card div\s*{[^}]*min-width: 0/s);
     assert.match(styles, /\.source-health-card div\s*{[^}]*min-width: 0/s);
 });
@@ -165,8 +196,17 @@ test("explore page owns the cross-module search surface", () => {
 
     assert.match(explore, /Explore tracked signals\./);
     assert.match(explore, /Signal focus/);
+    assert.match(explore, /Find signals/);
+    assert.match(explore, /Primary filters/);
     assert.match(explore, /Topic lenses/);
     assert.match(explore, /Review later/);
+    assert.match(explore, /class="explore-command-bar"/);
+    assert.match(explore, /class="explore-workbench"/);
+    assert.match(explore, /class="explore-filter-board"/);
+    assert.match(explore, /class="explore-saved-tools"/);
+    assert.match(explore, /class="explore-controls"/);
+    assert.doesNotMatch(explore, /class="sidebar"/);
+    assert.doesNotMatch(explore, /Refine explore/);
     assert.match(explore, /href="..\/review\/index\.html"/);
     assert.match(explore, /..\/js\/data-health\.js/);
     assert.match(explore, /..\/js\/explore\.js/);
@@ -182,6 +222,15 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(styles, /\.saved-searches/);
     assert.match(styles, /\.saved-search-item/);
     assert.match(styles, /\.saved-panel/);
+    assert.match(styles, /\.explore-shell\s*{[^}]*grid-template-columns: 1fr/s);
+    assert.match(styles, /\.explore-command-bar/);
+    assert.match(styles, /\.explore-workbench\s*{[^}]*grid-template-columns: minmax\(0, 1fr\) minmax\(280px, 0\.35fr\)/s);
+    assert.match(styles, /\.explore-filter-board\s*{[^}]*display: grid/s);
+    assert.match(styles, /\.explore-saved-tools\s*{[^}]*display: grid/s);
+    assert.match(styles, /\.explore-controls\s*{[^}]*display: grid/s);
+    assert.match(styles, /\.advanced-filter-grid\s*{[^}]*grid-template-columns:/s);
+    assert.match(styles, /\.saved-searches \[data-saved-searches\]\s*{[^}]*display: flex/s);
+    assert.match(styles, /@media \(max-width: 1040px\)\s*{[\s\S]*\.explore-workbench[\s\S]*grid-template-columns: 1fr/s);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.explore-results[\s\S]*grid-template-columns: 1fr/s);
 });
 
@@ -323,7 +372,6 @@ test("root page exposes command center slots", () => {
         "data-home-freshness",
         "data-home-review-saved",
         "data-home-review-unread",
-        "data-home-decision-actions",
         "data-home-topic-movements",
         "data-home-start",
         "data-home-skim",
@@ -333,11 +381,14 @@ test("root page exposes command center slots", () => {
     }
 
     assert.match(root, /What is worth opening now\?/);
-    assert.match(root, /Decision layer/);
-    assert.match(root, /Topic movement/);
-    assert.match(root, /Start here/);
+    assert.match(root, /class="home-command-board"/);
+    assert.match(root, /class="home-priority-panel"/);
+    assert.match(root, /class="home-utility-strip"/);
+    assert.match(root, /Open first/);
+    assert.match(root, /Topic lenses/);
+    assert.match(root, /Browse modules/);
     assert.match(root, /Worth skimming/);
-    assert.match(root, /Data status/);
+    assert.match(root, /Local state/);
     assert.match(root, /Open priority brief/);
     assert.match(root, /Explore workspace/);
     assert.match(root, /Search all tracked signals/);
@@ -346,13 +397,13 @@ test("root page exposes command center slots", () => {
     assert.match(root, /Saved for review/);
     assert.match(root, /Unread saved/);
     assert.match(root, /href="status\/index\.html"/);
-    assert.match(root, /class="explore-callout"/);
-    assert.match(root, /class="decision-layer"/);
+    assert.doesNotMatch(root, /data-home-decision-actions/);
+    assert.doesNotMatch(root, /class="decision-layer"/);
+    assert.doesNotMatch(root, />Decision layer</);
     assert.match(root, /class="topic-movement-grid"/);
-    assert.match(root, /class="command-center"/);
-    assert.match(root, /class="start-list"/);
+    assert.match(root, /class="[^"]*\bstart-list\b/);
     assert.match(root, /class="skim-list"/);
-    assert.match(root, /class="module-strip"/);
+    assert.match(root, /class="[^"]*\bmodule-strip\b/);
     assert.doesNotMatch(root, /aria-label="Topic focus pages"/);
     assert.doesNotMatch(root, />Topic focus</);
     assert.doesNotMatch(root, /class="today-grid"/);
@@ -361,6 +412,13 @@ test("root page exposes command center slots", () => {
     assert.match(root, /data-packages="data\/packages\.json"/);
     assert.match(root, /data-repos="data\/repos\.json"/);
     assert.match(root, /data-links="data\/links\.json"/);
+    assert.match(styles, /\.home-command-board\s*{[^}]*grid-template-columns: 1fr/s);
+    assert.match(styles, /\.home-utility-strip\s*{[^}]*grid-template-columns: repeat\(6, minmax\(0, 1fr\)\)/s);
+    assert.match(styles, /\.utility-card-wide\s*{[^}]*grid-column: span 2/s);
+    assert.match(styles, /\.home-priority-list\s*{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/s);
+    assert.match(styles, /\.home-module-board\s*{[^}]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/s);
+    assert.match(styles, /\.home-priority-panel \.section-heading\s*{[^}]*align-items: start/s);
+    assert.match(styles, /\.home-priority-panel \.section-heading > a\s*{[^}]*border: 1px solid var\(--line\)/s);
 });
 
 test("module pages expose data health strips", () => {
@@ -378,11 +436,9 @@ test("module pages expose data health strips", () => {
 test("home command center cards brighten on hover", () => {
     assert.match(styles, /\.start-item:hover/);
     assert.match(styles, /\.module-route:hover/);
-    assert.match(styles, /\.decision-card:hover/);
     assert.match(styles, /\.start-item:hover\s*{[^}]*background: var\(--panel-strong\)/s);
     assert.match(styles, /\.module-route:hover\s*{[^}]*background: var\(--panel-strong\)/s);
-    assert.match(styles, /\.decision-card:hover[\s\S]*background: var\(--panel-strong\)/s);
-    assert.doesNotMatch(styles, /\.decision-primary\s*{[^}]*background: var\(--panel-strong\)/s);
+    assert.doesNotMatch(styles, /\.decision-card/);
     assert.match(styles, /\.topic-movement-grid\s*{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/s);
 });
 

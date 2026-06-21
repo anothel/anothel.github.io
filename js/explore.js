@@ -626,6 +626,11 @@
         return sortExploreItems(filterExploreItems(items, filters), filters.sort || "priority", savedIds);
     }
 
+    function filterSavedIds(items, savedIds = new Set()) {
+        const validIds = new Set(items.map((item) => item.id));
+        return new Set([...savedIds].filter((id) => validIds.has(id)));
+    }
+
     function activeExploreSummary(filters, savedCount = 0) {
         const parts = [];
         if (filters.focus && filters.focus !== "all") parts.push(`Focus: ${filters.focus}`);
@@ -633,7 +638,6 @@
         if (filters.category !== "all") parts.push(`Category: ${filters.category}`);
         if (filters.query) parts.push(`Search: ${filters.query}`);
         if (filters.sort === "saved") parts.push("Sort: saved first");
-        if (savedCount > 0) parts.push(`Saved: ${savedCount}`);
         return parts.length > 0 ? parts.join(" / ") : "Showing all tracked items.";
     }
 
@@ -1100,7 +1104,7 @@
 
         state.items = normalizeExploreData(dataByModule);
         state.sourceMeta = collectSourceMeta(dataByModule);
-        state.savedIds = store.read();
+        state.savedIds = filterSavedIds(state.items, store.read());
         state.pinnedTopics = new Set(pinnedStore.read());
         state.savedSearches = savedSearchStore.read();
         state.focus = initialFocus(els.focusButtons, preferredState);
@@ -1136,6 +1140,7 @@
         savedSearchLabel,
         savedSearchStatusText,
         renderSavedSearches,
+        filterSavedIds,
         bindSavedSearchActions,
         applySearchState,
         applySavedSearchById,

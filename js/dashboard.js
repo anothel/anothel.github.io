@@ -241,7 +241,7 @@ function renderCards(items) {
     }
 
     els.grid.innerHTML = items.map((item) => `
-        <article class="trend-card">
+        <a class="trend-card" href="${safeHref(item.url)}">
             <div class="card-topline">
                 <span>#${escapeHtml(item.rank)}</span>
                 <span>${escapeHtml(item.source)}</span>
@@ -253,8 +253,7 @@ function renderCards(items) {
                 <span>${escapeHtml(item.score)}</span>
                 <span>${escapeHtml(item.velocity)}</span>
             </div>
-            <a href="${safeHref(item.url)}">Open item</a>
-        </article>
+        </a>
     `).join("");
 }
 

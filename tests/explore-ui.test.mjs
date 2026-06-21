@@ -286,8 +286,18 @@ test("Explore summarizes active saved workflow state", () => {
     );
     assert.equal(
         app.activeExploreSummary({ module: "Repos", category: "AI agents", focus: "MCP", query: "codex", sort: "saved" }, 2),
-        "Focus: MCP / Module: Repos / Category: AI agents / Search: codex / Sort: saved first / Saved: 2"
+        "Focus: MCP / Module: Repos / Category: AI agents / Search: codex / Sort: saved first"
     );
+});
+
+test("Explore ignores stale saved ids when current data is known", () => {
+    const app = loadExplore();
+    const items = [
+        { id: "repos:current", module: "Repos", title: "Current", category: "AI", origin: "GitHub", summary: "current", score: 90 }
+    ];
+    const savedIds = new Set(["repos:current", "repos:stale"]);
+
+    assert.deepEqual([...app.filterSavedIds(items, savedIds)], ["repos:current"]);
 });
 
 test("Explore clear behavior preserves saved-first sort only", () => {
@@ -790,7 +800,8 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
 
     elements["[data-explore-sort]"].dispatch("change", "saved");
     assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
-    assert.match(elements["[data-explore-summary]"].textContent, /Saved: 1/);
+    assert.doesNotMatch(elements["[data-explore-summary]"].textContent, /Saved:/);
+    assert.equal(elements["[data-explore-saved-count]"].textContent, "1");
 
     focusButtons[1].listeners.click({ target: focusButtons[1] });
     assert.match(elements["[data-explore-summary]"].textContent, /Focus: AI agents/);
