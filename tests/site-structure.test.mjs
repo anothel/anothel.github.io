@@ -151,7 +151,10 @@ test("explore page owns the cross-module search surface", () => {
         "data-topic-lenses",
         "data-data-mode",
         "data-source-health",
-        "data-clear-filters"
+        "data-clear-filters",
+        "data-save-explore-default",
+        "data-reset-explore-default",
+        "data-explore-default-status"
     ]) {
         assert.match(explore, new RegExp(hook));
     }
@@ -170,6 +173,8 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(sitemap, /https:\/\/anothel\.github\.io\/explore\//);
     assert.match(styles, /\.explore-results/);
     assert.match(styles, /\.topic-lens-grid/);
+    assert.match(styles, /\.preference-actions/);
+    assert.match(styles, /\.preference-status/);
     assert.match(styles, /\.saved-panel/);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.explore-results[\s\S]*grid-template-columns: 1fr/s);
 });

@@ -1,7 +1,9 @@
 (function attachExplore(global) {
     const storageKey = "anothel.explore.saved.v1";
     const pinnedTopicsStorageKey = "anothel.preferences.pinnedTopics.v1";
+    const preferredExploreStorageKey = "anothel.preferences.exploreState.v1";
     const dataHealth = global.DataHealth;
+    const defaultExploreState = { focus: "all", sort: "priority" };
 
     const defaultPaths = {
         manifest: "../data/manifest.json",
@@ -64,6 +66,14 @@
         }
     ];
     const knownTopicNames = topicLensDefinitions.map((definition) => definition.focus);
+    const allowedFocusValues = new Set(["all", "Security", "Packages", ...knownTopicNames]);
+    const allowedSortValues = new Set(["priority", "saved", "module", "category"]);
+    const sortLabels = {
+        priority: "priority",
+        saved: "saved first",
+        module: "module",
+        category: "category"
+    };
 
     function escapeHtml(value) {
         return String(value ?? "")
@@ -426,6 +436,46 @@
         };
     }
 
+    function createPreferredExploreStore(storage) {
+        function normalize(value = {}) {
+            return {
+                focus: allowedFocusValues.has(value.focus) ? value.focus : defaultExploreState.focus,
+                sort: allowedSortValues.has(value.sort) ? value.sort : defaultExploreState.sort
+            };
+        }
+
+        function read() {
+            try {
+                const parsed = JSON.parse(storage?.getItem(preferredExploreStorageKey) || "{}");
+                if (parsed?.version === 1) return normalize(parsed);
+            } catch {
+                return { ...defaultExploreState };
+            }
+            return { ...defaultExploreState };
+        }
+
+        function save(value) {
+            const normalized = normalize(value);
+            try {
+                storage?.setItem(preferredExploreStorageKey, JSON.stringify({ version: 1, ...normalized }));
+            } catch {
+                // Storage can be disabled in private or local file contexts.
+            }
+            return normalized;
+        }
+
+        function reset() {
+            try {
+                storage?.removeItem?.(preferredExploreStorageKey);
+            } catch {
+                // Storage can be disabled in private or local file contexts.
+            }
+            return { ...defaultExploreState };
+        }
+
+        return { read, save, reset };
+    }
+
     function sortTopicLensesByPins(lenses, pinnedTopics = new Set()) {
         const pinRank = new Map([...pinnedTopics].map((topic, index) => [topic, index]));
         return [...lenses].sort((a, b) => {
@@ -678,7 +728,10 @@
             topicLenses: document.querySelector("[data-topic-lenses]"),
             dataMode: document.querySelector("[data-data-mode]"),
             sourceHealth: document.querySelector("[data-source-health]"),
-            clearFilters: document.querySelector("[data-clear-filters]")
+            clearFilters: document.querySelector("[data-clear-filters]"),
+            saveDefault: document.querySelector("[data-save-explore-default]"),
+            resetDefault: document.querySelector("[data-reset-explore-default]"),
+            defaultStatus: document.querySelector("[data-explore-default-status]")
         };
     }
 
@@ -712,6 +765,22 @@
         } catch {
             return "all";
         }
+    }
+
+    function initialFocus(focusButtons, preferredState) {
+        const requested = focusFromLocation(focusButtons);
+        if (requested !== "all") return requested;
+        const allowed = new Set(focusButtons.map((button) => button.dataset.focusFilter));
+        return allowed.has(preferredState.focus) ? preferredState.focus : "all";
+    }
+
+    function defaultStatusText(preferredState, prefix = "Default") {
+        const focus = preferredState.focus === "all" ? "All" : preferredState.focus;
+        return `${prefix}: ${focus} / ${sortLabels[preferredState.sort] || preferredState.sort}`;
+    }
+
+    function updateDefaultStatus(els, preferredState, prefix) {
+        if (els.defaultStatus) els.defaultStatus.textContent = defaultStatusText(preferredState, prefix);
     }
 
     function renderHealth(els) {
@@ -757,7 +826,7 @@
         });
     }
 
-    function bindControls(els, store, pinnedStore) {
+    function bindControls(els, store, pinnedStore, preferredStore) {
         els.module?.addEventListener("change", (event) => {
             state.module = event.target.value;
             render(els, store, pinnedStore);
@@ -793,6 +862,19 @@
             if (els.query) els.query.value = state.query;
             if (els.sort) els.sort.value = state.sort;
             updateFocusButtons(els);
+            render(els, store, pinnedStore);
+        });
+        els.saveDefault?.addEventListener("click", () => {
+            const preferredState = preferredStore.save({ focus: state.focus, sort: state.sort });
+            updateDefaultStatus(els, preferredState, "Default saved");
+        });
+        els.resetDefault?.addEventListener("click", () => {
+            const defaults = preferredStore.reset();
+            state.focus = defaults.focus;
+            state.sort = defaults.sort;
+            if (els.sort) els.sort.value = state.sort;
+            updateFocusButtons(els);
+            updateDefaultStatus(els, defaults, "Default reset");
             render(els, store, pinnedStore);
         });
     }
@@ -831,17 +913,22 @@
         const els = selectors();
         const store = createExploreStore(global.localStorage);
         const pinnedStore = createPinnedTopicStore(global.localStorage);
+        const preferredStore = createPreferredExploreStore(global.localStorage);
+        const preferredState = preferredStore.read();
 
         state.items = normalizeExploreData(dataByModule);
         state.sourceMeta = collectSourceMeta(dataByModule);
         state.savedIds = store.read();
         state.pinnedTopics = new Set(pinnedStore.read());
-        state.focus = focusFromLocation(els.focusButtons);
+        state.focus = initialFocus(els.focusButtons, preferredState);
+        state.sort = preferredState.sort;
 
         fillSelect(els.module, uniqueValues(state.items, "module"), "All modules");
         fillSelect(els.category, uniqueValues(state.items, "category"), "All categories");
+        if (els.sort) els.sort.value = state.sort;
         updateFocusButtons(els);
-        bindControls(els, store, pinnedStore);
+        updateDefaultStatus(els, preferredState);
+        bindControls(els, store, pinnedStore, preferredStore);
         renderHealth(els);
         render(els, store, pinnedStore);
     }
@@ -859,10 +946,13 @@
         renderTopicLenses,
         createExploreStore,
         createPinnedTopicStore,
+        createPreferredExploreStore,
         qualityScoreForItem,
         dedupeExploreItems,
         activeExploreSummary,
-        clearedExploreState
+        clearedExploreState,
+        initialFocus,
+        defaultStatusText
     };
 
     if (typeof document !== "undefined" && document.querySelector("[data-explore-results]")) {

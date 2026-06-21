@@ -1066,6 +1066,33 @@ button {
     gap: 10px;
 }
 
+.preference-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.preference-actions button {
+    min-height: 36px;
+    padding: 0 10px;
+    background: var(--panel);
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+.preference-actions button:hover {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+}
+
+.preference-status {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
 .quick-filter-group {
     display: flex;
     flex-wrap: wrap;

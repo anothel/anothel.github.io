@@ -381,6 +381,32 @@ test("Explore pinned topics store and lens sorting prioritize repeat topics", ()
     );
 });
 
+test("Explore preferred state store saves explicit focus and sort only", () => {
+    const app = loadExplore();
+    const memory = new Map();
+    const storage = {
+        getItem(key) { return memory.get(key) || null; },
+        setItem(key, value) { memory.set(key, value); },
+        removeItem(key) { memory.delete(key); }
+    };
+    const store = app.createPreferredExploreStore(storage);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(store.read())), { focus: "all", sort: "priority" });
+    assert.deepEqual(JSON.parse(JSON.stringify(store.save({ focus: "MCP", sort: "saved", query: "ignored", module: "Repos" }))), { focus: "MCP", sort: "saved" });
+    assert.deepEqual(JSON.parse(memory.get("anothel.preferences.exploreState.v1")), { version: 1, focus: "MCP", sort: "saved" });
+    assert.deepEqual(JSON.parse(JSON.stringify(store.save({ focus: "Unknown", sort: "bad" }))), { focus: "all", sort: "priority" });
+    assert.deepEqual(JSON.parse(JSON.stringify(store.reset())), { focus: "all", sort: "priority" });
+    assert.equal(memory.has("anothel.preferences.exploreState.v1"), false);
+    assert.deepEqual(JSON.parse(JSON.stringify(app.createPreferredExploreStore({ getItem() { throw new Error("blocked"); } }).read())), { focus: "all", sort: "priority" });
+});
+
+test("Explore default status text describes explicit preferred state", () => {
+    const app = loadExplore();
+
+    assert.equal(app.defaultStatusText({ focus: "all", sort: "priority" }), "Default: All / priority");
+    assert.equal(app.defaultStatusText({ focus: "MCP", sort: "saved" }, "Default saved"), "Default saved: MCP / saved first");
+});
+
 test("Explore topic lenses render pin state", () => {
     const app = loadExplore();
     const lenses = [
@@ -993,4 +1019,195 @@ test("Explore browser init applies focus from URL query", async () => {
     assert.equal(elements["[data-explore-total]"].textContent, "1");
     assert.match(elements["[data-explore-summary]"].textContent, /Focus: MCP/);
     assert.equal(focusButtons[1].ariaPressed, "true");
+});
+
+test("Explore browser init restores explicit default focus and sort", async () => {
+    function createElement() {
+        return {
+            innerHTML: "",
+            textContent: "",
+            value: "all",
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
+            }
+        };
+    }
+
+    const elements = Object.fromEntries([
+        "[data-explore-results]",
+        "[data-explore-saved]",
+        "[data-explore-module]",
+        "[data-explore-category]",
+        "[data-explore-query]",
+        "[data-explore-sort]",
+        "[data-explore-total]",
+        "[data-explore-saved-count]",
+        "[data-explore-categories]",
+        "[data-explore-summary]",
+        "[data-topic-lenses]",
+        "[data-data-mode]",
+        "[data-source-health]",
+        "[data-clear-filters]",
+        "[data-save-explore-default]",
+        "[data-reset-explore-default]",
+        "[data-explore-default-status]"
+    ].map((selector) => [selector, createElement()]));
+    const focusButtons = [
+        { dataset: { focusFilter: "all" }, ariaPressed: "", addEventListener() {}, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
+        { dataset: { focusFilter: "MCP" }, ariaPressed: "", addEventListener() {}, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
+    ];
+    const sources = {
+        "../data/manifest.json": { modules: [] },
+        "../data/trends.json": {
+            updated: "2026-06-20",
+            sourceMeta: [],
+            items: [
+                { rank: 1, title: "MCP server", source: "GitHub", category: "MCP", score: 90, velocity: "+5%", url: "https://example.com/mcp", summary: "Model Context Protocol server." },
+                { rank: 2, title: "Saved agent", source: "GitHub", category: "AI agents", score: 80, velocity: "+4%", url: "https://example.com/agent", summary: "Coding agent." }
+            ]
+        },
+        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    };
+    const context = {
+        console,
+        URLSearchParams,
+        location: { search: "" },
+        document: {
+            currentScript: { dataset: {} },
+            querySelector(selector) {
+                return elements[selector] || null;
+            },
+            querySelectorAll(selector) {
+                if (selector === "[data-focus-filter]") return focusButtons;
+                return [];
+            }
+        },
+        localStorage: {
+            getItem(key) {
+                if (key === "anothel.preferences.exploreState.v1") return JSON.stringify({ version: 1, focus: "MCP", sort: "saved" });
+                return "[]";
+            },
+            setItem() {}
+        },
+        fetch: async (path) => ({
+            ok: true,
+            json: async () => sources[path]
+        })
+    };
+
+    vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    assert.equal(elements["[data-explore-sort]"].value, "saved");
+    assert.match(elements["[data-explore-summary]"].textContent, /Focus: MCP/);
+    assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
+    assert.equal(elements["[data-explore-default-status]"].textContent, "Default: MCP / saved first");
+    assert.equal(focusButtons[1].ariaPressed, "true");
+});
+
+test("Explore default controls save and reset explicit preferred state", async () => {
+    function createElement() {
+        return {
+            innerHTML: "",
+            textContent: "",
+            value: "all",
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
+            },
+            dispatch(type, value = this.value) {
+                this.value = value;
+                this.listeners[type]?.({ target: this });
+            }
+        };
+    }
+
+    const elements = Object.fromEntries([
+        "[data-explore-results]",
+        "[data-explore-saved]",
+        "[data-explore-module]",
+        "[data-explore-category]",
+        "[data-explore-query]",
+        "[data-explore-sort]",
+        "[data-explore-total]",
+        "[data-explore-saved-count]",
+        "[data-explore-categories]",
+        "[data-explore-summary]",
+        "[data-topic-lenses]",
+        "[data-data-mode]",
+        "[data-source-health]",
+        "[data-clear-filters]",
+        "[data-save-explore-default]",
+        "[data-reset-explore-default]",
+        "[data-explore-default-status]"
+    ].map((selector) => [selector, createElement()]));
+    const focusButtons = [
+        { dataset: { focusFilter: "all" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
+        { dataset: { focusFilter: "MCP" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
+    ];
+    const memory = new Map();
+    const sources = {
+        "../data/manifest.json": { modules: [] },
+        "../data/trends.json": {
+            updated: "2026-06-20",
+            sourceMeta: [],
+            items: [{ rank: 1, title: "MCP server", source: "GitHub", category: "MCP", score: 90, velocity: "+5%", url: "https://example.com/mcp", summary: "Model Context Protocol server." }]
+        },
+        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    };
+    const context = {
+        console,
+        URLSearchParams,
+        location: { search: "" },
+        document: {
+            currentScript: { dataset: {} },
+            querySelector(selector) {
+                return elements[selector] || null;
+            },
+            querySelectorAll(selector) {
+                if (selector === "[data-focus-filter]") return focusButtons;
+                return [];
+            }
+        },
+        localStorage: {
+            getItem(key) {
+                return memory.get(key) || "[]";
+            },
+            setItem(key, value) {
+                memory.set(key, value);
+            },
+            removeItem(key) {
+                memory.delete(key);
+            }
+        },
+        fetch: async (path) => ({
+            ok: true,
+            json: async () => sources[path]
+        })
+    };
+
+    vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    focusButtons[1].listeners.click({ target: focusButtons[1] });
+    elements["[data-explore-sort]"].dispatch("change", "saved");
+    elements["[data-save-explore-default]"].listeners.click({ target: elements["[data-save-explore-default]"] });
+
+    assert.deepEqual(JSON.parse(memory.get("anothel.preferences.exploreState.v1")), { version: 1, focus: "MCP", sort: "saved" });
+    assert.equal(elements["[data-explore-default-status]"].textContent, "Default saved: MCP / saved first");
+
+    elements["[data-reset-explore-default]"].listeners.click({ target: elements["[data-reset-explore-default]"] });
+
+    assert.equal(memory.has("anothel.preferences.exploreState.v1"), false);
+    assert.equal(elements["[data-explore-sort]"].value, "priority");
+    assert.equal(elements["[data-explore-default-status]"].textContent, "Default reset: All / priority");
+    assert.match(elements["[data-explore-summary]"].textContent, /Showing all tracked items/);
+    assert.equal(focusButtons[0].ariaPressed, "true");
 });

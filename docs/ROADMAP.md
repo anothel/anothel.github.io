@@ -15,7 +15,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, and 3 topic pages.
 - Core topics: AI agents, MCP, Agent skills.
 - Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata.
-- Local browser state: saved review items and up to 3 pinned topics.
+- Local browser state: saved review items, up to 3 pinned topics, and explicit Explore defaults.
 
 ## Planning Metrics
 
@@ -27,24 +27,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work
 
-### 1. Personalization v2: Preferred Explore State
-
-Goal: stop re-selecting the same Explore filters.
-
-- Persist preferred sort.
-- Persist last selected focus.
-- Add reset-to-default behavior.
-- Do not persist search query unless Saved Searches exists.
-
-Done when:
-- Reload keeps preferred sort and focus.
-- Clear filters keeps explicit saved preference rules predictable.
-- URL `?focus=` still wins over stored preference.
-
-Success metric:
-- Repeat Explore visit restores useful state with 0 extra clicks.
-
-### 2. Saved Searches v1
+### 1. Saved Searches v1
 
 Goal: make reusable queries first-class without building a full preferences panel.
 
@@ -61,7 +44,7 @@ Done when:
 Success metric:
 - Common filtered view opens in 1 click from Explore.
 
-### 3. Data Expansion v2
+### 2. Data Expansion v2
 
 Goal: add coverage only where it improves Today or Explore.
 
@@ -78,7 +61,7 @@ Done when:
 Success metric:
 - Added data creates at least 5 useful candidates without reducing Today specificity.
 
-### 4. Topic Notes v1
+### 3. Topic Notes v1
 
 Goal: add judgment only after topics have enough saved/review context.
 
