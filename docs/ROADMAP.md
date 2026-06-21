@@ -15,7 +15,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, and 3 topic pages.
 - Core topics: AI agents, MCP, Agent skills.
 - Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata.
-- Local browser state: saved review items, up to 3 pinned topics, and explicit Explore defaults.
+- Local browser state: saved review items, up to 3 pinned topics, explicit Explore defaults, and up to 5 saved Explore searches.
 
 ## Planning Metrics
 
@@ -27,24 +27,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work
 
-### 1. Saved Searches v1
-
-Goal: make reusable queries first-class without building a full preferences panel.
-
-- Save up to 5 Explore searches.
-- Each saved search stores focus, module, category, query, and sort.
-- Render saved searches near Explore controls.
-- Add remove action.
-
-Done when:
-- Saved search can be applied in 1 click.
-- Saved searches survive reload.
-- Empty and full states are clear.
-
-Success metric:
-- Common filtered view opens in 1 click from Explore.
-
-### 2. Data Expansion v2
+### 1. Data Expansion v2
 
 Goal: add coverage only where it improves Today or Explore.
 
@@ -61,7 +44,7 @@ Done when:
 Success metric:
 - Added data creates at least 5 useful candidates without reducing Today specificity.
 
-### 3. Topic Notes v1
+### 2. Topic Notes v1
 
 Goal: add judgment only after topics have enough saved/review context.
 

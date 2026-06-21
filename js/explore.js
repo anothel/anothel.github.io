@@ -2,8 +2,10 @@
     const storageKey = "anothel.explore.saved.v1";
     const pinnedTopicsStorageKey = "anothel.preferences.pinnedTopics.v1";
     const preferredExploreStorageKey = "anothel.preferences.exploreState.v1";
+    const savedSearchStorageKey = "anothel.preferences.savedSearches.v1";
     const dataHealth = global.DataHealth;
     const defaultExploreState = { focus: "all", sort: "priority" };
+    const maxSavedSearches = 5;
 
     const defaultPaths = {
         manifest: "../data/manifest.json",
@@ -22,7 +24,8 @@
         query: "",
         sort: "priority",
         savedIds: new Set(),
-        pinnedTopics: new Set()
+        pinnedTopics: new Set(),
+        savedSearches: []
     };
 
     const topicLensDefinitions = [
@@ -476,6 +479,111 @@
         return { read, save, reset };
     }
 
+    function normalizeSavedSearch(value = {}) {
+        return {
+            focus: allowedFocusValues.has(value.focus) ? value.focus : "all",
+            module: typeof value.module === "string" && value.module ? value.module : "all",
+            category: typeof value.category === "string" && value.category ? value.category : "all",
+            query: String(value.query || "").trim(),
+            sort: allowedSortValues.has(value.sort) ? value.sort : "priority"
+        };
+    }
+
+    function savedSearchId(value) {
+        const normalized = normalizeSavedSearch(value);
+        return [
+            ["focus", normalized.focus],
+            ["module", normalized.module],
+            ["category", normalized.category],
+            ["query", normalized.query],
+            ["sort", normalized.sort]
+        ].map(([key, value]) => `${key}:${String(value).toLowerCase()}`).join("|");
+    }
+
+    function savedSearchLabel(value) {
+        const normalized = normalizeSavedSearch(value);
+        const parts = [];
+        if (normalized.focus !== "all") parts.push(normalized.focus);
+        if (normalized.module !== "all") parts.push(normalized.module);
+        if (normalized.category !== "all") parts.push(normalized.category);
+        if (normalized.query) parts.push(normalized.query);
+        if (normalized.sort !== "priority") parts.push(sortLabels[normalized.sort] || normalized.sort);
+        return parts.length > 0 ? parts.join(" / ") : "All signals";
+    }
+
+    function savedSearchStatusText(status) {
+        if (status === "saved") return "Search saved.";
+        if (status === "updated") return "Saved search moved to top.";
+        if (status === "removed") return "Saved search removed.";
+        if (status === "full") return "Remove one to save another.";
+        if (status === "blocked") return "Saved searches are unavailable in this browser.";
+        return "Save reusable filter sets here.";
+    }
+
+    function renderSavedSearches(searches = [], status = "empty") {
+        if (!searches.length) {
+            return `<p class="saved-search-empty">${escapeHtml(savedSearchStatusText(status))}</p>`;
+        }
+
+        return searches.map((search) => `
+            <article class="saved-search-item">
+                <button type="button" data-apply-search-id="${escapeHtml(search.id)}">${escapeHtml(savedSearchLabel(search))}</button>
+                <button type="button" data-remove-search-id="${escapeHtml(search.id)}" aria-label="Remove ${escapeHtml(savedSearchLabel(search))}">Remove</button>
+            </article>
+        `).join("");
+    }
+
+    function createSavedSearchStore(storage) {
+        function normalizeItems(items) {
+            const seen = new Set();
+            return (items || []).map((item) => {
+                const normalized = normalizeSavedSearch(item);
+                return { id: savedSearchId(normalized), ...normalized };
+            }).filter((item) => {
+                if (seen.has(item.id)) return false;
+                seen.add(item.id);
+                return true;
+            }).slice(0, maxSavedSearches);
+        }
+
+        function read() {
+            try {
+                const parsed = JSON.parse(storage?.getItem(savedSearchStorageKey) || "{}");
+                if (parsed?.version === 1 && Array.isArray(parsed.items)) return normalizeItems(parsed.items);
+            } catch {
+                return [];
+            }
+            return [];
+        }
+
+        function write(items) {
+            const normalized = normalizeItems(items);
+            try {
+                storage?.setItem(savedSearchStorageKey, JSON.stringify({ version: 1, items: normalized }));
+            } catch {
+                return { status: "blocked", items: read() };
+            }
+            return { status: "saved", items: normalized };
+        }
+
+        return {
+            read,
+            save(value) {
+                const item = { id: savedSearchId(value), ...normalizeSavedSearch(value) };
+                const currentItems = read();
+                const current = currentItems.filter((saved) => saved.id !== item.id);
+                const existing = current.length !== currentItems.length;
+                if (!existing && current.length >= maxSavedSearches) return { status: "full", items: currentItems };
+                const written = write([item, ...current]);
+                return { status: existing ? "updated" : written.status, items: written.items };
+            },
+            remove(id) {
+                const written = write(read().filter((item) => item.id !== id));
+                return { status: "removed", items: written.items };
+            }
+        };
+    }
+
     function sortTopicLensesByPins(lenses, pinnedTopics = new Set()) {
         const pinRank = new Map([...pinnedTopics].map((topic, index) => [topic, index]));
         return [...lenses].sort((a, b) => {
@@ -731,11 +839,51 @@
             clearFilters: document.querySelector("[data-clear-filters]"),
             saveDefault: document.querySelector("[data-save-explore-default]"),
             resetDefault: document.querySelector("[data-reset-explore-default]"),
-            defaultStatus: document.querySelector("[data-explore-default-status]")
+            defaultStatus: document.querySelector("[data-explore-default-status]"),
+            saveSearch: document.querySelector("[data-save-search]"),
+            savedSearches: document.querySelector("[data-saved-searches]"),
+            savedSearchStatus: document.querySelector("[data-saved-search-status]")
         };
     }
 
-    function render(els, store, pinnedStore) {
+    function currentSearchState() {
+        return {
+            focus: state.focus,
+            module: state.module,
+            category: state.category,
+            query: state.query,
+            sort: state.sort
+        };
+    }
+
+    function applySearchState(els, search) {
+        const normalized = normalizeSavedSearch(search);
+        state.focus = normalized.focus;
+        state.module = normalized.module;
+        state.category = normalized.category;
+        state.query = normalized.query;
+        state.sort = normalized.sort;
+        if (els.module) els.module.value = state.module;
+        if (els.category) els.category.value = state.category;
+        if (els.query) els.query.value = state.query;
+        if (els.sort) els.sort.value = state.sort;
+        updateFocusButtons(els);
+    }
+
+    function applySavedSearchById(els, savedSearchStore, id) {
+        const search = state.savedSearches.find((item) => item.id === id)
+            || savedSearchStore.read().find((item) => item.id === id);
+        if (!search) return false;
+        applySearchState(els, search);
+        return true;
+    }
+
+    function renderSavedSearchPanel(els, status = "empty") {
+        if (els.savedSearches) els.savedSearches.innerHTML = renderSavedSearches(state.savedSearches, status);
+        if (els.savedSearchStatus) els.savedSearchStatus.textContent = savedSearchStatusText(status);
+    }
+
+    function render(els, store, pinnedStore, savedSearchStore) {
         const items = visibleItems(state.items, state, state.savedIds);
         const categoryCount = uniqueValues(items, "category").length;
 
@@ -746,7 +894,9 @@
         if (els.topicLenses) els.topicLenses.innerHTML = renderTopicLenses(sortTopicLensesByPins(buildTopicLenses(state.items), state.pinnedTopics), state.focus, state.pinnedTopics);
         if (els.results) els.results.innerHTML = renderExploreCards(items, state.savedIds);
         if (els.saved) els.saved.innerHTML = renderSavedQueue(state.items, state.savedIds);
-        bindDynamicActions(els, store, pinnedStore);
+        renderSavedSearchPanel(els);
+        bindDynamicActions(els, store, pinnedStore, savedSearchStore);
+        if (savedSearchStore) bindSavedSearchActions(els, savedSearchStore, store, pinnedStore);
     }
 
     function updateFocusButtons(els) {
@@ -789,7 +939,7 @@
         if (els.sourceHealth) els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(state.sourceMeta);
     }
 
-    function bindDynamicActions(els, store, pinnedStore) {
+    function bindDynamicActions(els, store, pinnedStore, savedSearchStore) {
         for (const button of [els.results, els.saved]) {
             if (!button?.innerHTML) continue;
         }
@@ -799,14 +949,14 @@
         document.querySelectorAll("[data-save-id]").forEach((button) => {
             button.addEventListener("click", () => {
                 state.savedIds = store.toggle(button.dataset.saveId);
-                render(els, store, pinnedStore);
+                render(els, store, pinnedStore, savedSearchStore);
             });
         });
 
         document.querySelectorAll("[data-remove-id]").forEach((button) => {
             button.addEventListener("click", () => {
                 state.savedIds = store.remove(button.dataset.removeId);
-                render(els, store, pinnedStore);
+                render(els, store, pinnedStore, savedSearchStore);
             });
         });
 
@@ -814,40 +964,65 @@
             button.addEventListener("click", () => {
                 state.focus = button.dataset.focusLens || "all";
                 updateFocusButtons(els);
-                render(els, store, pinnedStore);
+                render(els, store, pinnedStore, savedSearchStore);
             });
         });
 
         document.querySelectorAll("[data-pin-topic]").forEach((button) => {
             button.addEventListener("click", () => {
                 state.pinnedTopics = new Set(pinnedStore.toggle(button.dataset.pinTopic));
-                render(els, store, pinnedStore);
+                render(els, store, pinnedStore, savedSearchStore);
             });
         });
     }
 
-    function bindControls(els, store, pinnedStore, preferredStore) {
+    function bindSavedSearchActions(els, savedSearchStore, store, pinnedStore) {
+        if (typeof document.querySelectorAll !== "function") return;
+
+        document.querySelectorAll("[data-apply-search-id], [data-remove-search-id]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const applyId = button.dataset.applySearchId;
+                const removeId = button.dataset.removeSearchId;
+
+                if (applyId) {
+                    if (applySavedSearchById(els, savedSearchStore, applyId)) {
+                        render(els, store, pinnedStore, savedSearchStore);
+                    }
+                    return;
+                }
+
+                if (removeId) {
+                    const result = savedSearchStore.remove(removeId);
+                    state.savedSearches = result.items;
+                    renderSavedSearchPanel(els, result.status);
+                    bindSavedSearchActions(els, savedSearchStore, store, pinnedStore);
+                }
+            });
+        });
+    }
+
+    function bindControls(els, store, pinnedStore, preferredStore, savedSearchStore) {
         els.module?.addEventListener("change", (event) => {
             state.module = event.target.value;
-            render(els, store, pinnedStore);
+            render(els, store, pinnedStore, savedSearchStore);
         });
         els.category?.addEventListener("change", (event) => {
             state.category = event.target.value;
-            render(els, store, pinnedStore);
+            render(els, store, pinnedStore, savedSearchStore);
         });
         els.query?.addEventListener("input", (event) => {
             state.query = event.target.value;
-            render(els, store, pinnedStore);
+            render(els, store, pinnedStore, savedSearchStore);
         });
         els.sort?.addEventListener("change", (event) => {
             state.sort = event.target.value;
-            render(els, store, pinnedStore);
+            render(els, store, pinnedStore, savedSearchStore);
         });
         for (const button of els.focusButtons || []) {
             button.addEventListener("click", () => {
                 state.focus = button.dataset.focusFilter || "all";
                 updateFocusButtons(els);
-                render(els, store, pinnedStore);
+                render(els, store, pinnedStore, savedSearchStore);
             });
         }
         els.clearFilters?.addEventListener("click", () => {
@@ -862,7 +1037,13 @@
             if (els.query) els.query.value = state.query;
             if (els.sort) els.sort.value = state.sort;
             updateFocusButtons(els);
-            render(els, store, pinnedStore);
+            render(els, store, pinnedStore, savedSearchStore);
+        });
+        els.saveSearch?.addEventListener("click", () => {
+            const result = savedSearchStore.save(currentSearchState());
+            state.savedSearches = result.items;
+            renderSavedSearchPanel(els, result.status);
+            bindSavedSearchActions(els, savedSearchStore, store, pinnedStore);
         });
         els.saveDefault?.addEventListener("click", () => {
             const preferredState = preferredStore.save({ focus: state.focus, sort: state.sort });
@@ -875,7 +1056,7 @@
             if (els.sort) els.sort.value = state.sort;
             updateFocusButtons(els);
             updateDefaultStatus(els, defaults, "Default reset");
-            render(els, store, pinnedStore);
+            render(els, store, pinnedStore, savedSearchStore);
         });
     }
 
@@ -914,12 +1095,14 @@
         const store = createExploreStore(global.localStorage);
         const pinnedStore = createPinnedTopicStore(global.localStorage);
         const preferredStore = createPreferredExploreStore(global.localStorage);
+        const savedSearchStore = createSavedSearchStore(global.localStorage);
         const preferredState = preferredStore.read();
 
         state.items = normalizeExploreData(dataByModule);
         state.sourceMeta = collectSourceMeta(dataByModule);
         state.savedIds = store.read();
         state.pinnedTopics = new Set(pinnedStore.read());
+        state.savedSearches = savedSearchStore.read();
         state.focus = initialFocus(els.focusButtons, preferredState);
         state.sort = preferredState.sort;
 
@@ -928,9 +1111,9 @@
         if (els.sort) els.sort.value = state.sort;
         updateFocusButtons(els);
         updateDefaultStatus(els, preferredState);
-        bindControls(els, store, pinnedStore, preferredStore);
+        bindControls(els, store, pinnedStore, preferredStore, savedSearchStore);
         renderHealth(els);
-        render(els, store, pinnedStore);
+        render(els, store, pinnedStore, savedSearchStore);
     }
 
     global.ExploreApp = {
@@ -947,6 +1130,16 @@
         createExploreStore,
         createPinnedTopicStore,
         createPreferredExploreStore,
+        createSavedSearchStore,
+        normalizeSavedSearch,
+        savedSearchId,
+        savedSearchLabel,
+        savedSearchStatusText,
+        renderSavedSearches,
+        bindSavedSearchActions,
+        applySearchState,
+        applySavedSearchById,
+        currentSearchState,
         qualityScoreForItem,
         dedupeExploreItems,
         activeExploreSummary,

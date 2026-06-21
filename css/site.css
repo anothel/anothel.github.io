@@ -1093,6 +1093,51 @@ button {
     line-height: 1.5;
 }
 
+.saved-searches {
+    display: grid;
+    gap: 10px;
+    padding-top: 4px;
+}
+
+.saved-searches-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.saved-searches-header strong {
+    color: var(--text);
+    font-size: 0.86rem;
+}
+
+.saved-searches-header button,
+.saved-search-item button {
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 0.8rem;
+    font-weight: 900;
+}
+
+.saved-search-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+}
+
+.saved-search-item button:first-child {
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
+.saved-search-empty,
+.saved-search-status {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
 .quick-filter-group {
     display: flex;
     flex-wrap: wrap;

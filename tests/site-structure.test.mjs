@@ -155,7 +155,10 @@ test("explore page owns the cross-module search surface", () => {
         "data-clear-filters",
         "data-save-explore-default",
         "data-reset-explore-default",
-        "data-explore-default-status"
+        "data-explore-default-status",
+        "data-save-search",
+        "data-saved-searches",
+        "data-saved-search-status"
     ]) {
         assert.match(explore, new RegExp(hook));
     }
@@ -176,6 +179,8 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(styles, /\.topic-lens-grid/);
     assert.match(styles, /\.preference-actions/);
     assert.match(styles, /\.preference-status/);
+    assert.match(styles, /\.saved-searches/);
+    assert.match(styles, /\.saved-search-item/);
     assert.match(styles, /\.saved-panel/);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.explore-results[\s\S]*grid-template-columns: 1fr/s);
 });
