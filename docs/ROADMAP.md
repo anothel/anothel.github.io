@@ -88,7 +88,7 @@ This keeps the imported review intact enough to explain why each recommendation 
 | Data contract test | P0, doing now | Protects manifest counts, status values, URL safety, and Today section shape. |
 | README page role table | P0, doing now | Keeps operator docs aligned with route roles and data model. |
 | Explore compact/mobile drawer | P1, current | Valid UX issue now being addressed by Explore UX v2: desktop workbench plus mobile-collapsed filters. |
-| Common module page template | P1, keep | Useful once Trends, Packages, Repos, and Links have distinct roles; too early risks standardizing unclear copy. |
+| Common module page template | Done 2026-06-22 | Trends, Packages, Repos, and Links now share a source-detail shell without changing data hooks. |
 | Signal schema v2 / normalized signal view | P1, keep | Correct direction, but it touches all producers and consumers. Needs current schema tests first. |
 | Topic Notes v1 | P1, keep | Good way to make topics judgment pages, but wait until topic page slots are clearer. |
 | update-all / validate-data workflow | P1, keep | Valuable once validation rules are proven by tests; then consolidate scripts and workflow. |
@@ -102,11 +102,10 @@ This keeps the imported review intact enough to explain why each recommendation 
 | Backend, accounts, sync, comments, CMS, broad blog engine | Not now | Violates static-first, no-account boundary. Review can stay local for now. |
 | Portfolio/resume/company-history content | Not now | User already rejected that content direction; this site remains a personal signal radar. |
 
-### P1 - Defer Until P0 Lands
+### P1 - Active / Next
 
-These are valid backlog items. They are deferred, not discarded.
+These are valid backlog items. Completed items should move out of this list after verification.
 
-- **Common module page template**: unify module pages after their distinct page roles are clear.
 - **Signal schema v2 / normalized signal view**: define a shared cross-module signal contract after current data tests are stable.
 - **Topic Notes v1**: add short judgment notes after topic pages stop being simple Explore-filter mirrors.
 - **update-all / validate-data workflow consolidation**: add once validation rules are explicit.
@@ -126,7 +125,7 @@ These are valid backlog items. They are deferred, not discarded.
 - **Backend, accounts, sync, comments, CMS, broad blog engine**: cut for now because it breaks static-first and no-account constraints.
 - **Portfolio/resume/company-history content**: cut because it conflicts with the chosen content direction and the user explicitly does not want that burden.
 
-## Next Work
+## Current / Next Work
 
 ### 1. P0 Trust And Role Pass
 
@@ -147,24 +146,37 @@ Done when:
 Success metric:
 - A first-time visitor can answer: what this site is, what to open first, where saved items live, and whether the data is usable.
 
-### 2. P1 Explore UX v2
+### 2. P1 Signal Schema v2
 
-Goal: make Explore feel like a desktop workbench on PC and a compact filter flow on mobile.
+Goal: define one normalized signal contract across Trends, Packages, Repos, Links, Today, Explore, and Review.
 
-- Add a single-control filter drawer for mobile without duplicating inputs.
-- Keep desktop filters visible as a command workbench.
-- Keep saved searches/defaults separate from primary filters.
-- Preserve existing localStorage keys and Explore behavior.
+- Inventory current item fields by source.
+- Define required shared fields and source-specific extension fields.
+- Add data contract tests before changing producers.
+- Update renderers only after the contract is explicit.
 
 Done when:
-- Desktop keeps the full workbench visible.
-- Mobile can collapse filters and saved search tools above results.
-- Existing Explore saved/default/search behavior stays green.
-- Static structure tests protect the drawer/workbench contract.
+- Every item used by Explore and Review has a stable normalized shape.
+- Source-specific fields remain available without leaking into common UI code.
+- Data validation fails on missing IDs, unsafe URLs, invalid scores, or unknown modules.
+
+## Recently Completed
+
+### 2026-06-22 - P1 Module Pages v2
+
+Goal: make source detail pages feel like desktop pages on PC and compact flows on mobile.
+
+- Done: moved Trends and Links filters out of sticky sidebars.
+- Done: shared the module shell across Trends, Packages, Repos, and Links.
+- Done: preserved all renderer hooks and static data behavior.
+- Done: kept status/freshness visible near module stats.
+- Verified: structure tests, renderer tests, whitespace check, and browser desktop/mobile layout checks.
+
+Success metric:
+- A visitor can move between source detail pages without relearning the layout, while each page still keeps its own purpose and data controls.
 
 ## Later
 
-- Common module page template.
 - Signal schema v2 and normalized signal view.
 - Topic Notes v1.
 - `update-all` and `validate-data` workflow consolidation.

@@ -17,7 +17,7 @@
     <script defer src="../js/repo-watchlist.js"></script>
 </head>
 <body>
-    <div class="shell hub-shell">
+    <div class="shell module-shell">
         <header class="topbar">
             <div>
                 <p class="eyebrow">GitHub traction</p>
@@ -37,31 +37,33 @@
             </nav>
         </header>
 
-        <main class="hub-main">
-            <section class="stats-grid" aria-label="Repo traction stats">
-                <article class="stat-card">
-                    <span>Repositories</span>
-                    <strong data-total>-</strong>
-                </article>
-                <article class="stat-card">
-                    <span>Top project</span>
-                    <strong data-top-repo>-</strong>
-                </article>
-                <article class="stat-card">
-                    <span>Data status</span>
-                    <strong data-source-status>ok</strong>
-                </article>
+        <main class="module-main">
+            <section class="module-overview-grid" aria-label="Module overview">
+                <section class="stats-grid" aria-label="Repo traction stats">
+                    <article class="stat-card">
+                        <span>Repositories</span>
+                        <strong data-total>-</strong>
+                    </article>
+                    <article class="stat-card">
+                        <span>Top project</span>
+                        <strong data-top-repo>-</strong>
+                    </article>
+                    <article class="stat-card">
+                        <span>Data status</span>
+                        <strong data-source-status>ok</strong>
+                    </article>
+                </section>
+
+                <section class="health-panel compact-health" aria-labelledby="repo-health-title">
+                    <div class="panel-heading">
+                        <h2 id="repo-health-title">Data health</h2>
+                        <p data-data-mode>Latest checked-in data loaded with partial source failures.</p>
+                    </div>
+                    <div class="source-health-grid" data-source-health></div>
+                </section>
             </section>
 
-            <section class="health-panel compact-health" aria-labelledby="repo-health-title">
-                <div class="panel-heading">
-                    <h2 id="repo-health-title">Data health</h2>
-                    <p data-data-mode>Latest checked-in data loaded with partial source failures.</p>
-                </div>
-                <div class="source-health-grid" data-source-health></div>
-            </section>
-
-            <section class="rank-panel" aria-labelledby="repo-title">
+            <section class="rank-panel module-primary-panel" aria-labelledby="repo-title">
                 <div class="panel-heading">
                     <h2 id="repo-title">Project traction</h2>
                     <p>Stars, recent activity, and why each project is on the list.</p>

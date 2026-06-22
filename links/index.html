@@ -17,7 +17,7 @@
     <script defer src="../js/link-queue.js"></script>
 </head>
 <body>
-    <div class="shell">
+    <div class="shell module-shell">
         <header class="topbar">
             <div>
                 <p class="eyebrow">Reference shelf</p>
@@ -37,47 +37,49 @@
             </nav>
         </header>
 
-        <aside class="sidebar" aria-label="Link filters">
-            <div class="panel">
-                <h2>Refine links</h2>
-                <label>
-                    Category
-                    <select data-category>
-                        <option value="all">All categories</option>
-                    </select>
-                </label>
-                <label>
-                    Search
-                    <input data-query type="search" placeholder="github, docs, runtime">
-                </label>
-            </div>
-        </aside>
-
-        <main>
-            <section class="stats-grid" aria-label="Reference stats">
-                <article class="stat-card">
-                    <span>References</span>
-                    <strong data-total>-</strong>
-                </article>
-                <article class="stat-card">
-                    <span>Top category</span>
-                    <strong data-top-category>-</strong>
-                </article>
-                <article class="stat-card">
-                    <span>Data status</span>
-                    <strong data-source-status>ok</strong>
-                </article>
-            </section>
-
-            <section class="health-panel compact-health" aria-labelledby="links-health-title">
-                <div class="panel-heading">
-                    <h2 id="links-health-title">Data health</h2>
-                    <p data-data-mode>Latest checked-in data loaded.</p>
+        <main class="module-main">
+            <section class="module-filter-bar module-filter-bar-compact" aria-label="Link filters">
+                <div class="panel">
+                    <h2>Refine links</h2>
+                    <label>
+                        Category
+                        <select data-category>
+                            <option value="all">All categories</option>
+                        </select>
+                    </label>
+                    <label>
+                        Search
+                        <input data-query type="search" placeholder="github, docs, runtime">
+                    </label>
                 </div>
-                <div class="source-health-grid" data-source-health></div>
             </section>
 
-            <section class="link-grid" aria-label="Reference links" data-link-list></section>
+            <section class="module-overview-grid" aria-label="Module overview">
+                <section class="stats-grid" aria-label="Reference stats">
+                    <article class="stat-card">
+                        <span>References</span>
+                        <strong data-total>-</strong>
+                    </article>
+                    <article class="stat-card">
+                        <span>Top category</span>
+                        <strong data-top-category>-</strong>
+                    </article>
+                    <article class="stat-card">
+                        <span>Data status</span>
+                        <strong data-source-status>ok</strong>
+                    </article>
+                </section>
+
+                <section class="health-panel compact-health" aria-labelledby="links-health-title">
+                    <div class="panel-heading">
+                        <h2 id="links-health-title">Data health</h2>
+                        <p data-data-mode>Latest checked-in data loaded.</p>
+                    </div>
+                    <div class="source-health-grid" data-source-health></div>
+                </section>
+            </section>
+
+            <section class="link-grid module-primary-panel" aria-label="Reference links" data-link-list></section>
         </main>
     </div>
 </body>

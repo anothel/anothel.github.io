@@ -67,16 +67,46 @@ test("primary navigation remains reachable while scrolling", () => {
     assert.match(styles, /\.site-nav\s*{[^}]*overflow-x: auto/s);
 });
 
-test("sidebar filters avoid overlapping the sticky navigation", () => {
-    const trends = read("trends/index.html");
-    const links = read("links/index.html");
-
-    assert.match(trends, /<aside class="sidebar" aria-label="Dashboard filters">/);
-    assert.match(links, /<aside class="sidebar" aria-label="Link filters">/);
+test("legacy sidebar filters avoid overlapping the sticky navigation", () => {
     assert.match(styles, /\.sidebar \.panel\s*{[^}]*top: 148px/s);
     assert.match(styles, /\.sidebar \.panel\s*{[^}]*max-height: calc\(100vh - 172px\)/s);
     assert.match(styles, /\.sidebar \.panel\s*{[^}]*overflow-y: auto/s);
     assert.match(styles, /@media \(max-width: 1040px\)\s*{[\s\S]*\.panel\s*{[^}]*top: auto/s);
+});
+
+test("module pages share the source-detail shell", () => {
+    const modulePages = ["trends/index.html", "packages/index.html", "repos/index.html", "links/index.html"];
+
+    for (const path of modulePages) {
+        const html = read(path);
+
+        assert.match(html, /class="shell module-shell"/);
+        assert.match(html, /class="module-main"/);
+        assert.match(html, /class="module-overview-grid"/);
+        assert.match(html, /class="[^"]*module-primary-panel/);
+        assert.match(html, /data-data-mode/);
+        assert.match(html, /data-source-health/);
+    }
+
+    const trends = read("trends/index.html");
+    const links = read("links/index.html");
+
+    assert.match(trends, /class="module-filter-bar module-filter-bar-wide" aria-label="Dashboard filters"/);
+    for (const hook of ["data-source", "data-category", "data-query", "data-sort", "data-clear-filters", "data-filter-summary"]) {
+        assert.match(trends, new RegExp(hook));
+    }
+
+    assert.match(links, /class="module-filter-bar module-filter-bar-compact" aria-label="Link filters"/);
+    for (const hook of ["data-category", "data-query", "data-link-list"]) {
+        assert.match(links, new RegExp(hook));
+    }
+
+    assert.doesNotMatch(trends, /<aside class="sidebar"/);
+    assert.doesNotMatch(links, /<aside class="sidebar"/);
+    assert.match(styles, /\.module-shell\s*{[^}]*grid-template-columns: 1fr/s);
+    assert.match(styles, /\.module-overview-grid\s*{[^}]*grid-template-columns: minmax\(0, 0\.42fr\) minmax\(0, 0\.58fr\)/s);
+    assert.match(styles, /\.module-filter-bar \.panel\s*{[^}]*position: static/s);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.module-filter-bar \.panel,[\s\S]*grid-template-columns: 1fr/s);
 });
 
 test("desktop layout uses a wider workbench instead of stretched mobile stacks", () => {
