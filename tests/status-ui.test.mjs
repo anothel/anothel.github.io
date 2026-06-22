@@ -129,7 +129,7 @@ test("status rows and summary surface fallback safety detail", () => {
     };
     const rows = collectSourceRows(fallbackManifest, fallbackDatasets);
 
-    assert.equal(rows[0].detail, "fallback used / stale but safe / rate limited / No package rows fetched / previous 2026-06-19");
-    assert.match(renderSourceRows(rows), /fallback used \/ stale but safe \/ rate limited/);
+    assert.equal(rows[0].detail, "using fallback / previous data kept / rate limited / No package rows fetched / previous refresh 2026-06-19");
+    assert.match(renderSourceRows(rows), /using fallback \/ previous data kept \/ rate limited/);
     assert.equal(buildStatusSummary(fallbackManifest, fallbackDatasets).healthLabel, "1 fallback");
 });

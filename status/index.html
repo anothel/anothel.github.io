@@ -44,7 +44,7 @@
             <section class="stats-grid status-stats" aria-label="Status summary">
                 <article class="stat-card">
                     <span>Items tracked</span>
-                    <strong data-status-total>65</strong>
+                    <strong data-status-total>123</strong>
                 </article>
                 <article class="stat-card">
                     <span>Sources</span>
@@ -52,18 +52,18 @@
                 </article>
                 <article class="stat-card">
                     <span>Health</span>
-                    <strong data-status-health>6 ok</strong>
+                    <strong data-status-health>2 ok / 2 partial</strong>
                 </article>
                 <article class="stat-card">
-                    <span>Last refresh</span>
-                    <strong data-status-updated>2026-06-19</strong>
+                    <span>Data last refreshed</span>
+                    <strong data-status-updated>2026-06-21</strong>
                 </article>
             </section>
 
             <section class="health-panel" aria-labelledby="status-health-title">
                 <div class="panel-heading">
                     <h2 id="status-health-title">Source cards</h2>
-                    <p data-data-mode>Checked-in data, refreshed by workflow.</p>
+                    <p data-data-mode>Latest checked-in data loaded with partial source failures; partial sources kept usable data.</p>
                 </div>
                 <div class="source-health-grid" data-source-health></div>
             </section>
@@ -88,7 +88,7 @@
                         <span>ok</span>
                         <span>6 items</span>
                         <span>2026-06-18</span>
-                        <small>Checked-in source metadata.</small>
+                        <small>partial sources kept usable data when a refresh returned fewer rows or rate-limited responses.</small>
                     </a>
                 </div>
             </section>

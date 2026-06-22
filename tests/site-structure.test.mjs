@@ -394,8 +394,8 @@ test("root page exposes command center slots", () => {
     assert.match(root, /Search all tracked signals/);
     assert.match(root, /href="explore\/index\.html"/);
     assert.match(root, /href="review\/index\.html"/);
-    assert.match(root, /Saved for review/);
-    assert.match(root, /Unread saved/);
+    assert.match(root, /Saved queue/);
+    assert.match(root, /Unread/);
     assert.match(root, /href="status\/index\.html"/);
     assert.doesNotMatch(root, /data-home-decision-actions/);
     assert.doesNotMatch(root, /class="decision-layer"/);
@@ -465,7 +465,7 @@ test("public page copy states concrete page purpose", () => {
     assert.match(read("repos/index.html"), /GitHub projects with useful traction\./);
     assert.match(read("repos/index.html"), /Stars, recent activity, and why each project is on the list\./);
     assert.match(read("links/index.html"), /References worth keeping close\./);
-    assert.match(read("links/index.html"), /Docs, APIs, and tools that support future work\./);
+    assert.match(read("links/index.html"), /Curated reference shelf for docs, APIs, and durable tools\./);
 });
 
 test("status page owns the source health overview", () => {

@@ -54,11 +54,11 @@ test("DataHealth describes fallback and partial modes", () => {
 
     assert.equal(
         DataHealth.dataModeText({ status: "fallback" }),
-        "Showing fallback data because checked-in data was unavailable."
+        "Using static fallback because live data could not be loaded."
     );
     assert.equal(
         DataHealth.dataModeText({ status: "partial" }),
-        "Checked-in data loaded with partial source failures."
+        "Latest checked-in data loaded with partial source failures."
     );
 });
 
@@ -76,7 +76,7 @@ test("DataHealth renders fallback safety detail", () => {
     });
 
     assert.match(html, /source-health-card status-fallback/);
-    assert.match(html, /fallback used \/ stale but safe \/ rate limited/);
+    assert.match(html, /using fallback \/ previous data kept \/ rate limited/);
     assert.match(html, /No repo rows fetched/);
-    assert.match(html, /previous 2026-06-19/);
+    assert.match(html, /previous refresh 2026-06-19/);
 });

@@ -23,7 +23,7 @@ const exploreLinks = [
     ["Trends", "../trends/index.html", "Ranked movement"],
     ["Repos", "../repos/index.html", "GitHub traction"],
     ["Packages", "../packages/index.html", "npm movement"],
-    ["Links", "../links/index.html", "Reference queue"]
+    ["Links", "../links/index.html", "Curated reference shelf"]
 ];
 
 const sectionStats = {
@@ -82,6 +82,7 @@ export function totalSectionItems(sections) {
 
 function renderTodayCard(item) {
     const context = [item.origin, item.category].filter(Boolean).join(" / ");
+    const action = item.action || "Open the source and decide whether it belongs in the saved queue.";
 
     return `
         <a class="signal-card today-card" href="${safeHref(item.url)}">
@@ -94,7 +95,8 @@ function renderTodayCard(item) {
                 <strong>Source context</strong>
                 ${escapeHtml(context)}
             </small>
-            <p class="why-copy"><strong>Why this matters</strong> ${escapeHtml(item.reason)}</p>
+            <p class="why-copy"><strong>Why now</strong> ${escapeHtml(item.reason)}</p>
+            <p class="action-copy"><strong>Next action</strong> ${escapeHtml(action)}</p>
         </a>
     `;
 }
@@ -160,10 +162,10 @@ export function renderTodayStatus(data) {
     const total = totalSectionItems(data.sections);
     const status = data.sourceMeta?.status || "ok";
 
-    if (status === "fallback") return `${total} generated picks. Showing fallback data.`;
-    if (status === "partial") return `${total} generated picks from partial source data.`;
-    if (status === "error") return `${total} generated picks from failed source refresh.`;
-    return `${total} generated picks. Data status: ${status}.`;
+    if (status === "fallback") return `${total} generated picks. Using static fallback because live data could not be loaded.`;
+    if (status === "partial") return `${total} generated picks from partial source data. Usable picks remain available.`;
+    if (status === "error") return `${total} generated picks from failed source refresh. Check Status before trusting freshness.`;
+    return `${total} generated picks. Latest checked-in data loaded.`;
 }
 
 function renderToday(data) {

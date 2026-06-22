@@ -229,7 +229,19 @@ function pickStartItems(picker, intentPool, primaryPool, fallbackPool) {
     return startItems;
 }
 
-function stripItem(item) {
+function actionFor(sectionId, item) {
+    if (sectionId === "start") {
+        if (item.module === "Repos") return "Compare repo traction before saving.";
+        if (item.module === "Packages") return "Check package demand, then compare related repos.";
+        if (item.module === "Links") return "Open the reference and keep it nearby if useful.";
+        return "Open the source now, then decide whether to save it.";
+    }
+    if (sectionId === "skim") return "Skim the source and save it only if it changes what to watch next.";
+    if (sectionId === "reference") return "Keep as a reference when working on related agent workflows.";
+    return "Open the source and decide whether it belongs in the saved queue.";
+}
+
+function stripItem(item, sectionId) {
     return {
         title: item.title,
         module: item.module,
@@ -237,6 +249,7 @@ function stripItem(item) {
         category: item.category,
         metric: item.metric,
         reason: item.reason,
+        action: actionFor(sectionId, item),
         url: item.url,
         score: item.score
     };
@@ -350,19 +363,19 @@ export function buildTodayBrief(sources = {}, generatedAt = new Date().toISOStri
             id: "start",
             title: "Start here",
             summary: sectionSummaries.start,
-            items: startItems.map(stripItem)
+            items: startItems.map((item) => stripItem(item, "start"))
         },
         {
             id: "skim",
             title: "Worth skimming",
             summary: sectionSummaries.skim,
-            items: skimItems.map(stripItem)
+            items: skimItems.map((item) => stripItem(item, "skim"))
         },
         {
             id: "reference",
             title: "Reference shelf",
             summary: sectionSummaries.reference,
-            items: referenceItems.map(stripItem)
+            items: referenceItems.map((item) => stripItem(item, "reference"))
         }
     ];
     const count = sections.reduce((total, section) => total + section.items.length, 0);

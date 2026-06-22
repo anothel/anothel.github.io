@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-21",
-  "generatedAt": "2026-06-21T04:54:34.292Z",
+  "generatedAt": "2026-06-22T06:30:44.263Z",
   "sourceMeta": {
     "name": "generated",
     "status": "partial",
     "count": 13,
-    "updatedAt": "2026-06-21T04:54:34.292Z"
+    "updatedAt": "2026-06-22T06:30:44.263Z"
   },
   "sections": [
     {
@@ -20,6 +20,7 @@
           "category": "Agent skills",
           "metric": "100 score",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/anthropics/skills",
           "score": 100
         },
@@ -30,6 +31,7 @@
           "category": "Agent skills",
           "metric": "100 score",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/lobehub/lobehub",
           "score": 100
         },
@@ -40,6 +42,7 @@
           "category": "MCP",
           "metric": "100 score",
           "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/awslabs/mcp",
           "score": 100
         }
@@ -57,6 +60,7 @@
           "category": "AI evals",
           "metric": "100 score",
           "reason": "Evaluation signal for measuring agent and model behavior.",
+          "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/Arize-ai/phoenix",
           "score": 100
         },
@@ -67,6 +71,7 @@
           "category": "MCP",
           "metric": "100 score",
           "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/langgenius/dify",
           "score": 100
         },
@@ -77,6 +82,7 @@
           "category": "Agent skills",
           "metric": "138.4K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
           "score": 80
         },
@@ -87,6 +93,7 @@
           "category": "MCP",
           "metric": "38.9M/week",
           "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
           "score": 67
         },
@@ -97,6 +104,7 @@
           "category": "AI agents",
           "metric": "100 score",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/affaan-m/ECC",
           "score": 100
         },
@@ -107,6 +115,7 @@
           "category": "AI agents",
           "metric": "176.7K stars",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/anomalyco/opencode",
           "score": 83
         }
@@ -124,6 +133,7 @@
           "category": "Agent skills",
           "metric": "Spec",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://agentskills.io/",
           "score": 65
         },
@@ -134,6 +144,7 @@
           "category": "Agent skills",
           "metric": "Docs",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
           "score": 63
         },
@@ -144,6 +155,7 @@
           "category": "Agent skills",
           "metric": "Docs",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://support.claude.com/en/articles/11144907-what-are-skills",
           "score": 62
         },
@@ -154,6 +166,7 @@
           "category": "AI agents",
           "metric": "Repo",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://github.com/Aider-AI/aider",
           "score": 60
         }

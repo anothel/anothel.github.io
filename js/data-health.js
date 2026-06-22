@@ -78,20 +78,20 @@
 
     function dataModeText(sourceMeta) {
         const status = aggregateSourceStatus(sourceMeta);
-        if (status === "fallback") return "Showing fallback data because checked-in data was unavailable.";
-        if (status === "partial") return "Checked-in data loaded with partial source failures.";
-        if (status === "error") return "Checked-in data loaded, but source refresh failed.";
-        if (status === "ok") return "Checked-in data loaded. Scheduled workflow keeps it fresh.";
+        if (status === "fallback") return "Using static fallback because live data could not be loaded.";
+        if (status === "partial") return "Latest checked-in data loaded with partial source failures.";
+        if (status === "error") return "Latest checked-in data loaded, but source refresh failed.";
+        if (status === "ok") return "Latest checked-in data loaded.";
         return "Data status unavailable.";
     }
 
     function sourceDetail(source) {
         const safety = [];
-        if (source?.fallbackUsed) safety.push("fallback used");
-        if (source?.staleButSafe) safety.push("stale but safe");
+        if (source?.fallbackUsed) safety.push("using fallback");
+        if (source?.staleButSafe) safety.push("previous data kept");
         if (source?.rateLimited) safety.push("rate limited");
         if (source?.fallbackReason) safety.push(source.fallbackReason);
-        if (source?.previousUpdated) safety.push(`previous ${source.previousUpdated}`);
+        if (source?.previousUpdated) safety.push(`previous refresh ${source.previousUpdated}`);
         if (safety.length > 0) return safety.join(" / ");
 
         const errors = Array.isArray(source?.errors) ? source.errors : [];

@@ -25,32 +25,138 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - `Trust`: whether stale, partial, or rate-limited data is visible and understandable.
 - `Static safety`: all features must degrade cleanly when fetch or localStorage is blocked.
 
+## Backlog Triage 2026-06-22
+
+Imported backlog is useful and should not be treated as throwaway feedback. The split below records what moves into the current roadmap, what is deferred, and what is rejected for now.
+
+### P0 - Do Now
+
+Goal: make the current static site trustworthy and understandable before changing frameworks.
+
+1. **IA and route role copy**
+   - Add a short route role document.
+   - Give each public page a one-line job.
+   - Separate routes into Decision, Discovery, Source detail, and Trust / personal state.
+   - Reason: users need to know which page answers which question before more UI work helps.
+   - Done when: Home, Today, Explore, Review, Status, Trends, Packages, Repos, and Links each have distinct purpose copy.
+
+2. **Static fallback and data sync**
+   - Keep hardcoded HTML fallbacks aligned with `data/manifest.json` and `data/today.json`.
+   - Remove stale dates such as old `2026-06-14`, `2026-06-15`, and `2026-06-19` from visible fallback HTML.
+   - Reason: stale fallback values make loaded data look broken.
+   - Done when: JS-disabled Home, Today, Status, and module page stamps match checked-in data.
+
+3. **Home first screen**
+   - Keep Home as an open-now decision board, not a full dashboard dump.
+   - Prioritize 3 open-now signals, saved queue state, and a small trust strip.
+   - Push Browse modules below the primary decision area.
+   - Reason: Home should answer "what should I open first?" in one scan.
+   - Done when: first screen shows priority picks, why/action copy, current data health, and Review state.
+
+4. **Terminology split**
+   - Links = curated reference shelf.
+   - Review = saved locally in this browser.
+   - Explore = search/filter/save workbench.
+   - Topics = focused judgment pages, not only filters.
+   - Reason: "saved references" blurs Links and Review.
+   - Done when: public copy avoids mixed Links/Review wording.
+
+5. **Human-readable status copy**
+   - Explain partial, error, fallback, and rate-limit states in user-facing language.
+   - Reason: source health is a trust feature, not an internal implementation detail.
+   - Done when: Status and data health cards say whether data remains usable and what failed.
+
+6. **Regression tests**
+   - Add static fallback tests.
+   - Add minimal data contract tests.
+   - Reason: fallback drift and data shape drift are current risk points.
+   - Done when: tests fail on stale fallback dates, mismatched manifest counts, unsafe URLs, invalid statuses, or out-of-range scores.
+
+### Imported Backlog Decision Log
+
+This keeps the imported review intact enough to explain why each recommendation moved where it did.
+
+| Imported item | Decision | Why |
+|---|---|---|
+| Route role / IA document | P0, doing now | Framework changes will not fix unclear routes. This gives every page one job before more UI work. |
+| Home as open-now decision board | P0, doing now | Matches the site question: "What is worth opening now?" Home should not become a full dashboard dump. |
+| Static fallback and checked-in data sync | P0, doing now | Stale counts and dates make the site look broken when JS or fetch is slow. |
+| Links vs Review terminology split | P0, doing now | Links are curated checked-in references; Review is local browser state. Mixed copy creates confusion. |
+| Human-readable partial/error/fallback copy | P0, doing now | Trust states are user-facing product states, not implementation labels. |
+| Today reason/action split | P0, doing now | Today must explain why to open something and what to do next, not only list high-score items. |
+| Static fallback regression test | P0, doing now | Prevents old dates/counts from returning silently. |
+| Data contract test | P0, doing now | Protects manifest counts, status values, URL safety, and Today section shape. |
+| README page role table | P0, doing now | Keeps operator docs aligned with route roles and data model. |
+| Explore compact/mobile drawer | P1, keep | Valid UX issue, but should follow the current desktop/mobile review after P0 copy/data trust lands. |
+| Common module page template | P1, keep | Useful once Trends, Packages, Repos, and Links have distinct roles; too early risks standardizing unclear copy. |
+| Signal schema v2 / normalized signal view | P1, keep | Correct direction, but it touches all producers and consumers. Needs current schema tests first. |
+| Topic Notes v1 | P1, keep | Good way to make topics judgment pages, but wait until topic page slots are clearer. |
+| update-all / validate-data workflow | P1, keep | Valuable once validation rules are proven by tests; then consolidate scripts and workflow. |
+| sourceMeta marker cleanup | P1, keep | Status copy should drive which markers matter to users. Do after the first trust copy pass. |
+| Watchlist definitions moved from scripts to data | P1, keep | Makes source lists easier to edit, but not needed before fallback trust is fixed. |
+| Astro + React islands | P2, keep | Best medium-term fit: static pages plus interactive Explore/Review islands. |
+| Explore and Review React islands | P2, keep | Depends on Astro route compatibility and localStorage migration. |
+| Design-system rewrite | P2, keep small | Useful later for repetition, but current risk is data/copy trust, not tokens/components. |
+| Lightweight notes index | P2, keep conditional | Only worth adding after at least 3 real notes exist. Avoid creating an empty blog shell. |
+| Vite + React SPA | Not now | Current goal needs static fallback, direct routes, and low deploy complexity. SPA adds weight without solving the main problem. |
+| Backend, accounts, sync, comments, CMS, broad blog engine | Not now | Violates static-first, no-account boundary. Review can stay local for now. |
+| Portfolio/resume/company-history content | Not now | User already rejected that content direction; this site remains a personal signal radar. |
+
+### P1 - Defer Until P0 Lands
+
+These are valid backlog items. They are deferred, not discarded.
+
+- **Explore compact/mobile filter pattern**: revisit after current desktop and mobile layout is reviewed against real use.
+- **Common module page template**: unify module pages after their distinct page roles are clear.
+- **Signal schema v2 / normalized signal view**: define a shared cross-module signal contract after current data tests are stable.
+- **Topic Notes v1**: add short judgment notes after topic pages stop being simple Explore-filter mirrors.
+- **update-all / validate-data workflow consolidation**: add once validation rules are explicit.
+- **sourceMeta marker cleanup**: simplify markers after Status proves which states users need.
+- **Watchlist definitions as data**: move source definitions out of update scripts after updater behavior is stable.
+
+### P2 - Framework / Architecture Later
+
+- **Astro + React islands**: medium-term target because this site is static pages plus a few interactive islands.
+- **Explore and Review React islands**: only after Astro PoC proves route compatibility and localStorage migration.
+- **Design-system component cleanup**: keep narrow; avoid a broad rewrite until repeated patterns are stable.
+- **Lightweight notes index**: only after at least 3 real notes exist.
+
+### Not Now / Cut With Reasons
+
+- **Vite + React SPA**: cut for now because it weakens no-JS fallback, complicates GitHub Pages routing, and does not solve stale data/copy trust.
+- **Backend, accounts, sync, comments, CMS, broad blog engine**: cut for now because it breaks static-first and no-account constraints.
+- **Portfolio/resume/company-history content**: cut because it conflicts with the chosen content direction and the user explicitly does not want that burden.
+
 ## Next Work
 
-### 1. Topic Notes v1
+### 1. P0 Trust And Role Pass
 
-Goal: add judgment only after topics have enough saved/review context.
+Goal: make the current site explain itself and avoid stale fallback data.
 
-- Add 1 short note per core topic.
-- Each note must be under 500 words.
-- Notes must link to topic page and at least 2 current signals.
-- No CMS, tags, comments, or full blog index.
+- Add IA route role doc.
+- Update top-page copy and terminology.
+- Sync static fallback values with checked-in data.
+- Add static fallback and data contract tests.
+- Improve Today action copy and Status partial/fallback copy.
 
 Done when:
-- 3 topic notes exist.
-- Topic pages link to notes.
-- Notes explain judgment, not raw summaries.
+- JS-disabled fallback values match current checked-in data.
+- Each route has a distinct one-line role.
+- Links and Review wording no longer overlap.
+- Data health states are understandable without reading implementation docs.
 
 Success metric:
-- Notes answer "why do I care?" better than source cards alone.
+- A first-time visitor can answer: what this site is, what to open first, where saved items live, and whether the data is usable.
 
 ## Later
 
-- Hidden sources.
-- Compact Explore mode.
-- Better mobile filter controls.
+- Explore compact mode and mobile filter drawer.
+- Common module page template.
+- Signal schema v2 and normalized signal view.
+- Topic Notes v1.
+- `update-all` and `validate-data` workflow consolidation.
 - More topic pages only when data justifies them.
-- Lightweight `/notes/` index only after multiple notes exist.
+- Lightweight `/notes/` index only after at least 3 real notes exist.
 
 ## Not Now
 

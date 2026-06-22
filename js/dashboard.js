@@ -12,26 +12,26 @@ const trendDataUrl = document.currentScript?.dataset.source || "data/trends.json
 const dataHealth = globalThis.DataHealth;
 
 const fallbackData = {
-    updated: "2026-06-14",
-    generatedAt: "2026-06-14T00:00:00.000Z",
+    updated: "2026-06-21",
+    generatedAt: "2026-06-21T00:00:00.000Z",
     sourceMeta: [
         {
             name: "Hacker News",
             status: "fallback",
             count: 3,
-            updatedAt: "2026-06-14T00:00:00.000Z"
+            updatedAt: "2026-06-21T00:00:00.000Z"
         },
         {
             name: "GitHub",
             status: "fallback",
             count: 3,
-            updatedAt: "2026-06-14T00:00:00.000Z"
+            updatedAt: "2026-06-21T00:00:00.000Z"
         },
         {
             name: "npm",
             status: "fallback",
             count: 2,
-            updatedAt: "2026-06-14T00:00:00.000Z"
+            updatedAt: "2026-06-21T00:00:00.000Z"
         }
     ],
     items: [

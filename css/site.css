@@ -1766,6 +1766,14 @@ button {
     text-transform: uppercase;
 }
 
+.action-copy strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+}
+
 .source-context {
     font-size: 0.84rem;
     font-weight: 800;

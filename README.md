@@ -7,6 +7,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 ## Structure
 
 - `docs/ROADMAP.md`: direction and next large work items
+- `docs/IA.md`: page role and route grouping notes
 - `index.html`: home hub
 - `today/index.html`: generated priority brief from tracked dashboard data
 - `status/index.html`: source refresh and data health overview
@@ -35,6 +36,21 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `404.html`: GitHub Pages fallback page
 - `robots.txt`: crawler rules and sitemap location
 - `sitemap.xml`: public page list
+
+## Page Roles
+
+| Group | Page | Job |
+|---|---|---|
+| Decision | Home | Decide what to open first from current AI engineering signals. |
+| Decision | Today | Show the generated priority brief with reason and next action. |
+| Discovery | Explore | Search, filter, save, and reuse cross-module signal views. |
+| Discovery | Topics | Add focused judgment around recurring themes such as AI agents, MCP, and agent skills. |
+| Trust / state | Review | Keep a local browser-only saved queue. |
+| Trust / state | Status | Explain refresh health, partial data, fallback, and source failures. |
+| Source detail | Trends | Show movement across HN, GitHub, and npm. |
+| Source detail | Packages | Track npm package adoption signals. |
+| Source detail | Repos | Track GitHub project traction signals. |
+| Source detail | Links | Keep checked-in curated reference links. |
 
 ## Local Preview
 

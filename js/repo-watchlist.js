@@ -1,10 +1,10 @@
 const fallbackRepos = {
-    updated: "2026-06-14",
+    updated: "2026-06-21",
     sourceMeta: {
         name: "GitHub",
         status: "fallback",
         count: 3,
-        updatedAt: "2026-06-14T00:00:00.000Z"
+        updatedAt: "2026-06-21T00:00:00.000Z"
     },
     repos: [
         {

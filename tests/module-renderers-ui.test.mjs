@@ -73,7 +73,7 @@ test("package watchlist escapes generated text and blocks unsafe links", async (
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;pkg&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;focus&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Checked-in data loaded with partial source failures.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Latest checked-in data loaded with partial source failures.");
     assert.match(html, /status-partial/);
     assert.match(html, /1 failed: openai/);
 });
@@ -113,7 +113,7 @@ test("repo watchlist escapes generated text and blocks unsafe links", async () =
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;repo&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;focus&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Checked-in data loaded with partial source failures.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Latest checked-in data loaded with partial source failures.");
     assert.match(html, /status-partial/);
     assert.match(html, /1 failed: bad\/repo/);
 });
@@ -150,6 +150,6 @@ test("link queue escapes generated text and blocks unsafe links", async () => {
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;link&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;summary&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Checked-in data loaded. Scheduled workflow keeps it fresh.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Latest checked-in data loaded.");
     assert.match(html, /status-ok/);
 });

@@ -16,7 +16,7 @@ const expectedSectionCounts = [
     sectionCounts.skim,
     sectionCounts.reference
 ];
-const expectedItemFields = ["title", "module", "origin", "category", "metric", "reason", "url", "score"];
+const expectedItemFields = ["title", "module", "origin", "category", "metric", "reason", "action", "url", "score"];
 
 function buildQualityFixture() {
     return {
@@ -169,8 +169,9 @@ test("renderTodaySections emits section cards and item links", () => {
     assert.match(html, /Trends/);
     assert.match(html, /Example source \/ Developer tools/);
     assert.match(html, /91 score/);
-    assert.match(html, /Why this matters/);
+    assert.match(html, /Why now/);
     assert.match(html, /Synthetic reason/);
+    assert.match(html, /Next action/);
     assert.match(html, /Source context/);
 });
 
@@ -249,14 +250,14 @@ test("renderTodayStatus explains partial and fallback generated data", () => {
             sourceMeta: { status: "partial" },
             sections: [{ items: [{}, {}] }]
         }),
-        "2 generated picks from partial source data."
+        "2 generated picks from partial source data. Usable picks remain available."
     );
     assert.equal(
         renderTodayStatus({
             sourceMeta: { status: "fallback" },
             sections: []
         }),
-        "0 generated picks. Showing fallback data."
+        "0 generated picks. Using static fallback because live data could not be loaded."
     );
 });
 

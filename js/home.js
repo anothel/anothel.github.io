@@ -576,7 +576,7 @@ async function init() {
         applyTopicMovements(document, topicMovements);
         applySavedSummary(document, savedSummary);
     } catch {
-        // Static fallback remains useful when local file fetch is blocked.
+        // Keep local review counts usable when checked-in data cannot be read.
         const savedSummary = readSavedSummary(globalThis.localStorage);
         applySavedSummary(document, savedSummary);
     }
