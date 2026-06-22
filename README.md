@@ -29,6 +29,8 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `scripts/update-links.mjs`: updates curated links data from local definitions
 - `scripts/update-today.mjs`: builds the Today priority brief from generated data
 - `scripts/update-manifest.mjs`: updates the module manifest from generated data files
+- `scripts/update-all.mjs`: runs every data updater in the scheduled order
+- `scripts/validate-data.mjs`: runs data tests and public JavaScript syntax checks
 - `scripts/report-refresh.mjs`: writes data refresh summary artifacts for operators
 - `tests/trend-data.test.mjs`: trend data helper tests
 - `tests/ops-docs.test.mjs`: data refresh operating docs tests
@@ -68,17 +70,15 @@ Push changes to the GitHub Pages branch configured for this repository.
 
 ## Data Updates
 
-Run locally in this order:
+Run the full local refresh in the same order as GitHub Actions:
 
 ```powershell
 $env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
-node scripts/update-trends.mjs
-node scripts/update-packages.mjs
-node scripts/update-repos.mjs
-node scripts/update-links.mjs
-node scripts/update-today.mjs
-node scripts/update-manifest.mjs
+node scripts/update-all.mjs
+node scripts/validate-data.mjs
 ```
+
+Individual updater scripts stay available for focused refreshes, but the full flow should use `update-all` so Today and Manifest are rebuilt after source data changes.
 
 The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pages does not need a server.
 
@@ -91,7 +91,7 @@ The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pag
 - Scheduled refresh: `schedule` runs `17 21 * * *` UTC, once per day.
 - Auth: GitHub API calls use `GITHUB_TOKEN` from the workflow environment.
 - Scope: only `data/trends.json`, `data/packages.json`, `data/repos.json`, `data/links.json`, `data/today.json`, and `data/manifest.json` are committed.
-- Safety: `concurrency` prevents overlapping data refresh jobs, each updater is grouped in logs, and the workflow runs `node --test tests/*.test.mjs` before committing generated data.
+- Safety: `concurrency` prevents overlapping data refresh jobs, `node scripts/update-all.mjs` groups each updater in logs, and the workflow runs `node scripts/validate-data.mjs` before committing generated data.
 - Run summary: every workflow run writes a GitHub Step Summary and uploads a `refresh-report` artifact with source status, counts, timestamps, and source errors.
 - Failure model: source fetch failures are stored as `error` or `partial` status where the updater can keep useful data. If a full updater produces zero rows but previous checked-in data exists, the updater writes stale but safe fallback data instead of empty data.
 - Fallback markers: fallback source metadata uses `fallbackUsed`, `staleButSafe`, `fallbackReason`, and `rateLimited` when applicable. The Status page and refresh report surface those markers.
@@ -100,6 +100,7 @@ The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pag
 ## Verification
 
 ```powershell
+node scripts/validate-data.mjs
 node --test tests/*.test.mjs
 node --test tests/trend-data.test.mjs
 node --test tests/package-data.test.mjs
@@ -114,6 +115,8 @@ node --test tests/status-ui.test.mjs
 node --test tests/serve.test.mjs
 node --test tests/workflow.test.mjs
 node --test tests/ops-docs.test.mjs
+node --check scripts/update-all.mjs
+node --check scripts/validate-data.mjs
 node --check scripts/update-trends.mjs
 node --check scripts/update-packages.mjs
 node --check scripts/update-repos.mjs
@@ -129,6 +132,11 @@ node --check js/today.js
 node --check js/package-watchlist.js
 node --check js/repo-watchlist.js
 node --check js/link-queue.js
+node --check js/explore.js
+node --check js/review.js
+node --check js/topics.js
+node --check js/signal-schema.js
+node --check js/data-health.js
 ```
 
 ## Notes

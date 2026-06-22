@@ -5,27 +5,11 @@ import { readFileSync } from "node:fs";
 const workflow = readFileSync(".github/workflows/update-trends.yml", "utf8");
 
 test("data update workflow runs every data updater", () => {
-    for (const script of [
-        "scripts/update-trends.mjs",
-        "scripts/update-packages.mjs",
-        "scripts/update-repos.mjs",
-        "scripts/update-links.mjs",
-        "scripts/update-today.mjs",
-        "scripts/update-manifest.mjs"
-    ]) {
-        assert.match(workflow, new RegExp(script.replace("/", "\\/")));
-    }
-    assert.match(workflow, /node "\$\{script\}"/);
+    assert.match(workflow, /node scripts\/update-all\.mjs/);
 });
 
 test("today generator runs after links and before manifest", () => {
-    const linksIndex = workflow.indexOf("scripts/update-links.mjs");
-    const todayIndex = workflow.indexOf("scripts/update-today.mjs");
-    const manifestIndex = workflow.indexOf("scripts/update-manifest.mjs");
-
-    assert.ok(linksIndex >= 0);
-    assert.ok(todayIndex > linksIndex);
-    assert.ok(manifestIndex > todayIndex);
+    assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-links\.mjs[\s\S]*scripts\/update-today\.mjs[\s\S]*scripts\/update-manifest\.mjs/);
 });
 
 test("data update workflow commits every generated data file", () => {
@@ -64,7 +48,7 @@ test("data update workflow verifies generated data before committing", () => {
     assert.ok(testIndex > fetchIndex);
     assert.ok(summaryIndex > testIndex);
     assert.ok(commitIndex > summaryIndex);
-    assert.match(workflow, /node --test tests\/\*\.test\.mjs/);
+    assert.match(workflow, /node scripts\/validate-data\.mjs/);
 });
 
 test("data update workflow publishes refresh report for operators", () => {
@@ -72,6 +56,6 @@ test("data update workflow publishes refresh report for operators", () => {
     assert.match(workflow, /REFRESH_REASON:/);
     assert.match(workflow, /name: refresh-report/);
     assert.match(workflow, /path: \$\{\{ runner\.temp \}\}\/refresh-report/);
-    assert.match(workflow, /::group::\$\{script\}/);
-    assert.match(workflow, /::error::\$\{script\} failed with exit code \$\{status\}/);
+    assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /::group::\$\{script\}/);
+    assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /::error::\$\{script\} failed with exit code \$\{status\}/);
 });

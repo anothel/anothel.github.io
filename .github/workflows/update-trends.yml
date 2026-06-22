@@ -31,32 +31,12 @@ jobs:
           node-version: "20"
 
       - name: Fetch data
-        run: |
-          set -euo pipefail
-
-          for script in \
-            scripts/update-trends.mjs \
-            scripts/update-packages.mjs \
-            scripts/update-repos.mjs \
-            scripts/update-links.mjs \
-            scripts/update-today.mjs \
-            scripts/update-manifest.mjs
-          do
-            echo "::group::${script}"
-            if node "${script}"; then
-              echo "::endgroup::"
-            else
-              status=$?
-              echo "::endgroup::"
-              echo "::error::${script} failed with exit code ${status}"
-              exit "${status}"
-            fi
-          done
+        run: node scripts/update-all.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify generated data
-        run: node --test tests/*.test.mjs
+        run: node scripts/validate-data.mjs
 
       - name: Summarize refresh
         if: always()

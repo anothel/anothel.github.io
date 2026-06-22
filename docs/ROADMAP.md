@@ -106,7 +106,6 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- **update-all / validate-data workflow consolidation**: add once validation rules are explicit.
 - **sourceMeta marker cleanup**: simplify markers after Status proves which states users need.
 - **Watchlist definitions as data**: move source definitions out of update scripts after updater behavior is stable.
 
@@ -144,21 +143,37 @@ Done when:
 Success metric:
 - A first-time visitor can answer: what this site is, what to open first, where saved items live, and whether the data is usable.
 
-### 2. P1 Update-All / Validate-Data Workflow Consolidation
+### 2. P1 sourceMeta Marker Cleanup
+
+Goal: make source health metadata smaller, consistent, and easier to explain in Status and refresh reports.
+
+- Inventory current `sourceMeta` marker fields across generated data files.
+- Keep only markers that Status, Home, and refresh reports render clearly.
+- Normalize partial, fallback, stale, and rate-limit naming across modules.
+- Add tests that reject unknown or contradictory source health markers.
+
+Done when:
+- Status and refresh reports explain every retained marker.
+- Generated JSON avoids duplicate names for the same state.
+- Tests catch unknown source markers and contradictory status/fallback combinations.
+
+Success metric:
+- A partial refresh can be understood from Status without reading updater code.
+
+## Recently Completed
+
+### 2026-06-22 - P1 Update-All / Validate-Data Workflow Consolidation
 
 Goal: make local and scheduled data refresh harder to run in a partial or inconsistent order.
 
-- Add one local update command that runs all data generators in the documented order.
-- Add one validation command that checks generated JSON, static fallbacks, and public page contracts.
-- Keep individual updater scripts available for focused refreshes.
-- Keep GitHub Actions aligned with the local command order.
+- Done: added `scripts/update-all.mjs` to run Trends, Packages, Repos, Links, Today, and Manifest in one ordered flow.
+- Done: added `scripts/validate-data.mjs` to discover repository tests and syntax-check data workflow scripts plus public JavaScript.
+- Done: aligned GitHub Actions with the local update and validation commands.
+- Done: updated README operator commands and tests so docs, workflow, and scripts share one contract.
+- Verified: targeted workflow tests and the full validation command pass.
 
-Done when:
-- One command refreshes Trends, Packages, Repos, Links, Today, and Manifest.
-- One command verifies generated data and static fallback sync.
-- Workflow docs and tests reference the same command order.
-
-## Recently Completed
+Success metric:
+- One command refreshes generated data, one command verifies generated data and static page contracts, and scheduled refresh uses the same command path.
 
 ### 2026-06-22 - P1 Signal Schema v2
 

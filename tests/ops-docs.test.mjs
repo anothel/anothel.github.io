@@ -14,7 +14,7 @@ test("README explains data refresh automation for operators", () => {
     assert.match(readme, /partial/);
     assert.match(readme, /refresh-report/);
     assert.match(readme, /GitHub Step Summary/);
-    assert.match(readme, /node --test tests\/\*\.test\.mjs/);
+    assert.match(readme, /node scripts\/validate-data\.mjs/);
     assert.match(readme, /stale but safe/);
     assert.match(readme, /fallbackUsed/);
     assert.match(readme, /rateLimited/);
@@ -23,12 +23,10 @@ test("README explains data refresh automation for operators", () => {
 
 test("README keeps local and scheduled data update command order aligned", () => {
     const commands = [
-        "node scripts/update-trends.mjs",
-        "node scripts/update-packages.mjs",
-        "node scripts/update-repos.mjs",
-        "node scripts/update-links.mjs",
-        "node scripts/update-today.mjs",
-        "node scripts/update-manifest.mjs",
+        "node scripts/update-all.mjs",
+        "node scripts/validate-data.mjs",
+        "node --check scripts/update-all.mjs",
+        "node --check scripts/validate-data.mjs",
         "node --check scripts/report-refresh.mjs"
     ];
 
