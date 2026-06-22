@@ -10,7 +10,25 @@ function json(path) {
     return JSON.parse(readFileSync(path, "utf8"));
 }
 
-const statusValues = new Set(["ok", "partial", "error", "fallback", "stale", "unknown"]);
+const statusValues = new Set(["ok", "partial", "error", "fallback", "unknown"]);
+const sourceMetaKeys = new Set([
+    "name",
+    "status",
+    "count",
+    "tracked",
+    "emitted",
+    "coverage",
+    "updatedAt",
+    "updated",
+    "errors",
+    "error",
+    "fallbackUsed",
+    "staleButSafe",
+    "fallbackReason",
+    "previousUpdated",
+    "attemptedAt",
+    "rateLimited"
+]);
 const sectionIds = new Set(["start", "skim", "reference"]);
 
 function assertDate(value, label) {
@@ -34,9 +52,26 @@ function assertSourceMeta(sourceMeta, label) {
     for (const [index, source] of metas.entries()) {
         assert.ok(statusValues.has(source.status), `${label} source ${index} status`);
         assert.equal(typeof source.count, "number", `${label} source ${index} count`);
+        for (const key of Object.keys(source)) {
+            assert.ok(sourceMetaKeys.has(key), `${label} source ${index} marker ${key}`);
+        }
+        if (source.status === "fallback") {
+            assert.equal(source.fallbackUsed, true, `${label} source ${index} fallbackUsed`);
+            assert.equal(source.staleButSafe, true, `${label} source ${index} staleButSafe`);
+            assert.equal(typeof source.fallbackReason, "string", `${label} source ${index} fallbackReason`);
+        } else {
+            assert.equal(source.fallbackUsed, undefined, `${label} source ${index} fallbackUsed`);
+            assert.equal(source.staleButSafe, undefined, `${label} source ${index} staleButSafe`);
+            assert.equal(source.fallbackReason, undefined, `${label} source ${index} fallbackReason`);
+        }
+        if (source.rateLimited !== undefined) assert.equal(typeof source.rateLimited, "boolean", `${label} source ${index} rateLimited`);
         if (source.updatedAt) assertTimestamp(source.updatedAt, `${label} source ${index} updatedAt`);
     }
 }
+
+test("source metadata status vocabulary stays user-facing", () => {
+    assert.deepEqual([...statusValues], ["ok", "partial", "error", "fallback", "unknown"]);
+});
 
 test("manifest count and status matches module data files", () => {
     const manifest = json("data/manifest.json");
