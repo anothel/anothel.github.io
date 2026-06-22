@@ -106,7 +106,6 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- **Signal schema v2 / normalized signal view**: define a shared cross-module signal contract after current data tests are stable.
 - **Topic Notes v1**: add short judgment notes after topic pages stop being simple Explore-filter mirrors.
 - **update-all / validate-data workflow consolidation**: add once validation rules are explicit.
 - **sourceMeta marker cleanup**: simplify markers after Status proves which states users need.
@@ -146,21 +145,34 @@ Done when:
 Success metric:
 - A first-time visitor can answer: what this site is, what to open first, where saved items live, and whether the data is usable.
 
-### 2. P1 Signal Schema v2
+### 2. P1 Topic Notes v1
+
+Goal: make topic pages express judgment, not only filtered item lists.
+
+- Add a short checked-in note block per topic.
+- Explain why this topic matters now.
+- Link each note to the strongest supporting signals.
+- Keep notes static-first and data-backed.
+
+Done when:
+- AI agents, MCP, and Agent skills pages each have one concise note.
+- Notes are rendered even when JS is disabled.
+- Topic JS can refresh supporting signal links from normalized data.
+
+## Recently Completed
+
+### 2026-06-22 - P1 Signal Schema v2
 
 Goal: define one normalized signal contract across Trends, Packages, Repos, Links, Today, Explore, and Review.
 
-- Inventory current item fields by source.
-- Define required shared fields and source-specific extension fields.
-- Add data contract tests before changing producers.
-- Update renderers only after the contract is explicit.
+- Done: added shared `SignalSchema` v2 normalizer and validator.
+- Done: Explore delegates normalization and source meta collection to the shared schema.
+- Done: Review keeps saved-id matching through Explore normalized v2 items.
+- Done: Today generator maps shared schema candidates into brief sections and emits v2 ids/metadata.
+- Verified: data schema, Explore, Review, Today, and structure tests cover the shared contract.
 
-Done when:
-- Every item used by Explore and Review has a stable normalized shape.
-- Source-specific fields remain available without leaking into common UI code.
-- Data validation fails on missing IDs, unsafe URLs, invalid scores, or unknown modules.
-
-## Recently Completed
+Success metric:
+- A saved or generated signal has stable id, source module, display module, URL, score, source context, and validation rules across Explore, Review, and Today.
 
 ### 2026-06-22 - P1 Module Pages v2
 
@@ -177,7 +189,6 @@ Success metric:
 
 ## Later
 
-- Signal schema v2 and normalized signal view.
 - Topic Notes v1.
 - `update-all` and `validate-data` workflow consolidation.
 - More topic pages only when data justifies them.

@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-21",
-  "generatedAt": "2026-06-22T06:30:44.263Z",
+  "generatedAt": "2026-06-22T07:37:10.887Z",
   "sourceMeta": {
     "name": "generated",
     "status": "partial",
     "count": 13,
-    "updatedAt": "2026-06-22T06:30:44.263Z"
+    "updatedAt": "2026-06-22T07:37:10.887Z"
   },
   "sections": [
     {
@@ -14,6 +14,10 @@
       "summary": "Three signals worth opening first.",
       "items": [
         {
+          "schemaVersion": 2,
+          "id": "trends:https://github.com/anthropics/skills",
+          "sourceModule": "trends",
+          "sourceKind": "trend",
           "title": "anthropics/skills",
           "module": "Trends",
           "origin": "GitHub",
@@ -22,9 +26,21 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/anthropics/skills",
-          "score": 100
+          "rawScore": 100,
+          "qualityScore": 100,
+          "score": 100,
+          "sources": [
+            "Trends"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://github.com/anthropics/skills",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "trends:https://github.com/lobehub/lobehub",
+          "sourceModule": "trends",
+          "sourceKind": "trend",
           "title": "lobehub/lobehub",
           "module": "Trends",
           "origin": "GitHub",
@@ -33,9 +49,21 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/lobehub/lobehub",
-          "score": 100
+          "rawScore": 100,
+          "qualityScore": 100,
+          "score": 100,
+          "sources": [
+            "Trends"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://github.com/lobehub/lobehub",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "trends:https://github.com/awslabs/mcp",
+          "sourceModule": "trends",
+          "sourceKind": "trend",
           "title": "awslabs/mcp",
           "module": "Trends",
           "origin": "GitHub",
@@ -44,7 +72,15 @@
           "reason": "MCP infrastructure worth tracking for agent workflows.",
           "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/awslabs/mcp",
-          "score": 100
+          "rawScore": 100,
+          "qualityScore": 100,
+          "score": 100,
+          "sources": [
+            "Trends"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://github.com/awslabs/mcp",
+          "updated": "2026-06-21"
         }
       ]
     },
@@ -54,6 +90,10 @@
       "summary": "Useful movement that does not need first attention.",
       "items": [
         {
+          "schemaVersion": 2,
+          "id": "trends:https://github.com/Arize-ai/phoenix",
+          "sourceModule": "trends",
+          "sourceKind": "trend",
           "title": "Arize-ai/phoenix",
           "module": "Trends",
           "origin": "GitHub",
@@ -62,9 +102,21 @@
           "reason": "Evaluation signal for measuring agent and model behavior.",
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/Arize-ai/phoenix",
-          "score": 100
+          "rawScore": 100,
+          "qualityScore": 100,
+          "score": 100,
+          "sources": [
+            "Trends"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://github.com/arize-ai/phoenix",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "trends:https://github.com/langgenius/dify",
+          "sourceModule": "trends",
+          "sourceKind": "trend",
           "title": "langgenius/dify",
           "module": "Trends",
           "origin": "GitHub",
@@ -73,9 +125,21 @@
           "reason": "MCP infrastructure worth tracking for agent workflows.",
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/langgenius/dify",
-          "score": 100
+          "rawScore": 100,
+          "qualityScore": 100,
+          "score": 100,
+          "sources": [
+            "Trends"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://github.com/langgenius/dify",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "repos:https://github.com/mattpocock/skills",
+          "sourceModule": "repos",
+          "sourceKind": "repo",
           "title": "mattpocock/skills",
           "module": "Repos",
           "origin": "GitHub",
@@ -84,9 +148,21 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
-          "score": 80
+          "rawScore": 138414,
+          "qualityScore": 100,
+          "score": 80,
+          "sources": [
+            "Repos"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://github.com/mattpocock/skills",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "packages:https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
+          "sourceModule": "packages",
+          "sourceKind": "package",
           "title": "@modelcontextprotocol/sdk",
           "module": "Packages",
           "origin": "npm",
@@ -95,9 +171,21 @@
           "reason": "MCP infrastructure worth tracking for agent workflows.",
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-          "score": 67
+          "rawScore": 38861963,
+          "qualityScore": 92,
+          "score": 67,
+          "sources": [
+            "Packages"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://www.npmjs.com/package/%40modelcontextprotocol%2fsdk",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "trends:https://github.com/affaan-m/ECC",
+          "sourceModule": "trends",
+          "sourceKind": "trend",
           "title": "affaan-m/ECC",
           "module": "Trends",
           "origin": "GitHub",
@@ -106,9 +194,21 @@
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/affaan-m/ECC",
-          "score": 100
+          "rawScore": 100,
+          "qualityScore": 100,
+          "score": 100,
+          "sources": [
+            "Trends"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://github.com/affaan-m/ecc",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "repos:https://github.com/anomalyco/opencode",
+          "sourceModule": "repos",
+          "sourceKind": "repo",
           "title": "anomalyco/opencode",
           "module": "Repos",
           "origin": "GitHub",
@@ -117,7 +217,15 @@
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/anomalyco/opencode",
-          "score": 83
+          "rawScore": 176709,
+          "qualityScore": 100,
+          "score": 83,
+          "sources": [
+            "Repos"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://github.com/anomalyco/opencode",
+          "updated": "2026-06-21"
         }
       ]
     },
@@ -127,6 +235,10 @@
       "summary": "Stable references and projects worth keeping nearby.",
       "items": [
         {
+          "schemaVersion": 2,
+          "id": "links:https://agentskills.io/",
+          "sourceModule": "links",
+          "sourceKind": "reference",
           "title": "Agent Skills standard",
           "module": "Links",
           "origin": "Spec",
@@ -135,9 +247,21 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://agentskills.io/",
-          "score": 65
+          "rawScore": 99,
+          "qualityScore": 100,
+          "score": 65,
+          "sources": [
+            "Links"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://agentskills.io",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "links:https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
+          "sourceModule": "links",
+          "sourceKind": "reference",
           "title": "Claude API Skills overview",
           "module": "Links",
           "origin": "Docs",
@@ -146,9 +270,21 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
-          "score": 63
+          "rawScore": 97,
+          "qualityScore": 100,
+          "score": 63,
+          "sources": [
+            "Links"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "links:https://support.claude.com/en/articles/11144907-what-are-skills",
+          "sourceModule": "links",
+          "sourceKind": "reference",
           "title": "Claude Skills docs",
           "module": "Links",
           "origin": "Docs",
@@ -157,9 +293,21 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://support.claude.com/en/articles/11144907-what-are-skills",
-          "score": 62
+          "rawScore": 96,
+          "qualityScore": 100,
+          "score": 62,
+          "sources": [
+            "Links"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://support.claude.com/en/articles/11144907-what-are-skills",
+          "updated": "2026-06-21"
         },
         {
+          "schemaVersion": 2,
+          "id": "links:https://github.com/Aider-AI/aider",
+          "sourceModule": "links",
+          "sourceKind": "reference",
           "title": "Aider",
           "module": "Links",
           "origin": "Repo",
@@ -168,7 +316,15 @@
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://github.com/Aider-AI/aider",
-          "score": 60
+          "rawScore": 94,
+          "qualityScore": 86,
+          "score": 60,
+          "sources": [
+            "Links"
+          ],
+          "sourceContext": "",
+          "canonicalKey": "url:https://github.com/aider-ai/aider",
+          "updated": "2026-06-21"
         }
       ]
     }

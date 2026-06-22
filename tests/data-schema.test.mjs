@@ -1,6 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const signalSchema = require("../js/signal-schema.js");
 
 function json(path) {
     return JSON.parse(readFileSync(path, "utf8"));
@@ -63,6 +67,11 @@ test("today brief uses stable sections and safe links", () => {
         assert.ok(section.title, "section title");
         assert.ok(Array.isArray(section.items), "section items");
         for (const item of section.items) {
+            assert.equal(item.schemaVersion, 2, `${item.title} schemaVersion`);
+            assert.ok(item.id, `${item.title} id`);
+            assert.ok(item.sourceModule, `${item.title} sourceModule`);
+            assert.ok(item.sourceKind, `${item.title} sourceKind`);
+            assert.ok(item.canonicalKey, `${item.title} canonicalKey`);
             assert.ok(item.title, "today item title");
             assert.ok(item.reason, `${item.title} reason`);
             assertSafeUrl(item.url, `${item.title} url`);
@@ -92,5 +101,34 @@ test("module item urls and scores stay within display contract", () => {
     for (const item of links.links) {
         assertSafeUrl(item.url, `link ${item.title}`);
         assert.ok(item.summary, `link ${item.title} summary`);
+    }
+});
+
+test("checked-in sources normalize to Signal Schema v2 items", () => {
+    const items = signalSchema.normalizeSignalData({
+        trends: json("data/trends.json"),
+        packages: json("data/packages.json"),
+        repos: json("data/repos.json"),
+        links: json("data/links.json")
+    });
+    const sourceModules = new Set(["trends", "packages", "repos", "links"]);
+    const modules = new Set(["Trends", "Packages", "Repos", "Links"]);
+    const sourceKinds = new Set(["trend", "package", "repo", "reference"]);
+
+    assert.ok(items.length > 0, "normalized items exist");
+    assert.equal(new Set(items.map((item) => item.id)).size, items.length, "normalized ids are unique after dedupe");
+
+    for (const item of items) {
+        assert.deepEqual(signalSchema.validateSignalItem(item), []);
+        assert.equal(item.schemaVersion, 2);
+        assert.ok(sourceModules.has(item.sourceModule), `${item.id} sourceModule`);
+        assert.ok(modules.has(item.module), `${item.id} module`);
+        assert.ok(sourceKinds.has(item.sourceKind), `${item.id} sourceKind`);
+        assert.ok(item.canonicalKey, `${item.id} canonicalKey`);
+        assert.ok(Array.isArray(item.sources) && item.sources.length > 0, `${item.id} sources`);
+        assertSafeUrl(item.url, `${item.id} url`);
+        assert.ok(Number.isFinite(item.rawScore), `${item.id} rawScore`);
+        assert.ok(Number(item.qualityScore) >= 0 && Number(item.qualityScore) <= 100, `${item.id} qualityScore`);
+        assert.ok(Number(item.score) >= 0 && Number(item.score) <= 100, `${item.id} score`);
     }
 });

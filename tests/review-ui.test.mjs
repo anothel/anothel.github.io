@@ -5,6 +5,7 @@ import vm from "node:vm";
 
 function loadReview(extra = {}) {
     const context = { console, URL, ...extra };
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
     return context.ReviewApp;
@@ -263,6 +264,7 @@ test("Review browser init renders saved queue and removes items", async () => {
         })
     };
 
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -357,6 +359,7 @@ test("Review browser filters workflow status", async () => {
         })
     };
 
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));

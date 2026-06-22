@@ -4,6 +4,7 @@
     const preferredExploreStorageKey = "anothel.preferences.exploreState.v1";
     const savedSearchStorageKey = "anothel.preferences.savedSearches.v1";
     const dataHealth = global.DataHealth;
+    const signalSchema = global.SignalSchema;
     const defaultExploreState = { focus: "all", sort: "priority" };
     const maxSavedSearches = 5;
 
@@ -111,237 +112,27 @@
         }
     }
 
-    function itemId(moduleKey, item) {
-        return `${moduleKey}:${item.url || item.name || item.title || item.rank}`;
-    }
-
-    function clamp(value, min, max) {
-        return Math.min(max, Math.max(min, value));
-    }
-
-    function logScore(value, maxLog) {
-        return clamp((Math.log10(Math.max(0, Number(value || 0)) + 1) / maxLog) * 100, 0, 100);
-    }
-
-    function textBlob(item) {
-        return [
-            item.title,
-            item.name,
-            item.category,
-            item.focus,
-            item.summary,
-            item.source,
-            item.kind,
-            item.url
-        ].filter(Boolean).join(" ").toLowerCase();
-    }
-
-    function textBoost(text) {
-        let boost = 0;
-        if (/\b(ai|llm|agent|agents|agentic)\b/.test(text)) boost += 12;
-        if (/\b(skill|skills|mcp|codex|openai|anthropic|langchain)\b/.test(text)) boost += 8;
-        if (/\b(coding|developer|workflow|automation)\b/.test(text)) boost += 4;
-        return Math.min(boost, 20);
-    }
-
-    function isBroadBaselinePackage(item) {
-        const name = String(item.name || item.title || "").toLowerCase();
-        return new Set([
-            "typescript",
-            "react",
-            "eslint",
-            "prettier",
-            "vite",
-            "next",
-            "express",
-            "tailwindcss",
-            "zod"
-        ]).has(name);
-    }
-
-    function qualityScoreForItem(moduleKey, item) {
-        const text = textBlob(item);
-        let score = 0;
-
-        if (moduleKey === "trends") {
-            score = Number(item.score || 0);
-        } else if (moduleKey === "packages") {
-            score = logScore(item.downloads, 9);
-        } else if (moduleKey === "repos") {
-            score = logScore(item.stars, 6);
-        } else if (moduleKey === "links") {
-            score = Math.max(35, 92 - Number(item.rank || 0) * 3);
+    function requireSignalSchema() {
+        if (!signalSchema) {
+            throw new Error("SignalSchema must load before explore.js");
         }
-
-        score += textBoost(text);
-        const isNpmTrend = moduleKey === "trends" && String(item.source || "").toLowerCase() === "npm";
-        if ((moduleKey === "packages" || isNpmTrend) && isBroadBaselinePackage(item) && textBoost(text) < 8) {
-            score = Math.min(score, 76);
-        }
-
-        return Math.round(clamp(score, 0, 100));
-    }
-
-    function sourceContextFor(sources, moduleName) {
-        const alsoIn = sources.filter((source) => source !== moduleName);
-        return alsoIn.length > 0 ? `Also in ${alsoIn.join(" / ")}` : "";
-    }
-
-    function canonicalUrl(value) {
-        const href = String(value || "").trim();
-        if (!href) return "";
-
-        try {
-            const parsed = new URL(href);
-            parsed.hash = "";
-            parsed.search = "";
-            const pathname = parsed.pathname.replace(/\/$/, "").replace(/\.git$/, "");
-            return `${parsed.protocol}//${parsed.hostname.toLowerCase()}${pathname.toLowerCase()}`;
-        } catch {
-            return href.toLowerCase().replace(/\/$/, "");
-        }
-    }
-
-    function normalizedTitle(value) {
-        return String(value || "")
-            .toLowerCase()
-            .replace(/[^a-z0-9/]+/g, " ")
-            .trim()
-            .replace(/\s+/g, " ");
-    }
-
-    function duplicateKey(item) {
-        const url = canonicalUrl(item.url);
-        if (url) return `url:${url}`;
-        return `title:${normalizedTitle(item.title)}`;
-    }
-
-    function mergeExploreItems(primary, duplicate) {
-        const winner = (duplicate.qualityScore || duplicate.score || 0) > (primary.qualityScore || primary.score || 0)
-            ? duplicate
-            : primary;
-        const loser = winner === duplicate ? primary : duplicate;
-        const sources = [...new Set([...(winner.sources || [winner.module]), ...(loser.sources || [loser.module])])];
-        const updated = [winner.updated, loser.updated].filter(Boolean).sort().at(-1) || "-";
-
-        return {
-            ...winner,
-            sources,
-            updated,
-            sourceContext: sourceContextFor(sources, winner.module),
-            qualityScore: Math.max(winner.qualityScore || winner.score || 0, loser.qualityScore || loser.score || 0),
-            score: Math.max(winner.score || 0, loser.score || 0)
-        };
-    }
-
-    function dedupeExploreItems(items) {
-        const merged = new Map();
-
-        for (const item of items) {
-            const key = duplicateKey(item);
-            if (merged.has(key)) {
-                merged.set(key, mergeExploreItems(merged.get(key), item));
-            } else {
-                merged.set(key, {
-                    ...item,
-                    sources: item.sources || [item.module],
-                    sourceContext: sourceContextFor(item.sources || [item.module], item.module)
-                });
-            }
-        }
-
-        return [...merged.values()];
+        return signalSchema;
     }
 
     function normalizeExploreData(dataByModule) {
-        const trends = (dataByModule.trends?.items || []).map((item) => {
-            const qualityScore = qualityScoreForItem("trends", item);
-            return {
-                id: itemId("trends", item),
-                module: "Trends",
-                title: item.title,
-                category: item.category,
-                origin: item.source || "Tracked source",
-                metric: item.velocity || item.signal || `${item.score || 0} score`,
-                summary: item.summary || item.signal || "",
-                url: item.url,
-                rawScore: Number(item.score || 0),
-                qualityScore,
-                score: qualityScore,
-                sources: ["Trends"],
-                updated: dataByModule.trends?.updated || "-"
-            };
-        });
-
-        const packages = (dataByModule.packages?.packages || []).map((item) => {
-            const qualityScore = qualityScoreForItem("packages", item);
-            return {
-                id: itemId("packages", item),
-                module: "Packages",
-                title: item.name,
-                category: item.category,
-                origin: "npm",
-                metric: item.downloadsLabel || `${item.downloads || 0} downloads`,
-                summary: item.focus || item.period || "",
-                url: item.url,
-                rawScore: Number(item.downloads || 0),
-                qualityScore,
-                score: qualityScore,
-                sources: ["Packages"],
-                updated: dataByModule.packages?.updated || "-"
-            };
-        });
-
-        const repos = (dataByModule.repos?.repos || []).map((item) => {
-            const qualityScore = qualityScoreForItem("repos", item);
-            return {
-                id: itemId("repos", item),
-                module: "Repos",
-                title: item.name,
-                category: item.category,
-                origin: "GitHub",
-                metric: item.starsLabel ? `${item.starsLabel} stars` : `${item.stars || 0} stars`,
-                summary: item.summary || item.focus || "",
-                url: item.url,
-                rawScore: Number(item.stars || 0),
-                qualityScore,
-                score: qualityScore,
-                sources: ["Repos"],
-                updated: dataByModule.repos?.updated || "-"
-            };
-        });
-
-        const links = (dataByModule.links?.links || []).map((item) => {
-            const qualityScore = qualityScoreForItem("links", item);
-            return {
-                id: itemId("links", item),
-                module: "Links",
-                title: item.title,
-                category: item.category,
-                origin: item.kind || "Reference",
-                metric: item.kind || "Reference",
-                summary: item.summary || "",
-                url: item.url,
-                rawScore: Math.max(0, 100 - Number(item.rank || 0)),
-                qualityScore,
-                score: qualityScore,
-                sources: ["Links"],
-                updated: dataByModule.links?.updated || "-"
-            };
-        });
-
-        return dedupeExploreItems([...trends, ...packages, ...repos, ...links]);
+        return requireSignalSchema().normalizeSignalData(dataByModule);
     }
 
     function collectSourceMeta(dataByModule) {
-        return [
-            ...(Array.isArray(dataByModule.trends?.sourceMeta)
-                ? dataByModule.trends.sourceMeta
-                : [dataByModule.trends?.sourceMeta]),
-            dataByModule.packages?.sourceMeta,
-            dataByModule.repos?.sourceMeta,
-            dataByModule.links?.sourceMeta
-        ].filter(Boolean);
+        return requireSignalSchema().collectSourceMeta(dataByModule);
+    }
+
+    function qualityScoreForItem(moduleKey, item) {
+        return requireSignalSchema().qualityScoreForItem(moduleKey, item);
+    }
+
+    function dedupeExploreItems(items) {
+        return requireSignalSchema().dedupeSignalItems(items);
     }
 
     function includesQuery(item, query) {

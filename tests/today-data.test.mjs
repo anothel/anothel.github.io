@@ -16,7 +16,27 @@ const expectedSectionCounts = [
     sectionCounts.skim,
     sectionCounts.reference
 ];
-const expectedItemFields = ["title", "module", "origin", "category", "metric", "reason", "action", "url", "score"];
+const expectedItemFields = [
+    "schemaVersion",
+    "id",
+    "sourceModule",
+    "sourceKind",
+    "title",
+    "module",
+    "origin",
+    "category",
+    "metric",
+    "reason",
+    "action",
+    "url",
+    "rawScore",
+    "qualityScore",
+    "score",
+    "sources",
+    "sourceContext",
+    "canonicalKey",
+    "updated"
+];
 
 function buildQualityFixture() {
     return {

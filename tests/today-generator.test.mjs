@@ -79,6 +79,9 @@ test("normalizeCandidates maps source data into shared card shape", () => {
 
     assert.deepEqual(
         candidates.map((item) => ({
+            schemaVersion: item.schemaVersion,
+            sourceModule: item.sourceModule,
+            sourceKind: item.sourceKind,
             title: item.title,
             module: item.module,
             origin: item.origin,
@@ -86,10 +89,14 @@ test("normalizeCandidates maps source data into shared card shape", () => {
             metric: item.metric,
             reason: item.reason,
             url: item.url,
-            score: item.score
+            scoreInRange: Number(item.score) >= 0 && Number(item.score) <= 100,
+            canonicalKey: Boolean(item.canonicalKey)
         })),
         [
             {
+                schemaVersion: 2,
+                sourceModule: "trends",
+                sourceKind: "trend",
                 title: "Iroh 1.0",
                 module: "Trends",
                 origin: "Hacker News",
@@ -97,9 +104,13 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 metric: "96 score",
                 reason: "267 comments / 852 points",
                 url: "https://www.iroh.computer/blog/v1",
-                score: 96
+                scoreInRange: true,
+                canonicalKey: true
             },
             {
+                schemaVersion: 2,
+                sourceModule: "repos",
+                sourceKind: "repo",
                 title: "react/react",
                 module: "Repos",
                 origin: "GitHub",
@@ -107,9 +118,13 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 metric: "245.9K stars",
                 reason: "frontend runtime",
                 url: "https://github.com/react/react",
-                score: 80
+                scoreInRange: true,
+                canonicalKey: true
             },
             {
+                schemaVersion: 2,
+                sourceModule: "packages",
+                sourceKind: "package",
                 title: "typescript",
                 module: "Packages",
                 origin: "npm",
@@ -117,9 +132,13 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 metric: "217.3M/week",
                 reason: "typed JavaScript",
                 url: "https://www.npmjs.com/package/typescript",
-                score: 70
+                scoreInRange: true,
+                canonicalKey: true
             },
             {
+                schemaVersion: 2,
+                sourceModule: "links",
+                sourceKind: "reference",
                 title: "MDN Web Docs",
                 module: "Links",
                 origin: "Docs",
@@ -127,7 +146,8 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 metric: "Docs",
                 reason: "Reference for web platform APIs.",
                 url: "https://developer.mozilla.org/",
-                score: 60
+                scoreInRange: true,
+                canonicalKey: true
             }
         ]
     );
@@ -148,6 +168,8 @@ test("buildTodayBrief creates fixed sections from checked-in data", () => {
     );
     assert.equal(allItems.length, 13);
     assert.equal(new Set(urls).size, urls.length);
+    assert.ok(allItems.every((item) => item.schemaVersion === 2));
+    assert.ok(allItems.every((item) => item.id && item.sourceModule && item.sourceKind && item.canonicalKey));
 });
 
 test("buildTodayBrief surfaces expanded eval or workflow coverage from checked-in data", () => {

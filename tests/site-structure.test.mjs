@@ -241,7 +241,9 @@ test("explore page owns the cross-module search surface", () => {
     assert.doesNotMatch(explore, /Refine explore/);
     assert.match(explore, /href="..\/review\/index\.html"/);
     assert.match(explore, /..\/js\/data-health\.js/);
+    assert.match(explore, /..\/js\/signal-schema\.js/);
     assert.match(explore, /..\/js\/explore\.js/);
+    assert.match(explore, /<script defer src="..\/js\/signal-schema\.js"><\/script>\s*<script defer src="..\/js\/explore\.js"/s);
     assert.match(explore, /..\/data\/trends\.json/);
     assert.match(explore, /..\/data\/packages\.json/);
     assert.match(explore, /..\/data\/repos\.json/);
@@ -300,7 +302,9 @@ test("review page owns the saved follow-up surface", () => {
     assert.match(review, /Done/);
     assert.match(review, /Queue/);
     assert.match(review, /Selected item/);
+    assert.match(review, /..\/js\/signal-schema\.js/);
     assert.match(review, /..\/js\/explore\.js/);
+    assert.match(review, /<script defer src="..\/js\/signal-schema\.js"><\/script>\s*<script defer src="..\/js\/explore\.js"><\/script>\s*<script defer src="..\/js\/review\.js"/s);
     assert.match(review, /..\/js\/review\.js/);
     assert.match(review, /..\/data\/trends\.json/);
     assert.match(review, /..\/data\/packages\.json/);

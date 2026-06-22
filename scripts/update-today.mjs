@@ -1,8 +1,11 @@
 import { readFile, writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
 import { classifySignal, isBaselineSignal, qualityBoost, signalReason } from "./signal-taxonomy.mjs";
 
 const OUT_FILE = new URL("../data/today.json", import.meta.url);
+const require = createRequire(import.meta.url);
+const signalSchema = require("../js/signal-schema.js");
 
 const sourceFiles = {
     trends: new URL("../data/trends.json", import.meta.url),
@@ -54,34 +57,6 @@ function aggregateStatuses(statuses) {
 
 function newestDate(values) {
     return values.filter(Boolean).sort().at(-1) || isoDate();
-}
-
-function trendReason(item) {
-    return [item.velocity, item.signal].filter(Boolean).join(" / ") || item.summary || "Ranked trend signal";
-}
-
-function repoScore(repo) {
-    if (typeof repo.score === "number") {
-        return repo.score;
-    }
-
-    return repo.rank ? Math.max(65, 86 - repo.rank) : 80;
-}
-
-function packageScore(item) {
-    if (typeof item.score === "number") {
-        return item.score;
-    }
-
-    return item.rank ? Math.max(60, 76 - item.rank) : 70;
-}
-
-function linkScore(link) {
-    if (typeof link.score === "number") {
-        return link.score;
-    }
-
-    return link.rank ? Math.max(50, 66 - link.rank) : 60;
 }
 
 function candidateText(item) {
@@ -243,6 +218,10 @@ function actionFor(sectionId, item) {
 
 function stripItem(item, sectionId) {
     return {
+        schemaVersion: item.schemaVersion,
+        id: item.id,
+        sourceModule: item.sourceModule,
+        sourceKind: item.sourceKind,
         title: item.title,
         module: item.module,
         origin: item.origin,
@@ -251,7 +230,13 @@ function stripItem(item, sectionId) {
         reason: item.reason,
         action: actionFor(sectionId, item),
         url: item.url,
-        score: item.score
+        rawScore: item.rawScore,
+        qualityScore: item.qualityScore,
+        score: item.score,
+        sources: item.sources,
+        sourceContext: item.sourceContext,
+        canonicalKey: item.canonicalKey,
+        updated: item.updated
     };
 }
 
@@ -270,54 +255,28 @@ function sourceMetaFor(sources, generatedAt, count) {
     };
 }
 
+function todayScore(item) {
+    if (item.sourceModule === "trends") return item.rawScore;
+    if (item.sourceModule === "repos") return item.sourceRank ? Math.max(65, 86 - item.sourceRank) : 80;
+    if (item.sourceModule === "packages") return item.sourceRank ? Math.max(60, 76 - item.sourceRank) : 70;
+    if (item.sourceModule === "links") return item.sourceRank ? Math.max(50, 66 - item.sourceRank) : 60;
+    return item.score;
+}
+
+function todayModuleOrder(item) {
+    return { Trends: 0, Repos: 1, Packages: 2, Links: 3 }[item.module] ?? 4;
+}
+
 export function normalizeCandidates({ trends = {}, repos = {}, packages = {}, links = {} } = {}) {
-    const trendItems = (trends.items || []).map((item) => ({
-        title: item.title,
-        module: "Trends",
-        origin: item.source || "trend",
-        category: item.category || "Trend",
-        metric: `${item.score ?? 0} score`,
-        reason: trendReason(item),
-        url: item.url,
-        score: item.score ?? 0
-    }));
-
-    const repoItems = (repos.repos || []).map((repo) => ({
-        title: repo.name,
-        module: "Repos",
-        origin: "GitHub",
-        category: repo.category || "Repository",
-        metric: `${repo.starsLabel || "0"} stars`,
-        reason: repo.focus || repo.summary || "Repository traction",
-        url: repo.url,
-        score: repoScore(repo)
-    }));
-
-    const packageItems = (packages.packages || []).map((item) => ({
-        title: item.name,
-        module: "Packages",
-        origin: "npm",
-        category: item.category || "Package",
-        metric: item.downloadsLabel || "0/week",
-        reason: item.focus || "Weekly npm demand",
-        url: item.url,
-        score: packageScore(item)
-    }));
-
-    const linkItems = (links.links || []).map((link) => ({
-        title: link.title,
-        module: "Links",
-        origin: link.kind || "Link",
-        category: link.category || "Reference",
-        metric: link.kind || "Reference",
-        reason: link.summary || "Reference shelf item",
-        url: link.url,
-        score: linkScore(link)
-    }));
-
-    return [...trendItems, ...repoItems, ...packageItems, ...linkItems].filter(
-        (item) => item.title && item.url
-    );
+    return signalSchema.normalizeSignalData({ trends, repos, packages, links }, { dedupe: false })
+        .map((item) => ({
+            ...item,
+            category: item.category || `${item.module} signal`,
+            metric: item.sourceModule === "trends" ? `${item.rawScore ?? 0} score` : item.metric,
+            reason: item.reason || item.summary || item.metric,
+            score: todayScore(item)
+        }))
+        .sort((a, b) => todayModuleOrder(a) - todayModuleOrder(b));
 }
 
 export function buildTodayBrief(sources = {}, generatedAt = new Date().toISOString()) {

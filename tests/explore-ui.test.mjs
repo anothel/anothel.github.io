@@ -6,6 +6,7 @@ import vm from "node:vm";
 function loadExplore(extra = {}) {
     const context = { console, Date, ...extra };
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     return context.ExploreApp;
 }
@@ -77,6 +78,10 @@ test("Explore normalizes trends, packages, repos, and links into one item shape"
     ]);
     assert.equal(items[0].id, "trends:https://example.com/trend");
     assert.equal(items[1].updated, "2026-06-19");
+    assert.deepEqual(JSON.parse(JSON.stringify(items.map((item) => item.schemaVersion))), [2, 2, 2, 2]);
+    assert.deepEqual(JSON.parse(JSON.stringify(items.map((item) => item.sourceModule))), ["trends", "packages", "repos", "links"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(items.map((item) => item.sourceKind))), ["trend", "package", "repo", "reference"]);
+    assert.ok(items.every((item) => item.canonicalKey && Array.isArray(item.sources)));
 });
 
 test("Explore filters and sorts items with saved-first support", () => {
@@ -583,6 +588,7 @@ test("Explore script does not auto-fetch on non-Explore pages", async () => {
     };
 
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -691,6 +697,7 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
     };
 
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -790,6 +797,7 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
     };
 
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -899,6 +907,7 @@ test("Explore topic lens click applies the matching focus filter", async () => {
     };
 
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -998,6 +1007,7 @@ test("Explore topic pin click updates stored pins and rerenders lenses", async (
     };
 
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -1080,6 +1090,7 @@ test("Explore browser init applies focus from URL query", async () => {
     };
 
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -1166,6 +1177,7 @@ test("Explore browser init restores explicit default focus and sort", async () =
     };
 
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -1260,6 +1272,7 @@ test("Explore default controls save and reset explicit preferred state", async (
     };
 
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -1370,6 +1383,7 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
     };
 
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
 
