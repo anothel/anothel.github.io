@@ -87,7 +87,7 @@ This keeps the imported review intact enough to explain why each recommendation 
 | Static fallback regression test | P0, doing now | Prevents old dates/counts from returning silently. |
 | Data contract test | P0, doing now | Protects manifest counts, status values, URL safety, and Today section shape. |
 | README page role table | P0, doing now | Keeps operator docs aligned with route roles and data model. |
-| Explore compact/mobile drawer | P1, keep | Valid UX issue, but should follow the current desktop/mobile review after P0 copy/data trust lands. |
+| Explore compact/mobile drawer | P1, current | Valid UX issue now being addressed by Explore UX v2: desktop workbench plus mobile-collapsed filters. |
 | Common module page template | P1, keep | Useful once Trends, Packages, Repos, and Links have distinct roles; too early risks standardizing unclear copy. |
 | Signal schema v2 / normalized signal view | P1, keep | Correct direction, but it touches all producers and consumers. Needs current schema tests first. |
 | Topic Notes v1 | P1, keep | Good way to make topics judgment pages, but wait until topic page slots are clearer. |
@@ -106,7 +106,6 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. They are deferred, not discarded.
 
-- **Explore compact/mobile filter pattern**: revisit after current desktop and mobile layout is reviewed against real use.
 - **Common module page template**: unify module pages after their distinct page roles are clear.
 - **Signal schema v2 / normalized signal view**: define a shared cross-module signal contract after current data tests are stable.
 - **Topic Notes v1**: add short judgment notes after topic pages stop being simple Explore-filter mirrors.
@@ -148,9 +147,23 @@ Done when:
 Success metric:
 - A first-time visitor can answer: what this site is, what to open first, where saved items live, and whether the data is usable.
 
+### 2. P1 Explore UX v2
+
+Goal: make Explore feel like a desktop workbench on PC and a compact filter flow on mobile.
+
+- Add a single-control filter drawer for mobile without duplicating inputs.
+- Keep desktop filters visible as a command workbench.
+- Keep saved searches/defaults separate from primary filters.
+- Preserve existing localStorage keys and Explore behavior.
+
+Done when:
+- Desktop keeps the full workbench visible.
+- Mobile can collapse filters and saved search tools above results.
+- Existing Explore saved/default/search behavior stays green.
+- Static structure tests protect the drawer/workbench contract.
+
 ## Later
 
-- Explore compact mode and mobile filter drawer.
 - Common module page template.
 - Signal schema v2 and normalized signal view.
 - Topic Notes v1.

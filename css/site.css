@@ -1244,6 +1244,15 @@ button {
     background: color-mix(in srgb, var(--panel) 86%, var(--bg));
 }
 
+.explore-filter-shell {
+    display: grid;
+    gap: 14px;
+}
+
+.explore-filter-toggle {
+    display: none;
+}
+
 .explore-workbench {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(280px, 0.35fr);
@@ -1256,6 +1265,10 @@ button {
     grid-template-columns: minmax(220px, 0.32fr) minmax(0, 1fr);
     gap: 12px;
     min-width: 0;
+}
+
+.explore-control-rail {
+    display: grid;
 }
 
 .explore-saved-tools {
@@ -2037,6 +2050,40 @@ button {
     .explore-command-actions .ghost-button,
     .explore-command-actions a {
         flex: 1 1 0;
+    }
+
+    .explore-filter-toggle {
+        display: flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 900;
+        list-style: none;
+    }
+
+    .explore-filter-toggle::-webkit-details-marker {
+        display: none;
+    }
+
+    .explore-filter-toggle::after {
+        content: "Open";
+        color: var(--accent);
+        font-size: 0.82rem;
+    }
+
+    .explore-filter-shell[open] .explore-filter-toggle::after {
+        content: "Close";
+    }
+
+    .explore-filter-shell:not([open]) .explore-workbench {
+        display: none;
     }
 
     .explore-strip nav,

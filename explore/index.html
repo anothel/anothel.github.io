@@ -53,8 +53,12 @@
                     </div>
                 </div>
 
-                <div class="explore-workbench">
-                    <div class="explore-filter-board">
+                <details class="explore-filter-shell" data-explore-filter-shell open>
+                    <summary class="explore-filter-toggle">
+                        <span>Filters and saved searches</span>
+                    </summary>
+                    <div class="explore-workbench">
+                    <div class="explore-filter-board explore-control-rail">
                         <div class="explore-controls">
                             <label class="explore-search-field">
                                 Search
@@ -120,7 +124,8 @@
                             <p class="preference-status" data-explore-default-status>Default: All / priority</p>
                         </div>
                     </aside>
-                </div>
+                    </div>
+                </details>
             </section>
 
             <section class="stats-grid" aria-label="Explore stats">

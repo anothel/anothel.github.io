@@ -846,8 +846,15 @@
             defaultStatus: document.querySelector("[data-explore-default-status]"),
             saveSearch: document.querySelector("[data-save-search]"),
             savedSearches: document.querySelector("[data-saved-searches]"),
-            savedSearchStatus: document.querySelector("[data-saved-search-status]")
+            savedSearchStatus: document.querySelector("[data-saved-search-status]"),
+            filterShell: document.querySelector("[data-explore-filter-shell]")
         };
+    }
+
+    function collapseMobileFilterShell(els) {
+        const shell = els.filterShell;
+        const width = Number(global.innerWidth || 0);
+        if (shell && width > 0 && width <= 720) shell.removeAttribute("open");
     }
 
     function currentSearchState() {
@@ -1101,6 +1108,7 @@
         const preferredStore = createPreferredExploreStore(global.localStorage);
         const savedSearchStore = createSavedSearchStore(global.localStorage);
         const preferredState = preferredStore.read();
+        collapseMobileFilterShell(els);
 
         state.items = normalizeExploreData(dataByModule);
         state.sourceMeta = collectSourceMeta(dataByModule);

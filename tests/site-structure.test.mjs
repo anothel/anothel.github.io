@@ -201,8 +201,10 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(explore, /Topic lenses/);
     assert.match(explore, /Review later/);
     assert.match(explore, /class="explore-command-bar"/);
+    assert.match(explore, /<details class="explore-filter-shell" data-explore-filter-shell open>/);
+    assert.match(explore, /<summary class="explore-filter-toggle">/);
     assert.match(explore, /class="explore-workbench"/);
-    assert.match(explore, /class="explore-filter-board"/);
+    assert.match(explore, /class="explore-filter-board explore-control-rail"/);
     assert.match(explore, /class="explore-saved-tools"/);
     assert.match(explore, /class="explore-controls"/);
     assert.doesNotMatch(explore, /class="sidebar"/);
@@ -224,13 +226,21 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(styles, /\.saved-panel/);
     assert.match(styles, /\.explore-shell\s*{[^}]*grid-template-columns: 1fr/s);
     assert.match(styles, /\.explore-command-bar/);
+    assert.match(styles, /\.explore-filter-shell\s*{[^}]*display: grid/s);
+    assert.match(styles, /\.explore-filter-toggle\s*{[^}]*display: none/s);
+    assert.match(styles, /\.explore-filter-toggle::after\s*{[^}]*content: "Open"/s);
+    assert.match(styles, /\.explore-filter-shell\[open\] \.explore-filter-toggle::after\s*{[^}]*content: "Close"/s);
     assert.match(styles, /\.explore-workbench\s*{[^}]*grid-template-columns: minmax\(0, 1fr\) minmax\(280px, 0\.35fr\)/s);
     assert.match(styles, /\.explore-filter-board\s*{[^}]*display: grid/s);
+    assert.match(styles, /\.explore-control-rail\s*{[^}]*display: grid/s);
     assert.match(styles, /\.explore-saved-tools\s*{[^}]*display: grid/s);
     assert.match(styles, /\.explore-controls\s*{[^}]*display: grid/s);
     assert.match(styles, /\.advanced-filter-grid\s*{[^}]*grid-template-columns:/s);
     assert.match(styles, /\.saved-searches \[data-saved-searches\]\s*{[^}]*display: flex/s);
     assert.match(styles, /@media \(max-width: 1040px\)\s*{[\s\S]*\.explore-workbench[\s\S]*grid-template-columns: 1fr/s);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.explore-filter-toggle\s*{[^}]*display: flex/s);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.explore-filter-shell:not\(\[open\]\) \.explore-workbench\s*{[^}]*display: none/s);
+    assert.match(read("js/explore.js"), /collapseMobileFilterShell/);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.explore-results[\s\S]*grid-template-columns: 1fr/s);
 });
 
