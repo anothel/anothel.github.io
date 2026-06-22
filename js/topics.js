@@ -13,6 +13,11 @@
             route: "../../topics/ai-agents/index.html",
             summary: "Coding agents, workflow automation, and agent runtime movement.",
             whyPrefix: "Agent tooling is moving from demos into daily coding workflow.",
+            note: {
+                title: "Agent workflow is becoming a daily engineering surface.",
+                body: "Track this when coding agents, orchestration frameworks, or automation tools show signs of changing how work is planned, edited, reviewed, or tested.",
+                readWhen: "Open this topic when repo traction and package demand point to repeatable agent workflow, not one-off demos."
+            },
             guidance: {
                 whatToWatch: "Coding agents, local CLIs, orchestration frameworks, and agent runtime patterns.",
                 whenToOpen: "Open when a tool changes how code gets written, reviewed, tested, or automated.",
@@ -28,6 +33,11 @@
             route: "../../topics/mcp/index.html",
             summary: "Protocol, SDK, server, and client signals for agent tooling.",
             whyPrefix: "Protocol and server adoption is moving across SDKs, packages, and reference repos.",
+            note: {
+                title: "MCP is the protocol layer to keep checking.",
+                body: "Track this when protocol, SDK, registry, inspector, and server signals move together across packages, repos, and reference links.",
+                readWhen: "Open this topic when a source suggests agents may connect to tools differently."
+            },
             guidance: {
                 whatToWatch: "SDKs, reference servers, registries, inspector tools, and server packages.",
                 whenToOpen: "Open when a protocol or server signal could change how agents connect to tools.",
@@ -43,6 +53,11 @@
             route: "../../topics/agent-skills/index.html",
             summary: "Reusable instructions, skill specs, and agent workflow examples.",
             whyPrefix: "Reusable instruction patterns are becoming a practical layer above one-off prompting.",
+            note: {
+                title: "Reusable instructions are becoming operational assets.",
+                body: "Track this when skill specs, examples, and workflow repos show patterns that can be reused instead of rewritten per task.",
+                readWhen: "Open this topic when a reusable pattern looks durable enough to save, adapt, or compare against your own agent workflow."
+            },
             guidance: {
                 whatToWatch: "Skill specs, reusable instructions, examples, and workflow checklists.",
                 whenToOpen: "Open when a skill pattern can become repeatable work instead of one-off prompting.",
@@ -254,6 +269,23 @@
         return { ...topicConfig(topic).guidance };
     }
 
+    function topicNote(topic) {
+        return { ...topicConfig(topic).note };
+    }
+
+    function topicSupportingSignals(items) {
+        const seenUrls = new Set();
+        return [...items]
+            .sort((a, b) => Number(b.score || 0) - Number(a.score || 0))
+            .filter((item) => {
+                const url = String(item.url || "").trim();
+                if (!url || seenUrls.has(url)) return false;
+                seenUrls.add(url);
+                return true;
+            })
+            .slice(0, 3);
+    }
+
     function topicInsight(items, topic) {
         const mix = sourceMix(items);
         const moduleWord = mix.length === 1 ? "module" : "modules";
@@ -373,6 +405,34 @@
         `).join("");
     }
 
+    function renderTopicNote(note, signals = []) {
+        const signalList = signals.length > 0
+            ? signals.map((item) => `
+                <a href="${safeHref(item.url)}">
+                    <strong>${escapeHtml(item.title)}</strong>
+                    <span>${escapeHtml([item.module, item.metric].filter(Boolean).join(" / "))}</span>
+                </a>
+            `).join("")
+            : '<p class="saved-empty">No supporting signals yet.</p>';
+
+        return `
+            <article class="topic-note-card">
+                <div>
+                    <span>Topic note</span>
+                    <h2>${escapeHtml(note.title)}</h2>
+                    <p>${escapeHtml(note.body)}</p>
+                    <small>${escapeHtml(note.readWhen)}</small>
+                </div>
+                <aside>
+                    <span>Supporting signals</span>
+                    <div class="topic-support-list">
+                        ${signalList}
+                    </div>
+                </aside>
+            </article>
+        `;
+    }
+
     function renderWhyNow(whyNow) {
         return `
             <article class="topic-why-card">
@@ -481,6 +541,7 @@
             modules: document.querySelector("[data-topic-modules]"),
             updated: document.querySelector("[data-topic-updated]"),
             lead: document.querySelector("[data-topic-lead]"),
+            note: document.querySelector("[data-topic-note]"),
             guidance: document.querySelector("[data-topic-guidance]"),
             why: document.querySelector("[data-topic-why]"),
             topMovers: document.querySelector("[data-topic-top-movers]"),
@@ -528,6 +589,8 @@
             const summary = topicSummary(items);
             const insight = topicInsight(items, topic);
             const dashboard = topicDashboard(items, today, topic);
+            const note = topicNote(topic);
+            const supportingSignals = topicSupportingSignals(items);
             const els = selectors();
             const pinnedStore = createPinnedTopicStore(global.localStorage);
             const pinnedTopics = new Set(pinnedStore.read());
@@ -536,6 +599,7 @@
             if (els.modules) els.modules.textContent = String(summary.modules);
             if (els.updated) els.updated.textContent = summary.updated;
             if (els.lead) els.lead.textContent = insight.lead;
+            if (els.note) els.note.innerHTML = renderTopicNote(note, supportingSignals);
             if (els.guidance) els.guidance.innerHTML = renderTopicGuidance(dashboard.guidance);
             if (els.why) els.why.innerHTML = renderWhyNow(dashboard.whyNow);
             if (els.topMovers) els.topMovers.innerHTML = renderTopMovers(dashboard.topMovers);
@@ -559,11 +623,14 @@
         topicInsight,
         topicDashboard,
         topicGuidance,
+        topicNote,
+        topicSupportingSignals,
         createPinnedTopicStore,
         renderSourceMix,
         renderTopicActions,
         renderTopicPinAction,
         renderTopicGuidance,
+        renderTopicNote,
         renderWhyNow,
         renderTopMovers,
         renderRelatedGroups,

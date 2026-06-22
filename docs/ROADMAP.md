@@ -90,7 +90,7 @@ This keeps the imported review intact enough to explain why each recommendation 
 | Explore compact/mobile drawer | P1, current | Valid UX issue now being addressed by Explore UX v2: desktop workbench plus mobile-collapsed filters. |
 | Common module page template | Done 2026-06-22 | Trends, Packages, Repos, and Links now share a source-detail shell without changing data hooks. |
 | Signal schema v2 / normalized signal view | P1, keep | Correct direction, but it touches all producers and consumers. Needs current schema tests first. |
-| Topic Notes v1 | P1, keep | Good way to make topics judgment pages, but wait until topic page slots are clearer. |
+| Topic Notes v1 | Done 2026-06-22 | Topic pages now have checked-in judgment notes with dynamic supporting signals. |
 | update-all / validate-data workflow | P1, keep | Valuable once validation rules are proven by tests; then consolidate scripts and workflow. |
 | sourceMeta marker cleanup | P1, keep | Status copy should drive which markers matter to users. Do after the first trust copy pass. |
 | Watchlist definitions moved from scripts to data | P1, keep | Makes source lists easier to edit, but not needed before fallback trust is fixed. |
@@ -106,7 +106,6 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- **Topic Notes v1**: add short judgment notes after topic pages stop being simple Explore-filter mirrors.
 - **update-all / validate-data workflow consolidation**: add once validation rules are explicit.
 - **sourceMeta marker cleanup**: simplify markers after Status proves which states users need.
 - **Watchlist definitions as data**: move source definitions out of update scripts after updater behavior is stable.
@@ -145,19 +144,19 @@ Done when:
 Success metric:
 - A first-time visitor can answer: what this site is, what to open first, where saved items live, and whether the data is usable.
 
-### 2. P1 Topic Notes v1
+### 2. P1 Update-All / Validate-Data Workflow Consolidation
 
-Goal: make topic pages express judgment, not only filtered item lists.
+Goal: make local and scheduled data refresh harder to run in a partial or inconsistent order.
 
-- Add a short checked-in note block per topic.
-- Explain why this topic matters now.
-- Link each note to the strongest supporting signals.
-- Keep notes static-first and data-backed.
+- Add one local update command that runs all data generators in the documented order.
+- Add one validation command that checks generated JSON, static fallbacks, and public page contracts.
+- Keep individual updater scripts available for focused refreshes.
+- Keep GitHub Actions aligned with the local command order.
 
 Done when:
-- AI agents, MCP, and Agent skills pages each have one concise note.
-- Notes are rendered even when JS is disabled.
-- Topic JS can refresh supporting signal links from normalized data.
+- One command refreshes Trends, Packages, Repos, Links, Today, and Manifest.
+- One command verifies generated data and static fallback sync.
+- Workflow docs and tests reference the same command order.
 
 ## Recently Completed
 
@@ -187,10 +186,20 @@ Goal: make source detail pages feel like desktop pages on PC and compact flows o
 Success metric:
 - A visitor can move between source detail pages without relearning the layout, while each page still keeps its own purpose and data controls.
 
+### 2026-06-22 - P1 Topic Notes v1
+
+Goal: make topic pages express judgment, not only filtered item lists.
+
+- Done: added checked-in topic notes for AI agents, MCP, and Agent skills.
+- Done: notes render without JavaScript on each topic page.
+- Done: Topic JS refreshes note supporting links from current normalized topic signals.
+- Done: added tests for note copy, supporting signal selection, escaping, unsafe links, HTML slots, and static fallback notes.
+
+Success metric:
+- A topic page now answers why the topic is worth watching before listing filtered signals.
+
 ## Later
 
-- Topic Notes v1.
-- `update-all` and `validate-data` workflow consolidation.
 - More topic pages only when data justifies them.
 - Lightweight `/notes/` index only after at least 3 real notes exist.
 

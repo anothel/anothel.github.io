@@ -137,6 +137,47 @@ test("Topic guidance gives each topic concrete watch/open/action context", () =>
     });
 });
 
+test("Topic notes provide durable judgment copy per topic", () => {
+    const app = loadTopics();
+
+    assert.match(app.topicNote("AI agents").title, /agent workflow/i);
+    assert.match(app.topicNote("MCP").body, /protocol/i);
+    assert.match(app.topicNote("Agent skills").readWhen, /reusable/i);
+});
+
+test("Topic supporting signals dedupe URLs and keep strongest current signals", () => {
+    const app = loadTopics();
+    const signals = app.topicSupportingSignals([
+        { title: "First", module: "Repos", metric: "100 stars", url: "https://example.com/a", score: 70 },
+        { title: "Best", module: "Trends", metric: "100 score", url: "https://example.com/b", score: 99 },
+        { title: "Duplicate best", module: "Packages", metric: "1M/week", url: "https://example.com/b", score: 98 },
+        { title: "Second", module: "Links", metric: "Docs", url: "https://example.com/c", score: 80 },
+        { title: "Third", module: "Packages", metric: "20K/week", url: "https://example.com/d", score: 75 }
+    ]);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(signals.map((item) => item.title))), ["Best", "Second", "Third"]);
+});
+
+test("Topic note renderer escapes copy and blocks unsafe support links", () => {
+    const app = loadTopics();
+    const html = app.renderTopicNote(
+        {
+            title: "Watch <topic>",
+            body: "Use \"signals\" carefully.",
+            readWhen: "Open & compare."
+        },
+        [
+            { title: "<bad>", module: "Repos", metric: "100 stars", url: "javascript:alert(1)" }
+        ]
+    );
+
+    assert.match(html, /Watch &lt;topic&gt;/);
+    assert.match(html, /Use &quot;signals&quot; carefully\./);
+    assert.match(html, /Open &amp; compare\./);
+    assert.match(html, /href="#"/);
+    assert.match(html, /&lt;bad&gt;/);
+});
+
 test("Topic dashboard why-now copy uses topic-specific meaning", () => {
     const app = loadTopics();
     const items = [
@@ -276,6 +317,7 @@ test("Topic browser init renders stats and cards", async () => {
         "[data-topic-updated]",
         "[data-topic-lead]",
         "[data-topic-guidance]",
+        "[data-topic-note]",
         "[data-topic-why]",
         "[data-topic-top-movers]",
         "[data-topic-related]",
@@ -356,6 +398,7 @@ test("Topic browser init renders stats and cards", async () => {
     assert.equal(elements["[data-topic-updated]"].textContent, "2026-06-19");
     assert.match(elements["[data-topic-lead]"].textContent, /1 source module tracking 1 AI agent signal\./);
     assert.match(elements["[data-topic-guidance]"].innerHTML, /What to watch/);
+    assert.match(elements["[data-topic-note]"].innerHTML, /Agent runtime/);
     assert.match(elements["[data-topic-why]"].innerHTML, /Agent runtime/);
     assert.match(elements["[data-topic-top-movers]"].innerHTML, /Agent runtime/);
     assert.match(elements["[data-topic-related]"].innerHTML, /Today agent/);
@@ -381,6 +424,7 @@ test("Topic pin click updates local storage and rerenders pin state", async () =
         "[data-topic-updated]",
         "[data-topic-lead]",
         "[data-topic-guidance]",
+        "[data-topic-note]",
         "[data-topic-why]",
         "[data-topic-top-movers]",
         "[data-topic-related]",

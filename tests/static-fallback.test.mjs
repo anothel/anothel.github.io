@@ -91,6 +91,21 @@ test("module page stamps do not drift behind checked-in manifest", () => {
     }
 });
 
+test("topic pages keep checked-in judgment notes without JavaScript", () => {
+    const expectations = [
+        ["topics/ai-agents/index.html", /agent workflow/i],
+        ["topics/mcp/index.html", /protocol layer/i],
+        ["topics/agent-skills/index.html", /reusable instructions/i]
+    ];
+
+    for (const [path, pattern] of expectations) {
+        const html = read(path);
+        assert.match(html, /data-topic-note/, path);
+        assert.match(html, pattern, path);
+        assert.match(html, /Supporting signals/i, path);
+    }
+});
+
 test("checked-in fallback copy avoids stale internal implementation language", () => {
     for (const path of pages) {
         const html = read(path);

@@ -346,6 +346,7 @@ test("topic focus pages expose focused landing pages", () => {
         assert.match(html, /data-topic-modules/);
         assert.match(html, /data-topic-updated/);
         assert.match(html, /data-topic-lead/);
+        assert.match(html, /data-topic-note/);
         assert.match(html, /data-topic-guidance/);
         assert.match(html, /data-topic-why/);
         assert.match(html, /data-topic-top-movers/);
@@ -369,6 +370,9 @@ test("topic focus pages expose focused landing pages", () => {
     assert.match(styles, /\.pin-topic-button/);
     assert.match(styles, /\.topic-guidance-grid/);
     assert.match(styles, /\.topic-guidance-card/);
+    assert.match(styles, /\.topic-note-card/);
+    assert.match(styles, /\.topic-support-list/);
+    assert.match(styles, /\.topic-note-card\s*{[\s\S]*background: color-mix\(in srgb, var\(--panel\) 72%, var\(--bg\)\)/);
     assert.match(styles, /\.topic-dashboard-grid/);
     assert.match(styles, /\.topic-related-grid/);
     assert.match(styles, /\.topic-cross-link-grid/);

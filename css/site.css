@@ -750,6 +750,75 @@ main {
     overflow-wrap: anywhere;
 }
 
+.topic-note-panel {
+    display: grid;
+}
+
+.topic-note-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr);
+    gap: 18px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--panel) 72%, var(--bg));
+    box-shadow: var(--shadow);
+}
+
+.topic-note-card > div,
+.topic-note-card aside {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    min-width: 0;
+}
+
+.topic-note-card span,
+.topic-support-list span {
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.topic-note-card h2 {
+    margin: 0;
+    font-size: clamp(1.35rem, 2vw, 2rem);
+    line-height: 1.08;
+}
+
+.topic-note-card p,
+.topic-note-card small {
+    margin: 0;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+}
+
+.topic-support-list {
+    display: grid;
+    gap: 8px;
+}
+
+.topic-support-list a {
+    display: grid;
+    gap: 4px;
+    min-height: 58px;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.topic-support-list a:hover {
+    color: var(--accent);
+}
+
+.topic-support-list strong,
+.topic-support-list span {
+    overflow-wrap: anywhere;
+}
+
 .topic-related-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 }
@@ -2009,6 +2078,7 @@ button {
     .source-mix-grid,
     .topic-dashboard-grid,
     .topic-guidance-grid,
+    .topic-note-card,
     .topic-related-grid,
     .topic-cross-link-grid,
     .topic-grid,
@@ -2040,6 +2110,7 @@ button {
     .source-mix-grid,
     .topic-dashboard-grid,
     .topic-guidance-grid,
+    .topic-note-card,
     .topic-related-grid,
     .topic-cross-link-grid,
     .link-grid,
