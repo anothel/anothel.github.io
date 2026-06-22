@@ -64,6 +64,30 @@ async function fetchJson(url) {
     return response.json();
 }
 
+function wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchWithRetry(fetcher, url, definition, options = {}) {
+    const retries = options.retries ?? 2;
+    const retryDelayMs = options.retryDelayMs ?? 250;
+    let lastError;
+
+    for (let attempt = 0; attempt <= retries; attempt += 1) {
+        try {
+            return await fetcher(url, definition);
+        } catch (error) {
+            lastError = error;
+            if (attempt === retries) break;
+            if (retryDelayMs > 0) {
+                await wait(retryDelayMs * (attempt + 1));
+            }
+        }
+    }
+
+    throw lastError;
+}
+
 export function buildPackageDownloadUrl(name) {
     return `https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(name)}`;
 }
@@ -116,26 +140,26 @@ export function buildPackageRows(downloadRecords, definitions = packageDefinitio
 export async function collectPackages(
     definitions = packageDefinitions,
     fetcher = fetchJson,
-    generatedAt = new Date().toISOString()
+    generatedAt = new Date().toISOString(),
+    options = {}
 ) {
-    const results = await Promise.all(
-        definitions.map(async (definition) => {
-            try {
-                return {
-                    ok: true,
-                    record: await fetcher(buildPackageDownloadUrl(definition.name), definition)
-                };
-            } catch (error) {
-                return {
-                    ok: false,
-                    error: {
-                        name: definition.name,
-                        error: error.message
-                    }
-                };
-            }
-        })
-    );
+    const results = [];
+    for (const definition of definitions) {
+        try {
+            results.push({
+                ok: true,
+                record: await fetchWithRetry(fetcher, buildPackageDownloadUrl(definition.name), definition, options)
+            });
+        } catch (error) {
+            results.push({
+                ok: false,
+                error: {
+                    name: definition.name,
+                    error: error.message
+                }
+            });
+        }
+    }
     const downloadRecords = results.filter((result) => result.ok).map((result) => result.record);
     const errors = results.filter((result) => !result.ok).map((result) => result.error);
     const packages = buildPackageRows(downloadRecords, definitions);

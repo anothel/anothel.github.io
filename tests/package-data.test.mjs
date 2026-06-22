@@ -175,6 +175,37 @@ test("collectPackages keeps successful packages when one package fetch fails", a
     assert.deepEqual(data.packages.map((item) => item.name), ["react"]);
 });
 
+test("collectPackages retries transient package fetch failures before marking partial", async () => {
+    const attempts = new Map();
+    const data = await collectPackages(
+        [
+            { name: "react", category: "UI", focus: "frontend runtime" },
+            { name: "braintrust", category: "AI evals", focus: "AI evals and observability" }
+        ],
+        async (url, definition) => {
+            const count = (attempts.get(definition.name) || 0) + 1;
+            attempts.set(definition.name, count);
+
+            if (definition.name === "braintrust" && count === 1) {
+                throw new Error("429 Too Many Requests");
+            }
+
+            return {
+                package: definition.name,
+                downloads: definition.name === "react" ? 9000 : 1200,
+                start: "2026-06-01",
+                end: "2026-06-07"
+            };
+        },
+        "2026-06-19T00:00:00.000Z"
+    );
+
+    assert.equal(attempts.get("braintrust"), 2);
+    assert.equal(data.sourceMeta.status, "ok");
+    assert.equal(data.sourceMeta.coverage, "2/2");
+    assert.deepEqual(data.packages.map((item) => item.name), ["react", "braintrust"]);
+});
+
 test("collectPackages reports error when every package fetch fails", async () => {
     const data = await collectPackages(
         [

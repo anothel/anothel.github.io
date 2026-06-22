@@ -93,16 +93,16 @@ async function fetchJson(url, options = {}) {
 }
 
 export function buildRepoRows(repoRecords, definitions = repoDefinitions) {
-    const definitionByName = new Map(definitions.map((item) => [item.fullName, item]));
+    const definitionByName = new Map(definitions.map((item) => [item.fullName.toLowerCase(), item]));
 
     return repoRecords
-        .filter((repo) => definitionByName.has(repo.full_name))
+        .filter((repo) => definitionByName.has(repo.full_name.toLowerCase()))
         .sort((a, b) => b.stargazers_count - a.stargazers_count)
         .map((repo, index) => {
-            const definition = definitionByName.get(repo.full_name);
+            const definition = definitionByName.get(repo.full_name.toLowerCase());
             return {
                 rank: index + 1,
-                name: repo.full_name,
+                name: definition.fullName,
                 category: definition.category,
                 focus: definition.focus,
                 stars: repo.stargazers_count,

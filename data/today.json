@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-21",
-  "generatedAt": "2026-06-22T07:37:10.887Z",
+  "updated": "2026-06-22",
+  "generatedAt": "2026-06-22T11:54:43.966Z",
   "sourceMeta": {
     "name": "generated",
-    "status": "partial",
+    "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-22T07:37:10.887Z"
+    "updatedAt": "2026-06-22T11:54:43.966Z"
   },
   "sections": [
     {
@@ -144,19 +144,19 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "138.4K stars",
+          "metric": "140.9K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
-          "rawScore": 138414,
+          "rawScore": 140896,
           "qualityScore": 100,
-          "score": 80,
+          "score": 81,
           "sources": [
             "Repos"
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/mattpocock/skills",
-          "updated": "2026-06-21"
+          "updated": "2026-06-22"
         },
         {
           "schemaVersion": 2,
@@ -167,11 +167,11 @@
           "module": "Packages",
           "origin": "npm",
           "category": "MCP",
-          "metric": "38.9M/week",
+          "metric": "39.6M/week",
           "reason": "MCP infrastructure worth tracking for agent workflows.",
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-          "rawScore": 38861963,
+          "rawScore": 39623830,
           "qualityScore": 92,
           "score": 67,
           "sources": [
@@ -179,7 +179,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://www.npmjs.com/package/%40modelcontextprotocol%2fsdk",
-          "updated": "2026-06-21"
+          "updated": "2026-06-22"
         },
         {
           "schemaVersion": 2,
@@ -213,11 +213,11 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "AI agents",
-          "metric": "176.7K stars",
+          "metric": "177.2K stars",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/anomalyco/opencode",
-          "rawScore": 176709,
+          "rawScore": 177224,
           "qualityScore": 100,
           "score": 83,
           "sources": [
@@ -225,7 +225,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/anomalyco/opencode",
-          "updated": "2026-06-21"
+          "updated": "2026-06-22"
         }
       ]
     },

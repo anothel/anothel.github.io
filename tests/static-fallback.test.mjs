@@ -39,6 +39,23 @@ function moduleHealth() {
         .join(" / ");
 }
 
+function todayStatusText() {
+    const total = today.sections.reduce((sum, section) => sum + section.items.length, 0);
+    const status = today.sourceMeta?.status || "ok";
+
+    if (status === "fallback") return `${total} generated picks. Using static fallback because live data could not be loaded.`;
+    if (status === "partial") return `${total} generated picks from partial source data. Usable picks remain available.`;
+    if (status === "error") return `${total} generated picks from failed source refresh. Check Status before trusting freshness.`;
+    return `${total} generated picks. Latest checked-in data loaded.`;
+}
+
+function dataModeText() {
+    const health = moduleHealth();
+    if (health.includes("partial")) return "Latest checked-in data loaded with partial source failures.";
+    if (health.includes("fallback")) return "Using static fallback because live data could not be loaded.";
+    return "Latest checked-in data loaded.";
+}
+
 test("home static fallback matches current manifest summary", () => {
     const home = read("index.html");
 
@@ -51,10 +68,9 @@ test("home static fallback matches current manifest summary", () => {
 
 test("today static fallback matches current generated brief", () => {
     const html = read("today/index.html");
-    const total = today.sections.reduce((sum, section) => sum + section.items.length, 0);
 
     assert.match(html, new RegExp(`<span data-today-updated>${today.updated}</span>`));
-    assert.match(html, new RegExp(`${total} generated picks from partial source data\\.`));
+    assert.match(html, new RegExp(todayStatusText().replaceAll(".", "\\.")));
     assert.match(html, /<strong>anthropics\/skills<\/strong>/);
     assert.match(html, /<strong>Next action<\/strong>/);
 });
@@ -65,7 +81,7 @@ test("status static fallback matches current manifest summary", () => {
     assert.match(html, new RegExp(`<strong data-status-total>${moduleTotal()}</strong>`));
     assert.match(html, new RegExp(`<strong data-status-health>${moduleHealth()}</strong>`));
     assert.match(html, new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
-    assert.match(html, /partial sources kept usable data/i);
+    assert.match(html, new RegExp(dataModeText().replaceAll(".", "\\.")));
 });
 
 test("module page stamps do not drift behind checked-in manifest", () => {

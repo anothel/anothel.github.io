@@ -66,6 +66,33 @@ test("buildRepoRows sorts repos by stars and formats rows", () => {
     ]);
 });
 
+test("buildRepoRows matches redirected or differently cased repo full names", () => {
+    const rows = buildRepoRows(
+        [
+            {
+                full_name: "PipedreamHQ/pipedream",
+                html_url: "https://github.com/PipedreamHQ/pipedream",
+                description: "Connect APIs and AI.",
+                stargazers_count: 12000,
+                forks_count: 1000,
+                pushed_at: "2026-06-03T12:00:00Z",
+                topics: ["automation"]
+            }
+        ],
+        [
+            {
+                fullName: "pipedreamhq/pipedream",
+                category: "Workflow automation",
+                focus: "integration and workflow automation"
+            }
+        ]
+    );
+
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].name, "pipedreamhq/pipedream");
+    assert.equal(rows[0].category, "Workflow automation");
+});
+
 test("default repo watchlist tracks AI skills and agent projects", () => {
     const names = new Set(repoDefinitions.map((repo) => repo.fullName));
     const categories = new Set(repoDefinitions.map((repo) => repo.category));
