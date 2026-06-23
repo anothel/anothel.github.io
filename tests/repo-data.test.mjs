@@ -8,6 +8,10 @@ function readJson(path) {
     return JSON.parse(readFileSync(path, "utf8"));
 }
 
+test("default repo definitions come from checked-in watchlist data", () => {
+    assert.deepEqual(repoDefinitions, readJson("data/watchlists.json").repos);
+});
+
 test("buildRepoRows sorts repos by stars and formats rows", () => {
     const rows = buildRepoRows(
         [

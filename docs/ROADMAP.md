@@ -116,7 +116,7 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- **Watchlist definitions as data**: move source definitions out of update scripts after updater behavior is stable.
+- No active P1 source-data cleanup item remains after watchlist definitions moved to data.
 
 ### P2 - Framework / Architecture Later
 
@@ -152,24 +152,19 @@ Done when:
 Success metric:
 - A first-time visitor can answer: what this site is, what to open first, where saved items live, and whether the data is usable.
 
-### 2. P1 sourceMeta Marker Cleanup
+## Recently Completed
 
-Goal: make source health metadata smaller, consistent, and easier to explain in Status and refresh reports.
+### 2026-06-23 - P1 Watchlist Definitions As Data
 
-- Inventory current `sourceMeta` marker fields across generated data files.
-- Keep only markers that Status, Home, and refresh reports render clearly.
-- Normalize partial, fallback, stale, and rate-limit naming across modules.
-- Add tests that reject unknown or contradictory source health markers.
+Goal: make package and repo source lists easier to edit without touching updater logic.
 
-Done when:
-- Status and refresh reports explain every retained marker.
-- Generated JSON avoids duplicate names for the same state.
-- Tests catch unknown source markers and contradictory status/fallback combinations.
+- Done: added `data/watchlists.json` for npm package and GitHub repo definitions.
+- Done: package and repo updater scripts now load default definitions from checked-in data.
+- Done: tests fail if exported defaults drift from `data/watchlists.json`.
+- Deferred: Links and Trends use different source shapes, so they stay in scripts until a shared data shape is worth it.
 
 Success metric:
-- A partial refresh can be understood from Status without reading updater code.
-
-## Recently Completed
+- Updating package/repo watchlists no longer requires editing fetch/update logic.
 
 ### 2026-06-23 - P1 sourceMeta Marker Cleanup
 

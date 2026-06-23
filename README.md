@@ -17,6 +17,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `links/index.html`: curated reference queue
 - `css/site.css`: site-specific styles
 - `data/trends.json`: static seed data
+- `data/watchlists.json`: package and repo watchlist definitions used by updater scripts
 - `data/today.json`: generated priority brief data
 - `data/manifest.json`: module index and data freshness summary
 - `js/home.js`: home overview and current signal rendering

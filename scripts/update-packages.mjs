@@ -1,45 +1,17 @@
+import { readFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
 
 const OUT_FILE = new URL("../data/packages.json", import.meta.url);
+const WATCHLIST_FILE = new URL("../data/watchlists.json", import.meta.url);
 const USER_AGENT = "anothel.github.io package watchlist";
 
-export const packageDefinitions = [
-    { name: "react", category: "UI", focus: "frontend runtime" },
-    { name: "typescript", category: "Language", focus: "typed JavaScript" },
-    { name: "vite", category: "Tooling", focus: "build tool" },
-    { name: "next", category: "Framework", focus: "React framework" },
-    { name: "zod", category: "Validation", focus: "schema validation" },
-    { name: "playwright", category: "Testing", focus: "browser automation" },
-    { name: "eslint", category: "Tooling", focus: "linting" },
-    { name: "prettier", category: "Tooling", focus: "formatting" },
-    { name: "ai", category: "AI SDK", focus: "Vercel AI SDK" },
-    { name: "@ai-sdk/openai", category: "AI SDK", focus: "OpenAI provider for AI SDK" },
-    { name: "@ai-sdk/provider", category: "AI SDK", focus: "AI SDK provider interface" },
-    { name: "openai", category: "AI SDK", focus: "OpenAI API SDK" },
-    { name: "@anthropic-ai/sdk", category: "AI SDK", focus: "Anthropic API SDK" },
-    { name: "mastra", category: "AI agents", focus: "TypeScript agent framework" },
-    { name: "opencode-ai", category: "AI agents", focus: "OpenCode terminal agent package" },
-    { name: "@openai/agents", category: "AI agents", focus: "OpenAI Agents SDK for JavaScript" },
-    { name: "langchain", category: "AI agents", focus: "LLM and agent orchestration" },
-    { name: "@langchain/core", category: "AI agents", focus: "LangChain core primitives" },
-    { name: "@modelcontextprotocol/sdk", category: "MCP", focus: "Model Context Protocol SDK" },
-    { name: "fastmcp", category: "MCP", focus: "MCP server framework" },
-    { name: "@modelcontextprotocol/server-filesystem", category: "MCP", focus: "MCP filesystem server" },
-    { name: "@modelcontextprotocol/server-github", category: "MCP", focus: "MCP GitHub server" },
-    { name: "mcp-agent", category: "MCP", focus: "MCP agent helper package" },
-    { name: "evalite", category: "AI evals", focus: "LLM evaluation toolkit" },
-    { name: "braintrust", category: "AI evals", focus: "AI evals and observability" },
-    { name: "promptfoo", category: "AI evals", focus: "LLM evals and prompt testing" },
-    { name: "autoevals", category: "AI evals", focus: "AI eval scoring helpers" },
-    { name: "langfuse", category: "AI evals", focus: "LLM observability and evals" },
-    { name: "inngest", category: "Workflow automation", focus: "durable workflow runtime" },
-    { name: "@trigger.dev/sdk", category: "Workflow automation", focus: "durable workflow SDK" },
-    { name: "@temporalio/workflow", category: "Workflow automation", focus: "Temporal workflow runtime" },
-    { name: "@temporalio/client", category: "Workflow automation", focus: "Temporal workflow client" },
-    { name: "n8n-workflow", category: "Workflow automation", focus: "n8n workflow primitives" }
-];
+function readWatchlists() {
+    return JSON.parse(readFileSync(WATCHLIST_FILE, "utf8"));
+}
+
+export const packageDefinitions = readWatchlists().packages;
 
 function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);

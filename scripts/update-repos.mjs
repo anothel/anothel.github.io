@@ -1,47 +1,17 @@
+import { readFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
 
 const OUT_FILE = new URL("../data/repos.json", import.meta.url);
+const WATCHLIST_FILE = new URL("../data/watchlists.json", import.meta.url);
 const USER_AGENT = "anothel.github.io repo watchlist";
 
-export const repoDefinitions = [
-    { fullName: "react/react", category: "UI", focus: "frontend runtime" },
-    { fullName: "vercel/next.js", category: "Framework", focus: "React framework" },
-    { fullName: "vitejs/vite", category: "Tooling", focus: "build tool" },
-    { fullName: "microsoft/playwright", category: "Testing", focus: "browser automation" },
-    { fullName: "n8n-io/n8n", category: "Workflow automation", focus: "workflow automation" },
-    { fullName: "colinhacks/zod", category: "Validation", focus: "schema validation" },
-    { fullName: "anthropics/skills", category: "Agent skills", focus: "official Agent Skills examples" },
-    { fullName: "mattpocock/skills", category: "Agent skills", focus: "engineering workflow skills" },
-    { fullName: "openai/codex", category: "AI agents", focus: "terminal coding agent" },
-    { fullName: "anomalyco/opencode", category: "AI agents", focus: "open source coding agent" },
-    { fullName: "aaif-goose/goose", category: "AI agents", focus: "local extensible AI agent" },
-    { fullName: "Aider-AI/aider", category: "AI agents", focus: "terminal AI pair programming" },
-    { fullName: "google-gemini/gemini-cli", category: "AI agents", focus: "Gemini terminal coding agent" },
-    { fullName: "openai/openai-agents-js", category: "AI agents", focus: "TypeScript multi-agent framework" },
-    { fullName: "openai/openai-agents-python", category: "AI agents", focus: "Python multi-agent framework" },
-    { fullName: "github/awesome-copilot", category: "AI agents", focus: "Copilot agents and skills" },
-    { fullName: "modelcontextprotocol/servers", category: "MCP", focus: "MCP reference servers" },
-    { fullName: "modelcontextprotocol/typescript-sdk", category: "MCP", focus: "MCP TypeScript SDK" },
-    { fullName: "modelcontextprotocol/python-sdk", category: "MCP", focus: "MCP Python SDK" },
-    { fullName: "modelcontextprotocol/inspector", category: "MCP", focus: "MCP debugging and inspection" },
-    { fullName: "modelcontextprotocol/registry", category: "MCP", focus: "MCP server registry" },
-    { fullName: "lastmile-ai/mcp-agent", category: "MCP", focus: "MCP agent workflow framework" },
-    { fullName: "punkpeye/awesome-mcp-servers", category: "MCP", focus: "curated MCP server directory" },
-    { fullName: "contains-studio/agents", category: "AI agents", focus: "Claude Code agent packs" },
-    { fullName: "karpathy/nanoGPT", category: "AI engineering", focus: "small GPT training" },
-    { fullName: "karpathy/nanochat", category: "AI engineering", focus: "minimal ChatGPT stack" },
-    { fullName: "karpathy/llm.c", category: "AI engineering", focus: "LLM training in C/CUDA" },
-    { fullName: "karpathy/llama2.c", category: "AI engineering", focus: "single-file Llama inference" },
-    { fullName: "promptfoo/promptfoo", category: "AI evals", focus: "LLM evals and prompt testing" },
-    { fullName: "confident-ai/deepeval", category: "AI evals", focus: "LLM evaluation framework" },
-    { fullName: "langfuse/langfuse", category: "AI evals", focus: "LLM observability and evals" },
-    { fullName: "microsoft/promptflow", category: "AI evals", focus: "LLM app evaluation workflows" },
-    { fullName: "triggerdotdev/trigger.dev", category: "Workflow automation", focus: "durable workflow platform" },
-    { fullName: "temporalio/sdk-typescript", category: "Workflow automation", focus: "TypeScript workflow SDK" },
-    { fullName: "pipedreamhq/pipedream", category: "Workflow automation", focus: "integration and workflow automation" }
-];
+function readWatchlists() {
+    return JSON.parse(readFileSync(WATCHLIST_FILE, "utf8"));
+}
+
+export const repoDefinitions = readWatchlists().repos;
 
 function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);

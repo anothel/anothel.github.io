@@ -38,6 +38,11 @@ function assertTimestamp(value, label) {
     assert.match(String(value || ""), /^\d{4}-\d{2}-\d{2}T/, label);
 }
 
+function assertNonEmptyString(value, label) {
+    assert.equal(typeof value, "string", label);
+    assert.notEqual(value.trim(), "", label);
+}
+
 function assertSafeUrl(value, label) {
     const url = String(value || "");
     assert.ok(/^https?:\/\//.test(url) || /^(\.\.\/|\.\/|\/)?[a-z0-9._/-]+/i.test(url), label);
@@ -135,6 +140,30 @@ test("module item urls and scores stay within display contract", () => {
     for (const item of links.links) {
         assertSafeUrl(item.url, `link ${item.title}`);
         assert.ok(item.summary, `link ${item.title} summary`);
+    }
+});
+
+test("watchlist definitions stay editable data with stable fields", () => {
+    const watchlists = json("data/watchlists.json");
+    assert.ok(Array.isArray(watchlists.packages), "watchlist packages");
+    assert.ok(Array.isArray(watchlists.repos), "watchlist repos");
+
+    const packageNames = new Set();
+    for (const item of watchlists.packages) {
+        assertNonEmptyString(item.name, "package name");
+        assertNonEmptyString(item.category, `${item.name} category`);
+        assertNonEmptyString(item.focus, `${item.name} focus`);
+        assert.equal(packageNames.has(item.name), false, `${item.name} duplicate`);
+        packageNames.add(item.name);
+    }
+
+    const repoNames = new Set();
+    for (const item of watchlists.repos) {
+        assertNonEmptyString(item.fullName, "repo fullName");
+        assertNonEmptyString(item.category, `${item.fullName} category`);
+        assertNonEmptyString(item.focus, `${item.fullName} focus`);
+        assert.equal(repoNames.has(item.fullName.toLowerCase()), false, `${item.fullName} duplicate`);
+        repoNames.add(item.fullName.toLowerCase());
     }
 });
 

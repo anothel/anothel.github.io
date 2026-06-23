@@ -14,6 +14,10 @@ function readJson(path) {
     return JSON.parse(readFileSync(path, "utf8"));
 }
 
+test("default package definitions come from checked-in watchlist data", () => {
+    assert.deepEqual(packageDefinitions, readJson("data/watchlists.json").packages);
+});
+
 test("buildPackageRows sorts packages by downloads and formats rows", () => {
     const rows = buildPackageRows(
         [
