@@ -60,7 +60,6 @@ test("applyEmptyCollectionFallback keeps previous non-empty data and marks stale
             staleButSafe: true,
             fallbackReason: "No repo rows fetched",
             previousUpdated: "2026-06-19",
-            attemptedAt: "2026-06-20T00:00:00.000Z",
             rateLimited: true,
             errors: [{ name: "openai/codex", error: "403 rate limit exceeded" }]
         },

@@ -26,7 +26,6 @@ const sourceMetaKeys = new Set([
     "staleButSafe",
     "fallbackReason",
     "previousUpdated",
-    "attemptedAt",
     "rateLimited"
 ]);
 const sectionIds = new Set(["start", "skim", "reference"]);

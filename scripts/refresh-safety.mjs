@@ -38,7 +38,6 @@ function markSourceMeta(sourceMeta, previousCount, options, nextData) {
         staleButSafe: true,
         fallbackReason: options.fallbackReason,
         previousUpdated: options.previousUpdated,
-        attemptedAt: nextData.generatedAt,
         rateLimited: flags.rateLimited,
         ...(errors.length > 0 ? { errors } : {})
     }));

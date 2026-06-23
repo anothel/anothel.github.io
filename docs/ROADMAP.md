@@ -116,7 +116,6 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- **sourceMeta marker cleanup**: simplify markers after Status proves which states users need.
 - **Watchlist definitions as data**: move source definitions out of update scripts after updater behavior is stable.
 
 ### P2 - Framework / Architecture Later
@@ -171,6 +170,17 @@ Success metric:
 - A partial refresh can be understood from Status without reading updater code.
 
 ## Recently Completed
+
+### 2026-06-23 - P1 sourceMeta Marker Cleanup
+
+Goal: keep source health metadata limited to fields that Status and refresh reports explain.
+
+- Done: removed unused unrendered fallback marker from fallback source metadata.
+- Done: tightened source metadata schema so unknown rendered-state markers are rejected.
+- Verified: source metadata, fallback safety, Status, DataHealth, and refresh-report tests pass.
+
+Success metric:
+- Fallback source metadata now keeps only the markers surfaced by Status, README, and refresh reports.
 
 ### 2026-06-22 - P1 Update-All / Validate-Data Workflow Consolidation
 
