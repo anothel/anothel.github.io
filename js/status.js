@@ -126,7 +126,7 @@ export function renderStatusSummary(summary) {
             <strong>${escapeHtml(summary.healthLabel)}</strong>
         </article>
         <article class="stat-card">
-            <span>Last refresh</span>
+            <span>Data date</span>
             <strong>${escapeHtml(summary.updated)}</strong>
         </article>
     `;
@@ -196,7 +196,7 @@ function applyStatus(root, manifest, datasets) {
         const sourceMeta = rows.map((row) => ({ status: row.status }));
         dataMode.textContent = globalThis.DataHealth?.dataModeText
             ? globalThis.DataHealth.dataModeText(sourceMeta)
-            : "Checked-in data loaded. Scheduled workflow keeps it fresh.";
+            : "Source health unavailable. Existing pages remain usable.";
     }
 }
 

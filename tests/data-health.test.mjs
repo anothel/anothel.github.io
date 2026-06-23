@@ -54,11 +54,15 @@ test("DataHealth describes fallback and partial modes", () => {
 
     assert.equal(
         DataHealth.dataModeText({ status: "fallback" }),
-        "Using static fallback because live data could not be loaded."
+        "Source health fallback. Previous data remains available."
     );
     assert.equal(
         DataHealth.dataModeText({ status: "partial" }),
-        "Latest checked-in data loaded with partial source failures."
+        "Source health partial. Usable data remains available."
+    );
+    assert.equal(
+        DataHealth.dataModeText({ status: "ok" }),
+        "Source health ok. Data date is current."
     );
 });
 

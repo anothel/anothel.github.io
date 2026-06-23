@@ -162,10 +162,10 @@ export function renderTodayStatus(data) {
     const total = totalSectionItems(data.sections);
     const status = data.sourceMeta?.status || "ok";
 
-    if (status === "fallback") return `${total} generated picks. Using static fallback because live data could not be loaded.`;
-    if (status === "partial") return `${total} generated picks from partial source data. Usable picks remain available.`;
+    if (status === "fallback") return `${total} generated picks. Source health fallback. Previous data remains available.`;
+    if (status === "partial") return `${total} generated picks. Source health partial. Usable data remains available.`;
     if (status === "error") return `${total} generated picks from failed source refresh. Check Status before trusting freshness.`;
-    return `${total} generated picks. Latest checked-in data loaded.`;
+    return `${total} generated picks. Source health ok. Data date is current.`;
 }
 
 function renderToday(data) {

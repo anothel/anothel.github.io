@@ -37,8 +37,9 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Use **Reference shelf** for checked-in curated links.
 - Use **Saved queue** or **Review later** for local browser-saved items.
 - Use **Tracked signals** for normalized items coming from HN, GitHub, npm, repos, packages, and links.
-- Use **Data last refreshed** for checked-in data dates.
-- Use **Generated** for derived pages such as Today.
+- Use **Data date** for checked-in data dates.
+- Use **Generated at** for derived pages such as Today.
+- Use **Source health** for ok, partial, error, and fallback states.
 - Use **Partial** only with a short explanation of whether data remains usable.
 
 ## Deferred Decisions

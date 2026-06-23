@@ -270,14 +270,14 @@ test("renderTodayStatus explains partial and fallback generated data", () => {
             sourceMeta: { status: "partial" },
             sections: [{ items: [{}, {}] }]
         }),
-        "2 generated picks from partial source data. Usable picks remain available."
+        "2 generated picks. Source health partial. Usable data remains available."
     );
     assert.equal(
         renderTodayStatus({
             sourceMeta: { status: "fallback" },
             sections: []
         }),
-        "0 generated picks. Using static fallback because live data could not be loaded."
+        "0 generated picks. Source health fallback. Previous data remains available."
     );
 });
 

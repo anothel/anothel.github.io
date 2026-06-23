@@ -568,6 +568,24 @@ test("source wording distinguishes origin filters from data status", () => {
     }
 });
 
+test("freshness vocabulary uses data date, generated at, and source health", () => {
+    assert.match(read("index.html"), /<span>Data date<\/span>/);
+    assert.doesNotMatch(read("index.html"), /Freshness/);
+    assert.match(read("today/index.html"), /Generated at <span data-today-updated>/);
+    assert.match(read("status/index.html"), /<span>Data date<\/span>/);
+    assert.match(read("status/index.html"), /Source health/);
+
+    for (const path of ["trends/index.html", "packages/index.html", "repos/index.html", "links/index.html"]) {
+        assert.match(read(path), /Data date <span data-updated>/, path);
+        assert.match(read(path), /Source health/, path);
+    }
+
+    for (const [path] of topicPages) {
+        assert.match(read(path), /<span>Data date<\/span>/, path);
+        assert.doesNotMatch(read(path), /Last refresh/, path);
+    }
+});
+
 test("links page owns the links queue module", () => {
     const links = read("links/index.html");
 

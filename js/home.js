@@ -487,7 +487,7 @@ function applyOverview(root, manifest) {
     if (total) total.textContent = String(overview.totalItems);
     if (live) live.textContent = overview.healthLabel;
     if (updated) updated.textContent = overview.updated;
-    if (freshness) freshness.textContent = overview.updated === "-" ? "unknown" : "fresh";
+    if (freshness) freshness.textContent = overview.updated === "-" ? "unknown" : "current";
 }
 
 function applyRoutes(root, manifest) {

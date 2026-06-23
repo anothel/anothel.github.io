@@ -29,6 +29,16 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 Imported backlog is useful and should not be treated as throwaway feedback. The split below records what moves into the current roadmap, what is deferred, and what is rejected for now.
 
+## Audit Triage 2026-06-23
+
+Imported audit confirmed the current direction and ranked static trust work first.
+
+- Done: static fallback tests already covered Home, Today, Status, and module dates.
+- Done: topic fallback counts/dates now match current data.
+- Done: public copy now uses Data date, Generated at, and Source health instead of freshness/fallback implementation wording.
+- Keep next: page role copy, score explanation, Explore mobile density, Review empty/local state, and a11y pass.
+- Cut for now: React SPA and broad framework rewrite before static trust work is stable.
+
 ### P0 - Do Now
 
 Goal: make the current static site trustworthy and understandable before changing frameworks.

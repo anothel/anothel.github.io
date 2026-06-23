@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import vm from "node:vm";
 
 function read(path) {
     return readFileSync(path, "utf8");
@@ -21,7 +22,15 @@ const pages = [
     "trends/index.html",
     "packages/index.html",
     "repos/index.html",
-    "links/index.html"
+    "links/index.html",
+    "topics/ai-agents/index.html",
+    "topics/mcp/index.html",
+    "topics/agent-skills/index.html"
+];
+const topicPages = [
+    ["topics/ai-agents/index.html", "AI agents"],
+    ["topics/mcp/index.html", "MCP"],
+    ["topics/agent-skills/index.html", "Agent skills"]
 ];
 
 function moduleTotal() {
@@ -39,21 +48,53 @@ function moduleHealth() {
         .join(" / ");
 }
 
+function sourceHealth() {
+    const sources = manifest.modules.flatMap((module) => {
+        const sourceMeta = json(module.data).sourceMeta;
+        return Array.isArray(sourceMeta) ? sourceMeta : [sourceMeta];
+    });
+    const counts = sources.reduce((summary, source) => {
+        summary[source.status] = (summary[source.status] || 0) + 1;
+        return summary;
+    }, {});
+    return ["ok", "partial", "error", "fallback"]
+        .filter((status) => counts[status] > 0)
+        .map((status) => `${counts[status]} ${status}`)
+        .join(" / ");
+}
+
 function todayStatusText() {
     const total = today.sections.reduce((sum, section) => sum + section.items.length, 0);
     const status = today.sourceMeta?.status || "ok";
 
-    if (status === "fallback") return `${total} generated picks. Using static fallback because live data could not be loaded.`;
-    if (status === "partial") return `${total} generated picks from partial source data. Usable picks remain available.`;
+    if (status === "fallback") return `${total} generated picks. Source health fallback. Previous data remains available.`;
+    if (status === "partial") return `${total} generated picks. Source health partial. Usable data remains available.`;
     if (status === "error") return `${total} generated picks from failed source refresh. Check Status before trusting freshness.`;
-    return `${total} generated picks. Latest checked-in data loaded.`;
+    return `${total} generated picks. Source health ok. Data date is current.`;
 }
 
 function dataModeText() {
     const health = moduleHealth();
-    if (health.includes("partial")) return "Latest checked-in data loaded with partial source failures.";
-    if (health.includes("fallback")) return "Using static fallback because live data could not be loaded.";
-    return "Latest checked-in data loaded.";
+    if (health.includes("partial")) return "Source health partial. Usable data remains available.";
+    if (health.includes("fallback")) return "Source health fallback. Previous data remains available.";
+    return "Source health ok. Data date is current.";
+}
+
+function topicApp() {
+    const context = { console };
+    vm.runInNewContext(read("js/topics.js"), context);
+    return context.TopicApp;
+}
+
+function topicSummary(topic) {
+    const app = topicApp();
+    const sources = {
+        trends: json("data/trends.json"),
+        packages: json("data/packages.json"),
+        repos: json("data/repos.json"),
+        links: json("data/links.json")
+    };
+    return app.topicSummary(app.topicItems(sources, topic));
 }
 
 test("home static fallback matches current manifest summary", () => {
@@ -79,7 +120,7 @@ test("status static fallback matches current manifest summary", () => {
     const html = read("status/index.html");
 
     assert.match(html, new RegExp(`<strong data-status-total>${moduleTotal()}</strong>`));
-    assert.match(html, new RegExp(`<strong data-status-health>${moduleHealth()}</strong>`));
+    assert.match(html, new RegExp(`<strong data-status-health>${sourceHealth()}</strong>`));
     assert.match(html, new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
     assert.match(html, new RegExp(dataModeText().replaceAll(".", "\\.")));
 });
@@ -106,10 +147,21 @@ test("topic pages keep checked-in judgment notes without JavaScript", () => {
     }
 });
 
+test("topic page static fallback summaries match current topic data", () => {
+    for (const [path, topic] of topicPages) {
+        const html = read(path);
+        const summary = topicSummary(topic);
+
+        assert.match(html, new RegExp(`<strong data-topic-total>${summary.total}</strong>`), path);
+        assert.match(html, new RegExp(`<strong data-topic-modules>${summary.modules}</strong>`), path);
+        assert.match(html, new RegExp(`<strong data-topic-updated>${summary.updated}</strong>`), path);
+    }
+});
+
 test("checked-in fallback copy avoids stale internal implementation language", () => {
     for (const path of pages) {
         const html = read(path);
         assert.doesNotMatch(html, /2026-06-14|2026-06-15|2026-06-19/, path);
-        assert.doesNotMatch(html, /Static fallback|fetch is available|checked-in JSON/, path);
+        assert.doesNotMatch(html, /Static fallback|fetch is available|checked-in JSON|checked-in data/i, path);
     }
 });

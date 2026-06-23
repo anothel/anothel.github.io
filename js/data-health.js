@@ -78,10 +78,10 @@
 
     function dataModeText(sourceMeta) {
         const status = aggregateSourceStatus(sourceMeta);
-        if (status === "fallback") return "Using static fallback because live data could not be loaded.";
-        if (status === "partial") return "Latest checked-in data loaded with partial source failures.";
-        if (status === "error") return "Latest checked-in data loaded, but source refresh failed.";
-        if (status === "ok") return "Latest checked-in data loaded.";
+        if (status === "fallback") return "Source health fallback. Previous data remains available.";
+        if (status === "partial") return "Source health partial. Usable data remains available.";
+        if (status === "error") return "Source health failed. Check Status before trusting freshness.";
+        if (status === "ok") return "Source health ok. Data date is current.";
         return "Data status unavailable.";
     }
 
