@@ -165,6 +165,18 @@ test("watchlist definitions stay editable data with stable fields", () => {
         assert.equal(repoNames.has(item.fullName.toLowerCase()), false, `${item.fullName} duplicate`);
         repoNames.add(item.fullName.toLowerCase());
     }
+
+    const linkUrls = new Set();
+    assert.ok(Array.isArray(watchlists.links), "watchlist links");
+    for (const item of watchlists.links) {
+        assertNonEmptyString(item.title, "link title");
+        assertNonEmptyString(item.category, `${item.title} category`);
+        assertNonEmptyString(item.kind, `${item.title} kind`);
+        assertSafeUrl(item.url, `${item.title} url`);
+        assertNonEmptyString(item.summary, `${item.title} summary`);
+        assert.equal(linkUrls.has(item.url), false, `${item.url} duplicate`);
+        linkUrls.add(item.url);
+    }
 });
 
 test("checked-in sources normalize to Signal Schema v2 items", () => {

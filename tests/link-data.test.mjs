@@ -1,7 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 import { buildLinkRows, linkDefinitions } from "../scripts/update-links.mjs";
+
+function readJson(path) {
+    return JSON.parse(readFileSync(path, "utf8"));
+}
+
+test("default link definitions come from checked-in watchlist data", () => {
+    assert.deepEqual(linkDefinitions, readJson("data/watchlists.json").links);
+});
 
 test("buildLinkRows sorts links by category and title", () => {
     const rows = buildLinkRows([

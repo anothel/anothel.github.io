@@ -17,7 +17,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `links/index.html`: curated reference queue
 - `css/site.css`: site-specific styles
 - `data/trends.json`: static seed data
-- `data/watchlists.json`: package and repo watchlist definitions used by updater scripts
+- `data/watchlists.json`: package, repo, and curated link definitions used by updater scripts
 - `data/today.json`: generated priority brief data
 - `data/manifest.json`: module index and data freshness summary
 - `js/home.js`: home overview and current signal rendering
@@ -27,7 +27,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `scripts/update-trends.mjs`: updates trend data from HN, GitHub, and npm
 - `scripts/update-packages.mjs`: updates package watchlist data from npm
 - `scripts/update-repos.mjs`: updates repository watchlist data from GitHub
-- `scripts/update-links.mjs`: updates curated links data from local definitions
+- `scripts/update-links.mjs`: updates curated links data from watchlist definitions
 - `scripts/update-today.mjs`: builds the Today priority brief from generated data
 - `scripts/update-manifest.mjs`: updates the module manifest from generated data files
 - `scripts/update-all.mjs`: runs every data updater in the scheduled order

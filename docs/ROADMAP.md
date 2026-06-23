@@ -116,7 +116,7 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- No active P1 source-data cleanup item remains after watchlist definitions moved to data.
+- No active P1 source-data cleanup item remains after package, repo, and link definitions moved to data.
 
 ### P2 - Framework / Architecture Later
 
@@ -156,15 +156,15 @@ Success metric:
 
 ### 2026-06-23 - P1 Watchlist Definitions As Data
 
-Goal: make package and repo source lists easier to edit without touching updater logic.
+Goal: make package, repo, and link source lists easier to edit without touching updater logic.
 
-- Done: added `data/watchlists.json` for npm package and GitHub repo definitions.
-- Done: package and repo updater scripts now load default definitions from checked-in data.
+- Done: added `data/watchlists.json` for npm package, GitHub repo, and curated link definitions.
+- Done: package, repo, and link updater scripts now load default definitions from checked-in data.
 - Done: tests fail if exported defaults drift from `data/watchlists.json`.
-- Deferred: Links and Trends use different source shapes, so they stay in scripts until a shared data shape is worth it.
+- Deferred: Trends use query groups, npm package inputs, and scoring heuristics, so they stay in scripts until a shared data shape is worth it.
 
 Success metric:
-- Updating package/repo watchlists no longer requires editing fetch/update logic.
+- Updating package, repo, and link watchlists no longer requires editing fetch/update logic.
 
 ### 2026-06-23 - P1 sourceMeta Marker Cleanup
 
