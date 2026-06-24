@@ -67,6 +67,10 @@ test("primary navigation remains reachable while scrolling", () => {
     assert.match(styles, /\.site-nav\s*{[^}]*overflow-x: auto/s);
 });
 
+test("keyboard focus styles cover interactive disclosure controls", () => {
+    assert.match(styles, /a:focus-visible,[\s\S]*summary:focus-visible,[\s\S]*button:focus-visible\s*{[^}]*outline: 3px solid var\(--accent\)/s);
+});
+
 test("legacy sidebar filters avoid overlapping the sticky navigation", () => {
     assert.match(styles, /\.sidebar \.panel\s*{[^}]*top: 148px/s);
     assert.match(styles, /\.sidebar \.panel\s*{[^}]*max-height: calc\(100vh - 172px\)/s);

@@ -281,7 +281,7 @@
     function renderTopicPinAction(topic, pinnedTopics = new Set()) {
         const pinned = pinnedTopics.has(topic);
         return `
-            <button class="pin-topic-button" type="button" data-pin-topic="${escapeHtml(topic)}" aria-pressed="${pinned ? "true" : "false"}">
+            <button class="pin-topic-button" type="button" data-pin-topic="${escapeHtml(topic)}" aria-pressed="${pinned ? "true" : "false"}" aria-label="${escapeHtml(pinned ? `Unpin ${topic} topic` : `Pin ${topic} topic`)}">
                 ${pinned ? "Pinned topic" : "Pin topic"}
             </button>
         `;

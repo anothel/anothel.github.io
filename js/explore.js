@@ -394,7 +394,7 @@
                     ${item.sourceContext ? `<p class="source-context">${escapeHtml(item.sourceContext)}</p>` : ""}
                     <div class="explore-card-actions">
                         <a href="${safeHref(item.url)}">Open item</a>
-                        <button type="button" data-save-id="${escapeHtml(item.id)}" aria-pressed="${saved ? "true" : "false"}">
+                        <button type="button" data-save-id="${escapeHtml(item.id)}" aria-pressed="${saved ? "true" : "false"}" aria-label="${escapeHtml(saved ? `Saved ${item.title} for Review` : `Save ${item.title} for Review`)}">
                             ${saved ? "Saved" : "Save"}
                         </button>
                     </div>
@@ -415,7 +415,7 @@
                     <strong>${escapeHtml(item.title)}</strong>
                     <span>${escapeHtml([item.module, item.metric, item.sourceContext].filter(Boolean).join(" / "))}</span>
                 </div>
-                <button type="button" data-remove-id="${escapeHtml(item.id)}">Remove</button>
+                <button type="button" data-remove-id="${escapeHtml(item.id)}" aria-label="Remove ${escapeHtml(item.title)} from saved queue">Remove</button>
             </article>
         `).join("");
     }
@@ -435,8 +435,8 @@
                     <p>${escapeHtml(lens.description)}</p>
                     <small>${escapeHtml(top)}</small>
                     <div class="topic-lens-actions">
-                        <button type="button" data-focus-lens="${escapeHtml(lens.focus)}" aria-pressed="${pressed ? "true" : "false"}">Use lens</button>
-                        <button class="pin-topic-button" type="button" data-pin-topic="${escapeHtml(lens.focus)}" aria-pressed="${pinned ? "true" : "false"}">${pinned ? "Pinned" : "Pin"}</button>
+                        <button type="button" data-focus-lens="${escapeHtml(lens.focus)}" aria-pressed="${pressed ? "true" : "false"}" aria-label="Use ${escapeHtml(lens.label)} lens">Use lens</button>
+                        <button class="pin-topic-button" type="button" data-pin-topic="${escapeHtml(lens.focus)}" aria-pressed="${pinned ? "true" : "false"}" aria-label="${escapeHtml(pinned ? `Unpin ${lens.label} topic` : `Pin ${lens.label} topic`)}">${pinned ? "Pinned" : "Pin"}</button>
                         <a href="${safeHref(lens.route)}">Open topic</a>
                     </div>
                 </article>

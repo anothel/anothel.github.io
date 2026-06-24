@@ -31,17 +31,12 @@ No active P0 work. Keep security, data-loss prevention, static safety, and check
 
 ## P1 - Active / Next
 
-1. **Accessibility pass**
-   - Check keyboard reachability, visible focus, form labels, button names, landmark order, and no-JS fallbacks across Home, Today, Explore, Review, Status, and module pages.
-   - Prefer markup/CSS fixes over new JavaScript.
-   - Acceptance: tests or static assertions catch missing labels, unsafe focus traps, and broken landmarks.
-
-2. **Shared UI helpers**
+1. **Shared UI helpers**
    - Extract repeated `escapeHtml`, `safeHref`, and date/status formatting only when touching those renderers anyway.
    - Do not create a design system or helper package just to satisfy this item.
    - Acceptance: one touched flow removes real duplication without changing behavior.
 
-3. **Trends input data shape**
+2. **Trends input data shape**
    - Move trend query groups and npm trend inputs out of updater logic only if editing those sources becomes recurring work.
    - Keep scoring heuristics in code until they have a stable data contract.
    - Acceptance: changing trend source inputs does not require editing fetch/update control flow.

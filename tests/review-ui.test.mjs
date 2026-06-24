@@ -120,11 +120,15 @@ test("Review renders queue and selected detail with actions", () => {
 
     assert.match(queue, /data-review-select-id="repos:https:\/\/example\.com\/skills"/);
     assert.match(queue, /aria-selected="true"/);
+    assert.match(queue, /aria-label="Select @modelcontextprotocol\/sdk"/);
     assert.match(queue, /@modelcontextprotocol\/sdk/);
     assert.match(detail, /Why this matters/);
     assert.match(detail, /Source context/);
     assert.match(detail, /Signal fit 88/);
     assert.match(detail, /href="https:\/\/example\.com\/mcp"/);
+    assert.match(detail, /aria-label="Mark @modelcontextprotocol\/sdk read"/);
+    assert.match(detail, /aria-label="Mark @modelcontextprotocol\/sdk done"/);
+    assert.match(detail, /aria-label="Remove @modelcontextprotocol\/sdk from Review"/);
     assert.match(detail, /data-review-remove-id="packages:https:\/\/example\.com\/mcp"/);
     assert.match(detail, /href="..\/explore\/index\.html\?focus=MCP"/);
 });
@@ -175,6 +179,8 @@ test("Review rendering escapes generated text and blocks unsafe item links", () 
     assert.match(detail, /href="#"/);
     assert.match(detail, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
     assert.match(detail, /bad &quot;summary&quot;/);
+    assert.match(detail, /aria-label="Mark &lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt; read"/);
+    assert.match(detail, /aria-label="Remove &lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt; from Review"/);
 });
 
 test("Review browser init renders saved queue and removes items", async () => {

@@ -136,7 +136,7 @@
 
         const activeId = selectedId || items[0].id;
         return items.map((item) => `
-            <button class="review-queue-item" type="button" data-review-select-id="${escapeHtml(item.id)}" aria-selected="${item.id === activeId ? "true" : "false"}">
+            <button class="review-queue-item" type="button" data-review-select-id="${escapeHtml(item.id)}" aria-selected="${item.id === activeId ? "true" : "false"}" aria-label="Select ${escapeHtml(item.title)}">
                 <strong>${escapeHtml(item.title)}</strong>
                 <span>${escapeHtml([item.module, item.metric, item.category].filter(Boolean).join(" / "))}</span>
                 <small>${escapeHtml(statusLabel(item.savedStatus))} / ${escapeHtml(savedDateLabel(item.savedAt))}</small>
@@ -184,9 +184,9 @@
                 </div>
                 <div class="review-actions">
                     <a href="${safeHref(item.url)}">Open item</a>
-                    <button type="button" data-review-status-id="${escapeHtml(item.id)}" data-review-status="read">Mark read</button>
-                    <button type="button" data-review-status-id="${escapeHtml(item.id)}" data-review-status="done">Mark done</button>
-                    <button type="button" data-review-remove-id="${escapeHtml(item.id)}">Remove</button>
+                    <button type="button" data-review-status-id="${escapeHtml(item.id)}" data-review-status="read" aria-label="Mark ${escapeHtml(item.title)} read">Mark read</button>
+                    <button type="button" data-review-status-id="${escapeHtml(item.id)}" data-review-status="done" aria-label="Mark ${escapeHtml(item.title)} done">Mark done</button>
+                    <button type="button" data-review-remove-id="${escapeHtml(item.id)}" aria-label="Remove ${escapeHtml(item.title)} from Review">Remove</button>
                     <a href="${safeHref(similarExploreHref(item))}">Find similar in Explore</a>
                 </div>
             </article>

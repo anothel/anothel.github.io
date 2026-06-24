@@ -284,6 +284,8 @@ test("Explore renders merged source context in cards and saved queue", () => {
     assert.match(cards, /Reusable &lt;skills&gt;\./);
     assert.doesNotMatch(cards, /Reusable <skills>\./);
     assert.match(cards, /aria-label="Signal fit score 96"/);
+    assert.match(cards, /aria-label="Saved Skills repo for Review"/);
+    assert.match(saved, /aria-label="Remove Skills repo from saved queue"/);
     assert.match(cards, /Signal fit 96/);
     assert.match(cards, /class="quality-marker"/);
 });
@@ -372,6 +374,8 @@ test("Explore builds topic lenses with counts, module spread, and topic routes",
     const html = app.renderTopicLenses(lenses, "MCP");
     assert.match(html, /data-focus-lens="MCP"/);
     assert.match(html, /aria-pressed="true"/);
+    assert.match(html, /aria-label="Use MCP lens"/);
+    assert.match(html, /aria-label="Pin AI agents topic"/);
     assert.match(html, /Open topic/);
     assert.match(html, /2 items \/ 2 modules/);
     assert.match(html, /href="..\/topics\/agent-skills\/index\.html"/);
@@ -495,9 +499,11 @@ test("Explore topic lenses render pin state", () => {
     assert.match(html, /data-pin-topic="MCP"/);
     assert.match(html, /Pinned/);
     assert.match(html, /aria-pressed="true"/);
+    assert.match(html, /aria-label="Unpin MCP topic"/);
     assert.match(html, /data-pin-topic="AI agents"/);
     assert.match(html, />Pin</);
     assert.match(html, /aria-pressed="false"/);
+    assert.match(html, /aria-label="Pin AI agents topic"/);
 });
 
 test("Explore saved store reads, toggles, removes, and ignores broken storage", () => {
@@ -624,6 +630,7 @@ test("Explore rendering escapes generated text and blocks unsafe links", () => {
     assert.match(html, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;summary&quot;/);
     assert.match(html, /aria-pressed="true"/);
+    assert.match(html, /aria-label="Saved &lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt; for Review"/);
 });
 
 test("Explore browser init renders stats, health, filters, and saved queue", async () => {

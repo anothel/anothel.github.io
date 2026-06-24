@@ -244,8 +244,10 @@ test("Topic pinned store and renderer expose current topic state", () => {
     assert.match(pinned, /data-pin-topic="MCP"/);
     assert.match(pinned, /Pinned topic/);
     assert.match(pinned, /aria-pressed="true"/);
+    assert.match(pinned, /aria-label="Unpin MCP topic"/);
     assert.match(unpinned, /Pin topic/);
     assert.match(unpinned, /aria-pressed="false"/);
+    assert.match(unpinned, /aria-label="Pin AI agents topic"/);
 });
 
 test("Topic dashboard renderers escape text and preserve safe topic routes", () => {
