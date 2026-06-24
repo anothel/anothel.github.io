@@ -120,6 +120,34 @@ test("today brief uses stable sections and safe links", () => {
     }
 });
 
+test("checked-in refresh report describes the latest data update", () => {
+    const report = json("data/refresh-report.json");
+
+    assertTimestamp(report.generatedAt, "refresh report generatedAt");
+    assertDate(report.manifestUpdated, "refresh report manifestUpdated");
+    assert.ok(statusValues.has(report.totals.status), "refresh report status");
+    assert.equal(typeof report.totals.modules, "number", "refresh report module count");
+    assert.equal(typeof report.totals.sources, "number", "refresh report source count");
+    assert.equal(typeof report.totals.items, "number", "refresh report item count");
+    assert.equal(typeof report.totals.errors, "number", "refresh report non-ok count");
+    assert.ok(Array.isArray(report.changedModules), "refresh report changed modules");
+    assert.equal(typeof report.runContext, "object", "refresh report run context");
+
+    for (const module of report.modules) {
+        assertNonEmptyString(module.id, "refresh report module id");
+        assertNonEmptyString(module.title, `${module.id} title`);
+        assert.ok(statusValues.has(module.status), `${module.id} status`);
+        assert.equal(typeof module.changed, "boolean", `${module.id} changed`);
+        assert.ok(Array.isArray(module.sources), `${module.id} sources`);
+        for (const source of module.sources) {
+            assert.ok(statusValues.has(source.status), `${module.id} source status`);
+            assert.equal(typeof source.count, "number", `${module.id} source count`);
+            assert.ok(Array.isArray(source.errors), `${module.id} source errors`);
+            assert.ok(Array.isArray(source.safetyDetails), `${module.id} source safety details`);
+        }
+    }
+});
+
 test("module item urls and scores stay within display contract", () => {
     const trends = json("data/trends.json");
     const packages = json("data/packages.json");

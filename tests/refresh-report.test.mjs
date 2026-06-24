@@ -28,6 +28,13 @@ const manifest = {
 
 test("refresh report summarizes module and source health", () => {
     const report = buildRefreshReport(manifest, {
+        __changedFiles: ["data/packages.json"],
+        __runContext: {
+            reason: "manual retry",
+            eventName: "workflow_dispatch",
+            runId: "123",
+            refName: "main"
+        },
         packages: {
             sourceMeta: {
                 name: "npm",
@@ -53,6 +60,14 @@ test("refresh report summarizes module and source health", () => {
     assert.equal(report.totals.items, 3);
     assert.equal(report.totals.status, "partial");
     assert.equal(report.totals.errors, 1);
+    assert.equal(report.modules[0].changed, true);
+    assert.deepEqual(report.changedModules, [{ id: "packages", title: "Package watchlist", count: 1, updated: "2026-06-19" }]);
+    assert.deepEqual(report.runContext, {
+        reason: "manual retry",
+        eventName: "workflow_dispatch",
+        runId: "123",
+        refName: "main"
+    });
     assert.equal(report.modules[0].sources[0].coverage, "1/2");
     assert.deepEqual(report.modules[0].sources[0].errors, ["vite: 503 Service Unavailable"]);
 });
@@ -73,8 +88,19 @@ test("refresh report renders markdown for GitHub step summary", () => {
 
     assert.match(markdown, /# Data refresh report/);
     assert.match(markdown, /Reason: manual retry/);
+    assert.match(markdown, /Changed modules: none recorded/);
     assert.match(markdown, /\| packages \| npm \| error \| 0 \| 2026-06-19T00:00:00.000Z \| timeout \\| retry later \|/);
     assert.match(markdown, /Non-ok sources: 2/);
+});
+
+test("refresh report markdown lists changed modules", () => {
+    const report = buildRefreshReport(manifest, {
+        __changedFiles: ["data/packages.json"],
+        packages: { sourceMeta: { name: "npm", status: "ok", count: 1 } }
+    }, "2026-06-20T00:00:00.000Z");
+    const markdown = renderRefreshMarkdown(report);
+
+    assert.match(markdown, /Changed modules: packages/);
 });
 
 test("refresh report renders optional source coverage", () => {

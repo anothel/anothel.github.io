@@ -20,6 +20,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `data/watchlists.json`: package, repo, and curated link definitions used by updater scripts
 - `data/today.json`: generated priority brief data
 - `data/manifest.json`: module index and data freshness summary
+- `data/refresh-report.json`: last refresh run context, changed modules, and source health
 - `js/home.js`: home overview and current signal rendering
 - `js/topic-taxonomy.js`: shared topic labels, routes, descriptions, and matching rules
 - `js/today.js`: Today priority brief rendering
@@ -92,9 +93,9 @@ The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pag
 - Manual note: the `reason` input is copied into the refresh report.
 - Scheduled refresh: `schedule` runs `17 21 * * *` UTC, once per day.
 - Auth: GitHub API calls use `GITHUB_TOKEN` from the workflow environment.
-- Scope: only `data/trends.json`, `data/packages.json`, `data/repos.json`, `data/links.json`, `data/today.json`, and `data/manifest.json` are committed.
+- Scope: only `data/trends.json`, `data/packages.json`, `data/repos.json`, `data/links.json`, `data/today.json`, `data/manifest.json`, and `data/refresh-report.json` are committed.
 - Safety: `concurrency` prevents overlapping data refresh jobs, `node scripts/update-all.mjs` groups each updater in logs, and the workflow runs `node scripts/validate-data.mjs` before committing generated data.
-- Run summary: every workflow run writes a GitHub Step Summary and uploads a `refresh-report` artifact with source status, counts, timestamps, and source errors.
+- Run summary: every workflow run writes a GitHub Step Summary, commits `data/refresh-report.json`, and uploads a `refresh-report` artifact with source status, counts, changed modules, timestamps, and source errors.
 - Failure model: source fetch failures are stored as `error` or `partial` status where the updater can keep useful data. If a full updater produces zero rows but previous checked-in data exists, the updater writes stale but safe fallback data instead of empty data.
 - Fallback markers: fallback source metadata uses `fallbackUsed`, `staleButSafe`, `fallbackReason`, and `rateLimited` when applicable. The Status page and refresh report surface those markers.
 - Local GitHub refresh: set `$env:GITHUB_TOKEN` before running GitHub-backed updaters to avoid low anonymous API limits. Without it, rate limits may appear as `rateLimited` fallback in the report.

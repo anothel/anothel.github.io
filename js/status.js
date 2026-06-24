@@ -1,6 +1,9 @@
 const manifestUrl = typeof document === "undefined"
     ? "data/manifest.json"
     : document.currentScript?.dataset.manifest || "../data/manifest.json";
+const reportUrl = typeof document === "undefined"
+    ? "data/refresh-report.json"
+    : document.currentScript?.dataset.report || "../data/refresh-report.json";
 
 const dataBase = typeof document === "undefined"
     ? ""
@@ -179,6 +182,63 @@ export function renderSourceRows(rows, base = "") {
     `).join("");
 }
 
+function reportContext(report) {
+    return [
+        report.runContext?.reason,
+        report.runContext?.eventName,
+        report.runContext?.runId ? `run ${report.runContext.runId}` : "",
+        report.runContext?.refName
+    ].filter(Boolean).join(" / ") || "No run context recorded.";
+}
+
+function reportAttentionSources(report) {
+    return (report.modules || [])
+        .flatMap((module) => (module.sources || []).map((source) => ({ module, source })))
+        .filter(({ source }) => source.status !== "ok" || (source.errors || []).length > 0);
+}
+
+export function renderRefreshRun(report) {
+    if (!report) return "";
+
+    const changed = report.changedModules || [];
+    const attention = reportAttentionSources(report);
+    const changedText = changed.length
+        ? changed.map((module) => module.title || module.id).join(" / ")
+        : "No data file changes recorded.";
+    const attentionText = attention.length
+        ? attention.slice(0, 4).map(({ module, source }) => `${module.title || module.id}: ${source.source} ${source.status}`).join(" / ")
+        : "No failed, partial, or fallback sources.";
+
+    return `
+        <div class="status-head" aria-hidden="true">
+            <span>Run</span>
+            <span>State</span>
+            <span>Items</span>
+            <span>Changed</span>
+            <span>Context</span>
+            <span>Attention</span>
+        </div>
+        <div class="status-table">
+            <article class="status-row status-${escapeHtml(report.totals?.status || "unknown")}">
+                <span>Last refresh</span>
+                <strong>${escapeHtml(report.generatedAt || "-")}</strong>
+                <span>${escapeHtml(report.totals?.status || "unknown")}</span>
+                <span>${escapeHtml(report.totals?.items || 0)} items</span>
+                <span>${escapeHtml(changedText)}</span>
+                <small>${escapeHtml(reportContext(report))}</small>
+            </article>
+            <article class="status-row status-${attention.length ? "partial" : "ok"}">
+                <span>Attention</span>
+                <strong>${escapeHtml(attention.length)} sources</strong>
+                <span>${escapeHtml(report.totals?.errors || 0)} non-ok</span>
+                <span>${escapeHtml(report.totals?.sources || 0)} total sources</span>
+                <span>${escapeHtml(attentionText)}</span>
+                <small>${escapeHtml(changedText)}</small>
+            </article>
+        </div>
+    `;
+}
+
 function renderSourceCards(rows) {
     if (globalThis.DataHealth?.renderSourceHealth) {
         return globalThis.DataHealth.renderSourceHealth(rows.map((row) => ({
@@ -207,7 +267,7 @@ async function loadDatasets(manifest) {
     return Object.fromEntries(entries);
 }
 
-function applyStatus(root, manifest, datasets) {
+function applyStatus(root, manifest, datasets, report = null) {
     const rows = collectSourceRows(manifest, datasets);
     const summary = buildStatusSummary(manifest, datasets);
     const summarySlots = {
@@ -219,6 +279,7 @@ function applyStatus(root, manifest, datasets) {
     const rowList = root.querySelector("[data-status-rows]");
     const sourceCards = root.querySelector("[data-source-health]");
     const dataMode = root.querySelector("[data-data-mode]");
+    const refreshRun = root.querySelector("[data-refresh-run]");
 
     if (summarySlots.total) summarySlots.total.textContent = String(summary.totalItems);
     if (summarySlots.sources) summarySlots.sources.textContent = String(summary.totalSources);
@@ -226,6 +287,7 @@ function applyStatus(root, manifest, datasets) {
     if (summarySlots.updated) summarySlots.updated.textContent = summary.updated;
     if (rowList) rowList.innerHTML = renderSourceRows(rows, dataBase);
     if (sourceCards) sourceCards.innerHTML = renderSourceCards(rows);
+    if (refreshRun && report) refreshRun.innerHTML = renderRefreshRun(report);
     if (dataMode) {
         const sourceMeta = rows.map((row) => ({ status: row.status }));
         dataMode.textContent = globalThis.DataHealth?.dataModeText
@@ -237,8 +299,11 @@ function applyStatus(root, manifest, datasets) {
 async function init() {
     try {
         const manifest = await readJson(manifestUrl);
-        const datasets = await loadDatasets(manifest);
-        applyStatus(document, manifest, datasets);
+        const [datasets, report] = await Promise.all([
+            loadDatasets(manifest),
+            readJson(reportUrl).catch(() => null)
+        ]);
+        applyStatus(document, manifest, datasets, report);
     } catch {
         const dataMode = document.querySelector("[data-data-mode]");
         if (dataMode) dataMode.textContent = "Status unavailable. Existing checked-in pages remain usable.";

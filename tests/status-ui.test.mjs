@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildStatusSummary, collectSourceRows, renderSourceRows, renderStatusSummary } from "../js/status.js";
+import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows, renderStatusSummary } from "../js/status.js";
 
 const manifest = {
     updated: "2026-06-20",
@@ -132,4 +132,32 @@ test("status rows and summary surface fallback safety detail", () => {
     assert.equal(rows[0].detail, "Fallback - using 2026-06-19 data / using fallback / previous data kept / rate limited / No package rows fetched / previous refresh 2026-06-19");
     assert.match(renderSourceRows(rows), /using fallback \/ previous data kept \/ rate limited/);
     assert.equal(buildStatusSummary(fallbackManifest, fallbackDatasets).healthLabel, "1 fallback");
+});
+
+test("refresh run renderer surfaces checked-in report context safely", () => {
+    const html = renderRefreshRun({
+        generatedAt: "2026-06-24T11:39:53.728Z",
+        runContext: {
+            reason: "manual <retry>",
+            eventName: "workflow_dispatch",
+            runId: "123",
+            refName: "main"
+        },
+        changedModules: [{ id: "packages", title: "Package <watchlist>", count: 33, updated: "2026-06-22" }],
+        totals: { status: "partial", items: 126, errors: 1, sources: 6 },
+        modules: [
+            {
+                id: "packages",
+                title: "Package <watchlist>",
+                sources: [{ source: "npm", status: "partial", errors: ["rate <limit>"] }]
+            }
+        ]
+    });
+
+    assert.match(html, /Last refresh/);
+    assert.match(html, /Package &lt;watchlist&gt;/);
+    assert.match(html, /manual &lt;retry&gt; \/ workflow_dispatch \/ run 123 \/ main/);
+    assert.match(html, /Attention/);
+    assert.doesNotMatch(html, /Package <watchlist>/);
+    assert.doesNotMatch(html, /manual <retry>/);
 });

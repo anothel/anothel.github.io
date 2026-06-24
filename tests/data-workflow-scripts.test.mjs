@@ -11,7 +11,8 @@ test("update-all owns the full data refresh order", () => {
         "scripts/update-repos.mjs",
         "scripts/update-links.mjs",
         "scripts/update-today.mjs",
-        "scripts/update-manifest.mjs"
+        "scripts/update-manifest.mjs",
+        "scripts/report-refresh.mjs"
     ]);
 });
 

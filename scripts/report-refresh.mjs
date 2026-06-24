@@ -1,8 +1,12 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { pathToFileURL } from "node:url";
+import { execFile } from "node:child_process";
+import { resolve } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { promisify } from "node:util";
 
 const DEFAULT_OUT_DIR = new URL("../.refresh-report/", import.meta.url);
 const manifestFile = new URL("../data/manifest.json", import.meta.url);
+const execFileAsync = promisify(execFile);
 
 function sourceList(sourceMeta) {
     if (Array.isArray(sourceMeta)) return sourceMeta;
@@ -74,6 +78,7 @@ export function buildRefreshReport(manifest, datasets, generatedAt = new Date().
     const modules = (manifest.modules || []).map((module) => {
         const dataset = datasets[module.id] || {};
         const sources = summarizeSources(module, dataset);
+        const changed = (datasets.__changedFiles || []).includes(module.data);
 
         return {
             id: module.id,
@@ -81,6 +86,7 @@ export function buildRefreshReport(manifest, datasets, generatedAt = new Date().
             status: module.status || worstStatus(sources.map((source) => source.status)),
             count: module.count || 0,
             updated: module.updated || "-",
+            changed,
             sources
         };
     });
@@ -91,6 +97,15 @@ export function buildRefreshReport(manifest, datasets, generatedAt = new Date().
     return {
         generatedAt,
         manifestUpdated: manifest.updated || "-",
+        runContext: {
+            reason: datasets.__runContext?.reason || "",
+            eventName: datasets.__runContext?.eventName || "",
+            runId: datasets.__runContext?.runId || "",
+            refName: datasets.__runContext?.refName || ""
+        },
+        changedModules: modules
+            .filter((module) => module.changed)
+            .map((module) => ({ id: module.id, title: module.title, count: module.count, updated: module.updated })),
         modules,
         totals: {
             modules: modules.length,
@@ -124,7 +139,11 @@ export function renderRefreshMarkdown(report, context = {}) {
             source.errors.join(" / ") || source.safetyDetails.join(" / ") || source.coverage || "-"
         ])
     );
-    const reason = context.reason ? `\nReason: ${context.reason}\n` : "";
+    const reasonValue = context.reason || report.runContext?.reason;
+    const reason = reasonValue ? `\nReason: ${reasonValue}\n` : "";
+    const changedModules = report.changedModules?.length
+        ? report.changedModules.map((module) => module.id).join(", ")
+        : "none recorded";
 
     return [
         "# Data refresh report",
@@ -136,6 +155,7 @@ export function renderRefreshMarkdown(report, context = {}) {
         `Sources: ${report.totals.sources}`,
         `Items: ${report.totals.items}`,
         `Non-ok sources: ${report.totals.errors}`,
+        `Changed modules: ${changedModules}`,
         reason.trimEnd(),
         "",
         "## Modules",
@@ -165,6 +185,24 @@ async function collectDatasets(manifest) {
     return Object.fromEntries(entries);
 }
 
+async function changedDataFiles() {
+    try {
+        const { stdout } = await execFileAsync("git", ["diff", "--name-only", "--", "data"]);
+        return stdout.split(/\r?\n/).filter(Boolean).map((path) => path.replaceAll("\\", "/"));
+    } catch {
+        return [];
+    }
+}
+
+function runContext() {
+    return {
+        reason: process.env.REFRESH_REASON || "",
+        eventName: process.env.GITHUB_EVENT_NAME || "",
+        runId: process.env.GITHUB_RUN_ID || "",
+        refName: process.env.GITHUB_REF_NAME || ""
+    };
+}
+
 function argValue(name) {
     const index = process.argv.indexOf(name);
     return index >= 0 ? process.argv[index + 1] : undefined;
@@ -175,17 +213,24 @@ async function main() {
         ? new URL(`${argValue("--out-dir").replace(/[\\/]?$/, "/")}`, pathToFileURL(`${process.cwd()}/`))
         : DEFAULT_OUT_DIR;
     const manifest = await readJson(manifestFile);
-    const report = buildRefreshReport(manifest, await collectDatasets(manifest));
+    const datasets = await collectDatasets(manifest);
+    datasets.__changedFiles = await changedDataFiles();
+    datasets.__runContext = runContext();
+    const report = buildRefreshReport(manifest, datasets);
     const markdown = renderRefreshMarkdown(report, { reason: process.env.REFRESH_REASON });
+    const jsonOut = argValue("--json-out");
 
     await mkdir(outDir, { recursive: true });
     await writeFile(new URL("report.json", outDir), `${JSON.stringify(report, null, 2)}\n`, "utf8");
     await writeFile(new URL("summary.md", outDir), markdown, "utf8");
+    if (jsonOut) {
+        await writeFile(resolve(jsonOut), `${JSON.stringify(report, null, 2)}\n`, "utf8");
+    }
 
     if (process.argv.includes("--stdout")) {
         console.log(markdown);
     } else {
-        console.log(`Wrote refresh report to ${new URL("summary.md", outDir).pathname}`);
+        console.log(`Wrote refresh report to ${fileURLToPath(new URL("summary.md", outDir))}`);
     }
 }
 

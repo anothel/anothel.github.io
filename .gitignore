@@ -34,5 +34,6 @@
 # Codex/Superpowers local planning artifacts
 .superpowers/
 .tmp/
+.refresh-report/
 
 docs/superpowers/

@@ -19,7 +19,8 @@ test("data update workflow commits every generated data file", () => {
         "data/repos.json",
         "data/links.json",
         "data/today.json",
-        "data/manifest.json"
+        "data/manifest.json",
+        "data/refresh-report.json"
     ]) {
         assert.match(workflow, new RegExp(file.replace("/", "\\/")));
     }

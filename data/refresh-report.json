@@ -1,0 +1,150 @@
+{
+  "generatedAt": "2026-06-24T11:45:16.421Z",
+  "manifestUpdated": "2026-06-22",
+  "runContext": {
+    "reason": "",
+    "eventName": "",
+    "runId": "",
+    "refName": ""
+  },
+  "changedModules": [],
+  "modules": [
+    {
+      "id": "trends",
+      "title": "Tech trends",
+      "status": "ok",
+      "count": 24,
+      "updated": "2026-06-21",
+      "changed": false,
+      "sources": [
+        {
+          "module": "trends",
+          "source": "Hacker News",
+          "status": "ok",
+          "count": 4,
+          "updatedAt": "2026-06-21T04:54:19.791Z",
+          "coverage": "4/1",
+          "fallbackUsed": false,
+          "staleButSafe": false,
+          "rateLimited": false,
+          "fallbackReason": "",
+          "previousUpdated": "",
+          "safetyDetails": [],
+          "errors": []
+        },
+        {
+          "module": "trends",
+          "source": "GitHub",
+          "status": "ok",
+          "count": 12,
+          "updatedAt": "2026-06-21T04:54:19.791Z",
+          "coverage": "12/16",
+          "fallbackUsed": false,
+          "staleButSafe": false,
+          "rateLimited": false,
+          "fallbackReason": "",
+          "previousUpdated": "",
+          "safetyDetails": [],
+          "errors": []
+        },
+        {
+          "module": "trends",
+          "source": "npm",
+          "status": "ok",
+          "count": 8,
+          "updatedAt": "2026-06-21T04:54:19.791Z",
+          "coverage": "8/28",
+          "fallbackUsed": false,
+          "staleButSafe": false,
+          "rateLimited": false,
+          "fallbackReason": "",
+          "previousUpdated": "",
+          "safetyDetails": [],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "packages",
+      "title": "Package watchlist",
+      "status": "ok",
+      "count": 33,
+      "updated": "2026-06-22",
+      "changed": false,
+      "sources": [
+        {
+          "module": "packages",
+          "source": "npm",
+          "status": "ok",
+          "count": 33,
+          "updatedAt": "2026-06-22T11:54:25.015Z",
+          "coverage": "33/33",
+          "fallbackUsed": false,
+          "staleButSafe": false,
+          "rateLimited": false,
+          "fallbackReason": "",
+          "previousUpdated": "",
+          "safetyDetails": [],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "repos",
+      "title": "Repo watchlist",
+      "status": "ok",
+      "count": 35,
+      "updated": "2026-06-22",
+      "changed": false,
+      "sources": [
+        {
+          "module": "repos",
+          "source": "GitHub",
+          "status": "ok",
+          "count": 35,
+          "updatedAt": "2026-06-22T11:54:25.011Z",
+          "coverage": "35/35",
+          "fallbackUsed": false,
+          "staleButSafe": false,
+          "rateLimited": false,
+          "fallbackReason": "",
+          "previousUpdated": "",
+          "safetyDetails": [],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "links",
+      "title": "Links queue",
+      "status": "ok",
+      "count": 34,
+      "updated": "2026-06-21",
+      "changed": false,
+      "sources": [
+        {
+          "module": "links",
+          "source": "manual",
+          "status": "ok",
+          "count": 34,
+          "updatedAt": "2026-06-21T04:42:42.149Z",
+          "coverage": "34/34",
+          "fallbackUsed": false,
+          "staleButSafe": false,
+          "rateLimited": false,
+          "fallbackReason": "",
+          "previousUpdated": "",
+          "safetyDetails": [],
+          "errors": []
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "modules": 4,
+    "sources": 6,
+    "items": 126,
+    "status": "ok",
+    "errors": 0
+  }
+}

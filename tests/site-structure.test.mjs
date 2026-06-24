@@ -530,6 +530,7 @@ test("status page owns the source health overview", () => {
         "data-status-updated",
         "data-status-rows",
         "data-source-health",
+        "data-refresh-run",
         "data-data-mode"
     ]) {
         assert.match(status, new RegExp(hook));
@@ -538,6 +539,8 @@ test("status page owns the source health overview", () => {
     assert.match(status, /..\/js\/data-health\.js/);
     assert.match(status, /..\/js\/status\.js/);
     assert.match(status, /..\/data\/manifest\.json/);
+    assert.match(status, /data-report="..\/data\/refresh-report\.json"/);
+    assert.match(status, /Last refresh run/);
     assert.match(sitemap, /https:\/\/anothel\.github\.io\/status\//);
     assert.match(styles, /\.status-table/);
 });

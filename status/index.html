@@ -17,7 +17,7 @@
     <title>Status - anothel</title>
     <link rel="stylesheet" href="../css/site.css">
     <script defer src="../js/data-health.js"></script>
-    <script type="module" src="../js/status.js" data-manifest="../data/manifest.json" data-base="../"></script>
+    <script type="module" src="../js/status.js" data-manifest="../data/manifest.json" data-report="../data/refresh-report.json" data-base="../"></script>
 </head>
 <body>
     <div class="shell hub-shell">
@@ -66,6 +66,33 @@
                     <p data-data-mode>Source health ok. Data date is current.</p>
                 </div>
                 <div class="source-health-grid" data-source-health></div>
+            </section>
+
+            <section class="rank-panel" aria-labelledby="refresh-run-title">
+                <div class="panel-heading">
+                    <h2 id="refresh-run-title">Last refresh run</h2>
+                    <p>Checked-in refresh report with run context, changed data modules, and sources needing attention.</p>
+                </div>
+                <div data-refresh-run>
+                    <div class="status-head" aria-hidden="true">
+                        <span>Run</span>
+                        <span>State</span>
+                        <span>Items</span>
+                        <span>Changed</span>
+                        <span>Context</span>
+                        <span>Attention</span>
+                    </div>
+                    <div class="status-table">
+                        <article class="status-row status-ok">
+                            <span>Last refresh</span>
+                            <strong>2026-06-22T11:54:43.756Z</strong>
+                            <span>ok</span>
+                            <span>126 items</span>
+                            <span>No data file changes recorded.</span>
+                            <small>No failed, partial, or fallback sources.</small>
+                        </article>
+                    </div>
+                </div>
             </section>
 
             <section class="rank-panel" aria-labelledby="status-table-title">

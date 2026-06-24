@@ -7,7 +7,8 @@ export const dataUpdateScripts = [
     "scripts/update-repos.mjs",
     "scripts/update-links.mjs",
     "scripts/update-today.mjs",
-    "scripts/update-manifest.mjs"
+    "scripts/update-manifest.mjs",
+    "scripts/report-refresh.mjs"
 ];
 
 export function runCommand(command, args, options = {}) {
@@ -49,7 +50,10 @@ export async function runUpdateAll(runner = runCommand, options = {}) {
         }
 
         try {
-            await runner(process.execPath, [script], { env });
+            const args = script === "scripts/report-refresh.mjs"
+                ? [script, "--json-out", "data/refresh-report.json"]
+                : [script];
+            await runner(process.execPath, args, { env });
             if (groupedLogs) {
                 console.log("::endgroup::");
             }
