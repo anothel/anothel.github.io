@@ -138,8 +138,8 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- **Refresh report on Status**: surface last run, changed modules, failed sources, fallback sources, and run context from checked-in data.
 - **Shared UI helpers**: extract repeated `escapeHtml`, `safeHref`, and date/status formatting only when touching those renderers anyway.
+- Done: refresh report now appears on Status with last run, changed modules, attention sources, and run context.
 - Done: shared local state module now owns saved items and pinned topics. Explore defaults and saved searches stay Explore-local until another page needs them.
 - Done: package, repo, and link definitions moved to data. Trends stay in scripts until query groups and scoring heuristics have a clean data shape.
 
@@ -158,9 +158,20 @@ These are valid backlog items. Completed items should move out of this list afte
 
 ## Current / Next Work
 
-Next item to promote: Score reasons, refresh report on Status, or a narrow Explore density pass.
+Next item to promote: shared UI helpers only when touching renderers, or a narrow accessibility pass.
 
 ## Recently Completed
+
+### 2026-06-24 - P1 Explore Density Pass
+
+Goal: make Explore results scan better after score reasons increased card content.
+
+- Done: Explore result cards now use auto-fit columns on desktop instead of a fixed two-column grid.
+- Done: card padding, gaps, heading size, and score reason text are tighter while preserving mobile one-column layout.
+- Verified: focused site-structure tests and full validation pass.
+
+Success metric:
+- Explore can show more result cards per desktop row without adding new JS, state, or component abstractions.
 
 ### 2026-06-24 - P1 Score Reasons
 

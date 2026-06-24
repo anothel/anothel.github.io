@@ -128,6 +128,7 @@ test("mobile layout allows long titles and card text to wrap", () => {
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.home-command-board[\s\S]*grid-template-columns: 1fr/s);
     assert.match(styles, /\.signal-card div\s*{[^}]*min-width: 0/s);
     assert.match(styles, /\.source-health-card div\s*{[^}]*min-width: 0/s);
+    assert.match(styles, /\.score-reasons\s*{[^}]*overflow-wrap: anywhere/s);
 });
 
 test("public pages avoid indefinite loading placeholders in checked-in HTML", () => {
@@ -259,6 +260,8 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(styles, /\.saved-panel/);
     assert.match(styles, /\.explore-shell\s*{[^}]*grid-template-columns: 1fr/s);
     assert.match(styles, /\.explore-command-bar/);
+    assert.match(styles, /\.explore-results\s*{[^}]*grid-template-columns: repeat\(auto-fit, minmax\(280px, 1fr\)\)/s);
+    assert.match(styles, /\.explore-card\s*{[^}]*min-height: 220px/s);
     assert.match(styles, /\.explore-filter-shell\s*{[^}]*display: grid/s);
     assert.match(styles, /\.explore-filter-toggle\s*{[^}]*display: none/s);
     assert.match(styles, /\.explore-filter-toggle::after\s*{[^}]*content: "Open"/s);
