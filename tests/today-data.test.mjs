@@ -27,6 +27,7 @@ const expectedItemFields = [
     "category",
     "metric",
     "reason",
+    "scoreReasons",
     "action",
     "url",
     "rawScore",
@@ -170,6 +171,7 @@ test("renderTodaySections emits section cards and item links", () => {
                     category: "Developer tools",
                     metric: "91 score",
                     reason: "Synthetic reason",
+                    scoreReasons: ["91 score from Example source", "Synthetic <reason>", "Signal fit 91/100"],
                     url: "https://example.test/trend",
                     score: 91
                 }
@@ -191,6 +193,9 @@ test("renderTodaySections emits section cards and item links", () => {
     assert.match(html, /91 score/);
     assert.match(html, /Why now/);
     assert.match(html, /Synthetic reason/);
+    assert.match(html, /Score reasons/);
+    assert.match(html, /91 score from Example source/);
+    assert.match(html, /Synthetic &lt;reason&gt;/);
     assert.match(html, /Next action/);
     assert.match(html, /Source context/);
 });
@@ -209,6 +214,7 @@ test("renderTodaySections escapes text and blocks unsafe item links", () => {
                     category: "Developer tools",
                     metric: "91 score",
                     reason: "bad \"quote\"",
+                    scoreReasons: ["bad <reason>"],
                     url: "javascript:alert(1)",
                     score: 91
                 }
@@ -223,6 +229,7 @@ test("renderTodaySections escapes text and blocks unsafe item links", () => {
     assert.match(html, /Open &quot;carefully&quot;\./);
     assert.match(html, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;quote&quot;/);
+    assert.match(html, /bad &lt;reason&gt;/);
 });
 
 test("renderExploreLinks links to all full module pages", () => {

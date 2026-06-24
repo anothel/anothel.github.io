@@ -371,6 +371,7 @@
 
         return items.map((item) => {
             const saved = savedIds.has(item.id);
+            const scoreReasons = (item.scoreReasons || []).slice(0, 3);
             return `
                 <article class="explore-card" data-item-id="${escapeHtml(item.id)}">
                     <div class="card-topline">
@@ -385,6 +386,11 @@
                         <span>${escapeHtml(item.updated)}</span>
                         <span class="quality-marker" aria-label="Signal fit score ${escapeHtml(item.qualityScore || item.score || 0)}">Signal fit ${escapeHtml(item.qualityScore || item.score || 0)}</span>
                     </div>
+                    ${scoreReasons.length ? `
+                        <ul class="score-reasons" aria-label="Score reasons">
+                            ${scoreReasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}
+                        </ul>
+                    ` : ""}
                     ${item.sourceContext ? `<p class="source-context">${escapeHtml(item.sourceContext)}</p>` : ""}
                     <div class="explore-card-actions">
                         <a href="${safeHref(item.url)}">Open item</a>

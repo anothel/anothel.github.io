@@ -1895,6 +1895,13 @@ button {
     text-transform: uppercase;
 }
 
+.score-reasons {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--muted);
+    font-size: 0.86rem;
+}
+
 .source-context {
     font-size: 0.84rem;
     font-weight: 800;

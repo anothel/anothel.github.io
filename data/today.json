@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-22",
-  "generatedAt": "2026-06-22T11:54:43.966Z",
+  "generatedAt": "2026-06-24T11:52:40.991Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-06-22T11:54:43.966Z"
+    "updatedAt": "2026-06-24T11:52:40.991Z"
   },
   "sections": [
     {
@@ -24,6 +24,11 @@
           "category": "Agent skills",
           "metric": "100 score",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "scoreReasons": [
+            "Agent skills reference for reusable tool instructions.",
+            "153.3K stars from GitHub",
+            "153.3K stars / 18.1K forks"
+          ],
           "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/anthropics/skills",
           "rawScore": 100,
@@ -47,6 +52,11 @@
           "category": "Agent skills",
           "metric": "100 score",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "scoreReasons": [
+            "Agent skills reference for reusable tool instructions.",
+            "78.9K stars from GitHub",
+            "78.9K stars / 15.5K forks"
+          ],
           "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/lobehub/lobehub",
           "rawScore": 100,
@@ -70,6 +80,11 @@
           "category": "MCP",
           "metric": "100 score",
           "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "scoreReasons": [
+            "MCP infrastructure worth tracking for agent workflows.",
+            "9.3K stars from GitHub",
+            "9.3K stars / 1.6K forks"
+          ],
           "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/awslabs/mcp",
           "rawScore": 100,
@@ -100,6 +115,11 @@
           "category": "AI evals",
           "metric": "100 score",
           "reason": "Evaluation signal for measuring agent and model behavior.",
+          "scoreReasons": [
+            "Evaluation signal for measuring agent and model behavior.",
+            "10.2K stars from GitHub",
+            "10.2K stars / 938 forks"
+          ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/Arize-ai/phoenix",
           "rawScore": 100,
@@ -123,6 +143,11 @@
           "category": "MCP",
           "metric": "100 score",
           "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "scoreReasons": [
+            "MCP infrastructure worth tracking for agent workflows.",
+            "146K stars from GitHub",
+            "146K stars / 23K forks"
+          ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/langgenius/dify",
           "rawScore": 100,
@@ -146,6 +171,11 @@
           "category": "Agent skills",
           "metric": "140.9K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "scoreReasons": [
+            "Agent skills reference for reusable tool instructions.",
+            "140.9K stars from GitHub",
+            "engineering workflow skills"
+          ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
           "rawScore": 140896,
@@ -169,6 +199,11 @@
           "category": "MCP",
           "metric": "39.6M/week",
           "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "scoreReasons": [
+            "MCP infrastructure worth tracking for agent workflows.",
+            "39.6M/week from npm",
+            "Model Context Protocol SDK"
+          ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
           "rawScore": 39623830,
@@ -192,6 +227,11 @@
           "category": "AI agents",
           "metric": "100 score",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "scoreReasons": [
+            "Coding-agent ecosystem signal with practical workflow value.",
+            "218.9K stars from GitHub",
+            "218.9K stars / 33.6K forks"
+          ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/affaan-m/ECC",
           "rawScore": 100,
@@ -206,25 +246,30 @@
         },
         {
           "schemaVersion": 2,
-          "id": "repos:https://github.com/anomalyco/opencode",
+          "id": "repos:https://github.com/n8n-io/n8n",
           "sourceModule": "repos",
           "sourceKind": "repo",
-          "title": "anomalyco/opencode",
+          "title": "n8n-io/n8n",
           "module": "Repos",
           "origin": "GitHub",
-          "category": "AI agents",
-          "metric": "177.2K stars",
+          "category": "Workflow automation",
+          "metric": "193.6K stars",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "scoreReasons": [
+            "Coding-agent ecosystem signal with practical workflow value.",
+            "193.6K stars from GitHub",
+            "workflow automation"
+          ],
           "action": "Skim the source and save it only if it changes what to watch next.",
-          "url": "https://github.com/anomalyco/opencode",
-          "rawScore": 177224,
+          "url": "https://github.com/n8n-io/n8n",
+          "rawScore": 193590,
           "qualityScore": 100,
-          "score": 83,
+          "score": 84,
           "sources": [
             "Repos"
           ],
           "sourceContext": "",
-          "canonicalKey": "url:https://github.com/anomalyco/opencode",
+          "canonicalKey": "url:https://github.com/n8n-io/n8n",
           "updated": "2026-06-22"
         }
       ]
@@ -245,6 +290,11 @@
           "category": "Agent skills",
           "metric": "Spec",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "scoreReasons": [
+            "Agent skills reference for reusable tool instructions.",
+            "Spec from Spec",
+            "Open specification for packaging reusable instructions, scripts, and resources for agents."
+          ],
           "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://agentskills.io/",
           "rawScore": 99,
@@ -268,6 +318,11 @@
           "category": "Agent skills",
           "metric": "Docs",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "scoreReasons": [
+            "Agent skills reference for reusable tool instructions.",
+            "Docs from Docs",
+            "Developer overview for using skills through the Claude API."
+          ],
           "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
           "rawScore": 97,
@@ -291,6 +346,11 @@
           "category": "Agent skills",
           "metric": "Docs",
           "reason": "Agent skills reference for reusable tool instructions.",
+          "scoreReasons": [
+            "Agent skills reference for reusable tool instructions.",
+            "Docs from Docs",
+            "User-facing guide to what skills are and how Claude loads them for repeatable work."
+          ],
           "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://support.claude.com/en/articles/11144907-what-are-skills",
           "rawScore": 96,
@@ -314,6 +374,11 @@
           "category": "AI agents",
           "metric": "Repo",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
+          "scoreReasons": [
+            "Coding-agent ecosystem signal with practical workflow value.",
+            "Repo from Repo",
+            "Terminal AI pair programming tool for editing code in existing repositories."
+          ],
           "action": "Keep as a reference when working on related agent workflows.",
           "url": "https://github.com/Aider-AI/aider",
           "rawScore": 94,

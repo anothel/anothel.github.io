@@ -88,6 +88,8 @@ test("normalizeCandidates maps source data into shared card shape", () => {
             category: item.category,
             metric: item.metric,
             reason: item.reason,
+            firstScoreReason: item.scoreReasons?.[0],
+            scoreReasonCount: item.scoreReasons?.length,
             url: item.url,
             scoreInRange: Number(item.score) >= 0 && Number(item.score) <= 100,
             canonicalKey: Boolean(item.canonicalKey)
@@ -103,6 +105,8 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 category: "Developer tools",
                 metric: "96 score",
                 reason: "267 comments / 852 points",
+                firstScoreReason: "267 comments from Hacker News",
+                scoreReasonCount: 3,
                 url: "https://www.iroh.computer/blog/v1",
                 scoreInRange: true,
                 canonicalKey: true
@@ -117,6 +121,8 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 category: "UI",
                 metric: "245.9K stars",
                 reason: "frontend runtime",
+                firstScoreReason: "245.9K stars from GitHub",
+                scoreReasonCount: 2,
                 url: "https://github.com/react/react",
                 scoreInRange: true,
                 canonicalKey: true
@@ -131,6 +137,8 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 category: "Language",
                 metric: "217.3M/week",
                 reason: "typed JavaScript",
+                firstScoreReason: "217.3M/week from npm",
+                scoreReasonCount: 2,
                 url: "https://www.npmjs.com/package/typescript",
                 scoreInRange: true,
                 canonicalKey: true
@@ -145,6 +153,8 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 category: "Frontend",
                 metric: "Docs",
                 reason: "Reference for web platform APIs.",
+                firstScoreReason: "Docs from Docs",
+                scoreReasonCount: 3,
                 url: "https://developer.mozilla.org/",
                 scoreInRange: true,
                 canonicalKey: true
@@ -170,6 +180,7 @@ test("buildTodayBrief creates fixed sections from checked-in data", () => {
     assert.equal(new Set(urls).size, urls.length);
     assert.ok(allItems.every((item) => item.schemaVersion === 2));
     assert.ok(allItems.every((item) => item.id && item.sourceModule && item.sourceKind && item.canonicalKey));
+    assert.ok(allItems.every((item) => Array.isArray(item.scoreReasons) && item.scoreReasons.length >= 1 && item.scoreReasons.length <= 3));
 });
 
 test("buildTodayBrief surfaces expanded eval or workflow coverage from checked-in data", () => {

@@ -94,6 +94,15 @@
         return [item.velocity, item.signal].filter(Boolean).join(" / ") || item.summary || "Ranked trend signal";
     }
 
+    function scoreReasons(fields, qualityScore) {
+        const reasons = [
+            fields.metric && fields.origin ? `${fields.metric} from ${fields.origin}` : fields.metric,
+            fields.reason && fields.reason !== fields.metric ? fields.reason : "",
+            qualityScore >= 80 ? `Signal fit ${qualityScore}/100` : ""
+        ].filter(Boolean);
+        return [...new Set(reasons)].slice(0, 3);
+    }
+
     function sourceContextFor(sources, moduleName) {
         const alsoIn = sources.filter((source) => source !== moduleName);
         return alsoIn.length > 0 ? `Also in ${alsoIn.join(" / ")}` : "";
@@ -148,6 +157,7 @@
             sourceRank: Number(item.rank || 0),
             qualityScore,
             score: qualityScore,
+            scoreReasons: scoreReasons(fields, qualityScore),
             sources: [moduleName],
             sourceContext: "",
             canonicalKey: duplicateKey(fields),
@@ -169,7 +179,8 @@
             updated,
             sourceContext: sourceContextFor(sources, winner.module),
             qualityScore: Math.max(winner.qualityScore || winner.score || 0, loser.qualityScore || loser.score || 0),
-            score: Math.max(winner.score || 0, loser.score || 0)
+            score: Math.max(winner.score || 0, loser.score || 0),
+            scoreReasons: [...new Set([...(winner.scoreReasons || []), ...(loser.scoreReasons || [])])].slice(0, 3)
         };
     }
 
@@ -268,6 +279,12 @@
         }
         for (const field of ["rawScore", "qualityScore", "score"]) {
             if (!Number.isFinite(Number(item?.[field]))) errors.push(`${field} must be finite`);
+        }
+        if (!Array.isArray(item?.scoreReasons) || item.scoreReasons.length < 1 || item.scoreReasons.length > 3) {
+            errors.push("scoreReasons must contain 1-3 reasons");
+        }
+        for (const reason of item?.scoreReasons || []) {
+            if (typeof reason !== "string" || !reason.trim()) errors.push("scoreReasons must be non-empty strings");
         }
         if (Number(item?.qualityScore) < 0 || Number(item?.qualityScore) > 100) errors.push("qualityScore must be 0-100");
         if (Number(item?.score) < 0 || Number(item?.score) > 100) errors.push("score must be 0-100");

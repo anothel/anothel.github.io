@@ -72,11 +72,11 @@ test("Explore normalizes trends, packages, repos, and links into one item shape"
     });
 
     assert.equal(items.length, 4);
-    assert.deepEqual(JSON.parse(JSON.stringify(items.map((item) => [item.module, item.title, item.category, item.origin, item.metric]))), [
-        ["Trends", "Agent trend", "AI", "GitHub", "+12%"],
-        ["Packages", "ai", "AI SDK", "npm", "15M/week"],
-        ["Repos", "openai/codex", "AI agents", "GitHub", "92K stars"],
-        ["Links", "Agent Skills standard", "Agent skills", "Spec", "Spec"]
+    assert.deepEqual(JSON.parse(JSON.stringify(items.map((item) => [item.module, item.title, item.category, item.origin, item.metric, item.scoreReasons.length]))), [
+        ["Trends", "Agent trend", "AI", "GitHub", "+12%", 2],
+        ["Packages", "ai", "AI SDK", "npm", "15M/week", 3],
+        ["Repos", "openai/codex", "AI agents", "GitHub", "92K stars", 3],
+        ["Links", "Agent Skills standard", "Agent skills", "Spec", "Spec", 3]
     ]);
     assert.equal(items[0].id, "trends:https://example.com/trend");
     assert.equal(items[1].updated, "2026-06-19");
@@ -268,6 +268,7 @@ test("Explore renders merged source context in cards and saved queue", () => {
         updated: "2026-06-18",
         sources: ["Repos", "Links"],
         sourceContext: "Also in Links",
+        scoreReasons: ["135K stars from GitHub", "Reusable <skills>.", "Signal fit 96/100"],
         score: 96,
         qualityScore: 96
     };
@@ -279,6 +280,9 @@ test("Explore renders merged source context in cards and saved queue", () => {
     assert.match(saved, /Also in Links/);
     assert.match(cards, /Reusable &quot;skills&quot;\./);
     assert.match(cards, /Why this matters/);
+    assert.match(cards, /Score reasons/);
+    assert.match(cards, /Reusable &lt;skills&gt;\./);
+    assert.doesNotMatch(cards, /Reusable <skills>\./);
     assert.match(cards, /aria-label="Signal fit score 96"/);
     assert.match(cards, /Signal fit 96/);
     assert.match(cards, /class="quality-marker"/);

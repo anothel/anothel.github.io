@@ -89,6 +89,10 @@ function intentReason(item) {
     return signalReason(candidateText(item));
 }
 
+function scoreReasons(reason, item) {
+    return [...new Set([reason, ...(item.scoreReasons || [])].filter(Boolean))].slice(0, 3);
+}
+
 function qualityPriority(item) {
     let priority = item.score;
 
@@ -114,11 +118,13 @@ function enrichCandidate(item) {
         isIntentMatch,
         isBaseline
     };
+    const reason = isIntentMatch ? intentReason(enriched) : item.reason;
 
     return {
         ...enriched,
         priority: qualityPriority(enriched),
-        reason: isIntentMatch ? intentReason(enriched) : item.reason
+        reason,
+        scoreReasons: scoreReasons(reason, item)
     };
 }
 
@@ -234,6 +240,7 @@ function stripItem(item, sectionId) {
         category: item.category,
         metric: item.metric,
         reason: item.reason,
+        scoreReasons: item.scoreReasons,
         action: actionFor(sectionId, item),
         url: item.url,
         rawScore: item.rawScore,

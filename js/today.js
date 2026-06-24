@@ -83,6 +83,7 @@ export function totalSectionItems(sections) {
 function renderTodayCard(item) {
     const context = [item.origin, item.category].filter(Boolean).join(" / ");
     const action = item.action || "Open the source and decide whether it belongs in the saved queue.";
+    const scoreReasons = (item.scoreReasons || []).slice(0, 3);
 
     return `
         <a class="signal-card today-card" href="${safeHref(item.url)}">
@@ -96,6 +97,11 @@ function renderTodayCard(item) {
                 ${escapeHtml(context)}
             </small>
             <p class="why-copy"><strong>Why now</strong> ${escapeHtml(item.reason)}</p>
+            ${scoreReasons.length ? `
+                <ul class="score-reasons" aria-label="Score reasons">
+                    ${scoreReasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}
+                </ul>
+            ` : ""}
             <p class="action-copy"><strong>Next action</strong> ${escapeHtml(action)}</p>
         </a>
     `;

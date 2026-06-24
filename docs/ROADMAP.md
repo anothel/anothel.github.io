@@ -138,7 +138,6 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- **Score reasons**: expose 1-3 concise reasons for high-priority Today/Explore cards.
 - **Refresh report on Status**: surface last run, changed modules, failed sources, fallback sources, and run context from checked-in data.
 - **Shared UI helpers**: extract repeated `escapeHtml`, `safeHref`, and date/status formatting only when touching those renderers anyway.
 - Done: shared local state module now owns saved items and pinned topics. Explore defaults and saved searches stay Explore-local until another page needs them.
@@ -162,6 +161,18 @@ These are valid backlog items. Completed items should move out of this list afte
 Next item to promote: Score reasons, refresh report on Status, or a narrow Explore density pass.
 
 ## Recently Completed
+
+### 2026-06-24 - P1 Score Reasons
+
+Goal: explain why high-priority Today and Explore cards rank well without changing the scoring model.
+
+- Done: added `scoreReasons` to the shared Signal Schema v2 normalized item contract.
+- Done: Today generation preserves up to 3 concise score reasons in checked-in `data/today.json`.
+- Done: Today and Explore render score reasons with escaping and existing card styles.
+- Verified: focused Today, Explore, data schema, and full validation pass.
+
+Success metric:
+- Priority cards now expose metric, reason, and signal-fit context from existing data instead of adding a new scoring system.
 
 ### 2026-06-24 - P1 Topic Taxonomy As Data
 
