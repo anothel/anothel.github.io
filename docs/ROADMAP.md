@@ -39,6 +39,15 @@ Imported audit confirmed the current direction and ranked static trust work firs
 - Keep next: page role copy, score explanation, Explore mobile density, Review empty/local state, and a11y pass.
 - Cut for now: React SPA and broad framework rewrite before static trust work is stable.
 
+## Code Reanalysis Triage 2026-06-24
+
+Imported code-based reanalysis confirms the current product shape: static-first, data-first, Home as decision hub, Today as generated brief, Explore as workbench, Review as local saved queue, Status as trust surface, modules as source detail, and topics as judgment pages.
+
+- Keep: current vanilla/static structure until shared contracts are stable.
+- Keep next: freshness labels, source health consistency, local-only Review copy, localStorage state consolidation, topic taxonomy, score reasons, and refresh report.
+- Already covered: update-all / validate-data workflow, package/repo/link watchlists as data, Signal Schema v2, module shell, topic notes, IA route roles.
+- Cut for now: full React SPA, backend/accounts/sync, broad blog engine, design-system rewrite, and page-count growth without taxonomy/source/score contracts.
+
 ### P0 - Do Now
 
 Goal: make the current static site trustworthy and understandable before changing frameworks.
@@ -82,6 +91,17 @@ Goal: make the current static site trustworthy and understandable before changin
    - Reason: fallback drift and data shape drift are current risk points.
    - Done when: tests fail on stale fallback dates, mismatched manifest counts, unsafe URLs, invalid statuses, or out-of-range scores.
 
+7. **Freshness and source-health consistency**
+   - Show data age as Fresh, Aging, Stale, Fallback, Error, or Partial in user-facing copy.
+   - Keep Home, Explore, Status, and module stamps on the same aggregate source-health logic.
+   - Reason: "Data date" alone does not explain stale-but-usable or fallback states.
+   - Done when: tests cover fresh, stale, fallback, and partial cases across shared data-health logic.
+
+8. **Local-only saved queue copy**
+   - State that saved Review items stay in this browser only.
+   - Reason: localStorage is intentional, but users should not expect account sync.
+   - Done when: Review empty/header copy explains the local browser boundary without suggesting a broken feature.
+
 ### Imported Backlog Decision Log
 
 This keeps the imported review intact enough to explain why each recommendation moved where it did.
@@ -116,7 +136,12 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- No active P1 source-data cleanup item remains after package, repo, and link definitions moved to data.
+- **Shared local state module**: move saved items, pinned topics, saved searches, and Explore defaults behind one browser-state helper after current UX contracts are stable.
+- **Topic taxonomy as data**: unify Home, Explore, Topics, Today boosts, and update scripts around one topic definition source.
+- **Score reasons**: expose 1-3 concise reasons for high-priority Today/Explore cards.
+- **Refresh report on Status**: surface last run, changed modules, failed sources, fallback sources, and run context from checked-in data.
+- **Shared UI helpers**: extract repeated `escapeHtml`, `safeHref`, and date/status formatting only when touching those renderers anyway.
+- Done: package, repo, and link definitions moved to data. Trends stay in scripts until query groups and scoring heuristics have a clean data shape.
 
 ### P2 - Framework / Architecture Later
 
@@ -133,24 +158,22 @@ These are valid backlog items. Completed items should move out of this list afte
 
 ## Current / Next Work
 
-### 1. P0 Trust And Role Pass
+### 1. P0 Freshness And Trust Pass
 
-Goal: make the current site explain itself and avoid stale fallback data.
+Goal: make source freshness and local-only state impossible to misread.
 
-- Add IA route role doc.
-- Update top-page copy and terminology.
-- Sync static fallback values with checked-in data.
-- Add static fallback and data contract tests.
-- Improve Today action copy and Status partial/fallback copy.
+- Add freshness labels to shared data-health logic.
+- Make Home, Explore, Status, and module stamps use consistent source-health wording.
+- Add regression coverage for fresh, stale, fallback, and partial states.
+- Add local-only Review saved-queue copy.
 
 Done when:
-- JS-disabled fallback values match current checked-in data.
-- Each route has a distinct one-line role.
-- Links and Review wording no longer overlap.
 - Data health states are understandable without reading implementation docs.
+- Home, Explore, and Status do not disagree about the same source state.
+- Review clearly says saved items are stored in this browser only.
 
 Success metric:
-- A first-time visitor can answer: what this site is, what to open first, where saved items live, and whether the data is usable.
+- A repeat visitor can tell whether data is fresh, stale, partial, or fallback, and where saved items live.
 
 ## Recently Completed
 
