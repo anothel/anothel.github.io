@@ -5,6 +5,7 @@ import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 const signalSchema = require("../js/signal-schema.js");
+const topicTaxonomy = require("../js/topic-taxonomy.js");
 
 function json(path) {
     return JSON.parse(readFileSync(path, "utf8"));
@@ -177,6 +178,39 @@ test("watchlist definitions stay editable data with stable fields", () => {
         assert.equal(linkUrls.has(item.url), false, `${item.url} duplicate`);
         linkUrls.add(item.url);
     }
+});
+
+test("topic taxonomy keeps labels, slugs, aliases, and routes in one contract", async () => {
+    const { trackedTopicLabels } = await import("../scripts/signal-taxonomy.mjs");
+    const routeLabels = new Set(["AI agents", "MCP", "Agent skills"]);
+
+    assert.deepEqual(trackedTopicLabels, topicTaxonomy.trackedTopicLabels);
+    assert.deepEqual(topicTaxonomy.trackedTopicLabels, [
+        "AI agents",
+        "Agent skills",
+        "MCP",
+        "AI evals",
+        "AI engineering",
+        "Workflow automation",
+        "Developer tooling"
+    ]);
+
+    for (const topic of topicTaxonomy.topicDefinitions) {
+        assert.match(topic.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/, `${topic.label} slug`);
+        assertNonEmptyString(topic.description, `${topic.label} description`);
+        assert.equal(topicTaxonomy.topicByLabel(topic.label), topic, `${topic.label} lookup`);
+
+        const route = topicTaxonomy.routeForTopic(topic.label);
+        if (routeLabels.has(topic.label)) {
+            assert.equal(route, `topics/${topic.slug}/index.html`, `${topic.label} route`);
+        } else {
+            assert.equal(route, `explore/index.html?focus=${encodeURIComponent(topic.label)}`, `${topic.label} explore route`);
+        }
+    }
+
+    assert.equal(topicTaxonomy.matchesTopic({ title: "Model Context Protocol server" }, "MCP"), true);
+    assert.equal(topicTaxonomy.matchesTopic({ title: "mattpocock/skills for coding agents" }, "Agent skills"), true);
+    assert.equal(topicTaxonomy.matchesTopic({ title: "unknown" }, "not-a-topic"), false);
 });
 
 test("checked-in sources normalize to Signal Schema v2 items", () => {

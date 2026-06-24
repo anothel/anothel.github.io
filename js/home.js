@@ -1,4 +1,5 @@
 import "./local-state.js";
+import "./topic-taxonomy.js";
 
 const manifestUrl = typeof document === "undefined"
     ? "data/manifest.json"
@@ -57,51 +58,13 @@ const routePurpose = {
     links: "Reference shelf"
 };
 
-const topicDefinitions = [
-    {
-        topic: "AI agents",
-        route: "topics/ai-agents/index.html",
-        exploreRoute: "explore/index.html?focus=AI%20agents",
-        match: /\b(ai agents?|agentic|coding agent|codex|claude code|copilot|workflow automation|agent framework)\b/
-    },
-    {
-        topic: "Agent skills",
-        route: "topics/agent-skills/index.html",
-        exploreRoute: "explore/index.html?focus=Agent%20skills",
-        match: /\b(agent skills?|skills?|instructions?)\b/
-    },
-    {
-        topic: "MCP",
-        route: "topics/mcp/index.html",
-        exploreRoute: "explore/index.html?focus=MCP",
-        match: /\bmcp\b|\bmodelcontextprotocol\b|\bmodel context protocol\b/
-    },
-    {
-        topic: "AI evals",
-        route: "explore/index.html?focus=AI%20evals",
-        exploreRoute: "explore/index.html?focus=AI%20evals",
-        match: /\b(eval|evals|evaluation|observability|braintrust|evalite)\b/
-    },
-    {
-        topic: "AI engineering",
-        route: "explore/index.html?focus=AI%20engineering",
-        exploreRoute: "explore/index.html?focus=AI%20engineering",
-        match: /\b(ai engineering|gpt|llm|llama|training|inference|cuda|model)\b/
-    },
-    {
-        topic: "Workflow automation",
-        route: "explore/index.html?focus=Workflow%20automation",
-        exploreRoute: "explore/index.html?focus=Workflow%20automation",
-        match: /\b(workflow automation|automation|durable workflow|n8n|inngest|integration)\b/
-    },
-    {
-        topic: "Developer tooling",
-        route: "explore/index.html?focus=Developer%20tooling",
-        exploreRoute: "explore/index.html?focus=Developer%20tooling",
-        match: /\b(developer tools?|tooling|build tool|lint|format|testing|browser automation|vite|eslint|prettier|playwright)\b/
-    }
-];
-const knownTopicNames = topicDefinitions.map((definition) => definition.topic);
+const topicTaxonomy = globalThis.TopicTaxonomy;
+const topicDefinitions = topicTaxonomy.topicDefinitions.filter((topic) => topic.routePath).map((topic) => ({
+    topic: topic.label,
+    route: topicTaxonomy.routeForTopic(topic.label),
+    exploreRoute: topicTaxonomy.exploreRouteForTopic(topic.label)
+}));
+const knownTopicNames = topicTaxonomy.trackedTopicLabels;
 
 export function createPinnedTopicStore(storage) {
     return globalThis.AnothelState.createPinnedTopicStore(storage, knownTopicNames);
@@ -234,8 +197,7 @@ function buildValidSavedIds(dataByModule) {
 }
 
 function topicMatches(item, definition) {
-    const category = String(item.category || "").toLowerCase();
-    return category === definition.topic.toLowerCase() || definition.match.test(textBlob(item));
+    return topicTaxonomy.matchesTopic({ ...item, description: textBlob(item) }, definition.topic);
 }
 
 export function buildSavedSummary(rawValue, validIds = null) {

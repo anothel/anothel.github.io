@@ -4,6 +4,7 @@
     const dataHealth = global.DataHealth;
     const localState = global.AnothelState;
     const signalSchema = global.SignalSchema;
+    const topicTaxonomy = global.TopicTaxonomy;
     const defaultExploreState = { focus: "all", sort: "priority" };
     const maxSavedSearches = 5;
 
@@ -28,46 +29,7 @@
         savedSearches: []
     };
 
-    const topicLensDefinitions = [
-        {
-            focus: "AI agents",
-            label: "AI agents",
-            description: "Coding agents, agent runtimes, and workflow automation.",
-            route: "../topics/ai-agents/index.html"
-        },
-        {
-            focus: "MCP",
-            label: "MCP",
-            description: "Protocol, SDK, server, and client signals.",
-            route: "../topics/mcp/index.html"
-        },
-        {
-            focus: "Agent skills",
-            label: "Agent skills",
-            description: "Reusable instructions, skills repos, and agent patterns.",
-            route: "../topics/agent-skills/index.html"
-        },
-        {
-            focus: "AI evals",
-            label: "AI evals",
-            description: "Evaluation, observability, and test harness tools."
-        },
-        {
-            focus: "AI engineering",
-            label: "AI engineering",
-            description: "Model training, inference, and practical AI systems."
-        },
-        {
-            focus: "Workflow automation",
-            label: "Workflow automation",
-            description: "Durable workflows, integrations, and local automation."
-        },
-        {
-            focus: "Developer tooling",
-            label: "Developer tooling",
-            description: "Tools that affect coding, testing, and build flow."
-        }
-    ];
+    const topicLensDefinitions = topicTaxonomy.topicLensDefinitions("../");
     const knownTopicNames = topicLensDefinitions.map((definition) => definition.focus);
     const allowedFocusValues = new Set(["all", "Security", "Packages", ...knownTopicNames]);
     const allowedSortValues = new Set(["priority", "saved", "module", "category"]);
@@ -150,20 +112,14 @@
             .toLowerCase();
 
         if (focus === "Packages") return item.module === "Packages";
-        if (focus === "MCP") return /\bmcp\b|\bmodelcontextprotocol\b/.test(text);
-        if (focus === "Agent skills") return /\b(agent skills?|skills?)\b/.test(text);
-        if (focus === "AI evals") return /\b(eval|evals|evaluation|observability|braintrust|evalite)\b/.test(text);
-        if (focus === "AI engineering") return /\b(ai engineering|gpt|llm|llama|training|inference|cuda|model)\b/.test(text);
-        if (focus === "Workflow automation") return /\b(workflow automation|automation|durable workflow|n8n|inngest|integration)\b/.test(text);
-        if (focus === "Developer tooling") return /\b(developer tools?|tooling|build tool|lint|format|testing|browser automation|vite|eslint|prettier|playwright)\b/.test(text);
         if (focus === "Security") return /\b(security|oauth|auth|malware|vulnerability|supply chain)\b/.test(text);
-        if (focus === "AI agents") return /\b(ai agents?|agentic|coding agent|codex|claude code|copilot|workflow automation)\b/.test(text);
+        if (knownTopicNames.includes(focus)) return topicTaxonomy.matchesTopic({ ...item, description: text }, focus);
 
         return true;
     }
 
     function topicRouteFor(definition) {
-        return definition.route || `../explore/index.html?focus=${encodeURIComponent(definition.focus)}`;
+        return definition.route || topicTaxonomy.exploreRouteForTopic(definition.focus, "../");
     }
 
     function buildTopicLenses(items) {

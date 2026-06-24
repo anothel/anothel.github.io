@@ -1,5 +1,6 @@
 (function attachTopics(global) {
     const localState = global.AnothelState;
+    const topicTaxonomy = global.TopicTaxonomy;
     const defaultPaths = {
         trends: "../../data/trends.json",
         packages: "../../data/packages.json",
@@ -8,69 +9,7 @@
         today: "../../data/today.json"
     };
 
-    const topicRoutes = {
-        "AI agents": {
-            route: "../../topics/ai-agents/index.html",
-            summary: "Coding agents, workflow automation, and agent runtime movement.",
-            whyPrefix: "Agent tooling is moving from demos into daily coding workflow.",
-            note: {
-                title: "Agent workflow is becoming a daily engineering surface.",
-                body: "Track this when coding agents, orchestration frameworks, or automation tools show signs of changing how work is planned, edited, reviewed, or tested.",
-                readWhen: "Open this topic when repo traction and package demand point to repeatable agent workflow, not one-off demos."
-            },
-            guidance: {
-                whatToWatch: "Coding agents, local CLIs, orchestration frameworks, and agent runtime patterns.",
-                whenToOpen: "Open when a tool changes how code gets written, reviewed, tested, or automated.",
-                nextAction: "Compare the strongest repo and package signals before saving follow-up items."
-            },
-            actions: [
-                ["Open focused Explore", "../../explore/index.html?focus=AI%20agents", "AI agents lens"],
-                ["Repos", "../../repos/index.html", "Coding-agent traction"],
-                ["Packages", "../../packages/index.html", "Agent framework demand"]
-            ]
-        },
-        MCP: {
-            route: "../../topics/mcp/index.html",
-            summary: "Protocol, SDK, server, and client signals for agent tooling.",
-            whyPrefix: "Protocol and server adoption is moving across SDKs, packages, and reference repos.",
-            note: {
-                title: "MCP is the protocol layer to keep checking.",
-                body: "Track this when protocol, SDK, registry, inspector, and server signals move together across packages, repos, and reference links.",
-                readWhen: "Open this topic when a source suggests agents may connect to tools differently."
-            },
-            guidance: {
-                whatToWatch: "SDKs, reference servers, registries, inspector tools, and server packages.",
-                whenToOpen: "Open when a protocol or server signal could change how agents connect to tools.",
-                nextAction: "Check packages for adoption, then keep stable server references nearby."
-            },
-            actions: [
-                ["Open focused Explore", "../../explore/index.html?focus=MCP", "MCP lens"],
-                ["Packages", "../../packages/index.html", "SDK and server demand"],
-                ["Links", "../../links/index.html", "Stable protocol references"]
-            ]
-        },
-        "Agent skills": {
-            route: "../../topics/agent-skills/index.html",
-            summary: "Reusable instructions, skill specs, and agent workflow examples.",
-            whyPrefix: "Reusable instruction patterns are becoming a practical layer above one-off prompting.",
-            note: {
-                title: "Reusable instructions are becoming operational assets.",
-                body: "Track this when skill specs, examples, and workflow repos show patterns that can be reused instead of rewritten per task.",
-                readWhen: "Open this topic when a reusable pattern looks durable enough to save, adapt, or compare against your own agent workflow."
-            },
-            guidance: {
-                whatToWatch: "Skill specs, reusable instructions, examples, and workflow checklists.",
-                whenToOpen: "Open when a skill pattern can become repeatable work instead of one-off prompting.",
-                nextAction: "Start from stable references, then save repos that look reusable."
-            },
-            actions: [
-                ["Open focused Explore", "../../explore/index.html?focus=Agent%20skills", "Agent skills lens"],
-                ["Links", "../../links/index.html", "Skill specs and docs"],
-                ["Review", "../../review/index.html", "Saved reusable patterns"]
-            ]
-        }
-    };
-    const knownTopicNames = Object.keys(topicRoutes);
+    const knownTopicNames = topicTaxonomy.topicPageLabels;
 
     function escapeHtml(value) {
         return String(value ?? "")
@@ -126,12 +65,7 @@
         const category = String(item.category || "").toLowerCase();
         const text = textBlob(item);
 
-        if (topic === "MCP") return category === "mcp" || /\bmcp\b|\bmodelcontextprotocol\b/.test(text);
-        if (topic === "Agent skills") return category === "agent skills" || /\b(agent skills?|coding agent skills?)\b/.test(text);
-        if (topic === "AI agents") {
-            return category === "ai agents" || /\b(ai agents?|agentic|coding agent|codex|claude code|copilot|workflow automation)\b/.test(text);
-        }
-        return false;
+        return topicTaxonomy.matchesTopic({ ...item, category, description: text }, topic);
     }
 
     function scoreItem(module, item) {
@@ -218,13 +152,11 @@
     }
 
     function topicSignalLabel(topic) {
-        if (topic === "AI agents") return "AI agent";
-        if (topic === "Agent skills") return "agent skill";
-        return topic;
+        return topicTaxonomy.topicByLabel(topic)?.signalLabel || topic;
     }
 
     function topicConfig(topic) {
-        return topicRoutes[topic] || topicRoutes["AI agents"];
+        return topicTaxonomy.topicPageConfig(topic);
     }
 
     function topicGuidance(topic) {
@@ -293,13 +225,16 @@
     }
 
     function relatedTopicLinks(topic) {
-        return Object.entries(topicRoutes)
-            .filter(([name]) => name !== topic)
-            .map(([name, detail]) => ({
-                topic: name,
-                route: detail.route,
-                summary: detail.summary
-            }));
+        return knownTopicNames
+            .filter((name) => name !== topic)
+            .map((name) => {
+                const detail = topicConfig(name);
+                return {
+                    topic: name,
+                    route: detail.route,
+                    summary: detail.description
+                };
+            });
     }
 
     function topicDashboard(items, today, topic) {

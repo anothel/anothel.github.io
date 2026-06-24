@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
-import { classifySignal, isBaselineSignal, qualityBoost, signalReason } from "./signal-taxonomy.mjs";
+import { classifySignal, isBaselineSignal, qualityBoost, signalReason, trackedTopicLabels } from "./signal-taxonomy.mjs";
 
 const OUT_FILE = new URL("../data/today.json", import.meta.url);
 const require = createRequire(import.meta.url);
@@ -26,8 +26,14 @@ const sectionSummaries = {
     reference: "Stable references and projects worth keeping nearby."
 };
 
-const boostedCategories = new Set(["agent skills", "mcp", "ai agents", "ai evals", "ai engineering", "workflow automation"]);
-const expandedCoverageCategories = new Set(["AI evals", "Workflow automation"]);
+const boostedCategories = new Set(
+    trackedTopicLabels
+        .filter((label) => label !== "Developer tooling")
+        .map((label) => label.toLowerCase())
+);
+const expandedCoverageCategories = new Set(
+    trackedTopicLabels.filter((label) => ["AI evals", "Workflow automation"].includes(label))
+);
 
 function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);

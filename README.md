@@ -21,6 +21,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `data/today.json`: generated priority brief data
 - `data/manifest.json`: module index and data freshness summary
 - `js/home.js`: home overview and current signal rendering
+- `js/topic-taxonomy.js`: shared topic labels, routes, descriptions, and matching rules
 - `js/today.js`: Today priority brief rendering
 - `js/status.js`: source status rendering
 - `js/dashboard.js`: filtering and rendering
@@ -136,6 +137,7 @@ node --check js/link-queue.js
 node --check js/explore.js
 node --check js/review.js
 node --check js/topics.js
+node --check js/topic-taxonomy.js
 node --check js/signal-schema.js
 node --check js/data-health.js
 ```

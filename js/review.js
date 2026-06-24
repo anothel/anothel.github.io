@@ -1,5 +1,6 @@
 (function attachReview(global) {
     const app = global.ExploreApp;
+    const topicTaxonomy = global.TopicTaxonomy;
     const defaultPaths = {
         trends: "../data/trends.json",
         packages: "../data/packages.json",
@@ -113,11 +114,11 @@
             .join(" ")
             .toLowerCase();
 
-        if (/\bmcp\b|\bmodelcontextprotocol\b/.test(text)) return "MCP";
-        if (/\b(agent skills?|skills?)\b/.test(text)) return "Agent skills";
         if (/\b(security|oauth|auth|malware|vulnerability|supply chain)\b/.test(text)) return "Security";
+        for (const topic of topicTaxonomy.trackedTopicLabels) {
+            if (topicTaxonomy.matchesTopic({ ...item, description: text }, topic)) return topic;
+        }
         if (item?.module === "Packages") return "Packages";
-        if (/\b(ai agents?|agentic|coding agent|codex|claude code|copilot|workflow automation)\b/.test(text)) return "AI agents";
         return "all";
     }
 

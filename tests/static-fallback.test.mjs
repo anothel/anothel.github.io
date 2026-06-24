@@ -82,6 +82,7 @@ function dataModeText() {
 
 function topicApp() {
     const context = { console };
+    vm.runInNewContext(read("js/topic-taxonomy.js"), context);
     vm.runInNewContext(read("js/topics.js"), context);
     return context.TopicApp;
 }

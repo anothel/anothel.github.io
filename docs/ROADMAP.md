@@ -138,7 +138,6 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- **Topic taxonomy as data**: unify Home, Explore, Topics, Today boosts, and update scripts around one topic definition source.
 - **Score reasons**: expose 1-3 concise reasons for high-priority Today/Explore cards.
 - **Refresh report on Status**: surface last run, changed modules, failed sources, fallback sources, and run context from checked-in data.
 - **Shared UI helpers**: extract repeated `escapeHtml`, `safeHref`, and date/status formatting only when touching those renderers anyway.
@@ -160,24 +159,21 @@ These are valid backlog items. Completed items should move out of this list afte
 
 ## Current / Next Work
 
-### 1. P1 Topic Taxonomy As Data
+Next item to promote: Score reasons, refresh report on Status, or a narrow Explore density pass.
+
+## Recently Completed
+
+### 2026-06-24 - P1 Topic Taxonomy As Data
 
 Goal: make topic definitions one checked-in contract instead of repeated literals.
 
-- Move topic names, slugs, aliases, route paths, and short descriptions into one data module/file.
-- Reuse that contract from Home, Explore, Topics, Today boosts, and update scripts where it is already helpful.
-- Keep generated data shape stable unless a test proves a migration is needed.
-- Avoid expanding topics until the shared contract is in place.
-
-Done when:
-- Topic labels/slugs are not duplicated across Home, Explore, and Topics.
-- Topic routes and focus filters use the same definitions.
-- Tests fail on unknown topic slugs, broken topic routes, or stale topic aliases.
+- Done: added shared topic labels, slugs, route paths, descriptions, matching rules, reasons, and boosts in `js/topic-taxonomy.js`.
+- Done: Home, Explore, Topic pages, and `scripts/signal-taxonomy.mjs` now reuse the shared contract.
+- Done: Home topic movement stays scoped to the three real topic pages while Explore keeps broader lenses.
+- Verified: taxonomy, Home, Explore, Topic UI, site structure, and full validation pass.
 
 Success metric:
-- Adding or renaming a topic requires one data change plus any intentional copy/content change.
-
-## Recently Completed
+- Adding or renaming a topic now routes through one shared contract plus intentional page/copy changes.
 
 ### 2026-06-24 - P1 Shared Local State Module
 

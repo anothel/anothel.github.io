@@ -23,6 +23,7 @@ export const checkTargets = [
     "js/explore.js",
     "js/review.js",
     "js/topics.js",
+    "js/topic-taxonomy.js",
     "js/signal-schema.js",
     "js/data-health.js"
 ];
