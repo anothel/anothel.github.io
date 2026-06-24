@@ -1,3 +1,5 @@
+import "./local-state.js";
+
 const manifestUrl = typeof document === "undefined"
     ? "data/manifest.json"
     : document.currentScript?.dataset.manifest || "data/manifest.json";
@@ -17,9 +19,6 @@ const reposUrl = typeof document === "undefined"
 const linksUrl = typeof document === "undefined"
     ? "data/links.json"
     : document.currentScript?.dataset.links || "data/links.json";
-const savedStorageKey = "anothel.explore.saved.v1";
-const pinnedTopicsStorageKey = "anothel.preferences.pinnedTopics.v1";
-
 function escapeHtml(value) {
     return String(value)
         .replaceAll("&", "&amp;")
@@ -105,45 +104,7 @@ const topicDefinitions = [
 const knownTopicNames = topicDefinitions.map((definition) => definition.topic);
 
 export function createPinnedTopicStore(storage) {
-    const validTopics = new Set(knownTopicNames);
-    const maxPinnedTopics = 3;
-
-    function normalize(topics) {
-        return [...new Set((topics || []).filter((topic) => validTopics.has(topic)))].slice(0, maxPinnedTopics);
-    }
-
-    function read() {
-        try {
-            const parsed = JSON.parse(storage?.getItem(pinnedTopicsStorageKey) || "[]");
-            if (Array.isArray(parsed)) return normalize(parsed);
-            if (parsed?.version === 1 && Array.isArray(parsed.topics)) return normalize(parsed.topics);
-        } catch {
-            return [];
-        }
-        return [];
-    }
-
-    function write(topics) {
-        const normalized = normalize(topics);
-        try {
-            storage?.setItem(pinnedTopicsStorageKey, JSON.stringify({ version: 1, topics: normalized }));
-        } catch {
-            // Storage can be blocked in private or local file contexts.
-        }
-        return normalized;
-    }
-
-    return {
-        read,
-        toggle(topic) {
-            if (!validTopics.has(topic)) return read();
-            const topics = read();
-            const next = topics.includes(topic)
-                ? topics.filter((item) => item !== topic)
-                : [...topics, topic].slice(-maxPinnedTopics);
-            return write(next);
-        }
-    };
+    return globalThis.AnothelState.createPinnedTopicStore(storage, knownTopicNames);
 }
 
 function statusCounts(modules) {
@@ -278,28 +239,7 @@ function topicMatches(item, definition) {
 }
 
 export function buildSavedSummary(rawValue, validIds = null) {
-    function isCurrent(id) {
-        return !validIds || validIds.has(id);
-    }
-
-    try {
-        const parsed = JSON.parse(rawValue || "[]");
-        if (Array.isArray(parsed)) {
-            const saved = parsed.filter((id) => typeof id === "string" && isCurrent(id)).length;
-            return { saved, unread: saved };
-        }
-        if (parsed?.version === 2 && Array.isArray(parsed.items)) {
-            const records = parsed.items.filter((item) => item && typeof item.id === "string" && isCurrent(item.id));
-            return {
-                saved: records.length,
-                unread: records.filter((item) => !item.status || item.status === "unread").length
-            };
-        }
-    } catch {
-        return { saved: 0, unread: 0 };
-    }
-
-    return { saved: 0, unread: 0 };
+    return globalThis.AnothelState.savedSummaryFromRaw(rawValue, validIds);
 }
 
 export function buildHomeOverview(manifest, options = {}) {
@@ -544,7 +484,7 @@ function readSavedSummary(storage, validIds = null) {
     let rawValue = "[]";
 
     try {
-        rawValue = storage?.getItem(savedStorageKey) || "[]";
+        rawValue = storage?.getItem(globalThis.AnothelState.keys.savedItems) || "[]";
     } catch {
         rawValue = "[]";
     }

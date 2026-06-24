@@ -138,11 +138,11 @@ This keeps the imported review intact enough to explain why each recommendation 
 
 These are valid backlog items. Completed items should move out of this list after verification.
 
-- **Shared local state module**: move saved items, pinned topics, saved searches, and Explore defaults behind one browser-state helper after current UX contracts are stable.
 - **Topic taxonomy as data**: unify Home, Explore, Topics, Today boosts, and update scripts around one topic definition source.
 - **Score reasons**: expose 1-3 concise reasons for high-priority Today/Explore cards.
 - **Refresh report on Status**: surface last run, changed modules, failed sources, fallback sources, and run context from checked-in data.
 - **Shared UI helpers**: extract repeated `escapeHtml`, `safeHref`, and date/status formatting only when touching those renderers anyway.
+- Done: shared local state module now owns saved items and pinned topics. Explore defaults and saved searches stay Explore-local until another page needs them.
 - Done: package, repo, and link definitions moved to data. Trends stay in scripts until query groups and scoring heuristics have a clean data shape.
 
 ### P2 - Framework / Architecture Later
@@ -160,24 +160,38 @@ These are valid backlog items. Completed items should move out of this list afte
 
 ## Current / Next Work
 
-### 1. P1 Shared Local State Module
+### 1. P1 Topic Taxonomy As Data
+
+Goal: make topic definitions one checked-in contract instead of repeated literals.
+
+- Move topic names, slugs, aliases, route paths, and short descriptions into one data module/file.
+- Reuse that contract from Home, Explore, Topics, Today boosts, and update scripts where it is already helpful.
+- Keep generated data shape stable unless a test proves a migration is needed.
+- Avoid expanding topics until the shared contract is in place.
+
+Done when:
+- Topic labels/slugs are not duplicated across Home, Explore, and Topics.
+- Topic routes and focus filters use the same definitions.
+- Tests fail on unknown topic slugs, broken topic routes, or stale topic aliases.
+
+Success metric:
+- Adding or renaming a topic requires one data change plus any intentional copy/content change.
+
+## Recently Completed
+
+### 2026-06-24 - P1 Shared Local State Module
 
 Goal: remove duplicated localStorage handling without changing saved queue behavior.
 
-- Move saved items, pinned topics, saved searches, and Explore defaults behind one browser-state helper.
-- Keep existing storage keys and migration behavior.
-- Do not add accounts, sync, backend, or new dependencies.
-- Convert one caller at a time with tests.
-
-Done when:
-- Storage keys are defined in one file.
-- Explore and Review read identical saved item records.
-- Tests cover corrupted localStorage, missing fields, and v1-to-v2 saved item migration.
+- Done: added `AnothelState` as the shared browser-state helper.
+- Done: saved item storage keys, v1-to-v2 migration, status normalization, stale-id summary, and blocked-storage fallback now live in one place.
+- Done: Home, Explore, and Review now read the same saved item record format.
+- Done: Home, Explore, and Topic pages now share pinned topic storage and validation.
+- Deferred: Explore defaults and saved searches remain Explore-local because no other page consumes them yet.
+- Verified: focused local-state, Home, Explore, Review, and Topic tests pass.
 
 Success metric:
-- A saved item has one interpretation across Home, Explore, Review, and Topics.
-
-## Recently Completed
+- A saved item and pinned topic have one interpretation across Home, Explore, Review, and Topics.
 
 ### 2026-06-24 - P0 Freshness And Trust Pass
 

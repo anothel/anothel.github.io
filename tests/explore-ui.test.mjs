@@ -5,6 +5,7 @@ import vm from "node:vm";
 
 function loadExplore(extra = {}) {
     const context = { console, Date, ...extra };
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
@@ -587,6 +588,7 @@ test("Explore script does not auto-fetch on non-Explore pages", async () => {
         }
     };
 
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
@@ -696,6 +698,7 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
         })
     };
 
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
@@ -796,6 +799,7 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
         })
     };
 
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
@@ -906,6 +910,7 @@ test("Explore topic lens click applies the matching focus filter", async () => {
         })
     };
 
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
@@ -1006,6 +1011,7 @@ test("Explore topic pin click updates stored pins and rerenders lenses", async (
         })
     };
 
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
@@ -1089,6 +1095,7 @@ test("Explore browser init applies focus from URL query", async () => {
         })
     };
 
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
@@ -1176,6 +1183,7 @@ test("Explore browser init restores explicit default focus and sort", async () =
         })
     };
 
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
@@ -1271,6 +1279,7 @@ test("Explore default controls save and reset explicit preferred state", async (
         })
     };
 
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
@@ -1382,6 +1391,7 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
         })
     };
 
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);

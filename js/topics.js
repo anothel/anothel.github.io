@@ -1,5 +1,5 @@
 (function attachTopics(global) {
-    const pinnedTopicsStorageKey = "anothel.preferences.pinnedTopics.v1";
+    const localState = global.AnothelState;
     const defaultPaths = {
         trends: "../../data/trends.json",
         packages: "../../data/packages.json",
@@ -106,45 +106,7 @@
     }
 
     function createPinnedTopicStore(storage) {
-        const validTopics = new Set(knownTopicNames);
-        const maxPinnedTopics = 3;
-
-        function normalize(topics) {
-            return [...new Set((topics || []).filter((topic) => validTopics.has(topic)))].slice(0, maxPinnedTopics);
-        }
-
-        function read() {
-            try {
-                const parsed = JSON.parse(storage?.getItem(pinnedTopicsStorageKey) || "[]");
-                if (Array.isArray(parsed)) return normalize(parsed);
-                if (parsed?.version === 1 && Array.isArray(parsed.topics)) return normalize(parsed.topics);
-            } catch {
-                return [];
-            }
-            return [];
-        }
-
-        function write(topics) {
-            const normalized = normalize(topics);
-            try {
-                storage?.setItem(pinnedTopicsStorageKey, JSON.stringify({ version: 1, topics: normalized }));
-            } catch {
-                // Storage can be disabled in private or local file contexts.
-            }
-            return normalized;
-        }
-
-        return {
-            read,
-            toggle(topic) {
-                if (!validTopics.has(topic)) return read();
-                const topics = read();
-                const next = topics.includes(topic)
-                    ? topics.filter((item) => item !== topic)
-                    : [...topics, topic].slice(-maxPinnedTopics);
-                return write(next);
-            }
-        };
+        return localState.createPinnedTopicStore(storage, knownTopicNames);
     }
 
     function textBlob(item) {
