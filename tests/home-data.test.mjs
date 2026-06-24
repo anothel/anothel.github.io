@@ -27,7 +27,7 @@ test("buildHomeOverview summarizes manifest modules", () => {
             { status: "partial", count: 8, updated: "2026-06-13" },
             { status: "ok", count: 6, updated: "2026-06-14" }
         ]
-    });
+    }, { today: "2026-06-16" });
 
     assert.deepEqual(overview, {
         totalItems: 25,
@@ -36,7 +36,8 @@ test("buildHomeOverview summarizes manifest modules", () => {
         errorModules: 0,
         totalModules: 3,
         updated: "2026-06-14",
-        healthLabel: "2 ok / 1 partial"
+        healthLabel: "2 ok / 1 partial",
+        dataState: "Aging"
     });
 });
 

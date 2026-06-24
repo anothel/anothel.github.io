@@ -39,7 +39,7 @@ const datasets = {
 };
 
 test("collectSourceRows expands module source metadata into rows", () => {
-    assert.deepEqual(collectSourceRows(manifest, datasets), [
+    assert.deepEqual(collectSourceRows(manifest, datasets, { today: "2026-06-24" }), [
         {
             module: "Tech trends",
             moduleRoute: "trends/index.html",
@@ -47,7 +47,7 @@ test("collectSourceRows expands module source metadata into rows", () => {
             status: "ok",
             count: 6,
             updated: "2026-06-20T00:00:00.000Z",
-            detail: "2026-06-20T00:00:00.000Z"
+            detail: "Stale - 4 days old"
         },
         {
             module: "Tech trends",
@@ -56,7 +56,7 @@ test("collectSourceRows expands module source metadata into rows", () => {
             status: "error",
             count: 0,
             updated: "-",
-            detail: "rate limited"
+            detail: "Error - no current timestamp / rate limited"
         },
         {
             module: "Package watchlist",
@@ -65,7 +65,7 @@ test("collectSourceRows expands module source metadata into rows", () => {
             status: "ok",
             count: 4,
             updated: "2026-06-19T00:00:00.000Z",
-            detail: "2026-06-19T00:00:00.000Z"
+            detail: "Stale - 5 days old"
         }
     ]);
 });
@@ -129,7 +129,7 @@ test("status rows and summary surface fallback safety detail", () => {
     };
     const rows = collectSourceRows(fallbackManifest, fallbackDatasets);
 
-    assert.equal(rows[0].detail, "using fallback / previous data kept / rate limited / No package rows fetched / previous refresh 2026-06-19");
+    assert.equal(rows[0].detail, "Fallback - using 2026-06-19 data / using fallback / previous data kept / rate limited / No package rows fetched / previous refresh 2026-06-19");
     assert.match(renderSourceRows(rows), /using fallback \/ previous data kept \/ rate limited/);
     assert.equal(buildStatusSummary(fallbackManifest, fallbackDatasets).healthLabel, "1 fallback");
 });

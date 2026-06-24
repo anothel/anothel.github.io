@@ -96,11 +96,13 @@ Goal: make the current static site trustworthy and understandable before changin
    - Keep Home, Explore, Status, and module stamps on the same aggregate source-health logic.
    - Reason: "Data date" alone does not explain stale-but-usable or fallback states.
    - Done when: tests cover fresh, stale, fallback, and partial cases across shared data-health logic.
+   - Done 2026-06-24.
 
 8. **Local-only saved queue copy**
    - State that saved Review items stay in this browser only.
    - Reason: localStorage is intentional, but users should not expect account sync.
    - Done when: Review empty/header copy explains the local browser boundary without suggesting a broken feature.
+   - Done 2026-06-24; existing Review/Home copy already covered this.
 
 ### Imported Backlog Decision Log
 
@@ -158,24 +160,37 @@ These are valid backlog items. Completed items should move out of this list afte
 
 ## Current / Next Work
 
-### 1. P0 Freshness And Trust Pass
+### 1. P1 Shared Local State Module
 
-Goal: make source freshness and local-only state impossible to misread.
+Goal: remove duplicated localStorage handling without changing saved queue behavior.
 
-- Add freshness labels to shared data-health logic.
-- Make Home, Explore, Status, and module stamps use consistent source-health wording.
-- Add regression coverage for fresh, stale, fallback, and partial states.
-- Add local-only Review saved-queue copy.
+- Move saved items, pinned topics, saved searches, and Explore defaults behind one browser-state helper.
+- Keep existing storage keys and migration behavior.
+- Do not add accounts, sync, backend, or new dependencies.
+- Convert one caller at a time with tests.
 
 Done when:
-- Data health states are understandable without reading implementation docs.
-- Home, Explore, and Status do not disagree about the same source state.
-- Review clearly says saved items are stored in this browser only.
+- Storage keys are defined in one file.
+- Explore and Review read identical saved item records.
+- Tests cover corrupted localStorage, missing fields, and v1-to-v2 saved item migration.
 
 Success metric:
-- A repeat visitor can tell whether data is fresh, stale, partial, or fallback, and where saved items live.
+- A saved item has one interpretation across Home, Explore, Review, and Topics.
 
 ## Recently Completed
+
+### 2026-06-24 - P0 Freshness And Trust Pass
+
+Goal: make source freshness and local-only Review state harder to misread.
+
+- Done: source health cards now show Fresh, Aging, Stale, Fallback, Error, or Partial labels.
+- Done: fallback/error/partial details keep safety and failure context after the user-facing freshness label.
+- Done: Home Data state now uses Fresh/Aging/Stale instead of the vague `current`.
+- Done: Review and Home already had local-browser saved queue copy, so no new UI was added.
+- Verified: focused DataHealth, Home, Status, and static fallback tests pass.
+
+Success metric:
+- Home, Explore, Status, and module source cards expose data age/state through shared health rendering.
 
 ### 2026-06-23 - P1 Watchlist Definitions As Data
 

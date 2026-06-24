@@ -167,6 +167,24 @@ function healthLabel(counts) {
     ].filter(Boolean).join(" / ") || "0 ok";
 }
 
+function ageDays(updated, today = new Date()) {
+    const updatedDate = String(updated || "").match(/^\d{4}-\d{2}-\d{2}/)?.[0];
+    const todayDate = (today instanceof Date ? today.toISOString() : String(today || "")).match(/^\d{4}-\d{2}-\d{2}/)?.[0];
+    if (!updatedDate || !todayDate) return null;
+
+    const diff = Date.parse(`${todayDate}T00:00:00.000Z`) - Date.parse(`${updatedDate}T00:00:00.000Z`);
+    if (!Number.isFinite(diff)) return null;
+    return Math.max(0, Math.floor(diff / 86400000));
+}
+
+function dataState(updated, today) {
+    const age = ageDays(updated, today);
+    if (age === null) return "unknown";
+    if (age <= 1) return "Fresh";
+    if (age <= 3) return "Aging";
+    return "Stale";
+}
+
 function safeCount(value) {
     const count = Number(value);
     return Number.isFinite(count) && count > 0 ? Math.floor(count) : 0;
@@ -284,9 +302,10 @@ export function buildSavedSummary(rawValue, validIds = null) {
     return { saved: 0, unread: 0 };
 }
 
-export function buildHomeOverview(manifest) {
+export function buildHomeOverview(manifest, options = {}) {
     const modules = manifest.modules || [];
     const counts = statusCounts(modules);
+    const updated = modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || "-";
 
     return {
         totalItems: modules.reduce((sum, module) => sum + module.count, 0),
@@ -294,8 +313,9 @@ export function buildHomeOverview(manifest) {
         partialModules: counts.partial,
         errorModules: counts.error,
         totalModules: modules.length,
-        updated: modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || "-",
-        healthLabel: healthLabel(counts)
+        updated,
+        healthLabel: healthLabel(counts),
+        dataState: dataState(updated, options.today)
     };
 }
 
@@ -487,7 +507,7 @@ function applyOverview(root, manifest) {
     if (total) total.textContent = String(overview.totalItems);
     if (live) live.textContent = overview.healthLabel;
     if (updated) updated.textContent = overview.updated;
-    if (freshness) freshness.textContent = overview.updated === "-" ? "unknown" : "current";
+    if (freshness) freshness.textContent = overview.dataState;
 }
 
 function applyRoutes(root, manifest) {

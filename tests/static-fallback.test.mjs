@@ -103,6 +103,7 @@ test("home static fallback matches current manifest summary", () => {
     assert.match(home, new RegExp(`<strong data-home-total>${moduleTotal()}</strong>`));
     assert.match(home, new RegExp(`<strong data-home-live>${moduleHealth()}</strong>`));
     assert.match(home, new RegExp(`<strong data-home-updated>${manifest.updated}</strong>`));
+    assert.match(home, /<strong data-home-freshness>Aging<\/strong>/);
     assert.match(home, /A personal radar for AI engineering signals/);
     assert.doesNotMatch(home, /Static fallback|fetch is available|local file fetch is blocked/);
 });
@@ -123,6 +124,7 @@ test("status static fallback matches current manifest summary", () => {
     assert.match(html, new RegExp(`<strong data-status-health>${sourceHealth()}</strong>`));
     assert.match(html, new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
     assert.match(html, new RegExp(dataModeText().replaceAll(".", "\\.")));
+    assert.match(html, /<small>Aging - 3 days old<\/small>/);
 });
 
 test("module page stamps do not drift behind checked-in manifest", () => {

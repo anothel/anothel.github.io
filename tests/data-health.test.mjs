@@ -45,6 +45,7 @@ test("DataHealth renders source health cards with escaped errors", () => {
     assert.match(html, /source-health-card status-partial/);
     assert.match(html, /&lt;script&gt;npm\(\)&lt;\/script&gt;/);
     assert.match(html, /13 visible items/);
+    assert.match(html, /Partial - updated 2026-06-19/);
     assert.match(html, /1 failed: @bad\/pkg/);
     assert.match(html, /bad &quot;timeout&quot;/);
 });
@@ -66,6 +67,47 @@ test("DataHealth describes fallback and partial modes", () => {
     );
 });
 
+test("DataHealth labels source freshness by age and status", () => {
+    const DataHealth = loadDataHealth();
+
+    assert.equal(
+        DataHealth.freshnessText({ status: "ok", updatedAt: "2026-06-24T00:00:00.000Z" }, "2026-06-24"),
+        "Fresh - updated 2026-06-24"
+    );
+    assert.equal(
+        DataHealth.freshnessText({ status: "ok", updated: "2026-06-22" }, "2026-06-24"),
+        "Aging - 2 days old"
+    );
+    assert.equal(
+        DataHealth.freshnessText({ status: "ok", updated: "2026-06-19" }, "2026-06-24"),
+        "Stale - 5 days old"
+    );
+    assert.equal(
+        DataHealth.freshnessText({ status: "fallback", previousUpdated: "2026-06-21" }, "2026-06-24"),
+        "Fallback - using 2026-06-21 data"
+    );
+    assert.equal(
+        DataHealth.freshnessText({ status: "partial", updated: "2026-06-23" }, "2026-06-24"),
+        "Partial - updated 2026-06-23"
+    );
+    assert.equal(
+        DataHealth.freshnessText({ status: "error" }, "2026-06-24"),
+        "Error - no current timestamp"
+    );
+});
+
+test("DataHealth source cards include freshness detail", () => {
+    const DataHealth = loadDataHealth();
+    const html = DataHealth.renderSourceHealth({
+        name: "npm",
+        status: "ok",
+        count: 4,
+        updatedAt: "2026-06-22T00:00:00.000Z"
+    }, { today: "2026-06-24" });
+
+    assert.match(html, /Aging - 2 days old/);
+});
+
 test("DataHealth renders fallback safety detail", () => {
     const DataHealth = loadDataHealth();
     const html = DataHealth.renderSourceHealth({
@@ -80,6 +122,7 @@ test("DataHealth renders fallback safety detail", () => {
     });
 
     assert.match(html, /source-health-card status-fallback/);
+    assert.match(html, /Fallback - using 2026-06-19 data/);
     assert.match(html, /using fallback \/ previous data kept \/ rate limited/);
     assert.match(html, /No repo rows fetched/);
     assert.match(html, /previous refresh 2026-06-19/);
