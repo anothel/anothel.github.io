@@ -19,6 +19,7 @@
     const state = {
         items: [],
         sourceMeta: [],
+        updated: "",
         module: "all",
         category: "all",
         focus: "all",
@@ -585,7 +586,7 @@
 
     function renderHealth(els) {
         if (!dataHealth) return;
-        if (els.dataMode) els.dataMode.textContent = dataHealth.dataModeText(state.sourceMeta);
+        if (els.dataMode) els.dataMode.textContent = dataHealth.dataModeText(state.sourceMeta, { updated: state.updated });
         if (els.sourceHealth) els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(state.sourceMeta);
     }
 
@@ -751,6 +752,7 @@
 
         state.items = normalizeExploreData(dataByModule);
         state.sourceMeta = collectSourceMeta(dataByModule);
+        state.updated = manifest?.updated || state.items.map((item) => item.updated).filter(Boolean).sort().at(-1) || "";
         state.savedIds = filterSavedIds(state.items, store.read());
         state.pinnedTopics = new Set(pinnedStore.read());
         state.savedSearches = savedSearchStore.read();

@@ -111,12 +111,17 @@
         return `Stale - ${age} days old`;
     }
 
-    function dataModeText(sourceMeta) {
+    function dataModeText(sourceMeta, options = {}) {
         const status = aggregateSourceStatus(sourceMeta);
         if (status === "fallback") return "Source health fallback. Previous data remains available.";
         if (status === "partial") return "Source health partial. Usable data remains available.";
         if (status === "error") return "Source health failed. Check Status before trusting freshness.";
-        if (status === "ok") return "Source health ok. Data date is current.";
+        if (status === "ok") {
+            const updatedDate = datePart(options.updated);
+            return updatedDate
+                ? `Source health ok. Data date ${updatedDate}.`
+                : "Source health ok. Use the displayed data date for freshness.";
+        }
         return "Data status unavailable.";
     }
 

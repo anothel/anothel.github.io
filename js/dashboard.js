@@ -2,6 +2,7 @@ const state = {
     items: [],
     sourceMeta: [],
     isFallback: false,
+    updated: "",
     source: "all",
     category: "all",
     query: "",
@@ -224,7 +225,7 @@ function renderFilterSummary() {
 function renderSourceHealth() {
     els.dataMode.textContent = state.isFallback
         ? dataHealth.dataModeText({ status: "fallback" })
-        : dataHealth.dataModeText(state.sourceMeta);
+        : dataHealth.dataModeText(state.sourceMeta, { updated: state.updated });
 
     els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(state.sourceMeta);
 }
@@ -338,6 +339,7 @@ async function init() {
     state.items = data.items;
     state.sourceMeta = data.sourceMeta || [];
     state.isFallback = isFallback;
+    state.updated = data.updated;
     els.updated.textContent = data.updated;
     fillSelect(els.source, uniqueValues(data.items, "source"), "All origins");
     fillSelect(els.category, uniqueValues(data.items, "category"), "All categories");

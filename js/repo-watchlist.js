@@ -103,7 +103,7 @@ function render(data) {
     els.total.textContent = String(data.repos.length);
     els.topRepo.textContent = top ? top.name.split("/")[1] : "-";
     els.sourceStatus.textContent = data.sourceMeta.status;
-    els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta);
+    els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta, { updated: data.updated });
     els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(data.sourceMeta);
     els.list.innerHTML = data.repos.map((item) => `
         <a class="watch-row repo-row" href="${safeHref(item.url)}">

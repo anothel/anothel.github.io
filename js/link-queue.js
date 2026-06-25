@@ -152,7 +152,7 @@ async function init() {
     state.links = data.links;
     els.updated.textContent = data.updated;
     els.sourceStatus.textContent = data.sourceMeta.status;
-    els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta);
+    els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta, { updated: data.updated });
     els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(data.sourceMeta);
     fillCategorySelect(data.links);
     bindEvents();

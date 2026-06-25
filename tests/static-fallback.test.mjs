@@ -70,14 +70,14 @@ function todayStatusText() {
     if (status === "fallback") return `${total} generated picks. Source health fallback. Previous data remains available.`;
     if (status === "partial") return `${total} generated picks. Source health partial. Usable data remains available.`;
     if (status === "error") return `${total} generated picks from failed source refresh. Check Status before trusting freshness.`;
-    return `${total} generated picks. Source health ok. Data date is current.`;
+    return `${total} generated picks. Source health ok. Data date ${today.updated}.`;
 }
 
 function dataModeText() {
     const health = moduleHealth();
     if (health.includes("partial")) return "Source health partial. Usable data remains available.";
     if (health.includes("fallback")) return "Source health fallback. Previous data remains available.";
-    return "Source health ok. Data date is current.";
+    return `Source health ok. Data date ${manifest.updated}.`;
 }
 
 function topicApp() {
@@ -166,5 +166,6 @@ test("checked-in fallback copy avoids stale internal implementation language", (
         const html = read(path);
         assert.doesNotMatch(html, /2026-06-14|2026-06-15|2026-06-19/, path);
         assert.doesNotMatch(html, /Static fallback|fetch is available|checked-in JSON|checked-in data/i, path);
+        assert.doesNotMatch(html, /Data date is current/, path);
     }
 });

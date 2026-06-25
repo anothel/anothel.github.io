@@ -150,6 +150,6 @@ test("link queue escapes generated text and blocks unsafe links", async () => {
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;link&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;summary&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Source health ok. Data date is current.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Source health ok. Data date 2026-06-16.");
     assert.match(html, /status-ok/);
 });

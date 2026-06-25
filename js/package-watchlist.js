@@ -97,7 +97,7 @@ function render(data) {
     els.total.textContent = String(data.packages.length);
     els.topPackage.textContent = top ? top.name : "-";
     els.sourceStatus.textContent = data.sourceMeta.status;
-    els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta);
+    els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta, { updated: data.updated });
     els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(data.sourceMeta);
     els.list.innerHTML = data.packages.map((item) => `
         <a class="watch-row" href="${safeHref(item.url)}">

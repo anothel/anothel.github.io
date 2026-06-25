@@ -63,7 +63,11 @@ test("DataHealth describes fallback and partial modes", () => {
     );
     assert.equal(
         DataHealth.dataModeText({ status: "ok" }),
-        "Source health ok. Data date is current."
+        "Source health ok. Use the displayed data date for freshness."
+    );
+    assert.equal(
+        DataHealth.dataModeText({ status: "ok" }, { updated: "2026-06-22" }),
+        "Source health ok. Data date 2026-06-22."
     );
 });
 

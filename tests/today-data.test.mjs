@@ -274,6 +274,14 @@ test("renderTodayStats summarizes section counts", () => {
 test("renderTodayStatus explains partial and fallback generated data", () => {
     assert.equal(
         renderTodayStatus({
+            updated: "2026-06-22",
+            sourceMeta: { status: "ok" },
+            sections: [{ items: [{}, {}] }]
+        }),
+        "2 generated picks. Source health ok. Data date 2026-06-22."
+    );
+    assert.equal(
+        renderTodayStatus({
             sourceMeta: { status: "partial" },
             sections: [{ items: [{}, {}] }]
         }),

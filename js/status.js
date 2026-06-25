@@ -291,7 +291,7 @@ function applyStatus(root, manifest, datasets, report = null) {
     if (dataMode) {
         const sourceMeta = rows.map((row) => ({ status: row.status }));
         dataMode.textContent = globalThis.DataHealth?.dataModeText
-            ? globalThis.DataHealth.dataModeText(sourceMeta)
+            ? globalThis.DataHealth.dataModeText(sourceMeta, { updated: summary.updated })
             : "Source health unavailable. Existing pages remain usable.";
     }
 }
