@@ -89,6 +89,18 @@
                     writeRecords(records);
                 }
                 return new Set(records.map((item) => item.id));
+            },
+            mergeRecords(incomingRecords = []) {
+                const records = readRecords();
+                const seen = new Set(records.map((record) => record.id));
+                const incoming = incomingRecords.map((record) => normalizeRecord(record, options)).filter(Boolean);
+                const added = incoming.filter((record) => !seen.has(record.id));
+                writeRecords([...records, ...added]);
+                return {
+                    added: added.length,
+                    skipped: incoming.length - added.length,
+                    total: records.length + added.length
+                };
             }
         };
     }

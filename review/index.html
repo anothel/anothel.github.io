@@ -78,6 +78,10 @@
                 <button type="button" data-review-filter="unread" aria-pressed="false">Unread</button>
                 <button type="button" data-review-filter="read" aria-pressed="false">Read</button>
                 <button type="button" data-review-filter="done" aria-pressed="false">Done</button>
+                <button type="button" data-review-export>Export JSON</button>
+                <button type="button" data-review-import>Import JSON</button>
+                <input type="file" accept="application/json,.json" data-review-import-file hidden>
+                <span data-review-portability-status>Review JSON stays local.</span>
             </section>
 
             <section class="review-workspace" aria-label="Review workspace">

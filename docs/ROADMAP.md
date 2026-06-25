@@ -39,7 +39,6 @@ No active P1 work. Promote the next item only when a P2 trigger becomes real.
 - Astro + React islands only after route compatibility and localStorage migration are proven.
 - Explore and Review React islands only if vanilla code becomes the blocker.
 - Design-system cleanup only after repeated patterns stabilize.
-- Export/import Review JSON only after local-state portability becomes a real need.
 - Visual regression only after UI layout stabilizes enough to make snapshots useful.
 - More topic pages only when each has a judgment note, not just item count.
 

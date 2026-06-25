@@ -183,6 +183,26 @@ test("Review rendering escapes generated text and blocks unsafe item links", () 
     assert.match(detail, /aria-label="Remove &lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt; from Review"/);
 });
 
+test("Review exports saved records and imports valid payloads", () => {
+    const app = loadReview({ Date: class extends Date {
+        constructor() { super("2026-06-25T00:00:00.000Z"); }
+        static now() { return Date.parse("2026-06-25T00:00:00.000Z"); }
+    } });
+    const payload = app.reviewExportPayload([
+        { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "done" }
+    ]);
+
+    assert.match(payload, /"version": 2/);
+    assert.match(payload, /"exportedAt": "2026-06-25T00:00:00\.000Z"/);
+    assert.deepEqual(JSON.parse(payload).items, [
+        { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "done" }
+    ]);
+    assert.deepEqual(JSON.parse(JSON.stringify(app.reviewImportRecords(payload))), [
+        { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "done" }
+    ]);
+    assert.deepEqual(JSON.parse(JSON.stringify(app.reviewImportRecords("not json"))), []);
+});
+
 test("Review browser init renders saved queue and removes items", async () => {
     function createElement() {
         return {
@@ -197,6 +217,7 @@ test("Review browser init renders saved queue and removes items", async () => {
 
     const elements = Object.fromEntries([
         "[data-review-total]",
+        "[data-review-portability-status]",
         "[data-review-focus-count]",
         "[data-review-source-count]",
         "[data-review-queue]",

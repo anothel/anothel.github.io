@@ -193,6 +193,18 @@
         `;
     }
 
+    function reviewExportPayload(records = []) {
+        return JSON.stringify({
+            version: 2,
+            exportedAt: new Date().toISOString(),
+            items: records
+        }, null, 2);
+    }
+
+    function reviewImportRecords(text) {
+        return global.AnothelState.savedRecordsFromRaw(text);
+    }
+
     function selectors() {
         return {
             total: document.querySelector("[data-review-total]"),
@@ -203,6 +215,10 @@
             sourceCount: document.querySelector("[data-review-source-count]"),
             queue: document.querySelector("[data-review-queue]"),
             detail: document.querySelector("[data-review-detail]"),
+            exportButton: document.querySelector("[data-review-export]"),
+            importButton: document.querySelector("[data-review-import]"),
+            importInput: document.querySelector("[data-review-import-file]"),
+            portabilityStatus: document.querySelector("[data-review-portability-status]"),
             filterButtons: typeof document.querySelectorAll === "function"
                 ? [...document.querySelectorAll("[data-review-filter]")]
                 : []
@@ -222,6 +238,38 @@
 
     function bindActions(els, store) {
         if (typeof document.querySelectorAll !== "function") return;
+
+        if (els.exportButton && els.exportButton.dataset.reviewExportBound !== "true") {
+            els.exportButton.dataset.reviewExportBound = "true";
+            els.exportButton.addEventListener("click", () => {
+                const blob = new Blob([reviewExportPayload(store.readRecords())], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "anothel-review.json";
+                link.click();
+                URL.revokeObjectURL(url);
+                if (els.portabilityStatus) els.portabilityStatus.textContent = "Review JSON exported.";
+            });
+        }
+
+        if (els.importButton && els.importInput && els.importButton.dataset.reviewImportBound !== "true") {
+            els.importButton.dataset.reviewImportBound = "true";
+            els.importButton.addEventListener("click", () => els.importInput.click());
+            els.importInput.addEventListener("change", async () => {
+                const file = els.importInput.files?.[0];
+                if (!file) return;
+                const records = reviewImportRecords(await file.text());
+                const result = store.mergeRecords(records);
+                state.savedIds = store.read();
+                state.savedRecords = store.recordsById();
+                if (els.portabilityStatus) {
+                    els.portabilityStatus.textContent = `Imported ${result.added} items. Kept ${result.skipped} existing.`;
+                }
+                els.importInput.value = "";
+                render(els, store);
+            });
+        }
 
         (els.filterButtons || []).forEach((button) => {
             if (button.dataset.reviewFilterBound === "true") return;
@@ -318,6 +366,8 @@
         renderReviewQueue,
         renderReviewDetail,
         renderReviewEmpty,
+        reviewExportPayload,
+        reviewImportRecords,
         similarExploreHref
     };
 

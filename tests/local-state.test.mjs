@@ -83,6 +83,26 @@ test("saved item store toggles, removes, sets status, and ignores blocked storag
     assert.deepEqual([...blocked.toggle("repos:a")], ["repos:a"]);
 });
 
+test("saved item store imports new records without overwriting existing records", () => {
+    const state = loadLocalState();
+    const storage = memoryStorage();
+    const store = state.createSavedItemStore(storage, { now: () => "2026-06-24T00:00:00.000Z" });
+
+    store.toggle("repos:a");
+    store.setStatus("repos:a", "done");
+    const result = store.mergeRecords([
+        { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" },
+        { id: "links:b", savedAt: "2026-06-21T00:00:00.000Z", status: "read" },
+        { id: 7 }
+    ]);
+
+    assert.deepEqual(plain(result), { added: 1, skipped: 1, total: 2 });
+    assert.deepEqual(plain(store.readRecords()), [
+        { id: "repos:a", savedAt: "2026-06-24T00:00:00.000Z", status: "done" },
+        { id: "links:b", savedAt: "2026-06-21T00:00:00.000Z", status: "read" }
+    ]);
+});
+
 test("saved summary filters stale ids and counts unread records", () => {
     const state = loadLocalState();
     const validIds = new Set(["repos:a", "links:c"]);
