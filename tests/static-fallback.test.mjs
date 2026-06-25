@@ -125,7 +125,7 @@ test("status static fallback matches current manifest summary", () => {
     assert.match(html, new RegExp(`<strong data-status-health>${sourceHealth()}</strong>`));
     assert.match(html, new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
     assert.match(html, new RegExp(dataModeText().replaceAll(".", "\\.")));
-    assert.match(html, /<small>Aging - 3 days old<\/small>/);
+    assert.match(html, /<small>(Fresh|Aging|Stale|Partial|Fallback|Error|Unknown) - /);
 });
 
 test("module page stamps do not drift behind checked-in manifest", () => {

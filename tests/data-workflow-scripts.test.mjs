@@ -12,6 +12,7 @@ test("update-all owns the full data refresh order", () => {
         "scripts/update-links.mjs",
         "scripts/update-today.mjs",
         "scripts/update-manifest.mjs",
+        "scripts/update-static-fallbacks.mjs",
         "scripts/report-refresh.mjs"
     ]);
 });
@@ -29,6 +30,7 @@ test("validate-data syntax checks data workflow scripts and public JavaScript", 
         "scripts/update-all.mjs",
         "scripts/validate-data.mjs",
         "scripts/report-refresh.mjs",
+        "scripts/update-static-fallbacks.mjs",
         "js/topics.js",
         "js/signal-schema.js"
     ]) {

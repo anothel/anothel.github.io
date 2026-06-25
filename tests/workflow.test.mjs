@@ -12,6 +12,10 @@ test("today generator runs after links and before manifest", () => {
     assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-links\.mjs[\s\S]*scripts\/update-today\.mjs[\s\S]*scripts\/update-manifest\.mjs/);
 });
 
+test("static fallbacks refresh after manifest and before refresh report", () => {
+    assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-manifest\.mjs[\s\S]*scripts\/update-static-fallbacks\.mjs[\s\S]*scripts\/report-refresh\.mjs/);
+});
+
 test("data update workflow commits every generated data file", () => {
     for (const file of [
         "data/trends.json",
@@ -21,6 +25,23 @@ test("data update workflow commits every generated data file", () => {
         "data/today.json",
         "data/manifest.json",
         "data/refresh-report.json"
+    ]) {
+        assert.match(workflow, new RegExp(file.replace("/", "\\/")));
+    }
+});
+
+test("data update workflow commits refreshed static fallback pages", () => {
+    for (const file of [
+        "index.html",
+        "today/index.html",
+        "status/index.html",
+        "trends/index.html",
+        "packages/index.html",
+        "repos/index.html",
+        "links/index.html",
+        "topics/ai-agents/index.html",
+        "topics/mcp/index.html",
+        "topics/agent-skills/index.html"
     ]) {
         assert.match(workflow, new RegExp(file.replace("/", "\\/")));
     }

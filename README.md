@@ -32,6 +32,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `scripts/update-links.mjs`: updates curated links data from watchlist definitions
 - `scripts/update-today.mjs`: builds the Today priority brief from generated data
 - `scripts/update-manifest.mjs`: updates the module manifest from generated data files
+- `scripts/update-static-fallbacks.mjs`: refreshes no-JS fallback stamps from generated data
 - `scripts/update-all.mjs`: runs every data updater in the scheduled order
 - `scripts/validate-data.mjs`: runs data tests and public JavaScript syntax checks
 - `scripts/report-refresh.mjs`: writes data refresh summary artifacts for operators
@@ -81,7 +82,7 @@ node scripts/update-all.mjs
 node scripts/validate-data.mjs
 ```
 
-Individual updater scripts stay available for focused refreshes, but the full flow should use `update-all` so Today and Manifest are rebuilt after source data changes.
+Individual updater scripts stay available for focused refreshes, but the full flow should use `update-all` so Today, Manifest, and static fallback stamps are rebuilt after source data changes.
 
 The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pages does not need a server.
 
@@ -93,7 +94,7 @@ The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pag
 - Manual note: the `reason` input is copied into the refresh report.
 - Scheduled refresh: `schedule` runs `17 21 * * *` UTC, once per day.
 - Auth: GitHub API calls use `GITHUB_TOKEN` from the workflow environment.
-- Scope: only `data/trends.json`, `data/packages.json`, `data/repos.json`, `data/links.json`, `data/today.json`, `data/manifest.json`, and `data/refresh-report.json` are committed.
+- Scope: generated `data/*.json` files and refreshed static fallback pages are committed.
 - Safety: `concurrency` prevents overlapping data refresh jobs, `node scripts/update-all.mjs` groups each updater in logs, and the workflow runs `node scripts/validate-data.mjs` before committing generated data.
 - Run summary: every workflow run writes a GitHub Step Summary, commits `data/refresh-report.json`, and uploads a `refresh-report` artifact with source status, counts, changed modules, timestamps, and source errors.
 - Failure model: source fetch failures are stored as `error` or `partial` status where the updater can keep useful data. If a full updater produces zero rows but previous checked-in data exists, the updater writes stale but safe fallback data instead of empty data.
@@ -126,6 +127,7 @@ node --check scripts/update-repos.mjs
 node --check scripts/update-links.mjs
 node --check scripts/update-today.mjs
 node --check scripts/update-manifest.mjs
+node --check scripts/update-static-fallbacks.mjs
 node --check scripts/report-refresh.mjs
 node --check scripts/serve.mjs
 node --check js/dashboard.js

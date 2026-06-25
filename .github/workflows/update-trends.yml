@@ -54,13 +54,13 @@ jobs:
 
       - name: Commit updated data
         run: |
-          if git diff --quiet -- data/trends.json data/packages.json data/repos.json data/links.json data/today.json data/manifest.json data/refresh-report.json; then
+          if git diff --quiet -- data/trends.json data/packages.json data/repos.json data/links.json data/today.json data/manifest.json data/refresh-report.json index.html today/index.html status/index.html trends/index.html packages/index.html repos/index.html links/index.html topics/ai-agents/index.html topics/mcp/index.html topics/agent-skills/index.html; then
             echo "No data changes"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/trends.json data/packages.json data/repos.json data/links.json data/today.json data/manifest.json data/refresh-report.json
+          git add data/trends.json data/packages.json data/repos.json data/links.json data/today.json data/manifest.json data/refresh-report.json index.html today/index.html status/index.html trends/index.html packages/index.html repos/index.html links/index.html topics/ai-agents/index.html topics/mcp/index.html topics/agent-skills/index.html
           git commit -m "chore: update dashboard data"
           git push
