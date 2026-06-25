@@ -13,7 +13,7 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 | Group | Routes | Job |
 |---|---|---|
 | Decision | Home, Today | Decide what to open first. |
-| Discovery | Explore, Topics | Search across modules and inspect focused themes. |
+| Discovery | Explore, Topics, Notes | Search across modules and inspect focused themes. |
 | Source detail | Trends, Packages, Repos, Links | Inspect one source or curated list in more detail. |
 | Trust / personal state | Status, Review | Check data health and revisit locally saved items. |
 
@@ -31,6 +31,7 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 | Repos | GitHub watchlist focused on project traction and workflow relevance. |
 | Links | Checked-in curated reference shelf. |
 | Topics | Focused landing pages that add judgment and context beyond a raw Explore filter. |
+| Notes | Lightweight index of topic judgment notes. |
 
 ## Terminology
 
@@ -46,4 +47,3 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 
 - Astro + React islands remains the medium-term framework target, after P0 trust/copy/data work lands.
 - Signal schema v2 should not replace current data shapes until current schema tests protect module counts, URLs, statuses, and scores.
-- Notes index should wait until at least 3 real notes exist.

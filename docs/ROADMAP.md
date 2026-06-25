@@ -13,7 +13,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Current Surface
 
-- Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, and 5 topic pages.
+- Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, Notes, and 5 topic pages.
 - Core topics: AI agents, MCP, Agent skills, AI evals, Workflow automation.
 - Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata, with AI evals and workflow automation coverage.
 - Local browser state: saved review items, up to 3 pinned topics, explicit Explore defaults, and up to 5 saved Explore searches.
@@ -39,7 +39,6 @@ No active P1 work. Promote the next item only when a P2 trigger becomes real.
 - Astro + React islands only after route compatibility and localStorage migration are proven.
 - Explore and Review React islands only if vanilla code becomes the blocker.
 - Design-system cleanup only after repeated patterns stabilize.
-- Lightweight notes index only after at least 3 real notes exist.
 - Export/import Review JSON only after local-state portability becomes a real need.
 - Visual regression only after UI layout stabilizes enough to make snapshots useful.
 - More topic pages only when each has a judgment note, not just item count.

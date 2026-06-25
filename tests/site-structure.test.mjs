@@ -158,6 +158,7 @@ test("root page is a hub and trends page owns the dashboard", () => {
     assert.match(root, /href="packages\/index\.html"/);
     assert.match(root, /href="repos\/index\.html"/);
     assert.match(root, /href="links\/index\.html"/);
+    assert.match(root, /href="notes\/index\.html"/);
     assert.doesNotMatch(root, /ROADMAP\.md/);
     assert.doesNotMatch(root, /data-grid/);
     assert.doesNotMatch(root, /dashboard\.js/);
@@ -392,6 +393,25 @@ test("topic focus pages expose focused landing pages", () => {
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topic-dashboard-grid[\s\S]*grid-template-columns: 1fr/s);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topic-guidance-grid[\s\S]*grid-template-columns: 1fr/s);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.topic-grid[\s\S]*grid-template-columns: 1fr/s);
+});
+
+test("notes page indexes durable topic notes", () => {
+    const notes = read("notes/index.html");
+    const sitemap = read("sitemap.xml");
+
+    assert.match(notes, /Topic notes\./);
+    assert.match(notes, /Judgment notes from focused topic pages\./);
+    assert.match(notes, /data-notes-count/);
+    assert.match(notes, /data-notes-list/);
+    assert.match(notes, /..\/js\/topic-taxonomy\.js/);
+    assert.match(notes, /..\/js\/notes\.js/);
+    for (const topic of ["AI agents", "MCP", "Agent skills", "AI evals", "Workflow automation"]) {
+        assert.match(notes, new RegExp(topic.replaceAll(" ", "\\s+")));
+    }
+    assert.match(notes, /href="..\/topics\/ai-evals\/index\.html"/);
+    assert.match(notes, /href="..\/topics\/workflow-automation\/index\.html"/);
+    assert.match(notes, /href="..\/index\.html"/);
+    assert.match(sitemap, /https:\/\/anothel\.github\.io\/notes\//);
 });
 
 test("home and today pages link into topic focus pages", () => {

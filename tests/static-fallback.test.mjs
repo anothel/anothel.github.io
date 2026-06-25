@@ -24,6 +24,7 @@ const pages = [
     "packages/index.html",
     "repos/index.html",
     "links/index.html",
+    "notes/index.html",
     "topics/ai-agents/index.html",
     "topics/mcp/index.html",
     "topics/agent-skills/index.html",
@@ -157,6 +158,16 @@ test("topic pages keep checked-in judgment notes without JavaScript", () => {
         assert.match(html, pattern, path);
         assert.match(html, /Supporting signals/i, path);
     }
+});
+
+test("notes index keeps checked-in topic notes without JavaScript", () => {
+    const html = read("notes/index.html");
+
+    assert.match(html, /data-notes-list/);
+    assert.match(html, /Measurement decides which AI changes are safe to keep\./);
+    assert.match(html, /Durable workflows matter when agents need repeatable execution\./);
+    assert.match(html, /href="..\/topics\/ai-evals\/index\.html"/);
+    assert.match(html, /href="..\/topics\/workflow-automation\/index\.html"/);
 });
 
 test("topic page static fallback summaries match current topic data", () => {

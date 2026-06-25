@@ -175,6 +175,13 @@ async function topicApp() {
     return context.TopicApp;
 }
 
+async function notesApp() {
+    const context = { console, URL };
+    vm.runInNewContext(await readFile("js/topic-taxonomy.js", "utf8"), context);
+    vm.runInNewContext(await readFile("js/notes.js", "utf8"), context);
+    return context.NotesApp;
+}
+
 async function updateStaticFallbacks() {
     const manifest = await readJson("data/manifest.json");
     const today = await readJson("data/today.json");
@@ -238,6 +245,15 @@ ${renderRefreshRun(report).trim()}
         html = replaceTaggedText(html, "data-topic-updated", summary.updated);
         await writeIfChanged(path, html);
     }
+
+    const notes = await notesApp();
+    const noteItems = notes.noteItems();
+    let notesHtml = await readFile("notes/index.html", "utf8");
+    notesHtml = replaceTaggedText(notesHtml, "data-notes-count", noteItems.length);
+    notesHtml = replacePattern(notesHtml, /(<section class="topic-note-panel" aria-label="Topic notes" data-notes-list>)[\s\S]*?(<\/section>)/, `$1
+${notes.renderNotes(noteItems)}
+            $2`, "notes list");
+    await writeIfChanged("notes/index.html", notesHtml);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
