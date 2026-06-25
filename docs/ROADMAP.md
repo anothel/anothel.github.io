@@ -13,8 +13,8 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Current Surface
 
-- Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, and 3 topic pages.
-- Core topics: AI agents, MCP, Agent skills.
+- Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, and 5 topic pages.
+- Core topics: AI agents, MCP, Agent skills, AI evals, Workflow automation.
 - Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata, with AI evals and workflow automation coverage.
 - Local browser state: saved review items, up to 3 pinned topics, explicit Explore defaults, and up to 5 saved Explore searches.
 

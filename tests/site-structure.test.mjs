@@ -22,7 +22,9 @@ const pages = [
 const topicPages = [
     ["topics/ai-agents/index.html", "AI agents", "../../", "AI agent signals."],
     ["topics/mcp/index.html", "MCP", "../../", "MCP signals."],
-    ["topics/agent-skills/index.html", "Agent skills", "../../", "Agent skills signals."]
+    ["topics/agent-skills/index.html", "Agent skills", "../../", "Agent skills signals."],
+    ["topics/ai-evals/index.html", "AI evals", "../../", "AI eval signals."],
+    ["topics/workflow-automation/index.html", "Workflow automation", "../../", "Workflow automation signals."]
 ];
 
 test("public pages expose shared primary navigation", () => {

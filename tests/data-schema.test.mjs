@@ -221,7 +221,7 @@ test("watchlist definitions stay editable data with stable fields", () => {
 
 test("topic taxonomy keeps labels, slugs, aliases, and routes in one contract", async () => {
     const { trackedTopicLabels } = await import("../scripts/signal-taxonomy.mjs");
-    const routeLabels = new Set(["AI agents", "MCP", "Agent skills"]);
+    const routeLabels = new Set(["AI agents", "MCP", "Agent skills", "AI evals", "Workflow automation"]);
 
     assert.deepEqual(trackedTopicLabels, topicTaxonomy.trackedTopicLabels);
     assert.deepEqual(topicTaxonomy.trackedTopicLabels, [

@@ -6,7 +6,9 @@ import { renderRefreshRun } from "../js/status.js";
 const topicPages = [
     ["topics/ai-agents/index.html", "AI agents"],
     ["topics/mcp/index.html", "MCP"],
-    ["topics/agent-skills/index.html", "Agent skills"]
+    ["topics/agent-skills/index.html", "Agent skills"],
+    ["topics/ai-evals/index.html", "AI evals"],
+    ["topics/workflow-automation/index.html", "Workflow automation"]
 ];
 
 function escapeHtml(value) {

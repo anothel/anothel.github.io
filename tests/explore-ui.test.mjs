@@ -369,7 +369,7 @@ test("Explore builds topic lenses with counts, module spread, and topic routes",
     assert.equal(byFocus["AI agents"].topItem.title, "openai/codex");
     assert.equal(byFocus.MCP.count, 1);
     assert.equal(byFocus["Agent skills"].route, "../topics/agent-skills/index.html");
-    assert.equal(byFocus["AI evals"].route, "../explore/index.html?focus=AI%20evals");
+    assert.equal(byFocus["AI evals"].route, "../topics/ai-evals/index.html");
 
     const html = app.renderTopicLenses(lenses, "MCP");
     assert.match(html, /data-focus-lens="MCP"/);

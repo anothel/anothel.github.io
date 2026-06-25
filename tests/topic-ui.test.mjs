@@ -116,7 +116,7 @@ test("Topic dashboard model builds why-now text, top movers, related groups, and
         ["Repos", ["openai/codex"]],
         ["Links", ["Agents SDK"]]
     ]);
-    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.crossLinks.map((link) => link.topic))), ["MCP", "Agent skills"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.crossLinks.map((link) => link.topic))), ["MCP", "Agent skills", "AI evals", "Workflow automation"]);
 });
 
 test("Topic guidance gives each topic concrete watch/open/action context", () => {
@@ -137,6 +137,16 @@ test("Topic guidance gives each topic concrete watch/open/action context", () =>
         whenToOpen: "Open when a skill pattern can become repeatable work instead of one-off prompting.",
         nextAction: "Start from stable references, then save repos that look reusable."
     });
+    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("AI evals"))), {
+        whatToWatch: "Eval harnesses, prompt tests, observability, benchmark workflows, and scoring helpers.",
+        whenToOpen: "Open when a signal helps compare AI behavior instead of only showcasing a model.",
+        nextAction: "Check references for stable docs, then compare repo and package traction before saving."
+    });
+    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("Workflow automation"))), {
+        whatToWatch: "Durable workflows, event triggers, integration platforms, and orchestration SDKs.",
+        whenToOpen: "Open when automation can turn repeated agent work into a reliable workflow.",
+        nextAction: "Compare packages and repos, then save tools that fit repeatable work."
+    });
 });
 
 test("Topic notes provide durable judgment copy per topic", () => {
@@ -145,6 +155,8 @@ test("Topic notes provide durable judgment copy per topic", () => {
     assert.match(app.topicNote("AI agents").title, /agent workflow/i);
     assert.match(app.topicNote("MCP").body, /protocol/i);
     assert.match(app.topicNote("Agent skills").readWhen, /reusable/i);
+    assert.match(app.topicNote("AI evals").title, /measurement/i);
+    assert.match(app.topicNote("Workflow automation").body, /reliable runs/i);
 });
 
 test("Topic supporting signals dedupe URLs and keep strongest current signals", () => {
@@ -215,6 +227,8 @@ test("Topic actions use topic-specific routes", () => {
     const ai = app.renderTopicActions("AI agents");
     const mcp = app.renderTopicActions("MCP");
     const skills = app.renderTopicActions("Agent skills");
+    const evals = app.renderTopicActions("AI evals");
+    const workflow = app.renderTopicActions("Workflow automation");
 
     assert.match(ai, /href="..\/..\/repos\/index\.html"/);
     assert.match(ai, /href="..\/..\/packages\/index\.html"/);
@@ -223,6 +237,10 @@ test("Topic actions use topic-specific routes", () => {
     assert.match(mcp, /href="..\/..\/links\/index\.html"/);
     assert.match(skills, /href="..\/..\/links\/index\.html"/);
     assert.match(skills, /href="..\/..\/review\/index\.html"/);
+    assert.match(evals, /href="..\/..\/links\/index\.html"/);
+    assert.match(evals, /href="..\/..\/status\/index\.html"/);
+    assert.match(workflow, /href="..\/..\/packages\/index\.html"/);
+    assert.match(workflow, /href="..\/..\/repos\/index\.html"/);
 });
 
 test("Topic pinned store and renderer expose current topic state", () => {

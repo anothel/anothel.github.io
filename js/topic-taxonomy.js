@@ -90,12 +90,30 @@
         {
             label: "AI evals",
             slug: "ai-evals",
+            routePath: "topics/ai-evals/index.html",
             description: "Evaluation, observability, and test harness tools.",
+            lensDescription: "Evaluation, observability, benchmark, and harness tools.",
             signalLabel: "AI eval",
             reason: "Evaluation signal for measuring agent and model behavior.",
             boost: 30,
+            whyPrefix: "Evaluation tools are becoming the safety layer for agent and model changes.",
             patterns: [/\bevals?\b/, /\bevaluation\b/, /\bbenchmarks?\b/, /\bharness\b/, /\bobservability\b/, /\bbraintrust\b/, /\bevalite\b/],
-            requires: [/\bai\b/, /\bllm\b/, /\bmodel\b/, /\bagents?\b/, /\bcoding\b/]
+            requires: [/\bai\b/, /\bllm\b/, /\bmodel\b/, /\bagents?\b/, /\bcoding\b/],
+            note: {
+                title: "Measurement decides which AI changes are safe to keep.",
+                body: "Track this when eval harnesses, observability tools, and benchmarks make agent or model behavior easier to compare before adoption.",
+                readWhen: "Open this topic when a tool could improve confidence in prompts, agents, or model changes."
+            },
+            guidance: {
+                whatToWatch: "Eval harnesses, prompt tests, observability, benchmark workflows, and scoring helpers.",
+                whenToOpen: "Open when a signal helps compare AI behavior instead of only showcasing a model.",
+                nextAction: "Check references for stable docs, then compare repo and package traction before saving."
+            },
+            actions: [
+                ["Open focused Explore", "explore/index.html?focus=AI%20evals", "AI evals lens"],
+                ["Reference shelf", "links/index.html", "Evaluation references"],
+                ["Status", "status/index.html", "Source health before trusting eval signals"]
+            ]
         },
         {
             label: "AI engineering",
@@ -110,11 +128,29 @@
         {
             label: "Workflow automation",
             slug: "workflow-automation",
+            routePath: "topics/workflow-automation/index.html",
             description: "Durable workflows, integrations, and local automation.",
+            lensDescription: "Durable workflows, integrations, and automation runtimes.",
             signalLabel: "workflow automation",
             reason: "Workflow automation signal connected to agent-style work.",
             boost: 22,
-            patterns: [/\bworkflow automation\b/, /\bdurable workflow\b/, /\binngest\b/, /\bn8n\b/, /\bautomation\b/, /\bintegration\b/]
+            whyPrefix: "Automation runtimes are becoming the glue around agent work.",
+            patterns: [/\bworkflow automation\b/, /\bdurable workflow\b/, /\binngest\b/, /\bn8n\b/, /\bautomation\b/, /\bintegration\b/],
+            note: {
+                title: "Durable workflows matter when agents need repeatable execution.",
+                body: "Track this when workflow engines, integrations, and automation platforms help turn agent-style work into reliable runs.",
+                readWhen: "Open this topic when a signal could reduce manual orchestration or make repeated agent work safer."
+            },
+            guidance: {
+                whatToWatch: "Durable workflows, event triggers, integration platforms, and orchestration SDKs.",
+                whenToOpen: "Open when automation can turn repeated agent work into a reliable workflow.",
+                nextAction: "Compare packages and repos, then save tools that fit repeatable work."
+            },
+            actions: [
+                ["Open focused Explore", "explore/index.html?focus=Workflow%20automation", "Workflow automation lens"],
+                ["Packages", "packages/index.html", "Workflow SDK demand"],
+                ["Repos", "repos/index.html", "Automation project traction"]
+            ]
         },
         {
             label: "Developer tooling",
@@ -237,7 +273,7 @@
     return {
         topicDefinitions,
         trackedTopicLabels: topicDefinitions.map((topic) => topic.label),
-        topicPageLabels: ["AI agents", "MCP", "Agent skills"],
+        topicPageLabels: ["AI agents", "MCP", "Agent skills", "AI evals", "Workflow automation"],
         topicByLabel,
         routeForTopic,
         exploreRouteForTopic,
