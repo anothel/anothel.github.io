@@ -1,6 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import vm from "node:vm";
 import { pathToFileURL } from "node:url";
+import { renderRefreshRun } from "../js/status.js";
 
 const topicPages = [
     ["topics/ai-agents/index.html", "AI agents"],
@@ -175,6 +176,7 @@ async function topicApp() {
 async function updateStaticFallbacks() {
     const manifest = await readJson("data/manifest.json");
     const today = await readJson("data/today.json");
+    const report = await readJson("data/refresh-report.json");
     const datasets = await loadDatasets(manifest);
     const modules = manifest.modules || [];
     const rows = sourceRows(manifest, datasets);
@@ -202,6 +204,12 @@ async function updateStaticFallbacks() {
     statusHtml = replaceTaggedText(statusHtml, "data-status-health", sourceHealth);
     statusHtml = replaceTaggedText(statusHtml, "data-status-updated", updated);
     statusHtml = replacePattern(statusHtml, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(dataModeText(rows.map((row) => row.source), updated))}</p>`, "status data mode");
+    statusHtml = replacePattern(statusHtml, /(<div data-refresh-run>)[\s\S]*?\n\s*<\/section>\s*\n\s*(<section class="rank-panel" aria-labelledby="status-table-title">)/, `$1
+${renderRefreshRun(report).trim()}
+                </div>
+            </section>
+
+            $2`, "refresh run");
     statusHtml = replacePattern(statusHtml, /(<div class="status-table" data-status-rows>)[\s\S]*?(<\/div>)/, `$1${renderStatusRows(rows)}
                 $2`, "status rows");
     await writeIfChanged("status/index.html", statusHtml);

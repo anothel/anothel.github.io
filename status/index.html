@@ -74,24 +74,44 @@
                     <p>Checked-in refresh report with run context, changed data modules, and sources needing attention.</p>
                 </div>
                 <div data-refresh-run>
-                    <div class="status-head" aria-hidden="true">
-                        <span>Run</span>
-                        <span>State</span>
-                        <span>Items</span>
-                        <span>Changed</span>
-                        <span>Context</span>
-                        <span>Attention</span>
-                    </div>
-                    <div class="status-table">
-                        <article class="status-row status-ok">
-                            <span>Last refresh</span>
-                            <strong>2026-06-22T11:54:43.756Z</strong>
-                            <span>ok</span>
-                            <span>126 items</span>
-                            <span>No data file changes recorded.</span>
-                            <small>No failed, partial, or fallback sources.</small>
-                        </article>
-                    </div>
+<div class="stats-grid status-stats">
+            <article class="stat-card">
+                <span>Last run</span>
+                <strong>2026-06-24T11:53:54.493Z</strong>
+                <p>No run context recorded.</p>
+            </article>
+            <article class="stat-card">
+                <span>Result</span>
+                <strong>ok</strong>
+                <p>126 items / 6 sources / manifest 2026-06-22</p>
+            </article>
+            <article class="stat-card">
+                <span>Changed</span>
+                <strong>0 changed</strong>
+                <p>No changed modules.</p>
+            </article>
+            <article class="stat-card">
+                <span>Attention</span>
+                <strong>0 sources</strong>
+                <p>No failed, partial, or fallback sources.</p>
+            </article>
+        </div>
+        <div class="status-head" aria-hidden="true">
+            <span>Module</span>
+            <span>Run state</span>
+            <span>Status</span>
+            <span>Items</span>
+            <span>Detail</span>
+        </div>
+        <div class="status-table">
+            <article class="status-row status-ok">
+                <span>Last refresh</span>
+                <strong>No changed modules</strong>
+                <span>ok</span>
+                <span>126 items</span>
+                <small>No failed, partial, or fallback sources.</small>
+            </article>
+        </div>
                 </div>
             </section>
 

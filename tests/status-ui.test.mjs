@@ -137,6 +137,7 @@ test("status rows and summary surface fallback safety detail", () => {
 test("refresh run renderer surfaces checked-in report context safely", () => {
     const html = renderRefreshRun({
         generatedAt: "2026-06-24T11:39:53.728Z",
+        manifestUpdated: "2026-06-24",
         runContext: {
             reason: "manual <retry>",
             eventName: "workflow_dispatch",
@@ -149,15 +150,23 @@ test("refresh run renderer surfaces checked-in report context safely", () => {
             {
                 id: "packages",
                 title: "Package <watchlist>",
-                sources: [{ source: "npm", status: "partial", errors: ["rate <limit>"] }]
+                status: "partial",
+                count: 33,
+                updated: "2026-06-22",
+                sources: [{ source: "npm", status: "partial", count: 22, errors: ["rate <limit>"] }]
             }
         ]
     });
 
-    assert.match(html, /Last refresh/);
-    assert.match(html, /Package &lt;watchlist&gt;/);
-    assert.match(html, /manual &lt;retry&gt; \/ workflow_dispatch \/ run 123 \/ main/);
+    assert.match(html, /Last run/);
+    assert.match(html, /Result/);
+    assert.match(html, /Changed/);
     assert.match(html, /Attention/);
+    assert.match(html, /Package &lt;watchlist&gt;/);
+    assert.match(html, /manifest 2026-06-24/);
+    assert.match(html, /1 changed/);
+    assert.match(html, /npm partial/);
+    assert.match(html, /manual &lt;retry&gt; \/ workflow_dispatch \/ run 123 \/ main/);
     assert.doesNotMatch(html, /Package <watchlist>/);
     assert.doesNotMatch(html, /manual <retry>/);
 });

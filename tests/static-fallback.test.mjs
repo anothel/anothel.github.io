@@ -13,6 +13,7 @@ function json(path) {
 
 const manifest = json("data/manifest.json");
 const today = json("data/today.json");
+const refreshReport = json("data/refresh-report.json");
 const pages = [
     "index.html",
     "today/index.html",
@@ -125,6 +126,8 @@ test("status static fallback matches current manifest summary", () => {
     assert.match(html, new RegExp(`<strong data-status-health>${sourceHealth()}</strong>`));
     assert.match(html, new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
     assert.match(html, new RegExp(dataModeText().replaceAll(".", "\\.")));
+    assert.match(html, new RegExp(`<strong>${refreshReport.generatedAt}</strong>`));
+    assert.match(html, /No failed, partial, or fallback sources\./);
     assert.match(html, /<small>(Fresh|Aging|Stale|Partial|Fallback|Error|Unknown) - /);
 });
 

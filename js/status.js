@@ -197,6 +197,52 @@ function reportAttentionSources(report) {
         .filter(({ source }) => source.status !== "ok" || (source.errors || []).length > 0);
 }
 
+function sourceIssueText(source) {
+    const errors = Array.isArray(source.errors) ? source.errors.filter(Boolean).join(" / ") : "";
+    const safety = [
+        source.fallbackUsed ? "fallback used" : "",
+        source.staleButSafe ? "previous data kept" : "",
+        source.rateLimited ? "rate limited" : "",
+        source.fallbackReason || ""
+    ].filter(Boolean).join(" / ");
+    return [source.source || "unknown", source.status || "unknown", errors || safety]
+        .filter(Boolean)
+        .join(" ");
+}
+
+function reportDetailRows(report, attention) {
+    const changedIds = new Set((report.changedModules || []).map((module) => module.id));
+    const modules = (report.modules || []).filter((module) => {
+        const hasAttention = (module.sources || []).some((source) => source.status !== "ok" || (source.errors || []).length > 0);
+        return changedIds.has(module.id) || module.changed || hasAttention;
+    });
+
+    if (!modules.length) {
+        return `<article class="status-row status-${escapeHtml(report.totals?.status || "unknown")}">
+                <span>Last refresh</span>
+                <strong>No changed modules</strong>
+                <span>${escapeHtml(report.totals?.status || "unknown")}</span>
+                <span>${escapeHtml(report.totals?.items || 0)} items</span>
+                <small>${attention.length ? `${attention.length} sources need attention` : "No failed, partial, or fallback sources."}</small>
+            </article>`;
+    }
+
+    return modules.map((module) => {
+        const issues = (module.sources || [])
+            .filter((source) => source.status !== "ok" || (source.errors || []).length > 0)
+            .map(sourceIssueText);
+        const detail = issues.length ? issues.join(" / ") : "Changed data file";
+
+        return `<article class="status-row status-${escapeHtml(module.status || "unknown")}">
+                <span>${escapeHtml(module.title || module.id || "Module")}</span>
+                <strong>${escapeHtml(module.changed || changedIds.has(module.id) ? "changed" : "attention")}</strong>
+                <span>${escapeHtml(module.status || "unknown")}</span>
+                <span>${escapeHtml(module.count || 0)} items</span>
+                <small>${escapeHtml(detail)}</small>
+            </article>`;
+    }).join("");
+}
+
 export function renderRefreshRun(report) {
     if (!report) return "";
 
@@ -204,37 +250,45 @@ export function renderRefreshRun(report) {
     const attention = reportAttentionSources(report);
     const changedText = changed.length
         ? changed.map((module) => module.title || module.id).join(" / ")
-        : "No data file changes recorded.";
+        : "No changed modules.";
     const attentionText = attention.length
         ? attention.slice(0, 4).map(({ module, source }) => `${module.title || module.id}: ${source.source} ${source.status}`).join(" / ")
         : "No failed, partial, or fallback sources.";
+    const changedCount = changed.length === 1 ? "1 changed" : `${changed.length} changed`;
+    const attentionCount = attention.length === 1 ? "1 source" : `${attention.length} sources`;
 
     return `
+        <div class="stats-grid status-stats">
+            <article class="stat-card">
+                <span>Last run</span>
+                <strong>${escapeHtml(report.generatedAt || "-")}</strong>
+                <p>${escapeHtml(reportContext(report))}</p>
+            </article>
+            <article class="stat-card">
+                <span>Result</span>
+                <strong>${escapeHtml(report.totals?.status || "unknown")}</strong>
+                <p>${escapeHtml(report.totals?.items || 0)} items / ${escapeHtml(report.totals?.sources || 0)} sources / manifest ${escapeHtml(report.manifestUpdated || "-")}</p>
+            </article>
+            <article class="stat-card">
+                <span>Changed</span>
+                <strong>${escapeHtml(changedCount)}</strong>
+                <p>${escapeHtml(changedText)}</p>
+            </article>
+            <article class="stat-card">
+                <span>Attention</span>
+                <strong>${escapeHtml(attentionCount)}</strong>
+                <p>${escapeHtml(attentionText)}</p>
+            </article>
+        </div>
         <div class="status-head" aria-hidden="true">
-            <span>Run</span>
-            <span>State</span>
+            <span>Module</span>
+            <span>Run state</span>
+            <span>Status</span>
             <span>Items</span>
-            <span>Changed</span>
-            <span>Context</span>
-            <span>Attention</span>
+            <span>Detail</span>
         </div>
         <div class="status-table">
-            <article class="status-row status-${escapeHtml(report.totals?.status || "unknown")}">
-                <span>Last refresh</span>
-                <strong>${escapeHtml(report.generatedAt || "-")}</strong>
-                <span>${escapeHtml(report.totals?.status || "unknown")}</span>
-                <span>${escapeHtml(report.totals?.items || 0)} items</span>
-                <span>${escapeHtml(changedText)}</span>
-                <small>${escapeHtml(reportContext(report))}</small>
-            </article>
-            <article class="status-row status-${attention.length ? "partial" : "ok"}">
-                <span>Attention</span>
-                <strong>${escapeHtml(attention.length)} sources</strong>
-                <span>${escapeHtml(report.totals?.errors || 0)} non-ok</span>
-                <span>${escapeHtml(report.totals?.sources || 0)} total sources</span>
-                <span>${escapeHtml(attentionText)}</span>
-                <small>${escapeHtml(changedText)}</small>
-            </article>
+            ${reportDetailRows(report, attention).trim()}
         </div>
     `;
 }
