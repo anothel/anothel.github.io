@@ -33,7 +33,7 @@ export const moduleDefinitions = [
     },
     {
         id: "links",
-        title: "Links queue",
+        title: "Reference shelf",
         route: "links/index.html",
         data: "data/links.json",
         collection: "links"

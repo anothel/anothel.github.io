@@ -118,7 +118,7 @@ test("repo watchlist escapes generated text and blocks unsafe links", async () =
     assert.match(html, /1 failed: bad\/repo/);
 });
 
-test("link queue escapes generated text and blocks unsafe links", async () => {
+test("reference shelf renderer escapes generated text and blocks unsafe links", async () => {
     const elements = await runScript("js/link-queue.js", {
         updated: "2026-06-16",
         sourceMeta: { status: "ok" },

@@ -47,6 +47,7 @@ test("manifest describes every dashboard module", () => {
         manifest.modules.map((module) => module.count),
         [4, 2, 1, 3]
     );
+    assert.equal(manifest.modules.find((module) => module.id === "links").title, "Reference shelf");
     assert.ok(manifest.modules.every((module) => module.status === "ok"));
 });
 
@@ -106,8 +107,10 @@ test("checked-in manifest counts match generated data files", () => {
     const packages = readJson("data/packages.json");
     const today = readJson("data/today.json");
     const packageModule = manifest.modules.find((module) => module.id === "packages");
+    const linksModule = manifest.modules.find((module) => module.id === "links");
 
     assert.equal(packageModule.count, packages.packages.length);
+    assert.equal(linksModule.title, "Reference shelf");
     assert.equal(packages.sourceMeta.count, packages.packages.length);
     assert.equal(today.sourceMeta.count, today.sections.flatMap((section) => section.items).length);
 });

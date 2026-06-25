@@ -32,22 +32,17 @@ No active P0 work. Keep security, data-loss prevention, static safety, and check
 
 ## P1 - Active / Next
 
-1. **Reference shelf terminology**
-   - Align Links naming across manifest, refresh report, Home, Links, Explore, Review, docs, and tests.
-   - Keep route/file names as `links` unless a user-facing label needs to change.
-   - Acceptance: public copy does not mix `Links queue`, `saved references`, and `Reference shelf`.
-
-2. **Shared UI helpers**
+1. **Shared UI helpers**
    - Extract repeated `escapeHtml`, `safeHref`, and date/status formatting only when touching those renderers anyway.
    - Do not create a design system or helper package just to satisfy this item.
    - Acceptance: one touched flow removes real duplication without changing behavior.
 
-3. **Status refresh report surface**
+2. **Status refresh report surface**
    - Use the existing refresh report data before adding new pipeline output.
    - Show changed modules, source errors, and timestamps only if they help users trust the data.
    - Acceptance: Status explains the last refresh without duplicating script logs.
 
-4. **Trends input data shape**
+3. **Trends input data shape**
    - Move trend query groups and npm trend inputs out of updater logic only if editing those sources becomes recurring work.
    - Keep scoring heuristics in code until they have a stable data contract.
    - Acceptance: changing trend source inputs does not require editing fetch/update control flow.

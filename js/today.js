@@ -23,7 +23,7 @@ const exploreLinks = [
     ["Trends", "../trends/index.html", "Ranked movement"],
     ["Repos", "../repos/index.html", "GitHub traction"],
     ["Packages", "../packages/index.html", "npm movement"],
-    ["Links", "../links/index.html", "Curated reference shelf"]
+    ["Reference shelf", "../links/index.html", "Curated references"]
 ];
 
 const sectionStats = {

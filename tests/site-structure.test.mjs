@@ -16,7 +16,7 @@ const pages = [
     ["trends/index.html", "Trends", "../"],
     ["packages/index.html", "Packages", "../"],
     ["repos/index.html", "Repos", "../"],
-    ["links/index.html", "Links", "../"]
+    ["links/index.html", "Reference shelf", "../"]
 ];
 
 const topicPages = [
@@ -599,11 +599,22 @@ test("freshness vocabulary uses data date, generated at, and source health", () 
     }
 });
 
-test("links page owns the links queue module", () => {
+test("links page owns the reference shelf module", () => {
     const links = read("links/index.html");
 
     assert.match(links, /data-link-list/);
     assert.match(links, /..\/js\/link-queue\.js/);
+    assert.match(links, /Reference shelf - anothel/);
+});
+
+test("public copy uses reference shelf terminology for curated links", () => {
+    for (const [path] of [...pages, ...topicPages]) {
+        const html = read(path);
+
+        assert.doesNotMatch(html, /Links queue|saved references/i, path);
+        assert.doesNotMatch(html, />Links<\/a>/, path);
+        assert.match(html, /href="(?:\.\.\/|\.\.\/\.\.\/)?links\/index\.html"[^>]*>Reference shelf<\/a>/, path);
+    }
 });
 
 test("repos page owns the repo watchlist module", () => {

@@ -253,6 +253,8 @@ test("renderExploreLinks links to all full module pages", () => {
     assert.match(html, /\.\.\/explore\/index\.html\?focus=MCP/);
     assert.match(html, /Explore skills/);
     assert.match(html, /\.\.\/explore\/index\.html\?focus=Agent%20skills/);
+    assert.match(html, /Reference shelf/);
+    assert.doesNotMatch(html, />Links</);
 });
 
 test("renderTodayStats summarizes section counts", () => {
