@@ -318,9 +318,10 @@ test("review page owns the saved follow-up surface", () => {
     assert.match(review, /Queue/);
     assert.match(review, /Selected item/);
     assert.match(review, /..\/js\/signal-schema\.js/);
+    assert.match(review, /..\/js\/safe-dom\.js/);
     assert.match(review, /..\/js\/topic-taxonomy\.js/);
     assert.match(review, /..\/js\/explore\.js/);
-    assert.match(review, /<script defer src="..\/js\/signal-schema\.js"><\/script>\s*<script defer src="..\/js\/topic-taxonomy\.js"><\/script>\s*<script defer src="..\/js\/explore\.js"><\/script>\s*<script defer src="..\/js\/review\.js"/s);
+    assert.match(review, /<script defer src="..\/js\/signal-schema\.js"><\/script>\s*<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/topic-taxonomy\.js"><\/script>\s*<script defer src="..\/js\/explore\.js"><\/script>\s*<script defer src="..\/js\/review\.js"/s);
     assert.match(review, /..\/js\/review\.js/);
     assert.match(review, /..\/data\/trends\.json/);
     assert.match(review, /..\/data\/packages\.json/);

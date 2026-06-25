@@ -5,8 +5,10 @@ import vm from "node:vm";
 
 function loadReview(extra = {}) {
     const context = { console, URL, ...extra };
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
@@ -295,6 +297,7 @@ test("Review browser init renders saved queue and removes items", async () => {
 
     vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
@@ -392,6 +395,7 @@ test("Review browser filters workflow status", async () => {
 
     vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
