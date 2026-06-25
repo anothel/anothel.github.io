@@ -8,6 +8,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Data-first: HN, GitHub, npm, and curated references should feed useful reading paths.
 - Calm home base: Home should answer "what should I open first?" without becoming a marketing page.
 - Repeat-use bias: each round should reduce repeated filtering, searching, or checking.
+- Prune-first: prefer clearer copy, deleted scope, and reused helpers over new frameworks or broad rewrites.
 - No accounts, sync, backend, resume content, or broad blog engine for now.
 
 ## Current Surface
@@ -27,16 +28,34 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## P0
 
-No active P0 work. Keep security, data-loss prevention, static safety, and checked-in data integrity above product polish.
+1. **Data freshness truth check**
+   - Confirm the scheduled data refresh is running, or make Home/Today/Status wording stop implying old checked-in data is current today.
+   - Prefer local `data/refresh-report.json` and checked-in timestamps first; use live GitHub Actions only when local evidence is not enough.
+   - Acceptance: data date, generated time, and source health cannot be misread as "fresh today" when they are not.
 
 ## P1 - Active / Next
 
-1. **Shared UI helpers**
+1. **Reference shelf terminology**
+   - Align Links naming across manifest, refresh report, Home, Links, Explore, Review, docs, and tests.
+   - Keep route/file names as `links` unless a user-facing label needs to change.
+   - Acceptance: public copy does not mix `Links queue`, `saved references`, and `Reference shelf`.
+
+2. **Current/date wording**
+   - Replace broad `Data date is current` copy with factual date/generated/source-health wording where it can mislead.
+   - Do not add a stale-warning system until wording alone is insufficient.
+   - Acceptance: Home, Today, Status, and module pages explain what date is being judged.
+
+3. **Shared UI helpers**
    - Extract repeated `escapeHtml`, `safeHref`, and date/status formatting only when touching those renderers anyway.
    - Do not create a design system or helper package just to satisfy this item.
    - Acceptance: one touched flow removes real duplication without changing behavior.
 
-2. **Trends input data shape**
+4. **Status refresh report surface**
+   - Use the existing refresh report data before adding new pipeline output.
+   - Show changed modules, source errors, and timestamps only if they help users trust the data.
+   - Acceptance: Status explains the last refresh without duplicating script logs.
+
+5. **Trends input data shape**
    - Move trend query groups and npm trend inputs out of updater logic only if editing those sources becomes recurring work.
    - Keep scoring heuristics in code until they have a stable data contract.
    - Acceptance: changing trend source inputs does not require editing fetch/update control flow.
@@ -47,6 +66,9 @@ No active P0 work. Keep security, data-loss prevention, static safety, and check
 - Explore and Review React islands only if vanilla code becomes the blocker.
 - Design-system cleanup only after repeated patterns stabilize.
 - Lightweight notes index only after at least 3 real notes exist.
+- Export/import Review JSON only after local-state portability becomes a real need.
+- Visual regression only after UI layout stabilizes enough to make snapshots useful.
+- More topic pages only when each has a judgment note, not just item count.
 
 ## Not Now
 
@@ -57,6 +79,9 @@ No active P0 work. Keep security, data-loss prevention, static safety, and check
 - Company history.
 - Broad blog engine.
 - Large design-system rewrite.
+- Rename public routes just to improve labels.
+- Refactor all duplicated helpers at once.
+- Move scoring policy into data before the policy stabilizes.
 
 ## Working Rules
 
