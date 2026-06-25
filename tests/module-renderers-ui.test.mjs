@@ -31,6 +31,7 @@ async function runScript(scriptPath, data, selectors) {
         console
     };
 
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync(scriptPath, "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
