@@ -1,62 +1,26 @@
+import { readFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { classifySignal, qualityBoost } from "./signal-taxonomy.mjs";
 import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
 
 const OUT_FILE = new URL("../data/trends.json", import.meta.url);
+const WATCHLISTS_FILE = new URL("../data/watchlists.json", import.meta.url);
 const USER_AGENT = "anothel.github.io tech radar";
 export const MAX_ITEMS = 24;
 export const requiredTrendCategories = ["AI evals", "Workflow automation"];
 
-export const npmPackages = [
-    "react",
-    "typescript",
-    "vite",
-    "next",
-    "eslint",
-    "prettier",
-    "zod",
-    "tailwindcss",
-    "playwright",
-    "express",
-    "fastify",
-    "tsx",
-    "ai",
-    "@ai-sdk/openai",
-    "@ai-sdk/provider",
-    "openai",
-    "@anthropic-ai/sdk",
-    "mastra",
-    "langchain",
-    "@langchain/core",
-    "@modelcontextprotocol/sdk",
-    "promptfoo",
-    "autoevals",
-    "langfuse",
-    "@trigger.dev/sdk",
-    "@temporalio/workflow",
-    "@temporalio/client",
-    "n8n-workflow"
-];
+function readTrendInputs() {
+    const trends = JSON.parse(readFileSync(WATCHLISTS_FILE, "utf8")).trends || {};
+    if (!Array.isArray(trends.npmPackages) || !Array.isArray(trends.githubQueries)) {
+        throw new Error("data/watchlists.json must define trends.npmPackages and trends.githubQueries");
+    }
+    return trends;
+}
 
-export const githubQueries = [
-    { query: "topic:ai-agent stars:>100", category: "AI agents" },
-    { query: "coding agent stars:>100", category: "AI agents" },
-    { query: "claude code agents stars:>100", category: "AI agents" },
-    { query: "copilot agents stars:>100", category: "AI agents" },
-    { query: "topic:mcp stars:>100", category: "MCP" },
-    { query: "modelcontextprotocol stars:>100", category: "MCP" },
-    { query: "agent skills stars:>100", category: "Agent skills" },
-    { query: "claude skills stars:>100", category: "Agent skills" },
-    { query: "topic:evals stars:>100", category: "AI evals" },
-    { query: "llm eval benchmark agent stars:>100", category: "AI evals" },
-    { query: "llm observability evals stars:>100", category: "AI evals" },
-    { query: "workflow automation ai agents stars:>100", category: "Workflow automation" },
-    { query: "durable workflow typescript stars:>100", category: "Workflow automation" },
-    { query: "opencode coding agent stars:>100", category: "AI agents" },
-    { query: "topic:typescript stars:>500", category: "TypeScript" },
-    { query: "topic:developer-tools ai stars:>300", category: "Developer tools" }
-];
+const trendInputs = readTrendInputs();
+export const npmPackages = trendInputs.npmPackages;
+export const githubQueries = trendInputs.githubQueries;
 
 export function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);

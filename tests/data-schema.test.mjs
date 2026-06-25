@@ -174,8 +174,19 @@ test("module item urls and scores stay within display contract", () => {
 
 test("watchlist definitions stay editable data with stable fields", () => {
     const watchlists = json("data/watchlists.json");
+    assert.ok(Array.isArray(watchlists.trends?.npmPackages), "trend npm packages");
+    assert.ok(Array.isArray(watchlists.trends?.githubQueries), "trend GitHub queries");
     assert.ok(Array.isArray(watchlists.packages), "watchlist packages");
     assert.ok(Array.isArray(watchlists.repos), "watchlist repos");
+
+    for (const packageName of watchlists.trends.npmPackages) {
+        assertNonEmptyString(packageName, "trend npm package");
+    }
+
+    for (const item of watchlists.trends.githubQueries) {
+        assertNonEmptyString(item.query, "trend GitHub query");
+        assertNonEmptyString(item.category, `${item.query} category`);
+    }
 
     const packageNames = new Set();
     for (const item of watchlists.packages) {

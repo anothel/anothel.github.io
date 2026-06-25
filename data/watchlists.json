@@ -1,4 +1,102 @@
 {
+  "trends": {
+    "npmPackages": [
+      "react",
+      "typescript",
+      "vite",
+      "next",
+      "eslint",
+      "prettier",
+      "zod",
+      "tailwindcss",
+      "playwright",
+      "express",
+      "fastify",
+      "tsx",
+      "ai",
+      "@ai-sdk/openai",
+      "@ai-sdk/provider",
+      "openai",
+      "@anthropic-ai/sdk",
+      "mastra",
+      "langchain",
+      "@langchain/core",
+      "@modelcontextprotocol/sdk",
+      "promptfoo",
+      "autoevals",
+      "langfuse",
+      "@trigger.dev/sdk",
+      "@temporalio/workflow",
+      "@temporalio/client",
+      "n8n-workflow"
+    ],
+    "githubQueries": [
+      {
+        "query": "topic:ai-agent stars:>100",
+        "category": "AI agents"
+      },
+      {
+        "query": "coding agent stars:>100",
+        "category": "AI agents"
+      },
+      {
+        "query": "claude code agents stars:>100",
+        "category": "AI agents"
+      },
+      {
+        "query": "copilot agents stars:>100",
+        "category": "AI agents"
+      },
+      {
+        "query": "topic:mcp stars:>100",
+        "category": "MCP"
+      },
+      {
+        "query": "modelcontextprotocol stars:>100",
+        "category": "MCP"
+      },
+      {
+        "query": "agent skills stars:>100",
+        "category": "Agent skills"
+      },
+      {
+        "query": "claude skills stars:>100",
+        "category": "Agent skills"
+      },
+      {
+        "query": "topic:evals stars:>100",
+        "category": "AI evals"
+      },
+      {
+        "query": "llm eval benchmark agent stars:>100",
+        "category": "AI evals"
+      },
+      {
+        "query": "llm observability evals stars:>100",
+        "category": "AI evals"
+      },
+      {
+        "query": "workflow automation ai agents stars:>100",
+        "category": "Workflow automation"
+      },
+      {
+        "query": "durable workflow typescript stars:>100",
+        "category": "Workflow automation"
+      },
+      {
+        "query": "opencode coding agent stars:>100",
+        "category": "AI agents"
+      },
+      {
+        "query": "topic:typescript stars:>500",
+        "category": "TypeScript"
+      },
+      {
+        "query": "topic:developer-tools ai stars:>300",
+        "category": "Developer tools"
+      }
+    ]
+  },
   "packages": [
     {
       "name": "react",

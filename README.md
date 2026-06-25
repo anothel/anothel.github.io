@@ -17,7 +17,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `links/index.html`: curated reference queue
 - `css/site.css`: site-specific styles
 - `data/trends.json`: static seed data
-- `data/watchlists.json`: package, repo, and curated link definitions used by updater scripts
+- `data/watchlists.json`: trend, package, repo, and curated link definitions used by updater scripts
 - `data/today.json`: generated priority brief data
 - `data/manifest.json`: module index and data freshness summary
 - `data/refresh-report.json`: last refresh run context, changed modules, and source health

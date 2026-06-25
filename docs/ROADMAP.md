@@ -32,10 +32,7 @@ No active P0 work. Keep security, data-loss prevention, static safety, and check
 
 ## P1 - Active / Next
 
-1. **Trends input data shape**
-   - Move trend query groups and npm trend inputs out of updater logic only if editing those sources becomes recurring work.
-   - Keep scoring heuristics in code until they have a stable data contract.
-   - Acceptance: changing trend source inputs does not require editing fetch/update control flow.
+No active P1 work. Promote the next item only when a P2 trigger becomes real.
 
 ## P2 - Later
 
