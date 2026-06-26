@@ -117,7 +117,7 @@ test("Topic dashboard model builds why-now text, top movers, related groups, and
         ["Repos", ["openai/codex"]],
         ["Links", ["Agents SDK"]]
     ]);
-    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.crossLinks.map((link) => link.topic))), ["MCP", "Agent skills", "AI evals", "Workflow automation", "Security"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.crossLinks.map((link) => link.topic))), ["MCP", "Agent skills", "AI evals", "AI engineering", "Workflow automation", "Security"]);
 });
 
 test("Topic guidance gives each topic concrete watch/open/action context", () => {
@@ -143,6 +143,11 @@ test("Topic guidance gives each topic concrete watch/open/action context", () =>
         whenToOpen: "Open when a signal helps compare AI behavior instead of only showcasing a model.",
         nextAction: "Check references for stable docs, then compare repo and package traction before saving."
     });
+    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("AI engineering"))), {
+        whatToWatch: "Model training, inference, compact implementations, and practical AI systems.",
+        whenToOpen: "Open when a signal helps explain how models are built, run, or adapted.",
+        nextAction: "Start from stable references, then compare repos that make implementation details concrete."
+    });
     assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("Workflow automation"))), {
         whatToWatch: "Durable workflows, event triggers, integration platforms, and orchestration SDKs.",
         whenToOpen: "Open when automation can turn repeated agent work into a reliable workflow.",
@@ -162,6 +167,7 @@ test("Topic notes provide durable judgment copy per topic", () => {
     assert.match(app.topicNote("MCP").body, /protocol/i);
     assert.match(app.topicNote("Agent skills").readWhen, /reusable/i);
     assert.match(app.topicNote("AI evals").title, /measurement/i);
+    assert.match(app.topicNote("AI engineering").body, /implementation/i);
     assert.match(app.topicNote("Workflow automation").body, /reliable runs/i);
     assert.match(app.topicNote("Security").body, /trust boundary/i);
 });
@@ -235,6 +241,7 @@ test("Topic actions use topic-specific routes", () => {
     const mcp = app.renderTopicActions("MCP");
     const skills = app.renderTopicActions("Agent skills");
     const evals = app.renderTopicActions("AI evals");
+    const engineering = app.renderTopicActions("AI engineering");
     const workflow = app.renderTopicActions("Workflow automation");
     const security = app.renderTopicActions("Security");
 
@@ -247,6 +254,8 @@ test("Topic actions use topic-specific routes", () => {
     assert.match(skills, /href="..\/..\/review\/index\.html"/);
     assert.match(evals, /href="..\/..\/links\/index\.html"/);
     assert.match(evals, /href="..\/..\/status\/index\.html"/);
+    assert.match(engineering, /href="..\/..\/repos\/index\.html"/);
+    assert.match(engineering, /href="..\/..\/links\/index\.html"/);
     assert.match(workflow, /href="..\/..\/packages\/index\.html"/);
     assert.match(workflow, /href="..\/..\/repos\/index\.html"/);
     assert.match(security, /href="..\/..\/status\/index\.html"/);

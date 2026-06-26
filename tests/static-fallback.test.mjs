@@ -30,6 +30,7 @@ const pages = [
     "topics/mcp/index.html",
     "topics/agent-skills/index.html",
     "topics/ai-evals/index.html",
+    "topics/ai-engineering/index.html",
     "topics/workflow-automation/index.html",
     "topics/security/index.html"
 ];
@@ -38,6 +39,7 @@ const topicPages = [
     ["topics/mcp/index.html", "MCP"],
     ["topics/agent-skills/index.html", "Agent skills"],
     ["topics/ai-evals/index.html", "AI evals"],
+    ["topics/ai-engineering/index.html", "AI engineering"],
     ["topics/workflow-automation/index.html", "Workflow automation"],
     ["topics/security/index.html", "Security"]
 ];
@@ -154,6 +156,7 @@ test("topic pages keep checked-in judgment notes without JavaScript", () => {
         ["topics/mcp/index.html", /protocol layer/i],
         ["topics/agent-skills/index.html", /reusable instructions/i],
         ["topics/ai-evals/index.html", /measurement/i],
+        ["topics/ai-engineering/index.html", /implementation/i],
         ["topics/workflow-automation/index.html", /durable workflows/i],
         ["topics/security/index.html", /trust boundary/i]
     ];
@@ -171,9 +174,11 @@ test("notes index keeps checked-in topic notes without JavaScript", () => {
 
     assert.match(html, /data-notes-list/);
     assert.match(html, /Measurement decides which AI changes are safe to keep\./);
+    assert.match(html, /Implementation details make AI systems easier to judge\./);
     assert.match(html, /Durable workflows matter when agents need repeatable execution\./);
     assert.match(html, /Security signals decide where automation needs stronger guardrails\./);
     assert.match(html, /href="..\/topics\/ai-evals\/index\.html"/);
+    assert.match(html, /href="..\/topics\/ai-engineering\/index\.html"/);
     assert.match(html, /href="..\/topics\/workflow-automation\/index\.html"/);
     assert.match(html, /href="..\/topics\/security\/index\.html"/);
 });

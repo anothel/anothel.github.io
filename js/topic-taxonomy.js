@@ -118,12 +118,30 @@
         {
             label: "AI engineering",
             slug: "ai-engineering",
-            description: "Model training, inference, and practical AI systems.",
+            routePath: "topics/ai-engineering/index.html",
+            description: "Model training, inference, compact implementations, and practical AI systems.",
+            lensDescription: "Model training, inference, compact implementations, and practical AI systems.",
             signalLabel: "AI engineering",
             reason: "AI engineering reference with practical implementation value.",
             boost: 26,
+            whyPrefix: "Practical AI systems are easier to evaluate when implementation details are visible.",
             patterns: [/\bai engineering\b/, /\bnanogpt\b/, /\bnanochat\b/, /\bllm\.c\b/, /\bllama2\.c\b/, /\btraining\b/, /\binference\b/, /\bgpt\b/, /\bllm\b/, /\bllama\b/, /\bcuda\b/, /\bmodel\b/],
-            requires: [/\bai\b/, /\bllm\b/, /\bgpt\b/, /\bnanogpt\b/, /\bnanochat\b/, /\bmodel\b/, /\bkarpathy\b/, /\bllama\b/]
+            requires: [/\bai\b/, /\bllm\b/, /\bgpt\b/, /\bnanogpt\b/, /\bnanochat\b/, /\bmodel\b/, /\bkarpathy\b/, /\bllama\b/],
+            note: {
+                title: "Implementation details make AI systems easier to judge.",
+                body: "Track this when training, inference, and compact model examples make implementation tradeoffs visible enough to compare.",
+                readWhen: "Open this topic when a model, runtime, or reference implementation helps explain how AI systems are built or adapted."
+            },
+            guidance: {
+                whatToWatch: "Model training, inference, compact implementations, and practical AI systems.",
+                whenToOpen: "Open when a signal helps explain how models are built, run, or adapted.",
+                nextAction: "Start from stable references, then compare repos that make implementation details concrete."
+            },
+            actions: [
+                ["Open focused Explore", "explore/index.html?focus=AI%20engineering", "AI engineering lens"],
+                ["Repos", "repos/index.html", "Implementation repo traction"],
+                ["Reference shelf", "links/index.html", "Practical AI system references"]
+            ]
         },
         {
             label: "Workflow automation",
@@ -301,7 +319,7 @@
     return {
         topicDefinitions,
         trackedTopicLabels: topicDefinitions.map((topic) => topic.label),
-        topicPageLabels: ["AI agents", "MCP", "Agent skills", "AI evals", "Workflow automation", "Security"],
+        topicPageLabels: ["AI agents", "MCP", "Agent skills", "AI evals", "AI engineering", "Workflow automation", "Security"],
         topicByLabel,
         routeForTopic,
         exploreRouteForTopic,

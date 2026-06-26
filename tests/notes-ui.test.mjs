@@ -20,12 +20,14 @@ test("Notes index builds routed topic notes from taxonomy", () => {
         "MCP",
         "Agent skills",
         "AI evals",
+        "AI engineering",
         "Workflow automation",
         "Security"
     ]);
     assert.equal(notes[0].route, "../topics/ai-agents/index.html");
     assert.equal(notes[3].exploreRoute, "../explore/index.html?focus=AI%20evals");
-    assert.equal(notes[5].route, "../topics/security/index.html");
+    assert.equal(notes[4].route, "../topics/ai-engineering/index.html");
+    assert.equal(notes[6].route, "../topics/security/index.html");
 });
 
 test("Notes renderer escapes copy and blocks unsafe links", () => {

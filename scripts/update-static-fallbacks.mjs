@@ -11,6 +11,7 @@ const topicPages = [
     ["topics/mcp/index.html", "MCP"],
     ["topics/agent-skills/index.html", "Agent skills"],
     ["topics/ai-evals/index.html", "AI evals"],
+    ["topics/ai-engineering/index.html", "AI engineering"],
     ["topics/workflow-automation/index.html", "Workflow automation"],
     ["topics/security/index.html", "Security"]
 ];
