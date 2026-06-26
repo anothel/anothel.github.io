@@ -55,3 +55,11 @@ test("static fallback renderer reuses public render helpers instead of duplicati
     assert.match(script, /renderSourceRows/);
     assert.doesNotMatch(script, /function (ageDays|dataState|todayStatusText|sourceDetail|renderStatusRows)\b/);
 });
+
+test("static fallback renderer derives topic pages from taxonomy", () => {
+    const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
+
+    assert.match(script, /topicPageLabels/);
+    assert.match(script, /function renderTopicPage/);
+    assert.doesNotMatch(script, /const topicPages = \[/);
+});

@@ -194,6 +194,15 @@ test("topic page static fallback summaries match current topic data", () => {
     }
 });
 
+test("topic page fallbacks render current topic sections instead of placeholder cards", () => {
+    for (const [path] of topicPages) {
+        const html = read(path);
+
+        assert.doesNotMatch(html, /Current data fills this card|Topic fallback|Tracked topic/, path);
+        assert.match(html, /Signal fit|No focused items yet/, path);
+    }
+});
+
 test("checked-in fallback copy avoids stale internal implementation language", () => {
     for (const path of pages) {
         const html = read(path);
