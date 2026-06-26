@@ -1,11 +1,5 @@
 (function attachDataHealth(global) {
-    function escapeHtml(value) {
-        return String(value ?? "")
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;");
-    }
+    const { escapeHtml } = global.AnothelDom;
 
     function sourceList(sourceMeta) {
         if (Array.isArray(sourceMeta)) return sourceMeta;

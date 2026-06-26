@@ -52,6 +52,7 @@ async function runDashboard(data) {
         console
     };
 
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/dashboard.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));

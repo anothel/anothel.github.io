@@ -253,7 +253,7 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(explore, /..\/js\/safe-dom\.js/);
     assert.match(explore, /..\/js\/topic-taxonomy\.js/);
     assert.match(explore, /..\/js\/explore\.js/);
-    assert.match(explore, /<script defer src="..\/js\/signal-schema\.js"><\/script>\s*<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/topic-taxonomy\.js"><\/script>\s*<script defer src="..\/js\/explore\.js"/s);
+    assert.match(explore, /<script defer src="..\/js\/local-state\.js"><\/script>\s*<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/data-health\.js"><\/script>\s*<script defer src="..\/js\/signal-schema\.js"><\/script>\s*<script defer src="..\/js\/topic-taxonomy\.js"><\/script>\s*<script defer src="..\/js\/explore\.js"/s);
     assert.match(explore, /..\/data\/trends\.json/);
     assert.match(explore, /..\/data\/packages\.json/);
     assert.match(explore, /..\/data\/repos\.json/);
@@ -598,8 +598,11 @@ test("public page copy avoids implementation-first labels", () => {
 
 test("source wording distinguishes origin filters from data status", () => {
     const trends = read("trends/index.html");
+    const status = read("status/index.html");
     const dashboardScript = read("js/dashboard.js");
 
+    assert.match(trends, /<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/data-health\.js"><\/script>\s*<script defer src="..\/js\/dashboard\.js"/s);
+    assert.match(status, /<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/data-health\.js"><\/script>\s*<script type="module" src="..\/js\/status\.js"/s);
     assert.match(trends, /Origin\s*<select data-source>/);
     assert.match(trends, /All origins/);
     assert.match(dashboardScript, /document\.querySelector\("select\[data-source\]"\)/);

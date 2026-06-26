@@ -4,7 +4,8 @@ import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
 function loadDataHealth() {
-    const context = {};
+    const context = { URL };
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/data-health.js", "utf8"), context);
     return context.DataHealth;
 }

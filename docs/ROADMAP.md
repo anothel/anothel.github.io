@@ -52,7 +52,6 @@ No active P1 work. Promote the next item only when a P2 trigger becomes real.
 - Broad blog engine.
 - Large design-system rewrite.
 - Rename public routes just to improve labels.
-- Refactor all duplicated helpers at once.
 - Move scoring policy into data before the policy stabilizes.
 
 ## Working Rules

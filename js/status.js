@@ -1,3 +1,5 @@
+import "./safe-dom.js";
+
 const manifestUrl = typeof document === "undefined"
     ? "data/manifest.json"
     : document.currentScript?.dataset.manifest || "../data/manifest.json";
@@ -9,28 +11,7 @@ const dataBase = typeof document === "undefined"
     ? ""
     : document.currentScript?.dataset.base || "../";
 
-function escapeHtml(value) {
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;");
-}
-
-function safeHref(value) {
-    const href = String(value || "").trim();
-    if (!href || href.startsWith("//") || /[\u0000-\u001F\u007F]/.test(href)) return "#";
-
-    try {
-        const parsed = new URL(href, "https://anothel.github.io");
-        const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
-        if (hasScheme && parsed.protocol !== "http:" && parsed.protocol !== "https:") return "#";
-        if (!hasScheme && parsed.origin !== "https://anothel.github.io") return "#";
-        return escapeHtml(href);
-    } catch {
-        return "#";
-    }
-}
+const { escapeHtml, safeHref } = globalThis.AnothelDom;
 
 function sourceList(sourceMeta) {
     if (Array.isArray(sourceMeta)) return sourceMeta;
