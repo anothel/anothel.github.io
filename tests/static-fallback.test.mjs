@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
+import { buildHomeOverview } from "../js/home.js";
 
 function read(path) {
     return readFileSync(path, "utf8");
@@ -107,11 +108,12 @@ function topicSummary(topic) {
 
 test("home static fallback matches current manifest summary", () => {
     const home = read("index.html");
+    const overview = buildHomeOverview(manifest, { today: refreshReport.generatedAt || manifest.generatedAt });
 
     assert.match(home, new RegExp(`<strong data-home-total>${moduleTotal()}</strong>`));
     assert.match(home, new RegExp(`<strong data-home-live>${moduleHealth()}</strong>`));
     assert.match(home, new RegExp(`<strong data-home-updated>${manifest.updated}</strong>`));
-    assert.match(home, /<strong data-home-freshness>Aging<\/strong>/);
+    assert.match(home, new RegExp(`<strong data-home-freshness>${overview.dataState}</strong>`));
     assert.match(home, /A personal radar for AI engineering signals/);
     assert.doesNotMatch(home, /Static fallback|fetch is available|local file fetch is blocked/);
 });

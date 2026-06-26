@@ -1,6 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import vm from "node:vm";
 import { pathToFileURL } from "node:url";
+import "../js/safe-dom.js";
 import { renderRefreshRun } from "../js/status.js";
 
 const topicPages = [
@@ -11,19 +12,7 @@ const topicPages = [
     ["topics/workflow-automation/index.html", "Workflow automation"]
 ];
 
-function escapeHtml(value) {
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;");
-}
-
-function safeHref(value) {
-    const href = String(value || "").trim();
-    if (!href || href.startsWith("//") || /[\u0000-\u001F\u007F]/.test(href)) return "#";
-    return escapeHtml(href);
-}
+const { escapeHtml, safeHref } = globalThis.AnothelDom;
 
 function datePart(value) {
     return String(value || "").match(/^\d{4}-\d{2}-\d{2}/)?.[0] || "";
@@ -157,19 +146,20 @@ async function loadDatasets(manifest) {
     return Object.fromEntries(entries);
 }
 
-function sourceRows(manifest, datasets) {
+function sourceRows(manifest, datasets, today) {
     return (manifest.modules || []).flatMap((module) => {
         const sources = sourceList(datasets[module.id]?.sourceMeta);
         return sources.map((source) => ({
             module,
             source,
-            detail: sourceDetail(source)
+            detail: sourceDetail(source, today)
         }));
     });
 }
 
 async function topicApp() {
     const context = { console, URL };
+    vm.runInNewContext(await readFile("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(await readFile("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(await readFile("js/topics.js", "utf8"), context);
     return context.TopicApp;
@@ -177,6 +167,7 @@ async function topicApp() {
 
 async function notesApp() {
     const context = { console, URL };
+    vm.runInNewContext(await readFile("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(await readFile("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(await readFile("js/notes.js", "utf8"), context);
     return context.NotesApp;
@@ -188,8 +179,9 @@ async function updateStaticFallbacks() {
     const report = await readJson("data/refresh-report.json");
     const datasets = await loadDatasets(manifest);
     const modules = manifest.modules || [];
-    const rows = sourceRows(manifest, datasets);
     const updated = modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || manifest.updated || "-";
+    const generatedAt = report.generatedAt || manifest.generatedAt || updated;
+    const rows = sourceRows(manifest, datasets, generatedAt);
     const total = modules.reduce((sum, module) => sum + module.count, 0);
     const sourceHealth = statusLabel(rows.map((row) => row.source), "0 sources");
     const moduleHealth = statusLabel(modules, "0 ok");
@@ -198,7 +190,7 @@ async function updateStaticFallbacks() {
     home = replaceTaggedText(home, "data-home-total", total);
     home = replaceTaggedText(home, "data-home-live", moduleHealth);
     home = replaceTaggedText(home, "data-home-updated", updated);
-    home = replaceTaggedText(home, "data-home-freshness", dataState(updated));
+    home = replaceTaggedText(home, "data-home-freshness", dataState(updated, generatedAt));
     home = replacePattern(home, /<p class="stamp">Data date [^<]+<\/p>/, `<p class="stamp">Data date ${escapeHtml(updated)}</p>`, "home stamp");
     await writeIfChanged("index.html", home);
 
