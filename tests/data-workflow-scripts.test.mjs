@@ -45,3 +45,13 @@ test("static fallback renderer loads shared DOM safety before topic and note ren
     assert.match(script, /vm\.runInNewContext\(await readFile\("js\/safe-dom\.js", "utf8"\), context\);[\s\S]*vm\.runInNewContext\(await readFile\("js\/topics\.js", "utf8"\), context\);/);
     assert.match(script, /vm\.runInNewContext\(await readFile\("js\/safe-dom\.js", "utf8"\), context\);[\s\S]*vm\.runInNewContext\(await readFile\("js\/notes\.js", "utf8"\), context\);/);
 });
+
+test("static fallback renderer reuses public render helpers instead of duplicating freshness logic", () => {
+    const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
+
+    assert.match(script, /import \{ buildHomeOverview \} from "\.\.\/js\/home\.js";/);
+    assert.match(script, /import \{ renderTodayStatus \} from "\.\.\/js\/today\.js";/);
+    assert.match(script, /collectSourceRows/);
+    assert.match(script, /renderSourceRows/);
+    assert.doesNotMatch(script, /function (ageDays|dataState|todayStatusText|sourceDetail|renderStatusRows)\b/);
+});

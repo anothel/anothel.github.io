@@ -2,7 +2,9 @@ import { readFile, writeFile } from "node:fs/promises";
 import vm from "node:vm";
 import { pathToFileURL } from "node:url";
 import "../js/safe-dom.js";
-import { renderRefreshRun } from "../js/status.js";
+import { buildHomeOverview } from "../js/home.js";
+import { renderTodayStatus } from "../js/today.js";
+import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows } from "../js/status.js";
 
 const topicPages = [
     ["topics/ai-agents/index.html", "AI agents"],
@@ -12,110 +14,17 @@ const topicPages = [
     ["topics/workflow-automation/index.html", "Workflow automation"]
 ];
 
-const { escapeHtml, safeHref } = globalThis.AnothelDom;
+const { escapeHtml } = globalThis.AnothelDom;
 
-function datePart(value) {
-    return String(value || "").match(/^\d{4}-\d{2}-\d{2}/)?.[0] || "";
-}
-
-function ageDays(updated, today = new Date()) {
-    const updatedDate = datePart(updated);
-    const todayDate = datePart(today instanceof Date ? today.toISOString() : today);
-    if (!updatedDate || !todayDate) return null;
-
-    const diff = Date.parse(`${todayDate}T00:00:00.000Z`) - Date.parse(`${updatedDate}T00:00:00.000Z`);
-    if (!Number.isFinite(diff)) return null;
-    return Math.max(0, Math.floor(diff / 86400000));
-}
-
-function dataState(updated, today) {
-    const age = ageDays(updated, today);
-    if (age === null) return "unknown";
-    if (age <= 1) return "Fresh";
-    if (age <= 3) return "Aging";
-    return "Stale";
-}
-
-function sourceList(sourceMeta) {
-    if (Array.isArray(sourceMeta)) return sourceMeta;
-    if (sourceMeta && typeof sourceMeta === "object") return [sourceMeta];
-    return [];
-}
-
-function statusLabel(values, emptyLabel) {
-    const counts = values.reduce((summary, value) => {
-        const status = value.status || "unknown";
-        summary[status] = (summary[status] || 0) + 1;
-        return summary;
-    }, {});
-
-    return ["ok", "partial", "error", "fallback", "unknown"]
-        .filter((status) => counts[status] > 0)
-        .map((status) => `${counts[status]} ${status}`)
-        .join(" / ") || emptyLabel;
-}
-
-function dataModeText(sourceMeta, updated) {
-    const health = statusLabel(sourceMeta, "0 sources");
+function dataModeText(health, updated) {
     if (health.includes("partial")) return "Source health partial. Usable data remains available.";
     if (health.includes("fallback")) return "Source health fallback. Previous data remains available.";
     if (health.includes("error")) return "Source health failed. Check Status before trusting freshness.";
     return `Source health ok. Data date ${updated}.`;
 }
 
-function todayStatusText(today) {
-    const total = today.sections.reduce((sum, section) => sum + section.items.length, 0);
-    const status = today.sourceMeta?.status || "ok";
-
-    if (status === "fallback") return `${total} generated picks. Source health fallback. Previous data remains available.`;
-    if (status === "partial") return `${total} generated picks. Source health partial. Usable data remains available.`;
-    if (status === "error") return `${total} generated picks from failed source refresh. Check Status before trusting freshness.`;
-    return `${total} generated picks. Source health ok. Data date ${today.updated}.`;
-}
-
-function sourceDetail(source, today) {
-    const status = source?.status || "unknown";
-    const updated = source?.updatedAt || source?.updated;
-    const updatedDate = datePart(updated);
-    let freshness = "Unknown - no timestamp";
-
-    if (status === "fallback") {
-        const fallbackDate = datePart(source?.previousUpdated) || updatedDate;
-        freshness = fallbackDate ? `Fallback - using ${fallbackDate} data` : "Fallback - previous data kept";
-    } else if (status === "error") {
-        freshness = "Error - no current timestamp";
-    } else if (status === "partial") {
-        freshness = updatedDate ? `Partial - updated ${updatedDate}` : "Partial - usable data remains";
-    } else {
-        const age = ageDays(updated, today);
-        if (age !== null && age <= 1) freshness = `Fresh - updated ${updatedDate}`;
-        else if (age !== null && age <= 3) freshness = `Aging - ${age} days old`;
-        else if (age !== null) freshness = `Stale - ${age} days old`;
-    }
-
-    const safety = [];
-    if (source?.fallbackUsed) safety.push("using fallback");
-    if (source?.staleButSafe) safety.push("previous data kept");
-    if (source?.rateLimited) safety.push("rate limited");
-    if (source?.fallbackReason) safety.push(source.fallbackReason);
-    if (source?.previousUpdated) safety.push(`previous refresh ${source.previousUpdated}`);
-    return safety.length ? `${freshness} / ${safety.join(" / ")}` : freshness;
-}
-
-function sourceUpdated(source) {
-    return source?.updatedAt || source?.updated || "-";
-}
-
-function renderStatusRows(rows) {
-    return rows.map(({ module, source, detail }) => `
-                    <a class="status-row status-${escapeHtml(source.status || "unknown")}" href="../${safeHref(module.route)}">
-                        <span>${escapeHtml(module.title)}</span>
-                        <strong>${escapeHtml(source.name || "unknown")}</strong>
-                        <span>${escapeHtml(source.status || "unknown")}</span>
-                        <span>${escapeHtml(source.count || 0)} items</span>
-                        <span>${escapeHtml(sourceUpdated(source))}</span>
-                        <small>${escapeHtml(detail)}</small>
-                    </a>`).join("");
+function trimLineEnds(markup) {
+    return markup.split("\n").map((line) => line.trimEnd()).join("\n");
 }
 
 function replaceTaggedText(html, attr, value) {
@@ -146,17 +55,6 @@ async function loadDatasets(manifest) {
     return Object.fromEntries(entries);
 }
 
-function sourceRows(manifest, datasets, today) {
-    return (manifest.modules || []).flatMap((module) => {
-        const sources = sourceList(datasets[module.id]?.sourceMeta);
-        return sources.map((source) => ({
-            module,
-            source,
-            detail: sourceDetail(source, today)
-        }));
-    });
-}
-
 async function topicApp() {
     const context = { console, URL };
     vm.runInNewContext(await readFile("js/safe-dom.js", "utf8"), context);
@@ -179,39 +77,38 @@ async function updateStaticFallbacks() {
     const report = await readJson("data/refresh-report.json");
     const datasets = await loadDatasets(manifest);
     const modules = manifest.modules || [];
-    const updated = modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || manifest.updated || "-";
-    const generatedAt = report.generatedAt || manifest.generatedAt || updated;
-    const rows = sourceRows(manifest, datasets, generatedAt);
-    const total = modules.reduce((sum, module) => sum + module.count, 0);
-    const sourceHealth = statusLabel(rows.map((row) => row.source), "0 sources");
-    const moduleHealth = statusLabel(modules, "0 ok");
+    const generatedAt = report.generatedAt || manifest.generatedAt || manifest.updated || "-";
+    const homeOverview = buildHomeOverview(manifest, { today: generatedAt });
+    const statusSummary = buildStatusSummary(manifest, datasets);
+    const rows = collectSourceRows(manifest, datasets, { today: generatedAt });
+    const updated = homeOverview.updated;
 
     let home = await readFile("index.html", "utf8");
-    home = replaceTaggedText(home, "data-home-total", total);
-    home = replaceTaggedText(home, "data-home-live", moduleHealth);
+    home = replaceTaggedText(home, "data-home-total", homeOverview.totalItems);
+    home = replaceTaggedText(home, "data-home-live", homeOverview.healthLabel);
     home = replaceTaggedText(home, "data-home-updated", updated);
-    home = replaceTaggedText(home, "data-home-freshness", dataState(updated, generatedAt));
+    home = replaceTaggedText(home, "data-home-freshness", homeOverview.dataState);
     home = replacePattern(home, /<p class="stamp">Data date [^<]+<\/p>/, `<p class="stamp">Data date ${escapeHtml(updated)}</p>`, "home stamp");
     await writeIfChanged("index.html", home);
 
     let todayHtml = await readFile("today/index.html", "utf8");
     todayHtml = replaceTaggedText(todayHtml, "data-today-updated", today.updated);
-    todayHtml = replacePattern(todayHtml, /<p data-today-status>[\s\S]*?<\/p>/, `<p data-today-status>${escapeHtml(todayStatusText(today))}</p>`, "today status");
+    todayHtml = replacePattern(todayHtml, /<p data-today-status>[\s\S]*?<\/p>/, `<p data-today-status>${escapeHtml(renderTodayStatus(today))}</p>`, "today status");
     await writeIfChanged("today/index.html", todayHtml);
 
     let statusHtml = await readFile("status/index.html", "utf8");
-    statusHtml = replaceTaggedText(statusHtml, "data-status-total", total);
-    statusHtml = replaceTaggedText(statusHtml, "data-status-sources", rows.length);
-    statusHtml = replaceTaggedText(statusHtml, "data-status-health", sourceHealth);
-    statusHtml = replaceTaggedText(statusHtml, "data-status-updated", updated);
-    statusHtml = replacePattern(statusHtml, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(dataModeText(rows.map((row) => row.source), updated))}</p>`, "status data mode");
+    statusHtml = replaceTaggedText(statusHtml, "data-status-total", statusSummary.totalItems);
+    statusHtml = replaceTaggedText(statusHtml, "data-status-sources", statusSummary.totalSources);
+    statusHtml = replaceTaggedText(statusHtml, "data-status-health", statusSummary.healthLabel);
+    statusHtml = replaceTaggedText(statusHtml, "data-status-updated", statusSummary.updated);
+    statusHtml = replacePattern(statusHtml, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(dataModeText(statusSummary.healthLabel, statusSummary.updated))}</p>`, "status data mode");
     statusHtml = replacePattern(statusHtml, /(<div data-refresh-run>)[\s\S]*?\n\s*<\/section>\s*\n\s*(<section class="rank-panel" aria-labelledby="status-table-title">)/, `$1
 ${renderRefreshRun(report).trim()}
                 </div>
             </section>
 
             $2`, "refresh run");
-    statusHtml = replacePattern(statusHtml, /(<div class="status-table" data-status-rows>)[\s\S]*?(<\/div>)/, `$1${renderStatusRows(rows)}
+    statusHtml = replacePattern(statusHtml, /(<div class="status-table" data-status-rows>)[\s\S]*?(<\/div>)/, `$1${trimLineEnds(renderSourceRows(rows, "../"))}
                 $2`, "status rows");
     await writeIfChanged("status/index.html", statusHtml);
 
