@@ -374,8 +374,10 @@ test("topic focus pages expose focused landing pages", () => {
         assert.match(html, /data-topic-pin/);
         assert.match(html, /data-topic-actions-dynamic/);
         assert.match(html, /data-topic-list/);
+        assert.match(html, /..\/..\/js\/safe-dom\.js/);
         assert.match(html, /..\/..\/js\/topics\.js/);
         assert.match(html, /..\/..\/js\/topic-taxonomy\.js/);
+        assert.match(html, /<script defer src="..\/..\/js\/local-state\.js"><\/script>\s*<script defer src="..\/..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/..\/js\/topic-taxonomy\.js"><\/script>\s*<script defer src="..\/..\/js\/topics\.js"/s);
         assert.match(html, /..\/..\/data\/trends\.json/);
         assert.match(html, /..\/..\/data\/packages\.json/);
         assert.match(html, /..\/..\/data\/repos\.json/);

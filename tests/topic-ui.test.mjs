@@ -4,8 +4,9 @@ import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
 function loadTopics(extra = {}) {
-    const context = { console, ...extra };
+    const context = { console, URL, ...extra };
     vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topics.js", "utf8"), context);
     return context.TopicApp;
@@ -372,6 +373,7 @@ test("Topic browser init renders stats and cards", async () => {
 
     const context = {
         console,
+        URL,
         document: {
             currentScript: {
                 dataset: {
@@ -413,6 +415,7 @@ test("Topic browser init renders stats and cards", async () => {
     };
 
     vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topics.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -473,6 +476,7 @@ test("Topic pin click updates local storage and rerenders pin state", async () =
 
     const context = {
         console,
+        URL,
         document: {
             currentScript: {
                 dataset: {
@@ -516,6 +520,7 @@ test("Topic pin click updates local storage and rerenders pin state", async () =
     };
 
     vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topics.js", "utf8"), context);
     await new Promise((resolve) => setTimeout(resolve, 0));
