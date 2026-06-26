@@ -11,7 +11,8 @@ const topicPages = [
     ["topics/mcp/index.html", "MCP"],
     ["topics/agent-skills/index.html", "Agent skills"],
     ["topics/ai-evals/index.html", "AI evals"],
-    ["topics/workflow-automation/index.html", "Workflow automation"]
+    ["topics/workflow-automation/index.html", "Workflow automation"],
+    ["topics/security/index.html", "Security"]
 ];
 
 const { escapeHtml } = globalThis.AnothelDom;
@@ -140,7 +141,7 @@ ${renderRefreshRun(report).trim()}
     let notesHtml = await readFile("notes/index.html", "utf8");
     notesHtml = replaceTaggedText(notesHtml, "data-notes-count", noteItems.length);
     notesHtml = replacePattern(notesHtml, /(<section class="topic-note-panel" aria-label="Topic notes" data-notes-list>)[\s\S]*?(<\/section>)/, `$1
-${notes.renderNotes(noteItems)}
+${trimLineEnds(notes.renderNotes(noteItems))}
             $2`, "notes list");
     await writeIfChanged("notes/index.html", notesHtml);
 }

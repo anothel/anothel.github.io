@@ -48,6 +48,7 @@ test("trackedTopicLabels exposes stable topic coverage labels", () => {
         "AI evals",
         "AI engineering",
         "Workflow automation",
+        "Security",
         "Developer tooling"
     ]);
 });

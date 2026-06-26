@@ -24,7 +24,8 @@ const topicPages = [
     ["topics/mcp/index.html", "MCP", "../../", "MCP signals."],
     ["topics/agent-skills/index.html", "Agent skills", "../../", "Agent skills signals."],
     ["topics/ai-evals/index.html", "AI evals", "../../", "AI eval signals."],
-    ["topics/workflow-automation/index.html", "Workflow automation", "../../", "Workflow automation signals."]
+    ["topics/workflow-automation/index.html", "Workflow automation", "../../", "Workflow automation signals."],
+    ["topics/security/index.html", "Security", "../../", "Security signals."]
 ];
 
 test("public pages expose shared primary navigation", () => {
@@ -415,11 +416,12 @@ test("notes page indexes durable topic notes", () => {
     assert.match(notes, /..\/js\/topic-taxonomy\.js/);
     assert.match(notes, /..\/js\/notes\.js/);
     assert.match(notes, /<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/topic-taxonomy\.js"><\/script>\s*<script defer src="..\/js\/notes\.js"><\/script>/s);
-    for (const topic of ["AI agents", "MCP", "Agent skills", "AI evals", "Workflow automation"]) {
+    for (const topic of ["AI agents", "MCP", "Agent skills", "AI evals", "Workflow automation", "Security"]) {
         assert.match(notes, new RegExp(topic.replaceAll(" ", "\\s+")));
     }
     assert.match(notes, /href="..\/topics\/ai-evals\/index\.html"/);
     assert.match(notes, /href="..\/topics\/workflow-automation\/index\.html"/);
+    assert.match(notes, /href="..\/topics\/security\/index\.html"/);
     assert.match(notes, /href="..\/index\.html"/);
     assert.match(sitemap, /https:\/\/anothel\.github\.io\/notes\//);
 });

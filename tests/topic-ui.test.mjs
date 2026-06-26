@@ -117,7 +117,7 @@ test("Topic dashboard model builds why-now text, top movers, related groups, and
         ["Repos", ["openai/codex"]],
         ["Links", ["Agents SDK"]]
     ]);
-    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.crossLinks.map((link) => link.topic))), ["MCP", "Agent skills", "AI evals", "Workflow automation"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.crossLinks.map((link) => link.topic))), ["MCP", "Agent skills", "AI evals", "Workflow automation", "Security"]);
 });
 
 test("Topic guidance gives each topic concrete watch/open/action context", () => {
@@ -148,6 +148,11 @@ test("Topic guidance gives each topic concrete watch/open/action context", () =>
         whenToOpen: "Open when automation can turn repeated agent work into a reliable workflow.",
         nextAction: "Compare packages and repos, then save tools that fit repeatable work."
     });
+    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("Security"))), {
+        whatToWatch: "Auth, OAuth, supply chain, malware, vulnerability, and agent permission signals.",
+        whenToOpen: "Open when a signal changes how safe agent or developer workflow should be evaluated.",
+        nextAction: "Check source health, then save references that affect trusted execution."
+    });
 });
 
 test("Topic notes provide durable judgment copy per topic", () => {
@@ -158,6 +163,7 @@ test("Topic notes provide durable judgment copy per topic", () => {
     assert.match(app.topicNote("Agent skills").readWhen, /reusable/i);
     assert.match(app.topicNote("AI evals").title, /measurement/i);
     assert.match(app.topicNote("Workflow automation").body, /reliable runs/i);
+    assert.match(app.topicNote("Security").body, /trust boundary/i);
 });
 
 test("Topic supporting signals dedupe URLs and keep strongest current signals", () => {
@@ -230,6 +236,7 @@ test("Topic actions use topic-specific routes", () => {
     const skills = app.renderTopicActions("Agent skills");
     const evals = app.renderTopicActions("AI evals");
     const workflow = app.renderTopicActions("Workflow automation");
+    const security = app.renderTopicActions("Security");
 
     assert.match(ai, /href="..\/..\/repos\/index\.html"/);
     assert.match(ai, /href="..\/..\/packages\/index\.html"/);
@@ -242,6 +249,8 @@ test("Topic actions use topic-specific routes", () => {
     assert.match(evals, /href="..\/..\/status\/index\.html"/);
     assert.match(workflow, /href="..\/..\/packages\/index\.html"/);
     assert.match(workflow, /href="..\/..\/repos\/index\.html"/);
+    assert.match(security, /href="..\/..\/status\/index\.html"/);
+    assert.match(security, /href="..\/..\/links\/index\.html"/);
 });
 
 test("Topic pinned store and renderer expose current topic state", () => {

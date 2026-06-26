@@ -44,7 +44,8 @@ test("data update workflow commits refreshed static fallback pages", () => {
         "topics/mcp/index.html",
         "topics/agent-skills/index.html",
         "topics/ai-evals/index.html",
-        "topics/workflow-automation/index.html"
+        "topics/workflow-automation/index.html",
+        "topics/security/index.html"
     ]) {
         assert.match(workflow, new RegExp(file.replace("/", "\\/")));
     }

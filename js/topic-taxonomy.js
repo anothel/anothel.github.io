@@ -153,6 +153,33 @@
             ]
         },
         {
+            label: "Security",
+            slug: "security",
+            routePath: "topics/security/index.html",
+            description: "Auth, vulnerability, supply chain, and trusted execution signals.",
+            lensDescription: "Auth, vulnerability, supply chain, and trusted execution signals.",
+            signalLabel: "security",
+            reason: "Security signal that can change trust decisions around agent and developer workflows.",
+            boost: 24,
+            whyPrefix: "Security signals are becoming more important as agents reach more tools and permissions.",
+            patterns: [/\bsecurity\b/, /\boauth\b/, /\bauth\b/, /\bmalware\b/, /\bvulnerabilit(?:y|ies)\b/, /\bsupply chain\b/, /\bpermissions?\b/, /\bred teaming\b/, /\bpentesting\b/],
+            note: {
+                title: "Security signals decide where automation needs stronger guardrails.",
+                body: "Track this when auth, vulnerability, supply chain, or permission signals expose a trust boundary that could affect agent or developer workflow.",
+                readWhen: "Open this topic before trusting a tool that changes execution, access, dependencies, or saved workflow state."
+            },
+            guidance: {
+                whatToWatch: "Auth, OAuth, supply chain, malware, vulnerability, and agent permission signals.",
+                whenToOpen: "Open when a signal changes how safe agent or developer workflow should be evaluated.",
+                nextAction: "Check source health, then save references that affect trusted execution."
+            },
+            actions: [
+                ["Open focused Explore", "explore/index.html?focus=Security", "Security lens"],
+                ["Status", "status/index.html", "Source health before trusting security signals"],
+                ["Reference shelf", "links/index.html", "Security-relevant references"]
+            ]
+        },
+        {
             label: "Developer tooling",
             slug: "developer-tooling",
             description: "Tools that affect coding, testing, and build flow.",
@@ -170,6 +197,7 @@
         "AI engineering",
         "AI agents",
         "Workflow automation",
+        "Security",
         "Developer tooling"
     ];
     const byLabel = new Map(topicDefinitions.map((topic) => [topic.label, topic]));
@@ -273,7 +301,7 @@
     return {
         topicDefinitions,
         trackedTopicLabels: topicDefinitions.map((topic) => topic.label),
-        topicPageLabels: ["AI agents", "MCP", "Agent skills", "AI evals", "Workflow automation"],
+        topicPageLabels: ["AI agents", "MCP", "Agent skills", "AI evals", "Workflow automation", "Security"],
         topicByLabel,
         routeForTopic,
         exploreRouteForTopic,

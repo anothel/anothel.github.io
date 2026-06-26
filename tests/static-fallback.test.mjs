@@ -30,14 +30,16 @@ const pages = [
     "topics/mcp/index.html",
     "topics/agent-skills/index.html",
     "topics/ai-evals/index.html",
-    "topics/workflow-automation/index.html"
+    "topics/workflow-automation/index.html",
+    "topics/security/index.html"
 ];
 const topicPages = [
     ["topics/ai-agents/index.html", "AI agents"],
     ["topics/mcp/index.html", "MCP"],
     ["topics/agent-skills/index.html", "Agent skills"],
     ["topics/ai-evals/index.html", "AI evals"],
-    ["topics/workflow-automation/index.html", "Workflow automation"]
+    ["topics/workflow-automation/index.html", "Workflow automation"],
+    ["topics/security/index.html", "Security"]
 ];
 
 function moduleTotal() {
@@ -152,7 +154,8 @@ test("topic pages keep checked-in judgment notes without JavaScript", () => {
         ["topics/mcp/index.html", /protocol layer/i],
         ["topics/agent-skills/index.html", /reusable instructions/i],
         ["topics/ai-evals/index.html", /measurement/i],
-        ["topics/workflow-automation/index.html", /durable workflows/i]
+        ["topics/workflow-automation/index.html", /durable workflows/i],
+        ["topics/security/index.html", /trust boundary/i]
     ];
 
     for (const [path, pattern] of expectations) {
@@ -169,8 +172,10 @@ test("notes index keeps checked-in topic notes without JavaScript", () => {
     assert.match(html, /data-notes-list/);
     assert.match(html, /Measurement decides which AI changes are safe to keep\./);
     assert.match(html, /Durable workflows matter when agents need repeatable execution\./);
+    assert.match(html, /Security signals decide where automation needs stronger guardrails\./);
     assert.match(html, /href="..\/topics\/ai-evals\/index\.html"/);
     assert.match(html, /href="..\/topics\/workflow-automation\/index\.html"/);
+    assert.match(html, /href="..\/topics\/security\/index\.html"/);
 });
 
 test("topic page static fallback summaries match current topic data", () => {
