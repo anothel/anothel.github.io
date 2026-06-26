@@ -250,9 +250,10 @@ test("explore page owns the cross-module search surface", () => {
     assert.match(explore, /href="..\/review\/index\.html"/);
     assert.match(explore, /..\/js\/data-health\.js/);
     assert.match(explore, /..\/js\/signal-schema\.js/);
+    assert.match(explore, /..\/js\/safe-dom\.js/);
     assert.match(explore, /..\/js\/topic-taxonomy\.js/);
     assert.match(explore, /..\/js\/explore\.js/);
-    assert.match(explore, /<script defer src="..\/js\/signal-schema\.js"><\/script>\s*<script defer src="..\/js\/topic-taxonomy\.js"><\/script>\s*<script defer src="..\/js\/explore\.js"/s);
+    assert.match(explore, /<script defer src="..\/js\/signal-schema\.js"><\/script>\s*<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/topic-taxonomy\.js"><\/script>\s*<script defer src="..\/js\/explore\.js"/s);
     assert.match(explore, /..\/data\/trends\.json/);
     assert.match(explore, /..\/data\/packages\.json/);
     assert.match(explore, /..\/data\/repos\.json/);

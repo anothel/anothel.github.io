@@ -4,6 +4,7 @@
     const dataHealth = global.DataHealth;
     const localState = global.AnothelState;
     const signalSchema = global.SignalSchema;
+    const dom = global.AnothelDom;
     const topicTaxonomy = global.TopicTaxonomy;
     const defaultExploreState = { focus: "all", sort: "priority" };
     const maxSavedSearches = 5;
@@ -41,38 +42,8 @@
         category: "category"
     };
 
-    function escapeHtml(value) {
-        return String(value ?? "")
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;");
-    }
-
-    function safeHref(value) {
-        const href = String(value || "").trim();
-        if (!href || href.startsWith("//") || /[\u0000-\u001F\u007F]/.test(href)) {
-            return "#";
-        }
-
-        const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
-        if (!hasScheme && (href.startsWith("../") || href.startsWith("./") || href.startsWith("/"))) {
-            return escapeHtml(href);
-        }
-
-        try {
-            const parsed = new URL(href, "https://anothel.github.io/explore/");
-            if (hasScheme && parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-                return "#";
-            }
-            if (!hasScheme && parsed.origin !== "https://anothel.github.io") {
-                return "#";
-            }
-            return escapeHtml(href);
-        } catch {
-            return "#";
-        }
-    }
+    const escapeHtml = dom.escapeHtml;
+    const safeHref = dom.safeHref;
 
     function requireSignalSchema() {
         if (!signalSchema) {
