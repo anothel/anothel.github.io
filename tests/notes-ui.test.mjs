@@ -4,7 +4,8 @@ import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
 function loadNotes() {
-    const context = { console };
+    const context = { console, URL };
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(readFileSync("js/notes.js", "utf8"), context);
     return context.NotesApp;

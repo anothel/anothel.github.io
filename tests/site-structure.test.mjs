@@ -411,8 +411,10 @@ test("notes page indexes durable topic notes", () => {
     assert.match(notes, /Judgment notes from focused topic pages\./);
     assert.match(notes, /data-notes-count/);
     assert.match(notes, /data-notes-list/);
+    assert.match(notes, /..\/js\/safe-dom\.js/);
     assert.match(notes, /..\/js\/topic-taxonomy\.js/);
     assert.match(notes, /..\/js\/notes\.js/);
+    assert.match(notes, /<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/topic-taxonomy\.js"><\/script>\s*<script defer src="..\/js\/notes\.js"><\/script>/s);
     for (const topic of ["AI agents", "MCP", "Agent skills", "AI evals", "Workflow automation"]) {
         assert.match(notes, new RegExp(topic.replaceAll(" ", "\\s+")));
     }
