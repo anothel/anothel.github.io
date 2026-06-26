@@ -132,3 +132,17 @@ test("DataHealth renders fallback safety detail", () => {
     assert.match(html, /No repo rows fetched/);
     assert.match(html, /previous refresh 2026-06-19/);
 });
+
+test("DataHealth exposes shared source detail text", () => {
+    const DataHealth = loadDataHealth();
+
+    assert.equal(
+        DataHealth.sourceDetail({
+            status: "fallback",
+            previousUpdated: "2026-06-19",
+            fallbackUsed: true,
+            staleButSafe: true
+        }),
+        "Fallback - using 2026-06-19 data / using fallback / previous data kept / previous refresh 2026-06-19"
+    );
+});

@@ -157,6 +157,7 @@
         dataModeText,
         freshnessText,
         renderSourceHealth,
+        sourceDetail,
         summarizeModules
     };
 })(globalThis);

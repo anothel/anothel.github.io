@@ -575,8 +575,9 @@ test("status page owns the source health overview", () => {
         assert.match(status, new RegExp(hook));
     }
 
-    assert.match(status, /..\/js\/data-health\.js/);
     assert.match(status, /..\/js\/status\.js/);
+    assert.doesNotMatch(status, /<script defer src="..\/js\/safe-dom\.js"><\/script>/);
+    assert.doesNotMatch(status, /<script defer src="..\/js\/data-health\.js"><\/script>/);
     assert.match(status, /..\/data\/manifest\.json/);
     assert.match(status, /data-report="..\/data\/refresh-report\.json"/);
     assert.match(status, /Last refresh run/);
@@ -602,7 +603,7 @@ test("source wording distinguishes origin filters from data status", () => {
     const dashboardScript = read("js/dashboard.js");
 
     assert.match(trends, /<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/data-health\.js"><\/script>\s*<script defer src="..\/js\/dashboard\.js"/s);
-    assert.match(status, /<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/data-health\.js"><\/script>\s*<script type="module" src="..\/js\/status\.js"/s);
+    assert.match(status, /<script type="module" src="..\/js\/status\.js"/);
     assert.match(trends, /Origin\s*<select data-source>/);
     assert.match(trends, /All origins/);
     assert.match(dashboardScript, /document\.querySelector\("select\[data-source\]"\)/);

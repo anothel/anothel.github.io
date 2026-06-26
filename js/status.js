@@ -1,4 +1,5 @@
 import "./safe-dom.js";
+import "./data-health.js";
 
 const manifestUrl = typeof document === "undefined"
     ? "data/manifest.json"
@@ -17,57 +18,6 @@ function sourceList(sourceMeta) {
     if (Array.isArray(sourceMeta)) return sourceMeta;
     if (sourceMeta && typeof sourceMeta === "object") return [sourceMeta];
     return [];
-}
-
-function datePart(value) {
-    return String(value || "").match(/^\d{4}-\d{2}-\d{2}/)?.[0] || "";
-}
-
-function ageDays(updated, today = new Date()) {
-    const updatedDate = datePart(updated);
-    const todayDate = datePart(today instanceof Date ? today.toISOString() : today);
-    if (!updatedDate || !todayDate) return null;
-
-    const diff = Date.parse(`${todayDate}T00:00:00.000Z`) - Date.parse(`${updatedDate}T00:00:00.000Z`);
-    if (!Number.isFinite(diff)) return null;
-    return Math.max(0, Math.floor(diff / 86400000));
-}
-
-function freshnessText(source, today) {
-    const status = source?.status || "unknown";
-    const updated = source?.updatedAt || source?.updated;
-    const updatedDate = datePart(updated);
-
-    if (status === "fallback") {
-        const fallbackDate = datePart(source?.previousUpdated) || updatedDate;
-        return fallbackDate ? `Fallback - using ${fallbackDate} data` : "Fallback - previous data kept";
-    }
-    if (status === "error") return "Error - no current timestamp";
-    if (status === "partial") return updatedDate ? `Partial - updated ${updatedDate}` : "Partial - usable data remains";
-
-    const age = ageDays(updated, today);
-    if (age === null) return "Unknown - no timestamp";
-    if (age <= 1) return `Fresh - updated ${updatedDate}`;
-    if (age <= 3) return `Aging - ${age} days old`;
-    return `Stale - ${age} days old`;
-}
-
-function sourceDetail(source, today) {
-    const freshness = freshnessText(source, today);
-    const safety = [];
-    if (source?.fallbackUsed) safety.push("using fallback");
-    if (source?.staleButSafe) safety.push("previous data kept");
-    if (source?.rateLimited) safety.push("rate limited");
-    if (source?.fallbackReason) safety.push(source.fallbackReason);
-    if (source?.previousUpdated) safety.push(`previous refresh ${source.previousUpdated}`);
-    if (safety.length > 0) return `${freshness} / ${safety.join(" / ")}`;
-
-    const errors = Array.isArray(source?.errors) ? source.errors : [];
-    if (errors.length > 0) {
-        return `${freshness} / ${errors.map((error) => [error.name, error.error].filter(Boolean).join(": ")).join(" / ")}`;
-    }
-    if (source?.error) return `${freshness} / ${source.error}`;
-    return freshness;
 }
 
 function sourceUpdated(source) {
@@ -111,7 +61,7 @@ export function collectSourceRows(manifest, datasets, options = {}) {
             status: source.status || "unknown",
             count: source.count || 0,
             updated: sourceUpdated(source),
-            detail: sourceDetail(source, options.today)
+            detail: globalThis.DataHealth.sourceDetail(source, options.today)
         }));
     });
 }
