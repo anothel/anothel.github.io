@@ -29,6 +29,12 @@
         return value ? `Saved ${String(value).slice(0, 10)}` : "Saved date unknown";
     }
 
+    function nextActionCopy(status = "unread") {
+        if (status === "done") return "Remove it if it no longer needs to stay here, or find similar signals in Explore.";
+        if (status === "read") return "Add a reason, tag, or note, then mark done when no follow-up remains.";
+        return "Open this signal, then mark it read or done.";
+    }
+
     function statusRank(status = "unread") {
         if (status === "done") return 2;
         if (status === "read") return 1;
@@ -169,6 +175,7 @@
                 <h2>${escapeHtml(item.title)}</h2>
                 <p class="why-copy"><strong>Why this matters</strong> ${escapeHtml(item.summary)}</p>
                 <p class="source-context"><strong>Source context</strong> ${escapeHtml(context)}</p>
+                <p class="review-next-action"><strong>Next action</strong> ${escapeHtml(nextActionCopy(status))}</p>
                 <div class="card-meta">
                     <span>${escapeHtml(item.metric)}</span>
                     <span>${escapeHtml(item.updated)}</span>

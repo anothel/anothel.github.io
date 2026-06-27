@@ -24,7 +24,7 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 | Home | Open-now board with priority picks, local review state, trust summary, and secondary module jumps. |
 | Today | Generated priority brief that explains why each pick is worth opening and what to do next. |
 | Explore | Cross-module search, filter, save, defaults, saved searches, and topic lenses. |
-| Review | Local browser queue for items saved from Explore. |
+| Review | Local browser queue for items saved from Explore, with status-specific next actions. |
 | Status | Source health, freshness, partial/fallback context, and recovery clues. |
 | Trends | Cross-source movement across HN, GitHub, and npm. |
 | Packages | npm watchlist focused on adoption and package demand. |
@@ -87,6 +87,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Trend source failures preserve prior rows for the failed source while marking that source as fallback and stale but safe.
 - Disabled watchlist entries stay excluded from generated snapshots even when previous data is reused.
 - Home, Today, Explore, Status, and module pages continue to share one source-health truth from generated metadata.
+
+## Review Queue Friction Audit
+
+- Review keeps the existing localStorage key, saved item schema, canonical ids, and legacy saved id matching.
+- Empty and no-JS Review states now explain that saved items are local and should start from Explore.
+- Queue copy makes unread-first ordering explicit; selected-item detail gives a status-specific next action for unread, read, and done items.
+- Export and import stay local portability affordances, not sync, account, backend, or route expansion.
 
 ## Signal Policy
 

@@ -85,6 +85,13 @@ test("IA records refresh stability follow-up outcomes", () => {
     assert.match(ia, /Trend source failures preserve prior rows for the failed source/s);
 });
 
+test("IA records review queue friction audit outcomes", () => {
+    assert.match(ia, /Review Queue Friction Audit/);
+    assert.match(ia, /keeps the existing localStorage key, saved item schema, canonical ids, and legacy saved id matching/s);
+    assert.match(ia, /status-specific next action for unread, read, and done items/s);
+    assert.match(ia, /not sync, account, backend, or route expansion/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -108,18 +115,18 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
+    assert.match(roadmap, /### P0 - Signal Quality Regression Audit/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
+    assert.match(roadmap, /### P0 - Signal Quality Regression Audit/);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
+    assert.match(roadmap, /### P0 - Signal Quality Regression Audit/);
 });
 
 test("roadmap keeps architecture PoC as a gate outside next work", () => {
@@ -131,11 +138,16 @@ test("roadmap keeps architecture PoC as a gate outside next work", () => {
 
 test("roadmap keeps completed refresh stability out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
+    assert.match(roadmap, /### P0 - Signal Quality Regression Audit/);
 });
 
-test("roadmap promotes review queue friction as the active P0", () => {
-    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
-    assert.match(roadmap, /saved items accumulate but the next useful action is unclear/s);
-    assert.match(roadmap, /No new route, backend, sync, account, or framework dependency/s);
+test("roadmap keeps completed review queue friction out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Review Queue Friction Audit/);
+    assert.match(roadmap, /### P0 - Signal Quality Regression Audit/);
+});
+
+test("roadmap promotes signal quality regression as the active P0", () => {
+    assert.match(roadmap, /### P0 - Signal Quality Regression Audit/);
+    assert.match(roadmap, /priority surfaces still prefer specific agent-workflow signals over broad baseline tooling/s);
+    assert.match(roadmap, /No framework, backend, account, sync, or new public route/s);
 });

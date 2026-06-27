@@ -1871,6 +1871,11 @@ button {
     color: var(--muted);
 }
 
+.review-next-action {
+    margin: 0;
+    color: var(--muted);
+}
+
 .review-actions {
     display: flex;
     flex-wrap: wrap;

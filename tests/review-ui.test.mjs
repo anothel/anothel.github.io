@@ -185,6 +185,15 @@ test("Review renders status and saved date metadata", () => {
     assert.match(detail, /data-review-status-id="packages:https:\/\/example\.com\/mcp" data-review-status="done"/);
 });
 
+test("Review renders next action guidance by workflow status", () => {
+    const app = loadReview();
+
+    assert.match(app.renderReviewDetail({ ...items[0], savedStatus: "unread" }), /Next action/);
+    assert.match(app.renderReviewDetail({ ...items[0], savedStatus: "unread" }), /Open this signal, then mark it read or done/);
+    assert.match(app.renderReviewDetail({ ...items[0], savedStatus: "read" }), /Add a reason, tag, or note, then mark done/);
+    assert.match(app.renderReviewDetail({ ...items[0], savedStatus: "done" }), /Remove it if it no longer needs to stay here/);
+});
+
 test("Review renders saved metadata editor", () => {
     const app = loadReview();
     const item = {

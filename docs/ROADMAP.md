@@ -38,28 +38,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Review Queue Friction Audit
+### P0 - Signal Quality Regression Audit
 
-Trigger: saved items accumulate but the next useful action is unclear, duplicated, or slower than reopening Explore.
+Trigger: refresh fallback, shared signal policy, and Review workflow changes can hide whether priority surfaces still prefer specific agent-workflow signals over broad baseline tooling.
 
 Scope:
 
-- Audit Review queue copy, status filters, selected-item detail, export/import affordances, and metadata fields.
-- Reduce repeated local decisions without changing the localStorage key or saved item schema unless tests prove a migration is required.
-- Keep saved item identity compatible with current Explore canonical ids and legacy saved ids.
-- Keep Review useful with empty, stale, blocked-localStorage, and current-data states.
-- No new route, backend, sync, account, or framework dependency.
+- Compare Today, Explore, topic landing cards, and module health copy against current golden expectations.
+- Adjust checked-in signal policy or watchlist data only when tests show broad baseline items outrank agent-workflow signals.
+- Keep route count, localStorage schema, refresh scripts, and the architecture gate unchanged unless a failing test proves otherwise.
+- No framework, backend, account, sync, or new public route.
 
 Verification:
 
-- Run `node --test tests/review-ui.test.mjs tests/local-state.test.mjs tests/site-structure.test.mjs`.
+- Run `node --test tests/signal-quality-golden.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/topic-ui.test.mjs tests/site-structure.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
 
 Exit:
 
-- Review makes the next useful action obvious for unread, read, done, and empty queues.
-- Any changed workflow state has regression coverage.
-- Static HTML remains useful without JavaScript.
+- Broad baseline signals do not dominate agent-workflow priority surfaces.
+- Data health and fallback meanings remain consistent across Home, Today, Explore, Status, and module pages.
+- Any scoring or watchlist adjustment has a focused regression test.
 
 ## Architecture Gate
 

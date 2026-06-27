@@ -321,6 +321,8 @@ test("review page owns the saved follow-up surface", () => {
     assert.match(review, /Done/);
     assert.match(review, /Queue/);
     assert.match(review, /Selected item/);
+    assert.match(review, /Unread first/);
+    assert.match(review, /Next action changes with status/);
     assert.match(review, /..\/js\/signal-schema\.js/);
     assert.match(review, /..\/js\/safe-dom\.js/);
     assert.match(review, /..\/js\/topic-taxonomy\.js/);
