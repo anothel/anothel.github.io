@@ -3,16 +3,97 @@
     "npmPackages": [
       "react",
       "typescript",
-      "vite",
-      "next",
-      "eslint",
-      "prettier",
-      "zod",
-      "tailwindcss",
+      {
+        "name": "vite",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired from trend refresh because broad build-tool demand diluted agent-workflow signals."
+          }
+        ]
+      },
+      {
+        "name": "next",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired from trend refresh because broad framework demand duplicated baseline package coverage."
+          }
+        ]
+      },
+      {
+        "name": "eslint",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired from trend refresh because broad linting demand diluted agent-workflow signals."
+          }
+        ]
+      },
+      {
+        "name": "prettier",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired from trend refresh because broad formatting demand diluted agent-workflow signals."
+          }
+        ]
+      },
+      {
+        "name": "zod",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired from trend refresh because validation-library demand duplicated baseline package coverage."
+          }
+        ]
+      },
+      {
+        "name": "tailwindcss",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired from trend refresh because broad CSS framework demand diluted agent-workflow signals."
+          }
+        ]
+      },
       "playwright",
-      "express",
-      "fastify",
-      "tsx",
+      {
+        "name": "express",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired from trend refresh because broad server-framework demand was not specific to agent workflows."
+          }
+        ]
+      },
+      {
+        "name": "fastify",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired from trend refresh because broad server-framework demand was not specific to agent workflows."
+          }
+        ]
+      },
+      {
+        "name": "tsx",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired from trend refresh because generic TypeScript runner demand diluted signal quality."
+          }
+        ]
+      },
       "ai",
       "@ai-sdk/openai",
       "@ai-sdk/provider",
@@ -89,11 +170,25 @@
       },
       {
         "query": "topic:typescript stars:>500",
-        "category": "TypeScript"
+        "category": "TypeScript",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired because broad TypeScript repo search duplicated baseline tooling signals."
+          }
+        ]
       },
       {
         "query": "topic:developer-tools ai stars:>300",
-        "category": "Developer tools"
+        "category": "Developer tools",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-27",
+            "note": "Retired because broad developer-tools search returned adjacent tooling instead of durable agent-workflow signals."
+          }
+        ]
       }
     ]
   },
@@ -111,17 +206,38 @@
     {
       "name": "vite",
       "category": "Tooling",
-      "focus": "build tool"
+      "focus": "build tool",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad build-tool demand is covered by baseline scoring policy, not active source expansion."
+        }
+      ]
     },
     {
       "name": "next",
       "category": "Framework",
-      "focus": "React framework"
+      "focus": "React framework",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad framework demand duplicated baseline package coverage."
+        }
+      ]
     },
     {
       "name": "zod",
       "category": "Validation",
-      "focus": "schema validation"
+      "focus": "schema validation",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because validation-library demand is adjacent baseline tooling, not agent-workflow signal."
+        }
+      ]
     },
     {
       "name": "playwright",
@@ -131,12 +247,26 @@
     {
       "name": "eslint",
       "category": "Tooling",
-      "focus": "linting"
+      "focus": "linting",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad linting demand is adjacent baseline tooling."
+        }
+      ]
     },
     {
       "name": "prettier",
       "category": "Tooling",
-      "focus": "formatting"
+      "focus": "formatting",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad formatting demand is adjacent baseline tooling."
+        }
+      ]
     },
     {
       "name": "ai",
@@ -268,22 +398,50 @@
     {
       "fullName": "react/react",
       "category": "UI",
-      "focus": "frontend runtime"
+      "focus": "frontend runtime",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad UI runtime traction diluted agent-workflow source quality."
+        }
+      ]
     },
     {
       "fullName": "vercel/next.js",
       "category": "Framework",
-      "focus": "React framework"
+      "focus": "React framework",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad framework traction duplicated baseline tooling signals."
+        }
+      ]
     },
     {
       "fullName": "vitejs/vite",
       "category": "Tooling",
-      "focus": "build tool"
+      "focus": "build tool",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad build-tool traction diluted agent-workflow source quality."
+        }
+      ]
     },
     {
       "fullName": "microsoft/playwright",
       "category": "Testing",
-      "focus": "browser automation"
+      "focus": "browser automation",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad browser automation traction is adjacent tooling, not a focused agent signal."
+        }
+      ]
     },
     {
       "fullName": "n8n-io/n8n",
@@ -293,7 +451,14 @@
     {
       "fullName": "colinhacks/zod",
       "category": "Validation",
-      "focus": "schema validation"
+      "focus": "schema validation",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because validation-library traction duplicated baseline tooling signals."
+        }
+      ]
     },
     {
       "fullName": "anthropics/skills",
@@ -468,35 +633,70 @@
       "category": "Frontend",
       "kind": "Docs",
       "url": "https://developer.mozilla.org/",
-      "summary": "Reference for web platform APIs, CSS, HTML, and JavaScript."
+      "summary": "Reference for web platform APIs, CSS, HTML, and JavaScript.",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad platform docs did not change agent-workflow decisions."
+        }
+      ]
     },
     {
       "title": "web.dev",
       "category": "Frontend",
       "kind": "Guide",
       "url": "https://web.dev/",
-      "summary": "Practical guides for web performance, UX, and platform features."
+      "summary": "Practical guides for web performance, UX, and platform features.",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because broad web guidance duplicated generic frontend references."
+        }
+      ]
     },
     {
       "title": "Node.js API",
       "category": "Runtime",
       "kind": "Docs",
       "url": "https://nodejs.org/api/",
-      "summary": "Node.js runtime API documentation for scripts and tooling."
+      "summary": "Node.js runtime API documentation for scripts and tooling.",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because generic runtime docs did not add signal-dashboard decisions."
+        }
+      ]
     },
     {
       "title": "SQLite Docs",
       "category": "Data",
       "kind": "Docs",
       "url": "https://www.sqlite.org/docs.html",
-      "summary": "Reference for small durable data stores and local-first experiments."
+      "summary": "Reference for small durable data stores and local-first experiments.",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because generic data-store docs were outside current agent-workflow scope."
+        }
+      ]
     },
     {
       "title": "OpenTelemetry Docs",
       "category": "Ops",
       "kind": "Docs",
       "url": "https://opentelemetry.io/docs/",
-      "summary": "Observability concepts, instrumentation, traces, metrics, and logs."
+      "summary": "Observability concepts, instrumentation, traces, metrics, and logs.",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-27",
+          "note": "Retired because generic observability docs were broader than current AI eval and agent workflow signals."
+        }
+      ]
     },
     {
       "title": "Anthropic Agent Skills",

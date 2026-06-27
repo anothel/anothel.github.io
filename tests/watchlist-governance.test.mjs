@@ -26,3 +26,28 @@ test("watchlist governance filters disabled entries without deleting history", (
 test("checked-in watchlists keep optional disabled and history fields valid", () => {
     assert.deepEqual(validateWatchlistGovernance(json("data/watchlists.json")), []);
 });
+
+test("source quality drift review retires broad duplicate sources", () => {
+    const watchlists = json("data/watchlists.json");
+    const activeTrendPackages = new Set(activeNames(watchlists.trends.npmPackages));
+    const activeQueries = new Set(activeItems(watchlists.trends.githubQueries).map((item) => item.query));
+    const activePackages = new Set(activeItems(watchlists.packages).map((item) => item.name));
+    const activeRepos = new Set(activeItems(watchlists.repos).map((item) => item.fullName));
+    const activeLinks = new Set(activeItems(watchlists.links).map((item) => item.title));
+
+    for (const name of ["vite", "next", "eslint", "prettier", "zod", "tailwindcss", "express", "fastify", "tsx"]) {
+        assert.equal(activeTrendPackages.has(name), false, `${name} trend package should be retired`);
+    }
+    for (const query of ["topic:typescript stars:>500", "topic:developer-tools ai stars:>300"]) {
+        assert.equal(activeQueries.has(query), false, `${query} should be retired`);
+    }
+    for (const name of ["vite", "next", "zod", "eslint", "prettier"]) {
+        assert.equal(activePackages.has(name), false, `${name} package should be retired`);
+    }
+    for (const name of ["react/react", "vercel/next.js", "vitejs/vite", "microsoft/playwright", "colinhacks/zod"]) {
+        assert.equal(activeRepos.has(name), false, `${name} repo should be retired`);
+    }
+    for (const title of ["MDN Web Docs", "web.dev", "Node.js API", "SQLite Docs", "OpenTelemetry Docs"]) {
+        assert.equal(activeLinks.has(title), false, `${title} link should be retired`);
+    }
+});

@@ -73,6 +73,12 @@ test("IA documents source governance decisions", () => {
     assert.match(ia, /Framework islands stay deferred/);
 });
 
+test("IA records source quality drift review outcomes", () => {
+    assert.match(ia, /Source Quality Drift Review/);
+    assert.match(ia, /Broad baseline trend inputs stay retired/s);
+    assert.match(ia, /Broad package, repo, and reference entries use `disabled: true`/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -96,12 +102,16 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P5 - Source Quality Drift Review/);
+    assert.match(roadmap, /### P0 - Architecture PoC Only On Measured Blocker/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P5 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P6 - Architecture PoC Only On Measured Blocker/);
+    assert.match(roadmap, /### P0 - Architecture PoC Only On Measured Blocker/);
+});
+
+test("roadmap keeps completed source quality drift review out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
+    assert.match(roadmap, /### P0 - Architecture PoC Only On Measured Blocker/);
 });

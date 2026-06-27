@@ -75,6 +75,12 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - `disabled: true` keeps retired sources documented without appearing in current generated output.
 - `history` records why a source changed or retired with `date` and `note`.
 
+## Source Quality Drift Review
+
+- Broad baseline trend inputs stay retired when they duplicate generic TypeScript, framework, linting, formatting, validation, CSS, server, or runner demand.
+- Broad package, repo, and reference entries use `disabled: true` plus `history` instead of deletion, so provenance remains auditable.
+- Generated data snapshots may still show retired sources until the next data refresh.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

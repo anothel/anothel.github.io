@@ -38,26 +38,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P5 - Source Quality Drift Review
-
-Trigger: enabled watchlists keep growing and broad sources can dilute the signal dashboard.
-
-Scope:
-
-- Audit enabled watchlist entries for broad, stale, or duplicate sources.
-- Retire weak entries with `disabled: true` and `history` notes instead of deleting provenance.
-- Keep source modules and public routes unchanged.
-
-Verification:
-
-- Run `node --test tests/watchlist-governance.test.mjs tests/data-schema.test.mjs tests/ops-docs.test.mjs`.
-
-Exit:
-
-- Enabled source lists favor agent-workflow signal over broad tooling.
-- Retired sources keep rationale in checked-in history.
-
-### P6 - Architecture PoC Only On Measured Blocker
+### P0 - Architecture PoC Only On Measured Blocker
 
 Trigger: a measured vanilla JavaScript problem exceeds the budget in `docs/ARCHITECTURE.md`.
 
