@@ -172,7 +172,7 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Current routes remain justified by distinct jobs: Home opens, Today prioritizes, Explore discovers, Review returns, Status explains trust, source modules inspect, Notes and topic pages add judgment.
 - Home -> Today/Explore -> Review -> Notes/Status remains the core workflow.
 - No route or state was deleted because public structure, workflow, and static fallback tests already assign each surface a separate job.
-- Roadmap now stays trigger-only instead of creating another active audit item by default.
+- Future Roadmap work should stay bundled by workflow instead of creating page-by-page audit follow-ups.
 - No route, localStorage schema, source family, framework, backend, account, or sync scope changed.
 
 ## Signal Policy
