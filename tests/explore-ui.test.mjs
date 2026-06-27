@@ -79,7 +79,8 @@ test("Explore normalizes trends, packages, repos, and links into one item shape"
         ["Repos", "openai/codex", "AI agents", "GitHub", "92K stars", 3],
         ["Links", "Agent Skills standard", "Agent skills", "Spec", "Spec", 3]
     ]);
-    assert.equal(items[0].id, "trends:https://example.com/trend");
+    assert.equal(items[0].id, "url:https://example.com/trend");
+    assert.ok(items[0].legacyIds.includes("trends:https://example.com/trend"));
     assert.equal(items[1].updated, "2026-06-19");
     assert.deepEqual(JSON.parse(JSON.stringify(items.map((item) => item.schemaVersion))), [2, 2, 2, 2]);
     assert.deepEqual(JSON.parse(JSON.stringify(items.map((item) => item.sourceModule))), ["trends", "packages", "repos", "links"]);
@@ -171,6 +172,49 @@ test("Explore normalizes quality scores so broad baseline packages do not domina
     assert.equal(byTitle.typescript.rawScore, 250000000);
 });
 
+test("Explore uses canonical URL ids and still recognizes legacy saved ids", () => {
+    const app = loadExplore();
+    const items = app.normalizeExploreData({
+        trends: { updated: "2026-06-18", sourceMeta: [], items: [] },
+        packages: { updated: "2026-06-19", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        repos: {
+            updated: "2026-06-18",
+            sourceMeta: { name: "GitHub", status: "ok", count: 1 },
+            repos: [{
+                rank: 1,
+                name: "owner/repo",
+                category: "AI agents",
+                focus: "agent workflow",
+                stars: 1000,
+                starsLabel: "1K",
+                url: "https://github.com/Owner/Repo.git?tab=readme#intro",
+                summary: "Agent workflow."
+            }]
+        },
+        links: {
+            updated: "2026-06-18",
+            sourceMeta: { name: "manual", status: "ok", count: 1 },
+            links: [{
+                rank: 1,
+                title: "owner/repo docs",
+                category: "AI agents",
+                kind: "Docs",
+                url: "https://github.com/owner/repo/",
+                summary: "Same repo reference."
+            }]
+        }
+    });
+    const item = items[0];
+    const legacyId = "repos:https://github.com/Owner/Repo.git?tab=readme#intro";
+
+    assert.equal(items.length, 1);
+    assert.equal(item.id, "url:https://github.com/owner/repo");
+    assert.ok(item.legacyIds.includes(legacyId));
+    assert.deepEqual([...app.filterSavedIds(items, new Set([legacyId, "missing:id"]))], [legacyId]);
+    assert.match(app.renderExploreCards(items, new Set([legacyId])), /aria-pressed="true"/);
+    assert.match(app.renderSavedQueue(items, new Set([legacyId])), /owner\/repo docs|owner\/repo/);
+});
+
 test("Explore caps broad npm trend items before priority sorting", () => {
     const app = loadExplore();
     const items = app.normalizeExploreData({
@@ -251,7 +295,8 @@ test("Explore merges duplicate URLs and preserves source context", () => {
 
     assert.equal(items.length, 1);
     assert.deepEqual(JSON.parse(JSON.stringify(items[0].sources)), ["Repos", "Links"]);
-    assert.equal(items[0].id, "repos:https://github.com/mattpocock/skills");
+    assert.equal(items[0].id, "url:https://github.com/mattpocock/skills");
+    assert.ok(items[0].legacyIds.includes("repos:https://github.com/mattpocock/skills"));
     assert.match(items[0].sourceContext, /Also in Links/);
 });
 

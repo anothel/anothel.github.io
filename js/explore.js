@@ -277,6 +277,14 @@
         });
     }
 
+    function itemSavedId(item, savedIds = new Set()) {
+        return [item.id, ...(item.legacyIds || [])].find((id) => savedIds.has(id)) || "";
+    }
+
+    function isItemSaved(item, savedIds = new Set()) {
+        return Boolean(itemSavedId(item, savedIds));
+    }
+
     function filterExploreItems(items, filters) {
         return items
             .filter((item) => filters.module === "all" || item.module === filters.module)
@@ -288,7 +296,7 @@
     function sortExploreItems(items, sort, savedIds = new Set()) {
         return [...items].sort((a, b) => {
             if (sort === "saved") {
-                const savedDiff = Number(savedIds.has(b.id)) - Number(savedIds.has(a.id));
+                const savedDiff = Number(isItemSaved(b, savedIds)) - Number(isItemSaved(a, savedIds));
                 if (savedDiff !== 0) return savedDiff;
                 return Number(b.score || 0) - Number(a.score || 0);
             }
@@ -307,7 +315,7 @@
     }
 
     function filterSavedIds(items, savedIds = new Set()) {
-        const validIds = new Set(items.map((item) => item.id));
+        const validIds = new Set(items.flatMap((item) => [item.id, ...(item.legacyIds || [])]));
         return new Set([...savedIds].filter((id) => validIds.has(id)));
     }
 
@@ -342,7 +350,9 @@
         }
 
         return items.map((item) => {
-            const saved = savedIds.has(item.id);
+            const savedId = itemSavedId(item, savedIds);
+            const saved = Boolean(savedId);
+            const buttonId = savedId || item.id;
             const scoreReasons = (item.scoreReasons || []).slice(0, 3);
             return `
                 <article class="explore-card" data-item-id="${escapeHtml(item.id)}">
@@ -366,7 +376,7 @@
                     ${item.sourceContext ? `<p class="source-context">${escapeHtml(item.sourceContext)}</p>` : ""}
                     <div class="explore-card-actions">
                         <a href="${safeHref(item.url)}">Open item</a>
-                        <button type="button" data-save-id="${escapeHtml(item.id)}" aria-pressed="${saved ? "true" : "false"}" aria-label="${escapeHtml(saved ? `Saved ${item.title} for Review` : `Save ${item.title} for Review`)}">
+                        <button type="button" data-save-id="${escapeHtml(buttonId)}" aria-pressed="${saved ? "true" : "false"}" aria-label="${escapeHtml(saved ? `Saved ${item.title} for Review` : `Save ${item.title} for Review`)}">
                             ${saved ? "Saved" : "Save"}
                         </button>
                     </div>
@@ -376,20 +386,23 @@
     }
 
     function renderSavedQueue(items, savedIds = new Set()) {
-        const saved = items.filter((item) => savedIds.has(item.id));
+        const saved = items.filter((item) => isItemSaved(item, savedIds));
         if (saved.length === 0) {
             return '<p class="saved-empty">Save items to review later in this browser.</p>';
         }
 
-        return saved.map((item) => `
+        return saved.map((item) => {
+            const savedId = itemSavedId(item, savedIds) || item.id;
+            return `
             <article class="saved-item">
                 <div>
                     <strong>${escapeHtml(item.title)}</strong>
                     <span>${escapeHtml([item.module, item.metric, item.sourceContext].filter(Boolean).join(" / "))}</span>
                 </div>
-                <button type="button" data-remove-id="${escapeHtml(item.id)}" aria-label="Remove ${escapeHtml(item.title)} from saved queue">Remove</button>
+                <button type="button" data-remove-id="${escapeHtml(savedId)}" aria-label="Remove ${escapeHtml(item.title)} from saved queue">Remove</button>
             </article>
-        `).join("");
+            `;
+        }).join("");
     }
 
     function renderTopicLenses(lenses, activeFocus = "all", pinnedTopics = new Set()) {

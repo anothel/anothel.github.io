@@ -1,0 +1,124 @@
+{
+  "explore": [
+    {
+      "title": "Agents SDK docs",
+      "module": "Links",
+      "category": "AI agents",
+      "score": 100,
+      "reasons": [
+        "Docs from Docs",
+        "Agent workflow reference.",
+        "Signal fit 100/100"
+      ]
+    },
+    {
+      "title": "openai/codex",
+      "module": "Repos",
+      "category": "AI agents",
+      "score": 100,
+      "reasons": [
+        "92K stars from GitHub",
+        "terminal coding agent",
+        "Signal fit 100/100"
+      ]
+    },
+    {
+      "title": "Evalite docs",
+      "module": "Links",
+      "category": "AI evals",
+      "score": 99,
+      "reasons": [
+        "Docs from Docs",
+        "Evaluation workflow docs.",
+        "Signal fit 99/100"
+      ]
+    },
+    {
+      "title": "MCP TypeScript SDK",
+      "module": "Links",
+      "category": "MCP",
+      "score": 94,
+      "reasons": [
+        "Docs from Docs",
+        "Protocol SDK reference.",
+        "Signal fit 94/100"
+      ]
+    },
+    {
+      "title": "Zero-Touch OAuth for MCP",
+      "module": "Trends",
+      "category": "MCP",
+      "score": 94,
+      "reasons": [
+        "120 comments from Hacker News",
+        "120 comments / 420 points",
+        "Signal fit 94/100"
+      ]
+    },
+    {
+      "title": "react/react",
+      "module": "Repos",
+      "category": "Frontend",
+      "score": 90,
+      "reasons": [
+        "250K stars from GitHub",
+        "frontend runtime",
+        "Signal fit 90/100"
+      ]
+    },
+    {
+      "title": "promptfoo eval workflow",
+      "module": "Trends",
+      "category": "AI evals",
+      "score": 89,
+      "reasons": [
+        "8K stars from GitHub",
+        "8K stars / 1K forks",
+        "Signal fit 89/100"
+      ]
+    },
+    {
+      "title": "mattpocock/skills",
+      "module": "Repos",
+      "category": "Agent skills",
+      "score": 88,
+      "reasons": [
+        "12K stars from GitHub",
+        "coding agent skills",
+        "Signal fit 88/100"
+      ]
+    }
+  ],
+  "todayStart": [
+    {
+      "title": "mattpocock/skills",
+      "module": "Repos",
+      "category": "Agent skills",
+      "reasons": [
+        "Agent skills reference for reusable tool instructions.",
+        "12K stars from GitHub",
+        "coding agent skills"
+      ]
+    },
+    {
+      "title": "openai/codex",
+      "module": "Repos",
+      "category": "AI agents",
+      "reasons": [
+        "Coding-agent ecosystem signal with practical workflow value.",
+        "92K stars from GitHub",
+        "terminal coding agent"
+      ]
+    },
+    {
+      "title": "Zero-Touch OAuth for MCP",
+      "module": "Trends",
+      "category": "MCP",
+      "reasons": [
+        "MCP infrastructure worth tracking for agent workflows.",
+        "120 comments from Hacker News",
+        "120 comments / 420 points"
+      ]
+    }
+  ]
+}

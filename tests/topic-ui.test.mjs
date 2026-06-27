@@ -340,6 +340,28 @@ test("Topic rendering escapes text and blocks unsafe links", () => {
     assert.match(html, /href="#"/);
 });
 
+test("Topic cards render stable score reasons", () => {
+    const app = loadTopics();
+    const html = app.renderTopicCards([
+        {
+            title: "mattpocock/skills",
+            module: "Repos",
+            category: "Agent skills",
+            origin: "GitHub",
+            metric: "12K stars",
+            summary: "Reusable skills.",
+            scoreReasons: ["12K stars from GitHub", "Agent skills reference for reusable tool instructions."],
+            url: "https://example.com/skills",
+            updated: "2026-06-19",
+            score: 88
+        }
+    ]);
+
+    assert.match(html, /Score reasons/);
+    assert.match(html, /12K stars from GitHub/);
+    assert.match(html, /Agent skills reference/);
+});
+
 test("Topic browser init renders stats and cards", async () => {
     function createElement() {
         return {

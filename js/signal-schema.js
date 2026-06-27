@@ -140,9 +140,12 @@
     function signalItem(moduleKey, item, data, fields) {
         const qualityScore = qualityScoreForItem(moduleKey, item);
         const moduleName = moduleLabels[moduleKey];
+        const canonicalKey = duplicateKey(fields);
+        const legacyId = itemId(moduleKey, item);
         return {
             schemaVersion,
-            id: itemId(moduleKey, item),
+            id: canonicalKey || legacyId,
+            legacyIds: legacyId && legacyId !== canonicalKey ? [legacyId] : [],
             sourceModule: moduleKey,
             module: moduleName,
             sourceKind: sourceKinds[moduleKey],
@@ -160,7 +163,7 @@
             scoreReasons: scoreReasons(fields, qualityScore),
             sources: [moduleName],
             sourceContext: "",
-            canonicalKey: duplicateKey(fields),
+            canonicalKey,
             updated: data?.updated || "-"
         };
     }
@@ -176,6 +179,7 @@
         return {
             ...winner,
             sources,
+            legacyIds: [...new Set([...(winner.legacyIds || []), ...(loser.legacyIds || []), loser.id])].filter((id) => id && id !== winner.id),
             updated,
             sourceContext: sourceContextFor(sources, winner.module),
             qualityScore: Math.max(winner.qualityScore || winner.score || 0, loser.qualityScore || loser.score || 0),
@@ -289,6 +293,7 @@
         if (Number(item?.qualityScore) < 0 || Number(item?.qualityScore) > 100) errors.push("qualityScore must be 0-100");
         if (Number(item?.score) < 0 || Number(item?.score) > 100) errors.push("score must be 0-100");
         if (!Array.isArray(item?.sources) || item.sources.length === 0) errors.push("sources must be non-empty");
+        if (!Array.isArray(item?.legacyIds)) errors.push("legacyIds must be an array");
         return errors;
     }
 

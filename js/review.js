@@ -50,13 +50,19 @@
         return sorted;
     }
 
+    function matchingSavedId(item, savedIds = new Set()) {
+        return [item.id, ...(item.legacyIds || [])].find((id) => savedIds.has(id)) || "";
+    }
+
     function matchSavedItems(items, savedIds = new Set(), savedRecords = new Map()) {
         return sortReviewItems((Array.isArray(items) ? items : [])
-            .filter((item) => savedIds.has(item.id))
+            .filter((item) => matchingSavedId(item, savedIds))
             .map((item) => {
-                const record = savedRecords.get(item.id) || {};
+                const savedRecordId = matchingSavedId(item, savedIds);
+                const record = savedRecords.get(savedRecordId) || {};
                 return {
                     ...item,
+                    savedRecordId,
                     savedAt: record.savedAt,
                     savedStatus: record.status || "unread"
                 };
@@ -140,6 +146,7 @@
         ].filter(Boolean).join(" / ");
         const score = item.qualityScore || item.score || 0;
         const status = item.savedStatus || "unread";
+        const savedRecordId = item.savedRecordId || item.id;
 
         return `
             <article class="review-detail-card">
@@ -159,9 +166,9 @@
                 </div>
                 <div class="review-actions">
                     <a href="${safeHref(item.url)}">Open item</a>
-                    <button type="button" data-review-status-id="${escapeHtml(item.id)}" data-review-status="read" aria-label="Mark ${escapeHtml(item.title)} read">Mark read</button>
-                    <button type="button" data-review-status-id="${escapeHtml(item.id)}" data-review-status="done" aria-label="Mark ${escapeHtml(item.title)} done">Mark done</button>
-                    <button type="button" data-review-remove-id="${escapeHtml(item.id)}" aria-label="Remove ${escapeHtml(item.title)} from Review">Remove</button>
+                    <button type="button" data-review-status-id="${escapeHtml(savedRecordId)}" data-review-status="read" aria-label="Mark ${escapeHtml(item.title)} read">Mark read</button>
+                    <button type="button" data-review-status-id="${escapeHtml(savedRecordId)}" data-review-status="done" aria-label="Mark ${escapeHtml(item.title)} done">Mark done</button>
+                    <button type="button" data-review-remove-id="${escapeHtml(savedRecordId)}" aria-label="Remove ${escapeHtml(item.title)} from Review">Remove</button>
                     <a href="${safeHref(similarExploreHref(item))}">Find similar in Explore</a>
                 </div>
             </article>
@@ -174,6 +181,36 @@
             exportedAt: new Date().toISOString(),
             items: records
         }, null, 2);
+    }
+
+    function markdownText(value) {
+        return String(value || "").replace(/\s+/g, " ").trim();
+    }
+
+    function markdownLink(title, url) {
+        const label = markdownText(title).replace(/[[\]]/g, "");
+        const href = safeHref(url);
+        return href === "#" ? label : `[${label}](${href})`;
+    }
+
+    function reviewMarkdownPayload(items = []) {
+        const lines = [
+            "# Review queue",
+            "",
+            `Exported: ${new Date().toISOString()}`,
+            ""
+        ];
+
+        for (const item of items) {
+            const meta = [item.module, item.category, item.metric].map(markdownText).filter(Boolean).join(" / ");
+            const status = markdownText(item.savedStatus || "unread");
+            lines.push(`- [${status}] ${markdownLink(item.title || item.id, item.url)}${meta ? ` - ${meta}` : ""}`);
+            const summary = markdownText(item.summary || item.reason);
+            if (summary) lines.push(`  - ${summary}`);
+            if (item.savedAt) lines.push(`  - Saved ${String(item.savedAt).slice(0, 10)}`);
+        }
+
+        return `${lines.join("\n")}\n`;
     }
 
     function reviewImportRecords(text) {
@@ -191,6 +228,7 @@
             queue: document.querySelector("[data-review-queue]"),
             detail: document.querySelector("[data-review-detail]"),
             exportButton: document.querySelector("[data-review-export]"),
+            exportMarkdownButton: document.querySelector("[data-review-export-markdown]"),
             importButton: document.querySelector("[data-review-import]"),
             importInput: document.querySelector("[data-review-import-file]"),
             portabilityStatus: document.querySelector("[data-review-portability-status]"),
@@ -225,6 +263,21 @@
                 link.click();
                 URL.revokeObjectURL(url);
                 if (els.portabilityStatus) els.portabilityStatus.textContent = "Review JSON exported.";
+            });
+        }
+
+        if (els.exportMarkdownButton && els.exportMarkdownButton.dataset.reviewExportMarkdownBound !== "true") {
+            els.exportMarkdownButton.dataset.reviewExportMarkdownBound = "true";
+            els.exportMarkdownButton.addEventListener("click", () => {
+                const saved = matchSavedItems(state.items, store.read(), store.recordsById());
+                const blob = new Blob([reviewMarkdownPayload(saved)], { type: "text/markdown" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "anothel-review.md";
+                link.click();
+                URL.revokeObjectURL(url);
+                if (els.portabilityStatus) els.portabilityStatus.textContent = "Review Markdown exported.";
             });
         }
 
@@ -342,6 +395,7 @@
         renderReviewDetail,
         renderReviewEmpty,
         reviewExportPayload,
+        reviewMarkdownPayload,
         reviewImportRecords,
         similarExploreHref
     };

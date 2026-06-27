@@ -54,6 +54,26 @@ test("Review matches saved ids against current normalized items", () => {
     assert.deepEqual(saved.map((item) => item.id), ["packages:https://example.com/mcp"]);
 });
 
+test("Review matches legacy saved ids against canonical current ids", () => {
+    const app = loadReview();
+    const saved = app.matchSavedItems([
+        {
+            id: "url:https://example.com/skills",
+            legacyIds: ["repos:https://example.com/skills"],
+            module: "Repos",
+            title: "Skills repo",
+            category: "Agent skills",
+            metric: "135K stars"
+        }
+    ], new Set(["repos:https://example.com/skills"]), new Map([
+        ["repos:https://example.com/skills", { id: "repos:https://example.com/skills", savedAt: "2026-06-20T00:00:00.000Z", status: "read" }]
+    ]));
+
+    assert.deepEqual(saved.map((item) => [item.id, item.savedAt, item.savedStatus]), [
+        ["url:https://example.com/skills", "2026-06-20T00:00:00.000Z", "read"]
+    ]);
+});
+
 test("Review joins saved records and sorts newest first", () => {
     const app = loadReview();
     const saved = app.matchSavedItems(items, new Set(["repos:https://example.com/skills", "packages:https://example.com/mcp"]), new Map([
@@ -202,6 +222,39 @@ test("Review exports saved records and imports valid payloads", () => {
         { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "done" }
     ]);
     assert.deepEqual(JSON.parse(JSON.stringify(app.reviewImportRecords("not json"))), []);
+});
+
+test("Review exports current saved items as Markdown", () => {
+    const app = loadReview({ Date: class extends Date {
+        constructor() { super("2026-06-25T00:00:00.000Z"); }
+        static now() { return Date.parse("2026-06-25T00:00:00.000Z"); }
+    } });
+    const payload = app.reviewMarkdownPayload([
+        {
+            title: "Skills repo",
+            url: "https://example.com/skills",
+            module: "Repos",
+            category: "Agent skills",
+            metric: "135K stars",
+            summary: "Reusable agent instructions.",
+            savedStatus: "read",
+            savedAt: "2026-06-20T00:00:00.000Z"
+        },
+        {
+            title: "No URL",
+            module: "Links",
+            category: "AI evals",
+            metric: "Docs",
+            summary: "",
+            savedStatus: "done"
+        }
+    ]);
+
+    assert.match(payload, /# Review queue/);
+    assert.match(payload, /Exported: 2026-06-25T00:00:00\.000Z/);
+    assert.match(payload, /- \[read\] \[Skills repo\]\(https:\/\/example\.com\/skills\) - Repos \/ Agent skills \/ 135K stars/);
+    assert.match(payload, /  - Reusable agent instructions\./);
+    assert.match(payload, /- \[done\] No URL - Links \/ AI evals \/ Docs/);
 });
 
 test("Review browser init renders saved queue and removes items", async () => {

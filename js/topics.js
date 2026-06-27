@@ -44,6 +44,14 @@
         return Math.max(35, 58 - Number(item.rank || 0) * 2);
     }
 
+    function scoreReasons(item) {
+        return [...new Set([
+            item.metric && item.origin ? `${item.metric} from ${item.origin}` : item.metric,
+            item.summary,
+            Number(item.score || 0) >= 80 ? `Signal fit ${item.score}/100` : ""
+        ].filter(Boolean))].slice(0, 3);
+    }
+
     function normalize(dataByModule) {
         const trends = (dataByModule.trends?.items || []).map((item) => ({
             module: "Trends",
@@ -55,7 +63,7 @@
             url: item.url,
             updated: dataByModule.trends?.updated || "-",
             score: scoreItem("Trends", item)
-        }));
+        })).map((item) => ({ ...item, scoreReasons: scoreReasons(item) }));
 
         const packages = (dataByModule.packages?.packages || []).map((item) => ({
             module: "Packages",
@@ -67,7 +75,7 @@
             url: item.url,
             updated: dataByModule.packages?.updated || "-",
             score: scoreItem("Packages", item)
-        }));
+        })).map((item) => ({ ...item, scoreReasons: scoreReasons(item) }));
 
         const repos = (dataByModule.repos?.repos || []).map((item) => ({
             module: "Repos",
@@ -79,7 +87,7 @@
             url: item.url,
             updated: dataByModule.repos?.updated || "-",
             score: scoreItem("Repos", item)
-        }));
+        })).map((item) => ({ ...item, scoreReasons: scoreReasons(item) }));
 
         const links = (dataByModule.links?.links || []).map((item) => ({
             module: "Links",
@@ -91,7 +99,7 @@
             url: item.url,
             updated: dataByModule.links?.updated || "-",
             score: scoreItem("Links", item)
-        }));
+        })).map((item) => ({ ...item, scoreReasons: scoreReasons(item) }));
 
         return [...trends, ...packages, ...repos, ...links];
     }
@@ -364,6 +372,17 @@
         `).join("");
     }
 
+    function renderScoreReasons(item) {
+        const reasons = (item.scoreReasons || []).slice(0, 3);
+        if (reasons.length === 0) return "";
+
+        return `
+            <ul class="score-reasons" aria-label="Score reasons">
+                ${reasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}
+            </ul>
+        `;
+    }
+
     function renderTopicCards(items) {
         if (items.length === 0) {
             return `
@@ -382,6 +401,7 @@
                 </div>
                 <h3>${escapeHtml(item.title)}</h3>
                 <p class="why-copy"><strong>Why this matters</strong> ${escapeHtml(item.summary)}</p>
+                ${renderScoreReasons(item)}
                 <div class="card-meta">
                     <span>${escapeHtml(item.origin)}</span>
                     <span>${escapeHtml(item.metric)}</span>

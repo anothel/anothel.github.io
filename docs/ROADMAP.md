@@ -50,11 +50,11 @@ Success:
 
 Goal: "why open this first?" is visible in tests and UI, not only hidden in scoring code.
 
-- [ ] Add scoring golden fixtures for agent/MCP/evals/workflow signals versus broad generic tooling.
-- [ ] Keep scoring policy in code for now; do not move it into large data config before fixtures exist.
-- [ ] Structure score reasons so Today, Explore, and topic cards can show stable top reasons.
-- [ ] Add regression checks that baseline packages like React/Vite/TypeScript do not dominate by default.
-- [ ] Make score changes produce a useful golden diff.
+- [x] Add scoring golden fixtures for agent/MCP/evals/workflow signals versus broad generic tooling.
+- [x] Keep scoring policy in code for now; do not move it into large data config before fixtures exist.
+- [x] Structure score reasons so Today, Explore, and topic cards can show stable top reasons.
+- [x] Add regression checks that baseline packages like React/Vite/TypeScript do not dominate by default.
+- [x] Make score changes produce a useful golden diff.
 
 Success:
 
@@ -66,12 +66,12 @@ Success:
 
 Goal: saved items remain useful after data refreshes.
 
-- [ ] Introduce stable canonical IDs based on normalized URL when possible.
-- [ ] Keep legacy saved IDs working during migration.
+- [x] Introduce stable canonical IDs based on normalized URL when possible.
+- [x] Keep legacy saved IDs working during migration.
 - [ ] Store optional saved note/tag/reason.
-- [ ] Add Markdown export beside JSON export.
+- [x] Add Markdown export beside JSON export.
 - [ ] Add Review sorting around next action or saved reason only when the saved metadata exists.
-- [ ] Cover import/export migration with one focused test.
+- [x] Cover import/export migration with one focused test.
 
 Success:
 

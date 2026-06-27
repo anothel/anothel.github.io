@@ -303,6 +303,7 @@ test("review page owns the saved follow-up surface", () => {
         "data-review-source-count",
         "data-review-filter",
         "data-review-export",
+        "data-review-export-markdown",
         "data-review-import",
         "data-review-import-file",
         "data-review-portability-status",
