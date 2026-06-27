@@ -57,6 +57,12 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - **Retire** a topic when source movement no longer changes what to open, save, or compare.
 - Notes stays a decision-support index for topic judgment notes, not a blog engine.
 
+## Topic Promotion Review
+
+- Existing seven topic pages stay promoted: AI agents, MCP, Agent skills, AI evals, AI engineering, Workflow automation, and Security.
+- Developer tooling stays lens-only because it mostly catches broad baseline tooling such as TypeScript, Zod, ESLint, React, and Vite.
+- No topic page is added from item count alone; promotion still requires a route job, judgment note, guidance, and actions.
+
 ## Public Scope Triage
 
 - Public worklog route stays out. Notes already indexes durable topic judgment notes, so another worklog would duplicate the current discovery job without improving repeat use.

@@ -38,23 +38,24 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P5 - Topic Promotion Review
+### P5 - Source Quality Drift Review
 
-Trigger: source growth creates topic candidates that may deserve first-class pages.
+Trigger: enabled watchlists keep growing and broad sources can dilute the signal dashboard.
 
 Scope:
 
-- Promote a topic only when it changes decisions across modules, notes, guidance, and review actions.
-- Retire or merge weak candidates instead of adding topic pages from item count alone.
-- Keep topic navigation stable unless a promoted topic has a clear repeat-use job.
+- Audit enabled watchlist entries for broad, stale, or duplicate sources.
+- Retire weak entries with `disabled: true` and `history` notes instead of deleting provenance.
+- Keep source modules and public routes unchanged.
 
 Verification:
 
-- Run `node --test tests/topic-ui.test.mjs tests/ops-docs.test.mjs`.
+- Run `node --test tests/watchlist-governance.test.mjs tests/data-schema.test.mjs tests/ops-docs.test.mjs`.
 
 Exit:
 
-- Candidate topics are promoted, merged, retired, or left as data-only sources with rationale.
+- Enabled source lists favor agent-workflow signal over broad tooling.
+- Retired sources keep rationale in checked-in history.
 
 ### P6 - Architecture PoC Only On Measured Blocker
 

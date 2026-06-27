@@ -58,6 +58,13 @@ test("IA documents topic governance decisions", () => {
     assert.match(ia, /Notes stays a decision-support index/);
 });
 
+test("IA records topic promotion review outcomes", () => {
+    assert.match(ia, /Topic Promotion Review/);
+    assert.match(ia, /Developer tooling stays lens-only.*broad baseline tooling/s);
+    assert.match(ia, /Existing seven topic pages stay promoted/s);
+    assert.match(ia, /No topic page is added from item count alone/s);
+});
+
 test("IA documents source governance decisions", () => {
     assert.match(ia, /Source Governance/);
     assert.match(ia, /data\/watchlists\.json/);
@@ -89,6 +96,12 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P5 - Topic Promotion Review/);
+    assert.match(roadmap, /### P5 - Source Quality Drift Review/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
+});
+
+test("roadmap keeps completed topic promotion review out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
+    assert.match(roadmap, /### P5 - Source Quality Drift Review/);
+    assert.match(roadmap, /### P6 - Architecture PoC Only On Measured Blocker/);
 });
