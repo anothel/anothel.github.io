@@ -16,6 +16,7 @@ import {
     MAX_ITEMS,
     npmPackages
 } from "../scripts/update-trends.mjs";
+import { activeItems, activeNames } from "../scripts/watchlist-governance.mjs";
 
 function readJson(path) {
     return JSON.parse(readFileSync(path, "utf8"));
@@ -69,8 +70,8 @@ test("buildSourceMeta records source status and item counts", () => {
 test("default trend inputs leave room for AI agent signals", () => {
     const watchlists = readJson("data/watchlists.json");
 
-    assert.deepEqual(npmPackages, watchlists.trends.npmPackages);
-    assert.deepEqual(githubQueries, watchlists.trends.githubQueries);
+    assert.deepEqual(npmPackages, activeNames(watchlists.trends.npmPackages));
+    assert.deepEqual(githubQueries, activeItems(watchlists.trends.githubQueries));
     assert.equal(MAX_ITEMS, 24);
     assert.ok(npmPackages.includes("ai"));
     assert.ok(npmPackages.includes("openai"));

@@ -1823,6 +1823,49 @@ button {
     margin-bottom: 0;
 }
 
+.review-meta-editor {
+    display: grid;
+    gap: 10px;
+}
+
+.review-meta-editor label {
+    display: grid;
+    gap: 5px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+.review-meta-editor input,
+.review-meta-editor textarea {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+}
+
+.review-meta-editor textarea {
+    min-height: 78px;
+    resize: vertical;
+}
+
+.review-meta-editor button {
+    justify-self: start;
+    width: auto;
+    min-height: 38px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--accent);
+    font-size: 0.86rem;
+    font-weight: 900;
+}
+
 .review-empty p {
     margin-bottom: 0;
     color: var(--muted);

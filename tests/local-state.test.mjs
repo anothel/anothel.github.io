@@ -103,6 +103,49 @@ test("saved item store imports new records without overwriting existing records"
     ]);
 });
 
+test("saved item store preserves optional review metadata", () => {
+    const state = loadLocalState();
+    const storage = memoryStorage(new Map([
+        [state.keys.savedItems, JSON.stringify({
+            version: 2,
+            items: [
+                {
+                    id: "repos:a",
+                    savedAt: "2026-06-20T00:00:00.000Z",
+                    status: "read",
+                    note: "Compare with MCP servers.",
+                    tag: "agent",
+                    reason: "Use for reusable workflow."
+                },
+                { id: "repos:b", note: 7, tag: "", reason: "  " }
+            ]
+        })]
+    ]));
+    const store = state.createSavedItemStore(storage, { now: () => "2026-06-24T00:00:00.000Z" });
+
+    assert.deepEqual(plain(store.readRecords()), [
+        {
+            id: "repos:a",
+            savedAt: "2026-06-20T00:00:00.000Z",
+            status: "read",
+            note: "Compare with MCP servers.",
+            tag: "agent",
+            reason: "Use for reusable workflow."
+        },
+        { id: "repos:b", savedAt: "2026-06-24T00:00:00.000Z", status: "unread" }
+    ]);
+
+    store.setMeta("repos:a", { note: "Keep", tag: "skills", reason: "" });
+
+    assert.deepEqual(plain(store.recordsById().get("repos:a")), {
+        id: "repos:a",
+        savedAt: "2026-06-20T00:00:00.000Z",
+        status: "read",
+        note: "Keep",
+        tag: "skills"
+    });
+});
+
 test("saved summary filters stale ids and counts unread records", () => {
     const state = loadLocalState();
     const validIds = new Set(["repos:a", "links:c"]);

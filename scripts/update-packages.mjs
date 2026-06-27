@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
+import { activeItems } from "./watchlist-governance.mjs";
 
 const OUT_FILE = new URL("../data/packages.json", import.meta.url);
 const WATCHLIST_FILE = new URL("../data/watchlists.json", import.meta.url);
@@ -11,7 +12,7 @@ function readWatchlists() {
     return JSON.parse(readFileSync(WATCHLIST_FILE, "utf8"));
 }
 
-export const packageDefinitions = readWatchlists().packages;
+export const packageDefinitions = activeItems(readWatchlists().packages);
 
 function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);

@@ -5,6 +5,7 @@ import { pathToFileURL } from "node:url";
 export const checkTargets = [
     "scripts/update-all.mjs",
     "scripts/validate-data.mjs",
+    "scripts/watchlist-governance.mjs",
     "scripts/update-trends.mjs",
     "scripts/update-packages.mjs",
     "scripts/update-repos.mjs",

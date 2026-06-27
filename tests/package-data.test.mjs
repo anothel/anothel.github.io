@@ -9,13 +9,14 @@ import {
     packageDefinitions,
     preparePackageDataForWrite
 } from "../scripts/update-packages.mjs";
+import { activeItems } from "../scripts/watchlist-governance.mjs";
 
 function readJson(path) {
     return JSON.parse(readFileSync(path, "utf8"));
 }
 
 test("default package definitions come from checked-in watchlist data", () => {
-    assert.deepEqual(packageDefinitions, readJson("data/watchlists.json").packages);
+    assert.deepEqual(packageDefinitions, activeItems(readJson("data/watchlists.json").packages));
 });
 
 test("buildPackageRows sorts packages by downloads and formats rows", () => {

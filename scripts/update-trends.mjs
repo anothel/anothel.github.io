@@ -3,6 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { classifySignal, qualityBoost } from "./signal-taxonomy.mjs";
 import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
+import { activeItems, activeNames } from "./watchlist-governance.mjs";
 
 const OUT_FILE = new URL("../data/trends.json", import.meta.url);
 const WATCHLISTS_FILE = new URL("../data/watchlists.json", import.meta.url);
@@ -19,8 +20,8 @@ function readTrendInputs() {
 }
 
 const trendInputs = readTrendInputs();
-export const npmPackages = trendInputs.npmPackages;
-export const githubQueries = trendInputs.githubQueries;
+export const npmPackages = activeNames(trendInputs.npmPackages);
+export const githubQueries = activeItems(trendInputs.githubQueries);
 
 export function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);

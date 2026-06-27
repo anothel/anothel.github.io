@@ -38,6 +38,7 @@ test("validate-data syntax checks data workflow scripts and public JavaScript", 
     for (const target of [
         "scripts/update-all.mjs",
         "scripts/validate-data.mjs",
+        "scripts/watchlist-governance.mjs",
         "scripts/report-refresh.mjs",
         "scripts/update-static-fallbacks.mjs",
         "js/topics.js",

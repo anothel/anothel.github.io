@@ -172,6 +172,24 @@ test("Topic notes provide durable judgment copy per topic", () => {
     assert.match(app.topicNote("Security").body, /trust boundary/i);
 });
 
+test("Topic page configs keep complete judgment notes and actions", () => {
+    const app = loadTopics();
+
+    for (const topic of ["AI agents", "MCP", "Agent skills", "AI evals", "AI engineering", "Workflow automation", "Security"]) {
+        const note = app.topicNote(topic);
+        const guidance = app.topicGuidance(topic);
+        const actions = app.renderTopicActions(topic);
+
+        assert.ok(note.title.length > 20, `${topic} note title`);
+        assert.ok(note.body.length > 60, `${topic} note body`);
+        assert.ok(note.readWhen.length > 40, `${topic} readWhen`);
+        assert.ok(guidance.whatToWatch.length > 40, `${topic} whatToWatch`);
+        assert.ok(guidance.whenToOpen.length > 40, `${topic} whenToOpen`);
+        assert.ok(guidance.nextAction.length > 40, `${topic} nextAction`);
+        assert.match(actions, /Open focused Explore/, `${topic} focused Explore action`);
+    }
+});
+
 test("Topic supporting signals dedupe URLs and keep strongest current signals", () => {
     const app = loadTopics();
     const signals = app.topicSupportingSignals([

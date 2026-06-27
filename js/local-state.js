@@ -9,13 +9,22 @@
         return typeof options.now === "function" ? options.now() : new Date().toISOString();
     }
 
+    function optionalText(value) {
+        return typeof value === "string" && value.trim() ? value.trim() : "";
+    }
+
     function normalizeRecord(record, options = {}) {
         if (!record || typeof record.id !== "string") return null;
-        return {
+        const normalized = {
             id: record.id,
             savedAt: typeof record.savedAt === "string" ? record.savedAt : nowIso(options),
             status: validStatuses.has(record.status) ? record.status : "unread"
         };
+        for (const field of ["note", "tag", "reason"]) {
+            const value = optionalText(record[field]);
+            if (value) normalized[field] = value;
+        }
+        return normalized;
     }
 
     function savedRecordsFromRaw(rawValue, options = {}) {
@@ -89,6 +98,19 @@
                     writeRecords(records);
                 }
                 return new Set(records.map((item) => item.id));
+            },
+            setMeta(id, fields = {}) {
+                const records = readRecords();
+                const record = records.find((item) => item.id === id);
+                if (record) {
+                    for (const field of ["note", "tag", "reason"]) {
+                        const value = optionalText(fields[field]);
+                        if (value) record[field] = value;
+                        else delete record[field];
+                    }
+                    writeRecords(records);
+                }
+                return recordsById();
             },
             mergeRecords(incomingRecords = []) {
                 const records = readRecords();

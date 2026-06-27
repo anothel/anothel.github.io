@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
+import { validateWatchlistGovernance } from "../scripts/watchlist-governance.mjs";
 
 const require = createRequire(import.meta.url);
 const signalSchema = require("../js/signal-schema.js");
@@ -180,8 +181,10 @@ test("watchlist definitions stay editable data with stable fields", () => {
     assert.ok(Array.isArray(watchlists.repos), "watchlist repos");
 
     for (const packageName of watchlists.trends.npmPackages) {
-        assertNonEmptyString(packageName, "trend npm package");
+        assertNonEmptyString(typeof packageName === "string" ? packageName : packageName?.name, "trend npm package");
     }
+
+    assert.deepEqual(validateWatchlistGovernance(watchlists), []);
 
     for (const item of watchlists.trends.githubQueries) {
         assertNonEmptyString(item.query, "trend GitHub query");

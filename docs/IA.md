@@ -50,6 +50,19 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - **Aging** means 2-3 days old. Aging stays visible, but it is not Status attention while source health is ok.
 - **Stale** means more than 3 days old. Stale or any non-ok source health becomes Status attention.
 
+## Topic Governance
+
+- **Promote** a topic when it helps decisions across multiple source modules and has a durable note, guidance, and actions.
+- **Keep lens-only** when a theme is useful for Explore filtering but does not yet justify a focused page or Notes entry.
+- **Retire** a topic when source movement no longer changes what to open, save, or compare.
+- Notes stays a decision-support index for topic judgment notes, not a blog engine.
+
+## Source Governance
+
+- Watchlist ownership stays in `data/watchlists.json`; updater scripts consume active entries.
+- `disabled: true` keeps retired sources documented without appearing in current generated output.
+- `history` records why a source changed or retired with `date` and `note`.
+
 ## Deferred Decisions
 
-- Astro + React islands remains the medium-term framework target, after P0 trust/copy/data work lands.
+- Framework islands stay deferred until vanilla JavaScript blocks a specific Explore or Review workflow.

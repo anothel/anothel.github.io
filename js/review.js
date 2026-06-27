@@ -35,9 +35,14 @@
         return 0;
     }
 
+    function hasSavedReason(item) {
+        return Boolean(item.savedReason || item.savedNote || item.savedTag);
+    }
+
     function sortReviewItems(items) {
         return (Array.isArray(items) ? items.slice() : []).sort((a, b) => (
             statusRank(a.savedStatus) - statusRank(b.savedStatus)
+            || Number(hasSavedReason(b)) - Number(hasSavedReason(a))
             || String(b.savedAt || "").localeCompare(String(a.savedAt || ""))
         ));
     }
@@ -64,7 +69,10 @@
                     ...item,
                     savedRecordId,
                     savedAt: record.savedAt,
-                    savedStatus: record.status || "unread"
+                    savedStatus: record.status || "unread",
+                    savedNote: record.note,
+                    savedTag: record.tag,
+                    savedReason: record.reason
                 };
             }));
     }
@@ -120,6 +128,7 @@
             <button class="review-queue-item" type="button" data-review-select-id="${escapeHtml(item.id)}" aria-selected="${item.id === activeId ? "true" : "false"}" aria-label="Select ${escapeHtml(item.title)}">
                 <strong>${escapeHtml(item.title)}</strong>
                 <span>${escapeHtml([item.module, item.metric, item.category].filter(Boolean).join(" / "))}</span>
+                ${item.savedReason || item.savedTag ? `<span>${escapeHtml([item.savedTag, item.savedReason].filter(Boolean).join(" / "))}</span>` : ""}
                 <small>${escapeHtml(statusLabel(item.savedStatus))} / ${escapeHtml(savedDateLabel(item.savedAt))}</small>
             </button>
         `).join("");
@@ -147,6 +156,9 @@
         const score = item.qualityScore || item.score || 0;
         const status = item.savedStatus || "unread";
         const savedRecordId = item.savedRecordId || item.id;
+        const savedReason = item.savedReason || "";
+        const savedTag = item.savedTag || "";
+        const savedNote = item.savedNote || "";
 
         return `
             <article class="review-detail-card">
@@ -163,6 +175,21 @@
                     <span>${escapeHtml(savedDateLabel(item.savedAt))}</span>
                     <span class="status-pill status-${escapeHtml(status)}">${escapeHtml(statusLabel(status))}</span>
                     <span class="quality-marker">Signal fit ${escapeHtml(score)}</span>
+                </div>
+                <div class="review-meta-editor">
+                    <label>
+                        <span>Saved reason</span>
+                        <input type="text" data-review-reason value="${escapeHtml(savedReason)}">
+                    </label>
+                    <label>
+                        <span>Tag</span>
+                        <input type="text" data-review-tag value="${escapeHtml(savedTag)}">
+                    </label>
+                    <label>
+                        <span>Note</span>
+                        <textarea data-review-note>${escapeHtml(savedNote)}</textarea>
+                    </label>
+                    <button type="button" data-review-meta-id="${escapeHtml(savedRecordId)}">Save metadata</button>
                 </div>
                 <div class="review-actions">
                     <a href="${safeHref(item.url)}">Open item</a>
@@ -205,6 +232,9 @@
             const meta = [item.module, item.category, item.metric].map(markdownText).filter(Boolean).join(" / ");
             const status = markdownText(item.savedStatus || "unread");
             lines.push(`- [${status}] ${markdownLink(item.title || item.id, item.url)}${meta ? ` - ${meta}` : ""}`);
+            if (item.savedReason) lines.push(`  - Reason: ${markdownText(item.savedReason)}`);
+            if (item.savedTag) lines.push(`  - Tag: ${markdownText(item.savedTag)}`);
+            if (item.savedNote) lines.push(`  - Note: ${markdownText(item.savedNote)}`);
             const summary = markdownText(item.summary || item.reason);
             if (summary) lines.push(`  - ${summary}`);
             if (item.savedAt) lines.push(`  - Saved ${String(item.savedAt).slice(0, 10)}`);
@@ -328,6 +358,18 @@
         document.querySelectorAll("[data-review-status-id]").forEach((button) => {
             button.addEventListener("click", () => {
                 state.savedIds = store.setStatus(button.dataset.reviewStatusId, button.dataset.reviewStatus);
+                state.savedRecords = store.recordsById();
+                render(els, store);
+            });
+        });
+
+        document.querySelectorAll("[data-review-meta-id]").forEach((button) => {
+            button.addEventListener("click", () => {
+                store.setMeta(button.dataset.reviewMetaId, {
+                    reason: document.querySelector("[data-review-reason]")?.value || "",
+                    tag: document.querySelector("[data-review-tag]")?.value || "",
+                    note: document.querySelector("[data-review-note]")?.value || ""
+                });
                 state.savedRecords = store.recordsById();
                 render(els, store);
             });

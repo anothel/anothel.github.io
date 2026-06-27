@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { activeItems } from "./watchlist-governance.mjs";
 
 const OUT_FILE = new URL("../data/links.json", import.meta.url);
 const WATCHLIST_FILE = new URL("../data/watchlists.json", import.meta.url);
@@ -9,7 +10,7 @@ function readWatchlists() {
     return JSON.parse(readFileSync(WATCHLIST_FILE, "utf8"));
 }
 
-export const linkDefinitions = readWatchlists().links;
+export const linkDefinitions = activeItems(readWatchlists().links);
 
 function isoDate(date = new Date()) {
     return date.toISOString().slice(0, 10);

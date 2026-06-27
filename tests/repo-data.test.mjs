@@ -3,13 +3,14 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 import { buildRepoRows, collectRepos, prepareRepoDataForWrite, repoDefinitions } from "../scripts/update-repos.mjs";
+import { activeItems } from "../scripts/watchlist-governance.mjs";
 
 function readJson(path) {
     return JSON.parse(readFileSync(path, "utf8"));
 }
 
 test("default repo definitions come from checked-in watchlist data", () => {
-    assert.deepEqual(repoDefinitions, readJson("data/watchlists.json").repos);
+    assert.deepEqual(repoDefinitions, activeItems(readJson("data/watchlists.json").repos));
 });
 
 test("buildRepoRows sorts repos by stars and formats rows", () => {

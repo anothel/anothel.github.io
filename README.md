@@ -8,6 +8,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 
 - `docs/ROADMAP.md`: direction and next large work items
 - `docs/IA.md`: page role and route grouping notes
+- `docs/ARCHITECTURE.md`: static architecture and PoC gate
 - `index.html`: home hub
 - `today/index.html`: generated priority brief from tracked dashboard data
 - `status/index.html`: source refresh and data health overview
@@ -27,6 +28,7 @@ See `docs/ROADMAP.md` for product direction and next large work items.
 - `js/status.js`: source status rendering
 - `js/dashboard.js`: filtering and rendering
 - `scripts/update-trends.mjs`: updates trend data from HN, GitHub, and npm
+- `scripts/watchlist-governance.mjs`: filters disabled watchlist entries and validates history metadata
 - `scripts/update-packages.mjs`: updates package watchlist data from npm
 - `scripts/update-repos.mjs`: updates repository watchlist data from GitHub
 - `scripts/update-links.mjs`: updates curated links data from watchlist definitions
@@ -121,6 +123,7 @@ node --test tests/workflow.test.mjs
 node --test tests/ops-docs.test.mjs
 node --check scripts/update-all.mjs
 node --check scripts/validate-data.mjs
+node --check scripts/watchlist-governance.mjs
 node --check scripts/update-trends.mjs
 node --check scripts/update-packages.mjs
 node --check scripts/update-repos.mjs

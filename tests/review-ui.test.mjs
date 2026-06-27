@@ -87,6 +87,19 @@ test("Review joins saved records and sorts newest first", () => {
     ]);
 });
 
+test("Review joins saved metadata and sorts reasoned items first within status", () => {
+    const app = loadReview();
+    const saved = app.matchSavedItems(items, new Set(["repos:https://example.com/skills", "packages:https://example.com/mcp"]), new Map([
+        ["repos:https://example.com/skills", { id: "repos:https://example.com/skills", savedAt: "2026-06-19T00:00:00.000Z", status: "unread", reason: "Use for reusable workflows.", tag: "skills", note: "Compare with MCP." }],
+        ["packages:https://example.com/mcp", { id: "packages:https://example.com/mcp", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" }]
+    ]));
+
+    assert.deepEqual(saved.map((item) => [item.id, item.savedReason, item.savedTag, item.savedNote]), [
+        ["repos:https://example.com/skills", "Use for reusable workflows.", "skills", "Compare with MCP."],
+        ["packages:https://example.com/mcp", undefined, undefined, undefined]
+    ]);
+});
+
 test("Review summarizes saved focus areas and sources", () => {
     const app = loadReview();
 
@@ -172,6 +185,30 @@ test("Review renders status and saved date metadata", () => {
     assert.match(detail, /data-review-status-id="packages:https:\/\/example\.com\/mcp" data-review-status="done"/);
 });
 
+test("Review renders saved metadata editor", () => {
+    const app = loadReview();
+    const item = {
+        ...items[0],
+        savedAt: "2026-06-20T01:02:03.000Z",
+        savedStatus: "unread",
+        savedReason: "Use \"soon\"",
+        savedTag: "skills",
+        savedNote: "Compare <later>"
+    };
+    const queue = app.renderReviewQueue([item], item.id);
+    const detail = app.renderReviewDetail(item);
+
+    assert.match(queue, /skills/);
+    assert.match(queue, /Use &quot;soon&quot;/);
+    assert.match(detail, /data-review-reason/);
+    assert.match(detail, /data-review-tag/);
+    assert.match(detail, /data-review-note/);
+    assert.match(detail, /data-review-meta-id="repos:https:\/\/example\.com\/skills"/);
+    assert.match(detail, /value="Use &quot;soon&quot;"/);
+    assert.match(detail, /value="skills"/);
+    assert.match(detail, /Compare &lt;later&gt;/);
+});
+
 test("Review renders useful empty state", () => {
     const app = loadReview();
     const html = app.renderReviewEmpty();
@@ -238,6 +275,9 @@ test("Review exports current saved items as Markdown", () => {
             metric: "135K stars",
             summary: "Reusable agent instructions.",
             savedStatus: "read",
+            savedReason: "Use for reusable workflow.",
+            savedTag: "skills",
+            savedNote: "Compare with MCP.",
             savedAt: "2026-06-20T00:00:00.000Z"
         },
         {
@@ -253,6 +293,9 @@ test("Review exports current saved items as Markdown", () => {
     assert.match(payload, /# Review queue/);
     assert.match(payload, /Exported: 2026-06-25T00:00:00\.000Z/);
     assert.match(payload, /- \[read\] \[Skills repo\]\(https:\/\/example\.com\/skills\) - Repos \/ Agent skills \/ 135K stars/);
+    assert.match(payload, /  - Reason: Use for reusable workflow\./);
+    assert.match(payload, /  - Tag: skills/);
+    assert.match(payload, /  - Note: Compare with MCP\./);
     assert.match(payload, /  - Reusable agent instructions\./);
     assert.match(payload, /- \[done\] No URL - Links \/ AI evals \/ Docs/);
 });

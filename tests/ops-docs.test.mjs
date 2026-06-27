@@ -48,3 +48,19 @@ test("IA documents current schema and freshness vocabulary", () => {
     assert.doesNotMatch(ia, /Signal schema v2[^.\n]*deferred/i);
     assert.doesNotMatch(ia, /Signal schema v2 should not replace/i);
 });
+
+test("IA documents topic governance decisions", () => {
+    assert.match(ia, /Topic Governance/);
+    assert.match(ia, /Promote/);
+    assert.match(ia, /Keep lens-only/);
+    assert.match(ia, /Retire/);
+    assert.match(ia, /Notes stays a decision-support index/);
+});
+
+test("IA documents source governance decisions", () => {
+    assert.match(ia, /Source Governance/);
+    assert.match(ia, /data\/watchlists\.json/);
+    assert.match(ia, /disabled: true/);
+    assert.match(ia, /history.*date.*note/s);
+    assert.match(ia, /Framework islands stay deferred/);
+});
