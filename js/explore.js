@@ -356,7 +356,7 @@
             const buttonId = savedId || item.id;
             const scoreReasons = (item.scoreReasons || []).slice(0, 3);
             return `
-                <article class="explore-card" data-item-id="${escapeHtml(item.id)}">
+                <article class="explore-card" data-item-id="${escapeHtml(item.id)}" data-card-href="${escapeHtml(safeHref(item.url))}" tabindex="0" aria-label="Open ${escapeHtml(item.title)}">
                     <div class="card-topline">
                         <span>${escapeHtml(item.module)}</span>
                         <span>${escapeHtml(item.category)}</span>
@@ -593,6 +593,25 @@
             button.addEventListener("click", () => {
                 state.savedIds = store.remove(button.dataset.removeId);
                 render(els, store, pinnedStore, savedSearchStore);
+            });
+        });
+
+        document.querySelectorAll("[data-card-href]").forEach((card) => {
+            const open = () => {
+                const href = card.dataset.cardHref;
+                if (!href || href === "#") return;
+                if (typeof global.location?.assign === "function") global.location.assign(href);
+                else if (global.location) global.location.href = href;
+            };
+
+            card.addEventListener("click", (event) => {
+                if (event.target?.closest?.("a, button, input, select, textarea")) return;
+                open();
+            });
+            card.addEventListener("keydown", (event) => {
+                if (event.key !== "Enter") return;
+                event.preventDefault?.();
+                open();
             });
         });
 

@@ -369,6 +369,9 @@ test("Explore renders merged source context in cards and saved queue", () => {
     assert.match(cards, /Score reasons/);
     assert.match(cards, /Reusable &lt;skills&gt;\./);
     assert.doesNotMatch(cards, /Reusable <skills>\./);
+    assert.match(cards, /tabindex="0"/);
+    assert.match(cards, /data-card-href="https:\/\/example\.com\/skills"/);
+    assert.match(cards, /aria-label="Open Skills repo"/);
     assert.match(cards, /aria-label="Signal fit score 96"/);
     assert.match(cards, /aria-label="Saved Skills repo for Review"/);
     assert.match(saved, /aria-label="Remove Skills repo from saved queue"/);
@@ -758,6 +761,13 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
         { dataset: { focusFilter: "all" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
         { dataset: { focusFilter: "AI agents" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
     ];
+    const card = {
+        dataset: { cardHref: "https://example.com/trend" },
+        listeners: {},
+        addEventListener(type, listener) {
+            this.listeners[type] = listener;
+        }
+    };
 
     const sources = {
         "../data/manifest.json": { modules: [] },
@@ -782,7 +792,14 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
             },
             querySelectorAll(selector) {
                 if (selector === "[data-focus-filter]") return focusButtons;
+                if (selector === "[data-card-href]") return [card];
                 return [];
+            }
+        },
+        location: {
+            opened: "",
+            assign(href) {
+                this.opened = href;
             }
         },
         localStorage: {
@@ -820,6 +837,8 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
     assert.match(elements["[data-source-health]"].innerHTML, /status-partial/);
     assert.equal(focusButtons[0].ariaPressed, "true");
     assert.ok(fetchPaths.includes("../data/signal-policy.json"));
+    card.listeners.click({ target: { closest: () => null } });
+    assert.equal(context.location.opened, "https://example.com/trend");
 
     elements["[data-explore-query]"].dispatch("input", "missing");
     assert.equal(elements["[data-explore-total]"].textContent, "0");

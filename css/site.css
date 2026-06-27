@@ -46,6 +46,11 @@ button:focus-visible {
     outline-offset: 3px;
 }
 
+.explore-card:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+}
+
 .shell {
     display: grid;
     grid-template-columns: 300px minmax(0, 1fr);
@@ -1916,6 +1921,16 @@ button {
     gap: 10px;
     min-height: 220px;
     padding: 14px;
+    cursor: pointer;
+}
+
+.explore-card:hover,
+.explore-card:focus-within,
+.explore-card:focus-visible,
+.link-card:hover,
+.link-card:focus-visible {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
 }
 
 .explore-card h3 {
