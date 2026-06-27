@@ -270,3 +270,44 @@ test("prepareRepoDataForWrite falls back to previous repos on empty refresh", ()
     assert.equal(prepared.sourceMeta.rateLimited, true);
     assert.deepEqual(prepared.repos, [{ name: "openai/codex" }]);
 });
+
+test("prepareRepoDataForWrite preserves previous active rows for partial rate limits", () => {
+    const prepared = prepareRepoDataForWrite(
+        {
+            updated: "2026-06-20",
+            generatedAt: "2026-06-20T00:00:00.000Z",
+            sourceMeta: {
+                name: "GitHub",
+                status: "partial",
+                count: 1,
+                tracked: 2,
+                emitted: 1,
+                coverage: "1/2",
+                errors: [{ name: "openai/codex", error: "403 rate limit exceeded" }]
+            },
+            repos: [
+                { rank: 1, name: "anthropics/skills", stars: 9000 }
+            ]
+        },
+        {
+            updated: "2026-06-19",
+            generatedAt: "2026-06-19T00:00:00.000Z",
+            sourceMeta: {
+                name: "GitHub",
+                status: "ok",
+                count: 2
+            },
+            repos: [
+                { rank: 1, name: "anthropics/skills", stars: 8500 },
+                { rank: 2, name: "openai/codex", stars: 5000 }
+            ]
+        }
+    );
+
+    assert.equal(prepared.sourceMeta.status, "partial");
+    assert.equal(prepared.sourceMeta.staleButSafe, true);
+    assert.equal(prepared.sourceMeta.rateLimited, true);
+    assert.equal(prepared.sourceMeta.count, 2);
+    assert.equal(prepared.sourceMeta.coverage, "2/2");
+    assert.deepEqual(prepared.repos.map((item) => item.name), ["anthropics/skills", "openai/codex"]);
+});

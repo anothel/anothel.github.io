@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { classifySignal, qualityBoost } from "./signal-taxonomy.mjs";
-import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
+import { applyEmptyCollectionFallback, sourceSafetyFlags } from "./refresh-safety.mjs";
 import { activeItems, activeNames } from "./watchlist-governance.mjs";
 
 const OUT_FILE = new URL("../data/trends.json", import.meta.url);
@@ -136,6 +136,10 @@ function trendSort(a, b) {
 
 function trendKey(item) {
     return item.url || `${item.source}:${item.title}`;
+}
+
+function rerankTrendItems(items) {
+    return [...items].sort(trendSort).map((item, index) => ({ ...item, rank: index + 1 }));
 }
 
 export function selectTrendItems(items, limit, requiredCategories = requiredTrendCategories) {
@@ -364,6 +368,48 @@ export async function collect() {
 }
 
 export function prepareTrendDataForWrite(data, previousData) {
+    const nextItems = Array.isArray(data?.items) ? data.items : [];
+    const previousItems = Array.isArray(previousData?.items) ? previousData.items : [];
+    const sourceMeta = Array.isArray(data?.sourceMeta) ? data.sourceMeta : [];
+    const failedSources = new Set(sourceMeta.filter((source) => source.status === "error").map((source) => source.name));
+
+    if (nextItems.length > 0 && previousItems.length > 0 && failedSources.size > 0) {
+        const activeNpmPackages = new Set(npmPackages);
+        const existing = new Set(nextItems.map(trendKey));
+        const restored = previousItems.filter((item) => {
+            if (!failedSources.has(item.source)) return false;
+            if (item.source === "npm" && !activeNpmPackages.has(item.title)) return false;
+            return !existing.has(trendKey(item));
+        });
+
+        if (restored.length > 0) {
+            const restoredCountBySource = restored.reduce((counts, item) => {
+                counts[item.source] = (counts[item.source] || 0) + 1;
+                return counts;
+            }, {});
+            data = {
+                ...data,
+                sourceMeta: sourceMeta.map((source) => {
+                    const restoredCount = restoredCountBySource[source.name] || 0;
+                    if (restoredCount === 0) return source;
+                    const errors = source.error ? [{ name: source.name, error: source.error }] : source.errors || [];
+                    return {
+                        ...source,
+                        status: "fallback",
+                        count: restoredCount,
+                        emitted: restoredCount,
+                        coverage: `${restoredCount}/${source.tracked || 1}`,
+                        fallbackUsed: true,
+                        staleButSafe: true,
+                        previousUpdated: previousData.updated || source.previousUpdated,
+                        rateLimited: sourceSafetyFlags(errors).rateLimited
+                    };
+                }),
+                items: rerankTrendItems([...nextItems, ...restored])
+            };
+        }
+    }
+
     return applyEmptyCollectionFallback(data, previousData, {
         collection: "items",
         fallbackReason: "No trend items fetched",

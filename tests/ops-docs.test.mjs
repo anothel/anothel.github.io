@@ -79,6 +79,12 @@ test("IA records source quality drift review outcomes", () => {
     assert.match(ia, /Broad package, repo, and reference entries use `disabled: true`/s);
 });
 
+test("IA records refresh stability follow-up outcomes", () => {
+    assert.match(ia, /Refresh Stability Follow-up/);
+    assert.match(ia, /Partial package and repo refreshes preserve prior active rows/s);
+    assert.match(ia, /Trend source failures preserve prior rows for the failed source/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -102,18 +108,18 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - Refresh Stability Follow-up/);
+    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - Refresh Stability Follow-up/);
+    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - Refresh Stability Follow-up/);
+    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
 });
 
 test("roadmap keeps architecture PoC as a gate outside next work", () => {
@@ -123,8 +129,13 @@ test("roadmap keeps architecture PoC as a gate outside next work", () => {
     assert.match(roadmap, /measured vanilla JavaScript problem exceeds the budget/);
 });
 
-test("roadmap promotes refresh stability as the active P0", () => {
-    assert.match(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, /transient npm, GitHub, or source refresh failure/s);
-    assert.match(roadmap, /Partial refresh never silently drops active rows with prior data/s);
+test("roadmap keeps completed refresh stability out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
+    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
+});
+
+test("roadmap promotes review queue friction as the active P0", () => {
+    assert.match(roadmap, /### P0 - Review Queue Friction Audit/);
+    assert.match(roadmap, /saved items accumulate but the next useful action is unclear/s);
+    assert.match(roadmap, /No new route, backend, sync, account, or framework dependency/s);
 });

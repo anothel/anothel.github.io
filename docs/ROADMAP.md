@@ -38,30 +38,28 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Refresh Stability Follow-up
+### P0 - Review Queue Friction Audit
 
-Trigger: a transient npm, GitHub, or source refresh failure can hide useful active rows, stale/fallback detail, or generated snapshot drift.
+Trigger: saved items accumulate but the next useful action is unclear, duplicated, or slower than reopening Explore.
 
 Scope:
 
-- Audit refresh behavior after source pruning and package partial row preservation.
-- Keep successful current rows and prior active rows when transient source failures affect checked-in generated data.
-- Keep Home, Today, Explore, Status, and module pages aligned on one source-health truth.
-- Keep disabled watchlist entries out of generated snapshots.
-- Do not add routes, backend, accounts, sync, package managers, or framework tooling.
+- Audit Review queue copy, status filters, selected-item detail, export/import affordances, and metadata fields.
+- Reduce repeated local decisions without changing the localStorage key or saved item schema unless tests prove a migration is required.
+- Keep saved item identity compatible with current Explore canonical ids and legacy saved ids.
+- Keep Review useful with empty, stale, blocked-localStorage, and current-data states.
+- No new route, backend, sync, account, or framework dependency.
 
 Verification:
 
-- Run `node --test tests/package-data.test.mjs tests/refresh-safety.test.mjs tests/refresh-report.test.mjs tests/static-fallback.test.mjs tests/watchlist-governance.test.mjs`.
+- Run `node --test tests/review-ui.test.mjs tests/local-state.test.mjs tests/site-structure.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
-- When network refresh is used, confirm `data/refresh-report.json` explains ok, partial, fallback, and rate-limited states accurately.
 
 Exit:
 
-- Partial refresh never silently drops active rows with prior data.
-- Disabled sources do not reappear in generated snapshots.
-- Status, Today, Explore, and Home show the same source-health state.
-- Refresh failures remain visible without breaking static fallback pages.
+- Review makes the next useful action obvious for unread, read, done, and empty queues.
+- Any changed workflow state has regression coverage.
+- Static HTML remains useful without JavaScript.
 
 ## Architecture Gate
 

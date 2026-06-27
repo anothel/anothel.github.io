@@ -81,6 +81,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Broad package, repo, and reference entries use `disabled: true` plus `history` instead of deletion, so provenance remains auditable.
 - Generated data snapshots may still show retired sources until the next data refresh.
 
+## Refresh Stability Follow-up
+
+- Partial package and repo refreshes preserve prior active rows when transient source errors hide individual active entries.
+- Trend source failures preserve prior rows for the failed source while marking that source as fallback and stale but safe.
+- Disabled watchlist entries stay excluded from generated snapshots even when previous data is reused.
+- Home, Today, Explore, Status, and module pages continue to share one source-health truth from generated metadata.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

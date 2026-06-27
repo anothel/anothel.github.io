@@ -246,6 +246,40 @@ test("prepareTrendDataForWrite falls back to previous trends on empty refresh", 
     assert.deepEqual(prepared.items, [{ title: "openai/codex" }]);
 });
 
+test("prepareTrendDataForWrite preserves previous source rows for partial rate limits", () => {
+    const prepared = prepareTrendDataForWrite(
+        {
+            updated: "2026-06-20",
+            generatedAt: "2026-06-20T00:00:00.000Z",
+            sourceMeta: [
+                { name: "GitHub", status: "error", count: 0, tracked: 14, emitted: 0, coverage: "0/14", error: "403 rate limit exceeded" },
+                { name: "npm", status: "ok", count: 1, tracked: 19, emitted: 1, coverage: "1/19" }
+            ],
+            items: [
+                { rank: 1, title: "ai", source: "npm", score: 80, url: "https://www.npmjs.com/package/ai" }
+            ]
+        },
+        {
+            updated: "2026-06-19",
+            generatedAt: "2026-06-19T00:00:00.000Z",
+            sourceMeta: [
+                { name: "GitHub", status: "ok", count: 1 },
+                { name: "npm", status: "ok", count: 1 }
+            ],
+            items: [
+                { rank: 1, title: "openai/codex", source: "GitHub", score: 95, url: "https://github.com/openai/codex" },
+                { rank: 2, title: "ai", source: "npm", score: 80, url: "https://www.npmjs.com/package/ai" }
+            ]
+        }
+    );
+
+    assert.equal(prepared.sourceMeta[0].status, "fallback");
+    assert.equal(prepared.sourceMeta[0].staleButSafe, true);
+    assert.equal(prepared.sourceMeta[0].rateLimited, true);
+    assert.equal(prepared.sourceMeta[0].count, 1);
+    assert.deepEqual(prepared.items.map((item) => item.title), ["openai/codex", "ai"]);
+});
+
 test("buildTrendFailureData creates empty fallback candidate when collection throws", () => {
     assert.deepEqual(buildTrendFailureData(new Error("No trend items fetched"), "2026-06-20T00:00:00.000Z"), {
         updated: "2026-06-20",

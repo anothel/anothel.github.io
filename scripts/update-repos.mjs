@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
-import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
+import { applyEmptyCollectionFallback, sourceSafetyFlags } from "./refresh-safety.mjs";
 import { activeItems } from "./watchlist-governance.mjs";
 
 const OUT_FILE = new URL("../data/repos.json", import.meta.url);
@@ -87,6 +87,12 @@ export function buildRepoRows(repoRecords, definitions = repoDefinitions) {
         });
 }
 
+function rerankRepos(repos) {
+    return [...repos]
+        .sort((a, b) => (b.stars || 0) - (a.stars || 0))
+        .map((item, index) => ({ ...item, rank: index + 1 }));
+}
+
 export async function collectRepos(
     definitions = repoDefinitions,
     fetcher = fetchJson,
@@ -128,6 +134,37 @@ export async function collectRepos(
 }
 
 export function prepareRepoDataForWrite(data, previousData) {
+    const nextItems = Array.isArray(data?.repos) ? data.repos : [];
+    const previousItems = Array.isArray(previousData?.repos) ? previousData.repos : [];
+    const errors = Array.isArray(data?.sourceMeta?.errors) ? data.sourceMeta.errors : [];
+
+    if (data?.sourceMeta?.status === "partial" && nextItems.length > 0 && previousItems.length > 0 && errors.length > 0) {
+        const activeNames = new Set(repoDefinitions.map((definition) => definition.fullName));
+        const existing = new Set(nextItems.map((item) => item.name));
+        const previousByName = new Map(previousItems.map((item) => [item.name, item]));
+        const restored = errors
+            .map((error) => error.name)
+            .filter((name) => activeNames.has(name) && !existing.has(name) && previousByName.has(name))
+            .map((name) => previousByName.get(name));
+
+        if (restored.length > 0) {
+            const repos = rerankRepos([...nextItems, ...restored]);
+            data = {
+                ...data,
+                sourceMeta: {
+                    ...data.sourceMeta,
+                    count: repos.length,
+                    emitted: repos.length,
+                    coverage: `${repos.length}/${data.sourceMeta.tracked || repoDefinitions.length}`,
+                    staleButSafe: true,
+                    previousUpdated: previousData.updated || data.sourceMeta.previousUpdated,
+                    rateLimited: sourceSafetyFlags(errors).rateLimited
+                },
+                repos
+            };
+        }
+    }
+
     return applyEmptyCollectionFallback(data, previousData, {
         collection: "repos",
         fallbackReason: "No repo rows fetched",
