@@ -25,7 +25,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata.
 - Local browser state: saved review items with optional note/tag/reason, up to 3 pinned topics, explicit Explore defaults, and up to 5 saved Explore searches.
 - Source governance: checked-in watchlist data drives trends, packages, repos, and links; optional disabled/history fields keep retired sources documented without current output.
-- Signal policy: checked-in `data/signal-policy.json` owns generated Today baseline scoring penalties and intent thresholds.
+- Signal policy: checked-in `data/signal-policy.json` owns Today and Explore baseline scoring policy.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds the budget in `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -38,26 +38,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P5 - Explore Score Policy Parity
-
-Trigger: Today scoring policy is data-owned, while Explore still has local browser-side quality heuristics.
-
-Scope:
-
-- Decide whether Explore should consume shared policy data or document a deliberate split.
-- Move only stable scoring constants into checked-in data; do not create a generic rules engine.
-- Preserve blocked-fetch and static fallback behavior.
-
-Verification:
-
-- Add a regression test proving shared policy use or the documented split.
-- Run `node --test tests/explore-ui.test.mjs tests/signal-quality-golden.test.mjs`.
-
-Exit:
-
-- Today and Explore scoring ownership is either unified or clearly separated in tests and docs.
-
-### P6 - Topic Promotion Review
+### P5 - Topic Promotion Review
 
 Trigger: source growth creates topic candidates that may deserve first-class pages.
 
@@ -75,7 +56,7 @@ Exit:
 
 - Candidate topics are promoted, merged, retired, or left as data-only sources with rationale.
 
-### P7 - Architecture PoC Only On Measured Blocker
+### P6 - Architecture PoC Only On Measured Blocker
 
 Trigger: a measured vanilla JavaScript problem exceeds the budget in `docs/ARCHITECTURE.md`.
 
@@ -95,12 +76,6 @@ Exit:
 - Adopt the PoC only if it removes measured complexity without weakening static safety; otherwise delete it.
 
 ## Deferred Boundaries
-
-Eligible for triage:
-
-- Shared scoring data, only where tests prove policy duplication is risky.
-
-Still blocked:
 
 - Public worklog route stays rejected while Notes covers durable topic judgment.
 - Portfolio, resume, and company-history copy stay rejected while the site sentence remains a signal dashboard.

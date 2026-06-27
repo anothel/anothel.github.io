@@ -18,6 +18,26 @@
         repos: "repo",
         links: "reference"
     };
+    const fallbackSignalPolicy = {
+        baselineTitles: [
+            "typescript",
+            "eslint",
+            "prettier",
+            "react",
+            "react/react",
+            "zod",
+            "tailwindcss",
+            "vite",
+            "vitejs/vite",
+            "next",
+            "next.js",
+            "vercel/next.js"
+        ]
+    };
+
+    function signalPolicyFor(options = {}) {
+        return options.signalPolicy || fallbackSignalPolicy;
+    }
 
     function itemId(moduleKey, item) {
         return `${moduleKey}:${item.url || item.name || item.title || item.rank}`;
@@ -52,22 +72,12 @@
         return Math.min(boost, 20);
     }
 
-    function isBroadBaselinePackage(item) {
+    function isBroadBaselinePackage(item, options = {}) {
         const name = String(item.name || item.title || "").toLowerCase();
-        return new Set([
-            "typescript",
-            "react",
-            "eslint",
-            "prettier",
-            "vite",
-            "next",
-            "express",
-            "tailwindcss",
-            "zod"
-        ]).has(name);
+        return new Set(signalPolicyFor(options).baselineTitles || []).has(name);
     }
 
-    function qualityScoreForItem(moduleKey, item) {
+    function qualityScoreForItem(moduleKey, item, options = {}) {
         const text = textBlob(item);
         let score = 0;
 
@@ -83,7 +93,7 @@
 
         score += textBoost(text);
         const isNpmTrend = moduleKey === "trends" && String(item.source || "").toLowerCase() === "npm";
-        if ((moduleKey === "packages" || isNpmTrend) && isBroadBaselinePackage(item) && textBoost(text) < 8) {
+        if ((moduleKey === "packages" || isNpmTrend) && isBroadBaselinePackage(item, options) && textBoost(text) < 8) {
             score = Math.min(score, 76);
         }
 
@@ -137,8 +147,8 @@
         return `title:${normalizedTitle(item.title)}`;
     }
 
-    function signalItem(moduleKey, item, data, fields) {
-        const qualityScore = qualityScoreForItem(moduleKey, item);
+    function signalItem(moduleKey, item, data, fields, options) {
+        const qualityScore = qualityScoreForItem(moduleKey, item, options);
         const moduleName = moduleLabels[moduleKey];
         const canonicalKey = duplicateKey(fields);
         const legacyId = itemId(moduleKey, item);
@@ -217,7 +227,7 @@
             reason: trendReason(item),
             url: item.url,
             rawScore: Number(item.score || 0)
-        }));
+        }, options));
 
         const packages = (dataByModule.packages?.packages || []).map((item) => signalItem("packages", item, dataByModule.packages, {
             title: item.name,
@@ -228,7 +238,7 @@
             reason: item.focus || "Weekly npm demand",
             url: item.url,
             rawScore: Number(item.downloads || 0)
-        }));
+        }, options));
 
         const repos = (dataByModule.repos?.repos || []).map((item) => signalItem("repos", item, dataByModule.repos, {
             title: item.name,
@@ -239,7 +249,7 @@
             reason: item.focus || item.summary || "Repository traction",
             url: item.url,
             rawScore: Number(item.stars || 0)
-        }));
+        }, options));
 
         const links = (dataByModule.links?.links || []).map((item) => signalItem("links", item, dataByModule.links, {
             title: item.title,
@@ -250,7 +260,7 @@
             reason: item.summary || "Reference shelf item",
             url: item.url,
             rawScore: Math.max(0, 100 - Number(item.rank || 0))
-        }));
+        }, options));
 
         const items = [...trends, ...packages, ...repos, ...links].filter((item) => item.title && item.url);
         return options.dedupe === false ? items : dedupeSignalItems(items);

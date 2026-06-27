@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
+const signalPolicy = JSON.parse(readFileSync("data/signal-policy.json", "utf8"));
+
 function loadExplore(extra = {}) {
     const context = { console, Date, URL, ...extra };
     vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
@@ -170,6 +172,44 @@ test("Explore normalizes quality scores so broad baseline packages do not domina
     assert.ok(byTitle.typescript.qualityScore <= 78);
     assert.ok(byTitle.ai.qualityScore > byTitle.typescript.qualityScore);
     assert.equal(byTitle.typescript.rawScore, 250000000);
+});
+
+test("Explore baseline scoring uses checked-in signal policy", () => {
+    const app = loadExplore();
+    const items = app.normalizeExploreData({
+        trends: { updated: "2026-06-18", sourceMeta: [], items: [] },
+        packages: {
+            updated: "2026-06-19",
+            sourceMeta: { name: "npm", status: "ok", count: 2 },
+            packages: [
+                {
+                    rank: 1,
+                    name: "next.js",
+                    category: "Framework",
+                    focus: "frontend runtime",
+                    downloads: 250000000,
+                    downloadsLabel: "250M/week",
+                    url: "https://www.npmjs.com/package/next"
+                },
+                {
+                    rank: 2,
+                    name: "mastra",
+                    category: "AI agents",
+                    focus: "agent workflow framework",
+                    downloads: 500000,
+                    downloadsLabel: "500K/week",
+                    url: "https://www.npmjs.com/package/mastra"
+                }
+            ]
+        },
+        repos: { updated: "2026-06-18", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        links: { updated: "2026-06-18", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    }, { signalPolicy });
+    const byTitle = Object.fromEntries(items.map((item) => [item.title, item]));
+
+    assert.ok(signalPolicy.baselineTitles.includes("next.js"));
+    assert.ok(byTitle["next.js"].qualityScore <= 76);
+    assert.ok(byTitle.mastra.qualityScore > byTitle["next.js"].qualityScore);
 });
 
 test("Explore uses canonical URL ids and still recognizes legacy saved ids", () => {
@@ -728,8 +768,10 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
         },
         "../data/packages.json": { updated: "2026-06-19", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
         "../data/repos.json": { updated: "2026-06-18", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
-        "../data/links.json": { updated: "2026-06-18", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+        "../data/links.json": { updated: "2026-06-18", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] },
+        "../data/signal-policy.json": signalPolicy
     };
+    const fetchPaths = [];
 
     const context = {
         console,
@@ -752,10 +794,13 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
             },
             setItem() {}
         },
-        fetch: async (path) => ({
-            ok: true,
-            json: async () => sources[path]
-        })
+        fetch: async (path) => {
+            fetchPaths.push(path);
+            return {
+                ok: true,
+                json: async () => sources[path]
+            };
+        }
     };
 
     vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
@@ -774,6 +819,7 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
     assert.match(elements["[data-topic-lenses]"].innerHTML, /Use lens/);
     assert.match(elements["[data-source-health]"].innerHTML, /status-partial/);
     assert.equal(focusButtons[0].ariaPressed, "true");
+    assert.ok(fetchPaths.includes("../data/signal-policy.json"));
 
     elements["[data-explore-query]"].dispatch("input", "missing");
     assert.equal(elements["[data-explore-total]"].textContent, "0");

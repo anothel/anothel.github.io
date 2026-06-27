@@ -71,6 +71,8 @@ test("docs explain checked-in signal policy ownership", () => {
     assert.match(ia, /Signal Policy/);
     assert.match(ia, /baseline titles/);
     assert.match(ia, /intent threshold/);
+    assert.match(ia, /Today and Explore/);
+    assert.match(readme, /Today and Explore scoring policy/);
 });
 
 test("IA records public scope triage outcomes", () => {
@@ -82,6 +84,11 @@ test("IA records public scope triage outcomes", () => {
 
 test("roadmap keeps completed public scope triage out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Public Scope Triage/);
-    assert.match(roadmap, /### P5 - Explore Score Policy Parity/);
     assert.match(roadmap, /Public worklog route stays rejected/);
+});
+
+test("roadmap keeps completed explore policy parity out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
+    assert.match(roadmap, /### P5 - Topic Promotion Review/);
+    assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });

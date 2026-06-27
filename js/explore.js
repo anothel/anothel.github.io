@@ -14,7 +14,8 @@
         trends: "../data/trends.json",
         packages: "../data/packages.json",
         repos: "../data/repos.json",
-        links: "../data/links.json"
+        links: "../data/links.json",
+        signalPolicy: "../data/signal-policy.json"
     };
 
     const state = {
@@ -52,16 +53,16 @@
         return signalSchema;
     }
 
-    function normalizeExploreData(dataByModule) {
-        return requireSignalSchema().normalizeSignalData(dataByModule);
+    function normalizeExploreData(dataByModule, options = {}) {
+        return requireSignalSchema().normalizeSignalData(dataByModule, options);
     }
 
     function collectSourceMeta(dataByModule) {
         return requireSignalSchema().collectSourceMeta(dataByModule);
     }
 
-    function qualityScoreForItem(moduleKey, item) {
-        return requireSignalSchema().qualityScoreForItem(moduleKey, item);
+    function qualityScoreForItem(moduleKey, item, options = {}) {
+        return requireSignalSchema().qualityScoreForItem(moduleKey, item, options);
     }
 
     function dedupeExploreItems(items) {
@@ -708,15 +709,17 @@
             trends: script?.dataset.trends || defaultPaths.trends,
             packages: script?.dataset.packages || defaultPaths.packages,
             repos: script?.dataset.repos || defaultPaths.repos,
-            links: script?.dataset.links || defaultPaths.links
+            links: script?.dataset.links || defaultPaths.links,
+            signalPolicy: script?.dataset.signalPolicy || defaultPaths.signalPolicy
         };
 
-        const [manifest, trends, packages, repos, links] = await Promise.all([
+        const [manifest, trends, packages, repos, links, signalPolicy] = await Promise.all([
             readJson(paths.manifest).catch(() => null),
             readJson(paths.trends).catch(() => null),
             readJson(paths.packages).catch(() => null),
             readJson(paths.repos).catch(() => null),
-            readJson(paths.links).catch(() => null)
+            readJson(paths.links).catch(() => null),
+            readJson(paths.signalPolicy).catch(() => null)
         ]);
 
         const dataByModule = {
@@ -734,7 +737,7 @@
         const preferredState = preferredStore.read();
         collapseMobileFilterShell(els);
 
-        state.items = normalizeExploreData(dataByModule);
+        state.items = normalizeExploreData(dataByModule, { signalPolicy });
         state.sourceMeta = collectSourceMeta(dataByModule);
         state.updated = manifest?.updated || state.items.map((item) => item.updated).filter(Boolean).sort().at(-1) || "";
         state.savedIds = filterSavedIds(state.items, store.read());

@@ -74,6 +74,7 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Scoring policy ownership stays in `data/signal-policy.json`.
 - baseline titles list broad tools that should not dominate agent-workflow signals by raw popularity alone.
 - baseline penalty and intent threshold tune generated Today ranking without editing updater code.
+- Today and Explore share baseline titles; Explore uses an embedded fallback only when the policy JSON fetch is blocked.
 
 ## Deferred Decisions
 
