@@ -1983,11 +1983,7 @@ button {
     gap: 10px;
     align-items: center;
     align-self: end;
-    justify-content: space-between;
-}
-
-.explore-card-actions a {
-    font-weight: 900;
+    justify-content: flex-end;
 }
 
 .explore-card-actions button {

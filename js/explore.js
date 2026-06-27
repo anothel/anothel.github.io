@@ -376,7 +376,6 @@
                     ` : ""}
                     ${item.sourceContext ? `<p class="source-context">${escapeHtml(item.sourceContext)}</p>` : ""}
                     <div class="explore-card-actions">
-                        <a href="${safeHref(item.url)}">Open item</a>
                         <button type="button" data-save-id="${escapeHtml(buttonId)}" aria-pressed="${saved ? "true" : "false"}" aria-label="${escapeHtml(saved ? `Saved ${item.title} for Review` : `Save ${item.title} for Review`)}">
                             ${saved ? "Saved" : "Save"}
                         </button>

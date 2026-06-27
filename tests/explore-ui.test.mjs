@@ -372,6 +372,7 @@ test("Explore renders merged source context in cards and saved queue", () => {
     assert.match(cards, /tabindex="0"/);
     assert.match(cards, /data-card-href="https:\/\/example\.com\/skills"/);
     assert.match(cards, /aria-label="Open Skills repo"/);
+    assert.doesNotMatch(cards, /Open item/);
     assert.match(cards, /aria-label="Signal fit score 96"/);
     assert.match(cards, /aria-label="Saved Skills repo for Review"/);
     assert.match(saved, /aria-label="Remove Skills repo from saved queue"/);
