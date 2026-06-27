@@ -170,3 +170,25 @@ test("refresh run renderer surfaces checked-in report context safely", () => {
     assert.doesNotMatch(html, /Package <watchlist>/);
     assert.doesNotMatch(html, /manual <retry>/);
 });
+
+test("refresh run treats stale ok sources as attention", () => {
+    const html = renderRefreshRun({
+        generatedAt: "2026-06-24T00:00:00.000Z",
+        manifestUpdated: "2026-06-24",
+        changedModules: [],
+        totals: { status: "ok", items: 1, sources: 1 },
+        modules: [
+            {
+                id: "repos",
+                title: "Repo watchlist",
+                status: "ok",
+                count: 1,
+                sources: [{ source: "GitHub", status: "ok", count: 1, updatedAt: "2026-06-20T00:00:00.000Z" }]
+            }
+        ]
+    });
+
+    assert.match(html, /1 source/);
+    assert.match(html, /Repo watchlist: GitHub stale/);
+    assert.match(html, /Stale - 4 days old/);
+});

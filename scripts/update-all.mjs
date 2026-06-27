@@ -8,9 +8,15 @@ export const dataUpdateScripts = [
     "scripts/update-links.mjs",
     "scripts/update-today.mjs",
     "scripts/update-manifest.mjs",
-    "scripts/update-static-fallbacks.mjs",
-    "scripts/report-refresh.mjs"
+    "scripts/report-refresh.mjs",
+    "scripts/update-static-fallbacks.mjs"
 ];
+
+export function argsForScript(script) {
+    return script === "scripts/report-refresh.mjs"
+        ? [script, "--json-out", "data/refresh-report.json"]
+        : [script];
+}
 
 export function runCommand(command, args, options = {}) {
     return new Promise((resolve, reject) => {
@@ -51,10 +57,7 @@ export async function runUpdateAll(runner = runCommand, options = {}) {
         }
 
         try {
-            const args = script === "scripts/report-refresh.mjs"
-                ? [script, "--json-out", "data/refresh-report.json"]
-                : [script];
-            await runner(process.execPath, args, { env });
+            await runner(process.execPath, argsForScript(script), { env });
             if (groupedLogs) {
                 console.log("::endgroup::");
             }
@@ -79,7 +82,7 @@ async function main() {
 
     if (process.argv.includes("--dry-run")) {
         for (const script of dataUpdateScripts) {
-            console.log(`node ${script}`);
+            console.log(`node ${argsForScript(script).join(" ")}`);
         }
         return;
     }

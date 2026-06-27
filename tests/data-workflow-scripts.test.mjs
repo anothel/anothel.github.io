@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 import { dataUpdateScripts } from "../scripts/update-all.mjs";
@@ -13,9 +14,16 @@ test("update-all owns the full data refresh order", () => {
         "scripts/update-links.mjs",
         "scripts/update-today.mjs",
         "scripts/update-manifest.mjs",
-        "scripts/update-static-fallbacks.mjs",
-        "scripts/report-refresh.mjs"
+        "scripts/report-refresh.mjs",
+        "scripts/update-static-fallbacks.mjs"
     ]);
+});
+
+test("update-all dry-run prints the real command args", () => {
+    const output = execFileSync(process.execPath, ["scripts/update-all.mjs", "--dry-run"], { encoding: "utf8" });
+
+    assert.match(output, /node scripts\/report-refresh\.mjs --json-out data\/refresh-report\.json/);
+    assert.match(output, /scripts\/update-manifest\.mjs[\s\S]*scripts\/report-refresh\.mjs --json-out data\/refresh-report\.json[\s\S]*scripts\/update-static-fallbacks\.mjs/);
 });
 
 test("validate-data discovers repository test files without shell globs", async () => {

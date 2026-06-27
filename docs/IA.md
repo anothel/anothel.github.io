@@ -42,8 +42,14 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Use **Generated at** for derived pages such as Today.
 - Use **Source health** for ok, partial, error, and fallback states.
 - Use **Partial** only with a short explanation of whether data remains usable.
+- Signal Schema v2 is the current normalized item contract for Today, Explore, topics, and saved/review item identity.
+
+## Freshness Vocabulary
+
+- **Fresh** means 0-1 days old.
+- **Aging** means 2-3 days old. Aging stays visible, but it is not Status attention while source health is ok.
+- **Stale** means more than 3 days old. Stale or any non-ok source health becomes Status attention.
 
 ## Deferred Decisions
 
 - Astro + React islands remains the medium-term framework target, after P0 trust/copy/data work lands.
-- Signal schema v2 should not replace current data shapes until current schema tests protect module counts, URLs, statuses, and scores.

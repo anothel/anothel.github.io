@@ -122,21 +122,40 @@ function reportContext(report) {
     ].filter(Boolean).join(" / ") || "No run context recorded.";
 }
 
+function sourceFreshness(report, source) {
+    return globalThis.DataHealth?.freshnessText
+        ? globalThis.DataHealth.freshnessText({ status: source.status, updatedAt: source.updatedAt || source.updated }, report.generatedAt)
+        : "";
+}
+
+function isStaleSource(report, source) {
+    return source.status === "ok" && sourceFreshness(report, source).startsWith("Stale -");
+}
+
+function sourceNeedsAttention(report, source) {
+    return source.status !== "ok" || (source.errors || []).length > 0 || isStaleSource(report, source);
+}
+
 function reportAttentionSources(report) {
     return (report.modules || [])
         .flatMap((module) => (module.sources || []).map((source) => ({ module, source })))
-        .filter(({ source }) => source.status !== "ok" || (source.errors || []).length > 0);
+        .filter(({ source }) => sourceNeedsAttention(report, source));
 }
 
-function sourceIssueText(source) {
+function sourceAttentionLabel(report, source) {
+    return isStaleSource(report, source) ? "stale" : source.status;
+}
+
+function sourceIssueText(source, report) {
     const errors = Array.isArray(source.errors) ? source.errors.filter(Boolean).join(" / ") : "";
+    const freshness = isStaleSource(report, source) ? sourceFreshness(report, source) : "";
     const safety = [
         source.fallbackUsed ? "fallback used" : "",
         source.staleButSafe ? "previous data kept" : "",
         source.rateLimited ? "rate limited" : "",
         source.fallbackReason || ""
     ].filter(Boolean).join(" / ");
-    return [source.source || "unknown", source.status || "unknown", errors || safety]
+    return [source.source || "unknown", sourceAttentionLabel(report, source), errors || safety || freshness]
         .filter(Boolean)
         .join(" ");
 }
@@ -144,7 +163,7 @@ function sourceIssueText(source) {
 function reportDetailRows(report, attention) {
     const changedIds = new Set((report.changedModules || []).map((module) => module.id));
     const modules = (report.modules || []).filter((module) => {
-        const hasAttention = (module.sources || []).some((source) => source.status !== "ok" || (source.errors || []).length > 0);
+        const hasAttention = (module.sources || []).some((source) => sourceNeedsAttention(report, source));
         return changedIds.has(module.id) || module.changed || hasAttention;
     });
 
@@ -160,8 +179,8 @@ function reportDetailRows(report, attention) {
 
     return modules.map((module) => {
         const issues = (module.sources || [])
-            .filter((source) => source.status !== "ok" || (source.errors || []).length > 0)
-            .map(sourceIssueText);
+            .filter((source) => sourceNeedsAttention(report, source))
+            .map((source) => sourceIssueText(source, report));
         const detail = issues.length ? issues.join(" / ") : "Changed data file";
 
         return `<article class="status-row status-${escapeHtml(module.status || "unknown")}">
@@ -183,7 +202,7 @@ export function renderRefreshRun(report) {
         ? changed.map((module) => module.title || module.id).join(" / ")
         : "No changed modules.";
     const attentionText = attention.length
-        ? attention.slice(0, 4).map(({ module, source }) => `${module.title || module.id}: ${source.source} ${source.status}`).join(" / ")
+        ? attention.slice(0, 4).map(({ module, source }) => `${module.title || module.id}: ${source.source} ${sourceAttentionLabel(report, source)}`).join(" / ")
         : "No failed, partial, or fallback sources.";
     const changedCount = changed.length === 1 ? "1 changed" : `${changed.length} changed`;
     const attentionCount = attention.length === 1 ? "1 source" : `${attention.length} sources`;

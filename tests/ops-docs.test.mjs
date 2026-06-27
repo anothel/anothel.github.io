@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 const readme = readFileSync("README.md", "utf8");
+const ia = readFileSync("docs/IA.md", "utf8");
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -36,4 +37,14 @@ test("README keeps local and scheduled data update command order aligned", () =>
         assert.ok(index > previousIndex, `${command} should appear after previous update command`);
         previousIndex = index;
     }
+});
+
+test("IA documents current schema and freshness vocabulary", () => {
+    assert.match(ia, /Signal Schema v2 is the current normalized item contract/);
+    assert.match(ia, /Fresh.*0-1 days/s);
+    assert.match(ia, /Aging.*2-3 days/s);
+    assert.match(ia, /Stale.*more than 3 days/s);
+    assert.match(ia, /Status attention.*Stale|Stale.*Status attention/s);
+    assert.doesNotMatch(ia, /Signal schema v2[^.\n]*deferred/i);
+    assert.doesNotMatch(ia, /Signal schema v2 should not replace/i);
 });

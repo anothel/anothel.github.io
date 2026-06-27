@@ -16,6 +16,14 @@ function dataModeText(health, updated) {
     return `Source health ok. Data date ${updated}.`;
 }
 
+function sourceMetaList(datasets) {
+    return Object.values(datasets).flatMap((dataset) => {
+        const sourceMeta = dataset?.sourceMeta;
+        if (Array.isArray(sourceMeta)) return sourceMeta;
+        return sourceMeta && typeof sourceMeta === "object" ? [sourceMeta] : [];
+    });
+}
+
 function trimLineEnds(markup) {
     return markup.split("\n").map((line) => line.trimEnd()).join("\n");
 }
@@ -279,6 +287,21 @@ async function updateStaticFallbacks() {
     todayHtml = replaceTaggedText(todayHtml, "data-today-updated", today.updated);
     todayHtml = replacePattern(todayHtml, /<p data-today-status>[\s\S]*?<\/p>/, `<p data-today-status>${escapeHtml(renderTodayStatus(today))}</p>`, "today status");
     await writeIfChanged("today/index.html", todayHtml);
+
+    const exploreSources = sourceMetaList(datasets);
+    let exploreHtml = await readFile("explore/index.html", "utf8");
+    exploreHtml = replacePattern(exploreHtml, /<section class="health-panel" aria-labelledby="explore-health-title">[\s\S]*?<\/section>\s*\n\s*<section class="explore-workspace"/, `<section class="health-panel" aria-labelledby="explore-health-title">
+                <div class="panel-heading">
+                    <h2 id="explore-health-title">Source health</h2>
+                    <p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(exploreSources, { updated }))}</p>
+                </div>
+                <div class="source-health-grid" data-source-health>
+${trimLineEnds(globalThis.DataHealth.renderSourceHealth(exploreSources, { today: generatedAt }))}
+                </div>
+            </section>
+
+            <section class="explore-workspace"`, "explore source health");
+    await writeIfChanged("explore/index.html", exploreHtml);
 
     let statusHtml = await readFile("status/index.html", "utf8");
     statusHtml = replaceTaggedText(statusHtml, "data-status-total", statusSummary.totalItems);

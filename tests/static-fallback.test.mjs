@@ -74,6 +74,20 @@ function sourceHealth() {
         .join(" / ");
 }
 
+function sourceMeta() {
+    return manifest.modules.flatMap((module) => {
+        const source = json(module.data).sourceMeta;
+        return Array.isArray(source) ? source : [source];
+    });
+}
+
+function dataHealth() {
+    const context = { URL };
+    vm.runInNewContext(read("js/safe-dom.js"), context);
+    vm.runInNewContext(read("js/data-health.js"), context);
+    return context.DataHealth;
+}
+
 function todayStatusText() {
     const total = today.sections.reduce((sum, section) => sum + section.items.length, 0);
     const status = today.sourceMeta?.status || "ok";
@@ -141,6 +155,26 @@ test("status static fallback matches current manifest summary", () => {
     assert.match(html, new RegExp(`<strong>${refreshReport.generatedAt}</strong>`));
     assert.match(html, /No failed, partial, or fallback sources\./);
     assert.match(html, /<small>(Fresh|Aging|Stale|Partial|Fallback|Error|Unknown) - /);
+});
+
+test("home today explore and status fallbacks use one healthy source truth", () => {
+    assert.equal(refreshReport.totals.status, "ok");
+    assert.equal(today.sourceMeta.status, "ok");
+    assert.equal(sourceHealth(), "6 ok");
+
+    assert.match(read("index.html"), new RegExp(`<strong data-home-live>${moduleHealth()}</strong>`));
+    assert.match(read("today/index.html"), /Source health ok\./);
+    assert.match(read("status/index.html"), new RegExp(`<strong data-status-health>${sourceHealth()}</strong>`));
+    assert.match(read("explore/index.html"), new RegExp(`<p data-data-mode>${dataModeText().replaceAll(".", "\\.")}</p>`));
+});
+
+test("explore source cards use refresh report time for freshness detail", () => {
+    const html = read("explore/index.html");
+    const DataHealth = dataHealth();
+
+    for (const source of sourceMeta()) {
+        assert.match(html, new RegExp(DataHealth.sourceDetail(source, refreshReport.generatedAt).replaceAll("/", "\\/")));
+    }
 });
 
 test("module page stamps do not drift behind checked-in manifest", () => {

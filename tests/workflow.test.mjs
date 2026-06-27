@@ -12,8 +12,8 @@ test("today generator runs after links and before manifest", () => {
     assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-links\.mjs[\s\S]*scripts\/update-today\.mjs[\s\S]*scripts\/update-manifest\.mjs/);
 });
 
-test("static fallbacks refresh after manifest and before refresh report", () => {
-    assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-manifest\.mjs[\s\S]*scripts\/update-static-fallbacks\.mjs[\s\S]*scripts\/report-refresh\.mjs/);
+test("refresh report is generated after manifest and before static fallbacks", () => {
+    assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-manifest\.mjs[\s\S]*scripts\/report-refresh\.mjs[\s\S]*scripts\/update-static-fallbacks\.mjs/);
 });
 
 test("data update workflow commits every generated data file", () => {
