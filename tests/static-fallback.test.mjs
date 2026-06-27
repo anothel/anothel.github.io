@@ -144,6 +144,8 @@ test("today static fallback matches current generated brief", () => {
     assert.match(html, new RegExp(todayStatusText().replaceAll(".", "\\.")));
     assert.match(html, /<strong>anthropics\/skills<\/strong>/);
     assert.match(html, /<strong>Next action<\/strong>/);
+    assert.match(html, /href="..\/review\/index\.html"/);
+    assert.match(html, /Review later/);
 });
 
 test("status static fallback matches current manifest summary", () => {

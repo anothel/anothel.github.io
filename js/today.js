@@ -19,9 +19,13 @@ const fallbackData = {
 
 const exploreLinks = [
     ["Explore", "../explore/index.html", "Search all tracked signals"],
+    ["Review later", "../review/index.html", "Return to saved items"],
     ["Explore AI agents", "../explore/index.html?focus=AI%20agents", "Agent workflow signals"],
     ["Explore MCP", "../explore/index.html?focus=MCP", "Protocol and server references"],
     ["Explore skills", "../explore/index.html?focus=Agent%20skills", "Reusable agent instructions"],
+    ["AI agents", "../topics/ai-agents/index.html", "Focused landing page"],
+    ["MCP", "../topics/mcp/index.html", "Focused landing page"],
+    ["Agent skills", "../topics/agent-skills/index.html", "Focused landing page"],
     ["Trends", "../trends/index.html", "Ranked movement"],
     ["Repos", "../repos/index.html", "GitHub traction"],
     ["Packages", "../packages/index.html", "npm movement"],

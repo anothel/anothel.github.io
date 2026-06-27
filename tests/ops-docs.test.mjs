@@ -134,6 +134,13 @@ test("IA records notes return path audit outcomes", () => {
     assert.match(ia, /Home keeps one Notes entry from topic movement/s);
 });
 
+test("IA records end-to-end workflow consolidation outcomes", () => {
+    assert.match(ia, /End-to-End Workflow Consolidation/);
+    assert.match(ia, /Today now links to Review later/s);
+    assert.match(ia, /Home -> Today\/Explore -> Review -> Notes\/Status/s);
+    assert.match(ia, /No route, localStorage schema, source data, signal policy, framework, backend, account, or sync scope changed/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -157,18 +164,18 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
 test("roadmap keeps architecture PoC as a gate outside next work", () => {
@@ -180,46 +187,51 @@ test("roadmap keeps architecture PoC as a gate outside next work", () => {
 
 test("roadmap keeps completed refresh stability out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
 test("roadmap keeps completed review queue friction out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Review Queue Friction Audit/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
 test("roadmap keeps completed signal quality regression out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Signal Quality Regression Audit/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
 test("roadmap keeps completed home visit speed out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Home Visit Speed Audit/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
 test("roadmap keeps completed status recovery clarity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Status Recovery Clarity Audit/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
 test("roadmap keeps completed interaction state visual audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Interaction State Visual Audit/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
 test("roadmap keeps completed static snapshot drift audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Static Snapshot Drift Audit/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
 test("roadmap keeps completed notes return path audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Notes Return Path Audit/);
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
 });
 
-test("roadmap promotes end-to-end workflow consolidation as the active P0", () => {
-    assert.match(roadmap, /### P0 - End-to-End Workflow Consolidation/);
-    assert.match(roadmap, /full signal workflow together instead of adding another narrow audit/s);
-    assert.match(roadmap, /No framework, backend, account, sync, or new public route/s);
+test("roadmap keeps completed end-to-end workflow consolidation out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - End-to-End Workflow Consolidation/);
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
+});
+
+test("roadmap promotes refresh recovery drill as the active P0", () => {
+    assert.match(roadmap, /### P0 - Refresh Recovery Drill/);
+    assert.match(roadmap, /live network refresh remains optional/s);
+    assert.match(roadmap, /No route, source, scoring policy, localStorage schema, framework, backend, account, or sync scope/s);
 });

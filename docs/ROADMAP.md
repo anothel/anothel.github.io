@@ -38,28 +38,29 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - End-to-End Workflow Consolidation
+### P0 - Refresh Recovery Drill
 
-Trigger: recent work stabilized individual surfaces; the next pass should verify the full signal workflow together instead of adding another narrow audit.
+Trigger: the main visit workflow is connected; the next risk is whether source refresh failures keep that workflow trustworthy without manual interpretation.
 
 Scope:
 
-- Audit Home open-first, Today brief, Explore filtering/saving, Review follow-up, Notes judgment, Status trust, and topic pages as one workflow.
-- Collapse duplicate copy or navigation only when tests show the same decision appears in multiple places without a clearer job.
-- Keep route count, localStorage schema, source data, signal policy, static fallback generator, and the architecture gate unchanged unless a failing test proves otherwise.
-- No framework, backend, account, sync, or new public route.
+- Exercise update-all dry-run, refresh report generation, fallback safety helpers, Status recovery copy, and static fallback regeneration together.
+- Prove stale, partial, fallback, and ok source meanings still land in Status and public fallback pages from one source-health contract.
+- Keep live network refresh optional unless explicitly approved.
+- No route, source, scoring policy, localStorage schema, framework, backend, account, or sync scope.
 
 Verification:
 
-- Run `node --test tests/home-data.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/review-ui.test.mjs tests/notes-ui.test.mjs tests/topic-ui.test.mjs tests/status-ui.test.mjs tests/site-structure.test.mjs tests/static-fallback.test.mjs`.
-- Run `node scripts/update-static-fallbacks.mjs`, then confirm no unexpected static drift.
+- Run `node --test tests/data-workflow-scripts.test.mjs tests/refresh-safety.test.mjs tests/refresh-report.test.mjs tests/status-ui.test.mjs tests/static-fallback.test.mjs tests/workflow.test.mjs`.
+- Run `node scripts/update-all.mjs --dry-run`.
+- Run `node scripts/update-static-fallbacks.mjs`, then `git diff --check`.
 - Run `node scripts/validate-data.mjs`.
 
 Exit:
 
-- Home -> Today/Explore -> Review -> Notes/Status has one clear forward path and one clear return path.
-- Repeated decisions are removed or justified by separate jobs in tests or docs.
-- Any changed workflow copy, nav, or state has focused regression coverage.
+- Refresh order, report, fallback markers, Status copy, and static fallback pages agree on one recovery meaning.
+- live network refresh remains optional and clearly separate from local verification.
+- Any changed recovery behavior has focused regression coverage.
 
 ## Architecture Gate
 

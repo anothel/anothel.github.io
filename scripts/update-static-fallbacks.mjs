@@ -4,7 +4,7 @@ import vm from "node:vm";
 import { pathToFileURL } from "node:url";
 import "../js/safe-dom.js";
 import { buildHomeOverview } from "../js/home.js";
-import { renderTodayStatus } from "../js/today.js";
+import { renderExploreLinks, renderTodayStatus } from "../js/today.js";
 import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows } from "../js/status.js";
 
 const { escapeHtml } = globalThis.AnothelDom;
@@ -280,6 +280,10 @@ async function updateStaticFallbacks() {
     let todayHtml = await readFile("today/index.html", "utf8");
     todayHtml = replaceTaggedText(todayHtml, "data-today-updated", today.updated);
     todayHtml = replacePattern(todayHtml, /<p data-today-status>[\s\S]*?<\/p>/, `<p data-today-status>${escapeHtml(renderTodayStatus(today))}</p>`, "today status");
+    const todayExploreLinks = trimLineEnds(renderExploreLinks()).split("\n").map((line) => line ? `                ${line}` : line).join("\n");
+    todayHtml = replacePattern(todayHtml, /(<section class="explore-strip" data-today-explore aria-label="Explore full lists">)[\s\S]*?(<\/section>)/, `$1
+${todayExploreLinks}
+            $2`, "today explore links");
     await writeIfChanged("today/index.html", todayHtml);
 
     const exploreSources = sourceMetaList(datasets);

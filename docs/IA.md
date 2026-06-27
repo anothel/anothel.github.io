@@ -137,6 +137,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Home keeps one Notes entry from topic movement, while Notes keeps topic and Explore lens links for returning to current signals.
 - No route, localStorage schema, source data, signal policy, framework, backend, or account scope changed.
 
+## End-to-End Workflow Consolidation
+
+- Today now links to Review later from its continue block, matching its item-level next-action copy about saving useful signals.
+- Home -> Today/Explore -> Review -> Notes/Status has one forward path and one return path without adding another route.
+- Repeated audit slices are consolidated into workflow-level Roadmap items rather than new page-by-page audits.
+- No route, localStorage schema, source data, signal policy, framework, backend, account, or sync scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
