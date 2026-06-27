@@ -167,6 +167,14 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Query-level error copy drops long API URLs from generated metadata so Status stays reviewable.
 - Anonymous GitHub limits remain expected locally; set `GITHUB_TOKEN` before live refresh when a fully ok trend report matters.
 
+## Signal Surface Prune Pass
+
+- Current routes remain justified by distinct jobs: Home opens, Today prioritizes, Explore discovers, Review returns, Status explains trust, source modules inspect, Notes and topic pages add judgment.
+- Home -> Today/Explore -> Review -> Notes/Status remains the core workflow.
+- No route or state was deleted because public structure, workflow, and static fallback tests already assign each surface a separate job.
+- Roadmap now stays trigger-only instead of creating another active audit item by default.
+- No route, localStorage schema, source family, framework, backend, account, or sync scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

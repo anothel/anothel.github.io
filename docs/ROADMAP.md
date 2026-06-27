@@ -38,28 +38,18 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Signal Surface Prune Pass
+No active P0.
 
-Trigger: refresh, review, status, and static-safety loops are stable; next risk is accumulated routes, states, and copy slowing repeat visits.
+Do not invent another audit slice just to keep the queue non-empty. Start new work only when one of these triggers fires:
 
-Scope:
+- Signal quality regression: agent-workflow signals lose to broad baseline tooling in golden tests or visible priority surfaces.
+- Trust regression: Status, Home, or refresh-report disagree on ok, partial, fallback, stale, or error meaning.
+- Repeat-friction regression: a saved queue, Explore default, pinned topic, or review workflow must be re-selected repeatedly despite existing local state.
+- Static-safety regression: no-JS, blocked-fetch, or static fallback tests fail.
+- Source governance regression: a source or topic candidate has a concrete route job and focused tests, not item count alone.
+- Architecture blocker: vanilla JavaScript exceeds the measured budget in `docs/ARCHITECTURE.md`.
 
-- Audit Home, Today, Explore, Review, Status, source modules, Notes, and topic pages as one workflow.
-- Delete or demote duplicate choices, copy, or route jobs only when tests show another surface already owns the same decision.
-- Keep refresh cadence, source metadata schema, localStorage schema, signal policy, static fallback routes, and architecture gate unchanged unless a failing test proves otherwise.
-- No new route, source family, framework, backend, account, or sync scope.
-
-Verification:
-
-- Run `node --test tests/site-structure.test.mjs tests/home-data.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/review-ui.test.mjs tests/static-fallback.test.mjs`.
-- Run `node scripts/validate-data.mjs`.
-- Run `git diff --check`.
-
-Exit:
-
-- One open-first path, one discovery path, one review path, and one trust path remain obvious.
-- Any removed or deferred surface is recorded in IA or `Deferred Boundaries`, not active planning.
-- Route and local-state count stay justified by visit speed, repeat friction, signal quality, trust, or static safety.
+When a trigger fires, add one scoped item here with trigger, scope, verification, and exit. Otherwise keep Roadmap empty of active work.
 
 ## Architecture Gate
 
@@ -84,6 +74,7 @@ Exit:
 
 ## Deferred Boundaries
 
+- New audit slice without a failing test, user report, or measured metric.
 - Public worklog route stays rejected while Notes covers durable topic judgment.
 - Portfolio, resume, and company-history copy stay rejected while the site sentence remains a signal dashboard.
 - Vite + React SPA without a measured blocker.

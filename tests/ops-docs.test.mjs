@@ -164,6 +164,13 @@ test("IA records refresh cadence governance outcomes", () => {
     assert.match(ia, /set `GITHUB_TOKEN` before live refresh/s);
 });
 
+test("IA records signal surface prune outcomes", () => {
+    assert.match(ia, /Signal Surface Prune Pass/);
+    assert.match(ia, /Current routes remain justified by distinct jobs/s);
+    assert.match(ia, /Home -> Today\/Explore -> Review -> Notes\/Status remains the core workflow/s);
+    assert.match(ia, /No route, localStorage schema, source family, framework, backend, account, or sync scope changed/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -187,18 +194,18 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps architecture PoC as a gate outside next work", () => {
@@ -210,67 +217,73 @@ test("roadmap keeps architecture PoC as a gate outside next work", () => {
 
 test("roadmap keeps completed refresh stability out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed review queue friction out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Review Queue Friction Audit/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed signal quality regression out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Signal Quality Regression Audit/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed home visit speed out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Home Visit Speed Audit/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed status recovery clarity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Status Recovery Clarity Audit/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed interaction state visual audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Interaction State Visual Audit/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed static snapshot drift audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Static Snapshot Drift Audit/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed notes return path audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Notes Return Path Audit/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed end-to-end workflow consolidation out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - End-to-End Workflow Consolidation/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed refresh recovery drill out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Recovery Drill/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed live source refresh probe out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Live Source Refresh Probe/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
 test("roadmap keeps completed refresh cadence governance out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Cadence Governance Audit/);
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
 });
 
-test("roadmap promotes signal surface prune pass as the active P0", () => {
-    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
-    assert.match(roadmap, /accumulated routes, states, and copy slowing repeat visits/s);
-    assert.match(roadmap, /Audit Home, Today, Explore, Review, Status, source modules, Notes, and topic pages as one workflow/s);
-    assert.match(roadmap, /No new route, source family, framework, backend, account, or sync scope/s);
+test("roadmap keeps completed signal surface prune pass out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /No active P0/);
+});
+
+test("roadmap switches to trigger-only planning", () => {
+    assert.match(roadmap, /No active P0/);
+    assert.match(roadmap, /Do not invent another audit slice just to keep the queue non-empty/s);
+    assert.match(roadmap, /Start new work only when one of these triggers fires/s);
+    assert.match(roadmap, /Signal quality regression/s);
+    assert.doesNotMatch(roadmap, /### P0 -/);
 });
