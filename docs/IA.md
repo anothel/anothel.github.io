@@ -102,6 +102,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - No signal policy or watchlist change was needed because broad baseline items did not dominate priority surfaces.
 - Home, Today, Explore, Status, and module source health and fallback copy stayed consistent.
 
+## Home Visit Speed Audit
+
+- Home utility choices are reduced to items tracked, one trust state, and the saved queue.
+- Open first still points to Today as the priority brief, while Review remains the single return path for saved local work.
+- The trust state keeps source health, data date, and freshness visible without three separate Home choices.
+- No route, localStorage schema, refresh script, framework, backend, or account scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

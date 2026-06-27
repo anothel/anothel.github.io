@@ -99,6 +99,13 @@ test("IA records signal quality regression audit outcomes", () => {
     assert.match(ia, /source health and fallback copy stayed consistent/s);
 });
 
+test("IA records home visit speed audit outcomes", () => {
+    assert.match(ia, /Home Visit Speed Audit/);
+    assert.match(ia, /Home utility choices are reduced to items tracked, one trust state, and the saved queue/s);
+    assert.match(ia, /Open first still points to Today as the priority brief/s);
+    assert.match(ia, /No route, localStorage schema, refresh script, framework, backend, or account scope changed/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -122,18 +129,18 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - Home Visit Speed Audit/);
+    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - Home Visit Speed Audit/);
+    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - Home Visit Speed Audit/);
+    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
 });
 
 test("roadmap keeps architecture PoC as a gate outside next work", () => {
@@ -145,21 +152,26 @@ test("roadmap keeps architecture PoC as a gate outside next work", () => {
 
 test("roadmap keeps completed refresh stability out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, /### P0 - Home Visit Speed Audit/);
+    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
 });
 
 test("roadmap keeps completed review queue friction out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Review Queue Friction Audit/);
-    assert.match(roadmap, /### P0 - Home Visit Speed Audit/);
+    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
 });
 
 test("roadmap keeps completed signal quality regression out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Signal Quality Regression Audit/);
-    assert.match(roadmap, /### P0 - Home Visit Speed Audit/);
+    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
 });
 
-test("roadmap promotes home visit speed as the active P0", () => {
-    assert.match(roadmap, /### P0 - Home Visit Speed Audit/);
-    assert.match(roadmap, /Home must still answer what to open first faster than reopening Today or Explore/s);
+test("roadmap keeps completed home visit speed out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Home Visit Speed Audit/);
+    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
+});
+
+test("roadmap promotes status recovery clarity as the active P0", () => {
+    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
+    assert.match(roadmap, /partial, stale, and fallback states still expose one recovery meaning/s);
     assert.match(roadmap, /No framework, backend, account, sync, or new public route/s);
 });

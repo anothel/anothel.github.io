@@ -506,6 +506,7 @@ test("root page exposes command center slots", () => {
     assert.match(root, /class="home-priority-panel"/);
     assert.match(root, /class="home-utility-strip"/);
     assert.match(root, /Open first/);
+    assert.match(root, /Trust state/);
     assert.match(root, /Topic lenses/);
     assert.match(root, /Browse modules/);
     assert.match(root, /Worth skimming/);
@@ -518,6 +519,8 @@ test("root page exposes command center slots", () => {
     assert.match(root, /Saved queue/);
     assert.match(root, /Unread/);
     assert.match(root, /href="status\/index\.html"/);
+    assert.doesNotMatch(root, /Dataset health/);
+    assert.doesNotMatch(root, /Data state/);
     assert.doesNotMatch(root, /data-home-decision-actions/);
     assert.doesNotMatch(root, /class="decision-layer"/);
     assert.doesNotMatch(root, />Decision layer</);

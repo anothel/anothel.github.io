@@ -38,27 +38,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Home Visit Speed Audit
+### P0 - Status Recovery Clarity Audit
 
-Trigger: after signal-quality and review queue work, Home must still answer what to open first faster than reopening Today or Explore.
+Trigger: partial, stale, and fallback states still expose one recovery meaning after Home now shows a single trust state.
 
 Scope:
 
-- Audit Home command center, Today preview, Review summary, Status trust cue, and module jumps.
-- Reduce duplicate home choices or copy only when tests show the open-first path is unclear.
-- Keep route count, localStorage schema, refresh scripts, and the architecture gate unchanged unless a failing test proves otherwise.
+- Audit Status source cards, module data health strips, refresh-report copy, and Home trust-state wording.
+- Reduce duplicate recovery language only when tests show stale, partial, or fallback meanings diverge.
+- Keep route count, localStorage schema, refresh scripts, signal policy, and the architecture gate unchanged unless a failing test proves otherwise.
 - No framework, backend, account, sync, or new public route.
 
 Verification:
 
-- Run `node --test tests/home-data.test.mjs tests/today-data.test.mjs tests/site-structure.test.mjs tests/static-fallback.test.mjs`.
+- Run `node --test tests/status-ui.test.mjs tests/data-health.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
 
 Exit:
 
-- Home gives one obvious open-first path, one Review return path, and one trust state without extra filtering.
-- Static fallback copy stays useful without JavaScript.
-- Any changed Home workflow has focused regression coverage.
+- Status, Home, and module pages give the same recovery meaning for ok, partial, fallback, stale, and error states.
+- Operators get one obvious next action for data recovery without reading refresh scripts first.
+- Any changed recovery copy has focused regression coverage.
 
 ## Architecture Gate
 
