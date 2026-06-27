@@ -1,8 +1,26 @@
 {
   "trends": {
     "npmPackages": [
-      "react",
-      "typescript",
+      {
+        "name": "react",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-28",
+            "note": "Retired from trend refresh because broad UI runtime demand is baseline tooling, not an agent-workflow source."
+          }
+        ]
+      },
+      {
+        "name": "typescript",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-28",
+            "note": "Retired from trend refresh because broad language demand duplicated baseline tooling signals."
+          }
+        ]
+      },
       {
         "name": "vite",
         "disabled": true,
@@ -63,7 +81,16 @@
           }
         ]
       },
-      "playwright",
+      {
+        "name": "playwright",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-06-28",
+            "note": "Retired from trend refresh because broad browser automation demand diluted agent-workflow signals."
+          }
+        ]
+      },
       {
         "name": "express",
         "disabled": true,
@@ -196,12 +223,26 @@
     {
       "name": "react",
       "category": "UI",
-      "focus": "frontend runtime"
+      "focus": "frontend runtime",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-28",
+          "note": "Retired because broad UI runtime demand is baseline tooling, not active source expansion."
+        }
+      ]
     },
     {
       "name": "typescript",
       "category": "Language",
-      "focus": "typed JavaScript"
+      "focus": "typed JavaScript",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-28",
+          "note": "Retired because broad language demand duplicated baseline tooling signals."
+        }
+      ]
     },
     {
       "name": "vite",
@@ -242,7 +283,14 @@
     {
       "name": "playwright",
       "category": "Testing",
-      "focus": "browser automation"
+      "focus": "browser automation",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-06-28",
+          "note": "Retired because broad browser automation demand is adjacent tooling, not a focused agent signal."
+        }
+      ]
     },
     {
       "name": "eslint",

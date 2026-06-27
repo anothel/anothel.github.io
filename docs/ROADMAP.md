@@ -38,29 +38,30 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Source Governance Prune Pass
+### P0 - Live Refresh Confirmation Pass
 
-Trigger: static fallback and trust surfaces now follow current data, so the next broad risk is stale or broad checked-in sources diluting agent-workflow signals.
+Trigger: source governance pruning changed checked-in watchlists and snapshots locally; the next live refresh must prove retired sources stay absent under real HN, GitHub, and npm responses.
 
 Scope:
 
-- Audit checked-in trend, package, repo, and reference source lists for stale, duplicate, overly broad, or low-signal candidates.
-- Prefer pruning, disabling, or replacing weak source candidates over scoring-rule changes.
+- Run the existing refresh pipeline with network/auth approval; do not add a new refresh path.
+- Confirm retired direct watchlist entries stay absent from trends, packages, repos, links, Today, Explore, and static snapshots.
+- Preserve partial/rate-limit and stale-but-safe recovery meanings from current source metadata.
 - Keep source families, refresh cadence, source metadata schema, localStorage schema, signal policy, route count, static fallback routes, and architecture gate unchanged unless a failing test proves otherwise.
-- Preserve Today, Explore, topic, Status, and Home trust meanings after any data change.
 - No new public route, framework, backend, account, sync, or source family.
 
 Verification:
 
+- Run `node scripts/update-all.mjs` with network approval and `GITHUB_TOKEN` when available.
 - Run `node scripts/validate-data.mjs`.
 - Run `node --test tests/signal-quality-golden.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/topic-ui.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
 - Run `git diff --check`.
 
 Exit:
 
-- Retained sources have a clear signal-dashboard job.
-- Retired candidates move to disabled/history data or `Deferred Boundaries`, not active planning.
-- Broad baseline signals still do not dominate agent-workflow priority surfaces.
+- Live refreshed data omits retired direct watchlist entries.
+- Source health remains understandable for ok, partial, fallback, stale, and error states.
+- Broad baseline signals still do not dominate agent-workflow priority surfaces after live refresh.
 
 ## Architecture Gate
 

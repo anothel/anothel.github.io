@@ -47,10 +47,10 @@
     {
       "name": "npm",
       "status": "ok",
-      "count": 7,
-      "tracked": 19,
-      "emitted": 7,
-      "coverage": "7/19",
+      "count": 4,
+      "tracked": 16,
+      "emitted": 4,
+      "coverage": "4/16",
       "updatedAt": "2026-06-27T14:24:04.789Z"
     }
   ],
@@ -211,39 +211,6 @@
     },
     {
       "rank": 15,
-      "title": "typescript",
-      "source": "npm",
-      "category": "JavaScript",
-      "score": 100,
-      "velocity": "218.1M/week",
-      "signal": "2026-06-20 to 2026-06-26",
-      "url": "https://www.npmjs.com/package/typescript",
-      "summary": "218.1M downloads over the last available week."
-    },
-    {
-      "rank": 16,
-      "title": "react",
-      "source": "npm",
-      "category": "JavaScript",
-      "score": 98,
-      "velocity": "148.2M/week",
-      "signal": "2026-06-20 to 2026-06-26",
-      "url": "https://www.npmjs.com/package/react",
-      "summary": "148.2M downloads over the last available week."
-    },
-    {
-      "rank": 17,
-      "title": "playwright",
-      "source": "npm",
-      "category": "Developer tools",
-      "score": 94,
-      "velocity": "62M/week",
-      "signal": "2026-06-20 to 2026-06-26",
-      "url": "https://www.npmjs.com/package/playwright",
-      "summary": "62M downloads over the last available week."
-    },
-    {
-      "rank": 18,
       "title": "@modelcontextprotocol/sdk",
       "source": "npm",
       "category": "MCP",
@@ -254,7 +221,7 @@
       "summary": "40.6M downloads over the last available week."
     },
     {
-      "rank": 19,
+      "rank": 16,
       "title": "@anthropic-ai/sdk",
       "source": "npm",
       "category": "AI",
@@ -265,7 +232,7 @@
       "summary": "24.1M downloads over the last available week."
     },
     {
-      "rank": 20,
+      "rank": 17,
       "title": "Om Malik has died",
       "source": "Hacker News",
       "category": "Developer tools",
@@ -276,7 +243,7 @@
       "summary": "HN story by minimaxir with 165 comments."
     },
     {
-      "rank": 21,
+      "rank": 18,
       "title": "Previewing GPT5.6 Sol: a next-generation model",
       "source": "Hacker News",
       "category": "AI",
@@ -287,7 +254,7 @@
       "summary": "HN story by minimaxir with 669 comments."
     },
     {
-      "rank": 22,
+      "rank": 19,
       "title": "@ai-sdk/provider",
       "source": "npm",
       "category": "AI",
@@ -298,7 +265,7 @@
       "summary": "23.4M downloads over the last available week."
     },
     {
-      "rank": 23,
+      "rank": 20,
       "title": "U.S. allows Anthropic to release Mythos AI to trusted US organizations",
       "source": "Hacker News",
       "category": "AI",
@@ -309,7 +276,7 @@
       "summary": "HN story by bobrenjc93 with 651 comments."
     },
     {
-      "rank": 24,
+      "rank": 21,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",

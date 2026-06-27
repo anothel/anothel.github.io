@@ -87,7 +87,7 @@ test("default package watchlist tracks AI and agent SDK packages", () => {
         assert.ok(names.has(name), `${name} should be tracked`);
     }
 
-    assert.ok(packageDefinitions.length >= 26);
+    assert.ok(packageDefinitions.length >= 23);
     assert.ok(categories.has("AI SDK"));
     assert.ok(categories.has("AI agents"));
     assert.ok(categories.has("MCP"));
@@ -110,15 +110,16 @@ test("default package watchlist expands AI evals and workflow automation", () =>
     assert.ok(names.has("n8n-workflow"));
 });
 
-test("checked-in packages include baseline and AI agent coverage", () => {
+test("checked-in packages prune broad baseline while keeping agent coverage", () => {
     const data = readJson("data/packages.json");
     const names = new Set(data.packages.map((item) => item.name));
     const categories = new Set(data.packages.map((item) => item.category));
 
+    for (const name of ["react", "typescript", "playwright"]) {
+        assert.equal(names.has(name), false, `${name} should be pruned from generated packages`);
+    }
+
     for (const name of [
-        "react",
-        "typescript",
-        "playwright",
         "ai",
         "openai",
         "@modelcontextprotocol/sdk",

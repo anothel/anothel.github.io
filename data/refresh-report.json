@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-27T14:24:19.933Z",
+  "generatedAt": "2026-06-27T15:10:57.805Z",
   "manifestUpdated": "2026-06-27",
   "runContext": {
     "reason": "",
@@ -11,7 +11,13 @@
     {
       "id": "trends",
       "title": "Tech trends",
-      "count": 24,
+      "count": 21,
+      "updated": "2026-06-27"
+    },
+    {
+      "id": "packages",
+      "title": "Package watchlist",
+      "count": 25,
       "updated": "2026-06-27"
     }
   ],
@@ -20,7 +26,7 @@
       "id": "trends",
       "title": "Tech trends",
       "status": "partial",
-      "count": 24,
+      "count": 21,
       "updated": "2026-06-27",
       "changed": true,
       "sources": [
@@ -65,9 +71,9 @@
           "module": "trends",
           "source": "npm",
           "status": "ok",
-          "count": 7,
+          "count": 4,
           "updatedAt": "2026-06-27T14:24:04.789Z",
-          "coverage": "7/19",
+          "coverage": "4/16",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -82,17 +88,17 @@
       "id": "packages",
       "title": "Package watchlist",
       "status": "ok",
-      "count": 28,
+      "count": 25,
       "updated": "2026-06-27",
-      "changed": false,
+      "changed": true,
       "sources": [
         {
           "module": "packages",
           "source": "npm",
           "status": "ok",
-          "count": 28,
+          "count": 25,
           "updatedAt": "2026-06-27T14:15:34.079Z",
-          "coverage": "28/28",
+          "coverage": "25/25",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -157,7 +163,7 @@
   "totals": {
     "modules": 4,
     "sources": 6,
-    "items": 111,
+    "items": 105,
     "status": "partial",
     "errors": 1
   }

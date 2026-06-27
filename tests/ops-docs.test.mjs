@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
 const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
-const activeRoadmapP0 = /### P0 - Source Governance Prune Pass/;
+const activeRoadmapP0 = /### P0 - Live Refresh Confirmation Pass/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -173,6 +173,12 @@ test("IA records signal surface prune outcomes", () => {
     assert.match(ia, /No route, localStorage schema, source family, framework, backend, account, or sync scope changed/s);
 });
 
+test("IA records source governance prune outcomes", () => {
+    assert.match(ia, /Source Governance Prune Pass/);
+    assert.match(ia, /`react`, `typescript`, and `playwright` are retired/s);
+    assert.match(ia, /Baseline scoring policy stays in `data\/signal-policy\.json`/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -282,9 +288,14 @@ test("roadmap keeps completed signal surface prune pass out of next work", () =>
     assert.match(roadmap, activeRoadmapP0);
 });
 
-test("roadmap promotes source governance prune as the active P0", () => {
+test("roadmap keeps completed source governance prune out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Source Governance Prune Pass/);
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /Audit checked-in trend, package, repo, and reference source lists/s);
-    assert.match(roadmap, /Prefer pruning, disabling, or replacing weak source candidates over scoring-rule changes/s);
+});
+
+test("roadmap promotes live refresh confirmation as the active P0", () => {
+    assert.match(roadmap, activeRoadmapP0);
+    assert.match(roadmap, /Run the existing refresh pipeline with network\/auth approval/s);
+    assert.match(roadmap, /Confirm retired direct watchlist entries stay absent/s);
     assert.match(roadmap, /No new public route, framework, backend, account, sync, or source family/s);
 });

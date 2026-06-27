@@ -35,13 +35,13 @@ test("source quality drift review retires broad duplicate sources", () => {
     const activeRepos = new Set(activeItems(watchlists.repos).map((item) => item.fullName));
     const activeLinks = new Set(activeItems(watchlists.links).map((item) => item.title));
 
-    for (const name of ["vite", "next", "eslint", "prettier", "zod", "tailwindcss", "express", "fastify", "tsx"]) {
+    for (const name of ["react", "typescript", "playwright", "vite", "next", "eslint", "prettier", "zod", "tailwindcss", "express", "fastify", "tsx"]) {
         assert.equal(activeTrendPackages.has(name), false, `${name} trend package should be retired`);
     }
     for (const query of ["topic:typescript stars:>500", "topic:developer-tools ai stars:>300"]) {
         assert.equal(activeQueries.has(query), false, `${query} should be retired`);
     }
-    for (const name of ["vite", "next", "zod", "eslint", "prettier"]) {
+    for (const name of ["react", "typescript", "playwright", "vite", "next", "zod", "eslint", "prettier"]) {
         assert.equal(activePackages.has(name), false, `${name} package should be retired`);
     }
     for (const name of ["react/react", "vercel/next.js", "vitejs/vite", "microsoft/playwright", "colinhacks/zod"]) {

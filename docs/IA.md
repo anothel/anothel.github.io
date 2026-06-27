@@ -175,6 +175,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Future Roadmap work should stay bundled by workflow instead of creating page-by-page audit follow-ups.
 - No route, localStorage schema, source family, framework, backend, account, or sync scope changed.
 
+## Source Governance Prune Pass
+
+- Broad active npm sources `react`, `typescript`, and `playwright` are retired from trend and package watchlists with `disabled: true` plus `history`.
+- Checked-in trend and package snapshots omit those retired direct watchlist entries, so source modules start with agent, MCP, eval, workflow, and AI SDK signals instead of generic baseline tooling.
+- Today, Explore, Status, Home, and topic static snapshots were regenerated from the pruned checked-in data without changing source families, routes, schemas, refresh cadence, or signal policy.
+- Baseline scoring policy stays in `data/signal-policy.json`; source pruning now removes broad inputs that no longer need active collection.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

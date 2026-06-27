@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-27",
-  "generatedAt": "2026-06-27T14:24:09.650Z",
+  "generatedAt": "2026-06-27T15:10:47.705Z",
   "sourceMeta": {
     "name": "generated",
     "status": "partial",
     "count": 13,
-    "updatedAt": "2026-06-27T14:24:09.650Z"
+    "updatedAt": "2026-06-27T15:10:47.705Z"
   },
   "sections": [
     {
@@ -208,7 +208,7 @@
           "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
           "rawScore": 40637684,
           "qualityScore": 93,
-          "score": 72,
+          "score": 75,
           "sources": [
             "Packages"
           ],
