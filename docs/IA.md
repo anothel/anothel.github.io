@@ -63,6 +63,12 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - `disabled: true` keeps retired sources documented without appearing in current generated output.
 - `history` records why a source changed or retired with `date` and `note`.
 
+## Signal Policy
+
+- Scoring policy ownership stays in `data/signal-policy.json`.
+- baseline titles list broad tools that should not dominate agent-workflow signals by raw popularity alone.
+- baseline penalty and intent threshold tune generated Today ranking without editing updater code.
+
 ## Deferred Decisions
 
 - Framework islands stay deferred until vanilla JavaScript blocks a specific Explore or Review workflow.

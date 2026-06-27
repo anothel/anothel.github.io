@@ -5,6 +5,7 @@ import {
     classifySignal,
     isBaselineSignal,
     qualityBoost,
+    signalPolicy,
     signalReason,
     trackedTopicLabels
 } from "../scripts/signal-taxonomy.mjs";
@@ -27,6 +28,13 @@ test("isBaselineSignal separates broad tooling from agent workflow signals", () 
 test("qualityBoost rewards specific agent workflow signals over broad baseline tools", () => {
     assert.ok(qualityBoost("mattpocock/skills reusable agent skills") > qualityBoost("typescript"));
     assert.ok(qualityBoost("modelcontextprotocol servers MCP") > qualityBoost("react"));
+});
+
+test("signal scoring policy comes from checked-in data", () => {
+    assert.equal(signalPolicy.baselinePenalty, -26);
+    assert.equal(signalPolicy.intentThreshold, 20);
+    assert.ok(signalPolicy.baselineTitles.includes("typescript"));
+    assert.ok(signalPolicy.baselineTitles.includes("react/react"));
 });
 
 test("signalReason emits concise user-facing reasons", () => {

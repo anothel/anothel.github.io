@@ -222,6 +222,23 @@ test("watchlist definitions stay editable data with stable fields", () => {
     }
 });
 
+test("signal policy stays editable data with stable fields", () => {
+    const policy = json("data/signal-policy.json");
+
+    assert.equal(typeof policy.baselinePenalty, "number", "baseline penalty");
+    assert.ok(policy.baselinePenalty <= 0, "baseline penalty should downrank");
+    assert.equal(typeof policy.intentThreshold, "number", "intent threshold");
+    assert.ok(policy.intentThreshold > 0, "intent threshold positive");
+    assert.ok(Array.isArray(policy.baselineTitles), "baseline titles");
+
+    const titles = new Set();
+    for (const title of policy.baselineTitles) {
+        assertNonEmptyString(title, "baseline title");
+        assert.equal(titles.has(title), false, `${title} duplicate`);
+        titles.add(title);
+    }
+});
+
 test("topic taxonomy keeps labels, slugs, aliases, and routes in one contract", async () => {
     const { trackedTopicLabels } = await import("../scripts/signal-taxonomy.mjs");
     const routeLabels = new Set(["AI agents", "MCP", "Agent skills", "AI evals", "AI engineering", "Workflow automation", "Security"]);

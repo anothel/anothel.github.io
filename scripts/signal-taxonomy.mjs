@@ -1,22 +1,11 @@
 import "../js/topic-taxonomy.js";
+import { readFileSync } from "node:fs";
 
 const taxonomy = globalThis.TopicTaxonomy;
 export const trackedTopicLabels = taxonomy.trackedTopicLabels;
+export const signalPolicy = JSON.parse(readFileSync(new URL("../data/signal-policy.json", import.meta.url), "utf8"));
 
-const baselineTitles = new Set([
-    "typescript",
-    "eslint",
-    "prettier",
-    "react",
-    "react/react",
-    "zod",
-    "tailwindcss",
-    "vite",
-    "vitejs/vite",
-    "next",
-    "next.js",
-    "vercel/next.js"
-]);
+const baselineTitles = new Set(signalPolicy.baselineTitles);
 
 function normalizeInput(input = "") {
     if (typeof input === "string") return input.toLowerCase();
@@ -82,7 +71,7 @@ export function signalReason(input = "") {
 
 export function qualityBoost(input = "") {
     const category = classifySignal(input);
-    const baselinePenalty = isBaselineSignal(input) ? -26 : 0;
+    const baselinePenalty = isBaselineSignal(input) ? signalPolicy.baselinePenalty : 0;
     const boosts = Object.fromEntries(taxonomy.topicDefinitions.map((topic) => [topic.label, topic.boost]));
 
     return (boosts[category] || 0) + baselinePenalty;

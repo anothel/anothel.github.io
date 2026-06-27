@@ -64,3 +64,10 @@ test("IA documents source governance decisions", () => {
     assert.match(ia, /history.*date.*note/s);
     assert.match(ia, /Framework islands stay deferred/);
 });
+
+test("docs explain checked-in signal policy ownership", () => {
+    assert.match(readme, /data\/signal-policy\.json/);
+    assert.match(ia, /Signal Policy/);
+    assert.match(ia, /baseline titles/);
+    assert.match(ia, /intent threshold/);
+});

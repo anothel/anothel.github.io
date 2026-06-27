@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
-import { classifySignal, isBaselineSignal, qualityBoost, signalReason, trackedTopicLabels } from "./signal-taxonomy.mjs";
+import { classifySignal, isBaselineSignal, qualityBoost, signalPolicy, signalReason, trackedTopicLabels } from "./signal-taxonomy.mjs";
 
 const OUT_FILE = new URL("../data/today.json", import.meta.url);
 const require = createRequire(import.meta.url);
@@ -78,7 +78,7 @@ function candidateText(item) {
 }
 
 function matchesIntent(item) {
-    return qualityBoost(candidateText(item)) >= 20;
+    return qualityBoost(candidateText(item)) >= signalPolicy.intentThreshold;
 }
 
 function matchesBaseline(item) {

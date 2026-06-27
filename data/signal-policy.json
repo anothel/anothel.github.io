@@ -1,0 +1,18 @@
+{
+  "baselinePenalty": -26,
+  "intentThreshold": 20,
+  "baselineTitles": [
+    "typescript",
+    "eslint",
+    "prettier",
+    "react",
+    "react/react",
+    "zod",
+    "tailwindcss",
+    "vite",
+    "vitejs/vite",
+    "next",
+    "next.js",
+    "vercel/next.js"
+  ]
+}

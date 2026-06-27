@@ -19,6 +19,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata.
 - Local browser state: saved review items with optional note/tag/reason, up to 3 pinned topics, explicit Explore defaults, and up to 5 saved Explore searches.
 - Source governance: checked-in watchlist data drives trends, packages, repos, and links; optional disabled/history fields keep retired sources documented without current output.
+- Signal policy: checked-in `data/signal-policy.json` owns generated Today baseline scoring penalties and intent thresholds.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds the budget in `docs/ARCHITECTURE.md`.
 
 ## Planning Metrics
@@ -29,21 +30,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - `Trust`: whether stale, partial, or rate-limited data is visible and understandable.
 - `Static safety`: all features must degrade cleanly when fetch, JS, or localStorage is blocked.
 
-## Next Large Work
+## P5 - Public Scope Triage
 
-No active implementation track. Add the next roadmap item only when one planning metric regresses or Review/Explore has a measured vanilla JavaScript blocker.
+Goal: revisit former Not Now items without turning this into a resume, company-history page, or broad blog.
+
+- [ ] Audit whether a small public worklog would improve repeat-use or trust more than current Notes.
+- [ ] Decide if any portfolio/resume/company-history content has a signal-dashboard job.
+- [ ] Keep route additions static and removable; no account, sync, backend, or SPA requirement.
+- [ ] Add copy tests before adding any public route.
+
+Success:
+
+- Former Not Now content either earns a concrete route job or stays out.
+- New content does not weaken the site sentence or GitHub Pages fallback.
 
 ## Not Now
 
 - Vite + React SPA.
 - Backend/server functions.
 - Accounts or sync.
-- Full portfolio/resume.
-- Company history.
-- Broad blog engine.
 - Large design-system rewrite.
 - Rename public routes just to improve labels.
-- Move scoring policy into data before golden fixtures protect behavior.
 - Add more topic pages from item count alone.
 
 ## Working Rules
