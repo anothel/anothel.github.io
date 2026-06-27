@@ -38,13 +38,14 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Live Refresh Confirmation Pass
+### P0 - Authenticated GitHub Refresh Pass
 
-Trigger: source governance pruning changed checked-in watchlists and snapshots locally; the next live refresh must prove retired sources stay absent under real HN, GitHub, and npm responses.
+Trigger: live source confirmation proved retired direct watchlist entries stay absent, but unauthenticated GitHub search still left the trend source partial.
 
 Scope:
 
-- Run the existing refresh pipeline with network/auth approval; do not add a new refresh path.
+- Run the existing refresh pipeline with `GITHUB_TOKEN`; do not add a new refresh path.
+- Confirm whether the four skipped GitHub trend queries recover to ok, or document any remaining partial cause.
 - Confirm retired direct watchlist entries stay absent from trends, packages, repos, links, Today, Explore, and static snapshots.
 - Preserve partial/rate-limit and stale-but-safe recovery meanings from current source metadata.
 - Keep source families, refresh cadence, source metadata schema, localStorage schema, signal policy, route count, static fallback routes, and architecture gate unchanged unless a failing test proves otherwise.
@@ -52,15 +53,15 @@ Scope:
 
 Verification:
 
-- Run `node scripts/update-all.mjs` with network approval and `GITHUB_TOKEN` when available.
+- Run `node scripts/update-all.mjs` with network approval and `GITHUB_TOKEN`.
 - Run `node scripts/validate-data.mjs`.
 - Run `node --test tests/signal-quality-golden.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/topic-ui.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
 - Run `git diff --check`.
 
 Exit:
 
-- Live refreshed data omits retired direct watchlist entries.
-- Source health remains understandable for ok, partial, fallback, stale, and error states.
+- GitHub trend source is ok, or the remaining partial reason is documented in IA.
+- Live refreshed data still omits retired direct watchlist entries.
 - Broad baseline signals still do not dominate agent-workflow priority surfaces after live refresh.
 
 ## Architecture Gate

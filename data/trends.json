@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-27",
-  "generatedAt": "2026-06-27T14:24:04.789Z",
+  "generatedAt": "2026-06-27T15:15:58.985Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 1,
       "emitted": 5,
       "coverage": "5/1",
-      "updatedAt": "2026-06-27T14:24:04.789Z"
+      "updatedAt": "2026-06-27T15:15:58.985Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-27T14:24:04.789Z",
+      "updatedAt": "2026-06-27T15:15:58.985Z",
       "errors": [
         {
           "name": "llm observability evals stars:>100",
@@ -47,11 +47,11 @@
     {
       "name": "npm",
       "status": "ok",
-      "count": 4,
+      "count": 7,
       "tracked": 16,
-      "emitted": 4,
-      "coverage": "4/16",
-      "updatedAt": "2026-06-27T14:24:04.789Z"
+      "emitted": 7,
+      "coverage": "7/16",
+      "updatedAt": "2026-06-27T15:15:58.985Z"
     }
   ],
   "items": [
@@ -106,7 +106,7 @@
       "category": "Agent skills",
       "score": 100,
       "velocity": "155.8K stars",
-      "signal": "18.3K forks",
+      "signal": "18.4K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
     },
@@ -193,10 +193,10 @@
       "source": "Hacker News",
       "category": "Developer tools",
       "score": 100,
-      "velocity": "363 comments",
-      "signal": "1665 points",
+      "velocity": "364 comments",
+      "signal": "1668 points",
       "url": "https://scrollprize.org/firstscroll",
-      "summary": "HN story by verditelabs with 363 comments."
+      "summary": "HN story by verditelabs with 364 comments."
     },
     {
       "rank": 14,
@@ -204,10 +204,10 @@
       "source": "Hacker News",
       "category": "AI",
       "score": 100,
-      "velocity": "1159 comments",
-      "signal": "1094 points",
+      "velocity": "1168 comments",
+      "signal": "1112 points",
       "url": "https://www.washingtonpost.com/technology/2026/06/26/openai-says-us-government-will-vet-users-its-latest-ai-model/",
-      "summary": "HN story by alain94040 with 1159 comments."
+      "summary": "HN story by alain94040 with 1168 comments."
     },
     {
       "rank": 15,
@@ -222,6 +222,17 @@
     },
     {
       "rank": 16,
+      "title": "Previewing GPT5.6 Sol: a next-generation model",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 89,
+      "velocity": "671 comments",
+      "signal": "1062 points",
+      "url": "https://openai.com/index/previewing-gpt-5-6-sol/",
+      "summary": "HN story by minimaxir with 671 comments."
+    },
+    {
+      "rank": 17,
       "title": "@anthropic-ai/sdk",
       "source": "npm",
       "category": "AI",
@@ -232,29 +243,29 @@
       "summary": "24.1M downloads over the last available week."
     },
     {
-      "rank": 17,
+      "rank": 18,
       "title": "Om Malik has died",
       "source": "Hacker News",
       "category": "Developer tools",
       "score": 88,
-      "velocity": "165 comments",
+      "velocity": "167 comments",
       "signal": "1322 points",
       "url": "https://om.co/2026/06/24/1966-2026/",
-      "summary": "HN story by minimaxir with 165 comments."
-    },
-    {
-      "rank": 18,
-      "title": "Previewing GPT5.6 Sol: a next-generation model",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 88,
-      "velocity": "669 comments",
-      "signal": "1050 points",
-      "url": "https://openai.com/index/previewing-gpt-5-6-sol/",
-      "summary": "HN story by minimaxir with 669 comments."
+      "summary": "HN story by minimaxir with 167 comments."
     },
     {
       "rank": 19,
+      "title": "U.S. allows Anthropic to release Mythos AI to trusted US organizations",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 88,
+      "velocity": "672 comments",
+      "signal": "509 points",
+      "url": "https://www.semafor.com/article/06/27/2026/us-releases-powerful-anthropic-model-mythos-to-some-us-companies",
+      "summary": "HN story by bobrenjc93 with 672 comments."
+    },
+    {
+      "rank": 20,
       "title": "@ai-sdk/provider",
       "source": "npm",
       "category": "AI",
@@ -265,18 +276,40 @@
       "summary": "23.4M downloads over the last available week."
     },
     {
-      "rank": 20,
-      "title": "U.S. allows Anthropic to release Mythos AI to trusted US organizations",
-      "source": "Hacker News",
+      "rank": 21,
+      "title": "openai",
+      "source": "npm",
       "category": "AI",
-      "score": 87,
-      "velocity": "651 comments",
-      "signal": "497 points",
-      "url": "https://www.semafor.com/article/06/27/2026/us-releases-powerful-anthropic-model-mythos-to-some-us-companies",
-      "summary": "HN story by bobrenjc93 with 651 comments."
+      "score": 88,
+      "velocity": "23.1M/week",
+      "signal": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/openai",
+      "summary": "23.1M downloads over the last available week."
     },
     {
-      "rank": 21,
+      "rank": 22,
+      "title": "ai",
+      "source": "npm",
+      "category": "AI",
+      "score": 86,
+      "velocity": "16M/week",
+      "signal": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/ai",
+      "summary": "16M downloads over the last available week."
+    },
+    {
+      "rank": 23,
+      "title": "@ai-sdk/openai",
+      "source": "npm",
+      "category": "AI",
+      "score": 83,
+      "velocity": "8M/week",
+      "signal": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai",
+      "summary": "8M downloads over the last available week."
+    },
+    {
+      "rank": 24,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",

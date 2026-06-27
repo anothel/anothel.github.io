@@ -182,6 +182,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Today, Explore, Status, Home, and topic static snapshots were regenerated from the pruned checked-in data without changing source families, routes, schemas, refresh cadence, or signal policy.
 - Baseline scoring policy stays in `data/signal-policy.json`; source pruning now removes broad inputs that no longer need active collection.
 
+## Live Refresh Confirmation Pass
+
+- Network-approved `node scripts/update-all.mjs` refreshed live HN, GitHub, npm, repo, package, link, Today, manifest, report, and static fallback data after source pruning.
+- Retired direct watchlist entries `react`, `typescript`, and `playwright` stayed absent from generated trends, packages, repos, links, Today, Explore, and static snapshots.
+- The live refresh report covered 4 modules, 6 sources, and 108 generated items.
+- GitHub trend refresh remains `partial` under unauthenticated local refresh because four GitHub search queries hit rate limits; use `GITHUB_TOKEN` for the next confirmation pass.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
 const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
-const activeRoadmapP0 = /### P0 - Live Refresh Confirmation Pass/;
+const activeRoadmapP0 = /### P0 - Authenticated GitHub Refresh Pass/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -179,6 +179,13 @@ test("IA records source governance prune outcomes", () => {
     assert.match(ia, /Baseline scoring policy stays in `data\/signal-policy\.json`/s);
 });
 
+test("IA records live refresh confirmation outcomes", () => {
+    assert.match(ia, /Live Refresh Confirmation Pass/);
+    assert.match(ia, /108 generated items/s);
+    assert.match(ia, /Retired direct watchlist entries `react`, `typescript`, and `playwright` stayed absent/s);
+    assert.match(ia, /use `GITHUB_TOKEN` for the next confirmation pass/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -293,9 +300,14 @@ test("roadmap keeps completed source governance prune out of next work", () => {
     assert.match(roadmap, activeRoadmapP0);
 });
 
-test("roadmap promotes live refresh confirmation as the active P0", () => {
+test("roadmap keeps completed live refresh confirmation out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Live Refresh Confirmation Pass/);
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /Run the existing refresh pipeline with network\/auth approval/s);
-    assert.match(roadmap, /Confirm retired direct watchlist entries stay absent/s);
+});
+
+test("roadmap promotes authenticated GitHub refresh as the active P0", () => {
+    assert.match(roadmap, activeRoadmapP0);
+    assert.match(roadmap, /Run the existing refresh pipeline with `GITHUB_TOKEN`/s);
+    assert.match(roadmap, /four skipped GitHub trend queries recover to ok/s);
     assert.match(roadmap, /No new public route, framework, backend, account, sync, or source family/s);
 });

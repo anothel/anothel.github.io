@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-27",
-  "generatedAt": "2026-06-27T15:10:47.705Z",
+  "generatedAt": "2026-06-27T15:16:05.197Z",
   "sourceMeta": {
     "name": "generated",
     "status": "partial",
     "count": 13,
-    "updatedAt": "2026-06-27T15:10:47.705Z"
+    "updatedAt": "2026-06-27T15:16:05.197Z"
   },
   "sections": [
     {
@@ -27,7 +27,7 @@
           "scoreReasons": [
             "Agent skills reference for reusable tool instructions.",
             "155.8K stars from GitHub",
-            "155.8K stars / 18.3K forks"
+            "155.8K stars / 18.4K forks"
           ],
           "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/anthropics/skills",
@@ -169,16 +169,16 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "148K stars",
+          "metric": "148.1K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
             "Agent skills reference for reusable tool instructions.",
-            "148K stars from GitHub",
+            "148.1K stars from GitHub",
             "engineering workflow skills"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
-          "rawScore": 148022,
+          "rawScore": 148072,
           "qualityScore": 100,
           "score": 82,
           "sources": [
@@ -262,7 +262,7 @@
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/n8n-io/n8n",
-          "rawScore": 194237,
+          "rawScore": 194245,
           "qualityScore": 100,
           "score": 85,
           "sources": [
