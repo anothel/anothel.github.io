@@ -120,6 +120,13 @@ test("IA records interaction state visual audit outcomes", () => {
     assert.match(ia, /Saved queue remove buttons gain the same hover\/focus affordance/s);
 });
 
+test("IA records static snapshot drift audit outcomes", () => {
+    assert.match(ia, /Static Snapshot Drift Audit/);
+    assert.match(ia, /regenerated Home, Today, Explore, Status, module, topic, and Notes snapshots without producing drift/s);
+    assert.match(ia, /already matched shared renderer output/s);
+    assert.match(ia, /Static fallback copy stayed user-facing and aligned/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -143,18 +150,18 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
 });
 
 test("roadmap keeps architecture PoC as a gate outside next work", () => {
@@ -166,36 +173,41 @@ test("roadmap keeps architecture PoC as a gate outside next work", () => {
 
 test("roadmap keeps completed refresh stability out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
 });
 
 test("roadmap keeps completed review queue friction out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Review Queue Friction Audit/);
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
 });
 
 test("roadmap keeps completed signal quality regression out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Signal Quality Regression Audit/);
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
 });
 
 test("roadmap keeps completed home visit speed out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Home Visit Speed Audit/);
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
 });
 
 test("roadmap keeps completed status recovery clarity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Status Recovery Clarity Audit/);
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
 });
 
 test("roadmap keeps completed interaction state visual audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Interaction State Visual Audit/);
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
 });
 
-test("roadmap promotes static snapshot drift audit as the active P0", () => {
-    assert.match(roadmap, /### P0 - Static Snapshot Drift Audit/);
-    assert.match(roadmap, /shared renderers and static fallback copy changed/s);
+test("roadmap keeps completed static snapshot drift audit out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Static Snapshot Drift Audit/);
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
+});
+
+test("roadmap promotes notes return path audit as the active P0", () => {
+    assert.match(roadmap, /### P0 - Notes Return Path Audit/);
+    assert.match(roadmap, /Notes owns durable topic judgment/s);
     assert.match(roadmap, /No framework, backend, account, sync, or new public route/s);
 });

@@ -123,6 +123,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Saved queue remove buttons gain the same hover/focus affordance as other local action buttons.
 - No route, localStorage schema, refresh script, signal policy, framework, backend, or account scope changed.
 
+## Static Snapshot Drift Audit
+
+- `scripts/update-static-fallbacks.mjs` regenerated Home, Today, Explore, Status, module, topic, and Notes snapshots without producing drift.
+- Checked-in static pages already matched shared renderer output after the interaction and recovery-copy changes.
+- Static fallback copy stayed user-facing and aligned across Home, Today, Explore, Status, modules, and topics.
+- No route, localStorage schema, source data, signal policy, framework, backend, or account scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

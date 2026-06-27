@@ -38,28 +38,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Static Snapshot Drift Audit
+### P0 - Notes Return Path Audit
 
-Trigger: shared renderers and static fallback copy changed across Home, Today, Explore, Status, modules, and topic pages.
+Trigger: Notes owns durable topic judgment, but repeat visitors may still need to reopen topic pages or Explore to recover the decision context.
 
 Scope:
 
-- Audit `scripts/update-static-fallbacks.mjs`, checked-in static pages, shared render helpers, and topic snapshots.
-- Regenerate static HTML only when checked-in pages drift from shared renderer output.
-- Keep route count, localStorage schema, source data, signal policy, and the architecture gate unchanged unless a failing test proves otherwise.
+- Audit Notes index, topic note panels, topic actions, Home topic movement links, and Review detail return paths.
+- Reduce duplicate judgment links or copy only when tests show Notes, topic pages, and Explore repeat the same job.
+- Keep route count, localStorage schema, source data, signal policy, static fallback generator, and the architecture gate unchanged unless a failing test proves otherwise.
 - No framework, backend, account, sync, or new public route.
 
 Verification:
 
-- Run `node --test tests/static-fallback.test.mjs tests/data-workflow-scripts.test.mjs tests/site-structure.test.mjs tests/topic-ui.test.mjs`.
-- Run `node scripts/update-static-fallbacks.mjs`, then confirm no unexpected static drift.
+- Run `node --test tests/notes-ui.test.mjs tests/topic-ui.test.mjs tests/site-structure.test.mjs tests/static-fallback.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
 
 Exit:
 
-- Static pages reflect shared renderer output after a clean regeneration.
-- Static fallback copy stays user-facing and aligned across Home, Today, Explore, Status, modules, and topics.
-- Any intentional static snapshot change has focused regression coverage.
+- Notes is the single durable judgment return path for promoted topics.
+- Topic pages and Home link to Notes only where it reduces repeat reading, not as a duplicate route list.
+- Any changed Notes or topic workflow copy has focused regression coverage.
 
 ## Architecture Gate
 
