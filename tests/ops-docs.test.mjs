@@ -102,16 +102,29 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - Architecture PoC Only On Measured Blocker/);
+    assert.match(roadmap, /### P0 - Refresh Stability Follow-up/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - Architecture PoC Only On Measured Blocker/);
+    assert.match(roadmap, /### P0 - Refresh Stability Follow-up/);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - Architecture PoC Only On Measured Blocker/);
+    assert.match(roadmap, /### P0 - Refresh Stability Follow-up/);
+});
+
+test("roadmap keeps architecture PoC as a gate outside next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Architecture PoC Only On Measured Blocker/);
+    assert.match(roadmap, /## Architecture Gate/);
+    assert.match(roadmap, /Gate-only, not active queue work/);
+    assert.match(roadmap, /measured vanilla JavaScript problem exceeds the budget/);
+});
+
+test("roadmap promotes refresh stability as the active P0", () => {
+    assert.match(roadmap, /### P0 - Refresh Stability Follow-up/);
+    assert.match(roadmap, /transient npm, GitHub, or source refresh failure/s);
+    assert.match(roadmap, /Partial refresh never silently drops active rows with prior data/s);
 });

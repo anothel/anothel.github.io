@@ -38,7 +38,34 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Architecture PoC Only On Measured Blocker
+### P0 - Refresh Stability Follow-up
+
+Trigger: a transient npm, GitHub, or source refresh failure can hide useful active rows, stale/fallback detail, or generated snapshot drift.
+
+Scope:
+
+- Audit refresh behavior after source pruning and package partial row preservation.
+- Keep successful current rows and prior active rows when transient source failures affect checked-in generated data.
+- Keep Home, Today, Explore, Status, and module pages aligned on one source-health truth.
+- Keep disabled watchlist entries out of generated snapshots.
+- Do not add routes, backend, accounts, sync, package managers, or framework tooling.
+
+Verification:
+
+- Run `node --test tests/package-data.test.mjs tests/refresh-safety.test.mjs tests/refresh-report.test.mjs tests/static-fallback.test.mjs tests/watchlist-governance.test.mjs`.
+- Run `node scripts/validate-data.mjs`.
+- When network refresh is used, confirm `data/refresh-report.json` explains ok, partial, fallback, and rate-limited states accurately.
+
+Exit:
+
+- Partial refresh never silently drops active rows with prior data.
+- Disabled sources do not reappear in generated snapshots.
+- Status, Today, Explore, and Home show the same source-health state.
+- Refresh failures remain visible without breaking static fallback pages.
+
+## Architecture Gate
+
+Gate-only, not active queue work.
 
 Trigger: a measured vanilla JavaScript problem exceeds the budget in `docs/ARCHITECTURE.md`.
 
