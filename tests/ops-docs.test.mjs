@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
+const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -70,4 +71,17 @@ test("docs explain checked-in signal policy ownership", () => {
     assert.match(ia, /Signal Policy/);
     assert.match(ia, /baseline titles/);
     assert.match(ia, /intent threshold/);
+});
+
+test("IA records public scope triage outcomes", () => {
+    assert.match(ia, /Public Scope Triage/);
+    assert.match(ia, /Public worklog route stays out.*Notes already indexes durable topic judgment/s);
+    assert.match(ia, /Portfolio, resume, and company-history content stay out/s);
+    assert.match(ia, /Active navigation and sitemap should expose signal-dashboard routes/s);
+});
+
+test("roadmap keeps completed public scope triage out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P5 - Public Scope Triage/);
+    assert.match(roadmap, /### P5 - Explore Score Policy Parity/);
+    assert.match(roadmap, /Public worklog route stays rejected/);
 });

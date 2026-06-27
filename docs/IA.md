@@ -57,6 +57,12 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - **Retire** a topic when source movement no longer changes what to open, save, or compare.
 - Notes stays a decision-support index for topic judgment notes, not a blog engine.
 
+## Public Scope Triage
+
+- Public worklog route stays out. Notes already indexes durable topic judgment notes, so another worklog would duplicate the current discovery job without improving repeat use.
+- Portfolio, resume, and company-history content stay out unless the product sentence changes away from a signal dashboard.
+- Active navigation and sitemap should expose signal-dashboard routes, not profile, project, worklog, resume, or company-history routes.
+
 ## Source Governance
 
 - Watchlist ownership stays in `data/watchlists.json`; updater scripts consume active entries.

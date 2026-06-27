@@ -429,6 +429,30 @@ test("notes page indexes durable topic notes", () => {
     assert.match(sitemap, /https:\/\/anothel\.github\.io\/notes\//);
 });
 
+test("public scope excludes profile and worklog routes", () => {
+    const sitemap = read("sitemap.xml");
+    const publicHtml = [
+        "index.html",
+        "today/index.html",
+        "explore/index.html",
+        "review/index.html",
+        "status/index.html",
+        "trends/index.html",
+        "packages/index.html",
+        "repos/index.html",
+        "links/index.html",
+        "notes/index.html",
+        ...topicPages.map(([path]) => path)
+    ].map(read).join("\n");
+
+    for (const route of ["about", "projects", "worklog", "resume", "company-history"]) {
+        assert.doesNotMatch(sitemap, new RegExp(`https:\\/\\/anothel\\.github\\.io\\/${route}\\/`), route);
+        assert.doesNotMatch(publicHtml, new RegExp(`href="(?:\\.\\.\\/|\\.\\.\\/\\.\\.\\/)?${route}\\/index\\.html"`), route);
+    }
+
+    assert.match(read("notes/index.html"), /Judgment notes from focused topic pages\./);
+});
+
 test("home and today pages link into topic focus pages", () => {
     const home = read("index.html");
     const today = read("today/index.html");

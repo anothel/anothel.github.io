@@ -38,27 +38,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P5 - Public Scope Triage
-
-Trigger: former deferred content ideas need a fresh decision now that core signal surfaces are stable.
-
-Scope:
-
-- Decide whether a small public worklog improves repeat-use or trust more than current Notes.
-- Decide whether any portfolio, resume, or company-history content has a signal-dashboard job.
-- Keep any route addition static, removable, and copy-led; no account, sync, backend, or SPA dependency.
-
-Verification:
-
-- Add or update copy/navigation tests before adding any public route.
-- Run `node --test tests/site-structure.test.mjs tests/ops-docs.test.mjs`.
-
-Exit:
-
-- Each public-scope candidate is accepted with a concrete route job or explicitly rejected here.
-- Rejected ideas move to `Deferred Boundaries`, not back into active planning.
-
-### P6 - Explore Score Policy Parity
+### P5 - Explore Score Policy Parity
 
 Trigger: Today scoring policy is data-owned, while Explore still has local browser-side quality heuristics.
 
@@ -77,7 +57,7 @@ Exit:
 
 - Today and Explore scoring ownership is either unified or clearly separated in tests and docs.
 
-### P7 - Topic Promotion Review
+### P6 - Topic Promotion Review
 
 Trigger: source growth creates topic candidates that may deserve first-class pages.
 
@@ -95,7 +75,7 @@ Exit:
 
 - Candidate topics are promoted, merged, retired, or left as data-only sources with rationale.
 
-### P8 - Architecture PoC Only On Measured Blocker
+### P7 - Architecture PoC Only On Measured Blocker
 
 Trigger: a measured vanilla JavaScript problem exceeds the budget in `docs/ARCHITECTURE.md`.
 
@@ -118,12 +98,12 @@ Exit:
 
 Eligible for triage:
 
-- Public worklog, only if it improves trust or repeat-use.
-- Portfolio/resume/company-history copy, only if it directly supports the signal-dashboard job.
 - Shared scoring data, only where tests prove policy duplication is risky.
 
 Still blocked:
 
+- Public worklog route stays rejected while Notes covers durable topic judgment.
+- Portfolio, resume, and company-history copy stay rejected while the site sentence remains a signal dashboard.
 - Vite + React SPA without a measured blocker.
 - Backend or server functions.
 - Accounts, sync, or cross-device identity.
