@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-27",
-  "generatedAt": "2026-06-27T14:12:02.595Z",
+  "generatedAt": "2026-06-27T14:24:04.789Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,16 +14,35 @@
       "tracked": 1,
       "emitted": 5,
       "coverage": "5/1",
-      "updatedAt": "2026-06-27T14:12:02.595Z"
+      "updatedAt": "2026-06-27T14:24:04.789Z"
     },
     {
       "name": "GitHub",
-      "status": "ok",
+      "status": "partial",
       "count": 12,
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-27T14:12:02.595Z"
+      "updatedAt": "2026-06-27T14:24:04.789Z",
+      "errors": [
+        {
+          "name": "llm observability evals stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "workflow automation ai agents stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "durable workflow typescript stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "opencode coding agent stars:>100",
+          "error": "403 rate limit exceeded"
+        }
+      ],
+      "rateLimited": true
     },
     {
       "name": "npm",
@@ -32,7 +51,7 @@
       "tracked": 19,
       "emitted": 7,
       "coverage": "7/19",
-      "updatedAt": "2026-06-27T14:12:02.595Z"
+      "updatedAt": "2026-06-27T14:24:04.789Z"
     }
   ],
   "items": [
@@ -185,10 +204,10 @@
       "source": "Hacker News",
       "category": "AI",
       "score": 100,
-      "velocity": "1156 comments",
-      "signal": "1091 points",
+      "velocity": "1159 comments",
+      "signal": "1094 points",
       "url": "https://www.washingtonpost.com/technology/2026/06/26/openai-says-us-government-will-vet-users-its-latest-ai-model/",
-      "summary": "HN story by alain94040 with 1156 comments."
+      "summary": "HN story by alain94040 with 1159 comments."
     },
     {
       "rank": 15,
@@ -252,7 +271,7 @@
       "category": "Developer tools",
       "score": 88,
       "velocity": "165 comments",
-      "signal": "1321 points",
+      "signal": "1322 points",
       "url": "https://om.co/2026/06/24/1966-2026/",
       "summary": "HN story by minimaxir with 165 comments."
     },
@@ -262,10 +281,10 @@
       "source": "Hacker News",
       "category": "AI",
       "score": 88,
-      "velocity": "667 comments",
-      "signal": "1048 points",
+      "velocity": "669 comments",
+      "signal": "1050 points",
       "url": "https://openai.com/index/previewing-gpt-5-6-sol/",
-      "summary": "HN story by minimaxir with 667 comments."
+      "summary": "HN story by minimaxir with 669 comments."
     },
     {
       "rank": 22,
@@ -283,11 +302,11 @@
       "title": "U.S. allows Anthropic to release Mythos AI to trusted US organizations",
       "source": "Hacker News",
       "category": "AI",
-      "score": 86,
-      "velocity": "645 comments",
-      "signal": "492 points",
+      "score": 87,
+      "velocity": "651 comments",
+      "signal": "497 points",
       "url": "https://www.semafor.com/article/06/27/2026/us-releases-powerful-anthropic-model-mythos-to-some-us-companies",
-      "summary": "HN story by bobrenjc93 with 645 comments."
+      "summary": "HN story by bobrenjc93 with 651 comments."
     },
     {
       "rank": 24,

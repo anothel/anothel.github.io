@@ -38,28 +38,28 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Refresh Cadence Governance Audit
+### P0 - Signal Surface Prune Pass
 
-Trigger: a live source refresh succeeded; next risk is recurring scheduled refreshes creating noisy diffs or unclear rate-limit recovery without manual inspection.
+Trigger: refresh, review, status, and static-safety loops are stable; next risk is accumulated routes, states, and copy slowing repeat visits.
 
 Scope:
 
-- Audit the GitHub Actions refresh cadence, README operator copy, refresh-report contract, and generated-data churn from the latest live run.
-- Decide whether cadence, source budgets, or retry behavior need adjustment after the live probe.
-- Keep updater order, source metadata schema, static fallback routes, localStorage schema, signal policy, and architecture gate unchanged unless a failing test proves otherwise.
-- No new source family, route, framework, backend, account, or sync scope.
+- Audit Home, Today, Explore, Review, Status, source modules, Notes, and topic pages as one workflow.
+- Delete or demote duplicate choices, copy, or route jobs only when tests show another surface already owns the same decision.
+- Keep refresh cadence, source metadata schema, localStorage schema, signal policy, static fallback routes, and architecture gate unchanged unless a failing test proves otherwise.
+- No new route, source family, framework, backend, account, or sync scope.
 
 Verification:
 
-- Run `node --test tests/workflow.test.mjs tests/ops-docs.test.mjs tests/refresh-report.test.mjs tests/static-fallback.test.mjs`.
+- Run `node --test tests/site-structure.test.mjs tests/home-data.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/review-ui.test.mjs tests/static-fallback.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
 - Run `git diff --check`.
 
 Exit:
 
-- Scheduled and manual refresh cadence is either accepted as-is or adjusted with focused tests.
-- Source budget and rate-limit behavior is clear before the next live run.
-- Generated data churn remains reviewable and focused on agent-workflow signals.
+- One open-first path, one discovery path, one review path, and one trust path remain obvious.
+- Any removed or deferred surface is recorded in IA or `Deferred Boundaries`, not active planning.
+- Route and local-state count stay justified by visit speed, repeat friction, signal quality, trust, or static safety.
 
 ## Architecture Gate
 

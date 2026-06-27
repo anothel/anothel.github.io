@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-27T14:16:02.803Z",
+  "generatedAt": "2026-06-27T14:24:19.933Z",
   "manifestUpdated": "2026-06-27",
   "runContext": {
     "reason": "",
@@ -13,31 +13,13 @@
       "title": "Tech trends",
       "count": 24,
       "updated": "2026-06-27"
-    },
-    {
-      "id": "packages",
-      "title": "Package watchlist",
-      "count": 28,
-      "updated": "2026-06-27"
-    },
-    {
-      "id": "repos",
-      "title": "Repo watchlist",
-      "count": 30,
-      "updated": "2026-06-27"
-    },
-    {
-      "id": "links",
-      "title": "Reference shelf",
-      "count": 29,
-      "updated": "2026-06-27"
     }
   ],
   "modules": [
     {
       "id": "trends",
       "title": "Tech trends",
-      "status": "ok",
+      "status": "partial",
       "count": 24,
       "updated": "2026-06-27",
       "changed": true,
@@ -47,7 +29,7 @@
           "source": "Hacker News",
           "status": "ok",
           "count": 5,
-          "updatedAt": "2026-06-27T14:12:02.595Z",
+          "updatedAt": "2026-06-27T14:24:04.789Z",
           "coverage": "5/1",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -60,24 +42,31 @@
         {
           "module": "trends",
           "source": "GitHub",
-          "status": "ok",
+          "status": "partial",
           "count": 12,
-          "updatedAt": "2026-06-27T14:12:02.595Z",
+          "updatedAt": "2026-06-27T14:24:04.789Z",
           "coverage": "12/14",
           "fallbackUsed": false,
           "staleButSafe": false,
-          "rateLimited": false,
+          "rateLimited": true,
           "fallbackReason": "",
           "previousUpdated": "",
-          "safetyDetails": [],
-          "errors": []
+          "safetyDetails": [
+            "rate limited"
+          ],
+          "errors": [
+            "llm observability evals stars:>100: 403 rate limit exceeded",
+            "workflow automation ai agents stars:>100: 403 rate limit exceeded",
+            "durable workflow typescript stars:>100: 403 rate limit exceeded",
+            "opencode coding agent stars:>100: 403 rate limit exceeded"
+          ]
         },
         {
           "module": "trends",
           "source": "npm",
           "status": "ok",
           "count": 7,
-          "updatedAt": "2026-06-27T14:12:02.595Z",
+          "updatedAt": "2026-06-27T14:24:04.789Z",
           "coverage": "7/19",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -95,7 +84,7 @@
       "status": "ok",
       "count": 28,
       "updated": "2026-06-27",
-      "changed": true,
+      "changed": false,
       "sources": [
         {
           "module": "packages",
@@ -120,7 +109,7 @@
       "status": "ok",
       "count": 30,
       "updated": "2026-06-27",
-      "changed": true,
+      "changed": false,
       "sources": [
         {
           "module": "repos",
@@ -145,7 +134,7 @@
       "status": "ok",
       "count": 29,
       "updated": "2026-06-27",
-      "changed": true,
+      "changed": false,
       "sources": [
         {
           "module": "links",
@@ -169,7 +158,7 @@
     "modules": 4,
     "sources": 6,
     "items": 111,
-    "status": "ok",
-    "errors": 0
+    "status": "partial",
+    "errors": 1
   }
 }

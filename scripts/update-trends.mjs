@@ -52,6 +52,10 @@ function cleanGeneratedText(value = "") {
         .trim();
 }
 
+function sourceErrorText(error) {
+    return String(error.message || error).replace(/: https?:\/\/\S+$/, "");
+}
+
 export function buildNpmDownloadsUrl(packageName) {
     return `https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(packageName)}`;
 }
@@ -235,6 +239,7 @@ export async function fetchGitHub(fetcher = fetchJson) {
     }
 
     const results = [];
+    const errors = [];
 
     for (const item of githubQueries) {
         const params = new URLSearchParams({
@@ -246,6 +251,7 @@ export async function fetchGitHub(fetcher = fetchJson) {
 
         const data = await fetcher(`https://api.github.com/search/repositories?${params}`, { headers }).catch((error) => {
             console.warn(`Skipping GitHub query ${item.query}: ${error.message}`);
+            errors.push({ name: item.query, error: sourceErrorText(error) });
             return { items: [] };
         });
         for (const repo of data.items || []) {
@@ -265,7 +271,9 @@ export async function fetchGitHub(fetcher = fetchJson) {
         }
     }
 
-    return selectTrendItems(results, 12);
+    const selected = selectTrendItems(results, 12);
+    if (errors.length > 0) selected.sourceErrors = errors;
+    return selected;
 }
 
 async function fetchNpm() {
@@ -304,15 +312,21 @@ export function buildSourceMeta(items, results, generatedAt) {
     return results.map((result) => {
         const emitted = countBySource.get(result.name) || 0;
         const tracked = result.tracked || 1;
+        const errors = Array.isArray(result.errors) ? result.errors : [];
         const meta = {
             name: result.name,
-            status: result.ok ? "ok" : "error",
+            status: errors.length > 0 ? (emitted > 0 ? "partial" : "error") : (result.ok ? "ok" : "error"),
             count: emitted,
             tracked,
             emitted,
             coverage: `${emitted}/${tracked}`,
             updatedAt: generatedAt
         };
+
+        if (errors.length > 0) {
+            meta.errors = errors;
+            meta.rateLimited = sourceSafetyFlags(errors).rateLimited;
+        }
 
         if (!result.ok && result.error) {
             meta.error = result.error;
@@ -332,7 +346,8 @@ export async function collect() {
     const results = await Promise.all(
         sourceJobs.map(async ([name, fn, tracked]) => {
             try {
-                return { name, ok: true, tracked, items: await fn() };
+                const items = await fn();
+                return { name, ok: true, tracked, items, errors: items.sourceErrors };
             } catch (error) {
                 console.warn(`Skipping ${name}: ${error.message}`);
                 return { name, ok: false, tracked, error: error.message, items: [] };

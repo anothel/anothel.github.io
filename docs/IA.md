@@ -154,10 +154,18 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 ## Live Source Refresh Probe
 
 - `node scripts/update-all.mjs` refreshed live HN, GitHub, npm, repo, package, link, Today, manifest, report, and static fallback data for 2026-06-27.
-- The final refresh report is ok with 4 modules, 6 sources, and 111 generated items.
+- The live refresh report covered 4 modules, 6 sources, and 111 generated items.
 - An initial npm 429 partial run exposed that package and repo partial row reuse was using fallback-only `staleButSafe` metadata.
 - Package and repo partial row reuse now preserves previous active rows while keeping fallback-only markers reserved for true fallback states.
 - Generated Today and Explore surfaces still prioritize agent-workflow signals over broad baseline tooling.
+
+## Refresh Cadence Governance Audit
+
+- Scheduled refresh stays once daily at `17 21 * * *` UTC with manual `workflow_dispatch`; no cadence change was needed.
+- Workflow concurrency, grouped update logs, validate-before-commit, Step Summary, and `refresh-report` artifact remain the operator contract.
+- Trend GitHub query-level skips now mark the GitHub trend source `partial`, set `rateLimited`, and list the skipped query names in `data/refresh-report.json` and Status.
+- Query-level error copy drops long API URLs from generated metadata so Status stays reviewable.
+- Anonymous GitHub limits remain expected locally; set `GITHUB_TOKEN` before live refresh when a fully ok trend report matters.
 
 ## Signal Policy
 

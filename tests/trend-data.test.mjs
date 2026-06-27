@@ -67,6 +67,31 @@ test("buildSourceMeta records source status and item counts", () => {
     ]);
 });
 
+test("buildSourceMeta marks query-level source errors as partial", () => {
+    const meta = buildSourceMeta(
+        [{ source: "GitHub", title: "repo" }],
+        [{
+            name: "GitHub",
+            ok: true,
+            tracked: 2,
+            errors: [{ name: "coding agent", error: "403 rate limit exceeded" }]
+        }],
+        "2026-06-14T00:00:00.000Z"
+    );
+
+    assert.deepEqual(meta, [{
+        name: "GitHub",
+        status: "partial",
+        count: 1,
+        tracked: 2,
+        emitted: 1,
+        coverage: "1/2",
+        updatedAt: "2026-06-14T00:00:00.000Z",
+        errors: [{ name: "coding agent", error: "403 rate limit exceeded" }],
+        rateLimited: true
+    }]);
+});
+
 test("default trend inputs leave room for AI agent signals", () => {
     const watchlists = readJson("data/watchlists.json");
 
@@ -151,7 +176,7 @@ test("fetchGitHub keeps successful query results when one query fails", async ()
     const rows = await fetchGitHub(async () => {
         calls += 1;
         if (calls === 2) {
-            throw new Error("rate limit exceeded");
+            throw new Error("403 rate limit exceeded: https://api.github.com/search/repositories?q=too-long");
         }
 
         return {
@@ -171,6 +196,9 @@ test("fetchGitHub keeps successful query results when one query fails", async ()
     assert.equal(calls, githubQueries.length);
     assert.equal(rows.length, Math.min(12, githubQueries.length - 1));
     assert.ok(rows.every((row) => row.source === "GitHub"));
+    assert.deepEqual(rows.sourceErrors, [
+        { name: githubQueries[1].query, error: "403 rate limit exceeded" }
+    ]);
 });
 
 test("fetchGitHub strips non-ASCII mojibake from summaries", async () => {

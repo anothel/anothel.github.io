@@ -151,9 +151,17 @@ test("IA records refresh recovery drill outcomes", () => {
 test("IA records live source refresh probe outcomes", () => {
     assert.match(ia, /Live Source Refresh Probe/);
     assert.match(ia, /refreshed live HN, GitHub, npm, repo, package, link, Today, manifest, report, and static fallback data/s);
-    assert.match(ia, /final refresh report is ok with 4 modules, 6 sources, and 111 generated items/s);
+    assert.match(ia, /live refresh report covered 4 modules, 6 sources, and 111 generated items/s);
     assert.match(ia, /fallback-only `staleButSafe` metadata/s);
     assert.match(ia, /fallback-only markers reserved for true fallback states/s);
+});
+
+test("IA records refresh cadence governance outcomes", () => {
+    assert.match(ia, /Refresh Cadence Governance Audit/);
+    assert.match(ia, /Scheduled refresh stays once daily at `17 21 \* \* \*` UTC/s);
+    assert.match(ia, /Trend GitHub query-level skips now mark the GitHub trend source `partial`/s);
+    assert.match(ia, /Query-level error copy drops long API URLs/s);
+    assert.match(ia, /set `GITHUB_TOKEN` before live refresh/s);
 });
 
 test("docs explain checked-in signal policy ownership", () => {
@@ -179,18 +187,18 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps architecture PoC as a gate outside next work", () => {
@@ -202,63 +210,67 @@ test("roadmap keeps architecture PoC as a gate outside next work", () => {
 
 test("roadmap keeps completed refresh stability out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed review queue friction out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Review Queue Friction Audit/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed signal quality regression out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Signal Quality Regression Audit/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed home visit speed out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Home Visit Speed Audit/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed status recovery clarity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Status Recovery Clarity Audit/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed interaction state visual audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Interaction State Visual Audit/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed static snapshot drift audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Static Snapshot Drift Audit/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed notes return path audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Notes Return Path Audit/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed end-to-end workflow consolidation out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - End-to-End Workflow Consolidation/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed refresh recovery drill out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Recovery Drill/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
 test("roadmap keeps completed live source refresh probe out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Live Source Refresh Probe/);
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
 });
 
-test("roadmap promotes refresh cadence governance as the active P0", () => {
-    assert.match(roadmap, /### P0 - Refresh Cadence Governance Audit/);
-    assert.match(roadmap, /recurring scheduled refreshes creating noisy diffs or unclear rate-limit recovery/s);
-    assert.match(roadmap, /GitHub Actions refresh cadence, README operator copy, refresh-report contract/s);
-    assert.match(roadmap, /Keep updater order, source metadata schema, static fallback routes, localStorage schema/s);
-    assert.match(roadmap, /No new source family, route, framework, backend, account, or sync scope/s);
+test("roadmap keeps completed refresh cadence governance out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Refresh Cadence Governance Audit/);
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+});
+
+test("roadmap promotes signal surface prune pass as the active P0", () => {
+    assert.match(roadmap, /### P0 - Signal Surface Prune Pass/);
+    assert.match(roadmap, /accumulated routes, states, and copy slowing repeat visits/s);
+    assert.match(roadmap, /Audit Home, Today, Explore, Review, Status, source modules, Notes, and topic pages as one workflow/s);
+    assert.match(roadmap, /No new route, source family, framework, backend, account, or sync scope/s);
 });
