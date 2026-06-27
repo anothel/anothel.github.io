@@ -263,3 +263,43 @@ test("preparePackageDataForWrite falls back to previous packages on empty refres
     assert.equal(prepared.sourceMeta.rateLimited, true);
     assert.deepEqual(prepared.packages, [{ name: "react" }]);
 });
+
+test("preparePackageDataForWrite preserves previous rows for partial rate limits", () => {
+    const prepared = preparePackageDataForWrite(
+        {
+            updated: "2026-06-20",
+            generatedAt: "2026-06-20T00:00:00.000Z",
+            sourceMeta: {
+                name: "npm",
+                status: "partial",
+                count: 1,
+                tracked: 2,
+                emitted: 1,
+                coverage: "1/2",
+                errors: [{ name: "openai", error: "429 Too Many Requests" }]
+            },
+            packages: [
+                { rank: 1, name: "react", downloads: 9000 }
+            ]
+        },
+        {
+            updated: "2026-06-19",
+            generatedAt: "2026-06-19T00:00:00.000Z",
+            sourceMeta: {
+                name: "npm",
+                status: "ok",
+                count: 2
+            },
+            packages: [
+                { rank: 1, name: "react", downloads: 8500 },
+                { rank: 2, name: "openai", downloads: 5000 }
+            ]
+        }
+    );
+
+    assert.equal(prepared.sourceMeta.status, "partial");
+    assert.equal(prepared.sourceMeta.staleButSafe, true);
+    assert.equal(prepared.sourceMeta.count, 2);
+    assert.equal(prepared.sourceMeta.coverage, "2/2");
+    assert.deepEqual(prepared.packages.map((item) => item.name), ["react", "openai"]);
+});

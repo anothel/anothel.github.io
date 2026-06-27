@@ -153,17 +153,18 @@ test("status static fallback matches current manifest summary", () => {
     assert.match(html, new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
     assert.match(html, new RegExp(dataModeText().replaceAll(".", "\\.")));
     assert.match(html, new RegExp(`<strong>${refreshReport.generatedAt}</strong>`));
-    assert.match(html, /No failed, partial, or fallback sources\./);
+    if (refreshReport.totals.status === "ok") {
+        assert.match(html, /No failed, partial, or fallback sources\./);
+    } else {
+        assert.match(html, /<span>Attention<\/span>/);
+        assert.match(html, /\d+ source/);
+    }
     assert.match(html, /<small>(Fresh|Aging|Stale|Partial|Fallback|Error|Unknown) - /);
 });
 
-test("home today explore and status fallbacks use one healthy source truth", () => {
-    assert.equal(refreshReport.totals.status, "ok");
-    assert.equal(today.sourceMeta.status, "ok");
-    assert.equal(sourceHealth(), "6 ok");
-
+test("home today explore and status fallbacks use one source health truth", () => {
     assert.match(read("index.html"), new RegExp(`<strong data-home-live>${moduleHealth()}</strong>`));
-    assert.match(read("today/index.html"), /Source health ok\./);
+    assert.match(read("today/index.html"), new RegExp(todayStatusText().replaceAll(".", "\\.")));
     assert.match(read("status/index.html"), new RegExp(`<strong data-status-health>${sourceHealth()}</strong>`));
     assert.match(read("explore/index.html"), new RegExp(`<p data-data-mode>${dataModeText().replaceAll(".", "\\.")}</p>`));
 });

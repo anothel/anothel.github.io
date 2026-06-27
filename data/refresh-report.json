@@ -1,28 +1,53 @@
 {
-  "generatedAt": "2026-06-24T11:53:54.493Z",
-  "manifestUpdated": "2026-06-22",
+  "generatedAt": "2026-06-27T07:28:45.956Z",
+  "manifestUpdated": "2026-06-27",
   "runContext": {
     "reason": "",
     "eventName": "",
     "runId": "",
     "refName": ""
   },
-  "changedModules": [],
+  "changedModules": [
+    {
+      "id": "trends",
+      "title": "Tech trends",
+      "count": 24,
+      "updated": "2026-06-27"
+    },
+    {
+      "id": "packages",
+      "title": "Package watchlist",
+      "count": 28,
+      "updated": "2026-06-27"
+    },
+    {
+      "id": "repos",
+      "title": "Repo watchlist",
+      "count": 30,
+      "updated": "2026-06-27"
+    },
+    {
+      "id": "links",
+      "title": "Reference shelf",
+      "count": 29,
+      "updated": "2026-06-27"
+    }
+  ],
   "modules": [
     {
       "id": "trends",
       "title": "Tech trends",
       "status": "ok",
       "count": 24,
-      "updated": "2026-06-21",
-      "changed": false,
+      "updated": "2026-06-27",
+      "changed": true,
       "sources": [
         {
           "module": "trends",
           "source": "Hacker News",
           "status": "ok",
           "count": 4,
-          "updatedAt": "2026-06-21T04:54:19.791Z",
+          "updatedAt": "2026-06-27T07:25:51.148Z",
           "coverage": "4/1",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -37,8 +62,8 @@
           "source": "GitHub",
           "status": "ok",
           "count": 12,
-          "updatedAt": "2026-06-21T04:54:19.791Z",
-          "coverage": "12/16",
+          "updatedAt": "2026-06-27T07:25:51.148Z",
+          "coverage": "12/14",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -52,8 +77,8 @@
           "source": "npm",
           "status": "ok",
           "count": 8,
-          "updatedAt": "2026-06-21T04:54:19.791Z",
-          "coverage": "8/28",
+          "updatedAt": "2026-06-27T07:25:51.148Z",
+          "coverage": "8/19",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -68,17 +93,17 @@
       "id": "packages",
       "title": "Package watchlist",
       "status": "ok",
-      "count": 33,
-      "updated": "2026-06-22",
-      "changed": false,
+      "count": 28,
+      "updated": "2026-06-27",
+      "changed": true,
       "sources": [
         {
           "module": "packages",
           "source": "npm",
           "status": "ok",
-          "count": 33,
-          "updatedAt": "2026-06-22T11:54:25.015Z",
-          "coverage": "33/33",
+          "count": 28,
+          "updatedAt": "2026-06-27T07:28:22.300Z",
+          "coverage": "28/28",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -93,17 +118,17 @@
       "id": "repos",
       "title": "Repo watchlist",
       "status": "ok",
-      "count": 35,
-      "updated": "2026-06-22",
-      "changed": false,
+      "count": 30,
+      "updated": "2026-06-27",
+      "changed": true,
       "sources": [
         {
           "module": "repos",
           "source": "GitHub",
           "status": "ok",
-          "count": 35,
-          "updatedAt": "2026-06-22T11:54:25.011Z",
-          "coverage": "35/35",
+          "count": 30,
+          "updatedAt": "2026-06-27T07:26:00.936Z",
+          "coverage": "30/30",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -118,17 +143,17 @@
       "id": "links",
       "title": "Reference shelf",
       "status": "ok",
-      "count": 34,
-      "updated": "2026-06-21",
-      "changed": false,
+      "count": 29,
+      "updated": "2026-06-27",
+      "changed": true,
       "sources": [
         {
           "module": "links",
           "source": "manual",
           "status": "ok",
-          "count": 34,
-          "updatedAt": "2026-06-21T04:42:42.149Z",
-          "coverage": "34/34",
+          "count": 29,
+          "updatedAt": "2026-06-27T07:26:01.911Z",
+          "coverage": "29/29",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -143,7 +168,7 @@
   "totals": {
     "modules": 4,
     "sources": 6,
-    "items": 126,
+    "items": 111,
     "status": "ok",
     "errors": 0
   }

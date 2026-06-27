@@ -110,6 +110,12 @@ export function buildPackageRows(downloadRecords, definitions = packageDefinitio
         });
 }
 
+function rerankPackages(packages) {
+    return [...packages]
+        .sort((a, b) => (b.downloads || 0) - (a.downloads || 0))
+        .map((item, index) => ({ ...item, rank: index + 1 }));
+}
+
 export async function collectPackages(
     definitions = packageDefinitions,
     fetcher = fetchJson,
@@ -146,6 +152,36 @@ export async function collectPackages(
 }
 
 export function preparePackageDataForWrite(data, previousData) {
+    const nextItems = Array.isArray(data?.packages) ? data.packages : [];
+    const previousItems = Array.isArray(previousData?.packages) ? previousData.packages : [];
+    const errors = Array.isArray(data?.sourceMeta?.errors) ? data.sourceMeta.errors : [];
+
+    if (data?.sourceMeta?.status === "partial" && nextItems.length > 0 && previousItems.length > 0 && errors.length > 0) {
+        const activeNames = new Set(packageDefinitions.map((definition) => definition.name));
+        const existing = new Set(nextItems.map((item) => item.name));
+        const previousByName = new Map(previousItems.map((item) => [item.name, item]));
+        const restored = errors
+            .map((error) => error.name)
+            .filter((name) => activeNames.has(name) && !existing.has(name) && previousByName.has(name))
+            .map((name) => previousByName.get(name));
+
+        if (restored.length > 0) {
+            const packages = rerankPackages([...nextItems, ...restored]);
+            data = {
+                ...data,
+                sourceMeta: {
+                    ...data.sourceMeta,
+                    count: packages.length,
+                    emitted: packages.length,
+                    coverage: `${packages.length}/${data.sourceMeta.tracked || packageDefinitions.length}`,
+                    staleButSafe: true,
+                    previousUpdated: previousData.updated || data.sourceMeta.previousUpdated
+                },
+                packages
+            };
+        }
+    }
+
     return applyEmptyCollectionFallback(data, previousData, {
         collection: "packages",
         fallbackReason: "No package rows fetched",

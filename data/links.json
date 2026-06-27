@@ -1,14 +1,14 @@
 {
-  "updated": "2026-06-21",
-  "generatedAt": "2026-06-21T04:42:42.149Z",
+  "updated": "2026-06-27",
+  "generatedAt": "2026-06-27T07:26:01.911Z",
   "sourceMeta": {
     "name": "manual",
     "status": "ok",
-    "count": 34,
-    "tracked": 34,
-    "emitted": 34,
-    "coverage": "34/34",
-    "updatedAt": "2026-06-21T04:42:42.149Z"
+    "count": 29,
+    "tracked": 29,
+    "emitted": 29,
+    "coverage": "29/29",
+    "updatedAt": "2026-06-27T07:26:01.911Z"
   },
   "links": [
     {
@@ -181,30 +181,6 @@
     },
     {
       "rank": 22,
-      "title": "SQLite Docs",
-      "category": "Data",
-      "kind": "Docs",
-      "url": "https://www.sqlite.org/docs.html",
-      "summary": "Reference for small durable data stores and local-first experiments."
-    },
-    {
-      "rank": 23,
-      "title": "MDN Web Docs",
-      "category": "Frontend",
-      "kind": "Docs",
-      "url": "https://developer.mozilla.org/",
-      "summary": "Reference for web platform APIs, CSS, HTML, and JavaScript."
-    },
-    {
-      "rank": 24,
-      "title": "web.dev",
-      "category": "Frontend",
-      "kind": "Guide",
-      "url": "https://web.dev/",
-      "summary": "Practical guides for web performance, UX, and platform features."
-    },
-    {
-      "rank": 25,
       "title": "Awesome MCP Servers",
       "category": "MCP",
       "kind": "Repo",
@@ -212,7 +188,7 @@
       "summary": "Curated directory of MCP servers across files, databases, APIs, and developer tools."
     },
     {
-      "rank": 26,
+      "rank": 23,
       "title": "MCP Python SDK",
       "category": "MCP",
       "kind": "Repo",
@@ -220,7 +196,7 @@
       "summary": "Official Python SDK for building Model Context Protocol clients and servers."
     },
     {
-      "rank": 27,
+      "rank": 24,
       "title": "MCP Registry",
       "category": "MCP",
       "kind": "Repo",
@@ -228,7 +204,7 @@
       "summary": "Community-driven registry service for discovering and managing MCP servers."
     },
     {
-      "rank": 28,
+      "rank": 25,
       "title": "MCP TypeScript SDK",
       "category": "MCP",
       "kind": "Repo",
@@ -236,7 +212,7 @@
       "summary": "Official TypeScript SDK for building Model Context Protocol clients and servers."
     },
     {
-      "rank": 29,
+      "rank": 26,
       "title": "Model Context Protocol servers",
       "category": "MCP",
       "kind": "Repo",
@@ -244,23 +220,7 @@
       "summary": "Reference MCP servers for connecting agents to tools and data sources."
     },
     {
-      "rank": 30,
-      "title": "OpenTelemetry Docs",
-      "category": "Ops",
-      "kind": "Docs",
-      "url": "https://opentelemetry.io/docs/",
-      "summary": "Observability concepts, instrumentation, traces, metrics, and logs."
-    },
-    {
-      "rank": 31,
-      "title": "Node.js API",
-      "category": "Runtime",
-      "kind": "Docs",
-      "url": "https://nodejs.org/api/",
-      "summary": "Node.js runtime API documentation for scripts and tooling."
-    },
-    {
-      "rank": 32,
+      "rank": 27,
       "title": "Pipedream",
       "category": "Workflow automation",
       "kind": "Docs",
@@ -268,7 +228,7 @@
       "summary": "Workflow automation and integration platform for APIs, events, and scripts."
     },
     {
-      "rank": 33,
+      "rank": 28,
       "title": "Temporal TypeScript SDK",
       "category": "Workflow automation",
       "kind": "Docs",
@@ -276,7 +236,7 @@
       "summary": "Durable workflow runtime and TypeScript SDK for reliable async processes."
     },
     {
-      "rank": 34,
+      "rank": 29,
       "title": "Trigger.dev",
       "category": "Workflow automation",
       "kind": "Docs",

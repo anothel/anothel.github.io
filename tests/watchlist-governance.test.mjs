@@ -51,3 +51,24 @@ test("source quality drift review retires broad duplicate sources", () => {
         assert.equal(activeLinks.has(title), false, `${title} link should be retired`);
     }
 });
+
+test("generated source snapshots omit retired direct watchlist entries", () => {
+    const watchlists = json("data/watchlists.json");
+    const disabledTrendPackages = new Set(watchlists.trends.npmPackages.filter((item) => item.disabled).map((item) => item.name));
+    const disabledPackages = new Set(watchlists.packages.filter((item) => item.disabled).map((item) => item.name));
+    const disabledRepos = new Set(watchlists.repos.filter((item) => item.disabled).map((item) => item.fullName));
+    const disabledLinks = new Set(watchlists.links.filter((item) => item.disabled).map((item) => item.title));
+
+    for (const item of json("data/trends.json").items.filter((item) => item.source === "npm")) {
+        assert.equal(disabledTrendPackages.has(item.title), false, `${item.title} retired npm trend should not be generated`);
+    }
+    for (const item of json("data/packages.json").packages) {
+        assert.equal(disabledPackages.has(item.name), false, `${item.name} retired package should not be generated`);
+    }
+    for (const item of json("data/repos.json").repos) {
+        assert.equal(disabledRepos.has(item.name), false, `${item.name} retired repo should not be generated`);
+    }
+    for (const item of json("data/links.json").links) {
+        assert.equal(disabledLinks.has(item.title), false, `${item.title} retired link should not be generated`);
+    }
+});
