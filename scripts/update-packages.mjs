@@ -174,7 +174,6 @@ export function preparePackageDataForWrite(data, previousData) {
                     count: packages.length,
                     emitted: packages.length,
                     coverage: `${packages.length}/${data.sourceMeta.tracked || packageDefinitions.length}`,
-                    staleButSafe: true,
                     previousUpdated: previousData.updated || data.sourceMeta.previousUpdated
                 },
                 packages

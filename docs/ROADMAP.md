@@ -38,28 +38,28 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Live Source Refresh Probe
+### P0 - Refresh Cadence Governance Audit
 
-Trigger: local refresh recovery is verified; next risk is whether live upstream data changes produce useful output without breaking fallback safety.
+Trigger: a live source refresh succeeded; next risk is recurring scheduled refreshes creating noisy diffs or unclear rate-limit recovery without manual inspection.
 
 Scope:
 
-- Requires explicit network approval before running any live updater or `node scripts/update-all.mjs`.
-- Run the full data refresh once, inspect changed generated data, and keep only changes that improve current signal quality or freshness.
-- If rate limits or source failures occur, confirm fallback markers and previous rows remain clear in Status and refresh report.
-- No route, localStorage schema, framework, backend, account, or sync scope.
+- Audit the GitHub Actions refresh cadence, README operator copy, refresh-report contract, and generated-data churn from the latest live run.
+- Decide whether cadence, source budgets, or retry behavior need adjustment after the live probe.
+- Keep updater order, source metadata schema, static fallback routes, localStorage schema, signal policy, and architecture gate unchanged unless a failing test proves otherwise.
+- No new source family, route, framework, backend, account, or sync scope.
 
 Verification:
 
-- Run `node scripts/update-all.mjs` only after network approval.
+- Run `node --test tests/workflow.test.mjs tests/ops-docs.test.mjs tests/refresh-report.test.mjs tests/static-fallback.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
 - Run `git diff --check`.
 
 Exit:
 
-- Generated data and static fallback pages are refreshed or explicitly left unchanged with a reason.
-- Any fallback, partial, stale, or error state from live sources is visible in Status and refresh-report output.
-- Signal quality remains focused on agent-workflow signals rather than broad baseline tooling.
+- Scheduled and manual refresh cadence is either accepted as-is or adjusted with focused tests.
+- Source budget and rate-limit behavior is clear before the next live run.
+- Generated data churn remains reviewable and focused on agent-workflow signals.
 
 ## Architecture Gate
 

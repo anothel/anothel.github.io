@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-27",
-  "generatedAt": "2026-06-27T07:28:22.300Z",
+  "generatedAt": "2026-06-27T14:15:34.079Z",
   "sourceMeta": {
     "name": "npm",
     "status": "ok",
@@ -8,7 +8,7 @@
     "tracked": 28,
     "emitted": 28,
     "coverage": "28/28",
-    "updatedAt": "2026-06-27T07:28:22.300Z"
+    "updatedAt": "2026-06-27T14:15:34.079Z"
   },
   "packages": [
     {
@@ -16,9 +16,9 @@
       "name": "typescript",
       "category": "Language",
       "focus": "typed JavaScript",
-      "downloads": 217278212,
-      "downloadsLabel": "217.3M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 218142710,
+      "downloadsLabel": "218.1M/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/typescript"
     },
     {
@@ -26,9 +26,9 @@
       "name": "react",
       "category": "UI",
       "focus": "frontend runtime",
-      "downloads": 148654320,
-      "downloadsLabel": "148.7M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 148177253,
+      "downloadsLabel": "148.2M/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/react"
     },
     {
@@ -36,9 +36,9 @@
       "name": "playwright",
       "category": "Testing",
       "focus": "browser automation",
-      "downloads": 62633817,
-      "downloadsLabel": "62.6M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 62047765,
+      "downloadsLabel": "62M/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/playwright"
     },
     {
@@ -46,49 +46,49 @@
       "name": "@modelcontextprotocol/sdk",
       "category": "MCP",
       "focus": "Model Context Protocol SDK",
-      "downloads": 40125385,
-      "downloadsLabel": "40.1M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 40637684,
+      "downloadsLabel": "40.6M/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk"
     },
     {
       "rank": 5,
-      "name": "openai",
-      "category": "AI SDK",
-      "focus": "OpenAI API SDK",
-      "downloads": 27559108,
-      "downloadsLabel": "27.6M/week",
-      "period": "2026-06-18 to 2026-06-24",
-      "url": "https://www.npmjs.com/package/openai"
-    },
-    {
-      "rank": 6,
       "name": "@anthropic-ai/sdk",
       "category": "AI SDK",
       "focus": "Anthropic API SDK",
-      "downloads": 24090280,
+      "downloads": 24102515,
       "downloadsLabel": "24.1M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk"
     },
     {
-      "rank": 7,
+      "rank": 6,
       "name": "@ai-sdk/provider",
       "category": "AI SDK",
       "focus": "AI SDK provider interface",
-      "downloads": 22570393,
-      "downloadsLabel": "22.6M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 23380361,
+      "downloadsLabel": "23.4M/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider"
+    },
+    {
+      "rank": 7,
+      "name": "openai",
+      "category": "AI SDK",
+      "focus": "OpenAI API SDK",
+      "downloads": 23085997,
+      "downloadsLabel": "23.1M/week",
+      "period": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/openai"
     },
     {
       "rank": 8,
       "name": "ai",
       "category": "AI SDK",
       "focus": "Vercel AI SDK",
-      "downloads": 15964225,
+      "downloads": 16028600,
       "downloadsLabel": "16M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/ai"
     },
     {
@@ -96,9 +96,9 @@
       "name": "@ai-sdk/openai",
       "category": "AI SDK",
       "focus": "OpenAI provider for AI SDK",
-      "downloads": 8038849,
+      "downloads": 8025962,
       "downloadsLabel": "8M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai"
     },
     {
@@ -106,49 +106,49 @@
       "name": "@langchain/core",
       "category": "AI agents",
       "focus": "LangChain core primitives",
-      "downloads": 4787209,
+      "downloads": 4839307,
       "downloadsLabel": "4.8M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40langchain%2Fcore"
     },
     {
       "rank": 11,
-      "name": "opencode-ai",
-      "category": "AI agents",
-      "focus": "OpenCode terminal agent package",
-      "downloads": 2902842,
-      "downloadsLabel": "2.9M/week",
-      "period": "2026-06-18 to 2026-06-24",
-      "url": "https://www.npmjs.com/package/opencode-ai"
+      "name": "@temporalio/client",
+      "category": "Workflow automation",
+      "focus": "Temporal workflow client",
+      "downloads": 2529716,
+      "downloadsLabel": "2.5M/week",
+      "period": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/%40temporalio%2Fclient"
     },
     {
       "rank": 12,
       "name": "langchain",
       "category": "AI agents",
       "focus": "LLM and agent orchestration",
-      "downloads": 2479325,
+      "downloads": 2493479,
       "downloadsLabel": "2.5M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/langchain"
     },
     {
       "rank": 13,
-      "name": "@temporalio/client",
-      "category": "Workflow automation",
-      "focus": "Temporal workflow client",
-      "downloads": 2418802,
-      "downloadsLabel": "2.4M/week",
-      "period": "2026-06-18 to 2026-06-24",
-      "url": "https://www.npmjs.com/package/%40temporalio%2Fclient"
+      "name": "opencode-ai",
+      "category": "AI agents",
+      "focus": "OpenCode terminal agent package",
+      "downloads": 2471013,
+      "downloadsLabel": "2.5M/week",
+      "period": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/opencode-ai"
     },
     {
       "rank": 14,
       "name": "@temporalio/workflow",
       "category": "Workflow automation",
       "focus": "Temporal workflow runtime",
-      "downloads": 2167025,
-      "downloadsLabel": "2.2M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 2277210,
+      "downloadsLabel": "2.3M/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40temporalio%2Fworkflow"
     },
     {
@@ -156,9 +156,9 @@
       "name": "langfuse",
       "category": "AI evals",
       "focus": "LLM observability and evals",
-      "downloads": 1612469,
+      "downloads": 1580722,
       "downloadsLabel": "1.6M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/langfuse"
     },
     {
@@ -166,9 +166,9 @@
       "name": "@openai/agents",
       "category": "AI agents",
       "focus": "OpenAI Agents SDK for JavaScript",
-      "downloads": 1235421,
+      "downloads": 1248152,
       "downloadsLabel": "1.2M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40openai%2Fagents"
     },
     {
@@ -176,9 +176,9 @@
       "name": "inngest",
       "category": "Workflow automation",
       "focus": "durable workflow runtime",
-      "downloads": 1167629,
+      "downloads": 1164399,
       "downloadsLabel": "1.2M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/inngest"
     },
     {
@@ -186,69 +186,69 @@
       "name": "braintrust",
       "category": "AI evals",
       "focus": "AI evals and observability",
-      "downloads": 1034488,
+      "downloads": 1044208,
       "downloadsLabel": "1M/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/braintrust"
     },
     {
       "rank": 19,
-      "name": "@trigger.dev/sdk",
-      "category": "Workflow automation",
-      "focus": "durable workflow SDK",
-      "downloads": 583845,
-      "downloadsLabel": "583.8K/week",
-      "period": "2026-06-18 to 2026-06-24",
-      "url": "https://www.npmjs.com/package/%40trigger.dev%2Fsdk"
-    },
-    {
-      "rank": 20,
       "name": "autoevals",
       "category": "AI evals",
       "focus": "AI eval scoring helpers",
-      "downloads": 499630,
-      "downloadsLabel": "499.6K/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 521590,
+      "downloadsLabel": "521.6K/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/autoevals"
     },
     {
+      "rank": 20,
+      "name": "@trigger.dev/sdk",
+      "category": "Workflow automation",
+      "focus": "durable workflow SDK",
+      "downloads": 487561,
+      "downloadsLabel": "487.6K/week",
+      "period": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/%40trigger.dev%2Fsdk"
+    },
+    {
       "rank": 21,
-      "name": "promptfoo",
-      "category": "AI evals",
-      "focus": "LLM evals and prompt testing",
-      "downloads": 427324,
-      "downloadsLabel": "427.3K/week",
-      "period": "2026-06-18 to 2026-06-24",
-      "url": "https://www.npmjs.com/package/promptfoo"
+      "name": "mastra",
+      "category": "AI agents",
+      "focus": "TypeScript agent framework",
+      "downloads": 437026,
+      "downloadsLabel": "437K/week",
+      "period": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/mastra"
     },
     {
       "rank": 22,
       "name": "fastmcp",
       "category": "MCP",
       "focus": "MCP server framework",
-      "downloads": 415447,
-      "downloadsLabel": "415.4K/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 414560,
+      "downloadsLabel": "414.6K/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/fastmcp"
     },
     {
       "rank": 23,
-      "name": "mastra",
-      "category": "AI agents",
-      "focus": "TypeScript agent framework",
-      "downloads": 414600,
-      "downloadsLabel": "414.6K/week",
-      "period": "2026-06-18 to 2026-06-24",
-      "url": "https://www.npmjs.com/package/mastra"
+      "name": "promptfoo",
+      "category": "AI evals",
+      "focus": "LLM evals and prompt testing",
+      "downloads": 401735,
+      "downloadsLabel": "401.7K/week",
+      "period": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/promptfoo"
     },
     {
       "rank": 24,
       "name": "@modelcontextprotocol/server-filesystem",
       "category": "MCP",
       "focus": "MCP filesystem server",
-      "downloads": 348195,
-      "downloadsLabel": "348.2K/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 368056,
+      "downloadsLabel": "368.1K/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-filesystem"
     },
     {
@@ -256,9 +256,9 @@
       "name": "n8n-workflow",
       "category": "Workflow automation",
       "focus": "n8n workflow primitives",
-      "downloads": 293484,
-      "downloadsLabel": "293.5K/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 294485,
+      "downloadsLabel": "294.5K/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/n8n-workflow"
     },
     {
@@ -266,9 +266,9 @@
       "name": "evalite",
       "category": "AI evals",
       "focus": "LLM evaluation toolkit",
-      "downloads": 236745,
-      "downloadsLabel": "236.7K/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 250255,
+      "downloadsLabel": "250.3K/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/evalite"
     },
     {
@@ -276,9 +276,9 @@
       "name": "@modelcontextprotocol/server-github",
       "category": "MCP",
       "focus": "MCP GitHub server",
-      "downloads": 143995,
-      "downloadsLabel": "144K/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 144865,
+      "downloadsLabel": "144.9K/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-github"
     },
     {
@@ -286,9 +286,9 @@
       "name": "mcp-agent",
       "category": "MCP",
       "focus": "MCP agent helper package",
-      "downloads": 3,
-      "downloadsLabel": "3/week",
-      "period": "2026-06-18 to 2026-06-24",
+      "downloads": 4,
+      "downloadsLabel": "4/week",
+      "period": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/mcp-agent"
     }
   ]

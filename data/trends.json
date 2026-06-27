@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-27",
-  "generatedAt": "2026-06-27T07:25:51.148Z",
+  "generatedAt": "2026-06-27T14:12:02.595Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -10,11 +10,11 @@
     {
       "name": "Hacker News",
       "status": "ok",
-      "count": 4,
+      "count": 5,
       "tracked": 1,
-      "emitted": 4,
-      "coverage": "4/1",
-      "updatedAt": "2026-06-27T07:25:51.148Z"
+      "emitted": 5,
+      "coverage": "5/1",
+      "updatedAt": "2026-06-27T14:12:02.595Z"
     },
     {
       "name": "GitHub",
@@ -23,16 +23,16 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-27T07:25:51.148Z"
+      "updatedAt": "2026-06-27T14:12:02.595Z"
     },
     {
       "name": "npm",
       "status": "ok",
-      "count": 8,
+      "count": 7,
       "tracked": 19,
-      "emitted": 8,
-      "coverage": "8/19",
-      "updatedAt": "2026-06-27T07:25:51.148Z"
+      "emitted": 7,
+      "coverage": "7/19",
+      "updatedAt": "2026-06-27T14:12:02.595Z"
     }
   ],
   "items": [
@@ -42,7 +42,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "222.3K stars",
+      "velocity": "222.4K stars",
       "signal": "34K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
@@ -64,8 +64,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "179.3K stars",
-      "signal": "22K forks",
+      "velocity": "179.5K stars",
+      "signal": "22.1K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
     },
@@ -75,7 +75,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "134.6K stars",
+      "velocity": "134.7K stars",
       "signal": "21.7K forks",
       "url": "https://github.com/anthropics/claude-code",
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
@@ -86,7 +86,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "155.7K stars",
+      "velocity": "155.8K stars",
       "signal": "18.3K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
@@ -119,7 +119,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "109.2K stars",
+      "velocity": "109.4K stars",
       "signal": "7.2K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
@@ -142,7 +142,7 @@
       "category": "AI evals",
       "score": 100,
       "velocity": "4.9K stars",
-      "signal": "373 forks",
+      "signal": "374 forks",
       "url": "https://github.com/Kiln-AI/Kiln",
       "summary": "Build, Evaluate, and Optimize AI Systems. Includes evals, RAG, agents, fine-tuning, synthetic data generation, dataset management, MCP, and more."
     },
@@ -163,7 +163,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "79.1K stars",
+      "velocity": "79.2K stars",
       "signal": "15.5K forks",
       "url": "https://github.com/lobehub/lobehub",
       "summary": "LobeHub is your Chief Agent Operator, organizing your agents into 724 operations by hiring, scheduling, and reporting on your entire AI team."
@@ -174,43 +174,43 @@
       "source": "Hacker News",
       "category": "Developer tools",
       "score": 100,
-      "velocity": "359 comments",
-      "signal": "1649 points",
+      "velocity": "363 comments",
+      "signal": "1665 points",
       "url": "https://scrollprize.org/firstscroll",
-      "summary": "HN story by verditelabs with 359 comments."
+      "summary": "HN story by verditelabs with 363 comments."
     },
     {
       "rank": 14,
+      "title": "U.S. government will decide who gets to use GPT-5.6",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 100,
+      "velocity": "1156 comments",
+      "signal": "1091 points",
+      "url": "https://www.washingtonpost.com/technology/2026/06/26/openai-says-us-government-will-vet-users-its-latest-ai-model/",
+      "summary": "HN story by alain94040 with 1156 comments."
+    },
+    {
+      "rank": 15,
       "title": "typescript",
       "source": "npm",
       "category": "JavaScript",
       "score": 100,
-      "velocity": "217.3M/week",
-      "signal": "2026-06-18 to 2026-06-24",
+      "velocity": "218.1M/week",
+      "signal": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/typescript",
-      "summary": "217.3M downloads over the last available week."
+      "summary": "218.1M downloads over the last available week."
     },
     {
-      "rank": 15,
+      "rank": 16,
       "title": "react",
       "source": "npm",
       "category": "JavaScript",
       "score": 98,
-      "velocity": "148.7M/week",
-      "signal": "2026-06-18 to 2026-06-24",
+      "velocity": "148.2M/week",
+      "signal": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/react",
-      "summary": "148.7M downloads over the last available week."
-    },
-    {
-      "rank": 16,
-      "title": "U.S. government will decide who gets to use GPT-5.6",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 96,
-      "velocity": "1034 comments",
-      "signal": "978 points",
-      "url": "https://www.washingtonpost.com/technology/2026/06/26/openai-says-us-government-will-vet-users-its-latest-ai-model/",
-      "summary": "HN story by alain94040 with 1034 comments."
+      "summary": "148.2M downloads over the last available week."
     },
     {
       "rank": 17,
@@ -218,10 +218,10 @@
       "source": "npm",
       "category": "Developer tools",
       "score": 94,
-      "velocity": "62.6M/week",
-      "signal": "2026-06-18 to 2026-06-24",
+      "velocity": "62M/week",
+      "signal": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/playwright",
-      "summary": "62.6M downloads over the last available week."
+      "summary": "62M downloads over the last available week."
     },
     {
       "rank": 18,
@@ -229,10 +229,10 @@
       "source": "npm",
       "category": "MCP",
       "score": 91,
-      "velocity": "40.1M/week",
-      "signal": "2026-06-18 to 2026-06-24",
+      "velocity": "40.6M/week",
+      "signal": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-      "summary": "40.1M downloads over the last available week."
+      "summary": "40.6M downloads over the last available week."
     },
     {
       "rank": 19,
@@ -241,64 +241,64 @@
       "category": "AI",
       "score": 89,
       "velocity": "24.1M/week",
-      "signal": "2026-06-18 to 2026-06-24",
+      "signal": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk",
       "summary": "24.1M downloads over the last available week."
     },
     {
       "rank": 20,
-      "title": "openai",
-      "source": "npm",
-      "category": "AI",
-      "score": 89,
-      "velocity": "27.6M/week",
-      "signal": "2026-06-18 to 2026-06-24",
-      "url": "https://www.npmjs.com/package/openai",
-      "summary": "27.6M downloads over the last available week."
-    },
-    {
-      "rank": 21,
       "title": "Om Malik has died",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 87,
-      "velocity": "163 comments",
-      "signal": "1308 points",
+      "score": 88,
+      "velocity": "165 comments",
+      "signal": "1321 points",
       "url": "https://om.co/2026/06/24/1966-2026/",
-      "summary": "HN story by minimaxir with 163 comments."
+      "summary": "HN story by minimaxir with 165 comments."
     },
     {
-      "rank": 22,
+      "rank": 21,
       "title": "Previewing GPT5.6 Sol: a next-generation model",
       "source": "Hacker News",
       "category": "AI",
-      "score": 80,
-      "velocity": "595 comments",
-      "signal": "958 points",
+      "score": 88,
+      "velocity": "667 comments",
+      "signal": "1048 points",
       "url": "https://openai.com/index/previewing-gpt-5-6-sol/",
-      "summary": "HN story by minimaxir with 595 comments."
+      "summary": "HN story by minimaxir with 667 comments."
+    },
+    {
+      "rank": 22,
+      "title": "@ai-sdk/provider",
+      "source": "npm",
+      "category": "AI",
+      "score": 88,
+      "velocity": "23.4M/week",
+      "signal": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider",
+      "summary": "23.4M downloads over the last available week."
     },
     {
       "rank": 23,
+      "title": "U.S. allows Anthropic to release Mythos AI to trusted US organizations",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 86,
+      "velocity": "645 comments",
+      "signal": "492 points",
+      "url": "https://www.semafor.com/article/06/27/2026/us-releases-powerful-anthropic-model-mythos-to-some-us-companies",
+      "summary": "HN story by bobrenjc93 with 645 comments."
+    },
+    {
+      "rank": 24,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",
       "score": 77,
-      "velocity": "2.4M/week",
-      "signal": "2026-06-18 to 2026-06-24",
+      "velocity": "2.5M/week",
+      "signal": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
-      "summary": "2.4M downloads over the last available week."
-    },
-    {
-      "rank": 24,
-      "title": "langfuse",
-      "source": "npm",
-      "category": "AI evals",
-      "score": 74,
-      "velocity": "1.6M/week",
-      "signal": "2026-06-18 to 2026-06-24",
-      "url": "https://www.npmjs.com/package/langfuse",
-      "summary": "1.6M downloads over the last available week."
+      "summary": "2.5M downloads over the last available week."
     }
   ]
 }

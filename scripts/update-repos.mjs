@@ -156,7 +156,6 @@ export function prepareRepoDataForWrite(data, previousData) {
                     count: repos.length,
                     emitted: repos.length,
                     coverage: `${repos.length}/${data.sourceMeta.tracked || repoDefinitions.length}`,
-                    staleButSafe: true,
                     previousUpdated: previousData.updated || data.sourceMeta.previousUpdated,
                     rateLimited: sourceSafetyFlags(errors).rateLimited
                 },

@@ -151,6 +151,14 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Refresh order, fallback markers, Status copy, and static fallback tests share the same recovery meaning for ok, stale, partial, fallback, and error states.
 - Live source refresh stayed separate because it requires network approval.
 
+## Live Source Refresh Probe
+
+- `node scripts/update-all.mjs` refreshed live HN, GitHub, npm, repo, package, link, Today, manifest, report, and static fallback data for 2026-06-27.
+- The final refresh report is ok with 4 modules, 6 sources, and 111 generated items.
+- An initial npm 429 partial run exposed that package and repo partial row reuse was using fallback-only `staleButSafe` metadata.
+- Package and repo partial row reuse now preserves previous active rows while keeping fallback-only markers reserved for true fallback states.
+- Generated Today and Explore surfaces still prioritize agent-workflow signals over broad baseline tooling.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
