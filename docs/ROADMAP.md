@@ -38,29 +38,28 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Refresh Recovery Drill
+### P0 - Live Source Refresh Probe
 
-Trigger: the main visit workflow is connected; the next risk is whether source refresh failures keep that workflow trustworthy without manual interpretation.
+Trigger: local refresh recovery is verified; next risk is whether live upstream data changes produce useful output without breaking fallback safety.
 
 Scope:
 
-- Exercise update-all dry-run, refresh report generation, fallback safety helpers, Status recovery copy, and static fallback regeneration together.
-- Prove stale, partial, fallback, and ok source meanings still land in Status and public fallback pages from one source-health contract.
-- Keep live network refresh optional unless explicitly approved.
-- No route, source, scoring policy, localStorage schema, framework, backend, account, or sync scope.
+- Requires explicit network approval before running any live updater or `node scripts/update-all.mjs`.
+- Run the full data refresh once, inspect changed generated data, and keep only changes that improve current signal quality or freshness.
+- If rate limits or source failures occur, confirm fallback markers and previous rows remain clear in Status and refresh report.
+- No route, localStorage schema, framework, backend, account, or sync scope.
 
 Verification:
 
-- Run `node --test tests/data-workflow-scripts.test.mjs tests/refresh-safety.test.mjs tests/refresh-report.test.mjs tests/status-ui.test.mjs tests/static-fallback.test.mjs tests/workflow.test.mjs`.
-- Run `node scripts/update-all.mjs --dry-run`.
-- Run `node scripts/update-static-fallbacks.mjs`, then `git diff --check`.
+- Run `node scripts/update-all.mjs` only after network approval.
 - Run `node scripts/validate-data.mjs`.
+- Run `git diff --check`.
 
 Exit:
 
-- Refresh order, report, fallback markers, Status copy, and static fallback pages agree on one recovery meaning.
-- live network refresh remains optional and clearly separate from local verification.
-- Any changed recovery behavior has focused regression coverage.
+- Generated data and static fallback pages are refreshed or explicitly left unchanged with a reason.
+- Any fallback, partial, stale, or error state from live sources is visible in Status and refresh-report output.
+- Signal quality remains focused on agent-workflow signals rather than broad baseline tooling.
 
 ## Architecture Gate
 

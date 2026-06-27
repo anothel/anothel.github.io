@@ -192,3 +192,33 @@ test("refresh run treats stale ok sources as attention", () => {
     assert.match(html, /Repo watchlist: GitHub stale/);
     assert.match(html, /Stale - 4 days old/);
 });
+
+test("refresh run fallback attention keeps previous data context", () => {
+    const html = renderRefreshRun({
+        generatedAt: "2026-06-24T00:00:00.000Z",
+        manifestUpdated: "2026-06-24",
+        changedModules: [],
+        totals: { status: "fallback", items: 4, sources: 1 },
+        modules: [
+            {
+                id: "packages",
+                title: "Package watchlist",
+                status: "fallback",
+                count: 4,
+                sources: [{
+                    source: "npm",
+                    status: "fallback",
+                    count: 4,
+                    fallbackUsed: true,
+                    staleButSafe: true,
+                    rateLimited: true,
+                    fallbackReason: "No package rows fetched",
+                    previousUpdated: "2026-06-19"
+                }]
+            }
+        ]
+    });
+
+    assert.match(html, /Package watchlist: npm fallback/);
+    assert.match(html, /fallback used \/ previous data kept \/ rate limited \/ No package rows fetched \/ previous 2026-06-19/);
+});

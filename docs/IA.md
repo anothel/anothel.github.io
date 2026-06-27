@@ -144,6 +144,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Repeated audit slices are consolidated into workflow-level Roadmap items rather than new page-by-page audits.
 - No route, localStorage schema, source data, signal policy, framework, backend, account, or sync scope changed.
 
+## Refresh Recovery Drill
+
+- Status refresh-run fallback attention keeps previous data context, including the previous data date from refresh-report sources.
+- update-all dry-run and static fallback regeneration stayed local; no live source refresh was run.
+- Refresh order, fallback markers, Status copy, and static fallback tests share the same recovery meaning for ok, stale, partial, fallback, and error states.
+- Live source refresh stayed separate because it requires network approval.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

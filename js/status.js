@@ -153,7 +153,8 @@ function sourceIssueText(source, report) {
         source.fallbackUsed ? "fallback used" : "",
         source.staleButSafe ? "previous data kept" : "",
         source.rateLimited ? "rate limited" : "",
-        source.fallbackReason || ""
+        source.fallbackReason || "",
+        source.previousUpdated ? `previous ${source.previousUpdated}` : ""
     ].filter(Boolean).join(" / ");
     return [source.source || "unknown", sourceAttentionLabel(report, source), errors || safety || freshness]
         .filter(Boolean)
