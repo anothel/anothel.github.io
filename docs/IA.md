@@ -116,6 +116,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Stale source details name retry data refresh directly instead of requiring refresh-report interpretation.
 - No route, localStorage schema, refresh script order, signal policy, framework, backend, or account scope changed.
 
+## Interaction State Visual Audit
+
+- Nested actions now get their own hover/focus target instead of also brightening the parent card.
+- Review queue hover and selected states are visually distinct; selected rows keep a left accent marker.
+- Saved queue remove buttons gain the same hover/focus affordance as other local action buttons.
+- No route, localStorage schema, refresh script, signal policy, framework, backend, or account scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

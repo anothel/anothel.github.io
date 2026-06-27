@@ -572,6 +572,14 @@ test("home command center cards brighten on hover", () => {
     assert.match(styles, /\.topic-movement-grid\s*{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/s);
 });
 
+test("interactive card states keep nested actions and selection distinct", () => {
+    assert.match(styles, /\.topic-movement-card:hover:not\(:has\(\.topic-movement-actions a:is\(:hover, :focus-visible\)\)\)\s*{/);
+    assert.match(styles, /\.topic-movement-actions a:hover,[\s\S]*\.topic-movement-actions a:focus-visible\s*{[^}]*background: var\(--accent-soft\)/s);
+    assert.match(styles, /\.review-queue-item:hover:not\(\[aria-selected="true"\]\)\s*{[^}]*background: var\(--panel-strong\)/s);
+    assert.match(styles, /\.review-queue-item\[aria-selected="true"\]\s*{[^}]*box-shadow: inset 4px 0 0 var\(--accent\)/s);
+    assert.match(styles, /\.saved-item button:hover,[\s\S]*\.saved-item button:focus-visible\s*{[^}]*background: var\(--panel-strong\)/s);
+});
+
 test("packages page owns the package watchlist module", () => {
     const packages = read("packages/index.html");
 

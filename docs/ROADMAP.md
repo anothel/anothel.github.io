@@ -38,27 +38,28 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Interaction State Visual Audit
+### P0 - Static Snapshot Drift Audit
 
-Trigger: clickable cards, nested actions, hover, focus, and selected states must stay visually distinct after Explore and Home interaction changes.
+Trigger: shared renderers and static fallback copy changed across Home, Today, Explore, Status, modules, and topic pages.
 
 Scope:
 
-- Audit Explore cards, topic cards, module route cards, Review queue rows, and nested Save/Open actions.
-- Fix only states where card hover, focus, selected, or nested action hover obscures the target.
-- Keep route count, localStorage schema, refresh scripts, signal policy, and the architecture gate unchanged unless a failing test proves otherwise.
+- Audit `scripts/update-static-fallbacks.mjs`, checked-in static pages, shared render helpers, and topic snapshots.
+- Regenerate static HTML only when checked-in pages drift from shared renderer output.
+- Keep route count, localStorage schema, source data, signal policy, and the architecture gate unchanged unless a failing test proves otherwise.
 - No framework, backend, account, sync, or new public route.
 
 Verification:
 
-- Run `node --test tests/explore-ui.test.mjs tests/review-ui.test.mjs tests/topic-ui.test.mjs tests/site-structure.test.mjs`.
+- Run `node --test tests/static-fallback.test.mjs tests/data-workflow-scripts.test.mjs tests/site-structure.test.mjs tests/topic-ui.test.mjs`.
+- Run `node scripts/update-static-fallbacks.mjs`, then confirm no unexpected static drift.
 - Run `node scripts/validate-data.mjs`.
 
 Exit:
 
-- Hover, focus, selected, and nested action states identify one active target at a time.
-- Keyboard focus remains visible on every card-like interactive surface.
-- Any changed interaction state has focused regression coverage.
+- Static pages reflect shared renderer output after a clean regeneration.
+- Static fallback copy stays user-facing and aligned across Home, Today, Explore, Status, modules, and topics.
+- Any intentional static snapshot change has focused regression coverage.
 
 ## Architecture Gate
 

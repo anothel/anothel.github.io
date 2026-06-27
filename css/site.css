@@ -357,7 +357,7 @@ main {
     text-decoration: none;
 }
 
-.topic-movement-card:hover {
+.topic-movement-card:hover:not(:has(.topic-movement-actions a:is(:hover, :focus-visible))) {
     border-color: var(--accent-soft);
     background: var(--panel-strong);
 }
@@ -409,7 +409,8 @@ main {
     text-decoration: none;
 }
 
-.topic-movement-actions a:hover {
+.topic-movement-actions a:hover,
+.topic-movement-actions a:focus-visible {
     border-color: var(--accent-soft);
     background: var(--accent-soft);
 }
@@ -1722,6 +1723,12 @@ button {
     font-weight: 900;
 }
 
+.saved-item button:hover,
+.saved-item button:focus-visible {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+}
+
 .saved-empty {
     margin: 0;
     padding: 14px;
@@ -1790,9 +1797,13 @@ button {
     text-align: left;
 }
 
-.review-queue-item:hover,
+.review-queue-item:hover:not([aria-selected="true"]) {
+    background: var(--panel-strong);
+}
+
 .review-queue-item[aria-selected="true"] {
     background: var(--panel-strong);
+    box-shadow: inset 4px 0 0 var(--accent);
 }
 
 .review-queue-item strong {
