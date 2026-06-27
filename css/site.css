@@ -1924,8 +1924,7 @@ button {
     cursor: pointer;
 }
 
-.explore-card:hover,
-.explore-card:focus-within,
+.explore-card:hover:not(:has(.explore-card-actions button:is(:hover, :focus-visible))),
 .explore-card:focus-visible,
 .link-card:hover,
 .link-card:focus-visible {
@@ -1989,6 +1988,8 @@ button {
 .explore-card-actions button {
     width: auto;
     min-width: 88px;
+    border-color: var(--accent-soft);
+    background: var(--accent-soft);
     color: var(--accent);
     font-weight: 900;
 }
@@ -1996,6 +1997,12 @@ button {
 .explore-card-actions button[aria-pressed="true"] {
     border-color: var(--accent);
     background: var(--accent-soft);
+}
+
+.explore-card-actions button:hover,
+.explore-card-actions button:focus-visible {
+    border-color: var(--accent);
+    background: var(--panel-strong);
 }
 
 .panel-heading {

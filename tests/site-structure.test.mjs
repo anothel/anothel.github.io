@@ -561,7 +561,9 @@ test("home command center cards brighten on hover", () => {
     assert.match(styles, /\.link-card:hover/);
     assert.match(styles, /\.start-item:hover\s*{[^}]*background: var\(--panel-strong\)/s);
     assert.match(styles, /\.module-route:hover\s*{[^}]*background: var\(--panel-strong\)/s);
-    assert.match(styles, /\.explore-card:hover,[\s\S]*\.link-card:focus-visible\s*{[^}]*background: var\(--panel-strong\)/s);
+    assert.match(styles, /\.explore-card:hover:not\(:has\(\.explore-card-actions button:is\(:hover, :focus-visible\)\)\),[\s\S]*\.link-card:focus-visible\s*{[^}]*background: var\(--panel-strong\)/s);
+    assert.match(styles, /\.explore-card-actions button\s*{[^}]*background: var\(--accent-soft\)/s);
+    assert.match(styles, /\.explore-card-actions button:hover,[\s\S]*\.explore-card-actions button:focus-visible\s*{[^}]*background: var\(--panel-strong\)/s);
     assert.doesNotMatch(styles, /\.decision-card/);
     assert.match(styles, /\.topic-movement-grid\s*{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/s);
 });
