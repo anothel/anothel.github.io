@@ -38,27 +38,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Signal Quality Regression Audit
+### P0 - Home Visit Speed Audit
 
-Trigger: refresh fallback, shared signal policy, and Review workflow changes can hide whether priority surfaces still prefer specific agent-workflow signals over broad baseline tooling.
+Trigger: after signal-quality and review queue work, Home must still answer what to open first faster than reopening Today or Explore.
 
 Scope:
 
-- Compare Today, Explore, topic landing cards, and module health copy against current golden expectations.
-- Adjust checked-in signal policy or watchlist data only when tests show broad baseline items outrank agent-workflow signals.
+- Audit Home command center, Today preview, Review summary, Status trust cue, and module jumps.
+- Reduce duplicate home choices or copy only when tests show the open-first path is unclear.
 - Keep route count, localStorage schema, refresh scripts, and the architecture gate unchanged unless a failing test proves otherwise.
 - No framework, backend, account, sync, or new public route.
 
 Verification:
 
-- Run `node --test tests/signal-quality-golden.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/topic-ui.test.mjs tests/site-structure.test.mjs`.
+- Run `node --test tests/home-data.test.mjs tests/today-data.test.mjs tests/site-structure.test.mjs tests/static-fallback.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
 
 Exit:
 
-- Broad baseline signals do not dominate agent-workflow priority surfaces.
-- Data health and fallback meanings remain consistent across Home, Today, Explore, Status, and module pages.
-- Any scoring or watchlist adjustment has a focused regression test.
+- Home gives one obvious open-first path, one Review return path, and one trust state without extra filtering.
+- Static fallback copy stays useful without JavaScript.
+- Any changed Home workflow has focused regression coverage.
 
 ## Architecture Gate
 

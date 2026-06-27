@@ -95,6 +95,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Queue copy makes unread-first ordering explicit; selected-item detail gives a status-specific next action for unread, read, and done items.
 - Export and import stay local portability affordances, not sync, account, backend, or route expansion.
 
+## Signal Quality Regression Audit
+
+- The signal quality golden fixture still keeps agent-workflow signals above broad baseline tooling.
+- Today, Explore, topic landing cards, and public structure tests stayed green against current golden expectations.
+- No signal policy or watchlist change was needed because broad baseline items did not dominate priority surfaces.
+- Home, Today, Explore, Status, and module source health and fallback copy stayed consistent.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
