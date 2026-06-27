@@ -56,19 +56,23 @@ test("DataHealth describes fallback and partial modes", () => {
 
     assert.equal(
         DataHealth.dataModeText({ status: "fallback" }),
-        "Source health fallback. Previous data remains available."
+        "Source health fallback. Previous data remains available; retry data refresh."
     );
     assert.equal(
         DataHealth.dataModeText({ status: "partial" }),
-        "Source health partial. Usable data remains available."
+        "Source health partial. Usable data remains available; retry data refresh for missing sources."
     );
     assert.equal(
         DataHealth.dataModeText({ status: "ok" }),
-        "Source health ok. Use the displayed data date for freshness."
+        "Source health ok. Use the displayed data date for freshness. No recovery needed."
     );
     assert.equal(
         DataHealth.dataModeText({ status: "ok" }, { updated: "2026-06-22" }),
-        "Source health ok. Data date 2026-06-22."
+        "Source health ok. Data date 2026-06-22. No recovery needed."
+    );
+    assert.equal(
+        DataHealth.dataModeText({ status: "error" }),
+        "Source health failed. Retry data refresh before trusting freshness."
     );
 });
 
@@ -144,5 +148,9 @@ test("DataHealth exposes shared source detail text", () => {
             staleButSafe: true
         }),
         "Fallback - using 2026-06-19 data / using fallback / previous data kept / previous refresh 2026-06-19"
+    );
+    assert.equal(
+        DataHealth.sourceDetail({ status: "ok", updated: "2026-06-19" }, "2026-06-24"),
+        "Stale - 5 days old / retry data refresh"
     );
 });

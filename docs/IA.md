@@ -109,6 +109,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - The trust state keeps source health, data date, and freshness visible without three separate Home choices.
 - No route, localStorage schema, refresh script, framework, backend, or account scope changed.
 
+## Status Recovery Clarity Audit
+
+- Home, Today, Explore, Status, and module health strips now share recovery copy for ok, partial, fallback, stale, and error states.
+- Partial and fallback states keep usable data visible while naming retry data refresh as the recovery action.
+- Stale source details name retry data refresh directly instead of requiring refresh-report interpretation.
+- No route, localStorage schema, refresh script order, signal policy, framework, backend, or account scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

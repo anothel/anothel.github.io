@@ -74,7 +74,7 @@ test("package watchlist escapes generated text and blocks unsafe links", async (
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;pkg&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;focus&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Source health partial. Usable data remains available.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Source health partial. Usable data remains available; retry data refresh for missing sources.");
     assert.match(html, /status-partial/);
     assert.match(html, /1 failed: openai/);
 });
@@ -114,7 +114,7 @@ test("repo watchlist escapes generated text and blocks unsafe links", async () =
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;repo&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;focus&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Source health partial. Usable data remains available.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Source health partial. Usable data remains available; retry data refresh for missing sources.");
     assert.match(html, /status-partial/);
     assert.match(html, /1 failed: bad\/repo/);
 });
@@ -151,6 +151,6 @@ test("reference shelf renderer escapes generated text and blocks unsafe links", 
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;link&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;summary&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Source health ok. Data date 2026-06-16.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Source health ok. Data date 2026-06-16. No recovery needed.");
     assert.match(html, /status-ok/);
 });

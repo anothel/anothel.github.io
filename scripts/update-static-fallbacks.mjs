@@ -9,13 +9,6 @@ import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRo
 
 const { escapeHtml } = globalThis.AnothelDom;
 
-function dataModeText(health, updated) {
-    if (health.includes("partial")) return "Source health partial. Usable data remains available.";
-    if (health.includes("fallback")) return "Source health fallback. Previous data remains available.";
-    if (health.includes("error")) return "Source health failed. Check Status before trusting freshness.";
-    return `Source health ok. Data date ${updated}.`;
-}
-
 function sourceMetaList(datasets) {
     return Object.values(datasets).flatMap((dataset) => {
         const sourceMeta = dataset?.sourceMeta;
@@ -29,7 +22,7 @@ function trimLineEnds(markup) {
 }
 
 function replaceTaggedText(html, attr, value) {
-    const pattern = new RegExp(`(<(strong|span)[^>]*${attr}[^>]*>)[\\s\\S]*?(<\\/\\2>)`);
+    const pattern = new RegExp(`(<(strong|span|p)[^>]*${attr}[^>]*>)[\\s\\S]*?(<\\/\\2>)`);
     if (!pattern.test(html)) throw new Error(`Missing static fallback field: ${attr}`);
     return html.replace(pattern, `$1${escapeHtml(value)}$3`);
 }
@@ -280,6 +273,7 @@ async function updateStaticFallbacks() {
     home = replaceTaggedText(home, "data-home-live", homeOverview.healthLabel);
     home = replaceTaggedText(home, "data-home-updated", updated);
     home = replaceTaggedText(home, "data-home-freshness", homeOverview.dataState);
+    home = replaceTaggedText(home, "data-home-recovery", homeOverview.recoveryText);
     home = replacePattern(home, /<p class="stamp">Data date [^<]+<\/p>/, `<p class="stamp">Data date ${escapeHtml(updated)}</p>`, "home stamp");
     await writeIfChanged("index.html", home);
 
@@ -308,7 +302,7 @@ ${trimLineEnds(globalThis.DataHealth.renderSourceHealth(exploreSources, { today:
     statusHtml = replaceTaggedText(statusHtml, "data-status-sources", statusSummary.totalSources);
     statusHtml = replaceTaggedText(statusHtml, "data-status-health", statusSummary.healthLabel);
     statusHtml = replaceTaggedText(statusHtml, "data-status-updated", statusSummary.updated);
-    statusHtml = replacePattern(statusHtml, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(dataModeText(statusSummary.healthLabel, statusSummary.updated))}</p>`, "status data mode");
+    statusHtml = replacePattern(statusHtml, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(rows, { updated: statusSummary.updated }))}</p>`, "status data mode");
     statusHtml = replacePattern(statusHtml, /(<div data-refresh-run>)[\s\S]*?\n\s*<\/section>\s*\n\s*(<section class="rank-panel" aria-labelledby="status-table-title">)/, `$1
 ${renderRefreshRun(report).trim()}
                 </div>
@@ -320,8 +314,10 @@ ${renderRefreshRun(report).trim()}
     await writeIfChanged("status/index.html", statusHtml);
 
     for (const module of modules) {
+        const dataset = datasets[module.id] || {};
         let html = await readFile(module.route, "utf8");
         html = replaceTaggedText(html, "data-updated", module.updated);
+        html = replacePattern(html, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(dataset.sourceMeta, { updated: dataset.updated || module.updated }))}</p>`, `${module.id} data mode`);
         await writeIfChanged(module.route, html);
     }
 

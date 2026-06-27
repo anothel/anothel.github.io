@@ -47,7 +47,7 @@ test("collectSourceRows expands module source metadata into rows", () => {
             status: "ok",
             count: 6,
             updated: "2026-06-20T00:00:00.000Z",
-            detail: "Stale - 4 days old"
+            detail: "Stale - 4 days old / retry data refresh"
         },
         {
             module: "Tech trends",
@@ -65,7 +65,7 @@ test("collectSourceRows expands module source metadata into rows", () => {
             status: "ok",
             count: 4,
             updated: "2026-06-19T00:00:00.000Z",
-            detail: "Stale - 5 days old"
+            detail: "Stale - 5 days old / retry data refresh"
         }
     ]);
 });

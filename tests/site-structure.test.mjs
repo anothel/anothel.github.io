@@ -491,6 +491,7 @@ test("root page exposes command center slots", () => {
         "data-home-live",
         "data-home-updated",
         "data-home-freshness",
+        "data-home-recovery",
         "data-home-review-saved",
         "data-home-review-unread",
         "data-home-topic-movements",

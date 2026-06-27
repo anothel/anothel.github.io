@@ -1,6 +1,7 @@
 import "./safe-dom.js";
 import "./local-state.js";
 import "./topic-taxonomy.js";
+import "./data-health.js";
 
 const manifestUrl = typeof document === "undefined"
     ? "data/manifest.json"
@@ -191,7 +192,8 @@ export function buildHomeOverview(manifest, options = {}) {
         totalModules: modules.length,
         updated,
         healthLabel: healthLabel(counts),
-        dataState: dataState(updated, options.today)
+        dataState: dataState(updated, options.today),
+        recoveryText: globalThis.DataHealth.dataModeText(modules.map((module) => ({ status: module.status })), { updated })
     };
 }
 
@@ -379,11 +381,13 @@ function applyOverview(root, manifest) {
     const live = root.querySelector("[data-home-live]");
     const updated = root.querySelector("[data-home-updated]");
     const freshness = root.querySelector("[data-home-freshness]");
+    const recovery = root.querySelector("[data-home-recovery]");
 
     if (total) total.textContent = String(overview.totalItems);
     if (live) live.textContent = overview.healthLabel;
     if (updated) updated.textContent = overview.updated;
     if (freshness) freshness.textContent = overview.dataState;
+    if (recovery) recovery.textContent = overview.recoveryText;
 }
 
 function applyRoutes(root, manifest) {

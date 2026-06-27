@@ -106,6 +106,13 @@ test("IA records home visit speed audit outcomes", () => {
     assert.match(ia, /No route, localStorage schema, refresh script, framework, backend, or account scope changed/s);
 });
 
+test("IA records status recovery clarity audit outcomes", () => {
+    assert.match(ia, /Status Recovery Clarity Audit/);
+    assert.match(ia, /share recovery copy for ok, partial, fallback, stale, and error states/s);
+    assert.match(ia, /retry data refresh as the recovery action/s);
+    assert.match(ia, /Stale source details name retry data refresh/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -129,18 +136,18 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
+    assert.match(roadmap, /### P0 - Interaction State Visual Audit/);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
+    assert.match(roadmap, /### P0 - Interaction State Visual Audit/);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
+    assert.match(roadmap, /### P0 - Interaction State Visual Audit/);
 });
 
 test("roadmap keeps architecture PoC as a gate outside next work", () => {
@@ -152,26 +159,31 @@ test("roadmap keeps architecture PoC as a gate outside next work", () => {
 
 test("roadmap keeps completed refresh stability out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
+    assert.match(roadmap, /### P0 - Interaction State Visual Audit/);
 });
 
 test("roadmap keeps completed review queue friction out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Review Queue Friction Audit/);
-    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
+    assert.match(roadmap, /### P0 - Interaction State Visual Audit/);
 });
 
 test("roadmap keeps completed signal quality regression out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Signal Quality Regression Audit/);
-    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
+    assert.match(roadmap, /### P0 - Interaction State Visual Audit/);
 });
 
 test("roadmap keeps completed home visit speed out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Home Visit Speed Audit/);
-    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
+    assert.match(roadmap, /### P0 - Interaction State Visual Audit/);
 });
 
-test("roadmap promotes status recovery clarity as the active P0", () => {
-    assert.match(roadmap, /### P0 - Status Recovery Clarity Audit/);
-    assert.match(roadmap, /partial, stale, and fallback states still expose one recovery meaning/s);
+test("roadmap keeps completed status recovery clarity out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Status Recovery Clarity Audit/);
+    assert.match(roadmap, /### P0 - Interaction State Visual Audit/);
+});
+
+test("roadmap promotes interaction state visual audit as the active P0", () => {
+    assert.match(roadmap, /### P0 - Interaction State Visual Audit/);
+    assert.match(roadmap, /clickable cards, nested actions, hover, focus, and selected states/s);
     assert.match(roadmap, /No framework, backend, account, sync, or new public route/s);
 });

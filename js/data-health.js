@@ -107,16 +107,16 @@
 
     function dataModeText(sourceMeta, options = {}) {
         const status = aggregateSourceStatus(sourceMeta);
-        if (status === "fallback") return "Source health fallback. Previous data remains available.";
-        if (status === "partial") return "Source health partial. Usable data remains available.";
-        if (status === "error") return "Source health failed. Check Status before trusting freshness.";
+        if (status === "fallback") return "Source health fallback. Previous data remains available; retry data refresh.";
+        if (status === "partial") return "Source health partial. Usable data remains available; retry data refresh for missing sources.";
+        if (status === "error") return "Source health failed. Retry data refresh before trusting freshness.";
         if (status === "ok") {
             const updatedDate = datePart(options.updated);
             return updatedDate
-                ? `Source health ok. Data date ${updatedDate}.`
-                : "Source health ok. Use the displayed data date for freshness.";
+                ? `Source health ok. Data date ${updatedDate}. No recovery needed.`
+                : "Source health ok. Use the displayed data date for freshness. No recovery needed.";
         }
-        return "Data status unavailable.";
+        return "Data status unavailable. Check Status before trusting freshness.";
     }
 
     function sourceDetail(source, today) {
@@ -128,6 +128,7 @@
         if (source?.fallbackReason) safety.push(source.fallbackReason);
         if (source?.previousUpdated) safety.push(`previous refresh ${source.previousUpdated}`);
         if (safety.length > 0) return `${freshness} / ${safety.join(" / ")}`;
+        if (freshness.startsWith("Stale -")) return `${freshness} / retry data refresh`;
 
         const errors = Array.isArray(source?.errors) ? source.errors : [];
         if (errors.length > 0) {

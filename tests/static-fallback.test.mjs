@@ -92,17 +92,17 @@ function todayStatusText() {
     const total = today.sections.reduce((sum, section) => sum + section.items.length, 0);
     const status = today.sourceMeta?.status || "ok";
 
-    if (status === "fallback") return `${total} generated picks. Source health fallback. Previous data remains available.`;
-    if (status === "partial") return `${total} generated picks. Source health partial. Usable data remains available.`;
-    if (status === "error") return `${total} generated picks from failed source refresh. Check Status before trusting freshness.`;
-    return `${total} generated picks. Source health ok. Data date ${today.updated}.`;
+    if (status === "fallback") return `${total} generated picks. Source health fallback. Previous data remains available; retry data refresh.`;
+    if (status === "partial") return `${total} generated picks. Source health partial. Usable data remains available; retry data refresh for missing sources.`;
+    if (status === "error") return `${total} generated picks from failed source refresh. Retry data refresh before trusting freshness.`;
+    return `${total} generated picks. Source health ok. Data date ${today.updated}. No recovery needed.`;
 }
 
 function dataModeText() {
     const health = moduleHealth();
-    if (health.includes("partial")) return "Source health partial. Usable data remains available.";
-    if (health.includes("fallback")) return "Source health fallback. Previous data remains available.";
-    return `Source health ok. Data date ${manifest.updated}.`;
+    if (health.includes("partial")) return "Source health partial. Usable data remains available; retry data refresh for missing sources.";
+    if (health.includes("fallback")) return "Source health fallback. Previous data remains available; retry data refresh.";
+    return `Source health ok. Data date ${manifest.updated}. No recovery needed.`;
 }
 
 function topicApp() {
@@ -132,6 +132,7 @@ test("home static fallback matches current manifest summary", () => {
     assert.match(home, new RegExp(`<strong data-home-live>${moduleHealth()}</strong>`));
     assert.match(home, new RegExp(`<strong data-home-updated>${manifest.updated}</strong>`));
     assert.match(home, new RegExp(`<strong data-home-freshness>${overview.dataState}</strong>`));
+    assert.match(home, new RegExp(`<p class="review-summary-note" data-home-recovery>${dataModeText().replaceAll(".", "\\.")}</p>`));
     assert.match(home, /A personal radar for AI engineering signals/);
     assert.doesNotMatch(home, /Static fallback|fetch is available|local file fetch is blocked/);
 });

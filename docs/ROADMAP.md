@@ -38,27 +38,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Status Recovery Clarity Audit
+### P0 - Interaction State Visual Audit
 
-Trigger: partial, stale, and fallback states still expose one recovery meaning after Home now shows a single trust state.
+Trigger: clickable cards, nested actions, hover, focus, and selected states must stay visually distinct after Explore and Home interaction changes.
 
 Scope:
 
-- Audit Status source cards, module data health strips, refresh-report copy, and Home trust-state wording.
-- Reduce duplicate recovery language only when tests show stale, partial, or fallback meanings diverge.
+- Audit Explore cards, topic cards, module route cards, Review queue rows, and nested Save/Open actions.
+- Fix only states where card hover, focus, selected, or nested action hover obscures the target.
 - Keep route count, localStorage schema, refresh scripts, signal policy, and the architecture gate unchanged unless a failing test proves otherwise.
 - No framework, backend, account, sync, or new public route.
 
 Verification:
 
-- Run `node --test tests/status-ui.test.mjs tests/data-health.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run `node --test tests/explore-ui.test.mjs tests/review-ui.test.mjs tests/topic-ui.test.mjs tests/site-structure.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
 
 Exit:
 
-- Status, Home, and module pages give the same recovery meaning for ok, partial, fallback, stale, and error states.
-- Operators get one obvious next action for data recovery without reading refresh scripts first.
-- Any changed recovery copy has focused regression coverage.
+- Hover, focus, selected, and nested action states identify one active target at a time.
+- Keyboard focus remains visible on every card-like interactive surface.
+- Any changed interaction state has focused regression coverage.
 
 ## Architecture Gate
 
