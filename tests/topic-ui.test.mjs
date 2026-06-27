@@ -221,6 +221,8 @@ test("Topic note renderer escapes copy and blocks unsafe support links", () => {
     assert.match(html, /Open &amp; compare\./);
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;bad&gt;/);
+    assert.match(html, /href="..\/..\/notes\/index\.html"/);
+    assert.match(html, /Open Notes/);
 });
 
 test("Topic dashboard why-now copy uses topic-specific meaning", () => {

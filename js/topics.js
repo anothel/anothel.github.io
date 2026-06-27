@@ -301,6 +301,10 @@
                     <span>Supporting signals</span>
                     <div class="topic-support-list">
                         ${signalList}
+                        <a href="../../notes/index.html">
+                            <strong>Open Notes</strong>
+                            <span>All topic judgment</span>
+                        </a>
                     </div>
                 </aside>
             </article>

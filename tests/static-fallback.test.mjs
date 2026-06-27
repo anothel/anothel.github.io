@@ -202,6 +202,8 @@ test("topic pages keep checked-in judgment notes without JavaScript", () => {
         assert.match(html, /data-topic-note/, path);
         assert.match(html, pattern, path);
         assert.match(html, /Supporting signals/i, path);
+        assert.match(html, /href="..\/..\/notes\/index\.html"/, path);
+        assert.match(html, /Open Notes/, path);
     }
 });
 

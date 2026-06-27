@@ -124,6 +124,11 @@
             : `../explore/index.html?focus=${encodeURIComponent(focus)}`;
     }
 
+    function topicNotesHref(item) {
+        const focus = exploreFocus(item);
+        return topicTaxonomy.topicByLabel(focus)?.note ? "../notes/index.html" : "";
+    }
+
     function renderReviewQueue(items, selectedId = "") {
         if (items.length === 0) {
             return '<p class="saved-empty">No saved items in current data.</p>';
@@ -165,6 +170,7 @@
         const savedReason = item.savedReason || "";
         const savedTag = item.savedTag || "";
         const savedNote = item.savedNote || "";
+        const noteHref = topicNotesHref(item);
 
         return `
             <article class="review-detail-card">
@@ -204,6 +210,7 @@
                     <button type="button" data-review-status-id="${escapeHtml(savedRecordId)}" data-review-status="done" aria-label="Mark ${escapeHtml(item.title)} done">Mark done</button>
                     <button type="button" data-review-remove-id="${escapeHtml(savedRecordId)}" aria-label="Remove ${escapeHtml(item.title)} from Review">Remove</button>
                     <a href="${safeHref(similarExploreHref(item))}">Find similar in Explore</a>
+                    ${noteHref ? `<a href="${safeHref(noteHref)}">Open topic notes</a>` : ""}
                 </div>
             </article>
         `;

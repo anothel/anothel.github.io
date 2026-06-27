@@ -38,27 +38,28 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Notes Return Path Audit
+### P0 - End-to-End Workflow Consolidation
 
-Trigger: Notes owns durable topic judgment, but repeat visitors may still need to reopen topic pages or Explore to recover the decision context.
+Trigger: recent work stabilized individual surfaces; the next pass should verify the full signal workflow together instead of adding another narrow audit.
 
 Scope:
 
-- Audit Notes index, topic note panels, topic actions, Home topic movement links, and Review detail return paths.
-- Reduce duplicate judgment links or copy only when tests show Notes, topic pages, and Explore repeat the same job.
+- Audit Home open-first, Today brief, Explore filtering/saving, Review follow-up, Notes judgment, Status trust, and topic pages as one workflow.
+- Collapse duplicate copy or navigation only when tests show the same decision appears in multiple places without a clearer job.
 - Keep route count, localStorage schema, source data, signal policy, static fallback generator, and the architecture gate unchanged unless a failing test proves otherwise.
 - No framework, backend, account, sync, or new public route.
 
 Verification:
 
-- Run `node --test tests/notes-ui.test.mjs tests/topic-ui.test.mjs tests/site-structure.test.mjs tests/static-fallback.test.mjs`.
+- Run `node --test tests/home-data.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/review-ui.test.mjs tests/notes-ui.test.mjs tests/topic-ui.test.mjs tests/status-ui.test.mjs tests/site-structure.test.mjs tests/static-fallback.test.mjs`.
+- Run `node scripts/update-static-fallbacks.mjs`, then confirm no unexpected static drift.
 - Run `node scripts/validate-data.mjs`.
 
 Exit:
 
-- Notes is the single durable judgment return path for promoted topics.
-- Topic pages and Home link to Notes only where it reduces repeat reading, not as a duplicate route list.
-- Any changed Notes or topic workflow copy has focused regression coverage.
+- Home -> Today/Explore -> Review -> Notes/Status has one clear forward path and one clear return path.
+- Repeated decisions are removed or justified by separate jobs in tests or docs.
+- Any changed workflow copy, nav, or state has focused regression coverage.
 
 ## Architecture Gate
 

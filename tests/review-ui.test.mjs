@@ -165,6 +165,8 @@ test("Review renders queue and selected detail with actions", () => {
     assert.match(detail, /aria-label="Remove @modelcontextprotocol\/sdk from Review"/);
     assert.match(detail, /data-review-remove-id="packages:https:\/\/example\.com\/mcp"/);
     assert.match(detail, /href="..\/explore\/index\.html\?focus=MCP"/);
+    assert.match(detail, /href="..\/notes\/index\.html"/);
+    assert.match(detail, /Open topic notes/);
 });
 
 test("Review renders status and saved date metadata", () => {

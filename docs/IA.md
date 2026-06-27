@@ -130,6 +130,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Static fallback copy stayed user-facing and aligned across Home, Today, Explore, Status, modules, and topics.
 - No route, localStorage schema, source data, signal policy, framework, backend, or account scope changed.
 
+## Notes Return Path Audit
+
+- Topic note panels now link back to Notes, so the durable judgment index is reachable from promoted topic pages.
+- Review details add a topic notes return path when the saved item maps to a promoted topic with judgment notes.
+- Home keeps one Notes entry from topic movement, while Notes keeps topic and Explore lens links for returning to current signals.
+- No route, localStorage schema, source data, signal policy, framework, backend, or account scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
