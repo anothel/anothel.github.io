@@ -38,30 +38,29 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Bundled Signal Workflow Pass
+### P0 - Source Governance Prune Pass
 
-Trigger: user wants next work to continue, but grouped by broad workflow rather than repeated page-by-page audit slices.
+Trigger: static fallback and trust surfaces now follow current data, so the next broad risk is stale or broad checked-in sources diluting agent-workflow signals.
 
 Scope:
 
-- Bundle signal quality, trust, repeat-use, static-safety, and source-governance fixes into one workflow pass.
-- Audit the full path Home -> Today/Explore -> Review -> Notes/Status plus source modules and topic pages.
-- Change only surfaces where tests or current data show duplicate choice, stale copy, unclear trust state, or repeated local decision friction.
-- Do not create page-by-page audit follow-ups; record rejected ideas in `Deferred Boundaries`.
-- Keep refresh cadence, source metadata schema, localStorage schema, signal policy, static fallback routes, and architecture gate unchanged unless a failing test proves otherwise.
-- No new route, source family, framework, backend, account, or sync scope.
+- Audit checked-in trend, package, repo, and reference source lists for stale, duplicate, overly broad, or low-signal candidates.
+- Prefer pruning, disabling, or replacing weak source candidates over scoring-rule changes.
+- Keep source families, refresh cadence, source metadata schema, localStorage schema, signal policy, route count, static fallback routes, and architecture gate unchanged unless a failing test proves otherwise.
+- Preserve Today, Explore, topic, Status, and Home trust meanings after any data change.
+- No new public route, framework, backend, account, sync, or source family.
 
 Verification:
 
-- Run `node --test tests/site-structure.test.mjs tests/home-data.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/review-ui.test.mjs tests/status-ui.test.mjs tests/static-fallback.test.mjs tests/signal-quality-golden.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
+- Run `node --test tests/signal-quality-golden.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/topic-ui.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
 - Run `git diff --check`.
 
 Exit:
 
-- One open-first path, one discovery path, one review path, and one trust path remain obvious.
-- Any removed or deferred surface is recorded in IA or `Deferred Boundaries`, not active planning.
-- Next roadmap item, if any, is another broad workflow bundle only when a real trigger remains.
+- Retained sources have a clear signal-dashboard job.
+- Retired candidates move to disabled/history data or `Deferred Boundaries`, not active planning.
+- Broad baseline signals still do not dominate agent-workflow priority surfaces.
 
 ## Architecture Gate
 

@@ -40,6 +40,7 @@ const topicDefinitions = topicTaxonomy.topicDefinitions.filter((topic) => topic.
     exploreRoute: topicTaxonomy.exploreRouteForTopic(topic.label)
 }));
 const knownTopicNames = topicTaxonomy.trackedTopicLabels;
+const requiredHomeTopics = ["AI agents", "MCP", "Agent skills"];
 
 export function createPinnedTopicStore(storage) {
     return globalThis.AnothelState.createPinnedTopicStore(storage, knownTopicNames);
@@ -201,9 +202,9 @@ export function getTodaySection(today, id) {
     return (today.sections || []).find((section) => section.id === id)?.items || [];
 }
 
-export function buildTopicMovements(dataByModule, limit = 3) {
+export function buildTopicMovements(dataByModule, limit = 4) {
     const items = normalizeHomeSignals(dataByModule);
-    return topicDefinitions
+    const rankedMovements = topicDefinitions
         .map((definition, index) => {
             const matches = items
                 .filter((item) => topicMatches(item, definition))
@@ -223,8 +224,20 @@ export function buildTopicMovements(dataByModule, limit = 3) {
         })
         .filter((movement) => movement.count > 0)
         .sort((a, b) => Number(b.count) - Number(a.count) || Number(b.modules) - Number(a.modules) || a.order - b.order)
-        .slice(0, limit)
         .map(({ order, ...movement }) => movement);
+    const movements = rankedMovements.slice(0, limit);
+
+    for (const topic of requiredHomeTopics.slice(0, limit)) {
+        if (movements.some((movement) => movement.topic === topic)) continue;
+
+        const candidate = rankedMovements.find((movement) => movement.topic === topic);
+        const replacementIndex = [...movements].reverse().findIndex((movement) => !requiredHomeTopics.includes(movement.topic));
+        if (!candidate || replacementIndex < 0) continue;
+
+        movements[movements.length - 1 - replacementIndex] = candidate;
+    }
+
+    return movements;
 }
 
 export function sortTopicMovementsByPins(movements, pinnedTopics = []) {

@@ -2,10 +2,27 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
-import { buildHomeOverview } from "../js/home.js";
+import {
+    buildHomeOverview,
+    buildModuleRoutes,
+    buildTopicMovements,
+    getTodaySection,
+    renderModuleRoutes,
+    renderSkimList,
+    renderStartItems,
+    renderTopicMovements
+} from "../js/home.js";
 
 function read(path) {
     return readFileSync(path, "utf8");
+}
+
+function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function collapseMarkup(value) {
+    return String(value).replace(/\s+/g, " ").trim();
 }
 
 function json(path) {
@@ -14,6 +31,10 @@ function json(path) {
 
 const manifest = json("data/manifest.json");
 const today = json("data/today.json");
+const trends = json("data/trends.json");
+const packages = json("data/packages.json");
+const repos = json("data/repos.json");
+const links = json("data/links.json");
 const refreshReport = json("data/refresh-report.json");
 const pages = [
     "index.html",
@@ -133,6 +154,26 @@ test("home static fallback matches current manifest summary", () => {
     assert.match(home, new RegExp(`<strong data-home-updated>${manifest.updated}</strong>`));
     assert.match(home, new RegExp(`<strong data-home-freshness>${overview.dataState}</strong>`));
     assert.match(home, new RegExp(`<p class="review-summary-note" data-home-recovery>${dataModeText().replaceAll(".", "\\.")}</p>`));
+    for (const route of buildModuleRoutes(manifest)) {
+        assert.match(home, new RegExp(`href="${escapeRegExp(route.route)}"`), route.id);
+        assert.match(home, new RegExp(`<small>${route.count} items / ${route.updated} / Status ${route.status}</small>`), route.id);
+    }
+    assert.match(
+        collapseMarkup(home),
+        new RegExp(escapeRegExp(collapseMarkup(renderStartItems(getTodaySection(today, "start")))))
+    );
+    assert.match(
+        collapseMarkup(home),
+        new RegExp(escapeRegExp(collapseMarkup(renderSkimList(getTodaySection(today, "skim")))))
+    );
+    assert.match(
+        collapseMarkup(home),
+        new RegExp(escapeRegExp(collapseMarkup(renderModuleRoutes(buildModuleRoutes(manifest)))))
+    );
+    assert.match(
+        collapseMarkup(home),
+        new RegExp(escapeRegExp(collapseMarkup(renderTopicMovements(buildTopicMovements({ trends, packages, repos, links })))))
+    );
     assert.match(home, /A personal radar for AI engineering signals/);
     assert.doesNotMatch(home, /Static fallback|fetch is available|local file fetch is blocked/);
 });

@@ -59,9 +59,11 @@ test("static fallback renderer loads shared DOM safety before topic and note ren
 test("static fallback renderer reuses public render helpers instead of duplicating freshness logic", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
-    assert.match(script, /import \{ buildHomeOverview \} from "\.\.\/js\/home\.js";/);
+    assert.match(script, /import \{[\s\S]*buildHomeOverview[\s\S]*renderModuleRoutes[\s\S]*renderTopicMovements[\s\S]*\} from "\.\.\/js\/home\.js";/);
     assert.match(script, /import \{ renderExploreLinks, renderTodayStatus \} from "\.\.\/js\/today\.js";/);
     assert.match(script, /renderExploreLinks\(\)/);
+    assert.match(script, /renderModuleRoutes\(homeRoutes\)/);
+    assert.match(script, /renderTopicMovements\(topicMovements\)/);
     assert.match(script, /collectSourceRows/);
     assert.match(script, /renderSourceRows/);
     assert.doesNotMatch(script, /function (ageDays|dataState|todayStatusText|sourceDetail|renderStatusRows)\b/);

@@ -3,7 +3,16 @@ import { dirname } from "node:path";
 import vm from "node:vm";
 import { pathToFileURL } from "node:url";
 import "../js/safe-dom.js";
-import { buildHomeOverview } from "../js/home.js";
+import {
+    buildHomeOverview,
+    buildModuleRoutes,
+    buildTopicMovements,
+    getTodaySection,
+    renderModuleRoutes,
+    renderSkimList,
+    renderStartItems,
+    renderTopicMovements
+} from "../js/home.js";
 import { renderExploreLinks, renderTodayStatus } from "../js/today.js";
 import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows } from "../js/status.js";
 
@@ -19,6 +28,15 @@ function sourceMetaList(datasets) {
 
 function trimLineEnds(markup) {
     return markup.split("\n").map((line) => line.trimEnd()).join("\n");
+}
+
+function indentBlock(markup, spaces) {
+    const prefix = " ".repeat(spaces);
+    return trimLineEnds(markup)
+        .trim()
+        .split("\n")
+        .map((line) => line.trim() ? `${prefix}${line.replace(/^ {12}/, "")}` : "")
+        .join("\n");
 }
 
 function replaceTaggedText(html, attr, value) {
@@ -267,6 +285,8 @@ async function updateStaticFallbacks() {
     const statusSummary = buildStatusSummary(manifest, datasets);
     const rows = collectSourceRows(manifest, datasets, { today: generatedAt });
     const updated = homeOverview.updated;
+    const homeRoutes = buildModuleRoutes(manifest);
+    const topicMovements = buildTopicMovements(datasets);
 
     let home = await readFile("index.html", "utf8");
     home = replaceTaggedText(home, "data-home-total", homeOverview.totalItems);
@@ -275,6 +295,14 @@ async function updateStaticFallbacks() {
     home = replaceTaggedText(home, "data-home-freshness", homeOverview.dataState);
     home = replaceTaggedText(home, "data-home-recovery", homeOverview.recoveryText);
     home = replacePattern(home, /<p class="stamp">Data date [^<]+<\/p>/, `<p class="stamp">Data date ${escapeHtml(updated)}</p>`, "home stamp");
+    home = replacePattern(home, /(<div class="start-list home-priority-list" data-home-start>)[\s\S]*?(\n\s*<\/div>\n\s*<\/div>\n\s*<aside class="home-utility-strip")/, `$1
+${indentBlock(renderStartItems(getTodaySection(today, "start")), 24)}$2`, "home start");
+    home = replacePattern(home, /(<div class="topic-movement-grid" data-home-topic-movements>)[\s\S]*?(\n\s*<\/div>\n\s*<\/section>\n\s*<section class="home-module-section")/, `$1
+${indentBlock(renderTopicMovements(topicMovements), 20)}$2`, "home topic movement");
+    home = replacePattern(home, /(<section class="module-strip home-module-board" aria-label="Module routes" data-home-routes>)[\s\S]*?(\n\s*<\/section>\n\s*<\/section>\n\s*<section class="home-skim-panel")/, `$1
+${indentBlock(renderModuleRoutes(homeRoutes), 20)}$2`, "home module routes");
+    home = replacePattern(home, /(<div class="skim-list" data-home-skim>)[\s\S]*?(\n\s*<\/div>\n\s*<\/section>\n\s*<\/main>)/, `$1
+${indentBlock(renderSkimList(getTodaySection(today, "skim")), 20)}$2`, "home skim");
     await writeIfChanged("index.html", home);
 
     let todayHtml = await readFile("today/index.html", "utf8");

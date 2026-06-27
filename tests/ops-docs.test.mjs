@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
 const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
+const activeRoadmapP0 = /### P0 - Source Governance Prune Pass/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -195,18 +196,18 @@ test("roadmap keeps completed public scope triage out of next work", () => {
 
 test("roadmap keeps completed explore policy parity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
     assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
 });
 
 test("roadmap keeps completed topic promotion review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed source quality drift review out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps architecture PoC as a gate outside next work", () => {
@@ -218,72 +219,72 @@ test("roadmap keeps architecture PoC as a gate outside next work", () => {
 
 test("roadmap keeps completed refresh stability out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed review queue friction out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Review Queue Friction Audit/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed signal quality regression out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Signal Quality Regression Audit/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed home visit speed out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Home Visit Speed Audit/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed status recovery clarity out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Status Recovery Clarity Audit/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed interaction state visual audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Interaction State Visual Audit/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed static snapshot drift audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Static Snapshot Drift Audit/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed notes return path audit out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Notes Return Path Audit/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed end-to-end workflow consolidation out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - End-to-End Workflow Consolidation/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed refresh recovery drill out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Recovery Drill/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed live source refresh probe out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Live Source Refresh Probe/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed refresh cadence governance out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Refresh Cadence Governance Audit/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
 test("roadmap keeps completed signal surface prune pass out of next work", () => {
     assert.doesNotMatch(roadmap, /### P0 - Signal Surface Prune Pass/);
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
+    assert.match(roadmap, activeRoadmapP0);
 });
 
-test("roadmap promotes bundled signal workflow as the active P0", () => {
-    assert.match(roadmap, /### P0 - Bundled Signal Workflow Pass/);
-    assert.match(roadmap, /Bundle signal quality, trust, repeat-use, static-safety, and source-governance fixes/s);
-    assert.match(roadmap, /Do not create page-by-page audit follow-ups/s);
-    assert.match(roadmap, /No new route, source family, framework, backend, account, or sync scope/s);
+test("roadmap promotes source governance prune as the active P0", () => {
+    assert.match(roadmap, activeRoadmapP0);
+    assert.match(roadmap, /Audit checked-in trend, package, repo, and reference source lists/s);
+    assert.match(roadmap, /Prefer pruning, disabling, or replacing weak source candidates over scoring-rule changes/s);
+    assert.match(roadmap, /No new public route, framework, backend, account, sync, or source family/s);
 });

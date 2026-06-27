@@ -390,7 +390,8 @@ test("checked-in data powers the home command center", () => {
     assert.equal(startItems.length, 3);
     assert.equal(skimItems.length, 6);
     assert.equal(routes.length, 6);
-    assert.equal(movements.length, 3);
+    assert.equal(movements.length, 4);
     assert.equal(movements[0].topic, "AI agents");
+    assert.ok(movements.some((movement) => movement.topic === "Agent skills"));
     assert.deepEqual(routes.map((route) => route.id), ["explore", "status", "trends", "packages", "repos", "links"]);
 });
