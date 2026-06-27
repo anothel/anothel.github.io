@@ -2,7 +2,14 @@
 
 This site is a personal technical signal dashboard. It is not a portfolio, resume, blog, company-history page, or social product.
 
-## Direction
+## Use This File
+
+- Keep only future work here. Completed work belongs in git history and docs, not roadmap checklists.
+- Each priority needs a trigger, scope, verification path, and exit condition.
+- Pull former deferred ideas forward only when they improve the signal-dashboard job.
+- Delete or demote items that do not protect visit speed, repeat use, signal quality, trust, or static safety.
+
+## Product Direction
 
 - Static-first: must keep working on GitHub Pages, including no-JS and blocked-fetch fallbacks.
 - Data-first: HN, GitHub, npm, and curated references should feed useful reading paths.
@@ -10,7 +17,6 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Repeat-use bias: each round should reduce repeated filtering, searching, or checking.
 - Trust first: every page should explain data freshness and partial/fallback states with the same meaning.
 - Prune-first: prefer clearer copy, deleted scope, and reused helpers over new frameworks or broad rewrites.
-- No accounts, sync, backend, resume content, or broad blog engine for now.
 
 ## Current Surface
 
@@ -22,36 +28,108 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Signal policy: checked-in `data/signal-policy.json` owns generated Today baseline scoring penalties and intent thresholds.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds the budget in `docs/ARCHITECTURE.md`.
 
-## Planning Metrics
+## Decision Metrics
 
-- `Visit speed`: how many clicks from Home to a useful signal.
-- `Repeat friction`: how much state must be re-selected on every visit.
-- `Signal quality`: whether Today/Explore show specific agent-workflow signals over broad generic tooling.
-- `Trust`: whether stale, partial, or rate-limited data is visible and understandable.
-- `Static safety`: all features must degrade cleanly when fetch, JS, or localStorage is blocked.
+- `Visit speed`: clicks from Home to a useful signal.
+- `Repeat friction`: state the user must re-select on every visit.
+- `Signal quality`: specific agent-workflow signals beating broad generic tooling.
+- `Trust`: stale, partial, or rate-limited data is visible and understandable.
+- `Static safety`: features degrade cleanly when fetch, JS, or localStorage is blocked.
 
-## P5 - Public Scope Triage
+## Next Work Queue
 
-Goal: revisit former Not Now items without turning this into a resume, company-history page, or broad blog.
+### P5 - Public Scope Triage
 
-- [ ] Audit whether a small public worklog would improve repeat-use or trust more than current Notes.
-- [ ] Decide if any portfolio/resume/company-history content has a signal-dashboard job.
-- [ ] Keep route additions static and removable; no account, sync, backend, or SPA requirement.
-- [ ] Add copy tests before adding any public route.
+Trigger: former deferred content ideas need a fresh decision now that core signal surfaces are stable.
 
-Success:
+Scope:
 
-- Former Not Now content either earns a concrete route job or stays out.
-- New content does not weaken the site sentence or GitHub Pages fallback.
+- Decide whether a small public worklog improves repeat-use or trust more than current Notes.
+- Decide whether any portfolio, resume, or company-history content has a signal-dashboard job.
+- Keep any route addition static, removable, and copy-led; no account, sync, backend, or SPA dependency.
 
-## Not Now
+Verification:
 
-- Vite + React SPA.
-- Backend/server functions.
-- Accounts or sync.
+- Add or update copy/navigation tests before adding any public route.
+- Run `node --test tests/site-structure.test.mjs tests/ops-docs.test.mjs`.
+
+Exit:
+
+- Each public-scope candidate is accepted with a concrete route job or explicitly rejected here.
+- Rejected ideas move to `Deferred Boundaries`, not back into active planning.
+
+### P6 - Explore Score Policy Parity
+
+Trigger: Today scoring policy is data-owned, while Explore still has local browser-side quality heuristics.
+
+Scope:
+
+- Decide whether Explore should consume shared policy data or document a deliberate split.
+- Move only stable scoring constants into checked-in data; do not create a generic rules engine.
+- Preserve blocked-fetch and static fallback behavior.
+
+Verification:
+
+- Add a regression test proving shared policy use or the documented split.
+- Run `node --test tests/explore-ui.test.mjs tests/signal-quality-golden.test.mjs`.
+
+Exit:
+
+- Today and Explore scoring ownership is either unified or clearly separated in tests and docs.
+
+### P7 - Topic Promotion Review
+
+Trigger: source growth creates topic candidates that may deserve first-class pages.
+
+Scope:
+
+- Promote a topic only when it changes decisions across modules, notes, guidance, and review actions.
+- Retire or merge weak candidates instead of adding topic pages from item count alone.
+- Keep topic navigation stable unless a promoted topic has a clear repeat-use job.
+
+Verification:
+
+- Run `node --test tests/topic-ui.test.mjs tests/ops-docs.test.mjs`.
+
+Exit:
+
+- Candidate topics are promoted, merged, retired, or left as data-only sources with rationale.
+
+### P8 - Architecture PoC Only On Measured Blocker
+
+Trigger: a measured vanilla JavaScript problem exceeds the budget in `docs/ARCHITECTURE.md`.
+
+Scope:
+
+- Start with the smallest affected surface, likely Review or Explore.
+- Keep GitHub Pages, no-JS messaging, blocked-fetch fallbacks, and public routes intact.
+- Keep the client budget explicit before introducing framework tooling.
+
+Verification:
+
+- Run the affected UI tests plus any architecture PoC test added for the blocker.
+- Compare bundled/static output against the current no-build path before accepting the PoC.
+
+Exit:
+
+- Adopt the PoC only if it removes measured complexity without weakening static safety; otherwise delete it.
+
+## Deferred Boundaries
+
+Eligible for triage:
+
+- Public worklog, only if it improves trust or repeat-use.
+- Portfolio/resume/company-history copy, only if it directly supports the signal-dashboard job.
+- Shared scoring data, only where tests prove policy duplication is risky.
+
+Still blocked:
+
+- Vite + React SPA without a measured blocker.
+- Backend or server functions.
+- Accounts, sync, or cross-device identity.
 - Large design-system rewrite.
-- Rename public routes just to improve labels.
-- Add more topic pages from item count alone.
+- Route renames just to improve labels.
+- More topic pages from item count alone.
 
 ## Working Rules
 
@@ -59,4 +137,4 @@ Success:
 - Public project docs live at repo root when they guide future work.
 - Private implementation plans stay under `.superpowers/`.
 - Before each large task, update or consult this roadmap.
-- After each large task, keep only the next measurable work in this file.
+- After each large task, keep only future work in this file.
