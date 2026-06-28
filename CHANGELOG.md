@@ -13,6 +13,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Marked npm 429 partial refreshes as explicit `rateLimited` metadata while preserving useful package rows.
 - Added shared external-link attribute rendering and static fallback coverage for renderer safety.
 - Strengthened data contract negative fixtures and documented dated GitHub Pages release policy.
+- Recorded the generated data publish drill outcome and promoted module-type warning cleanup as the next Roadmap item.
 
 ## 2026-06-28
 

@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - Generated Data Publish Drill/;
+const activeRoadmapP0 = /### P0 - Module Type Warning Cleanup/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -225,6 +225,13 @@ test("IA records contract and release discipline outcomes", () => {
     assert.match(ia, /No Git tag, provenance, SLSA, framework, backend, account, or sync scope changed/s);
 });
 
+test("IA records generated data publish drill outcomes", () => {
+    assert.match(ia, /Generated Data Publish Drill/);
+    assert.match(ia, /Current checked-in data is publishable from local checks/s);
+    assert.match(ia, /npm `n8n-workflow` 429 remains accepted visible partial source health with `rateLimited` metadata/s);
+    assert.match(ia, /No live network refresh, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -430,8 +437,13 @@ test("roadmap keeps completed contract and release discipline out of next work",
     assert.match(roadmap, /Release policy: dated changelog entries and normal GitHub Pages publishes; no Git tag is required yet/s);
 });
 
-test("roadmap promotes generated data publish drill as the active P0", () => {
+test("roadmap keeps completed generated data publish drill out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Generated Data Publish Drill/);
+    assert.match(roadmap, /Publish drill: current checked-in data is publishable from local checks while npm `n8n-workflow` 429 remains visible `partial` source health/s);
+});
+
+test("roadmap promotes module type warning cleanup as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /release and data contract docs are established, but publish decisions still need one dry-run drill/s);
-    assert.match(roadmap, /A maintainer can decide whether current generated data is publishable from local checks and refresh-report copy/s);
+    assert.match(roadmap, /Validation passes, but Node 24 emits MODULE_TYPELESS_PACKAGE_JSON warnings/s);
+    assert.match(roadmap, /Standard validation runs without module-type warnings or records why the warning remains accepted/s);
 });

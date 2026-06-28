@@ -34,6 +34,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Verification entry point: dependency-free `package.json` scripts; package entry point and PR CI are established.
 - No package dependencies, package manager lockfile, framework tooling, backend, account, sync, or build output exists.
 - npm partial recovery: npm `n8n-workflow` 429 is accepted as visible partial source health with preserved rows and explicit `rateLimited` metadata.
+- Publish drill: current checked-in data is publishable from local checks while npm `n8n-workflow` 429 remains visible `partial` source health.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -47,27 +48,26 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Generated Data Publish Drill
+### P0 - Module Type Warning Cleanup
 
-Trigger: release and data contract docs are established, but publish decisions still need one dry-run drill against current generated data and partial-source state.
+Trigger: Validation passes, but Node 24 emits MODULE_TYPELESS_PACKAGE_JSON warnings because ESM tests/scripts coexist with browser UMD/CommonJS-style helpers.
 
 Scope:
 
-- Run the release checklist against current checked-in data without live network refresh.
-- Confirm current `partial`, `fallback`, `rateLimited`, and generated static fallback states are publishable or explicitly blocked.
+- Audit the smallest ESM/CommonJS boundary causing warnings.
+- Remove the warning with file-level or test-level changes only if UMD globals and no-build GitHub Pages behavior stay intact.
 - Keep route count, source families, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged.
-- Do not add provenance, SLSA, tags, or visual regression unless the drill exposes a concrete gap.
+- Do not add a bundler, transpiler, dependency, or package-wide `"type": "module"` unless tests prove current browser helpers still work.
 
 Verification:
 
-- Run `node --test tests/ops-docs.test.mjs`.
-- Run `node scripts/validate-data.mjs`.
+- Run `npm run check`.
 - Run `git diff --check`.
 
 Exit:
 
-- A maintainer can decide whether current generated data is publishable from local checks and refresh-report copy.
-- Any blocked publish reason becomes future Roadmap work, not an implicit release step.
+- Standard validation runs without module-type warnings or records why the warning remains accepted.
+- Static fallback, UMD helper, and public-route behavior remain unchanged.
 
 ## Architecture Gate
 
@@ -102,7 +102,7 @@ Exit:
 - Large design-system rewrite.
 - Route renames just to improve labels.
 - More topic pages from item count alone.
-- Release provenance, SLSA, visual regression, and advanced ranking work stay deferred until a drill or failing test shows a concrete gap.
+- Release provenance, SLSA, visual regression, and advanced ranking work stay deferred until a failing test shows a concrete gap.
 
 ## Working Rules
 

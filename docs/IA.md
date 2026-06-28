@@ -236,6 +236,12 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - `docs/RELEASE_CHECKLIST.md` names `npm run check`, `node scripts/validate-data.mjs`, `git diff --check`, generated-data review, dated changelog review, and publish decision checks.
 - No Git tag, provenance, SLSA, framework, backend, account, or sync scope changed.
 
+## Generated Data Publish Drill
+
+- Current checked-in data is publishable from local checks when `npm run check`, `node scripts/validate-data.mjs`, and `git diff --check` pass.
+- npm `n8n-workflow` 429 remains accepted visible partial source health with `rateLimited` metadata because preserved package rows keep the surface useful.
+- No live network refresh, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
