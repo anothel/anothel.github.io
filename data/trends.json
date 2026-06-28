@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-28",
-  "generatedAt": "2026-06-28T09:57:30.401Z",
+  "generatedAt": "2026-06-28T22:13:55.256Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 1,
       "emitted": 4,
       "coverage": "4/1",
-      "updatedAt": "2026-06-28T09:57:30.401Z"
+      "updatedAt": "2026-06-28T22:13:55.256Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-28T09:57:30.401Z"
+      "updatedAt": "2026-06-28T22:13:55.256Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-06-28T09:57:30.401Z"
+      "updatedAt": "2026-06-28T22:13:55.256Z"
     }
   ],
   "items": [
@@ -53,8 +53,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "222.8K stars",
-      "signal": "34.1K forks",
+      "velocity": "223K stars",
+      "signal": "34.2K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
@@ -75,8 +75,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "180K stars",
-      "signal": "22.1K forks",
+      "velocity": "180.2K stars",
+      "signal": "22.2K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
     },
@@ -97,7 +97,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "156K stars",
+      "velocity": "156.2K stars",
       "signal": "18.4K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
@@ -130,7 +130,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "63.8K stars",
+      "velocity": "63.9K stars",
       "signal": "5.2K forks",
       "url": "https://github.com/code-yeongyu/oh-my-openagent",
       "summary": "omo/lazycodex: The coding agent for tokenmaxxers;the one and only agent harness for complex codebases. For your Codex, for your OpenCode"
@@ -152,7 +152,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "109.7K stars",
+      "velocity": "109.9K stars",
       "signal": "7.3K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
@@ -163,46 +163,13 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "35.8K stars",
+      "velocity": "35.9K stars",
       "signal": "4.4K forks",
       "url": "https://github.com/github/awesome-copilot",
       "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot."
     },
     {
       "rank": 13,
-      "title": "Anonymous GitHub account mass-dropping undisclosed 0-days",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 95,
-      "velocity": "318 comments",
-      "signal": "810 points",
-      "url": "https://github.com/bikini/exploitarium",
-      "summary": "HN story by binyu with 318 comments."
-    },
-    {
-      "rank": 14,
-      "title": "Previewing GPT5.6 Sol: a next-generation model",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 94,
-      "velocity": "723 comments",
-      "signal": "1112 points",
-      "url": "https://openai.com/index/previewing-gpt-5-6-sol/",
-      "summary": "HN story by minimaxir with 723 comments."
-    },
-    {
-      "rank": 15,
-      "title": "DSpark: Speculative decoding accelerates LLM inference [pdf]",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 92,
-      "velocity": "321 comments",
-      "signal": "762 points",
-      "url": "https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf",
-      "summary": "HN story by aurenvale with 321 comments."
-    },
-    {
-      "rank": 16,
       "title": "@modelcontextprotocol/sdk",
       "source": "npm",
       "category": "MCP",
@@ -213,7 +180,7 @@
       "summary": "40.6M downloads over the last available week."
     },
     {
-      "rank": 17,
+      "rank": 14,
       "title": "@ai-sdk/provider",
       "source": "npm",
       "category": "AI",
@@ -224,7 +191,7 @@
       "summary": "23.7M downloads over the last available week."
     },
     {
-      "rank": 18,
+      "rank": 15,
       "title": "@anthropic-ai/sdk",
       "source": "npm",
       "category": "AI",
@@ -235,7 +202,7 @@
       "summary": "23.5M downloads over the last available week."
     },
     {
-      "rank": 19,
+      "rank": 16,
       "title": "openai",
       "source": "npm",
       "category": "AI",
@@ -246,7 +213,7 @@
       "summary": "22.5M downloads over the last available week."
     },
     {
-      "rank": 20,
+      "rank": 17,
       "title": "ai",
       "source": "npm",
       "category": "AI",
@@ -257,7 +224,7 @@
       "summary": "15.9M downloads over the last available week."
     },
     {
-      "rank": 21,
+      "rank": 18,
       "title": "@ai-sdk/openai",
       "source": "npm",
       "category": "AI",
@@ -268,7 +235,7 @@
       "summary": "8M downloads over the last available week."
     },
     {
-      "rank": 22,
+      "rank": 19,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",
@@ -279,7 +246,7 @@
       "summary": "2.5M downloads over the last available week."
     },
     {
-      "rank": 23,
+      "rank": 20,
       "title": "langfuse",
       "source": "npm",
       "category": "AI evals",
@@ -290,15 +257,48 @@
       "summary": "1.5M downloads over the last available week."
     },
     {
-      "rank": 24,
-      "title": "AI learns the dark art of RFIC design",
+      "rank": 21,
+      "title": "I used Claude Code to get a second opinion on my MRI",
       "source": "Hacker News",
       "category": "AI",
-      "score": 54,
-      "velocity": "151 comments",
-      "signal": "232 points",
-      "url": "https://spectrum.ieee.org/ai-radio-chip-design",
-      "summary": "HN story by Brajeshwar with 151 comments."
+      "score": 63,
+      "velocity": "372 comments",
+      "signal": "265 points",
+      "url": "https://antoine.fi/mri-analysis-using-claude-code-opus",
+      "summary": "HN story by engmarketer with 372 comments."
+    },
+    {
+      "rank": 22,
+      "title": "EU to legislate about Chat Control behind closed doors",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 45,
+      "velocity": "312 comments",
+      "signal": "556 points",
+      "url": "https://www.patrick-breyer.de/en/double-threat-to-private-communications-undemocratic-chat-control-backroom-deals-and-imminent-concessions-spark-relaunch-of-fightchatcontrol-eu/",
+      "summary": "HN story by NeutralForest with 312 comments."
+    },
+    {
+      "rank": 23,
+      "title": "California legislature agrees to upload driver's licenses to national database",
+      "source": "Hacker News",
+      "category": "Database",
+      "score": 42,
+      "velocity": "48 comments",
+      "signal": "107 points",
+      "url": "https://papersplease.org/wp/2026/06/27/california-legislature-agrees-to-upload-drivers-licenses-to-national-database/",
+      "summary": "HN story by iamnothere with 48 comments."
+    },
+    {
+      "rank": 24,
+      "title": "Professor denounces mass AI fraud on an exam at Brown",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 42,
+      "velocity": "82 comments",
+      "signal": "81 points",
+      "url": "https://english.elpais.com/education/2026-06-28/ai-fraud-at-brown-university-academic-integrity-is-at-risk.html",
+      "summary": "HN story by geox with 82 comments."
     }
   ]
 }

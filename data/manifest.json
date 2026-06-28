@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-28",
-  "generatedAt": "2026-06-28T09:57:33.947Z",
+  "generatedAt": "2026-06-28T22:13:59.044Z",
   "modules": [
     {
       "id": "trends",
@@ -18,7 +18,7 @@
       "route": "packages/index.html",
       "data": "data/packages.json",
       "source": "npm",
-      "status": "ok",
+      "status": "partial",
       "count": 25,
       "updated": "2026-06-28"
     },
