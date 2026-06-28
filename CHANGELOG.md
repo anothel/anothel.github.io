@@ -27,6 +27,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Ran unauthenticated publish-health refresh; generated data stayed publishable with GitHub trend 403 partial and npm `n8n-workflow` 429 partial visible.
 - Ran token-backed publish-health rerun; all refresh sources recovered to `ok` with 108 generated items and no source errors.
 - Clarified Review's stale local-saved state when saved browser records no longer match current data.
+- Browser-smoked Explore save to Review, Review status and metadata updates, exports, and cleanup on the local static server.
 
 ## 2026-06-28
 
