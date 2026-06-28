@@ -248,6 +248,12 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - CommonJS-compatible `signal-schema.js` and `topic-taxonomy.js` stay `.js`, so existing `require` callers and browser globals keep working.
 - No package-wide `"type": "module"`, dependency, bundler, transpiler, framework, backend, account, or sync scope changed.
 
+## npm Partial Recovery Confirmation
+
+- Network-approved refresh still returned npm `n8n-workflow` 429.
+- 25 package rows stayed preserved with `rateLimited` metadata, so npm partial remains accepted source health rather than a watchlist removal.
+- The same local run lacked `GITHUB_TOKEN`, so GitHub trend refresh became `partial` again and publish confirmation needs a token-backed refresh report.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

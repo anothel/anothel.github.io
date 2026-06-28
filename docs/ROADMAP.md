@@ -36,6 +36,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - npm partial recovery: npm `n8n-workflow` 429 is accepted as visible partial source health with preserved rows and explicit `rateLimited` metadata.
 - Publish drill: current checked-in data is publishable from local checks while npm `n8n-workflow` 429 remains visible `partial` source health.
 - Module syntax: Home, Today, and Status ESM browser modules use `.mjs` while global helper scripts stay `.js`.
+- npm partial confirmation: npm `n8n-workflow` 429 remains accepted with preserved package rows and visible `rateLimited` metadata.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -49,20 +50,20 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - npm Partial Recovery Confirmation
+### P0 - Authenticated Refresh Publish Confirmation
 
-Trigger: npm `n8n-workflow` 429 remains the only visible partial source after publish and module-warning cleanup.
+Trigger: latest local refresh lacked `GITHUB_TOKEN` and reintroduced GitHub trend `partial`, while npm `n8n-workflow` remains an accepted partial source.
 
 Scope:
 
-- With network approval, run the existing refresh path and confirm whether npm source health recovers.
-- If npm still returns 429, keep preserved rows and decide whether `n8n-workflow` stays accepted partial or needs a watchlist governance change.
+- Run the existing refresh path with `GITHUB_TOKEN` present.
+- Confirm GitHub trend source recovers to `ok`, and npm partial remains the only accepted non-ok source.
 - Keep route count, source families, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged.
-- Do not add retries, mirrors, proxies, provenance, tags, or release automation unless the existing refresh path cannot produce a clear operator decision.
+- Do not add retries, mirrors, proxies, provenance, tags, or release automation unless token-backed refresh still cannot produce a clear publish decision.
 
 Verification:
 
-- Run `node scripts/update-all.mjs` only with network approval.
+- Run `node scripts/update-all.mjs` with `GITHUB_TOKEN`.
 - Run `node --test tests/package-data.test.mjs tests/refresh-report.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
 - Run `npm run check`.
@@ -70,8 +71,8 @@ Verification:
 
 Exit:
 
-- npm partial either recovers to `ok` or remains explicitly accepted with refresh-report and Status copy.
-- Any watchlist change has governance history and focused regression coverage.
+- Current generated data is publishable or blocked from a token-backed refresh report.
+- If GitHub remains partial with a token, the blocker is documented in Roadmap instead of treated as npm fallout.
 
 ## Architecture Gate
 

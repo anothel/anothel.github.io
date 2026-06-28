@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - npm Partial Recovery Confirmation/;
+const activeRoadmapP0 = /### P0 - Authenticated Refresh Publish Confirmation/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -239,6 +239,13 @@ test("IA records module type warning cleanup outcomes", () => {
     assert.match(ia, /No package-wide `"type": "module"`, dependency, bundler, transpiler, framework, backend, account, or sync scope changed/s);
 });
 
+test("IA records npm partial recovery confirmation outcomes", () => {
+    assert.match(ia, /npm Partial Recovery Confirmation/);
+    assert.match(ia, /Network-approved refresh still returned npm `n8n-workflow` 429/s);
+    assert.match(ia, /25 package rows stayed preserved with `rateLimited` metadata/s);
+    assert.match(ia, /The same local run lacked `GITHUB_TOKEN`, so GitHub trend refresh became `partial` again/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -454,8 +461,13 @@ test("roadmap keeps completed module type warning cleanup out of next work", () 
     assert.match(roadmap, /Module syntax: Home, Today, and Status ESM browser modules use `.mjs` while global helper scripts stay `.js`/s);
 });
 
-test("roadmap promotes npm partial recovery confirmation as the active P0", () => {
+test("roadmap keeps completed npm partial recovery confirmation out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - npm Partial Recovery Confirmation/);
+    assert.match(roadmap, /npm partial confirmation: npm `n8n-workflow` 429 remains accepted with preserved package rows and visible `rateLimited` metadata/s);
+});
+
+test("roadmap promotes authenticated refresh publish confirmation as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /npm `n8n-workflow` 429 remains the only visible partial source after publish and module-warning cleanup/s);
-    assert.match(roadmap, /npm partial either recovers to `ok` or remains explicitly accepted with refresh-report and Status copy/s);
+    assert.match(roadmap, /latest local refresh lacked `GITHUB_TOKEN` and reintroduced GitHub trend `partial`/s);
+    assert.match(roadmap, /Current generated data is publishable or blocked from a token-backed refresh report/s);
 });

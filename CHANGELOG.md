@@ -15,6 +15,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Strengthened data contract negative fixtures and documented dated GitHub Pages release policy.
 - Recorded the generated data publish drill outcome and promoted module-type warning cleanup as the next Roadmap item.
 - Renamed Home, Today, and Status ESM browser modules to `.mjs` so Node validation runs without module-type warnings.
+- Confirmed npm `n8n-workflow` still returns 429 with preserved package rows; next publish confirmation needs `GITHUB_TOKEN`.
 
 ## 2026-06-28
 
