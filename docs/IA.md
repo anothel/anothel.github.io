@@ -242,6 +242,12 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - npm `n8n-workflow` 429 remains accepted visible partial source health with `rateLimited` metadata because preserved package rows keep the surface useful.
 - No live network refresh, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed.
 
+## Module Type Warning Cleanup
+
+- Home, Today, and Status browser modules now use `.mjs`, matching their ESM exports and removing Node 24 module-type warnings from validation.
+- CommonJS-compatible `signal-schema.js` and `topic-taxonomy.js` stay `.js`, so existing `require` callers and browser globals keep working.
+- No package-wide `"type": "module"`, dependency, bundler, transpiler, framework, backend, account, or sync scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

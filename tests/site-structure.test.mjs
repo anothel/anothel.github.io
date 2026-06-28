@@ -192,9 +192,9 @@ test("today page owns the generated priority brief", () => {
     ]) {
         assert.doesNotMatch(today, new RegExp(oldHook));
     }
-    assert.match(today, /..\/js\/today\.js/);
+    assert.match(today, /..\/js\/today\.mjs/);
     assert.match(today, /..\/data\/today\.json/);
-    assert.match(today, /type="module" src="..\/js\/today\.js" data-source="..\/data\/today\.json"/);
+    assert.match(today, /type="module" src="..\/js\/today\.mjs" data-source="..\/data\/today\.json"/);
     assert.match(today, /href="..\/index\.html"/);
     assert.match(today, /Today's priority brief\./);
     assert.match(today, /Thirteen generated picks from tracked signals\./);
@@ -472,7 +472,7 @@ test("home and today pages link into topic focus pages", () => {
 test("root page avoids duplicate module entry cards below primary navigation", () => {
     const root = read("index.html");
 
-    assert.match(root, /type="module" src="js\/home\.js" data-manifest="data\/manifest\.json" data-today="data\/today\.json"/);
+    assert.match(root, /type="module" src="js\/home\.mjs" data-manifest="data\/manifest\.json" data-today="data\/today\.json"/);
     assert.doesNotMatch(root, /Entry points/);
     assert.doesNotMatch(root, /class="hub-intro"/);
     assert.doesNotMatch(root, /class="module-grid"/);
@@ -623,7 +623,7 @@ test("status page owns the source health overview", () => {
         assert.match(status, new RegExp(hook));
     }
 
-    assert.match(status, /..\/js\/status\.js/);
+    assert.match(status, /..\/js\/status\.mjs/);
     assert.doesNotMatch(status, /<script defer src="..\/js\/safe-dom\.js"><\/script>/);
     assert.doesNotMatch(status, /<script defer src="..\/js\/data-health\.js"><\/script>/);
     assert.match(status, /..\/data\/manifest\.json/);
@@ -651,7 +651,7 @@ test("source wording distinguishes origin filters from data status", () => {
     const dashboardScript = read("js/dashboard.js");
 
     assert.match(trends, /<script defer src="..\/js\/safe-dom\.js"><\/script>\s*<script defer src="..\/js\/data-health\.js"><\/script>\s*<script defer src="..\/js\/dashboard\.js"/s);
-    assert.match(status, /<script type="module" src="..\/js\/status\.js"/);
+    assert.match(status, /<script type="module" src="..\/js\/status\.mjs"/);
     assert.match(trends, /Origin\s*<select data-source>/);
     assert.match(trends, /All origins/);
     assert.match(dashboardScript, /document\.querySelector\("select\[data-source\]"\)/);

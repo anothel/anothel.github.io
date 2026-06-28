@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - Module Type Warning Cleanup/;
+const activeRoadmapP0 = /### P0 - npm Partial Recovery Confirmation/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -232,6 +232,13 @@ test("IA records generated data publish drill outcomes", () => {
     assert.match(ia, /No live network refresh, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
 });
 
+test("IA records module type warning cleanup outcomes", () => {
+    assert.match(ia, /Module Type Warning Cleanup/);
+    assert.match(ia, /Home, Today, and Status browser modules now use `.mjs`/s);
+    assert.match(ia, /CommonJS-compatible `signal-schema\.js` and `topic-taxonomy\.js` stay `.js`/s);
+    assert.match(ia, /No package-wide `"type": "module"`, dependency, bundler, transpiler, framework, backend, account, or sync scope changed/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -442,8 +449,13 @@ test("roadmap keeps completed generated data publish drill out of next work", ()
     assert.match(roadmap, /Publish drill: current checked-in data is publishable from local checks while npm `n8n-workflow` 429 remains visible `partial` source health/s);
 });
 
-test("roadmap promotes module type warning cleanup as the active P0", () => {
+test("roadmap keeps completed module type warning cleanup out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Module Type Warning Cleanup/);
+    assert.match(roadmap, /Module syntax: Home, Today, and Status ESM browser modules use `.mjs` while global helper scripts stay `.js`/s);
+});
+
+test("roadmap promotes npm partial recovery confirmation as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /Validation passes, but Node 24 emits MODULE_TYPELESS_PACKAGE_JSON warnings/s);
-    assert.match(roadmap, /Standard validation runs without module-type warnings or records why the warning remains accepted/s);
+    assert.match(roadmap, /npm `n8n-workflow` 429 remains the only visible partial source after publish and module-warning cleanup/s);
+    assert.match(roadmap, /npm partial either recovers to `ok` or remains explicitly accepted with refresh-report and Status copy/s);
 });

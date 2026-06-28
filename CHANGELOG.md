@@ -14,6 +14,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Added shared external-link attribute rendering and static fallback coverage for renderer safety.
 - Strengthened data contract negative fixtures and documented dated GitHub Pages release policy.
 - Recorded the generated data publish drill outcome and promoted module-type warning cleanup as the next Roadmap item.
+- Renamed Home, Today, and Status ESM browser modules to `.mjs` so Node validation runs without module-type warnings.
 
 ## 2026-06-28
 

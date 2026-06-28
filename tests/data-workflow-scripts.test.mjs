@@ -42,6 +42,9 @@ test("validate-data syntax checks data workflow scripts and public JavaScript", 
         "scripts/watchlist-governance.mjs",
         "scripts/report-refresh.mjs",
         "scripts/update-static-fallbacks.mjs",
+        "js/home.mjs",
+        "js/status.mjs",
+        "js/today.mjs",
         "js/topics.js",
         "js/signal-schema.js"
     ]) {
@@ -59,8 +62,8 @@ test("static fallback renderer loads shared DOM safety before topic and note ren
 test("static fallback renderer reuses public render helpers instead of duplicating freshness logic", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
-    assert.match(script, /import \{[\s\S]*buildHomeOverview[\s\S]*renderModuleRoutes[\s\S]*renderTopicMovements[\s\S]*\} from "\.\.\/js\/home\.js";/);
-    assert.match(script, /import \{ renderExploreLinks, renderTodaySections, renderTodayStats, renderTodayStatus \} from "\.\.\/js\/today\.js";/);
+    assert.match(script, /import \{[\s\S]*buildHomeOverview[\s\S]*renderModuleRoutes[\s\S]*renderTopicMovements[\s\S]*\} from "\.\.\/js\/home\.mjs";/);
+    assert.match(script, /import \{ renderExploreLinks, renderTodaySections, renderTodayStats, renderTodayStatus \} from "\.\.\/js\/today\.mjs";/);
     assert.match(script, /renderExploreLinks\(\)/);
     assert.match(script, /renderTodayStats\(today\.sections\)/);
     assert.match(script, /renderTodaySections\(today\.sections\)/);

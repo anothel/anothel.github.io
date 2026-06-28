@@ -11,7 +11,7 @@ import {
     renderSkimList,
     renderStartItems,
     renderTopicMovements
-} from "../js/home.js";
+} from "../js/home.mjs";
 
 function read(path) {
     return readFileSync(path, "utf8");

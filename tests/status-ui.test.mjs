@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows, renderStatusSummary } from "../js/status.js";
+import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows, renderStatusSummary } from "../js/status.mjs";
 
 const manifest = {
     updated: "2026-06-20",

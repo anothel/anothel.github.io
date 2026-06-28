@@ -8,7 +8,7 @@ import {
     renderTodayStats,
     renderTodayStatus,
     totalSectionItems
-} from "../js/today.js";
+} from "../js/today.mjs";
 
 const todayData = JSON.parse(readFileSync("data/today.json", "utf8"));
 const expectedSectionCounts = [

@@ -35,6 +35,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - No package dependencies, package manager lockfile, framework tooling, backend, account, sync, or build output exists.
 - npm partial recovery: npm `n8n-workflow` 429 is accepted as visible partial source health with preserved rows and explicit `rateLimited` metadata.
 - Publish drill: current checked-in data is publishable from local checks while npm `n8n-workflow` 429 remains visible `partial` source health.
+- Module syntax: Home, Today, and Status ESM browser modules use `.mjs` while global helper scripts stay `.js`.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -48,26 +49,29 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Module Type Warning Cleanup
+### P0 - npm Partial Recovery Confirmation
 
-Trigger: Validation passes, but Node 24 emits MODULE_TYPELESS_PACKAGE_JSON warnings because ESM tests/scripts coexist with browser UMD/CommonJS-style helpers.
+Trigger: npm `n8n-workflow` 429 remains the only visible partial source after publish and module-warning cleanup.
 
 Scope:
 
-- Audit the smallest ESM/CommonJS boundary causing warnings.
-- Remove the warning with file-level or test-level changes only if UMD globals and no-build GitHub Pages behavior stay intact.
+- With network approval, run the existing refresh path and confirm whether npm source health recovers.
+- If npm still returns 429, keep preserved rows and decide whether `n8n-workflow` stays accepted partial or needs a watchlist governance change.
 - Keep route count, source families, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged.
-- Do not add a bundler, transpiler, dependency, or package-wide `"type": "module"` unless tests prove current browser helpers still work.
+- Do not add retries, mirrors, proxies, provenance, tags, or release automation unless the existing refresh path cannot produce a clear operator decision.
 
 Verification:
 
+- Run `node scripts/update-all.mjs` only with network approval.
+- Run `node --test tests/package-data.test.mjs tests/refresh-report.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run `node scripts/validate-data.mjs`.
 - Run `npm run check`.
 - Run `git diff --check`.
 
 Exit:
 
-- Standard validation runs without module-type warnings or records why the warning remains accepted.
-- Static fallback, UMD helper, and public-route behavior remain unchanged.
+- npm partial either recovers to `ok` or remains explicitly accepted with refresh-report and Status copy.
+- Any watchlist change has governance history and focused regression coverage.
 
 ## Architecture Gate
 

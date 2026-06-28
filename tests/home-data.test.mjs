@@ -14,7 +14,7 @@ import {
     renderTopicMovements,
     renderSkimList,
     renderStartItems
-} from "../js/home.js";
+} from "../js/home.mjs";
 
 function readJson(path) {
     return JSON.parse(readFileSync(path, "utf8"));

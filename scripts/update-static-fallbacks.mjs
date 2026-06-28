@@ -12,9 +12,9 @@ import {
     renderSkimList,
     renderStartItems,
     renderTopicMovements
-} from "../js/home.js";
-import { renderExploreLinks, renderTodaySections, renderTodayStats, renderTodayStatus } from "../js/today.js";
-import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows } from "../js/status.js";
+} from "../js/home.mjs";
+import { renderExploreLinks, renderTodaySections, renderTodayStats, renderTodayStatus } from "../js/today.mjs";
+import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows } from "../js/status.mjs";
 
 const { escapeHtml, safeLinkAttrs } = globalThis.AnothelDom;
 
