@@ -201,6 +201,14 @@ test("IA records authenticated GitHub refresh outcomes", () => {
     assert.match(ia, /remaining refresh `partial` status came from npm `n8n-workflow` 429/s);
 });
 
+test("IA records roadmap analysis P0 corrections", () => {
+    assert.match(ia, /Roadmap Analysis P0 Corrections/);
+    assert.match(ia, /rejects `history.date` values after the current data date/s);
+    assert.match(ia, /baseline penalty from `data\/signal-policy\.json`/s);
+    assert.match(ia, /static pages now keep top source rows/s);
+    assert.match(ia, /remaining active data issue is npm `n8n-workflow` 429 partial state/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -327,6 +335,7 @@ test("roadmap keeps completed authenticated GitHub refresh out of next work", ()
 
 test("roadmap promotes npm rate limit follow-up as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
+    assert.match(roadmap, /Source detail pages: Trends, Packages, Repos, and Links keep checked-in top rows/s);
     assert.match(roadmap, /npm `n8n-workflow` fetch returned 429/s);
     assert.match(roadmap, /Use the existing package updater retry and fallback path/s);
     assert.match(roadmap, /No new public route, framework, backend, account, sync, source family, or schema/s);

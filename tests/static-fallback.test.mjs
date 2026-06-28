@@ -229,6 +229,19 @@ test("module page stamps do not drift behind checked-in manifest", () => {
     }
 });
 
+test("module pages keep top source rows without JavaScript", () => {
+    for (const module of manifest.modules) {
+        const dataset = json(module.data);
+        const total = dataset.items?.length || dataset.packages?.length || dataset.repos?.length || dataset.links?.length || 0;
+        if (total === 0) continue;
+
+        const html = read(module.route);
+        const hrefCount = (html.match(/href="https?:\/\//g) || []).length;
+
+        assert.ok(hrefCount >= 3, `${module.route} should keep at least 3 static item links`);
+    }
+});
+
 test("topic pages keep checked-in judgment notes without JavaScript", () => {
     const expectations = [
         ["topics/ai-agents/index.html", /agent workflow/i],

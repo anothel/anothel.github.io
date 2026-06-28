@@ -1,53 +1,28 @@
 {
-  "generatedAt": "2026-06-27T15:16:05.731Z",
+  "generatedAt": "2026-06-28T00:41:34.086Z",
   "manifestUpdated": "2026-06-27",
   "runContext": {
     "reason": "",
-    "eventName": "schedule",
-    "runId": "28303418811",
-    "refName": "main"
+    "eventName": "",
+    "runId": "",
+    "refName": ""
   },
-  "changedModules": [
-    {
-      "id": "trends",
-      "title": "Tech trends",
-      "count": 24,
-      "updated": "2026-06-27"
-    },
-    {
-      "id": "packages",
-      "title": "Package watchlist",
-      "count": 25,
-      "updated": "2026-06-27"
-    },
-    {
-      "id": "repos",
-      "title": "Repo watchlist",
-      "count": 30,
-      "updated": "2026-06-27"
-    },
-    {
-      "id": "links",
-      "title": "Reference shelf",
-      "count": 29,
-      "updated": "2026-06-27"
-    }
-  ],
+  "changedModules": [],
   "modules": [
     {
       "id": "trends",
       "title": "Tech trends",
       "status": "ok",
-      "count": 24,
+      "count": 26,
       "updated": "2026-06-27",
-      "changed": true,
+      "changed": false,
       "sources": [
         {
           "module": "trends",
           "source": "Hacker News",
           "status": "ok",
-          "count": 5,
-          "updatedAt": "2026-06-27T15:15:58.985Z",
+          "count": 4,
+          "updatedAt": "2026-06-27T15:32:42.747Z",
           "coverage": "5/1",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -62,7 +37,7 @@
           "source": "GitHub",
           "status": "ok",
           "count": 12,
-          "updatedAt": "2026-06-27T15:15:58.985Z",
+          "updatedAt": "2026-06-27T15:32:42.747Z",
           "coverage": "12/14",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -76,8 +51,8 @@
           "module": "trends",
           "source": "npm",
           "status": "ok",
-          "count": 7,
-          "updatedAt": "2026-06-27T15:15:58.985Z",
+          "count": 8,
+          "updatedAt": "2026-06-27T15:32:42.747Z",
           "coverage": "7/16",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -95,14 +70,14 @@
       "status": "partial",
       "count": 25,
       "updated": "2026-06-27",
-      "changed": true,
+      "changed": false,
       "sources": [
         {
           "module": "packages",
           "source": "npm",
           "status": "partial",
           "count": 25,
-          "updatedAt": "2026-06-27T15:15:59.120Z",
+          "updatedAt": "2026-06-27T15:32:42.908Z",
           "coverage": "25/25",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -124,7 +99,7 @@
       "status": "ok",
       "count": 30,
       "updated": "2026-06-27",
-      "changed": true,
+      "changed": false,
       "sources": [
         {
           "module": "repos",
@@ -149,14 +124,14 @@
       "status": "ok",
       "count": 29,
       "updated": "2026-06-27",
-      "changed": true,
+      "changed": false,
       "sources": [
         {
           "module": "links",
           "source": "manual",
           "status": "ok",
           "count": 29,
-          "updatedAt": "2026-06-27T15:16:04.976Z",
+          "updatedAt": "2026-06-27T15:32:45.981Z",
           "coverage": "29/29",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -172,7 +147,7 @@
   "totals": {
     "modules": 4,
     "sources": 6,
-    "items": 108,
+    "items": 110,
     "status": "partial",
     "errors": 1
   }

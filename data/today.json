@@ -1,11 +1,11 @@
 {
   "updated": "2026-06-27",
-  "generatedAt": "2026-06-27T15:16:05.197Z",
+  "generatedAt": "2026-06-28T00:36:57.667Z",
   "sourceMeta": {
     "name": "generated",
     "status": "partial",
     "count": 13,
-    "updatedAt": "2026-06-27T15:16:05.197Z"
+    "updatedAt": "2026-06-28T00:36:57.667Z"
   },
   "sections": [
     {
@@ -144,9 +144,9 @@
           "metric": "100 score",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
-            "MCP infrastructure worth tracking for agent workflows.",
-            "146.7K stars from GitHub",
-            "146.7K stars / 23.1K forks"
+            "Coding-agent ecosystem signal with practical workflow value.",
+            "222.6K stars from GitHub",
+            "222.6K stars / 34.1K forks"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/affaan-m/ECC",
@@ -169,11 +169,11 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "148.3K stars",
+          "metric": "148.1K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
             "Agent skills reference for reusable tool instructions.",
-            "148.3K stars from GitHub",
+            "148.1K stars from GitHub",
             "engineering workflow skills"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
@@ -229,8 +229,8 @@
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
             "Coding-agent ecosystem signal with practical workflow value.",
-            "222.4K stars from GitHub",
-            "222.4K stars / 34K forks"
+            "179.7K stars from GitHub",
+            "179.7K stars / 22.1K forks"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/anomalyco/opencode",
@@ -253,11 +253,11 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Workflow automation",
-          "metric": "194.3K stars",
+          "metric": "194.2K stars",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
             "Coding-agent ecosystem signal with practical workflow value.",
-            "194.3K stars from GitHub",
+            "194.2K stars from GitHub",
             "workflow automation"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",

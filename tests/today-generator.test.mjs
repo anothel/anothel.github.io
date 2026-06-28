@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 import {
+    baselinePriorityPenalty,
     buildTodayBrief,
     normalizeCandidates,
     sectionCounts
@@ -23,6 +24,12 @@ function checkedInSources() {
 
 test("sectionCounts defines Today brief slots", () => {
     assert.deepEqual(sectionCounts, { start: 3, skim: 6, reference: 4 });
+});
+
+test("Today baseline priority penalty comes from signal policy", () => {
+    assert.equal(baselinePriorityPenalty({ baselinePenalty: -5 }), 5);
+    assert.equal(baselinePriorityPenalty({ baselinePenalty: -50 }), 50);
+    assert.doesNotMatch(readFileSync("scripts/update-today.mjs", "utf8"), /priority\s*-=\s*26/);
 });
 
 test("normalizeCandidates maps source data into shared card shape", () => {

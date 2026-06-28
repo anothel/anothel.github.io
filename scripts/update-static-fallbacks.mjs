@@ -16,7 +16,7 @@ import {
 import { renderExploreLinks, renderTodayStatus } from "../js/today.js";
 import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows } from "../js/status.js";
 
-const { escapeHtml } = globalThis.AnothelDom;
+const { escapeHtml, safeHref } = globalThis.AnothelDom;
 
 function sourceMetaList(datasets) {
     return Object.values(datasets).flatMap((dataset) => {
@@ -48,6 +48,86 @@ function replaceTaggedText(html, attr, value) {
 function replacePattern(html, pattern, replacement, label) {
     if (!pattern.test(html)) throw new Error(`Missing static fallback block: ${label}`);
     return html.replace(pattern, replacement);
+}
+
+function renderTrendCards(items = [], limit = 8) {
+    return items.slice(0, limit).map((item) => `
+        <a class="trend-card" href="${safeHref(item.url)}">
+            <div class="card-topline">
+                <span>#${escapeHtml(item.rank)}</span>
+                <span>${escapeHtml(item.source)}</span>
+            </div>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.summary)}</p>
+            <div class="card-meta">
+                <span>${escapeHtml(item.category)}</span>
+                <span>${escapeHtml(item.score)}</span>
+                <span>${escapeHtml(item.velocity)}</span>
+            </div>
+        </a>
+    `).join("");
+}
+
+function renderTrendRows(items = [], limit = 8) {
+    return items.slice(0, limit).map((item) => `
+        <a class="rank-row" href="${safeHref(item.url)}">
+            <span>${escapeHtml(item.rank)}</span>
+            <strong>${escapeHtml(item.title)}</strong>
+            <span>${escapeHtml(item.category)}</span>
+            <span>${escapeHtml(item.source)}</span>
+            <span>${escapeHtml(item.score)}</span>
+        </a>
+    `).join("");
+}
+
+function renderPackageRows(items = [], limit = 10) {
+    return items.slice(0, limit).map((item) => `
+        <a class="watch-row" href="${safeHref(item.url)}">
+            <span>#${escapeHtml(item.rank)}</span>
+            <strong>${escapeHtml(item.name)}</strong>
+            <span>${escapeHtml(item.category)}</span>
+            <span>${escapeHtml(item.downloadsLabel)}</span>
+            <span>${escapeHtml(item.focus)}</span>
+        </a>
+    `).join("");
+}
+
+function renderRepoRows(items = [], limit = 10) {
+    return items.slice(0, limit).map((item) => `
+        <a class="watch-row repo-row" href="${safeHref(item.url)}">
+            <span>#${escapeHtml(item.rank)}</span>
+            <strong>${escapeHtml(item.name)}</strong>
+            <span>${escapeHtml(item.category)}</span>
+            <span>${escapeHtml(item.starsLabel)} stars</span>
+            <span>${escapeHtml(item.focus)}</span>
+        </a>
+    `).join("");
+}
+
+function renderLinkCards(items = [], limit = 10) {
+    return items.slice(0, limit).map((link) => `
+        <a class="link-card" href="${safeHref(link.url)}">
+            <div>
+                <span>${escapeHtml(link.category)}</span>
+                <span>${escapeHtml(link.kind)}</span>
+            </div>
+            <h2>${escapeHtml(link.title)}</h2>
+            <p>${escapeHtml(link.summary)}</p>
+        </a>
+    `).join("");
+}
+
+function renderModuleRows(module, dataset) {
+    if (module.id === "trends") {
+        return {
+            grid: renderTrendCards(dataset.items),
+            table: renderTrendRows(dataset.items)
+        };
+    }
+    if (module.id === "packages") return { list: renderPackageRows(dataset.packages) };
+    if (module.id === "repos") return { list: renderRepoRows(dataset.repos) };
+    if (module.id === "links") return { list: renderLinkCards(dataset.links) };
+    return {};
 }
 
 async function readJson(path) {
@@ -295,13 +375,13 @@ async function updateStaticFallbacks() {
     home = replaceTaggedText(home, "data-home-freshness", homeOverview.dataState);
     home = replaceTaggedText(home, "data-home-recovery", homeOverview.recoveryText);
     home = replacePattern(home, /<p class="stamp">Data date [^<]+<\/p>/, `<p class="stamp">Data date ${escapeHtml(updated)}</p>`, "home stamp");
-    home = replacePattern(home, /(<div class="start-list home-priority-list" data-home-start>)[\s\S]*?(\n\s*<\/div>\n\s*<\/div>\n\s*<aside class="home-utility-strip")/, `$1
+    home = replacePattern(home, /(<div class="start-list home-priority-list" data-home-start>)[\s\S]*?(\s*<\/div>\s*<\/div>\s*<aside class="home-utility-strip")/, `$1
 ${indentBlock(renderStartItems(getTodaySection(today, "start")), 24)}$2`, "home start");
-    home = replacePattern(home, /(<div class="topic-movement-grid" data-home-topic-movements>)[\s\S]*?(\n\s*<\/div>\n\s*<\/section>\n\s*<section class="home-module-section")/, `$1
+    home = replacePattern(home, /(<div class="topic-movement-grid" data-home-topic-movements>)[\s\S]*?(\s*<\/div>\s*<\/section>\s*<section class="home-module-section")/, `$1
 ${indentBlock(renderTopicMovements(topicMovements), 20)}$2`, "home topic movement");
-    home = replacePattern(home, /(<section class="module-strip home-module-board" aria-label="Module routes" data-home-routes>)[\s\S]*?(\n\s*<\/section>\n\s*<\/section>\n\s*<section class="home-skim-panel")/, `$1
+    home = replacePattern(home, /(<section class="module-strip home-module-board" aria-label="Module routes" data-home-routes>)[\s\S]*?(\s*<\/section>\s*<\/section>\s*<section class="home-skim-panel")/, `$1
 ${indentBlock(renderModuleRoutes(homeRoutes), 20)}$2`, "home module routes");
-    home = replacePattern(home, /(<div class="skim-list" data-home-skim>)[\s\S]*?(\n\s*<\/div>\n\s*<\/section>\n\s*<\/main>)/, `$1
+    home = replacePattern(home, /(<div class="skim-list" data-home-skim>)[\s\S]*?(\s*<\/div>\s*<\/section>\s*<\/main>)/, `$1
 ${indentBlock(renderSkimList(getTodaySection(today, "skim")), 20)}$2`, "home skim");
     await writeIfChanged("index.html", home);
 
@@ -347,9 +427,24 @@ ${renderRefreshRun(report).trim()}
 
     for (const module of modules) {
         const dataset = datasets[module.id] || {};
+        const renderedRows = renderModuleRows(module, dataset);
         let html = await readFile(module.route, "utf8");
         html = replaceTaggedText(html, "data-updated", module.updated);
         html = replacePattern(html, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(dataset.sourceMeta, { updated: dataset.updated || module.updated }))}</p>`, `${module.id} data mode`);
+        if (renderedRows.grid) {
+            html = replacePattern(html, /(<section class="dashboard-grid module-primary-panel" aria-label="Trend cards" data-grid>)[\s\S]*?(\n\s*<\/section>\n\s*<section class="rank-panel module-primary-panel")/, `$1
+${indentBlock(renderedRows.grid, 16)}$2`, `${module.id} cards`);
+        }
+        if (renderedRows.table) {
+            html = replacePattern(html, /(<div class="rank-list" data-table>)[\s\S]*?(<\/div>)/, `$1
+${indentBlock(renderedRows.table, 20)}
+                $2`, `${module.id} table`);
+        }
+        if (renderedRows.list) {
+            html = replacePattern(html, /(<(?:div|section)[^>]*data-(?:package|repo|link)-list[^>]*>)[\s\S]*?(<\/(?:div|section)>)/, `$1
+${indentBlock(renderedRows.list, 20)}
+                $2`, `${module.id} list`);
+        }
         await writeIfChanged(module.route, html);
     }
 

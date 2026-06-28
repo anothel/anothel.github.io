@@ -202,6 +202,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Retired direct watchlist entries stayed absent from generated priority surfaces after the authenticated refresh.
 - The remaining refresh `partial` status came from npm `n8n-workflow` 429, not GitHub auth.
 
+## Roadmap Analysis P0 Corrections
+
+- Watchlist governance now rejects `history.date` values after the current data date, and former `2026-06-28` watchlist history entries were corrected to `2026-06-27`.
+- Today baseline priority scoring now derives the baseline penalty from `data/signal-policy.json` instead of a hard-coded `26`.
+- Trends, Packages, Repos, and Reference shelf static pages now keep top source rows in checked-in HTML, so no-JS and blocked-fetch visits still expose item links.
+- The remaining active data issue is npm `n8n-workflow` 429 partial state; GitHub trend auth recovery is complete.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

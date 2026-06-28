@@ -23,6 +23,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, Notes, and 7 topic pages.
 - Core topics: AI agents, MCP, Agent skills, AI evals, AI engineering, Workflow automation, Security.
 - Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata.
+- Source detail pages: Trends, Packages, Repos, and Links keep checked-in top rows for no-JS and blocked-fetch visits.
 - Local browser state: saved review items with optional note/tag/reason, up to 3 pinned topics, explicit Explore defaults, and up to 5 saved Explore searches.
 - Source governance: checked-in watchlist data drives trends, packages, repos, and links; optional disabled/history fields keep retired sources documented without current output.
 - Signal policy: checked-in `data/signal-policy.json` owns Today and Explore baseline scoring policy.

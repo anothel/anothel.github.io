@@ -16,7 +16,7 @@ export function activeNames(items = []) {
         .filter((name) => typeof name === "string" && name.trim() !== "");
 }
 
-function validateGovernanceFields(item, label, errors) {
+function validateGovernanceFields(item, label, errors, maxDate) {
     if (!item || typeof item !== "object") return;
 
     if (item.disabled !== undefined && typeof item.disabled !== "boolean") {
@@ -35,8 +35,11 @@ function validateGovernanceFields(item, label, errors) {
             errors.push(`${entryLabel} must be an object`);
             return;
         }
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(String(entry.date || ""))) {
+        const date = String(entry.date || "");
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
             errors.push(`${entryLabel}.date must be YYYY-MM-DD`);
+        } else if (maxDate && date > maxDate) {
+            errors.push(`${entryLabel}.date must not be after ${maxDate}`);
         }
         if (typeof entry.note !== "string" || entry.note.trim() === "") {
             errors.push(`${entryLabel}.note must be non-empty`);
@@ -44,8 +47,9 @@ function validateGovernanceFields(item, label, errors) {
     });
 }
 
-export function validateWatchlistGovernance(watchlists) {
+export function validateWatchlistGovernance(watchlists, options = {}) {
     const errors = [];
+    const maxDate = options.today || new Date().toISOString().slice(0, 10);
     const groups = [
         ["trends.npmPackages", watchlists?.trends?.npmPackages],
         ["trends.githubQueries", watchlists?.trends?.githubQueries],
@@ -56,7 +60,7 @@ export function validateWatchlistGovernance(watchlists) {
 
     for (const [groupName, items] of groups) {
         if (!Array.isArray(items)) continue;
-        items.forEach((item, index) => validateGovernanceFields(item, `${groupName}[${index}]`, errors));
+        items.forEach((item, index) => validateGovernanceFields(item, `${groupName}[${index}]`, errors, maxDate));
     }
 
     return errors;

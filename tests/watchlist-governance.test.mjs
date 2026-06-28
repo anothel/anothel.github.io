@@ -24,7 +24,21 @@ test("watchlist governance filters disabled entries without deleting history", (
 });
 
 test("checked-in watchlists keep optional disabled and history fields valid", () => {
-    assert.deepEqual(validateWatchlistGovernance(json("data/watchlists.json")), []);
+    assert.deepEqual(validateWatchlistGovernance(json("data/watchlists.json"), { today: json("data/manifest.json").updated }), []);
+});
+
+test("watchlist governance rejects history dates after the data date", () => {
+    const errors = validateWatchlistGovernance({
+        packages: [
+            {
+                name: "future",
+                disabled: true,
+                history: [{ date: "2026-06-28", note: "Retired after data date." }]
+            }
+        ]
+    }, { today: "2026-06-27" });
+
+    assert.deepEqual(errors, ["packages[0].history[0].date must not be after 2026-06-27"]);
 });
 
 test("source quality drift review retires broad duplicate sources", () => {

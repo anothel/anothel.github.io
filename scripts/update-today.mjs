@@ -93,6 +93,11 @@ function scoreReasons(reason, item) {
     return [...new Set([reason, ...(item.scoreReasons || [])].filter(Boolean))].slice(0, 3);
 }
 
+export function baselinePriorityPenalty(policy = signalPolicy) {
+    const value = Number(policy?.baselinePenalty || 0);
+    return value < 0 ? Math.abs(value) : value;
+}
+
 function qualityPriority(item) {
     let priority = item.score;
 
@@ -104,7 +109,7 @@ function qualityPriority(item) {
         priority += 10;
     }
     if (item.isBaseline) {
-        priority -= 26;
+        priority -= baselinePriorityPenalty();
     }
 
     return priority;
