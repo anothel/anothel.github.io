@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - Post-Publish Smoke Pass/;
+const activeRoadmapP0 = /### P0 - Next Refresh Health Watch/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -268,6 +268,13 @@ test("IA records publish readiness diff review outcomes", () => {
     assert.match(ia, /User-owned staging, commit, push, and GitHub Pages publish remain outside repository automation/s);
 });
 
+test("IA records post-publish smoke outcomes", () => {
+    assert.match(ia, /Post-Publish Smoke Pass/);
+    assert.match(ia, /live Home, Today, Explore, Review, Status, source detail, and topic routes returned 200/s);
+    assert.match(ia, /live data JSON still showed GitHub trends `ok` and npm packages `partial` with one rate-limited source/s);
+    assert.match(ia, /No checked-in data, route, source family, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -503,8 +510,13 @@ test("roadmap keeps completed publish readiness diff review out of next work", (
     assert.match(roadmap, /Publish readiness: generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit/s);
 });
 
-test("roadmap promotes post-publish smoke pass as the active P0", () => {
+test("roadmap keeps completed post-publish smoke pass out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Post-Publish Smoke Pass/);
+    assert.match(roadmap, /Post-publish smoke: live decision, review, status, source detail, topic, and data JSON routes matched checked-in source health/s);
+});
+
+test("roadmap promotes next refresh health watch as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /user-owned staging, commit, push, and GitHub Pages publish have completed/s);
-    assert.match(roadmap, /live Home, Today, Explore, Status, and one topic route load with current source health copy/s);
+    assert.match(roadmap, /next scheduled or manual data refresh changes checked-in data after the post-publish smoke pass/s);
+    assert.match(roadmap, /Refresh report, manifest, Today, static fallbacks, and source-health copy stay consistent after the next data update/s);
 });

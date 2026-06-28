@@ -19,6 +19,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Ran authenticated refresh with `gh auth token`; GitHub trends recovered to `ok`, leaving npm `n8n-workflow` as the only accepted non-ok source.
 - Confirmed refreshed priority, topic, and module snapshots remain publishable without watchlist or signal-policy changes.
 - Confirmed generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit.
+- Confirmed published Home, Today, Explore, Review, Status, source detail, topic, and data JSON routes match checked-in source health.
 
 ## 2026-06-28
 

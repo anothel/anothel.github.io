@@ -275,6 +275,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - `data/manifest.json`, `data/refresh-report.json`, and Today sections stayed aligned with checked-in static fallback pages.
 - User-owned staging, commit, push, and GitHub Pages publish remain outside repository automation.
 
+## Post-Publish Smoke Pass
+
+- live Home, Today, Explore, Review, Status, source detail, and topic routes returned 200.
+- live data JSON still showed GitHub trends `ok` and npm packages `partial` with one rate-limited source.
+- Checked-in static fallback and public structure tests matched the published route contract.
+- No checked-in data, route, source family, package dependency, lockfile, framework, backend, account, or sync scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
