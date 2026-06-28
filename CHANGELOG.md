@@ -18,6 +18,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Confirmed npm `n8n-workflow` still returns 429 with preserved package rows; next publish confirmation needs `GITHUB_TOKEN`.
 - Ran authenticated refresh with `gh auth token`; GitHub trends recovered to `ok`, leaving npm `n8n-workflow` as the only accepted non-ok source.
 - Confirmed refreshed priority, topic, and module snapshots remain publishable without watchlist or signal-policy changes.
+- Confirmed generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit.
 
 ## 2026-06-28
 

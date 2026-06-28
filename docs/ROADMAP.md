@@ -39,6 +39,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - npm partial confirmation: npm `n8n-workflow` 429 remains accepted with preserved package rows and visible `rateLimited` metadata.
 - Authenticated refresh: GitHub trend source is `ok`; npm `n8n-workflow` 429 is the only accepted non-ok source.
 - Current signal diff: refreshed priority, topic, and module snapshots remain publishable without policy or watchlist changes.
+- Publish readiness: generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -52,27 +53,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Publish Readiness Diff Review
+### P0 - Post-Publish Smoke Pass
 
-Trigger: authenticated refresh and signal diff triage left a broad generated diff ready for human publish review.
+Trigger: user-owned staging, commit, push, and GitHub Pages publish have completed.
 
 Scope:
 
-- Review generated data, static snapshots, docs, and release notes as one publish bundle.
-- Confirm route count, navigation, source health copy, and dated changelog entry still match the release checklist.
-- Keep user-owned git staging, commits, and pushes unchanged.
-- Do not run another live refresh unless the diff exposes a concrete data defect.
+- Check live Home, Today, Explore, Status, and one topic route.
+- Confirm live source health copy still shows GitHub trends `ok` and npm `n8n-workflow` as the only accepted partial source.
+- Keep route count, source families, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged.
+- Do not change generated data unless live output diverges from checked-in files.
 
 Verification:
 
-- Run `node --test tests/ops-docs.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
-- Run `npm run check`.
+- Run `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run the smallest live checks needed for the published URLs.
 - Run `git diff --check`.
 
 Exit:
 
-- Generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit.
-- Any publish-blocking diff either gets fixed with focused coverage or moves to Deferred Boundaries with a concrete reason.
+- live Home, Today, Explore, Status, and one topic route load with current source health copy.
+- Any publish-only mismatch is fixed in checked-in static files or documented with a concrete upstream reason.
 
 ## Architecture Gate
 

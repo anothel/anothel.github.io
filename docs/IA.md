@@ -268,6 +268,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - The only non-ok source health remains npm `n8n-workflow` 429 with preserved package rows and visible `rateLimited` metadata.
 - No watchlist, signal policy, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed.
 
+## Publish Readiness Diff Review
+
+- The generated data, static snapshots, docs, and release notes matched the release checklist.
+- route count, navigation, source health copy, dated changelog entry, and known npm partial state stayed publishable.
+- `data/manifest.json`, `data/refresh-report.json`, and Today sections stayed aligned with checked-in static fallback pages.
+- User-owned staging, commit, push, and GitHub Pages publish remain outside repository automation.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

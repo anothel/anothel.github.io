@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - Publish Readiness Diff Review/;
+const activeRoadmapP0 = /### P0 - Post-Publish Smoke Pass/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -261,6 +261,13 @@ test("IA records current signal diff triage outcomes", () => {
     assert.match(ia, /No watchlist, signal policy, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
 });
 
+test("IA records publish readiness diff review outcomes", () => {
+    assert.match(ia, /Publish Readiness Diff Review/);
+    assert.match(ia, /generated data, static snapshots, docs, and release notes matched the release checklist/s);
+    assert.match(ia, /route count, navigation, source health copy, dated changelog entry, and known npm partial state stayed publishable/s);
+    assert.match(ia, /User-owned staging, commit, push, and GitHub Pages publish remain outside repository automation/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -491,8 +498,13 @@ test("roadmap keeps completed current signal diff triage out of next work", () =
     assert.match(roadmap, /Current signal diff: refreshed priority, topic, and module snapshots remain publishable without policy or watchlist changes/s);
 });
 
-test("roadmap promotes publish readiness diff review as the active P0", () => {
+test("roadmap keeps completed publish readiness diff review out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Publish Readiness Diff Review/);
+    assert.match(roadmap, /Publish readiness: generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit/s);
+});
+
+test("roadmap promotes post-publish smoke pass as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /authenticated refresh and signal diff triage left a broad generated diff ready for human publish review/s);
-    assert.match(roadmap, /Generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit/s);
+    assert.match(roadmap, /user-owned staging, commit, push, and GitHub Pages publish have completed/s);
+    assert.match(roadmap, /live Home, Today, Explore, Status, and one topic route load with current source health copy/s);
 });
