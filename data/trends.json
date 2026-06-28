@@ -10,7 +10,7 @@
     {
       "name": "Hacker News",
       "status": "ok",
-      "count": 5,
+      "count": 4,
       "tracked": 1,
       "emitted": 5,
       "coverage": "5/1",
@@ -28,7 +28,7 @@
     {
       "name": "npm",
       "status": "ok",
-      "count": 7,
+      "count": 8,
       "tracked": 16,
       "emitted": 7,
       "coverage": "7/16",
@@ -53,8 +53,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "222.4K stars",
-      "signal": "34K forks",
+      "velocity": "222.6K stars",
+      "signal": "34.1K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
@@ -75,7 +75,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "179.5K stars",
+      "velocity": "179.7K stars",
       "signal": "22.1K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
@@ -97,7 +97,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "155.8K stars",
+      "velocity": "155.9K stars",
       "signal": "18.4K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
@@ -109,7 +109,7 @@
       "category": "AI evals",
       "score": 100,
       "velocity": "10.3K stars",
-      "signal": "944 forks",
+      "signal": "945 forks",
       "url": "https://github.com/Arize-ai/phoenix",
       "summary": "AI Observability & Evaluation"
     },
@@ -152,7 +152,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "109.4K stars",
+      "velocity": "109.5K stars",
       "signal": "7.2K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
@@ -170,18 +170,18 @@
     },
     {
       "rank": 13,
-      "title": "An entire Herculaneum scroll has been read for the first time",
+      "title": "Previewing GPT5.6 Sol: a next-generation model",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 100,
-      "velocity": "364 comments",
-      "signal": "1668 points",
-      "url": "https://scrollprize.org/firstscroll",
-      "summary": "HN story by verditelabs with 364 comments."
+      "category": "AI",
+      "score": 93,
+      "velocity": "711 comments",
+      "signal": "1101 points",
+      "url": "https://openai.com/index/previewing-gpt-5-6-sol/",
+      "summary": "HN story by minimaxir with 711 comments."
     },
     {
       "rank": 14,
-      "title": "U.S. government will decide who gets to use GPT-5.6",
+      "title": "U.S. allows Anthropic to release Mythos AI to trusted US organizations",
       "source": "Hacker News",
       "category": "AI",
       "score": 100,
@@ -299,6 +299,28 @@
       "signal": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
       "summary": "2.5M downloads over the last available week."
+    },
+    {
+      "rank": 23,
+      "title": "Anonymous GitHub account mass-dropping undisclosed 0-days",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 76,
+      "velocity": "225 comments",
+      "signal": "558 points",
+      "url": "https://github.com/bikini/exploitarium",
+      "summary": "HN story by binyu with 225 comments."
+    },
+    {
+      "rank": 24,
+      "title": "langfuse",
+      "source": "npm",
+      "category": "AI evals",
+      "score": 74,
+      "velocity": "1.6M/week",
+      "signal": "2026-06-20 to 2026-06-26",
+      "url": "https://www.npmjs.com/package/langfuse",
+      "summary": "1.6M downloads over the last available week."
     }
   ]
 }
