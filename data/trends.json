@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-28",
-  "generatedAt": "2026-06-28T02:30:05.971Z",
+  "generatedAt": "2026-06-28T02:49:41.558Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 1,
       "emitted": 4,
       "coverage": "4/1",
-      "updatedAt": "2026-06-28T02:30:05.971Z"
+      "updatedAt": "2026-06-28T02:49:41.558Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-28T02:30:05.971Z"
+      "updatedAt": "2026-06-28T02:49:41.558Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-06-28T02:30:05.971Z"
+      "updatedAt": "2026-06-28T02:49:41.558Z"
     }
   ],
   "items": [
@@ -196,10 +196,10 @@
       "source": "Hacker News",
       "category": "AI",
       "score": 90,
-      "velocity": "305 comments",
-      "signal": "729 points",
+      "velocity": "306 comments",
+      "signal": "732 points",
       "url": "https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf",
-      "summary": "HN story by aurenvale with 305 comments."
+      "summary": "HN story by aurenvale with 306 comments."
     },
     {
       "rank": 16,
@@ -240,10 +240,10 @@
       "source": "Hacker News",
       "category": "Developer tools",
       "score": 86,
-      "velocity": "268 comments",
-      "signal": "682 points",
+      "velocity": "271 comments",
+      "signal": "686 points",
       "url": "https://github.com/bikini/exploitarium",
-      "summary": "HN story by binyu with 268 comments."
+      "summary": "HN story by binyu with 271 comments."
     },
     {
       "rank": 20,
@@ -294,11 +294,11 @@
       "title": "AI learns the dark art of RFIC design",
       "source": "Hacker News",
       "category": "AI",
-      "score": 50,
-      "velocity": "127 comments",
-      "signal": "193 points",
+      "score": 51,
+      "velocity": "129 comments",
+      "signal": "196 points",
       "url": "https://spectrum.ieee.org/ai-radio-chip-design",
-      "summary": "HN story by Brajeshwar with 127 comments."
+      "summary": "HN story by Brajeshwar with 129 comments."
     }
   ]
 }

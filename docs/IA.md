@@ -282,6 +282,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Checked-in static fallback and public structure tests matched the published route contract.
 - No checked-in data, route, source family, package dependency, lockfile, framework, backend, account, or sync scope changed.
 
+## Next Refresh Health Watch
+
+- A token-backed manual refresh kept GitHub trend health `ok`.
+- npm `n8n-workflow` stayed the only non-ok source with preserved package rows and visible `rateLimited` metadata.
+- Refresh report, manifest, Today, static fallbacks, and source-health copy stayed consistent.
+- The refresh changed only generated data, source timestamps, small counters, and the matching static fallback snapshots.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - Next Refresh Health Watch/;
+const activeRoadmapP0 = /### P0 - Repeated npm Partial Decision/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -275,6 +275,13 @@ test("IA records post-publish smoke outcomes", () => {
     assert.match(ia, /No checked-in data, route, source family, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
 });
 
+test("IA records next refresh health watch outcomes", () => {
+    assert.match(ia, /Next Refresh Health Watch/);
+    assert.match(ia, /token-backed manual refresh kept GitHub trend health `ok`/s);
+    assert.match(ia, /npm `n8n-workflow` stayed the only non-ok source with preserved package rows/s);
+    assert.match(ia, /Refresh report, manifest, Today, static fallbacks, and source-health copy stayed consistent/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -515,8 +522,13 @@ test("roadmap keeps completed post-publish smoke pass out of next work", () => {
     assert.match(roadmap, /Post-publish smoke: live decision, review, status, source detail, topic, and data JSON routes matched checked-in source health/s);
 });
 
-test("roadmap promotes next refresh health watch as the active P0", () => {
+test("roadmap keeps completed next refresh health watch out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Next Refresh Health Watch/);
+    assert.match(roadmap, /Next refresh health: token-backed refresh kept GitHub trends `ok` and left npm `n8n-workflow` as the only accepted partial source/s);
+});
+
+test("roadmap promotes repeated npm partial decision as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /next scheduled or manual data refresh changes checked-in data after the post-publish smoke pass/s);
-    assert.match(roadmap, /Refresh report, manifest, Today, static fallbacks, and source-health copy stay consistent after the next data update/s);
+    assert.match(roadmap, /multiple token-backed refreshes still leave npm `n8n-workflow` as the only non-ok source/s);
+    assert.match(roadmap, /The repeated npm partial is either kept as accepted visible source health, replaced, or disabled with history/s);
 });

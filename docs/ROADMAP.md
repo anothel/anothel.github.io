@@ -41,6 +41,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Current signal diff: refreshed priority, topic, and module snapshots remain publishable without policy or watchlist changes.
 - Publish readiness: generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit.
 - Post-publish smoke: live decision, review, status, source detail, topic, and data JSON routes matched checked-in source health.
+- Next refresh health: token-backed refresh kept GitHub trends `ok` and left npm `n8n-workflow` as the only accepted partial source.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -54,28 +55,28 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Next Refresh Health Watch
+### P0 - Repeated npm Partial Decision
 
-Trigger: next scheduled or manual data refresh changes checked-in data after the post-publish smoke pass.
+Trigger: multiple token-backed refreshes still leave npm `n8n-workflow` as the only non-ok source.
 
 Scope:
 
-- Compare refresh report, manifest, Today, static fallbacks, and source-health copy as one update bundle.
-- Confirm GitHub trend health stays `ok` when a token-backed refresh is expected, or document any partial as source health.
-- Confirm npm `n8n-workflow` either recovers or remains an intentional visible partial with preserved rows.
+- Decide whether `n8n-workflow` should stay active, be replaced, or be disabled with watchlist history.
+- Keep useful workflow-automation coverage in packages and Today.
+- Keep the visible partial semantics if the source stays active.
 - Keep route count, source families, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged.
-- Do not add new sources, topics, or scoring rules unless the next refresh shows a concrete signal-quality defect.
+- Do not run another live refresh unless the decision needs fresh source evidence.
 
 Verification:
 
-- Run `node --test tests/signal-quality-golden.test.mjs tests/today-data.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run `node --test tests/package-data.test.mjs tests/refresh-report.test.mjs tests/today-data.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
 - Run `git diff --check`.
 
 Exit:
 
-- Refresh report, manifest, Today, static fallbacks, and source-health copy stay consistent after the next data update.
-- Any source-health change is either accepted with visible copy or fixed in the refresh path with focused coverage.
+- The repeated npm partial is either kept as accepted visible source health, replaced, or disabled with history.
+- Any package watchlist change has focused package, Today, and source-health coverage.
 
 ## Architecture Gate
 
