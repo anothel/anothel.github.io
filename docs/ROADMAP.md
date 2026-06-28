@@ -38,6 +38,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Module syntax: Home, Today, and Status ESM browser modules use `.mjs` while global helper scripts stay `.js`.
 - npm partial confirmation: npm `n8n-workflow` 429 remains accepted with preserved package rows and visible `rateLimited` metadata.
 - Authenticated refresh: GitHub trend source is `ok`; npm `n8n-workflow` 429 is the only accepted non-ok source.
+- Current signal diff: refreshed priority, topic, and module snapshots remain publishable without policy or watchlist changes.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -51,27 +52,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Current Signal Diff Triage
+### P0 - Publish Readiness Diff Review
 
-Trigger: authenticated refresh changed generated data across priority and topic surfaces.
+Trigger: authenticated refresh and signal diff triage left a broad generated diff ready for human publish review.
 
 Scope:
 
-- Review refreshed Home, Today, Explore, topic, and module snapshots for broad baseline dominance or stale recovery copy.
-- Adjust watchlists or signal policy only if current generated surfaces stop preferring agent-workflow signals.
-- Keep route count, source families, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged.
-- Do not run another live refresh unless this diff exposes a concrete data defect.
+- Review generated data, static snapshots, docs, and release notes as one publish bundle.
+- Confirm route count, navigation, source health copy, and dated changelog entry still match the release checklist.
+- Keep user-owned git staging, commits, and pushes unchanged.
+- Do not run another live refresh unless the diff exposes a concrete data defect.
 
 Verification:
 
-- Run `node --test tests/signal-quality-golden.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/topic-ui.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
-- Run `node scripts/validate-data.mjs`.
+- Run `node --test tests/ops-docs.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run `npm run check`.
 - Run `git diff --check`.
 
 Exit:
 
-- Refreshed Home, Today, Explore, topic, and module snapshots remain publishable.
-- Any watchlist or signal-policy change has focused regression coverage.
+- Generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit.
+- Any publish-blocking diff either gets fixed with focused coverage or moves to Deferred Boundaries with a concrete reason.
 
 ## Architecture Gate
 

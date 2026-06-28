@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - Current Signal Diff Triage/;
+const activeRoadmapP0 = /### P0 - Publish Readiness Diff Review/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -254,6 +254,13 @@ test("IA records authenticated refresh publish confirmation outcomes", () => {
     assert.match(ia, /No route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
 });
 
+test("IA records current signal diff triage outcomes", () => {
+    assert.match(ia, /Current Signal Diff Triage/);
+    assert.match(ia, /refreshed Home, Today, Explore, topic, and module snapshots stayed publishable/s);
+    assert.match(ia, /agent-workflow signals still lead the priority surfaces/s);
+    assert.match(ia, /No watchlist, signal policy, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -479,8 +486,13 @@ test("roadmap keeps completed authenticated refresh publish confirmation out of 
     assert.match(roadmap, /Authenticated refresh: GitHub trend source is `ok`; npm `n8n-workflow` 429 is the only accepted non-ok source/s);
 });
 
-test("roadmap promotes current signal diff triage as the active P0", () => {
+test("roadmap keeps completed current signal diff triage out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Current Signal Diff Triage/);
+    assert.match(roadmap, /Current signal diff: refreshed priority, topic, and module snapshots remain publishable without policy or watchlist changes/s);
+});
+
+test("roadmap promotes publish readiness diff review as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /authenticated refresh changed generated data across priority and topic surfaces/s);
-    assert.match(roadmap, /Refreshed Home, Today, Explore, topic, and module snapshots remain publishable/s);
+    assert.match(roadmap, /authenticated refresh and signal diff triage left a broad generated diff ready for human publish review/s);
+    assert.match(roadmap, /Generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit/s);
 });

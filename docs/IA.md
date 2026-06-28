@@ -261,6 +261,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Only npm `n8n-workflow` 429 remains non-ok, and the preserved package rows keep generated surfaces publishable under accepted partial source health.
 - No route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed.
 
+## Current Signal Diff Triage
+
+- After the authenticated refresh, refreshed Home, Today, Explore, topic, and module snapshots stayed publishable.
+- Today start-here picks, topic top movers, and source detail rows show agent-workflow signals still lead the priority surfaces over broad baseline tooling.
+- The only non-ok source health remains npm `n8n-workflow` 429 with preserved package rows and visible `rateLimited` metadata.
+- No watchlist, signal policy, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
