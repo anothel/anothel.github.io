@@ -42,6 +42,13 @@ function isGitHubActions(env) {
     return env.GITHUB_ACTIONS === "true";
 }
 
+export function warnIfMissingGitHubToken(env = process.env, warn = console.warn) {
+    if (env.GITHUB_TOKEN) return false;
+
+    warn("GITHUB_TOKEN is not set; GitHub-backed refreshes may stay partial/rateLimited. Set GITHUB_TOKEN for full GitHub confirmation.");
+    return true;
+}
+
 function exitStatus(error) {
     const match = /exit code (\d+)/.exec(error.message);
     return match ? match[1] : "1";
@@ -87,6 +94,7 @@ async function main() {
         return;
     }
 
+    warnIfMissingGitHubToken();
     await runUpdateAll();
 }
 

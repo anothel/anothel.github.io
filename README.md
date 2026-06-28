@@ -102,7 +102,7 @@ The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pag
 - Run summary: every workflow run writes a GitHub Step Summary, commits `data/refresh-report.json`, and uploads a `refresh-report` artifact with source status, counts, changed modules, timestamps, and source errors.
 - Failure model: source fetch failures are stored as `error` or `partial` status where the updater can keep useful data. If a full updater produces zero rows but previous checked-in data exists, the updater writes stale but safe fallback data instead of empty data.
 - Fallback markers: fallback source metadata uses `fallbackUsed`, `staleButSafe`, `fallbackReason`, and `rateLimited` when applicable. The Status page and refresh report surface those markers.
-- Local GitHub refresh: set `$env:GITHUB_TOKEN` before running GitHub-backed updaters to avoid low anonymous API limits. Without it, rate limits may appear as `rateLimited` fallback in the report.
+- Local GitHub refresh: set `$env:GITHUB_TOKEN` before running GitHub-backed updaters to avoid low anonymous API limits. `node scripts/update-all.mjs` warns when it is missing; without it, rate limits may appear as `partial` or `rateLimited` in the report.
 
 ## Verification
 

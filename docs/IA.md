@@ -189,6 +189,19 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - The live refresh report covered 4 modules, 6 sources, and 108 generated items.
 - GitHub trend refresh remains `partial` under unauthenticated local refresh because four GitHub search queries hit rate limits; use `GITHUB_TOKEN` for the next confirmation pass.
 
+## Refresh Auth Preflight Pass
+
+- `node scripts/update-all.mjs` now warns local operators when `GITHUB_TOKEN` is missing before running GitHub-backed refreshes.
+- The warning keeps the existing refresh path and explains that unauthenticated GitHub calls may remain `partial` or `rateLimited`.
+- The authenticated confirmation itself remains gated on a real `GITHUB_TOKEN`; no source family, route, schema, or refresh cadence changed.
+
+## Authenticated GitHub Refresh Pass
+
+- With `GITHUB_TOKEN` present, the live refresh ran the existing `node scripts/update-all.mjs` path and the GitHub trend source recovered to `ok`.
+- No GitHub rate-limit or skipped-query errors remained in `data/refresh-report.json`.
+- Retired direct watchlist entries stayed absent from generated priority surfaces after the authenticated refresh.
+- The remaining refresh `partial` status came from npm `n8n-workflow` 429, not GitHub auth.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

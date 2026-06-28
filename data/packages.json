@@ -1,14 +1,21 @@
 {
   "updated": "2026-06-27",
-  "generatedAt": "2026-06-27T15:15:59.120Z",
+  "generatedAt": "2026-06-27T15:32:42.908Z",
   "sourceMeta": {
     "name": "npm",
-    "status": "ok",
+    "status": "partial",
     "count": 25,
     "tracked": 25,
     "emitted": 25,
     "coverage": "25/25",
-    "updatedAt": "2026-06-27T15:15:59.120Z"
+    "updatedAt": "2026-06-27T15:32:42.908Z",
+    "errors": [
+      {
+        "name": "n8n-workflow",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
+      }
+    ],
+    "previousUpdated": "2026-06-27"
   },
   "packages": [
     {

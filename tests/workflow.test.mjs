@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { warnIfMissingGitHubToken } from "../scripts/update-all.mjs";
 
 const workflow = readFileSync(".github/workflows/update-trends.yml", "utf8");
 
@@ -85,4 +86,21 @@ test("data update workflow publishes refresh report for operators", () => {
     assert.match(workflow, /path: \$\{\{ runner\.temp \}\}\/refresh-report/);
     assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /::group::\$\{script\}/);
     assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /::error::\$\{script\} failed with exit code \$\{status\}/);
+});
+
+test("local update-all warns when GitHub token is missing", () => {
+    const warnings = [];
+
+    assert.equal(warnIfMissingGitHubToken({}, (message) => warnings.push(message)), true);
+    assert.equal(warnings.length, 1);
+    assert.match(warnings[0], /GITHUB_TOKEN/);
+    assert.match(warnings[0], /partial/);
+    assert.match(warnings[0], /rateLimited/);
+});
+
+test("local update-all skips GitHub token warning when token exists", () => {
+    const warnings = [];
+
+    assert.equal(warnIfMissingGitHubToken({ GITHUB_TOKEN: "set" }, (message) => warnings.push(message)), false);
+    assert.deepEqual(warnings, []);
 });

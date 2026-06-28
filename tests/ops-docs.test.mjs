@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
 const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
-const activeRoadmapP0 = /### P0 - Authenticated GitHub Refresh Pass/;
+const activeRoadmapP0 = /### P0 - npm Rate Limit Partial Follow-up/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -22,6 +22,7 @@ test("README explains data refresh automation for operators", () => {
     assert.match(readme, /fallbackUsed/);
     assert.match(readme, /rateLimited/);
     assert.match(readme, /\$env:GITHUB_TOKEN/);
+    assert.match(readme, /warns when it is missing/);
 });
 
 test("README keeps local and scheduled data update command order aligned", () => {
@@ -186,6 +187,20 @@ test("IA records live refresh confirmation outcomes", () => {
     assert.match(ia, /use `GITHUB_TOKEN` for the next confirmation pass/s);
 });
 
+test("IA records refresh auth preflight outcomes", () => {
+    assert.match(ia, /Refresh Auth Preflight Pass/);
+    assert.match(ia, /warns local operators when `GITHUB_TOKEN` is missing/s);
+    assert.match(ia, /may remain `partial` or `rateLimited`/s);
+    assert.match(ia, /authenticated confirmation itself remains gated on a real `GITHUB_TOKEN`/s);
+});
+
+test("IA records authenticated GitHub refresh outcomes", () => {
+    assert.match(ia, /Authenticated GitHub Refresh Pass/);
+    assert.match(ia, /GitHub trend source recovered to `ok`/s);
+    assert.match(ia, /No GitHub rate-limit or skipped-query errors remained/s);
+    assert.match(ia, /remaining refresh `partial` status came from npm `n8n-workflow` 429/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -305,9 +320,14 @@ test("roadmap keeps completed live refresh confirmation out of next work", () =>
     assert.match(roadmap, activeRoadmapP0);
 });
 
-test("roadmap promotes authenticated GitHub refresh as the active P0", () => {
+test("roadmap keeps completed authenticated GitHub refresh out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Authenticated GitHub Refresh Pass/);
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /Run the existing refresh pipeline with `GITHUB_TOKEN`/s);
-    assert.match(roadmap, /four skipped GitHub trend queries recover to ok/s);
-    assert.match(roadmap, /No new public route, framework, backend, account, sync, or source family/s);
+});
+
+test("roadmap promotes npm rate limit follow-up as the active P0", () => {
+    assert.match(roadmap, activeRoadmapP0);
+    assert.match(roadmap, /npm `n8n-workflow` fetch returned 429/s);
+    assert.match(roadmap, /Use the existing package updater retry and fallback path/s);
+    assert.match(roadmap, /No new public route, framework, backend, account, sync, source family, or schema/s);
 });

@@ -38,31 +38,31 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Authenticated GitHub Refresh Pass
+### P0 - npm Rate Limit Partial Follow-up
 
-Trigger: live source confirmation proved retired direct watchlist entries stay absent, but unauthenticated GitHub search still left the trend source partial.
+Trigger: authenticated GitHub refresh recovered trend source health to ok, but npm `n8n-workflow` fetch returned 429 and kept the overall refresh status partial.
 
 Scope:
 
-- Run the existing refresh pipeline with `GITHUB_TOKEN`; do not add a new refresh path.
-- Confirm whether the four skipped GitHub trend queries recover to ok, or document any remaining partial cause.
-- Confirm retired direct watchlist entries stay absent from trends, packages, repos, links, Today, Explore, and static snapshots.
+- Use the existing package updater retry and fallback path; do not add a new refresh path.
+- Decide whether npm 429 handling needs only documentation, a small retry timing tweak, or no code change.
+- Confirm package rows stay useful when one package fetch is partial.
 - Preserve partial/rate-limit and stale-but-safe recovery meanings from current source metadata.
 - Keep source families, refresh cadence, source metadata schema, localStorage schema, signal policy, route count, static fallback routes, and architecture gate unchanged unless a failing test proves otherwise.
-- No new public route, framework, backend, account, sync, or source family.
+- No new public route, framework, backend, account, sync, source family, or schema.
 
 Verification:
 
-- Run `node scripts/update-all.mjs` with network approval and `GITHUB_TOKEN`.
+- Run package updater tests covering partial package refresh.
 - Run `node scripts/validate-data.mjs`.
-- Run `node --test tests/signal-quality-golden.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/topic-ui.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run `node --test tests/package-data.test.mjs tests/status-ui.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
 - Run `git diff --check`.
 
 Exit:
 
-- GitHub trend source is ok, or the remaining partial reason is documented in IA.
-- Live refreshed data still omits retired direct watchlist entries.
-- Broad baseline signals still do not dominate agent-workflow priority surfaces after live refresh.
+- npm 429 behavior is either accepted as a visible partial state or improved with focused retry coverage.
+- Package, Status, and static fallback pages keep one recovery meaning for the npm partial state.
+- No broad baseline source returns to active priority surfaces.
 
 ## Architecture Gate
 

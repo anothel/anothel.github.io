@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-27",
-  "generatedAt": "2026-06-27T15:15:58.985Z",
+  "generatedAt": "2026-06-27T15:32:42.747Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,35 +14,16 @@
       "tracked": 1,
       "emitted": 5,
       "coverage": "5/1",
-      "updatedAt": "2026-06-27T15:15:58.985Z"
+      "updatedAt": "2026-06-27T15:32:42.747Z"
     },
     {
       "name": "GitHub",
-      "status": "partial",
+      "status": "ok",
       "count": 12,
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-27T15:15:58.985Z",
-      "errors": [
-        {
-          "name": "llm observability evals stars:>100",
-          "error": "403 rate limit exceeded"
-        },
-        {
-          "name": "workflow automation ai agents stars:>100",
-          "error": "403 rate limit exceeded"
-        },
-        {
-          "name": "durable workflow typescript stars:>100",
-          "error": "403 rate limit exceeded"
-        },
-        {
-          "name": "opencode coding agent stars:>100",
-          "error": "403 rate limit exceeded"
-        }
-      ],
-      "rateLimited": true
+      "updatedAt": "2026-06-27T15:32:42.747Z"
     },
     {
       "name": "npm",
@@ -51,12 +32,23 @@
       "tracked": 16,
       "emitted": 7,
       "coverage": "7/16",
-      "updatedAt": "2026-06-27T15:15:58.985Z"
+      "updatedAt": "2026-06-27T15:32:42.747Z"
     }
   ],
   "items": [
     {
       "rank": 1,
+      "title": "activepieces/activepieces",
+      "source": "GitHub",
+      "category": "Workflow automation",
+      "score": 100,
+      "velocity": "23K stars",
+      "signal": "3.9K forks",
+      "url": "https://github.com/activepieces/activepieces",
+      "summary": "AI Agents & MCPs & AI Workflow Automation (~400 MCP servers for AI agents) AI Automation / AI Agent with MCPs AI Workflows & AI Agents MCPs for AI Agents"
+    },
+    {
+      "rank": 2,
       "title": "affaan-m/ECC",
       "source": "GitHub",
       "category": "AI agents",
@@ -67,7 +59,7 @@
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
     {
-      "rank": 2,
+      "rank": 3,
       "title": "AgentOps-AI/agentops",
       "source": "GitHub",
       "category": "AI evals",
@@ -78,7 +70,7 @@
       "summary": "Python SDK for AI agent monitoring, LLM cost tracking, benchmarking, and more. Integrates with most LLMs and agent frameworks including CrewAI, Agno, OpenAI Agents SDK, Langchain, Autogen, AG2, and CamelAI"
     },
     {
-      "rank": 3,
+      "rank": 4,
       "title": "anomalyco/opencode",
       "source": "GitHub",
       "category": "AI agents",
@@ -89,7 +81,7 @@
       "summary": "The open source coding agent."
     },
     {
-      "rank": 4,
+      "rank": 5,
       "title": "anthropics/claude-code",
       "source": "GitHub",
       "category": "AI agents",
@@ -100,7 +92,7 @@
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
     },
     {
-      "rank": 5,
+      "rank": 6,
       "title": "anthropics/skills",
       "source": "GitHub",
       "category": "Agent skills",
@@ -111,7 +103,7 @@
       "summary": "Public repository for Agent Skills"
     },
     {
-      "rank": 6,
+      "rank": 7,
       "title": "Arize-ai/phoenix",
       "source": "GitHub",
       "category": "AI evals",
@@ -122,7 +114,7 @@
       "summary": "AI Observability & Evaluation"
     },
     {
-      "rank": 7,
+      "rank": 8,
       "title": "awslabs/mcp",
       "source": "GitHub",
       "category": "MCP",
@@ -133,7 +125,29 @@
       "summary": "Open source MCP Servers for AWS"
     },
     {
-      "rank": 8,
+      "rank": 9,
+      "title": "code-yeongyu/oh-my-openagent",
+      "source": "GitHub",
+      "category": "AI agents",
+      "score": 100,
+      "velocity": "63.8K stars",
+      "signal": "5.2K forks",
+      "url": "https://github.com/code-yeongyu/oh-my-openagent",
+      "summary": "omo/lazycodex: The coding agent for tokenmaxxers;the one and only agent harness for complex codebases. For your Codex, for your OpenCode"
+    },
+    {
+      "rank": 10,
+      "title": "enescingoz/awesome-n8n-templates",
+      "source": "GitHub",
+      "category": "Workflow automation",
+      "score": 100,
+      "velocity": "23.5K stars",
+      "signal": "6.2K forks",
+      "url": "https://github.com/enescingoz/awesome-n8n-templates",
+      "summary": "280+ free n8n automation templates ready-to-use workflows for Gmail, Telegram, Slack, Discord, WhatsApp, Google Drive, Notion, OpenAI, and more. AI agents, RAG chatbots, email automation, social media, DevOps, and document processing. The largest open-source n8n template collection."
+    },
+    {
+      "rank": 11,
       "title": "farion1231/cc-switch",
       "source": "GitHub",
       "category": "AI agents",
@@ -144,7 +158,7 @@
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
     },
     {
-      "rank": 9,
+      "rank": 12,
       "title": "github/awesome-copilot",
       "source": "GitHub",
       "category": "AI agents",
@@ -153,39 +167,6 @@
       "signal": "4.4K forks",
       "url": "https://github.com/github/awesome-copilot",
       "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot."
-    },
-    {
-      "rank": 10,
-      "title": "Kiln-AI/Kiln",
-      "source": "GitHub",
-      "category": "AI evals",
-      "score": 100,
-      "velocity": "4.9K stars",
-      "signal": "374 forks",
-      "url": "https://github.com/Kiln-AI/Kiln",
-      "summary": "Build, Evaluate, and Optimize AI Systems. Includes evals, RAG, agents, fine-tuning, synthetic data generation, dataset management, MCP, and more."
-    },
-    {
-      "rank": 11,
-      "title": "langgenius/dify",
-      "source": "GitHub",
-      "category": "MCP",
-      "score": 100,
-      "velocity": "146.7K stars",
-      "signal": "23.1K forks",
-      "url": "https://github.com/langgenius/dify",
-      "summary": "Production-ready platform for agentic workflow development."
-    },
-    {
-      "rank": 12,
-      "title": "lobehub/lobehub",
-      "source": "GitHub",
-      "category": "Agent skills",
-      "score": 100,
-      "velocity": "79.2K stars",
-      "signal": "15.5K forks",
-      "url": "https://github.com/lobehub/lobehub",
-      "summary": "LobeHub is your Chief Agent Operator, organizing your agents into 724 operations by hiring, scheduling, and reporting on your entire AI team."
     },
     {
       "rank": 13,
@@ -205,7 +186,7 @@
       "category": "AI",
       "score": 100,
       "velocity": "1168 comments",
-      "signal": "1112 points",
+      "signal": "1115 points",
       "url": "https://www.washingtonpost.com/technology/2026/06/26/openai-says-us-government-will-vet-users-its-latest-ai-model/",
       "summary": "HN story by alain94040 with 1168 comments."
     },
@@ -226,10 +207,10 @@
       "source": "Hacker News",
       "category": "AI",
       "score": 89,
-      "velocity": "671 comments",
-      "signal": "1062 points",
+      "velocity": "675 comments",
+      "signal": "1064 points",
       "url": "https://openai.com/index/previewing-gpt-5-6-sol/",
-      "summary": "HN story by minimaxir with 671 comments."
+      "summary": "HN story by minimaxir with 675 comments."
     },
     {
       "rank": 17,
@@ -244,28 +225,17 @@
     },
     {
       "rank": 18,
-      "title": "Om Malik has died",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 88,
-      "velocity": "167 comments",
-      "signal": "1322 points",
-      "url": "https://om.co/2026/06/24/1966-2026/",
-      "summary": "HN story by minimaxir with 167 comments."
-    },
-    {
-      "rank": 19,
       "title": "U.S. allows Anthropic to release Mythos AI to trusted US organizations",
       "source": "Hacker News",
       "category": "AI",
       "score": 88,
-      "velocity": "672 comments",
-      "signal": "509 points",
+      "velocity": "676 comments",
+      "signal": "511 points",
       "url": "https://www.semafor.com/article/06/27/2026/us-releases-powerful-anthropic-model-mythos-to-some-us-companies",
-      "summary": "HN story by bobrenjc93 with 672 comments."
+      "summary": "HN story by bobrenjc93 with 676 comments."
     },
     {
-      "rank": 20,
+      "rank": 19,
       "title": "@ai-sdk/provider",
       "source": "npm",
       "category": "AI",
@@ -276,7 +246,7 @@
       "summary": "23.4M downloads over the last available week."
     },
     {
-      "rank": 21,
+      "rank": 20,
       "title": "openai",
       "source": "npm",
       "category": "AI",
@@ -287,7 +257,7 @@
       "summary": "23.1M downloads over the last available week."
     },
     {
-      "rank": 22,
+      "rank": 21,
       "title": "ai",
       "source": "npm",
       "category": "AI",
@@ -298,7 +268,7 @@
       "summary": "16M downloads over the last available week."
     },
     {
-      "rank": 23,
+      "rank": 22,
       "title": "@ai-sdk/openai",
       "source": "npm",
       "category": "AI",
@@ -307,6 +277,17 @@
       "signal": "2026-06-20 to 2026-06-26",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai",
       "summary": "8M downloads over the last available week."
+    },
+    {
+      "rank": 23,
+      "title": "DSpark: Speculative decoding accelerates LLM inference [pdf]",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 78,
+      "velocity": "226 comments",
+      "signal": "589 points",
+      "url": "https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf",
+      "summary": "HN story by aurenvale with 226 comments."
     },
     {
       "rank": 24,
