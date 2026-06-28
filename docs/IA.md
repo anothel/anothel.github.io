@@ -209,6 +209,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Trends, Packages, Repos, and Reference shelf static pages now keep top source rows in checked-in HTML, so no-JS and blocked-fetch visits still expose item links.
 - The remaining active data issue is npm `n8n-workflow` 429 partial state; GitHub trend auth recovery is complete.
 
+## Documentation Trust Baseline
+
+- README now uses the same product sentence as IA: a static-first personal signal dashboard for deciding what to open next.
+- Public operating docs now cover security reporting, contribution workflow, Signal Schema v2, source governance, threat model, release checklist, and changelog.
+- Roadmap now separates future operational work from completed documentation work, with verification entry points and npm partial handling as the next P0 queue.
+- Missing package scripts and PR CI are documented as future work instead of implied current capabilities.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

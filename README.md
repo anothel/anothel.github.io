@@ -1,79 +1,53 @@
 # anothel.github.io
 
-Static home hub and small dashboards served with GitHub Pages.
+Static-first personal signal dashboard for deciding what technical signal to open next.
 
-See `docs/ROADMAP.md` for product direction and next large work items.
+The site gathers AI engineering and developer-workflow signals from Hacker News, GitHub, npm, and checked-in references. It ships as plain HTML, CSS, JavaScript, and checked-in JSON on GitHub Pages.
 
-## Structure
-
-- `docs/ROADMAP.md`: direction and next large work items
-- `docs/IA.md`: page role and route grouping notes
-- `docs/ARCHITECTURE.md`: static architecture and PoC gate
-- `index.html`: home hub
-- `today/index.html`: generated priority brief from tracked dashboard data
-- `status/index.html`: source refresh and data health overview
-- `trends/index.html`: responsive tech trend dashboard
-- `packages/index.html`: npm package watchlist
-- `repos/index.html`: GitHub repository watchlist
-- `links/index.html`: curated reference queue
-- `css/site.css`: site-specific styles
-- `data/trends.json`: static seed data
-- `data/watchlists.json`: trend, package, repo, and curated link definitions used by updater scripts
-- `data/signal-policy.json`: Today and Explore scoring policy for baseline penalties and intent thresholds
-- `data/today.json`: generated priority brief data
-- `data/manifest.json`: module index and data freshness summary
-- `data/refresh-report.json`: last refresh run context, changed modules, and source health
-- `js/home.js`: home overview and current signal rendering
-- `js/topic-taxonomy.js`: shared topic labels, routes, descriptions, and matching rules
-- `js/today.js`: Today priority brief rendering
-- `js/status.js`: source status rendering
-- `js/dashboard.js`: filtering and rendering
-- `scripts/update-trends.mjs`: updates trend data from HN, GitHub, and npm
-- `scripts/watchlist-governance.mjs`: filters disabled watchlist entries and validates history metadata
-- `scripts/update-packages.mjs`: updates package watchlist data from npm
-- `scripts/update-repos.mjs`: updates repository watchlist data from GitHub
-- `scripts/update-links.mjs`: updates curated links data from watchlist definitions
-- `scripts/update-today.mjs`: builds the Today priority brief from generated data
-- `scripts/update-manifest.mjs`: updates the module manifest from generated data files
-- `scripts/update-static-fallbacks.mjs`: refreshes no-JS fallback stamps from generated data
-- `scripts/update-all.mjs`: runs every data updater in the scheduled order
-- `scripts/validate-data.mjs`: runs data tests and public JavaScript syntax checks
-- `scripts/report-refresh.mjs`: writes data refresh summary artifacts for operators
-- `tests/trend-data.test.mjs`: trend data helper tests
-- `tests/ops-docs.test.mjs`: data refresh operating docs tests
-- `.github/workflows/update-trends.yml`: scheduled data update workflow
-- `404.html`: GitHub Pages fallback page
-- `robots.txt`: crawler rules and sitemap location
-- `sitemap.xml`: public page list
-
-## Page Roles
-
-| Group | Page | Job |
-|---|---|---|
-| Decision | Home | Decide what to open first from current AI engineering signals. |
-| Decision | Today | Show the generated priority brief with reason and next action. |
-| Discovery | Explore | Search, filter, save, and reuse cross-module signal views. |
-| Discovery | Topics | Add focused judgment around recurring themes such as AI agents, MCP, and agent skills. |
-| Trust / state | Review | Keep a local browser-only saved queue. |
-| Trust / state | Status | Explain refresh health, partial data, fallback, and source failures. |
-| Source detail | Trends | Show movement across HN, GitHub, and npm. |
-| Source detail | Packages | Track npm package adoption signals. |
-| Source detail | Repos | Track GitHub project traction signals. |
-| Source detail | Links | Keep checked-in curated reference links. |
-
-## Local Preview
-
-Use the local static server so nested routes and JSON fetches work the same way as GitHub Pages:
+## Start Here
 
 ```powershell
 node scripts/serve.mjs
+node scripts/validate-data.mjs
 ```
 
 Then open `http://127.0.0.1:58117/`.
 
-## Publishing
+Use `docs/ROADMAP.md` for next work. Keep completed work out of the roadmap.
 
-Push changes to the GitHub Pages branch configured for this repository.
+## Project Docs
+
+- `docs/ROADMAP.md`: future work queue, decision metrics, deferred boundaries.
+- `docs/IA.md`: product sentence, route jobs, vocabulary, completed information-architecture decisions.
+- `docs/ARCHITECTURE.md`: static architecture and framework PoC gate.
+- `docs/SIGNAL_SCHEMA.md`: normalized Signal Schema v2 contract.
+- `docs/SOURCE_GOVERNANCE.md`: source, watchlist, partial, and fallback rules.
+- `docs/THREAT_MODEL.md`: static-site threat model and current controls.
+- `docs/RELEASE_CHECKLIST.md`: release and generated-data review checklist.
+- `SECURITY.md`: vulnerability reporting and security posture.
+- `CONTRIBUTING.md`: local workflow and change rules.
+- `CHANGELOG.md`: user-visible and operations-visible changes.
+
+## Runtime Surface
+
+| Area | Files | Job |
+|---|---|---|
+| Decision | `index.html`, `today/index.html` | Open-now hub and generated priority brief. |
+| Discovery | `explore/index.html`, `topics/*`, `notes/index.html` | Search, filter, save, and inspect focused themes. |
+| Trust / state | `review/index.html`, `status/index.html` | Local saved queue and source health. |
+| Source detail | `trends/index.html`, `packages/index.html`, `repos/index.html`, `links/index.html` | Inspect one source family or reference shelf. |
+| Data | `data/*.json` | Checked-in source snapshots, manifest, report, watchlists, and `data/signal-policy.json` for Today and Explore scoring policy. |
+| Client JS | `js/*.js` | Page renderers plus shared safe DOM, data health, local state, signal schema. |
+| Refresh scripts | `scripts/update-*.mjs`, `scripts/report-refresh.mjs` | Generate data, reports, and no-JS static fallbacks. |
+| Tests | `tests/*.test.mjs` | Data, UI renderer, workflow, static fallback, and governance checks. |
+
+## Local Preview
+
+Use the local static server so nested routes and JSON fetches match GitHub Pages:
+
+```powershell
+node scripts/serve.mjs
+```
 
 ## Data Updates
 
@@ -85,69 +59,67 @@ node scripts/update-all.mjs
 node scripts/validate-data.mjs
 ```
 
-Individual updater scripts stay available for focused refreshes, but the full flow should use `update-all` so Today, Manifest, and static fallback stamps are rebuilt after source data changes.
+`GITHUB_TOKEN` is optional for local runs, but unauthenticated GitHub API calls can stay `partial` or `rateLimited`. `node scripts/update-all.mjs` warns when it is missing.
 
-The site is still static. Pages load checked-in JSON from `data/`, so GitHub Pages does not need a server.
+The full refresh order is:
+
+1. `node scripts/update-trends.mjs`
+2. `node scripts/update-packages.mjs`
+3. `node scripts/update-repos.mjs`
+4. `node scripts/update-links.mjs`
+5. `node scripts/update-today.mjs`
+6. `node scripts/update-manifest.mjs`
+7. `node scripts/report-refresh.mjs`
+8. `node scripts/update-static-fallbacks.mjs`
+
+Use individual updater scripts only for focused debugging. Use `update-all` before committing generated data so Today, Manifest, refresh-report, and static fallback pages stay aligned.
 
 ## Data Refresh Automation
 
-`.github/workflows/update-trends.yml` keeps generated data warm.
+`.github/workflows/update-trends.yml` keeps generated data warm. The workflow name is `Update data`; the file name is legacy.
 
-- Manual refresh: run `workflow_dispatch` from GitHub Actions.
-- Manual note: the `reason` input is copied into the refresh report.
-- Scheduled refresh: `schedule` runs `17 21 * * *` UTC, once per day.
-- Auth: GitHub API calls use `GITHUB_TOKEN` from the workflow environment.
+- Manual refresh: `workflow_dispatch`.
+- Manual note: `reason` input appears in the refresh report.
+- Scheduled refresh: `schedule` runs `17 21 * * *` UTC daily.
+- Auth: GitHub API calls use `GITHUB_TOKEN` from workflow secrets.
 - Scope: generated `data/*.json` files and refreshed static fallback pages are committed.
-- Safety: `concurrency` prevents overlapping data refresh jobs, `node scripts/update-all.mjs` groups each updater in logs, and the workflow runs `node scripts/validate-data.mjs` before committing generated data.
-- Run summary: every workflow run writes a GitHub Step Summary, commits `data/refresh-report.json`, and uploads a `refresh-report` artifact with source status, counts, changed modules, timestamps, and source errors.
-- Failure model: source fetch failures are stored as `error` or `partial` status where the updater can keep useful data. If a full updater produces zero rows but previous checked-in data exists, the updater writes stale but safe fallback data instead of empty data.
-- Fallback markers: fallback source metadata uses `fallbackUsed`, `staleButSafe`, `fallbackReason`, and `rateLimited` when applicable. The Status page and refresh report surface those markers.
-- Local GitHub refresh: set `$env:GITHUB_TOKEN` before running GitHub-backed updaters to avoid low anonymous API limits. `node scripts/update-all.mjs` warns when it is missing; without it, rate limits may appear as `partial` or `rateLimited` in the report.
+- Safety: `concurrency` prevents overlapping data refresh jobs, updater logs are grouped, and `node scripts/validate-data.mjs` runs before commit.
+- Run summary: each workflow writes GitHub Step Summary, commits `data/refresh-report.json`, and uploads a `refresh-report` artifact.
+- Failure model: source fetch failures are stored as `error` or `partial` when useful rows remain. Empty full refreshes reuse stale but safe previous data where supported.
+- Fallback markers: source metadata uses `fallbackUsed`, `staleButSafe`, `fallbackReason`, and `rateLimited` when applicable. Status and refresh-report expose those markers.
 
 ## Verification
 
+Primary check:
+
 ```powershell
 node scripts/validate-data.mjs
-node --test tests/*.test.mjs
-node --test tests/trend-data.test.mjs
-node --test tests/package-data.test.mjs
-node --test tests/repo-data.test.mjs
-node --test tests/link-data.test.mjs
-node --test tests/home-data.test.mjs
-node --test tests/today-data.test.mjs
-node --test tests/today-generator.test.mjs
-node --test tests/manifest.test.mjs
-node --test tests/site-structure.test.mjs
-node --test tests/status-ui.test.mjs
-node --test tests/serve.test.mjs
-node --test tests/workflow.test.mjs
+git diff --check
+```
+
+Focused checks used often:
+
+```powershell
 node --test tests/ops-docs.test.mjs
+node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs
+node --test tests/package-data.test.mjs tests/status-ui.test.mjs
 node --check scripts/update-all.mjs
 node --check scripts/validate-data.mjs
-node --check scripts/watchlist-governance.mjs
-node --check scripts/update-trends.mjs
-node --check scripts/update-packages.mjs
-node --check scripts/update-repos.mjs
-node --check scripts/update-links.mjs
-node --check scripts/update-today.mjs
-node --check scripts/update-manifest.mjs
-node --check scripts/update-static-fallbacks.mjs
 node --check scripts/report-refresh.mjs
-node --check scripts/serve.mjs
-node --check js/dashboard.js
-node --check js/home.js
-node --check js/status.js
-node --check js/today.js
-node --check js/package-watchlist.js
-node --check js/repo-watchlist.js
-node --check js/link-queue.js
-node --check js/explore.js
-node --check js/review.js
-node --check js/topics.js
-node --check js/topic-taxonomy.js
-node --check js/signal-schema.js
-node --check js/data-health.js
 ```
+
+## Publishing
+
+Push checked-in HTML, CSS, JavaScript, JSON, and docs to the GitHub Pages branch configured for this repository.
+
+Do not publish a refresh result if `data/manifest.json`, `data/refresh-report.json`, Today data, or static fallback pages are out of sync. Run `node scripts/validate-data.mjs` first.
+
+## Boundaries
+
+- No backend, account, sync, or database.
+- No framework unless the architecture gate records a measured vanilla JavaScript blocker.
+- No portfolio, resume, worklog, or company-history route while the product remains a signal dashboard.
+- Local saved review state stays browser-only.
 
 ## Notes
 

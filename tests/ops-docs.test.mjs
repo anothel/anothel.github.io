@@ -5,6 +5,13 @@ import { readFileSync } from "node:fs";
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
 const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
+const security = readFileSync("SECURITY.md", "utf8");
+const contributing = readFileSync("CONTRIBUTING.md", "utf8");
+const changelog = readFileSync("CHANGELOG.md", "utf8");
+const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
+const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
+const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
+const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const activeRoadmapP0 = /### P0 - npm Rate Limit Partial Follow-up/;
 
 test("README explains data refresh automation for operators", () => {
@@ -26,20 +33,13 @@ test("README explains data refresh automation for operators", () => {
 });
 
 test("README keeps local and scheduled data update command order aligned", () => {
-    const commands = [
-        "node scripts/update-all.mjs",
-        "node scripts/validate-data.mjs",
-        "node --check scripts/update-all.mjs",
-        "node --check scripts/validate-data.mjs",
-        "node --check scripts/report-refresh.mjs"
-    ];
+    const dataUpdates = readme.slice(readme.indexOf("## Data Updates"), readme.indexOf("## Data Refresh Automation"));
+    const verification = readme.slice(readme.indexOf("## Verification"));
 
-    let previousIndex = -1;
-    for (const command of commands) {
-        const index = readme.indexOf(command);
-        assert.ok(index > previousIndex, `${command} should appear after previous update command`);
-        previousIndex = index;
-    }
+    assert.ok(dataUpdates.indexOf("node scripts/update-all.mjs") < dataUpdates.indexOf("node scripts/validate-data.mjs"));
+    assert.match(verification, /node --check scripts\/update-all\.mjs/);
+    assert.match(verification, /node --check scripts\/validate-data\.mjs/);
+    assert.match(verification, /node --check scripts\/report-refresh\.mjs/);
 });
 
 test("IA documents current schema and freshness vocabulary", () => {
@@ -209,6 +209,46 @@ test("IA records roadmap analysis P0 corrections", () => {
     assert.match(ia, /remaining active data issue is npm `n8n-workflow` 429 partial state/s);
 });
 
+test("docs record the public trust baseline", () => {
+    assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
+    assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
+    assert.match(readme, /docs\/THREAT_MODEL\.md/);
+    assert.match(readme, /docs\/RELEASE_CHECKLIST\.md/);
+    assert.match(readme, /SECURITY\.md/);
+    assert.match(readme, /CONTRIBUTING\.md/);
+    assert.match(readme, /CHANGELOG\.md/);
+    assert.match(ia, /Documentation Trust Baseline/);
+    assert.match(ia, /Missing package scripts and PR CI are documented as future work/s);
+});
+
+test("security and threat docs preserve the static-site trust model", () => {
+    assert.match(security, /static GitHub Pages signal dashboard/s);
+    assert.match(security, /Do not open a public issue for a suspected vulnerability/s);
+    assert.match(security, /GITHUB_TOKEN/s);
+    assert.match(threatModel, /There is no backend, account system, sync service, or database/s);
+    assert.match(threatModel, /Remote sources: Hacker News, GitHub, npm/s);
+    assert.match(threatModel, /Shared safe DOM helpers escape HTML and restrict hrefs/s);
+});
+
+test("data contract docs describe schema and source governance", () => {
+    assert.match(signalSchema, /Signal Schema v2 is the normalized item contract/s);
+    assert.match(signalSchema, /data\/signal-policy\.json/);
+    assert.match(signalSchema, /fallbackUsed/);
+    assert.match(sourceGovernance, /data\/watchlists\.json/);
+    assert.match(sourceGovernance, /Governance validation rejects future `history.date` values/s);
+    assert.match(sourceGovernance, /npm `n8n-workflow` returned 429/s);
+});
+
+test("contribution and release docs name the runnable checks", () => {
+    assert.match(contributing, /node scripts\/validate-data\.mjs/);
+    assert.match(contributing, /git diff --check/);
+    assert.match(releaseChecklist, /node scripts\/validate-data\.mjs/);
+    assert.match(releaseChecklist, /data\/manifest\.json/);
+    assert.match(releaseChecklist, /Roadmap contains only future work/s);
+    assert.match(changelog, /Unreleased/);
+    assert.match(changelog, /2026-06-28/);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -339,4 +379,11 @@ test("roadmap promotes npm rate limit follow-up as the active P0", () => {
     assert.match(roadmap, /npm `n8n-workflow` fetch returned 429/s);
     assert.match(roadmap, /Use the existing package updater retry and fallback path/s);
     assert.match(roadmap, /No new public route, framework, backend, account, sync, source family, or schema/s);
+});
+
+test("roadmap promotes verification entry points without claiming they already exist", () => {
+    assert.match(roadmap, /### P0 - Verification Entry Point Baseline/);
+    assert.match(roadmap, /no root `package\.json`, no standard npm scripts, and no separate PR CI/s);
+    assert.match(roadmap, /Do not add package dependencies, bundlers, framework tooling, lockfiles, backend, account, sync, or build output/s);
+    assert.match(roadmap, /Architecture gate still proves no package manager lockfile or build output was introduced/s);
 });

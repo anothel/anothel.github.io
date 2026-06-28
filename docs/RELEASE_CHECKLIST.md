@@ -1,0 +1,57 @@
+# Release Checklist
+
+Use this before publishing meaningful site, data, or operations changes.
+
+## Required Checks
+
+```powershell
+node scripts/validate-data.mjs
+git diff --check
+```
+
+Run focused tests for touched areas:
+
+```powershell
+node --test tests/ops-docs.test.mjs
+node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs
+```
+
+## Generated Data Review
+
+Check before publishing generated data:
+
+- `data/manifest.json` counts match module data.
+- `data/refresh-report.json` explains source health.
+- Today data exists and has expected sections.
+- Static fallback pages were regenerated after data changes.
+- Any `partial`, `fallback`, `staleButSafe`, or `rateLimited` state is visible and acceptable.
+
+## Security Review
+
+Check when rendering or source handling changed:
+
+- Unsafe URLs are blocked or replaced.
+- Generated text is escaped.
+- External links keep safe attributes where rendered.
+- localStorage import/export treats payload as untrusted.
+
+## Docs Review
+
+Update docs when behavior changes:
+
+- `README.md` for commands or surface changes.
+- `docs/ROADMAP.md` for future work only.
+- `docs/IA.md` for product, route, or vocabulary decisions.
+- `docs/SIGNAL_SCHEMA.md` for normalized data contract changes.
+- `docs/SOURCE_GOVERNANCE.md` for source policy changes.
+- `docs/THREAT_MODEL.md` or `SECURITY.md` for security posture changes.
+- `CHANGELOG.md` for user-visible or operator-visible changes.
+
+## Publish Decision
+
+Publish when:
+
+- Required checks pass.
+- Known partial/fallback states are intentional and documented.
+- No unrelated generated drift is mixed into the change.
+- Roadmap contains only future work.
