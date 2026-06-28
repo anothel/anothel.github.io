@@ -16,6 +16,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Recorded the generated data publish drill outcome and promoted module-type warning cleanup as the next Roadmap item.
 - Renamed Home, Today, and Status ESM browser modules to `.mjs` so Node validation runs without module-type warnings.
 - Confirmed npm `n8n-workflow` still returns 429 with preserved package rows; next publish confirmation needs `GITHUB_TOKEN`.
+- Ran authenticated refresh with `gh auth token`; GitHub trends recovered to `ok`, leaving npm `n8n-workflow` as the only accepted non-ok source.
 
 ## 2026-06-28
 

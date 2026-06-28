@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - Authenticated Refresh Publish Confirmation/;
+const activeRoadmapP0 = /### P0 - Current Signal Diff Triage/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -246,6 +246,14 @@ test("IA records npm partial recovery confirmation outcomes", () => {
     assert.match(ia, /The same local run lacked `GITHUB_TOKEN`, so GitHub trend refresh became `partial` again/s);
 });
 
+test("IA records authenticated refresh publish confirmation outcomes", () => {
+    assert.match(ia, /Authenticated Refresh Publish Confirmation/);
+    assert.match(ia, /`gh auth token` supplied `GITHUB_TOKEN` to the existing refresh path/s);
+    assert.match(ia, /GitHub trend source recovered to `ok`/s);
+    assert.match(ia, /Only npm `n8n-workflow` 429 remains non-ok/s);
+    assert.match(ia, /No route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -466,8 +474,13 @@ test("roadmap keeps completed npm partial recovery confirmation out of next work
     assert.match(roadmap, /npm partial confirmation: npm `n8n-workflow` 429 remains accepted with preserved package rows and visible `rateLimited` metadata/s);
 });
 
-test("roadmap promotes authenticated refresh publish confirmation as the active P0", () => {
+test("roadmap keeps completed authenticated refresh publish confirmation out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Authenticated Refresh Publish Confirmation/);
+    assert.match(roadmap, /Authenticated refresh: GitHub trend source is `ok`; npm `n8n-workflow` 429 is the only accepted non-ok source/s);
+});
+
+test("roadmap promotes current signal diff triage as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /latest local refresh lacked `GITHUB_TOKEN` and reintroduced GitHub trend `partial`/s);
-    assert.match(roadmap, /Current generated data is publishable or blocked from a token-backed refresh report/s);
+    assert.match(roadmap, /authenticated refresh changed generated data across priority and topic surfaces/s);
+    assert.match(roadmap, /Refreshed Home, Today, Explore, topic, and module snapshots remain publishable/s);
 });

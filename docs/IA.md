@@ -254,6 +254,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - 25 package rows stayed preserved with `rateLimited` metadata, so npm partial remains accepted source health rather than a watchlist removal.
 - The same local run lacked `GITHUB_TOKEN`, so GitHub trend refresh became `partial` again and publish confirmation needs a token-backed refresh report.
 
+## Authenticated Refresh Publish Confirmation
+
+- `gh auth token` supplied `GITHUB_TOKEN` to the existing refresh path without printing the token.
+- GitHub trend source recovered to `ok`; no skipped GitHub trend queries or GitHub rate-limit errors remained.
+- Only npm `n8n-workflow` 429 remains non-ok, and the preserved package rows keep generated surfaces publishable under accepted partial source health.
+- No route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

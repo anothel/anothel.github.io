@@ -37,6 +37,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Publish drill: current checked-in data is publishable from local checks while npm `n8n-workflow` 429 remains visible `partial` source health.
 - Module syntax: Home, Today, and Status ESM browser modules use `.mjs` while global helper scripts stay `.js`.
 - npm partial confirmation: npm `n8n-workflow` 429 remains accepted with preserved package rows and visible `rateLimited` metadata.
+- Authenticated refresh: GitHub trend source is `ok`; npm `n8n-workflow` 429 is the only accepted non-ok source.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -50,29 +51,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Authenticated Refresh Publish Confirmation
+### P0 - Current Signal Diff Triage
 
-Trigger: latest local refresh lacked `GITHUB_TOKEN` and reintroduced GitHub trend `partial`, while npm `n8n-workflow` remains an accepted partial source.
+Trigger: authenticated refresh changed generated data across priority and topic surfaces.
 
 Scope:
 
-- Run the existing refresh path with `GITHUB_TOKEN` present.
-- Confirm GitHub trend source recovers to `ok`, and npm partial remains the only accepted non-ok source.
+- Review refreshed Home, Today, Explore, topic, and module snapshots for broad baseline dominance or stale recovery copy.
+- Adjust watchlists or signal policy only if current generated surfaces stop preferring agent-workflow signals.
 - Keep route count, source families, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged.
-- Do not add retries, mirrors, proxies, provenance, tags, or release automation unless token-backed refresh still cannot produce a clear publish decision.
+- Do not run another live refresh unless this diff exposes a concrete data defect.
 
 Verification:
 
-- Run `node scripts/update-all.mjs` with `GITHUB_TOKEN`.
-- Run `node --test tests/package-data.test.mjs tests/refresh-report.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run `node --test tests/signal-quality-golden.test.mjs tests/today-data.test.mjs tests/explore-ui.test.mjs tests/topic-ui.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
 - Run `node scripts/validate-data.mjs`.
-- Run `npm run check`.
 - Run `git diff --check`.
 
 Exit:
 
-- Current generated data is publishable or blocked from a token-backed refresh report.
-- If GitHub remains partial with a token, the blocker is documented in Roadmap instead of treated as npm fallout.
+- Refreshed Home, Today, Explore, topic, and module snapshots remain publishable.
+- Any watchlist or signal-policy change has focused regression coverage.
 
 ## Architecture Gate
 
