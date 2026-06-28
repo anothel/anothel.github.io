@@ -299,6 +299,7 @@ test("preparePackageDataForWrite preserves previous rows for partial rate limits
     );
 
     assert.equal(prepared.sourceMeta.status, "partial");
+    assert.equal(prepared.sourceMeta.rateLimited, true);
     assert.equal(prepared.sourceMeta.fallbackUsed, undefined);
     assert.equal(prepared.sourceMeta.staleButSafe, undefined);
     assert.equal(prepared.sourceMeta.fallbackReason, undefined);

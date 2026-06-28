@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-28T00:41:34.086Z",
+  "generatedAt": "2026-06-28T01:12:19.549Z",
   "manifestUpdated": "2026-06-27",
   "runContext": {
     "reason": "",
@@ -7,7 +7,14 @@
     "runId": "",
     "refName": ""
   },
-  "changedModules": [],
+  "changedModules": [
+    {
+      "id": "packages",
+      "title": "Package watchlist",
+      "count": 25,
+      "updated": "2026-06-27"
+    }
+  ],
   "modules": [
     {
       "id": "trends",
@@ -70,7 +77,7 @@
       "status": "partial",
       "count": 25,
       "updated": "2026-06-27",
-      "changed": false,
+      "changed": true,
       "sources": [
         {
           "module": "packages",
@@ -81,10 +88,11 @@
           "coverage": "25/25",
           "fallbackUsed": false,
           "staleButSafe": false,
-          "rateLimited": false,
+          "rateLimited": true,
           "fallbackReason": "",
           "previousUpdated": "2026-06-27",
           "safetyDetails": [
+            "rate limited",
             "previous 2026-06-27"
           ],
           "errors": [

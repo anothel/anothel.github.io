@@ -9,6 +9,8 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Added public security, contribution, signal schema, source governance, threat model, and release checklist docs.
 - Expanded README around operating commands, data refresh, verification, and project boundaries.
 - Reworked Roadmap around future operational trust work: verification entry points, npm partial handling, renderer safety, data contract enforcement, and release discipline.
+- Added dependency-free `package.json` scripts and read-only PR CI validation.
+- Marked npm 429 partial refreshes as explicit `rateLimited` metadata while preserving useful package rows.
 
 ## 2026-06-28
 

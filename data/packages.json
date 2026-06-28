@@ -15,6 +15,7 @@
         "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
       }
     ],
+    "rateLimited": true,
     "previousUpdated": "2026-06-27"
   },
   "packages": [

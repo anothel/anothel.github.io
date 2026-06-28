@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { warnIfMissingGitHubToken } from "../scripts/update-all.mjs";
 
 const workflow = readFileSync(".github/workflows/update-trends.yml", "utf8");
@@ -103,4 +103,19 @@ test("local update-all skips GitHub token warning when token exists", () => {
 
     assert.equal(warnIfMissingGitHubToken({ GITHUB_TOKEN: "set" }, (message) => warnings.push(message)), false);
     assert.deepEqual(warnings, []);
+});
+
+test("PR CI validates without committing generated data", () => {
+    assert.equal(existsSync(".github/workflows/ci.yml"), true);
+    const ci = readFileSync(".github/workflows/ci.yml", "utf8");
+
+    assert.match(ci, /^name: CI/m);
+    assert.match(ci, /pull_request:/);
+    assert.match(ci, /push:/);
+    assert.match(ci, /contents: read/);
+    assert.match(ci, /node-version: "20"/);
+    assert.match(ci, /npm run check/);
+    assert.match(ci, /git diff --check/);
+    assert.doesNotMatch(ci, /git add|git commit|git push/);
+    assert.doesNotMatch(ci, /node scripts\/update-all\.mjs/);
 });

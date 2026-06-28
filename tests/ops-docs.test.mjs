@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - npm Rate Limit Partial Follow-up/;
+const activeRoadmapP0 = /### P0 - Renderer Safety Audit/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -218,7 +218,7 @@ test("docs record the public trust baseline", () => {
     assert.match(readme, /CONTRIBUTING\.md/);
     assert.match(readme, /CHANGELOG\.md/);
     assert.match(ia, /Documentation Trust Baseline/);
-    assert.match(ia, /Missing package scripts and PR CI are documented as future work/s);
+    assert.match(ia, /Package entry point and PR CI are established without dependencies/s);
 });
 
 test("security and threat docs preserve the static-site trust model", () => {
@@ -237,10 +237,11 @@ test("data contract docs describe schema and source governance", () => {
     assert.match(sourceGovernance, /data\/watchlists\.json/);
     assert.match(sourceGovernance, /Governance validation rejects future `history.date` values/s);
     assert.match(sourceGovernance, /npm `n8n-workflow` returned 429/s);
+    assert.match(sourceGovernance, /visible `partial` source health with `rateLimited: true`/s);
 });
 
 test("contribution and release docs name the runnable checks", () => {
-    assert.match(contributing, /node scripts\/validate-data\.mjs/);
+    assert.match(contributing, /npm run check/);
     assert.match(contributing, /git diff --check/);
     assert.match(releaseChecklist, /node scripts\/validate-data\.mjs/);
     assert.match(releaseChecklist, /data\/manifest\.json/);
@@ -373,17 +374,23 @@ test("roadmap keeps completed authenticated GitHub refresh out of next work", ()
     assert.match(roadmap, activeRoadmapP0);
 });
 
-test("roadmap promotes npm rate limit follow-up as the active P0", () => {
-    assert.match(roadmap, activeRoadmapP0);
+test("roadmap keeps completed npm rate limit follow-up out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - npm Rate Limit Partial Follow-up/);
     assert.match(roadmap, /Source detail pages: Trends, Packages, Repos, and Links keep checked-in top rows/s);
-    assert.match(roadmap, /npm `n8n-workflow` fetch returned 429/s);
-    assert.match(roadmap, /Use the existing package updater retry and fallback path/s);
-    assert.match(roadmap, /No new public route, framework, backend, account, sync, source family, or schema/s);
+    assert.match(roadmap, /npm `n8n-workflow` 429 is accepted as visible partial source health/s);
+    assert.match(roadmap, /explicit `rateLimited` metadata/s);
 });
 
-test("roadmap promotes verification entry points without claiming they already exist", () => {
-    assert.match(roadmap, /### P0 - Verification Entry Point Baseline/);
-    assert.match(roadmap, /no root `package\.json`, no standard npm scripts, and no separate PR CI/s);
-    assert.match(roadmap, /Do not add package dependencies, bundlers, framework tooling, lockfiles, backend, account, sync, or build output/s);
-    assert.match(roadmap, /Architecture gate still proves no package manager lockfile or build output was introduced/s);
+test("roadmap keeps completed verification entry points out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Verification Entry Point Baseline/);
+    assert.match(roadmap, /package entry point and PR CI are established/s);
+    assert.match(roadmap, /No package dependencies, package manager lockfile, framework tooling, backend, account, sync, or build output exists/s);
+    assert.match(readme, /npm run check/);
+    assert.match(contributing, /npm run check/);
+});
+
+test("roadmap promotes renderer safety audit as the active P0", () => {
+    assert.match(roadmap, activeRoadmapP0);
+    assert.match(roadmap, /external data and checked-in watchlists are rendered into multiple public pages/s);
+    assert.match(roadmap, /Keep shared `safe-dom\.js` as the trust boundary/s);
 });

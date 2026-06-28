@@ -5,11 +5,13 @@
 No package install is required today.
 
 ```powershell
-node scripts/serve.mjs
-node scripts/validate-data.mjs
+npm run serve
+npm run check
 ```
 
 Use Node 20 or newer.
+
+If PowerShell blocks `npm.ps1`, use `npm.cmd run check`.
 
 ## Change Rules
 
@@ -26,7 +28,7 @@ Use the full refresh path before accepting generated data changes:
 ```powershell
 $env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
 node scripts/update-all.mjs
-node scripts/validate-data.mjs
+npm run check
 ```
 
 If `GITHUB_TOKEN` is missing, GitHub-backed sources may stay `partial` or `rateLimited`. That is acceptable only when Status and `data/refresh-report.json` explain the state.
@@ -36,7 +38,7 @@ If `GITHUB_TOKEN` is missing, GitHub-backed sources may stay `partial` or `rateL
 Before handing off a change:
 
 ```powershell
-node scripts/validate-data.mjs
+npm run check
 git diff --check
 ```
 

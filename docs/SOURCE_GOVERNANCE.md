@@ -48,6 +48,6 @@ Governance validation rejects future `history.date` values after the current dat
 - `fallbackUsed` and `staleButSafe` are reserved for true fallback states, not ordinary partial row reuse.
 - Rate limits must stay visible through source metadata and refresh-report.
 
-## Current Active Follow-Up
+## Current Rate Limit Decision
 
-npm `n8n-workflow` returned 429 during refresh. Roadmap keeps this as an active P0 until behavior is accepted or improved with focused retry coverage.
+npm `n8n-workflow` returned 429 during refresh. The accepted behavior is visible `partial` source health with `rateLimited: true`, preserved previous rows, and refresh-report detail. Revisit only if repeated npm 429s hide useful package rows or make Status recovery unclear.

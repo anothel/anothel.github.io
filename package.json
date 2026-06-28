@@ -1,0 +1,14 @@
+{
+  "name": "anothel.github.io",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "serve": "node scripts/serve.mjs",
+    "validate": "node scripts/validate-data.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node scripts/validate-data.mjs",
+    "update:data": "node scripts/update-all.mjs"
+  }
+}

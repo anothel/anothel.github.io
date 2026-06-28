@@ -18,8 +18,19 @@ test("architecture PoC gate defines scope, budgets, and static safety", () => {
     assert.match(architecture, /Budget: PoC may add at most 20 KB raw shipped JavaScript/);
 });
 
-test("architecture PoC has not added a package manager or build output", () => {
-    for (const path of ["package.json", "package-lock.json", "pnpm-lock.yaml", "yarn.lock", "dist"]) {
+test("package entry point stays dependency-free without package manager or build output", () => {
+    const manifest = JSON.parse(read("package.json"));
+
+    assert.deepEqual(manifest.engines, { node: ">=20" });
+    assert.equal(manifest.dependencies, undefined);
+    assert.equal(manifest.devDependencies, undefined);
+    assert.equal(manifest.scripts.serve, "node scripts/serve.mjs");
+    assert.equal(manifest.scripts.validate, "node scripts/validate-data.mjs");
+    assert.equal(manifest.scripts.test, "node --test tests/*.test.mjs");
+    assert.equal(manifest.scripts.check, "node scripts/validate-data.mjs");
+    assert.equal(manifest.scripts["update:data"], "node scripts/update-all.mjs");
+
+    for (const path of ["package-lock.json", "pnpm-lock.yaml", "yarn.lock", "dist"]) {
         assert.equal(existsSync(path), false, `${path} should not exist before a PoC proves value`);
     }
 });

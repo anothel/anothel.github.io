@@ -7,11 +7,13 @@ The site gathers AI engineering and developer-workflow signals from Hacker News,
 ## Start Here
 
 ```powershell
-node scripts/serve.mjs
-node scripts/validate-data.mjs
+npm run serve
+npm run check
 ```
 
 Then open `http://127.0.0.1:58117/`.
+
+If PowerShell blocks `npm.ps1`, use `npm.cmd run check`.
 
 Use `docs/ROADMAP.md` for next work. Keep completed work out of the roadmap.
 
@@ -55,8 +57,8 @@ Run the full local refresh in the same order as GitHub Actions:
 
 ```powershell
 $env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
-node scripts/update-all.mjs
-node scripts/validate-data.mjs
+npm run update:data
+npm run check
 ```
 
 `GITHUB_TOKEN` is optional for local runs, but unauthenticated GitHub API calls can stay `partial` or `rateLimited`. `node scripts/update-all.mjs` warns when it is missing.
@@ -73,6 +75,13 @@ The full refresh order is:
 8. `node scripts/update-static-fallbacks.mjs`
 
 Use individual updater scripts only for focused debugging. Use `update-all` before committing generated data so Today, Manifest, refresh-report, and static fallback pages stay aligned.
+
+Equivalent direct commands remain:
+
+```powershell
+node scripts/update-all.mjs
+node scripts/validate-data.mjs
+```
 
 ## Data Refresh Automation
 
@@ -93,13 +102,14 @@ Use individual updater scripts only for focused debugging. Use `update-all` befo
 Primary check:
 
 ```powershell
-node scripts/validate-data.mjs
+npm run check
 git diff --check
 ```
 
 Focused checks used often:
 
 ```powershell
+node scripts/validate-data.mjs
 node --test tests/ops-docs.test.mjs
 node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs
 node --test tests/package-data.test.mjs tests/status-ui.test.mjs

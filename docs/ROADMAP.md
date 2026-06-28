@@ -28,6 +28,9 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Source governance: `data/watchlists.json` drives trends, packages, repos, and links; disabled/history fields keep retired sources auditable.
 - Signal policy: `data/signal-policy.json` owns Today and Explore baseline scoring policy.
 - Public trust docs: `SECURITY.md`, `docs/THREAT_MODEL.md`, `docs/SIGNAL_SCHEMA.md`, `docs/SOURCE_GOVERNANCE.md`, and `docs/RELEASE_CHECKLIST.md` describe the operating contract.
+- Verification entry point: dependency-free `package.json` scripts; package entry point and PR CI are established.
+- No package dependencies, package manager lockfile, framework tooling, backend, account, sync, or build output exists.
+- npm partial recovery: npm `n8n-workflow` 429 is accepted as visible partial source health with preserved rows and explicit `rateLimited` metadata.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -41,57 +44,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Verification Entry Point Baseline
-
-Trigger: repo analysis found no root `package.json`, no standard npm scripts, and no separate PR CI, while tests and update scripts already exist.
-
-Scope:
-
-- Add the smallest root `package.json` that records `type`, Node engine, and scripts for serve, validate, test, check, and data update.
-- Add PR CI that runs validation and whitespace checks without committing generated data.
-- Keep scheduled data refresh separate from PR CI.
-- Keep the existing `update-trends.yml` behavior unless renaming can be done without breaking tests or operator docs.
-- Do not add package dependencies, bundlers, framework tooling, lockfiles, backend, account, sync, or build output.
-
-Verification:
-
-- Run `node scripts/validate-data.mjs`.
-- Run `node --test tests/workflow.test.mjs tests/ops-docs.test.mjs tests/architecture-poc.test.mjs`.
-- Run `git diff --check`.
-
-Exit:
-
-- A new contributor can run the documented commands without copying long command lists.
-- PR validation exists separately from scheduled data refresh.
-- Architecture gate still proves no package manager lockfile or build output was introduced.
-
-### P0 - npm Rate Limit Partial Follow-up
-
-Trigger: authenticated GitHub refresh recovered trend source health to ok, but npm `n8n-workflow` fetch returned 429 and kept overall refresh status partial.
-
-Scope:
-
-- Use the existing package updater retry and fallback path; do not add a new refresh path.
-- Decide whether npm 429 handling needs only documentation, a small retry timing tweak, or no code change.
-- Confirm package rows stay useful when one package fetch is partial.
-- Preserve partial/rate-limit and stale-but-safe recovery meanings from current source metadata.
-- Keep source families, refresh cadence, source metadata schema, localStorage schema, signal policy, route count, static fallback routes, and architecture gate unchanged unless a failing test proves otherwise.
-- No new public route, framework, backend, account, sync, source family, or schema.
-
-Verification:
-
-- Run package updater tests covering partial package refresh.
-- Run `node scripts/validate-data.mjs`.
-- Run `node --test tests/package-data.test.mjs tests/status-ui.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
-- Run `git diff --check`.
-
-Exit:
-
-- npm 429 behavior is either accepted as a visible partial state or improved with focused retry coverage.
-- Package, Status, and static fallback pages keep one recovery meaning for the npm partial state.
-- No broad baseline source returns to active priority surfaces.
-
-### P1 - Renderer Safety Audit
+### P0 - Renderer Safety Audit
 
 Trigger: external data and checked-in watchlists are rendered into multiple public pages, and the safety contract should be proven page by page.
 

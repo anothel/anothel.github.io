@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
-import { applyEmptyCollectionFallback } from "./refresh-safety.mjs";
+import { applyEmptyCollectionFallback, sourceSafetyFlags } from "./refresh-safety.mjs";
 import { activeItems } from "./watchlist-governance.mjs";
 
 const OUT_FILE = new URL("../data/packages.json", import.meta.url);
@@ -167,6 +167,7 @@ export function preparePackageDataForWrite(data, previousData) {
 
         if (restored.length > 0) {
             const packages = rerankPackages([...nextItems, ...restored]);
+            const flags = sourceSafetyFlags(errors);
             data = {
                 ...data,
                 sourceMeta: {
@@ -174,6 +175,7 @@ export function preparePackageDataForWrite(data, previousData) {
                     count: packages.length,
                     emitted: packages.length,
                     coverage: `${packages.length}/${data.sourceMeta.tracked || packageDefinitions.length}`,
+                    ...(flags.rateLimited ? { rateLimited: true } : {}),
                     previousUpdated: previousData.updated || data.sourceMeta.previousUpdated
                 },
                 packages
