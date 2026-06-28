@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - Data Contract Enforcement/;
+const activeRoadmapP0 = /### P0 - Generated Data Publish Drill/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -216,6 +216,15 @@ test("IA records renderer safety audit outcomes", () => {
     assert.match(ia, /no sanitizer, framework, backend, route, account, or sync scope changed/s);
 });
 
+test("IA records contract and release discipline outcomes", () => {
+    assert.match(ia, /Data Contract Enforcement/);
+    assert.match(ia, /`node scripts\/validate-data\.mjs` remains the single data contract gate/s);
+    assert.match(ia, /JSON Schema files stay deferred until current tests miss real drift/s);
+    assert.match(ia, /Release Discipline Pass/);
+    assert.match(ia, /dated changelog entries and normal GitHub Pages publishes/s);
+    assert.match(ia, /No Git tag, provenance, SLSA, framework, backend, account, or sync scope changed/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -241,6 +250,13 @@ test("data contract docs describe schema and source governance", () => {
     assert.match(signalSchema, /Signal Schema v2 is the normalized item contract/s);
     assert.match(signalSchema, /data\/signal-policy\.json/);
     assert.match(signalSchema, /fallbackUsed/);
+    assert.match(signalSchema, /## Contract Gate/);
+    assert.match(signalSchema, /`node scripts\/validate-data\.mjs` is the data contract gate/s);
+    assert.match(signalSchema, /Manifest contract.*`data\/manifest\.json`/s);
+    assert.match(signalSchema, /Refresh report contract.*`data\/refresh-report\.json`/s);
+    assert.match(signalSchema, /Signal policy contract.*`data\/signal-policy\.json`/s);
+    assert.match(signalSchema, /Normalized item example/);
+    assert.match(signalSchema, /JSON Schema files stay deferred/s);
     assert.match(sourceGovernance, /data\/watchlists\.json/);
     assert.match(sourceGovernance, /Governance validation rejects future `history.date` values/s);
     assert.match(sourceGovernance, /npm `n8n-workflow` returned 429/s);
@@ -250,7 +266,12 @@ test("data contract docs describe schema and source governance", () => {
 test("contribution and release docs name the runnable checks", () => {
     assert.match(contributing, /npm run check/);
     assert.match(contributing, /git diff --check/);
+    assert.match(readme, /This repo uses dated changelog entries and normal GitHub Pages publishes, not release tags yet/s);
     assert.match(releaseChecklist, /node scripts\/validate-data\.mjs/);
+    assert.match(releaseChecklist, /npm run check/);
+    assert.match(releaseChecklist, /GitHub Pages publish/);
+    assert.match(releaseChecklist, /No Git tag is required/);
+    assert.match(releaseChecklist, /dated `CHANGELOG\.md` entry/s);
     assert.match(releaseChecklist, /data\/manifest\.json/);
     assert.match(releaseChecklist, /Roadmap contains only future work/s);
     assert.match(changelog, /Unreleased/);
@@ -402,8 +423,15 @@ test("roadmap keeps completed renderer safety audit out of next work", () => {
     assert.match(threatModel, /External item links rendered from data use `rel="noopener noreferrer"`/s);
 });
 
-test("roadmap promotes data contract enforcement as the active P0", () => {
+test("roadmap keeps completed contract and release discipline out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Data Contract Enforcement/);
+    assert.doesNotMatch(roadmap, /### P1 - Release Discipline Pass/);
+    assert.match(roadmap, /Data contract gate: `node scripts\/validate-data\.mjs` owns manifest, refresh-report, signal-policy, and normalized item contract checks/s);
+    assert.match(roadmap, /Release policy: dated changelog entries and normal GitHub Pages publishes; no Git tag is required yet/s);
+});
+
+test("roadmap promotes generated data publish drill as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /Signal Schema v2 is now documented, but validation still mostly lives in JS tests and updater code/s);
-    assert.match(roadmap, /Data contract drift fails in validation before generated HTML is accepted/s);
+    assert.match(roadmap, /release and data contract docs are established, but publish decisions still need one dry-run drill/s);
+    assert.match(roadmap, /A maintainer can decide whether current generated data is publishable from local checks and refresh-report copy/s);
 });

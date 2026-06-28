@@ -2,9 +2,14 @@
 
 Use this before publishing meaningful site, data, or operations changes.
 
+## Release Policy
+
+This repo uses dated `CHANGELOG.md` entries and normal GitHub Pages publish. No Git tag is required until versioned releases exist.
+
 ## Required Checks
 
 ```powershell
+npm run check
 node scripts/validate-data.mjs
 git diff --check
 ```
@@ -52,6 +57,8 @@ Update docs when behavior changes:
 Publish when:
 
 - Required checks pass.
+- A dated `CHANGELOG.md` entry covers user-visible or operator-visible changes.
 - Known partial/fallback states are intentional and documented.
 - No unrelated generated drift is mixed into the change.
 - Roadmap contains only future work.
+- GitHub Pages publish can be explained from the checks and generated-data review above.

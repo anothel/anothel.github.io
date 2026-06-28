@@ -28,6 +28,8 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Source governance: `data/watchlists.json` drives trends, packages, repos, and links; disabled/history fields keep retired sources auditable.
 - Signal policy: `data/signal-policy.json` owns Today and Explore baseline scoring policy.
 - Renderer safety: shared `safe-dom.js` owns text escaping, href blocking, and external item link attributes across public renderers and static fallbacks.
+- Data contract gate: `node scripts/validate-data.mjs` owns manifest, refresh-report, signal-policy, and normalized item contract checks.
+- Release policy: dated changelog entries and normal GitHub Pages publishes; no Git tag is required yet.
 - Public trust docs: `SECURITY.md`, `docs/THREAT_MODEL.md`, `docs/SIGNAL_SCHEMA.md`, `docs/SOURCE_GOVERNANCE.md`, and `docs/RELEASE_CHECKLIST.md` describe the operating contract.
 - Verification entry point: dependency-free `package.json` scripts; package entry point and PR CI are established.
 - No package dependencies, package manager lockfile, framework tooling, backend, account, sync, or build output exists.
@@ -45,45 +47,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Data Contract Enforcement
+### P0 - Generated Data Publish Drill
 
-Trigger: Signal Schema v2 is now documented, but validation still mostly lives in JS tests and updater code.
-
-Scope:
-
-- Decide whether lightweight JSON Schema files add value beyond current tests.
-- Start with manifest, refresh report, signal policy, and normalized item examples.
-- Keep validation local and dependency-free unless current checks become too brittle.
-
-Verification:
-
-- Run `node scripts/validate-data.mjs`.
-- Run schema or contract tests added for the chosen data files.
-
-Exit:
-
-- Data contract drift fails in validation before generated HTML is accepted.
-- Source additions have one documented path and one test path.
-
-### P1 - Release Discipline Pass
-
-Trigger: release checklist and changelog now exist, but release flow is not connected to CI or generated-data review.
+Trigger: release and data contract docs are established, but publish decisions still need one dry-run drill against current generated data and partial-source state.
 
 Scope:
 
-- Keep `CHANGELOG.md` current for user-visible and operator-visible changes.
-- Define whether this repo uses dated releases, Git tags, or only Pages publishes.
-- Connect release checklist to actual verification commands.
-- Do not add provenance/SLSA machinery until the basic release contract is used.
+- Run the release checklist against current checked-in data without live network refresh.
+- Confirm current `partial`, `fallback`, `rateLimited`, and generated static fallback states are publishable or explicitly blocked.
+- Keep route count, source families, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged.
+- Do not add provenance, SLSA, tags, or visual regression unless the drill exposes a concrete gap.
 
 Verification:
 
 - Run `node --test tests/ops-docs.test.mjs`.
-- Run release-doc tests added for the chosen policy.
+- Run `node scripts/validate-data.mjs`.
+- Run `git diff --check`.
 
 Exit:
 
-- A maintainer can decide whether a generated-data change is publishable from docs and CI output.
+- A maintainer can decide whether current generated data is publishable from local checks and refresh-report copy.
+- Any blocked publish reason becomes future Roadmap work, not an implicit release step.
 
 ## Architecture Gate
 
@@ -118,7 +102,7 @@ Exit:
 - Large design-system rewrite.
 - Route renames just to improve labels.
 - More topic pages from item count alone.
-- Release provenance, SLSA, visual regression, and advanced ranking work before basic CI and release discipline exist.
+- Release provenance, SLSA, visual regression, and advanced ranking work stay deferred until a drill or failing test shows a concrete gap.
 
 ## Working Rules
 

@@ -120,6 +120,8 @@ node --check scripts/report-refresh.mjs
 
 ## Publishing
 
+This repo uses dated changelog entries and normal GitHub Pages publishes, not release tags yet.
+
 Push checked-in HTML, CSS, JavaScript, JSON, and docs to the GitHub Pages branch configured for this repository.
 
 Do not publish a refresh result if `data/manifest.json`, `data/refresh-report.json`, Today data, or static fallback pages are out of sync. Run `node scripts/validate-data.mjs` first.

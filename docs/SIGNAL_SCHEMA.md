@@ -45,6 +45,17 @@ Common optional fields:
 - Broad baseline tooling should not outrank specific agent-workflow signals by popularity alone.
 - Today and Explore may present different views, but they must share the same checked-in scoring policy.
 
+## Contract Gate
+
+`node scripts/validate-data.mjs` is the data contract gate. It runs checked-in contract tests before generated HTML is accepted.
+
+- Manifest contract: `data/manifest.json` owns module ids, titles, routes, data paths, counts, status, updated date, and generated timestamp.
+- Refresh report contract: `data/refresh-report.json` owns generated timestamp, manifest date, totals, changed modules, run context, module rows, source rows, errors, and safety details.
+- Signal policy contract: `data/signal-policy.json` owns baseline penalty, intent threshold, and baseline titles.
+- Normalized item example: any rendered signal must validate through `js/signal-schema.js`, keep `schemaVersion: 2`, carry a stable id, source module, source kind, canonical key, source list, safe URL, and bounded scores.
+
+JSON Schema files stay deferred. Add them only when `tests/data-schema.test.mjs` and current validator tests miss real drift.
+
 ## Source Metadata
 
 Source metadata states:

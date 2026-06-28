@@ -12,6 +12,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Added dependency-free `package.json` scripts and read-only PR CI validation.
 - Marked npm 429 partial refreshes as explicit `rateLimited` metadata while preserving useful package rows.
 - Added shared external-link attribute rendering and static fallback coverage for renderer safety.
+- Strengthened data contract negative fixtures and documented dated GitHub Pages release policy.
 
 ## 2026-06-28
 

@@ -224,6 +224,18 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Today, Home, source detail modules, topic pages, Notes, and Review reuse the same link-attribute helper instead of page-local link policy.
 - Existing malicious fixture tests still prove unsafe URLs and generated text are blocked or escaped; no sanitizer, framework, backend, route, account, or sync scope changed.
 
+## Data Contract Enforcement
+
+- `node scripts/validate-data.mjs` remains the single data contract gate for manifest, refresh-report, signal policy, normalized items, watchlists, source metadata, and syntax checks.
+- `tests/data-schema.test.mjs` now includes focused negative drift fixtures for duplicate manifest module ids, refresh-report module mismatch, and non-downranking signal policy penalty.
+- JSON Schema files stay deferred until current tests miss real drift; no dependency, package manager lockfile, framework, backend, account, or sync scope changed.
+
+## Release Discipline Pass
+
+- The release policy stays dated changelog entries and normal GitHub Pages publishes.
+- `docs/RELEASE_CHECKLIST.md` names `npm run check`, `node scripts/validate-data.mjs`, `git diff --check`, generated-data review, dated changelog review, and publish decision checks.
+- No Git tag, provenance, SLSA, framework, backend, account, or sync scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

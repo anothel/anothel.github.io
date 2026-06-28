@@ -75,6 +75,69 @@ function assertSourceMeta(sourceMeta, label) {
     }
 }
 
+function assertManifestContract(manifest) {
+    assertDate(manifest.updated, "manifest updated");
+    assertTimestamp(manifest.generatedAt, "manifest generatedAt");
+    assert.ok(Array.isArray(manifest.modules), "manifest modules");
+
+    const ids = new Set();
+    const routes = new Set();
+    const dataPaths = new Set();
+    for (const module of manifest.modules) {
+        assertNonEmptyString(module.id, "manifest module id");
+        assert.equal(ids.has(module.id), false, `duplicate manifest module id ${module.id}`);
+        ids.add(module.id);
+
+        assertNonEmptyString(module.title, `${module.id} title`);
+        assertSafeUrl(module.route, `${module.id} route`);
+        assert.equal(routes.has(module.route), false, `duplicate manifest route ${module.route}`);
+        routes.add(module.route);
+
+        assertSafeUrl(module.data, `${module.id} data`);
+        assert.equal(dataPaths.has(module.data), false, `duplicate manifest data ${module.data}`);
+        dataPaths.add(module.data);
+
+        assert.ok(statusValues.has(module.status), `${module.id} manifest status`);
+        assert.equal(typeof module.count, "number", `${module.id} manifest count`);
+        assertDate(module.updated, `${module.id} updated`);
+    }
+}
+
+function assertRefreshReportContract(report, manifest) {
+    assertTimestamp(report.generatedAt, "refresh report generatedAt");
+    assertDate(report.manifestUpdated, "refresh report manifestUpdated");
+    assert.ok(statusValues.has(report.totals?.status), "refresh report status");
+    assert.equal(typeof report.totals?.modules, "number", "refresh report module count");
+    assert.equal(typeof report.totals?.sources, "number", "refresh report source count");
+    assert.equal(typeof report.totals?.items, "number", "refresh report item count");
+    assert.equal(typeof report.totals?.errors, "number", "refresh report non-ok count");
+    assert.ok(Array.isArray(report.modules), "refresh report modules");
+
+    if (manifest) {
+        assert.deepEqual(
+            report.modules.map((module) => module.id).sort(),
+            manifest.modules.map((module) => module.id).sort(),
+            "refresh report module ids align with manifest"
+        );
+        assert.equal(report.totals.modules, manifest.modules.length, "refresh report module total");
+    }
+}
+
+function assertSignalPolicyContract(policy) {
+    assert.equal(typeof policy.baselinePenalty, "number", "baseline penalty");
+    assert.ok(policy.baselinePenalty <= 0, "baseline penalty should downrank");
+    assert.equal(typeof policy.intentThreshold, "number", "intent threshold");
+    assert.ok(policy.intentThreshold > 0, "intent threshold positive");
+    assert.ok(Array.isArray(policy.baselineTitles), "baseline titles");
+
+    const titles = new Set();
+    for (const title of policy.baselineTitles) {
+        assertNonEmptyString(title, "baseline title");
+        assert.equal(titles.has(title), false, `${title} duplicate`);
+        titles.add(title);
+    }
+}
+
 test("source metadata status vocabulary stays user-facing", () => {
     assert.deepEqual([...statusValues], ["ok", "partial", "error", "fallback", "unknown"]);
 });
@@ -82,6 +145,7 @@ test("source metadata status vocabulary stays user-facing", () => {
 test("manifest count and status matches module data files", () => {
     const manifest = json("data/manifest.json");
 
+    assertManifestContract(manifest);
     assertDate(manifest.updated, "manifest updated");
     assertTimestamp(manifest.generatedAt, "manifest generatedAt");
 
@@ -123,7 +187,9 @@ test("today brief uses stable sections and safe links", () => {
 
 test("checked-in refresh report describes the latest data update", () => {
     const report = json("data/refresh-report.json");
+    const manifest = json("data/manifest.json");
 
+    assertRefreshReportContract(report, manifest);
     assertTimestamp(report.generatedAt, "refresh report generatedAt");
     assertDate(report.manifestUpdated, "refresh report manifestUpdated");
     assert.ok(statusValues.has(report.totals.status), "refresh report status");
@@ -225,6 +291,7 @@ test("watchlist definitions stay editable data with stable fields", () => {
 test("signal policy stays editable data with stable fields", () => {
     const policy = json("data/signal-policy.json");
 
+    assertSignalPolicyContract(policy);
     assert.equal(typeof policy.baselinePenalty, "number", "baseline penalty");
     assert.ok(policy.baselinePenalty <= 0, "baseline penalty should downrank");
     assert.equal(typeof policy.intentThreshold, "number", "intent threshold");
@@ -237,6 +304,31 @@ test("signal policy stays editable data with stable fields", () => {
         assert.equal(titles.has(title), false, `${title} duplicate`);
         titles.add(title);
     }
+});
+
+test("data contract helpers reject focused drift fixtures", () => {
+    const manifest = json("data/manifest.json");
+    const report = json("data/refresh-report.json");
+    const policy = json("data/signal-policy.json");
+
+    assert.throws(
+        () => assertManifestContract({
+            ...manifest,
+            modules: [manifest.modules[0], { ...manifest.modules[0] }]
+        }),
+        /duplicate manifest module id/
+    );
+    assert.throws(
+        () => assertRefreshReportContract({
+            ...report,
+            modules: report.modules.slice(1)
+        }, manifest),
+        /refresh report module ids align with manifest/
+    );
+    assert.throws(
+        () => assertSignalPolicyContract({ ...policy, baselinePenalty: 1 }),
+        /baseline penalty should downrank/
+    );
 });
 
 test("topic taxonomy keeps labels, slugs, aliases, and routes in one contract", async () => {
