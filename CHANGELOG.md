@@ -21,6 +21,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Confirmed generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit.
 - Confirmed published Home, Today, Explore, Review, Status, source detail, topic, and data JSON routes match checked-in source health.
 - Ran another token-backed refresh; GitHub trends stayed `ok`, while npm `n8n-workflow` remained the only accepted partial source.
+- Kept npm `n8n-workflow` active as accepted visible partial source health because preserved package rows still cover workflow automation.
 
 ## 2026-06-28
 

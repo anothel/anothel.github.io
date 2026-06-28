@@ -42,6 +42,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Publish readiness: generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit.
 - Post-publish smoke: live decision, review, status, source detail, topic, and data JSON routes matched checked-in source health.
 - Next refresh health: token-backed refresh kept GitHub trends `ok` and left npm `n8n-workflow` as the only accepted partial source.
+- Repeated npm partial: `n8n-workflow` stays active as accepted visible partial source health because preserved package rows keep workflow-automation coverage useful.
 - Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
 
 ## Decision Metrics
@@ -55,28 +56,27 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Repeated npm Partial Decision
+### P0 - New Trigger Intake
 
-Trigger: multiple token-backed refreshes still leave npm `n8n-workflow` as the only non-ok source.
+Trigger: a new user report, failing test, live refresh drift, or measured metric shows a gap in visit speed, repeat use, signal quality, trust, static safety, or contributor confidence.
 
 Scope:
 
-- Decide whether `n8n-workflow` should stay active, be replaced, or be disabled with watchlist history.
-- Keep useful workflow-automation coverage in packages and Today.
-- Keep the visible partial semantics if the source stays active.
-- Keep route count, source families, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged.
-- Do not run another live refresh unless the decision needs fresh source evidence.
+- Triage the new trigger as one workflow-level bundle, not page-by-page audit slices.
+- Prefer clearer copy, docs, data decisions, and focused tests before new routes or abstractions.
+- Keep route count, localStorage schema, source families, refresh cadence, signal policy, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged unless a failing test proves the change.
+- Do not run live refresh unless the trigger needs fresh source evidence.
 
 Verification:
 
-- Run `node --test tests/package-data.test.mjs tests/refresh-report.test.mjs tests/today-data.test.mjs tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run the focused tests for the affected workflow.
 - Run `node scripts/validate-data.mjs`.
 - Run `git diff --check`.
 
 Exit:
 
-- The repeated npm partial is either kept as accepted visible source health, replaced, or disabled with history.
-- Any package watchlist change has focused package, Today, and source-health coverage.
+- Resolve the trigger or move it to Deferred Boundaries with a concrete reason.
+- Keep only future work in this Roadmap.
 
 ## Architecture Gate
 

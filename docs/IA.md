@@ -289,6 +289,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Refresh report, manifest, Today, static fallbacks, and source-health copy stayed consistent.
 - The refresh changed only generated data, source timestamps, small counters, and the matching static fallback snapshots.
 
+## Repeated npm Partial Decision
+
+- `n8n-workflow` stays active because the preserved package row preserves workflow-automation package coverage.
+- The repeated 429 remains visible `partial` source health with `rateLimited` metadata instead of watchlist churn.
+- Replacement or disabling waits until the source stops preserving useful rows, hides health, or a better workflow package source is identified.
+- No watchlist, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
