@@ -1,22 +1,14 @@
 {
   "updated": "2026-06-28",
-  "generatedAt": "2026-06-28T09:50:30.981Z",
+  "generatedAt": "2026-06-28T09:57:30.781Z",
   "sourceMeta": {
     "name": "npm",
-    "status": "partial",
+    "status": "ok",
     "count": 25,
     "tracked": 25,
     "emitted": 25,
     "coverage": "25/25",
-    "updatedAt": "2026-06-28T09:50:30.981Z",
-    "errors": [
-      {
-        "name": "n8n-workflow",
-        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
-      }
-    ],
-    "rateLimited": true,
-    "previousUpdated": "2026-06-28"
+    "updatedAt": "2026-06-28T09:57:30.781Z"
   },
   "packages": [
     {
@@ -234,9 +226,9 @@
       "name": "n8n-workflow",
       "category": "Workflow automation",
       "focus": "n8n workflow primitives",
-      "downloads": 294485,
-      "downloadsLabel": "294.5K/week",
-      "period": "2026-06-20 to 2026-06-26",
+      "downloads": 289704,
+      "downloadsLabel": "289.7K/week",
+      "period": "2026-06-21 to 2026-06-27",
       "url": "https://www.npmjs.com/package/n8n-workflow"
     },
     {

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-28T09:50:38.469Z",
+  "generatedAt": "2026-06-28T09:57:34.290Z",
   "manifestUpdated": "2026-06-28",
   "runContext": {
     "reason": "",
@@ -37,7 +37,7 @@
     {
       "id": "trends",
       "title": "Tech trends",
-      "status": "partial",
+      "status": "ok",
       "count": 24,
       "updated": "2026-06-28",
       "changed": true,
@@ -47,7 +47,7 @@
           "source": "Hacker News",
           "status": "ok",
           "count": 4,
-          "updatedAt": "2026-06-28T09:50:30.815Z",
+          "updatedAt": "2026-06-28T09:57:30.401Z",
           "coverage": "4/1",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -60,32 +60,24 @@
         {
           "module": "trends",
           "source": "GitHub",
-          "status": "partial",
+          "status": "ok",
           "count": 12,
-          "updatedAt": "2026-06-28T09:50:30.815Z",
+          "updatedAt": "2026-06-28T09:57:30.401Z",
           "coverage": "12/14",
           "fallbackUsed": false,
           "staleButSafe": false,
-          "rateLimited": true,
+          "rateLimited": false,
           "fallbackReason": "",
           "previousUpdated": "",
-          "safetyDetails": [
-            "rate limited"
-          ],
-          "errors": [
-            "llm eval benchmark agent stars:>100: 403 rate limit exceeded",
-            "llm observability evals stars:>100: 403 rate limit exceeded",
-            "workflow automation ai agents stars:>100: 403 rate limit exceeded",
-            "durable workflow typescript stars:>100: 403 rate limit exceeded",
-            "opencode coding agent stars:>100: 403 rate limit exceeded"
-          ]
+          "safetyDetails": [],
+          "errors": []
         },
         {
           "module": "trends",
           "source": "npm",
           "status": "ok",
           "count": 8,
-          "updatedAt": "2026-06-28T09:50:30.815Z",
+          "updatedAt": "2026-06-28T09:57:30.401Z",
           "coverage": "8/16",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -100,7 +92,7 @@
     {
       "id": "packages",
       "title": "Package watchlist",
-      "status": "partial",
+      "status": "ok",
       "count": 25,
       "updated": "2026-06-28",
       "changed": true,
@@ -108,22 +100,17 @@
         {
           "module": "packages",
           "source": "npm",
-          "status": "partial",
+          "status": "ok",
           "count": 25,
-          "updatedAt": "2026-06-28T09:50:30.981Z",
+          "updatedAt": "2026-06-28T09:57:30.781Z",
           "coverage": "25/25",
           "fallbackUsed": false,
           "staleButSafe": false,
-          "rateLimited": true,
+          "rateLimited": false,
           "fallbackReason": "",
-          "previousUpdated": "2026-06-28",
-          "safetyDetails": [
-            "rate limited",
-            "previous 2026-06-28"
-          ],
-          "errors": [
-            "n8n-workflow: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
-          ]
+          "previousUpdated": "",
+          "safetyDetails": [],
+          "errors": []
         }
       ]
     },
@@ -140,7 +127,7 @@
           "source": "GitHub",
           "status": "ok",
           "count": 30,
-          "updatedAt": "2026-06-28T09:50:36.698Z",
+          "updatedAt": "2026-06-28T09:57:31.752Z",
           "coverage": "30/30",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -165,7 +152,7 @@
           "source": "manual",
           "status": "ok",
           "count": 29,
-          "updatedAt": "2026-06-28T09:50:37.786Z",
+          "updatedAt": "2026-06-28T09:57:33.144Z",
           "coverage": "29/29",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -182,7 +169,7 @@
     "modules": 4,
     "sources": 6,
     "items": 108,
-    "status": "partial",
-    "errors": 2
+    "status": "ok",
+    "errors": 0
   }
 }

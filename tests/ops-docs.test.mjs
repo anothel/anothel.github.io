@@ -306,6 +306,14 @@ test("IA records unauthenticated publish health refresh outcomes", () => {
     assert.match(ia, /108 generated items stayed publishable/s);
 });
 
+test("IA records token-backed publish health rerun outcomes", () => {
+    assert.match(ia, /Token-backed Publish Health Rerun/);
+    assert.match(ia, /`gh auth token` supplied `GITHUB_TOKEN`/s);
+    assert.match(ia, /all 6 sources reported `ok`/s);
+    assert.match(ia, /refresh report totals stayed at 108 generated items/s);
+    assert.match(ia, /errors dropped to 0/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);

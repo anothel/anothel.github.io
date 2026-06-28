@@ -303,6 +303,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - 108 generated items stayed publishable across trends, packages, repos, and links, with repos and links still `ok`.
 - Next full publish confirmation should supply `GITHUB_TOKEN` before refresh if GitHub trend health must be proven `ok`.
 
+## Token-backed Publish Health Rerun
+
+- `gh auth token` supplied `GITHUB_TOKEN` to the existing refresh path without printing the token.
+- Token-backed refresh cleared the GitHub trend 403 state and all 6 sources reported `ok`.
+- The refresh report totals stayed at 108 generated items across 4 modules, and errors dropped to 0.
+- Static fallbacks regenerated from the same checked-in data, so Home, Today, Explore, Status, module, and topic pages share the same source-health truth.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
