@@ -17,7 +17,7 @@
     };
 
     const escapeHtml = dom.escapeHtml;
-    const safeHref = dom.safeHref;
+    const safeLinkAttrs = dom.safeLinkAttrs;
 
     function statusLabel(status = "unread") {
         if (status === "done") return "Done";
@@ -205,12 +205,12 @@
                     <button type="button" data-review-meta-id="${escapeHtml(savedRecordId)}">Save metadata</button>
                 </div>
                 <div class="review-actions">
-                    <a href="${safeHref(item.url)}">Open item</a>
+                    <a ${safeLinkAttrs(item.url)}>Open item</a>
                     <button type="button" data-review-status-id="${escapeHtml(savedRecordId)}" data-review-status="read" aria-label="Mark ${escapeHtml(item.title)} read">Mark read</button>
                     <button type="button" data-review-status-id="${escapeHtml(savedRecordId)}" data-review-status="done" aria-label="Mark ${escapeHtml(item.title)} done">Mark done</button>
                     <button type="button" data-review-remove-id="${escapeHtml(savedRecordId)}" aria-label="Remove ${escapeHtml(item.title)} from Review">Remove</button>
-                    <a href="${safeHref(similarExploreHref(item))}">Find similar in Explore</a>
-                    ${noteHref ? `<a href="${safeHref(noteHref)}">Open topic notes</a>` : ""}
+                    <a ${safeLinkAttrs(similarExploreHref(item))}>Find similar in Explore</a>
+                    ${noteHref ? `<a ${safeLinkAttrs(noteHref)}>Open topic notes</a>` : ""}
                 </div>
             </article>
         `;
@@ -230,7 +230,7 @@
 
     function markdownLink(title, url) {
         const label = markdownText(title).replace(/[[\]]/g, "");
-        const href = safeHref(url);
+        const href = dom.safeHref(url);
         return href === "#" ? label : `[${label}](${href})`;
     }
 

@@ -60,8 +60,10 @@ test("static fallback renderer reuses public render helpers instead of duplicati
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
     assert.match(script, /import \{[\s\S]*buildHomeOverview[\s\S]*renderModuleRoutes[\s\S]*renderTopicMovements[\s\S]*\} from "\.\.\/js\/home\.js";/);
-    assert.match(script, /import \{ renderExploreLinks, renderTodayStatus \} from "\.\.\/js\/today\.js";/);
+    assert.match(script, /import \{ renderExploreLinks, renderTodaySections, renderTodayStats, renderTodayStatus \} from "\.\.\/js\/today\.js";/);
     assert.match(script, /renderExploreLinks\(\)/);
+    assert.match(script, /renderTodayStats\(today\.sections\)/);
+    assert.match(script, /renderTodaySections\(today\.sections\)/);
     assert.match(script, /renderModuleRoutes\(homeRoutes\)/);
     assert.match(script, /renderTopicMovements\(topicMovements\)/);
     assert.match(script, /collectSourceRows/);

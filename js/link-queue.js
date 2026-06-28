@@ -35,7 +35,7 @@ const fallbackLinks = {
 };
 
 const dataHealth = globalThis.DataHealth;
-const { escapeHtml, safeHref } = globalThis.AnothelDom;
+const { escapeHtml, safeLinkAttrs } = globalThis.AnothelDom;
 
 const state = {
     links: [],
@@ -96,7 +96,7 @@ function render() {
     els.total.textContent = String(links.length);
     els.topCategory.textContent = top ? top.category : "-";
     els.list.innerHTML = links.map((link) => `
-        <a class="link-card" href="${safeHref(link.url)}">
+        <a class="link-card" ${safeLinkAttrs(link.url)}>
             <div>
                 <span>${escapeHtml(link.category)}</span>
                 <span>${escapeHtml(link.kind)}</span>

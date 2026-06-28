@@ -11,6 +11,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Reworked Roadmap around future operational trust work: verification entry points, npm partial handling, renderer safety, data contract enforcement, and release discipline.
 - Added dependency-free `package.json` scripts and read-only PR CI validation.
 - Marked npm 429 partial refreshes as explicit `rateLimited` metadata while preserving useful package rows.
+- Added shared external-link attribute rendering and static fallback coverage for renderer safety.
 
 ## 2026-06-28
 

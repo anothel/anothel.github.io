@@ -1,6 +1,6 @@
 (function attachNotes(global) {
     const topicTaxonomy = global.TopicTaxonomy;
-    const { escapeHtml, safeHref } = global.AnothelDom;
+    const { escapeHtml, safeLinkAttrs } = global.AnothelDom;
 
     function noteItems() {
         if (!topicTaxonomy) return [];
@@ -34,11 +34,11 @@
                 <aside>
                     <span>${escapeHtml(item.description)}</span>
                     <div class="topic-support-list">
-                        <a href="${safeHref(item.route)}">
+                        <a ${safeLinkAttrs(item.route)}>
                             <strong>Open topic</strong>
                             <span>${escapeHtml(item.topic)}</span>
                         </a>
-                        <a href="${safeHref(item.exploreRoute)}">
+                        <a ${safeLinkAttrs(item.exploreRoute)}>
                             <strong>Explore lens</strong>
                             <span>${escapeHtml(item.topic)}</span>
                         </a>

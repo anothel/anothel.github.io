@@ -2,7 +2,7 @@
     const localState = global.AnothelState;
     const dom = global.AnothelDom;
     const topicTaxonomy = global.TopicTaxonomy;
-    const { escapeHtml, safeHref } = dom;
+    const { escapeHtml, safeLinkAttrs } = dom;
     const defaultPaths = {
         trends: "../../data/trends.json",
         packages: "../../data/packages.json",
@@ -248,7 +248,7 @@
 
     function renderTopicActions(topic) {
         return topicConfig(topic).actions.map(([label, href, description]) => `
-            <a href="${safeHref(href)}">
+            <a ${safeLinkAttrs(href)}>
                 <strong>${escapeHtml(label)}</strong>
                 <span>${escapeHtml(description)}</span>
             </a>
@@ -282,7 +282,7 @@
     function renderTopicNote(note, signals = []) {
         const signalList = signals.length > 0
             ? signals.map((item) => `
-                <a href="${safeHref(item.url)}">
+                <a ${safeLinkAttrs(item.url)}>
                     <strong>${escapeHtml(item.title)}</strong>
                     <span>${escapeHtml([item.module, item.metric].filter(Boolean).join(" / "))}</span>
                 </a>
@@ -338,7 +338,7 @@
                     <span>${escapeHtml(item.metric)}</span>
                     <span>Fit ${escapeHtml(item.score)}</span>
                 </div>
-                <a href="${safeHref(item.url)}">Open signal</a>
+                <a ${safeLinkAttrs(item.url)}>Open signal</a>
             </article>
         `).join("");
     }
@@ -353,7 +353,7 @@
                 <span>${escapeHtml(group.label)}</span>
                 <div class="topic-related-list">
                     ${group.items.map((item) => `
-                        <a href="${safeHref(item.url)}">
+                        <a ${safeLinkAttrs(item.url)}>
                             <strong>${escapeHtml(item.title)}</strong>
                             <small>${escapeHtml(item.metric || item.origin || item.module)}</small>
                         </a>
@@ -369,7 +369,7 @@
         }
 
         return links.map((link) => `
-            <a class="topic-cross-link" href="${safeHref(link.route)}">
+            <a class="topic-cross-link" ${safeLinkAttrs(link.route)}>
                 <strong>${escapeHtml(link.topic)}</strong>
                 <span>${escapeHtml(link.summary)}</span>
             </a>
@@ -413,7 +413,7 @@
                     <span class="quality-marker">Signal fit ${escapeHtml(item.score)}</span>
                 </div>
                 <div class="explore-card-actions">
-                    <a href="${safeHref(item.url)}">Open item</a>
+                    <a ${safeLinkAttrs(item.url)}>Open item</a>
                 </div>
             </article>
         `).join("");

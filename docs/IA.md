@@ -214,8 +214,15 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - README now uses the same product sentence as IA: a static-first personal signal dashboard for deciding what to open next.
 - Public operating docs now cover security reporting, contribution workflow, Signal Schema v2, source governance, threat model, release checklist, and changelog.
 - Package entry point and PR CI are established without dependencies, lockfiles, framework tooling, backend, account, sync, or build output.
-- Roadmap now separates future operational work from completed documentation work, with renderer safety audit as the next P0 queue.
+- Roadmap now separates future operational work from completed documentation work, with data contract enforcement as the next P0 queue.
 - npm `n8n-workflow` 429 remains an accepted visible partial state because previous rows are preserved and `rateLimited` metadata is explicit.
+
+## Renderer Safety Audit
+
+- Shared `safe-dom.js` owns text escaping, href blocking, and link attribute rendering for public renderers.
+- External item links rendered from generated data and static fallbacks carry `rel="noopener noreferrer"`; internal route links stay plain hrefs.
+- Today, Home, source detail modules, topic pages, Notes, and Review reuse the same link-attribute helper instead of page-local link policy.
+- Existing malicious fixture tests still prove unsafe URLs and generated text are blocked or escaped; no sanitizer, framework, backend, route, account, or sync scope changed.
 
 ## Signal Policy
 

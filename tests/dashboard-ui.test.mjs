@@ -168,6 +168,6 @@ test("dashboard trend cards are directly clickable links", async () => {
         ]
     });
 
-    assert.match(elements["[data-grid]"].innerHTML, /<a class="trend-card" href="https:\/\/example\.com\/clickable">/);
+    assert.match(elements["[data-grid]"].innerHTML, /<a class="trend-card" href="https:\/\/example\.com\/clickable" rel="noopener noreferrer">/);
     assert.doesNotMatch(elements["[data-grid]"].innerHTML, />Open item<\/a>/);
 });

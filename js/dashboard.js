@@ -11,7 +11,7 @@ const state = {
 
 const trendDataUrl = document.currentScript?.dataset.source || "data/trends.json";
 const dataHealth = globalThis.DataHealth;
-const { escapeHtml, safeHref } = globalThis.AnothelDom;
+const { escapeHtml, safeLinkAttrs } = globalThis.AnothelDom;
 
 const fallbackData = {
     updated: "2026-06-21",
@@ -214,7 +214,7 @@ function renderCards(items) {
     }
 
     els.grid.innerHTML = items.map((item) => `
-        <a class="trend-card" href="${safeHref(item.url)}">
+        <a class="trend-card" ${safeLinkAttrs(item.url)}>
             <div class="card-topline">
                 <span>#${escapeHtml(item.rank)}</span>
                 <span>${escapeHtml(item.source)}</span>
@@ -237,7 +237,7 @@ function renderTable(items) {
     }
 
     els.table.innerHTML = items.map((item) => `
-        <a class="rank-row" href="${safeHref(item.url)}">
+        <a class="rank-row" ${safeLinkAttrs(item.url)}>
             <span>${escapeHtml(item.rank)}</span>
             <strong>${escapeHtml(item.title)}</strong>
             <span>${escapeHtml(item.category)}</span>

@@ -13,10 +13,10 @@ import {
     renderStartItems,
     renderTopicMovements
 } from "../js/home.js";
-import { renderExploreLinks, renderTodayStatus } from "../js/today.js";
+import { renderExploreLinks, renderTodaySections, renderTodayStats, renderTodayStatus } from "../js/today.js";
 import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows } from "../js/status.js";
 
-const { escapeHtml, safeHref } = globalThis.AnothelDom;
+const { escapeHtml, safeLinkAttrs } = globalThis.AnothelDom;
 
 function sourceMetaList(datasets) {
     return Object.values(datasets).flatMap((dataset) => {
@@ -52,7 +52,7 @@ function replacePattern(html, pattern, replacement, label) {
 
 function renderTrendCards(items = [], limit = 8) {
     return items.slice(0, limit).map((item) => `
-        <a class="trend-card" href="${safeHref(item.url)}">
+        <a class="trend-card" ${safeLinkAttrs(item.url)}>
             <div class="card-topline">
                 <span>#${escapeHtml(item.rank)}</span>
                 <span>${escapeHtml(item.source)}</span>
@@ -70,7 +70,7 @@ function renderTrendCards(items = [], limit = 8) {
 
 function renderTrendRows(items = [], limit = 8) {
     return items.slice(0, limit).map((item) => `
-        <a class="rank-row" href="${safeHref(item.url)}">
+        <a class="rank-row" ${safeLinkAttrs(item.url)}>
             <span>${escapeHtml(item.rank)}</span>
             <strong>${escapeHtml(item.title)}</strong>
             <span>${escapeHtml(item.category)}</span>
@@ -82,7 +82,7 @@ function renderTrendRows(items = [], limit = 8) {
 
 function renderPackageRows(items = [], limit = 10) {
     return items.slice(0, limit).map((item) => `
-        <a class="watch-row" href="${safeHref(item.url)}">
+        <a class="watch-row" ${safeLinkAttrs(item.url)}>
             <span>#${escapeHtml(item.rank)}</span>
             <strong>${escapeHtml(item.name)}</strong>
             <span>${escapeHtml(item.category)}</span>
@@ -94,7 +94,7 @@ function renderPackageRows(items = [], limit = 10) {
 
 function renderRepoRows(items = [], limit = 10) {
     return items.slice(0, limit).map((item) => `
-        <a class="watch-row repo-row" href="${safeHref(item.url)}">
+        <a class="watch-row repo-row" ${safeLinkAttrs(item.url)}>
             <span>#${escapeHtml(item.rank)}</span>
             <strong>${escapeHtml(item.name)}</strong>
             <span>${escapeHtml(item.category)}</span>
@@ -106,7 +106,7 @@ function renderRepoRows(items = [], limit = 10) {
 
 function renderLinkCards(items = [], limit = 10) {
     return items.slice(0, limit).map((link) => `
-        <a class="link-card" href="${safeHref(link.url)}">
+        <a class="link-card" ${safeLinkAttrs(link.url)}>
             <div>
                 <span>${escapeHtml(link.category)}</span>
                 <span>${escapeHtml(link.kind)}</span>
@@ -388,6 +388,10 @@ ${indentBlock(renderSkimList(getTodaySection(today, "skim")), 20)}$2`, "home ski
     let todayHtml = await readFile("today/index.html", "utf8");
     todayHtml = replaceTaggedText(todayHtml, "data-today-updated", today.updated);
     todayHtml = replacePattern(todayHtml, /<p data-today-status>[\s\S]*?<\/p>/, `<p data-today-status>${escapeHtml(renderTodayStatus(today))}</p>`, "today status");
+    todayHtml = replacePattern(todayHtml, /(<section class="stats-grid today-stats" aria-label="Today section summary" data-today-stats>)[\s\S]*?(\s*<\/section>\s*<section class="today-brief")/, `$1
+${indentBlock(renderTodayStats(today.sections), 16)}$2`, "today stats");
+    todayHtml = replacePattern(todayHtml, /(<section class="today-brief" data-today-sections aria-label="Today priority sections">)[\s\S]*?(\s*<\/section>\s*<section class="explore-strip")/, `$1
+${indentBlock(renderTodaySections(today.sections), 16)}$2`, "today sections");
     const todayExploreLinks = trimLineEnds(renderExploreLinks()).split("\n").map((line) => line ? `                ${line}` : line).join("\n");
     todayHtml = replacePattern(todayHtml, /(<section class="explore-strip" data-today-explore aria-label="Explore full lists">)[\s\S]*?(<\/section>)/, `$1
 ${todayExploreLinks}
@@ -441,7 +445,10 @@ ${indentBlock(renderedRows.table, 20)}
                 $2`, `${module.id} table`);
         }
         if (renderedRows.list) {
-            html = replacePattern(html, /(<(?:div|section)[^>]*data-(?:package|repo|link)-list[^>]*>)[\s\S]*?(<\/(?:div|section)>)/, `$1
+            const listPattern = module.id === "links"
+                ? /(<section[^>]*data-link-list[^>]*>)[\s\S]*?(<\/section>)/
+                : /(<div[^>]*data-(?:package|repo)-list[^>]*>)[\s\S]*?(<\/div>)/;
+            html = replacePattern(html, listPattern, `$1
 ${indentBlock(renderedRows.list, 20)}
                 $2`, `${module.id} list`);
         }

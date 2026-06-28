@@ -35,6 +35,7 @@ There is no backend, account system, sync service, or database.
 ## Current Controls
 
 - Shared safe DOM helpers escape HTML and restrict hrefs.
+- External item links rendered from data use `rel="noopener noreferrer"`.
 - Renderer tests cover unsafe links and generated text escaping.
 - Source metadata exposes `ok`, `partial`, `fallback`, and `error`.
 - Static fallback pages keep useful checked-in content without JavaScript.

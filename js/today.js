@@ -46,7 +46,7 @@ const els = typeof document === "undefined" ? {} : {
     explore: document.querySelector("[data-today-explore]")
 };
 
-const { escapeHtml, safeHref } = globalThis.AnothelDom;
+const { escapeHtml, safeLinkAttrs } = globalThis.AnothelDom;
 
 function sectionItems(section) {
     return Array.isArray(section?.items) ? section.items : [];
@@ -65,7 +65,7 @@ function renderTodayCard(item) {
     const scoreReasons = (item.scoreReasons || []).slice(0, 3);
 
     return `
-        <a class="signal-card today-card" href="${safeHref(item.url)}">
+        <a class="signal-card today-card" ${safeLinkAttrs(item.url)}>
             <div>
                 <span>${escapeHtml(item.module)}</span>
                 <em>${escapeHtml(item.metric)}</em>
@@ -128,7 +128,7 @@ export function renderExploreLinks() {
         </div>
         <nav aria-label="Explore and full module pages">
             ${exploreLinks.map(([label, href, meta]) => `
-                <a href="${escapeHtml(href)}">
+                <a ${safeLinkAttrs(href)}>
                     <strong>${escapeHtml(label)}</strong>
                     <span>${escapeHtml(meta)}</span>
                 </a>

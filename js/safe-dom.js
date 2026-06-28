@@ -28,8 +28,25 @@
         }
     }
 
+    function safeLinkAttrs(value) {
+        const href = safeHref(value);
+        if (href === "#") return 'href="#"';
+
+        try {
+            const parsed = new URL(String(value || "").trim(), "https://anothel.github.io");
+            if (parsed.origin !== "https://anothel.github.io") {
+                return `href="${href}" rel="noopener noreferrer"`;
+            }
+        } catch {
+            return 'href="#"';
+        }
+
+        return `href="${href}"`;
+    }
+
     global.AnothelDom = {
         escapeHtml,
-        safeHref
+        safeHref,
+        safeLinkAttrs
     };
 })(globalThis);

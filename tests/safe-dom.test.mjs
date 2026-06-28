@@ -25,3 +25,14 @@ test("SafeDom blocks unsafe hrefs and preserves http links", () => {
     assert.equal(SafeDom.safeHref("//evil.example"), "#");
     assert.equal(SafeDom.safeHref("https://example.com/docs?q=agent"), "https://example.com/docs?q=agent");
 });
+
+test("SafeDom adds rel protection to rendered external link attributes", () => {
+    const SafeDom = loadSafeDom();
+
+    assert.equal(
+        SafeDom.safeLinkAttrs("https://example.com/docs?q=agent"),
+        'href="https://example.com/docs?q=agent" rel="noopener noreferrer"'
+    );
+    assert.equal(SafeDom.safeLinkAttrs("../review/index.html"), 'href="../review/index.html"');
+    assert.equal(SafeDom.safeLinkAttrs("javascript:alert(1)"), 'href="#"');
+});

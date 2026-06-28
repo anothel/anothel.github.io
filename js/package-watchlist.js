@@ -38,7 +38,7 @@ const fallbackPackages = {
 };
 
 const dataHealth = globalThis.DataHealth;
-const { escapeHtml, safeHref } = globalThis.AnothelDom;
+const { escapeHtml, safeLinkAttrs } = globalThis.AnothelDom;
 
 const els = {
     updated: document.querySelector("[data-updated]"),
@@ -72,7 +72,7 @@ function render(data) {
     els.dataMode.textContent = dataHealth.dataModeText(data.sourceMeta, { updated: data.updated });
     els.sourceHealth.innerHTML = dataHealth.renderSourceHealth(data.sourceMeta);
     els.list.innerHTML = data.packages.map((item) => `
-        <a class="watch-row" href="${safeHref(item.url)}">
+        <a class="watch-row" ${safeLinkAttrs(item.url)}>
             <span>#${escapeHtml(item.rank)}</span>
             <strong>${escapeHtml(item.name)}</strong>
             <span>${escapeHtml(item.category)}</span>

@@ -12,7 +12,7 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - Renderer Safety Audit/;
+const activeRoadmapP0 = /### P0 - Data Contract Enforcement/;
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -209,6 +209,13 @@ test("IA records roadmap analysis P0 corrections", () => {
     assert.match(ia, /remaining active data issue is npm `n8n-workflow` 429 partial state/s);
 });
 
+test("IA records renderer safety audit outcomes", () => {
+    assert.match(ia, /Renderer Safety Audit/);
+    assert.match(ia, /Shared `safe-dom\.js` owns text escaping, href blocking, and link attribute rendering/s);
+    assert.match(ia, /External item links rendered from generated data and static fallbacks carry `rel="noopener noreferrer"`/s);
+    assert.match(ia, /no sanitizer, framework, backend, route, account, or sync scope changed/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -389,8 +396,14 @@ test("roadmap keeps completed verification entry points out of next work", () =>
     assert.match(contributing, /npm run check/);
 });
 
-test("roadmap promotes renderer safety audit as the active P0", () => {
+test("roadmap keeps completed renderer safety audit out of next work", () => {
+    assert.doesNotMatch(roadmap, /### P0 - Renderer Safety Audit/);
+    assert.match(roadmap, /shared `safe-dom\.js` owns text escaping, href blocking, and external item link attributes/s);
+    assert.match(threatModel, /External item links rendered from data use `rel="noopener noreferrer"`/s);
+});
+
+test("roadmap promotes data contract enforcement as the active P0", () => {
     assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /external data and checked-in watchlists are rendered into multiple public pages/s);
-    assert.match(roadmap, /Keep shared `safe-dom\.js` as the trust boundary/s);
+    assert.match(roadmap, /Signal Schema v2 is now documented, but validation still mostly lives in JS tests and updater code/s);
+    assert.match(roadmap, /Data contract drift fails in validation before generated HTML is accepted/s);
 });

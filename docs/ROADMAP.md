@@ -27,6 +27,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 - Local browser state: saved review items with optional note/tag/reason, up to 3 pinned topics, explicit Explore defaults, and up to 5 saved Explore searches.
 - Source governance: `data/watchlists.json` drives trends, packages, repos, and links; disabled/history fields keep retired sources auditable.
 - Signal policy: `data/signal-policy.json` owns Today and Explore baseline scoring policy.
+- Renderer safety: shared `safe-dom.js` owns text escaping, href blocking, and external item link attributes across public renderers and static fallbacks.
 - Public trust docs: `SECURITY.md`, `docs/THREAT_MODEL.md`, `docs/SIGNAL_SCHEMA.md`, `docs/SOURCE_GOVERNANCE.md`, and `docs/RELEASE_CHECKLIST.md` describe the operating contract.
 - Verification entry point: dependency-free `package.json` scripts; package entry point and PR CI are established.
 - No package dependencies, package manager lockfile, framework tooling, backend, account, sync, or build output exists.
@@ -44,29 +45,7 @@ This site is a personal technical signal dashboard. It is not a portfolio, resum
 
 ## Next Work Queue
 
-### P0 - Renderer Safety Audit
-
-Trigger: external data and checked-in watchlists are rendered into multiple public pages, and the safety contract should be proven page by page.
-
-Scope:
-
-- Audit direct `innerHTML` use and external link rendering across page renderers.
-- Add malicious fixture coverage where page-level tests are missing.
-- Keep shared `safe-dom.js` as the trust boundary; do not create a second sanitizer.
-- Consider a static meta policy only if it fits GitHub Pages and does not break existing external links.
-
-Verification:
-
-- Run `node --test tests/safe-dom.test.mjs tests/site-structure.test.mjs tests/static-fallback.test.mjs`.
-- Run affected page renderer tests.
-- Run `node scripts/validate-data.mjs`.
-
-Exit:
-
-- Public renderers prove unsafe URLs and HTML are escaped or blocked.
-- External links keep `rel="noopener noreferrer"` where rendered.
-
-### P1 - Data Contract Enforcement
+### P0 - Data Contract Enforcement
 
 Trigger: Signal Schema v2 is now documented, but validation still mostly lives in JS tests and updater code.
 

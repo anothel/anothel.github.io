@@ -22,7 +22,7 @@ const reposUrl = typeof document === "undefined"
 const linksUrl = typeof document === "undefined"
     ? "data/links.json"
     : document.currentScript?.dataset.links || "data/links.json";
-const { escapeHtml, safeHref } = globalThis.AnothelDom;
+const { escapeHtml, safeLinkAttrs } = globalThis.AnothelDom;
 
 const routePurpose = {
     explore: "Search and save across sources",
@@ -308,7 +308,7 @@ export function renderStartItems(items) {
         const context = [item.origin, item.category].filter(Boolean).join(" / ");
 
         return `
-            <a class="start-item" href="${safeHref(item.url)}">
+            <a class="start-item" ${safeLinkAttrs(item.url)}>
                 <span>${index + 1}</span>
                 <div>
                     <strong>${escapeHtml(item.title)}</strong>
@@ -323,7 +323,7 @@ export function renderStartItems(items) {
 
 export function renderSkimList(items) {
     return items.map((item) => `
-        <a class="skim-item" href="${safeHref(item.url)}">
+        <a class="skim-item" ${safeLinkAttrs(item.url)}>
             <strong>${escapeHtml(item.title)}</strong>
             <span>${escapeHtml(item.module)} / ${escapeHtml(item.metric)}</span>
         </a>
@@ -332,7 +332,7 @@ export function renderSkimList(items) {
 
 export function renderModuleRoutes(routes) {
     return withUtilityRoutes(routes).map((route) => `
-        <a class="module-route status-${escapeHtml(route.status)}" href="${safeHref(route.route)}">
+        <a class="module-route status-${escapeHtml(route.status)}" ${safeLinkAttrs(route.route)}>
             <span>${escapeHtml(route.title)}</span>
             <strong>${escapeHtml(route.purpose)}</strong>
             <small>${escapeHtml(route.count)} items / ${escapeHtml(route.updated)} / Status ${escapeHtml(route.status)}</small>
@@ -381,8 +381,8 @@ export function renderTopicMovements(movements) {
             <h3>${escapeHtml(movement.topItem?.title || "Open topic")}</h3>
             <p>${escapeHtml([movement.topItem?.module, movement.topItem?.metric, movement.updated].filter(Boolean).join(" / "))}</p>
             <div class="topic-movement-actions">
-                <a href="${safeHref(movement.route)}">Open topic</a>
-                <a href="${safeHref(movement.exploreRoute)}">Explore lens</a>
+                <a ${safeLinkAttrs(movement.route)}>Open topic</a>
+                <a ${safeLinkAttrs(movement.exploreRoute)}>Explore lens</a>
             </div>
         </article>
     `).join("");

@@ -242,6 +242,17 @@ test("module pages keep top source rows without JavaScript", () => {
     }
 });
 
+test("checked-in external item links carry rel protection", () => {
+    for (const path of pages) {
+        const html = read(path);
+        const links = html.match(/<a\b[^>]*href="https?:\/\/[^"]+"[^>]*>/g) || [];
+
+        for (const link of links) {
+            assert.match(link, /\brel="[^"]*\bnoopener\b[^"]*\bnoreferrer\b[^"]*"/, `${path}: ${link}`);
+        }
+    }
+});
+
 test("topic pages keep checked-in judgment notes without JavaScript", () => {
     const expectations = [
         ["topics/ai-agents/index.html", /agent workflow/i],
