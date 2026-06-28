@@ -229,6 +229,27 @@ test("Review renders useful empty state", () => {
     assert.match(html, /href="..\/explore\/index\.html"/);
 });
 
+test("Review empty state distinguishes stale local saved records", () => {
+    const app = loadReview();
+    const empty = app.renderReviewEmpty(2);
+    const queue = app.renderReviewQueue([], "", 2);
+
+    assert.match(empty, /2 saved items are still local to this browser/);
+    assert.match(empty, /not in current data/);
+    assert.match(empty, /Export JSON/);
+    assert.match(queue, /2 saved items are local but not in current data/);
+});
+
+test("Review empty state distinguishes empty status filters", () => {
+    const app = loadReview();
+    const empty = app.renderReviewEmpty(0, "done");
+    const queue = app.renderReviewQueue([], "", 0, "done");
+
+    assert.match(empty, /No done items in Review/);
+    assert.match(empty, /Choose All or another status/);
+    assert.match(queue, /No done items match this filter/);
+});
+
 test("Review rendering escapes generated text and blocks unsafe item links", () => {
     const app = loadReview();
     const detail = app.renderReviewDetail({

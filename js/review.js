@@ -129,8 +129,15 @@
         return topicTaxonomy.topicByLabel(focus)?.note ? "../notes/index.html" : "";
     }
 
-    function renderReviewQueue(items, selectedId = "") {
+    function staleSavedCopy(savedCount) {
+        const label = savedCount === 1 ? "1 saved item is" : `${savedCount} saved items are`;
+        return `${label} local but not in current data. Export JSON before clearing local browser data, or open Explore to save current signals.`;
+    }
+
+    function renderReviewQueue(items, selectedId = "", staleSavedCount = 0, statusFilter = "all") {
         if (items.length === 0) {
+            if (staleSavedCount > 0) return `<p class="saved-empty">${escapeHtml(staleSavedCopy(staleSavedCount))}</p>`;
+            if (statusFilter !== "all") return `<p class="saved-empty">No ${escapeHtml(statusFilter)} items match this filter.</p>`;
             return '<p class="saved-empty">No saved items in current data.</p>';
         }
 
@@ -145,7 +152,28 @@
         `).join("");
     }
 
-    function renderReviewEmpty() {
+    function renderReviewEmpty(staleSavedCount = 0, statusFilter = "all") {
+        if (staleSavedCount > 0) {
+            const label = staleSavedCount === 1 ? "1 saved item is" : `${staleSavedCount} saved items are`;
+            return `
+                <article class="review-empty">
+                    <h2>Saved items not in current data</h2>
+                    <p>${escapeHtml(label)} still local to this browser, but not in current data. Export JSON before clearing browser data, or open Explore to save current signals.</p>
+                    <a href="../explore/index.html">Open Explore</a>
+                </article>
+            `;
+        }
+
+        if (statusFilter !== "all") {
+            return `
+                <article class="review-empty">
+                    <h2>No ${escapeHtml(statusFilter)} items in Review</h2>
+                    <p>Choose All or another status to keep working through saved local items.</p>
+                    <a href="../explore/index.html">Open Explore</a>
+                </article>
+            `;
+        }
+
         return `
             <article class="review-empty">
                 <h2>No saved items yet</h2>
@@ -403,8 +431,9 @@
         if (els.done) els.done.textContent = String(workflow.done);
         if (els.focusCount) els.focusCount.textContent = String(stats.focusAreas);
         if (els.sourceCount) els.sourceCount.textContent = String(stats.sources);
-        if (els.queue) els.queue.innerHTML = renderReviewQueue(visible, selected?.id || "");
-        if (els.detail) els.detail.innerHTML = renderReviewDetail(selected);
+        const staleSavedCount = saved.length === 0 ? state.savedIds.size : 0;
+        if (els.queue) els.queue.innerHTML = renderReviewQueue(visible, selected?.id || "", staleSavedCount, state.statusFilter);
+        if (els.detail) els.detail.innerHTML = selected ? renderReviewDetail(selected) : renderReviewEmpty(staleSavedCount, state.statusFilter);
         updateFilterButtons(els);
         bindActions(els, store);
     }

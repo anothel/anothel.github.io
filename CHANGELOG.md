@@ -26,6 +26,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Kept npm `n8n-workflow` active as accepted visible partial source health because preserved package rows still cover workflow automation.
 - Ran unauthenticated publish-health refresh; generated data stayed publishable with GitHub trend 403 partial and npm `n8n-workflow` 429 partial visible.
 - Ran token-backed publish-health rerun; all refresh sources recovered to `ok` with 108 generated items and no source errors.
+- Clarified Review's stale local-saved state when saved browser records no longer match current data.
 
 ## 2026-06-28
 
