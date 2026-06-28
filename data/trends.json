@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-28",
-  "generatedAt": "2026-06-28T02:49:41.558Z",
+  "generatedAt": "2026-06-28T09:50:30.815Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,16 +14,39 @@
       "tracked": 1,
       "emitted": 4,
       "coverage": "4/1",
-      "updatedAt": "2026-06-28T02:49:41.558Z"
+      "updatedAt": "2026-06-28T09:50:30.815Z"
     },
     {
       "name": "GitHub",
-      "status": "ok",
+      "status": "partial",
       "count": 12,
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-28T02:49:41.558Z"
+      "updatedAt": "2026-06-28T09:50:30.815Z",
+      "errors": [
+        {
+          "name": "llm eval benchmark agent stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "llm observability evals stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "workflow automation ai agents stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "durable workflow typescript stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "opencode coding agent stars:>100",
+          "error": "403 rate limit exceeded"
+        }
+      ],
+      "rateLimited": true
     },
     {
       "name": "npm",
@@ -32,34 +55,23 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-06-28T02:49:41.558Z"
+      "updatedAt": "2026-06-28T09:50:30.815Z"
     }
   ],
   "items": [
     {
       "rank": 1,
-      "title": "activepieces/activepieces",
-      "source": "GitHub",
-      "category": "Workflow automation",
-      "score": 100,
-      "velocity": "23K stars",
-      "signal": "3.9K forks",
-      "url": "https://github.com/activepieces/activepieces",
-      "summary": "AI Agents & MCPs & AI Workflow Automation (~400 MCP servers for AI agents) AI Automation / AI Agent with MCPs AI Workflows & AI Agents MCPs for AI Agents"
-    },
-    {
-      "rank": 2,
       "title": "affaan-m/ECC",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "222.7K stars",
+      "velocity": "222.8K stars",
       "signal": "34.1K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
     {
-      "rank": 3,
+      "rank": 2,
       "title": "AgentOps-AI/agentops",
       "source": "GitHub",
       "category": "AI evals",
@@ -70,51 +82,51 @@
       "summary": "Python SDK for AI agent monitoring, LLM cost tracking, benchmarking, and more. Integrates with most LLMs and agent frameworks including CrewAI, Agno, OpenAI Agents SDK, Langchain, Autogen, AG2, and CamelAI"
     },
     {
-      "rank": 4,
+      "rank": 3,
       "title": "anomalyco/opencode",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "179.8K stars",
+      "velocity": "180K stars",
       "signal": "22.1K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
     },
     {
-      "rank": 5,
+      "rank": 4,
       "title": "anthropics/claude-code",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "134.7K stars",
+      "velocity": "134.8K stars",
       "signal": "21.8K forks",
       "url": "https://github.com/anthropics/claude-code",
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
     },
     {
-      "rank": 6,
+      "rank": 5,
       "title": "anthropics/skills",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "155.9K stars",
+      "velocity": "156K stars",
       "signal": "18.4K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
     },
     {
-      "rank": 7,
+      "rank": 6,
       "title": "Arize-ai/phoenix",
       "source": "GitHub",
       "category": "AI evals",
       "score": 100,
       "velocity": "10.3K stars",
-      "signal": "945 forks",
+      "signal": "946 forks",
       "url": "https://github.com/Arize-ai/phoenix",
       "summary": "AI Observability & Evaluation"
     },
     {
-      "rank": 8,
+      "rank": 7,
       "title": "awslabs/mcp",
       "source": "GitHub",
       "category": "MCP",
@@ -125,40 +137,18 @@
       "summary": "Open source MCP Servers for AWS"
     },
     {
-      "rank": 9,
-      "title": "code-yeongyu/oh-my-openagent",
-      "source": "GitHub",
-      "category": "AI agents",
-      "score": 100,
-      "velocity": "63.8K stars",
-      "signal": "5.2K forks",
-      "url": "https://github.com/code-yeongyu/oh-my-openagent",
-      "summary": "omo/lazycodex: The coding agent for tokenmaxxers;the one and only agent harness for complex codebases. For your Codex, for your OpenCode"
-    },
-    {
-      "rank": 10,
-      "title": "enescingoz/awesome-n8n-templates",
-      "source": "GitHub",
-      "category": "Workflow automation",
-      "score": 100,
-      "velocity": "23.5K stars",
-      "signal": "6.2K forks",
-      "url": "https://github.com/enescingoz/awesome-n8n-templates",
-      "summary": "280+ free n8n automation templates ready-to-use workflows for Gmail, Telegram, Slack, Discord, WhatsApp, Google Drive, Notion, OpenAI, and more. AI agents, RAG chatbots, email automation, social media, DevOps, and document processing. The largest open-source n8n template collection."
-    },
-    {
-      "rank": 11,
+      "rank": 8,
       "title": "farion1231/cc-switch",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "109.5K stars",
+      "velocity": "109.7K stars",
       "signal": "7.3K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
     },
     {
-      "rank": 12,
+      "rank": 9,
       "title": "github/awesome-copilot",
       "source": "GitHub",
       "category": "AI agents",
@@ -169,48 +159,81 @@
       "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot."
     },
     {
+      "rank": 10,
+      "title": "Kiln-AI/Kiln",
+      "source": "GitHub",
+      "category": "AI evals",
+      "score": 100,
+      "velocity": "4.9K stars",
+      "signal": "374 forks",
+      "url": "https://github.com/Kiln-AI/Kiln",
+      "summary": "Build, Evaluate, and Optimize AI Systems. Includes evals, RAG, agents, fine-tuning, synthetic data generation, dataset management, MCP, and more."
+    },
+    {
+      "rank": 11,
+      "title": "langgenius/dify",
+      "source": "GitHub",
+      "category": "MCP",
+      "score": 100,
+      "velocity": "146.8K stars",
+      "signal": "23.1K forks",
+      "url": "https://github.com/langgenius/dify",
+      "summary": "Production-ready platform for agentic workflow development."
+    },
+    {
+      "rank": 12,
+      "title": "lobehub/lobehub",
+      "source": "GitHub",
+      "category": "Agent skills",
+      "score": 100,
+      "velocity": "79.2K stars",
+      "signal": "15.5K forks",
+      "url": "https://github.com/lobehub/lobehub",
+      "summary": "LobeHub is your Chief Agent Operator, organizing your agents into 724 operations by hiring, scheduling, and reporting on your entire AI team."
+    },
+    {
       "rank": 13,
-      "title": "Previewing GPT5.6 Sol: a next-generation model",
+      "title": "Anonymous GitHub account mass-dropping undisclosed 0-days",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 93,
-      "velocity": "722 comments",
-      "signal": "1105 points",
-      "url": "https://openai.com/index/previewing-gpt-5-6-sol/",
-      "summary": "HN story by minimaxir with 722 comments."
+      "category": "Developer tools",
+      "score": 95,
+      "velocity": "317 comments",
+      "signal": "809 points",
+      "url": "https://github.com/bikini/exploitarium",
+      "summary": "HN story by binyu with 317 comments."
     },
     {
       "rank": 14,
-      "title": "@modelcontextprotocol/sdk",
-      "source": "npm",
-      "category": "MCP",
-      "score": 91,
-      "velocity": "40.6M/week",
-      "signal": "2026-06-20 to 2026-06-26",
-      "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-      "summary": "40.6M downloads over the last available week."
+      "title": "Previewing GPT5.6 Sol: a next-generation model",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 94,
+      "velocity": "723 comments",
+      "signal": "1112 points",
+      "url": "https://openai.com/index/previewing-gpt-5-6-sol/",
+      "summary": "HN story by minimaxir with 723 comments."
     },
     {
       "rank": 15,
       "title": "DSpark: Speculative decoding accelerates LLM inference [pdf]",
       "source": "Hacker News",
       "category": "AI",
-      "score": 90,
-      "velocity": "306 comments",
-      "signal": "732 points",
+      "score": 92,
+      "velocity": "320 comments",
+      "signal": "761 points",
       "url": "https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf",
-      "summary": "HN story by aurenvale with 306 comments."
+      "summary": "HN story by aurenvale with 320 comments."
     },
     {
       "rank": 16,
-      "title": "@anthropic-ai/sdk",
+      "title": "@modelcontextprotocol/sdk",
       "source": "npm",
-      "category": "AI",
-      "score": 89,
-      "velocity": "24.1M/week",
-      "signal": "2026-06-20 to 2026-06-26",
-      "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk",
-      "summary": "24.1M downloads over the last available week."
+      "category": "MCP",
+      "score": 91,
+      "velocity": "40.6M/week",
+      "signal": "2026-06-21 to 2026-06-27",
+      "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
+      "summary": "40.6M downloads over the last available week."
     },
     {
       "rank": 17,
@@ -218,32 +241,32 @@
       "source": "npm",
       "category": "AI",
       "score": 88,
-      "velocity": "23.4M/week",
-      "signal": "2026-06-20 to 2026-06-26",
+      "velocity": "23.7M/week",
+      "signal": "2026-06-21 to 2026-06-27",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider",
-      "summary": "23.4M downloads over the last available week."
+      "summary": "23.7M downloads over the last available week."
     },
     {
       "rank": 18,
+      "title": "@anthropic-ai/sdk",
+      "source": "npm",
+      "category": "AI",
+      "score": 88,
+      "velocity": "23.5M/week",
+      "signal": "2026-06-21 to 2026-06-27",
+      "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk",
+      "summary": "23.5M downloads over the last available week."
+    },
+    {
+      "rank": 19,
       "title": "openai",
       "source": "npm",
       "category": "AI",
       "score": 88,
-      "velocity": "23.1M/week",
-      "signal": "2026-06-20 to 2026-06-26",
+      "velocity": "22.5M/week",
+      "signal": "2026-06-21 to 2026-06-27",
       "url": "https://www.npmjs.com/package/openai",
-      "summary": "23.1M downloads over the last available week."
-    },
-    {
-      "rank": 19,
-      "title": "Anonymous GitHub account mass-dropping undisclosed 0-days",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 86,
-      "velocity": "271 comments",
-      "signal": "686 points",
-      "url": "https://github.com/bikini/exploitarium",
-      "summary": "HN story by binyu with 271 comments."
+      "summary": "22.5M downloads over the last available week."
     },
     {
       "rank": 20,
@@ -251,10 +274,10 @@
       "source": "npm",
       "category": "AI",
       "score": 86,
-      "velocity": "16M/week",
-      "signal": "2026-06-20 to 2026-06-26",
+      "velocity": "15.9M/week",
+      "signal": "2026-06-21 to 2026-06-27",
       "url": "https://www.npmjs.com/package/ai",
-      "summary": "16M downloads over the last available week."
+      "summary": "15.9M downloads over the last available week."
     },
     {
       "rank": 21,
@@ -263,7 +286,7 @@
       "category": "AI",
       "score": 83,
       "velocity": "8M/week",
-      "signal": "2026-06-20 to 2026-06-26",
+      "signal": "2026-06-21 to 2026-06-27",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai",
       "summary": "8M downloads over the last available week."
     },
@@ -274,7 +297,7 @@
       "category": "Workflow automation",
       "score": 77,
       "velocity": "2.5M/week",
-      "signal": "2026-06-20 to 2026-06-26",
+      "signal": "2026-06-21 to 2026-06-27",
       "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
       "summary": "2.5M downloads over the last available week."
     },
@@ -284,21 +307,21 @@
       "source": "npm",
       "category": "AI evals",
       "score": 74,
-      "velocity": "1.6M/week",
-      "signal": "2026-06-20 to 2026-06-26",
+      "velocity": "1.5M/week",
+      "signal": "2026-06-21 to 2026-06-27",
       "url": "https://www.npmjs.com/package/langfuse",
-      "summary": "1.6M downloads over the last available week."
+      "summary": "1.5M downloads over the last available week."
     },
     {
       "rank": 24,
       "title": "AI learns the dark art of RFIC design",
       "source": "Hacker News",
       "category": "AI",
-      "score": 51,
-      "velocity": "129 comments",
-      "signal": "196 points",
+      "score": 54,
+      "velocity": "151 comments",
+      "signal": "232 points",
       "url": "https://spectrum.ieee.org/ai-radio-chip-design",
-      "summary": "HN story by Brajeshwar with 129 comments."
+      "summary": "HN story by Brajeshwar with 151 comments."
     }
   ]
 }

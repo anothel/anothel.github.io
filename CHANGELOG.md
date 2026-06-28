@@ -6,6 +6,8 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Rewrote Roadmap as a future-work queue with concrete publish, review, signal-quality, Explore, trust, and architecture-gate bundles.
+- Folded the repo analysis intake and accepted follow-up work directly into the Roadmap.
 - Added public security, contribution, signal schema, source governance, threat model, and release checklist docs.
 - Expanded README around operating commands, data refresh, verification, and project boundaries.
 - Reworked Roadmap around future operational trust work: verification entry points, npm partial handling, renderer safety, data contract enforcement, and release discipline.
@@ -22,6 +24,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Confirmed published Home, Today, Explore, Review, Status, source detail, topic, and data JSON routes match checked-in source health.
 - Ran another token-backed refresh; GitHub trends stayed `ok`, while npm `n8n-workflow` remained the only accepted partial source.
 - Kept npm `n8n-workflow` active as accepted visible partial source health because preserved package rows still cover workflow automation.
+- Ran unauthenticated publish-health refresh; generated data stayed publishable with GitHub trend 403 partial and npm `n8n-workflow` 429 partial visible.
 
 ## 2026-06-28
 

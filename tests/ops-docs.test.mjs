@@ -12,7 +12,15 @@ const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
 const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const activeRoadmapP0 = /### P0 - New Trigger Intake/;
+const roadmapQueueHeadings = [
+    "P0 - Publish Health Refresh",
+    "P0 - Saved Review Workflow",
+    "P1 - Signal Quality Watchlist",
+    "P1 - Explore Repeat-Use Tightening",
+    "P1 - Security and Release Hardening",
+    "P2 - Status and Source Trust",
+    "P3 - Architecture Gate",
+];
 
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
@@ -87,8 +95,8 @@ test("IA records refresh stability follow-up outcomes", () => {
     assert.match(ia, /Trend source failures preserve prior rows for the failed source/s);
 });
 
-test("IA records review queue friction audit outcomes", () => {
-    assert.match(ia, /Review Queue Friction Audit/);
+test("IA records review queue workflow audit outcomes", () => {
+    assert.match(ia, /Review Queue Workflow Audit/);
     assert.match(ia, /keeps the existing localStorage key, saved item schema, canonical ids, and legacy saved id matching/s);
     assert.match(ia, /status-specific next action for unread, read, and done items/s);
     assert.match(ia, /not sync, account, backend, or route expansion/s);
@@ -290,6 +298,14 @@ test("IA records repeated npm partial decision outcomes", () => {
     assert.match(ia, /No watchlist, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
 });
 
+test("IA records unauthenticated publish health refresh outcomes", () => {
+    assert.match(ia, /Unauthenticated Publish Health Refresh/);
+    assert.match(ia, /`GITHUB_TOKEN` was not set/s);
+    assert.match(ia, /GitHub trend source became `partial` with 403 rate limits/s);
+    assert.match(ia, /npm `n8n-workflow` stayed `partial` with 429/s);
+    assert.match(ia, /108 generated items stayed publishable/s);
+});
+
 test("docs record the public trust baseline", () => {
     assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
     assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
@@ -359,189 +375,85 @@ test("IA records public scope triage outcomes", () => {
     assert.match(ia, /Active navigation and sitemap should expose signal-dashboard routes/s);
 });
 
-test("roadmap keeps completed public scope triage out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P5 - Public Scope Triage/);
-    assert.match(roadmap, /Public worklog route stays rejected/);
+test("roadmap is a future work queue, not a completed-work ledger", () => {
+    assert.match(roadmap, /## Next Work Queue/);
+    assert.match(roadmap, /## Later Queue/);
+    assert.match(roadmap, /Keep shipped outcomes in `CHANGELOG\.md`/);
+    assert.doesNotMatch(roadmap, /## Current Surface/);
+    assert.doesNotMatch(roadmap, /## Product Direction/);
+    assert.doesNotMatch(roadmap, /Post-publish smoke:/);
+    assert.doesNotMatch(roadmap, /Publish readiness:/);
 });
 
-test("roadmap keeps completed explore policy parity out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P5 - Explore Score Policy Parity/);
-    assert.match(roadmap, activeRoadmapP0);
-    assert.doesNotMatch(roadmap, /Shared scoring data, only where tests prove policy duplication is risky/);
+test("roadmap names concrete next work bundles in priority order", () => {
+    const headings = [...roadmap.matchAll(/^### (P\d - .+)$/gm)].map((match) => match[1]);
+
+    assert.deepEqual(headings, roadmapQueueHeadings);
 });
 
-test("roadmap keeps completed topic promotion review out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P5 - Topic Promotion Review/);
-    assert.match(roadmap, activeRoadmapP0);
+test("roadmap work bundles define trigger, scope, verification, and exit", () => {
+    for (const heading of roadmapQueueHeadings) {
+        const start = roadmap.indexOf(`### ${heading}`);
+        const next = roadmap.indexOf("\n### ", start + 1);
+        const section = roadmap.slice(start, next === -1 ? undefined : next);
+
+        assert.match(section, /Trigger:/);
+        assert.match(section, /Scope:/);
+        assert.match(section, /Verification:/);
+        assert.match(section, /Exit:/);
+    }
 });
 
-test("roadmap keeps completed source quality drift review out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Source Quality Drift Review/);
-    assert.match(roadmap, activeRoadmapP0);
+test("roadmap keeps product boundaries explicit for future work", () => {
+    assert.match(roadmap, /No backend, account, sync, database, framework, bundler, package dependency, or lockfile/);
+    assert.match(roadmap, /Do not run live refresh unless the selected bundle needs fresh source evidence/);
+    assert.match(roadmap, /Keep npm `n8n-workflow` active while preserved rows remain useful/);
+    assert.match(roadmap, /If `GITHUB_TOKEN` is missing, keep GitHub 403 as known partial state and queue a token-backed rerun/);
+    assert.match(roadmap, /Framework PoC waits for a measured vanilla JavaScript blocker/);
 });
 
-test("roadmap keeps architecture PoC as a gate outside next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Architecture PoC Only On Measured Blocker/);
-    assert.match(roadmap, /## Architecture Gate/);
-    assert.match(roadmap, /Gate-only, not active queue work/);
-    assert.match(roadmap, /measured vanilla JavaScript problem exceeds the budget/);
-});
+test("roadmap folds repo analysis work into baselines, bundles, and deferrals", () => {
+    assert.match(roadmap, /## Current Baseline/);
+    assert.match(roadmap, /Absorbs analysis items:/);
+    assert.match(roadmap, /## Later Queue/);
+    assert.match(roadmap, /Why later:/);
+    assert.match(roadmap, /Pull forward when:/);
+    assert.doesNotMatch(roadmap, /C:\/Users\/anoth\/Downloads\/anothel_repo_analysis_2026-06-28\.md/);
+    assert.doesNotMatch(roadmap, /Report item \| Decision \| Reason/);
 
-test("roadmap keeps completed refresh stability out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Refresh Stability Follow-up/);
-    assert.match(roadmap, activeRoadmapP0);
-});
+    for (const label of [
+        "SECURITY.md",
+        "package.json",
+        "PR CI",
+        "Roadmap P0",
+        "Signal Schema v2",
+        "renderer XSS",
+        "GitHub 403",
+        "CONTRIBUTING.md",
+        "CHANGELOG.md",
+        "source governance",
+        "external link policy",
+        "update-trends.yml",
+        "Status partial copy",
+        "accessibility",
+        "Astro/React",
+        "visual regression",
+        "provenance",
+        "advanced ranking",
+        "export/import",
+        "source expansion",
+        "README product purpose",
+        "JSON Schema",
+        "route/link checker",
+        "Actions pinning",
+        "Dependabot",
+        "release checklist",
+    ]) {
+        assert.match(roadmap, new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+    }
 
-test("roadmap keeps completed review queue friction out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Review Queue Friction Audit/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed signal quality regression out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Signal Quality Regression Audit/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed home visit speed out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Home Visit Speed Audit/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed status recovery clarity out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Status Recovery Clarity Audit/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed interaction state visual audit out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Interaction State Visual Audit/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed static snapshot drift audit out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Static Snapshot Drift Audit/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed notes return path audit out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Notes Return Path Audit/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed end-to-end workflow consolidation out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - End-to-End Workflow Consolidation/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed refresh recovery drill out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Refresh Recovery Drill/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed live source refresh probe out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Live Source Refresh Probe/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed refresh cadence governance out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Refresh Cadence Governance Audit/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed signal surface prune pass out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Signal Surface Prune Pass/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed source governance prune out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Source Governance Prune Pass/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed live refresh confirmation out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Live Refresh Confirmation Pass/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed authenticated GitHub refresh out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Authenticated GitHub Refresh Pass/);
-    assert.match(roadmap, activeRoadmapP0);
-});
-
-test("roadmap keeps completed npm rate limit follow-up out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - npm Rate Limit Partial Follow-up/);
-    assert.match(roadmap, /Source detail pages: Trends, Packages, Repos, and Links keep checked-in top rows/s);
-    assert.match(roadmap, /npm `n8n-workflow` 429 is accepted as visible partial source health/s);
-    assert.match(roadmap, /explicit `rateLimited` metadata/s);
-});
-
-test("roadmap keeps completed verification entry points out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Verification Entry Point Baseline/);
-    assert.match(roadmap, /package entry point and PR CI are established/s);
-    assert.match(roadmap, /No package dependencies, package manager lockfile, framework tooling, backend, account, sync, or build output exists/s);
-    assert.match(readme, /npm run check/);
-    assert.match(contributing, /npm run check/);
-});
-
-test("roadmap keeps completed renderer safety audit out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Renderer Safety Audit/);
-    assert.match(roadmap, /shared `safe-dom\.js` owns text escaping, href blocking, and external item link attributes/s);
-    assert.match(threatModel, /External item links rendered from data use `rel="noopener noreferrer"`/s);
-});
-
-test("roadmap keeps completed contract and release discipline out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Data Contract Enforcement/);
-    assert.doesNotMatch(roadmap, /### P1 - Release Discipline Pass/);
-    assert.match(roadmap, /Data contract gate: `node scripts\/validate-data\.mjs` owns manifest, refresh-report, signal-policy, and normalized item contract checks/s);
-    assert.match(roadmap, /Release policy: dated changelog entries and normal GitHub Pages publishes; no Git tag is required yet/s);
-});
-
-test("roadmap keeps completed generated data publish drill out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Generated Data Publish Drill/);
-    assert.match(roadmap, /Publish drill: current checked-in data is publishable from local checks while npm `n8n-workflow` 429 remains visible `partial` source health/s);
-});
-
-test("roadmap keeps completed module type warning cleanup out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Module Type Warning Cleanup/);
-    assert.match(roadmap, /Module syntax: Home, Today, and Status ESM browser modules use `.mjs` while global helper scripts stay `.js`/s);
-});
-
-test("roadmap keeps completed npm partial recovery confirmation out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - npm Partial Recovery Confirmation/);
-    assert.match(roadmap, /npm partial confirmation: npm `n8n-workflow` 429 remains accepted with preserved package rows and visible `rateLimited` metadata/s);
-});
-
-test("roadmap keeps completed authenticated refresh publish confirmation out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Authenticated Refresh Publish Confirmation/);
-    assert.match(roadmap, /Authenticated refresh: GitHub trend source is `ok`; npm `n8n-workflow` 429 is the only accepted non-ok source/s);
-});
-
-test("roadmap keeps completed current signal diff triage out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Current Signal Diff Triage/);
-    assert.match(roadmap, /Current signal diff: refreshed priority, topic, and module snapshots remain publishable without policy or watchlist changes/s);
-});
-
-test("roadmap keeps completed publish readiness diff review out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Publish Readiness Diff Review/);
-    assert.match(roadmap, /Publish readiness: generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit/s);
-});
-
-test("roadmap keeps completed post-publish smoke pass out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Post-Publish Smoke Pass/);
-    assert.match(roadmap, /Post-publish smoke: live decision, review, status, source detail, topic, and data JSON routes matched checked-in source health/s);
-});
-
-test("roadmap keeps completed next refresh health watch out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Next Refresh Health Watch/);
-    assert.match(roadmap, /Next refresh health: token-backed refresh kept GitHub trends `ok` and left npm `n8n-workflow` as the only accepted partial source/s);
-});
-
-test("roadmap keeps completed repeated npm partial decision out of next work", () => {
-    assert.doesNotMatch(roadmap, /### P0 - Repeated npm Partial Decision/);
-    assert.match(roadmap, /Repeated npm partial: `n8n-workflow` stays active as accepted visible partial source health/s);
-});
-
-test("roadmap promotes new trigger intake as the active P0", () => {
-    assert.match(roadmap, activeRoadmapP0);
-    assert.match(roadmap, /new user report, failing test, live refresh drift, or measured metric/s);
-    assert.match(roadmap, /Resolve the trigger or move it to Deferred Boundaries with a concrete reason/s);
+    assert.match(roadmap, /already part of the current repo/);
+    assert.match(roadmap, /not re-added/);
+    assert.match(roadmap, /queued with lower priority/);
+    assert.match(roadmap, /Pull forward when:/);
 });

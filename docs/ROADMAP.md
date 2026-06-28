@@ -1,122 +1,315 @@
 # Roadmap
 
-This site is a personal technical signal dashboard. It is not a portfolio, resume, blog, company-history page, or social product.
+This file is the next-work queue for anothel.github.io.
+
+Use it to choose the next useful bundle, not to store completed history. Keep shipped outcomes in `CHANGELOG.md`.
 
 ## Use This File
 
-- Keep only future work here. Completed work belongs in git history, `CHANGELOG.md`, and decision docs.
-- Each priority needs trigger, scope, verification, and exit.
-- Bundle related slices into one workflow-level task when possible.
-- Delete or demote items that do not protect visit speed, repeat use, signal quality, trust, static safety, or contributor confidence.
+- Pick the highest priority bundle with a live trigger.
+- Keep work workflow-level, not page-by-page.
+- Each active bundle must keep Trigger, Scope, Verification, and Exit.
+- Prefer copy, data, docs, and focused tests before new routes or abstractions.
+- Do not run live refresh unless the selected bundle needs fresh source evidence.
 
-## Product Direction
+## Current Baseline
 
-- Static-first: GitHub Pages, no-JS fallback, and blocked-fetch fallback must keep useful content visible.
-- Data-first: HN, GitHub, npm, and curated references should feed useful reading paths.
-- Calm home base: Home answers "what should I open first?" without becoming marketing.
-- Repeat-use bias: reduce repeated filtering, searching, and status checking.
-- Trust first: stale, partial, fallback, and rate-limited states stay visible and consistent.
-- Prune-first: prefer clearer copy, deleted scope, reused helpers, and tests over new frameworks.
+The 2026-06-28 repository analysis called for several trust, tooling, and documentation basics. These are already part of the current repo and should stay maintained, not re-added:
 
-## Current Surface
+- Public trust docs: README product purpose, `SECURITY.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `docs/THREAT_MODEL.md`, `docs/SIGNAL_SCHEMA.md`, source governance in `docs/SOURCE_GOVERNANCE.md`, and `docs/RELEASE_CHECKLIST.md`.
+- Tooling entry points: `package.json`, Node `>=20`, `serve`, `validate`, `test`, `check`, and `update:data` scripts.
+- Workflow split: PR CI is separate from scheduled/manual data refresh.
+- Data contract baseline: Signal Schema v2, source health vocabulary, score policy ownership, generated-file ownership, and schema migration behavior are documented and tested.
+- Existing safety tests: safe DOM helpers, external link `rel="noopener noreferrer"`, malicious URL/text escaping, localStorage migration, route/sitemap/404 behavior, partial/fallback/rate-limit handling, and checked-in schema drift.
 
-- Pages: Home, Today, Explore, Review, Status, Trends, Packages, Repos, Links, Notes, and 7 topic pages.
-- Core topics: AI agents, MCP, Agent skills, AI evals, AI engineering, Workflow automation, Security.
-- Data modules: HN/GitHub/npm/reference links plus generated Today and Status metadata.
-- Source detail pages: Trends, Packages, Repos, and Links keep checked-in top rows for no-JS and blocked-fetch visits.
-- Local browser state: saved review items with optional note/tag/reason, up to 3 pinned topics, explicit Explore defaults, and up to 5 saved Explore searches.
-- Source governance: `data/watchlists.json` drives trends, packages, repos, and links; disabled/history fields keep retired sources auditable.
-- Signal policy: `data/signal-policy.json` owns Today and Explore baseline scoring policy.
-- Renderer safety: shared `safe-dom.js` owns text escaping, href blocking, and external item link attributes across public renderers and static fallbacks.
-- Data contract gate: `node scripts/validate-data.mjs` owns manifest, refresh-report, signal-policy, and normalized item contract checks.
-- Release policy: dated changelog entries and normal GitHub Pages publishes; no Git tag is required yet.
-- Public trust docs: `SECURITY.md`, `docs/THREAT_MODEL.md`, `docs/SIGNAL_SCHEMA.md`, `docs/SOURCE_GOVERNANCE.md`, and `docs/RELEASE_CHECKLIST.md` describe the operating contract.
-- Verification entry point: dependency-free `package.json` scripts; package entry point and PR CI are established.
-- No package dependencies, package manager lockfile, framework tooling, backend, account, sync, or build output exists.
-- npm partial recovery: npm `n8n-workflow` 429 is accepted as visible partial source health with preserved rows and explicit `rateLimited` metadata.
-- Publish drill: current checked-in data is publishable from local checks while npm `n8n-workflow` 429 remains visible `partial` source health.
-- Module syntax: Home, Today, and Status ESM browser modules use `.mjs` while global helper scripts stay `.js`.
-- npm partial confirmation: npm `n8n-workflow` 429 remains accepted with preserved package rows and visible `rateLimited` metadata.
-- Authenticated refresh: GitHub trend source is `ok`; npm `n8n-workflow` 429 is the only accepted non-ok source.
-- Current signal diff: refreshed priority, topic, and module snapshots remain publishable without policy or watchlist changes.
-- Publish readiness: generated data, static snapshots, docs, and release notes are ready for user-owned staging and commit.
-- Post-publish smoke: live decision, review, status, source detail, topic, and data JSON routes matched checked-in source health.
-- Next refresh health: token-backed refresh kept GitHub trends `ok` and left npm `n8n-workflow` as the only accepted partial source.
-- Repeated npm partial: `n8n-workflow` stays active as accepted visible partial source health because preserved package rows keep workflow-automation coverage useful.
-- Architecture gate: framework PoC stays blocked until a measured vanilla JavaScript problem exceeds `docs/ARCHITECTURE.md`.
-
-## Decision Metrics
-
-- `Visit speed`: clicks from Home to a useful signal.
-- `Repeat friction`: state the user must re-select on every visit.
-- `Signal quality`: specific agent-workflow signals beating broad generic tooling.
-- `Trust`: stale, partial, rate-limited, or fallback data is visible and understandable.
-- `Static safety`: features degrade cleanly when fetch, JS, or localStorage is blocked.
-- `Contributor confidence`: a new maintainer can run, validate, release, and report security issues from docs.
+Do not turn the baseline into new work unless it drifts from current behavior.
 
 ## Next Work Queue
 
-### P0 - New Trigger Intake
+### P0 - Publish Health Refresh
 
-Trigger: a new user report, failing test, live refresh drift, or measured metric shows a gap in visit speed, repeat use, signal quality, trust, static safety, or contributor confidence.
+Trigger: checked-in data is older than the publish window, source health changes, a publish needs fresh evidence, or owner asks for a live source confirmation.
 
 Scope:
 
-- Triage the new trigger as one workflow-level bundle, not page-by-page audit slices.
-- Prefer clearer copy, docs, data decisions, and focused tests before new routes or abstractions.
-- Keep route count, localStorage schema, source families, refresh cadence, signal policy, release policy, package deps, lockfiles, framework, backend, account, and sync unchanged unless a failing test proves the change.
-- Do not run live refresh unless the trigger needs fresh source evidence.
+- Run the existing data refresh path only; do not change source families or refresh cadence.
+- Confirm whether the current partial state is GitHub 403, npm 429, or another source failure.
+- If `GITHUB_TOKEN` is missing, keep GitHub 403 as known partial state and queue a token-backed rerun.
+- Keep npm `n8n-workflow` active while preserved rows remain useful and rate-limited health stays visible.
+- Review generated data, Today, manifest, refresh report, and static fallbacks as one publish bundle.
+- Keep Roadmap P0 aligned with the real current partial cause after every refresh.
+
+Absorbs analysis items:
+
+- Roadmap P0 current partial alignment.
+- Current GitHub 403 rate-limit policy.
+- npm `n8n-workflow` 429 policy.
+- Live refresh probe, gated on network/token approval.
+- Data freshness and recovery criteria before publish.
 
 Verification:
 
-- Run the focused tests for the affected workflow.
+- Run `node scripts/update-all.mjs` only when network and token access are approved.
+- Run `npm.cmd run check`.
 - Run `node scripts/validate-data.mjs`.
 - Run `git diff --check`.
 
 Exit:
 
-- Resolve the trigger or move it to Deferred Boundaries with a concrete reason.
-- Keep only future work in this Roadmap.
+- Generated data is publishable, or the blocker is documented in this Roadmap with reason and next trigger.
+- Source health copy matches the actual failing source.
 
-## Architecture Gate
+### P0 - Saved Review Workflow
 
-Gate-only, not active queue work.
-
-Trigger: a measured vanilla JavaScript problem exceeds the budget in `docs/ARCHITECTURE.md`.
+Trigger: owner request, manual smoke, or test shows saved items are hard to return to, triage, export, import, clear, or understand as local-only.
 
 Scope:
 
-- Start with the smallest affected surface, likely Review or Explore.
-- Keep GitHub Pages, no-JS messaging, blocked-fetch fallbacks, and public routes intact.
-- Keep the client budget explicit before introducing framework tooling.
+- Work through Explore -> save -> Review -> mark/read/done -> Notes/Status return path.
+- Keep the current localStorage keys and legacy saved-id migration.
+- Improve existing copy, controls, and tests before adding storage schema, sync, account, or routes.
+- Keep no-JS and blocked-storage states useful.
+- Clarify local-only saved state when requested or when a smoke test shows it is unclear.
+
+Absorbs analysis items:
+
+- Review local-only copy.
+- LocalStorage migration coverage.
+- User setting export/import baseline, limited to the existing Review import/export path.
 
 Verification:
 
-- Run affected UI tests plus any architecture PoC test added for the blocker.
-- Compare bundled/static output against the current no-build path before accepting the PoC.
+- Run `node --test tests/explore-ui.test.mjs tests/review-ui.test.mjs tests/local-state.test.mjs`.
+- Run `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run `npm.cmd run check`.
+- Run `git diff --check`.
 
 Exit:
 
-- Adopt the PoC only if it removes measured complexity without weakening static safety; otherwise delete it.
+- Saved workflow has one clear next action from Explore and Review.
+- Any larger state or sync idea is moved to Later Queue with a concrete trigger.
 
-## Deferred Boundaries
+### P1 - Signal Quality Watchlist
 
-- Page-by-page audit follow-ups when the issue can be handled as one workflow pass.
-- New audit slice without a failing test, user report, or measured metric.
-- Public worklog route stays rejected while Notes covers durable topic judgment.
-- Portfolio, resume, and company-history copy stay rejected while the site sentence remains a signal dashboard.
-- Vite + React SPA without a measured blocker.
-- Backend or server functions.
-- Accounts, sync, or cross-device identity.
-- Large design-system rewrite.
-- Route renames just to improve labels.
-- More topic pages from item count alone.
-- Release provenance, SLSA, visual regression, and advanced ranking work stay deferred until a failing test shows a concrete gap.
+Trigger: broad baseline tooling outranks agent-workflow signals, a watched source goes empty, owner review finds ranking wrong, or a better source replaces a weak one.
+
+Scope:
+
+- Tune `data/watchlists.json` and `data/signal-policy.json` before updater code.
+- Retire broad sources with `disabled: true` and `history`; do not delete provenance.
+- Preserve agent, MCP, eval, workflow automation, AI engineering, and security coverage.
+- Keep Today and Explore policy aligned.
+- Keep source add/remove rules in `docs/SOURCE_GOVERNANCE.md` aligned with any watchlist change.
+- Keep source health states, score/ranking docs, and schema migration notes aligned with any contract change.
+
+Absorbs analysis items:
+
+- Source add/remove guide.
+- Source health state machine documentation.
+- Score/ranking documentation.
+- Data schema golden coverage.
+- Partial/fallback/rate-limit fixtures.
+
+Verification:
+
+- Run `node --test tests/signal-quality-golden.test.mjs tests/signal-taxonomy.test.mjs`.
+- Run `node --test tests/trend-data.test.mjs tests/package-data.test.mjs tests/repo-data.test.mjs tests/link-data.test.mjs`.
+- Run `npm.cmd run check`.
+- Run `git diff --check`.
+
+Exit:
+
+- Priority surfaces favor specific agent-workflow signals over generic tooling.
+- Watchlist history explains every retirement or replacement.
+
+### P1 - Explore Repeat-Use Tightening
+
+Trigger: owner request or repeated visits require the same search, focus, sort, topic pin setup, or ranking/source interpretation.
+
+Scope:
+
+- Improve saved searches, preferred defaults, topic pins, active-filter clarity, and score/reason/source explanation inside Explore.
+- Keep existing localStorage keys and caps unless a failing test proves they block repeat use.
+- Reuse existing local-state and safe-DOM helpers.
+- Do not add account sync, backend, or a new route.
+- Include keyboard, ARIA, and contrast checks when changing controls.
+
+Absorbs analysis items:
+
+- Score/reason/source explanation.
+- Accessibility smoke checks.
+- First-screen explanation only when owner asks or the current first screen blocks use.
+
+Verification:
+
+- Run `node --test tests/explore-ui.test.mjs tests/local-state.test.mjs tests/topic-ui.test.mjs`.
+- Run `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
+- Run `npm.cmd run check`.
+- Run `git diff --check`.
+
+Exit:
+
+- A repeat visit can restore useful Explore state without redoing routine setup.
+- Any cross-device request is moved to Later Queue unless backend/account scope is approved.
+
+### P1 - Security and Release Hardening
+
+Trigger: renderer, workflow, release, or policy change weakens security posture or release confidence.
+
+Scope:
+
+- Keep `SECURITY.md`, `docs/THREAT_MODEL.md`, `docs/RELEASE_CHECKLIST.md`, `CONTRIBUTING.md`, and `CHANGELOG.md` aligned with current behavior.
+- Audit renderer `innerHTML` usage when rendering generated or saved data changes.
+- Expand malicious URL/text fixture tests when renderer security changes.
+- Keep external link policy in `js/safe-dom.js`, `docs/THREAT_MODEL.md`, and renderer tests aligned.
+- Decide referrer policy, GitHub Actions SHA pinning, and Dependabot policy before raising the workflow hardening bar.
+- Keep release checks tied to `npm.cmd run check`, generated-data review, and dated changelog entries.
+
+Absorbs analysis items:
+
+- Renderer XSS audit.
+- `innerHTML` direct usage audit.
+- URL sanitization fixture expansion.
+- External link policy.
+- Referrer policy.
+- Actions pinning.
+- Dependabot or GitHub Actions update policy.
+- Release checklist and support scope maintenance.
+
+Verification:
+
+- Run `node --test tests/safe-dom.test.mjs tests/module-renderers-ui.test.mjs tests/static-fallback.test.mjs`.
+- Run `node --test tests/ops-docs.test.mjs tests/workflow.test.mjs`.
+- Run `npm.cmd run check`.
+- Run `git diff --check`.
+
+Exit:
+
+- Security and release docs match actual controls.
+- Any deferred hardening has a concrete trigger in Later Queue or this bundle.
+
+### P2 - Status and Source Trust
+
+Trigger: source health, stale data, partial recovery, or fallback state is unclear on Home, Today, Status, or source detail pages.
+
+Scope:
+
+- Keep one shared meaning for ok, partial, error, stale, fallback, staleButSafe, and rateLimited.
+- Improve shared data-health rendering before page-local copy.
+- Keep useful checked-in rows visible for no-JS and blocked-fetch visits.
+- Do not hide partial data that still has preserved useful rows.
+- Track whether the current partial is GitHub 403, npm 429, or another source before changing copy.
+- Keep source freshness and recovery copy documented in `docs/SIGNAL_SCHEMA.md` and `docs/SOURCE_GOVERNANCE.md`.
+
+Absorbs analysis items:
+
+- Status partial copy.
+- Data refresh failure recovery copy.
+- Source freshness criteria.
+- Current GitHub 403 / npm 429 explanation.
+
+Verification:
+
+- Run `node --test tests/status-ui.test.mjs tests/data-health.test.mjs tests/refresh-report.test.mjs`.
+- Run `node --test tests/static-fallback.test.mjs tests/home-data.test.mjs tests/today-data.test.mjs`.
+- Run `npm.cmd run check`.
+- Run `git diff --check`.
+
+Exit:
+
+- Every non-ok source state names whether data remains usable and what recovery action exists.
+- Any live-source uncertainty is either refreshed with approval or documented as known partial state.
+
+### P3 - Architecture Gate
+
+Trigger: a measured vanilla JavaScript blocker makes Review or Explore harder to maintain than the no-build path.
+
+Scope:
+
+- Start with the smallest affected surface, likely Review first and Explore second.
+- Keep GitHub Pages, checked-in HTML, no-JS messaging, blocked-fetch fallbacks, and public routes intact.
+- No backend, account, sync, database, framework, bundler, package dependency, or lockfile unless the PoC beats the current path on measured complexity.
+- Delete the PoC if it does not clearly reduce shipped maintenance cost.
+
+Absorbs analysis items:
+
+- Astro/React island PoC.
+- Framework conversion.
+- Browser global helper risk.
+
+Verification:
+
+- Add or update one focused architecture PoC test for the measured blocker.
+- Run affected UI tests for the chosen surface.
+- Run `npm.cmd run check`.
+- Run `git diff --check`.
+
+Exit:
+
+- Framework PoC waits for a measured vanilla JavaScript blocker.
+- Adopt only if static safety and shipped size stay within `docs/ARCHITECTURE.md`; otherwise delete the PoC.
+
+## Later Queue
+
+These items are queued with lower priority. They stay below the active queue because the current repo already has a smaller working path or the work needs a clearer trigger.
+
+- `CODE_OF_CONDUCT.md`
+  - Why later: there is no active public contributor process to moderate today.
+  - Pull forward when: external contributions or community discussion become regular enough that conduct handling needs a written policy.
+- Separate `RELEASE.md`
+  - Why later: `docs/RELEASE_CHECKLIST.md` already covers current release steps.
+  - Pull forward when: versioned releases start and release process needs a shorter root-level entry point.
+- Package-wide `"type": "module"`
+  - Why later: current browser module and CommonJS-compatible helper split is stable and tested.
+  - Pull forward when: module warnings return, tests require package-wide ESM, or the helper split starts causing maintenance cost.
+- Rename `.github/workflows/update-trends.yml`
+  - Why later: workflow display name already says `Update data`, so behavior is clear in GitHub Actions UI.
+  - Pull forward when: operator mistakes or docs confusion keep coming from the legacy filename.
+- JSON Schema files
+  - Why later: `scripts/validate-data.mjs` and focused data contract tests already catch current drift.
+  - Pull forward when: schema drift escapes tests, external contributors need machine-readable contracts, or new source types make JS-only validation unclear.
+- Meta CSP
+  - Why later: GitHub Pages constraints and current renderer behavior need checking before adding a policy that can break pages.
+  - Pull forward when: Security and Release Hardening reviews static-page policy headers or renderer risk increases.
+- Release tags and GitHub releases
+  - Why later: dated changelog plus GitHub Pages publish is enough for the current site.
+  - Pull forward when: users need installable/versioned artifacts or rollback points by version.
+- Provenance or SLSA
+  - Why later: there is no release artifact chain beyond checked-in static files and GitHub Pages publish.
+  - Pull forward when: release tags, generated artifacts, or external consumers need supply-chain attestation.
+- Visual regression
+  - Why later: static/UI tests already cover current layout and fallback contracts.
+  - Pull forward when: UI regressions escape tests or major visual changes land.
+- Coverage tooling
+  - Why later: the focused Node tests are more useful than a coverage number right now.
+  - Pull forward when: regressions escape tested areas or coverage data would guide pruning.
+- Route/link checker
+  - Why later: serve, site-structure, sitemap, static fallback, and route tests cover current route risk.
+  - Pull forward when: broken links escape those tests or source expansion adds many external URLs.
+- Large source expansion
+  - Why later: current source freshness, partial recovery, and fallback copy should stay stable before adding more sources.
+  - Pull forward when: existing watched sources are stable and owner review identifies specific missing source families.
+- Advanced ranking
+  - Why later: current signal policy already keeps agent-workflow signals ahead of broad baseline tooling.
+  - Pull forward when: signal-quality tests or owner review show ranking failure.
+- Advanced settings export/import
+  - Why later: Review already supports the useful export/import baseline.
+  - Pull forward when: richer settings, cross-device migration, or backup/restore flows are requested.
+- Link preview policy
+  - Why later: the site renders links, not previews.
+  - Pull forward when: previews are introduced or external metadata fetching becomes part of the product.
+- Portfolio, resume, social, company-history, or public worklog routes
+  - Why later: current scope is a signal dashboard, not a personal profile site.
+  - Pull forward when: owner explicitly wants public identity/work history pages.
+- Backend, account, sync, database, server functions, or cross-device identity
+  - Why later: static GitHub Pages keeps the attack surface small and deployment simple.
+  - Pull forward when: local-only state blocks a required workflow and the owner accepts backend/account scope.
+- Framework, bundler, dependency, or lockfile
+  - Why later: no-build static pages are currently working and tested.
+  - Pull forward when: the Architecture Gate finds a measured vanilla JavaScript maintenance blocker.
 
 ## Working Rules
 
-- User owns git staging, commits, and pushes.
-- Public project docs live at repo root when they guide future work.
-- Private implementation plans stay under `.superpowers/`.
-- Before each large task, update or consult this roadmap.
-- After each large task, keep only future work in this file.
+- User owns staging, commits, and pushes.
+- Before a large task, consult this file and pick one bundle.
+- After a large task, remove completed work from this file and record outcome in `CHANGELOG.md`.

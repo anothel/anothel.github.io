@@ -88,7 +88,7 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Disabled watchlist entries stay excluded from generated snapshots even when previous data is reused.
 - Home, Today, Explore, Status, and module pages continue to share one source-health truth from generated metadata.
 
-## Review Queue Friction Audit
+## Review Queue Workflow Audit
 
 - Review keeps the existing localStorage key, saved item schema, canonical ids, and legacy saved id matching.
 - Empty and no-JS Review states now explain that saved items are local and should start from Explore.
@@ -295,6 +295,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - The repeated 429 remains visible `partial` source health with `rateLimited` metadata instead of watchlist churn.
 - Replacement or disabling waits until the source stops preserving useful rows, hides health, or a better workflow package source is identified.
 - No watchlist, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed.
+
+## Unauthenticated Publish Health Refresh
+
+- Network-approved refresh ran while `GITHUB_TOKEN` was not set, so GitHub trend source became `partial` with 403 rate limits across five trend queries.
+- npm `n8n-workflow` stayed `partial` with 429, while preserved package rows kept package coverage useful.
+- 108 generated items stayed publishable across trends, packages, repos, and links, with repos and links still `ok`.
+- Next full publish confirmation should supply `GITHUB_TOKEN` before refresh if GitHub trend health must be proven `ok`.
 
 ## Signal Policy
 
