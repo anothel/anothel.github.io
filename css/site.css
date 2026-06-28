@@ -1756,6 +1756,17 @@ button {
     font-weight: 900;
 }
 
+.review-filters textarea {
+    min-height: 36px;
+    width: min(100%, 280px);
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--text);
+    resize: vertical;
+}
+
 .review-filters button:hover,
 .review-filters button[aria-pressed="true"] {
     border-color: var(--accent-soft);

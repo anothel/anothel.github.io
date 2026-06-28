@@ -14,7 +14,6 @@ const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const roadmapQueueHeadings = [
     "P0 - Publish Health Refresh",
-    "P0 - Saved Review Workflow",
     "P1 - Signal Quality Watchlist",
     "P1 - Explore Repeat-Use Tightening",
     "P1 - Security and Release Hardening",
@@ -449,6 +448,7 @@ test("roadmap folds repo analysis work into baselines, bundles, and deferrals", 
         "provenance",
         "advanced ranking",
         "export/import",
+        "Native file chooser import smoke",
         "source expansion",
         "README product purpose",
         "JSON Schema",

@@ -305,6 +305,8 @@ test("review page owns the saved follow-up surface", () => {
         "data-review-export",
         "data-review-export-markdown",
         "data-review-import",
+        "data-review-import-text",
+        "data-review-import-paste",
         "data-review-import-file",
         "data-review-portability-status",
         "data-review-queue",
@@ -337,6 +339,7 @@ test("review page owns the saved follow-up surface", () => {
     assert.match(sitemap, /https:\/\/anothel\.github\.io\/review\//);
     assert.match(styles, /\.review-workspace/);
     assert.match(styles, /\.review-filters/);
+    assert.match(styles, /\.review-filters textarea/);
     assert.match(styles, /\.review-detail/);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.review-workspace[\s\S]*grid-template-columns: 1fr/s);
 });

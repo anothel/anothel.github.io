@@ -302,6 +302,8 @@
             exportButton: document.querySelector("[data-review-export]"),
             exportMarkdownButton: document.querySelector("[data-review-export-markdown]"),
             importButton: document.querySelector("[data-review-import]"),
+            importText: document.querySelector("[data-review-import-text]"),
+            importPasteButton: document.querySelector("[data-review-import-paste]"),
             importInput: document.querySelector("[data-review-import-file]"),
             portabilityStatus: document.querySelector("[data-review-portability-status]"),
             filterButtons: typeof document.querySelectorAll === "function"
@@ -350,6 +352,23 @@
                 link.click();
                 URL.revokeObjectURL(url);
                 if (els.portabilityStatus) els.portabilityStatus.textContent = "Review Markdown exported.";
+            });
+        }
+
+        if (els.importPasteButton && els.importPasteButton.dataset.reviewImportPasteBound !== "true") {
+            els.importPasteButton.dataset.reviewImportPasteBound = "true";
+            els.importPasteButton.addEventListener("click", () => {
+                const text = els.importText?.value || "";
+                if (!text && els.portabilityStatus) els.portabilityStatus.textContent = "Paste Review JSON first.";
+                if (!text) return;
+                const result = store.mergeRecords(reviewImportRecords(text));
+                state.savedIds = store.read();
+                state.savedRecords = store.recordsById();
+                if (els.portabilityStatus) {
+                    els.portabilityStatus.textContent = `Imported ${result.added} items. Kept ${result.skipped} existing.`;
+                }
+                if (els.importText) els.importText.value = "";
+                render(els, store);
             });
         }
 

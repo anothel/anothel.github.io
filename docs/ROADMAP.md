@@ -59,36 +59,6 @@ Exit:
 - Generated data is publishable, or the blocker is documented in this Roadmap with reason and next trigger.
 - Source health copy matches the actual failing source.
 
-### P0 - Saved Review Workflow
-
-Trigger: owner request, manual smoke, or test shows saved items are hard to return to, triage, export, import, clear, or understand as local-only.
-
-Scope:
-
-- Work through Explore -> save -> Review -> mark/read/done -> Notes/Status return path.
-- Keep the current localStorage keys and legacy saved-id migration.
-- Improve existing copy, controls, and tests before adding storage schema, sync, account, or routes.
-- Keep no-JS and blocked-storage states useful.
-- Clarify local-only saved state when requested or when a smoke test shows it is unclear.
-
-Absorbs analysis items:
-
-- Review local-only copy.
-- LocalStorage migration coverage.
-- User setting export/import baseline, limited to the existing Review import/export path.
-
-Verification:
-
-- Run `node --test tests/explore-ui.test.mjs tests/review-ui.test.mjs tests/local-state.test.mjs`.
-- Run `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
-- Run `npm.cmd run check`.
-- Run `git diff --check`.
-
-Exit:
-
-- Saved workflow has one clear next action from Explore and Review.
-- Any larger state or sync idea is moved to Later Queue with a concrete trigger.
-
 ### P1 - Signal Quality Watchlist
 
 Trigger: broad baseline tooling outranks agent-workflow signals, a watched source goes empty, owner review finds ranking wrong, or a better source replaces a weak one.
@@ -295,6 +265,9 @@ These items are queued with lower priority. They stay below the active queue bec
 - Advanced settings export/import
   - Why later: Review already supports the useful export/import baseline.
   - Pull forward when: richer settings, cross-device migration, or backup/restore flows are requested.
+- Native file chooser import smoke
+  - Why later: Review now has file import and pasted JSON import; current browser automation can smoke the pasted path but cannot drive the OS file picker.
+  - Pull forward when: manual browser QA is requested or the browser automation tool exposes a supported file-upload action.
 - Link preview policy
   - Why later: the site renders links, not previews.
   - Pull forward when: previews are introduced or external metadata fetching becomes part of the product.

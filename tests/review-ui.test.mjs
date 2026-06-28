@@ -540,3 +540,94 @@ test("Review browser filters workflow status", async () => {
     assert.doesNotMatch(elements["[data-review-queue]"].innerHTML, /Unread item/);
     assert.match(elements["[data-review-queue]"].innerHTML, /Done item/);
 });
+
+test("Review browser imports pasted JSON without file chooser", async () => {
+    function createElement() {
+        return {
+            innerHTML: "",
+            textContent: "",
+            dataset: {},
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
+            },
+            setAttribute() {}
+        };
+    }
+
+    const elements = Object.fromEntries([
+        "[data-review-total]",
+        "[data-review-unread]",
+        "[data-review-read]",
+        "[data-review-done]",
+        "[data-review-focus-count]",
+        "[data-review-source-count]",
+        "[data-review-queue]",
+        "[data-review-detail]",
+        "[data-review-import-text]",
+        "[data-review-import-paste]",
+        "[data-review-portability-status]"
+    ].map((selector) => [selector, createElement()]));
+    let savedValue = JSON.stringify({ version: 2, items: [] });
+    const sources = {
+        "../data/trends.json": {
+            updated: "2026-06-20",
+            sourceMeta: [],
+            items: [{
+                rank: 1,
+                title: "Imported item",
+                source: "GitHub",
+                category: "AI agents",
+                score: 90,
+                velocity: "+5%",
+                url: "https://example.com/imported",
+                summary: "Imported summary."
+            }]
+        },
+        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
+        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
+        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
+    };
+    const context = {
+        console,
+        document: {
+            currentScript: { dataset: {} },
+            querySelector(selector) {
+                return elements[selector] || null;
+            },
+            querySelectorAll() {
+                return [];
+            }
+        },
+        localStorage: {
+            getItem() {
+                return savedValue;
+            },
+            setItem(_key, value) {
+                savedValue = value;
+            }
+        },
+        fetch: async (path) => ({
+            ok: true,
+            json: async () => sources[path]
+        })
+    };
+
+    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
+    vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    elements["[data-review-import-text]"].value = JSON.stringify({
+        version: 2,
+        items: [{ id: "trends:https://example.com/imported", savedAt: "2026-06-20T00:00:00.000Z", status: "read" }]
+    });
+    elements["[data-review-import-paste]"].listeners.click();
+
+    assert.equal(elements["[data-review-total]"].textContent, "1");
+    assert.match(elements["[data-review-portability-status]"].textContent, /Imported 1 items/);
+    assert.match(elements["[data-review-queue]"].innerHTML, /Imported item/);
+});

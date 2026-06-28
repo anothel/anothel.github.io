@@ -28,6 +28,8 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Ran token-backed publish-health rerun; all refresh sources recovered to `ok` with 108 generated items and no source errors.
 - Clarified Review's stale local-saved state when saved browser records no longer match current data.
 - Browser-smoked Explore save to Review, Review status and metadata updates, exports, and cleanup on the local static server.
+- Added a Paste JSON Review import path so local saved queues can be restored without automating a file chooser.
+- Removed the completed Saved Review Workflow bundle from the active Roadmap and queued native file chooser smoke as a later trigger.
 
 ## 2026-06-28
 
