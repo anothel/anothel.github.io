@@ -103,8 +103,8 @@ test("IA records review queue workflow audit outcomes", () => {
 
 test("IA records signal quality regression audit outcomes", () => {
     assert.match(ia, /Signal Quality Regression Audit/);
-    assert.match(ia, /golden fixture still keeps agent-workflow signals above broad baseline tooling/s);
-    assert.match(ia, /No signal policy or watchlist change was needed/s);
+    assert.match(ia, /golden fixture now excludes broad baseline tooling from the top Explore priority set/s);
+    assert.match(ia, /Shared signal normalization now applies baseline caps to broad repos/s);
     assert.match(ia, /source health and fallback copy stayed consistent/s);
 });
 

@@ -34,6 +34,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Updated Roadmap P0 current state to queue a token-backed rerun for full GitHub trend confirmation.
 - Fixed static fallback regeneration on CRLF-checked-out Trends pages.
 - Ran token-backed 2026-06-29 publish-health rerun; GitHub trends recovered to `ok`, leaving npm `n8n-workflow` 429 as the only visible partial source.
+- Capped broad baseline repo scoring in shared signal normalization and updated the golden signal-quality fixture so workflow signals displace generic high-star repos in Explore priority.
 
 ## 2026-06-28
 

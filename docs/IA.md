@@ -97,9 +97,9 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 
 ## Signal Quality Regression Audit
 
-- The signal quality golden fixture still keeps agent-workflow signals above broad baseline tooling.
+- The signal quality golden fixture now excludes broad baseline tooling from the top Explore priority set when enough agent, MCP, eval, skills, or workflow signals exist.
 - Today, Explore, topic landing cards, and public structure tests stayed green against current golden expectations.
-- No signal policy or watchlist change was needed because broad baseline items did not dominate priority surfaces.
+- Shared signal normalization now applies baseline caps to broad repos as well as packages and npm trends, so a generic high-star repo cannot outrank specific workflow signals by raw popularity alone.
 - Home, Today, Explore, Status, and module source health and fallback copy stayed consistent.
 
 ## Home Visit Speed Audit

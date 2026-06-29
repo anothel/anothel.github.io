@@ -72,7 +72,7 @@
         return Math.min(boost, 20);
     }
 
-    function isBroadBaselinePackage(item, options = {}) {
+    function isBroadBaselineSignal(item, options = {}) {
         const name = String(item.name || item.title || "").toLowerCase();
         return new Set(signalPolicyFor(options).baselineTitles || []).has(name);
     }
@@ -93,7 +93,7 @@
 
         score += textBoost(text);
         const isNpmTrend = moduleKey === "trends" && String(item.source || "").toLowerCase() === "npm";
-        if ((moduleKey === "packages" || isNpmTrend) && isBroadBaselinePackage(item, options) && textBoost(text) < 8) {
+        if ((moduleKey === "packages" || moduleKey === "repos" || isNpmTrend) && isBroadBaselineSignal(item, options) && textBoost(text) < 8) {
             score = Math.min(score, 76);
         }
 

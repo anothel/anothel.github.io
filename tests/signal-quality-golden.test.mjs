@@ -83,8 +83,10 @@ test("signal quality golden fixture keeps agent workflow signals above broad bas
     const expected = JSON.parse(readFileSync("tests/fixtures/signal-quality-golden.json", "utf8"));
     const actual = actualGolden();
     const todayBaseline = actual.todayStart.filter((item) => ["typescript", "react", "vite"].includes(item.title));
+    const exploreBaseline = actual.explore.filter((item) => ["typescript", "react", "react/react", "vite"].includes(item.title));
 
     assert.deepEqual(actual, expected);
+    assert.deepEqual(exploreBaseline, []);
     assert.ok(todayBaseline.length <= 1);
     assert.ok(actual.todayStart.some((item) => ["MCP", "Agent skills", "AI evals", "Workflow automation", "AI agents"].includes(item.category)));
 });

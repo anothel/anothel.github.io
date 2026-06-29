@@ -72,6 +72,7 @@ Trigger: broad baseline tooling outranks agent-workflow signals, a watched sourc
 Scope:
 
 - Tune `data/watchlists.json` and `data/signal-policy.json` before updater code.
+- If checked-in policy is correct but not applied consistently, fix shared signal normalization before page-local ranking.
 - Retire broad sources with `disabled: true` and `history`; do not delete provenance.
 - Preserve agent, MCP, eval, workflow automation, AI engineering, and security coverage.
 - Keep Today and Explore policy aligned.

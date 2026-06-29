@@ -56,17 +56,6 @@
       ]
     },
     {
-      "title": "react/react",
-      "module": "Repos",
-      "category": "Frontend",
-      "score": 90,
-      "reasons": [
-        "250K stars from GitHub",
-        "frontend runtime",
-        "Signal fit 90/100"
-      ]
-    },
-    {
       "title": "promptfoo eval workflow",
       "module": "Trends",
       "category": "AI evals",
@@ -85,6 +74,17 @@
       "reasons": [
         "12K stars from GitHub",
         "coding agent skills",
+        "Signal fit 88/100"
+      ]
+    },
+    {
+      "title": "trigger.dev durable workflow",
+      "module": "Trends",
+      "category": "Workflow automation",
+      "score": 88,
+      "reasons": [
+        "10K stars from GitHub",
+        "10K stars / 900 forks",
         "Signal fit 88/100"
       ]
     }
