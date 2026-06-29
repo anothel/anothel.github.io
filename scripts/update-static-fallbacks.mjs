@@ -172,6 +172,17 @@ async function notesApp() {
     return context.NotesApp;
 }
 
+async function exploreRuntime() {
+    const context = { console, URL };
+    vm.runInNewContext(await readFile("js/local-state.js", "utf8"), context);
+    vm.runInNewContext(await readFile("js/safe-dom.js", "utf8"), context);
+    vm.runInNewContext(await readFile("js/data-health.js", "utf8"), context);
+    vm.runInNewContext(await readFile("js/signal-schema.js", "utf8"), context);
+    vm.runInNewContext(await readFile("js/topic-taxonomy.js", "utf8"), context);
+    vm.runInNewContext(await readFile("js/explore.js", "utf8"), context);
+    return context.ExploreApp;
+}
+
 function displaySignalLabel(topic) {
     if (topic.label === "Agent skills") return topic.label;
     const label = topic.signalLabel || topic.label;
@@ -358,6 +369,7 @@ async function updateStaticFallbacks() {
     const manifest = await readJson("data/manifest.json");
     const today = await readJson("data/today.json");
     const report = await readJson("data/refresh-report.json");
+    const signalPolicy = await readJson("data/signal-policy.json");
     const datasets = await loadDatasets(manifest);
     const modules = manifest.modules || [];
     const generatedAt = report.generatedAt || manifest.generatedAt || manifest.updated || "-";
@@ -399,6 +411,14 @@ ${todayExploreLinks}
     await writeIfChanged("today/index.html", todayHtml);
 
     const exploreSources = sourceMetaList(datasets);
+    const exploreApp = await exploreRuntime();
+    const normalizedExploreItems = exploreApp.normalizeExploreData(datasets, { signalPolicy });
+    const sourceContextItem = normalizedExploreItems.find((item) => item.sourceContext);
+    const exploreItems = [...new Map([
+        ...normalizedExploreItems.slice(0, 2),
+        sourceContextItem,
+        ...normalizedExploreItems
+    ].filter(Boolean).map((item) => [item.id, item])).values()].slice(0, 3);
     let exploreHtml = await readFile("explore/index.html", "utf8");
     exploreHtml = replacePattern(exploreHtml, /<section class="health-panel" aria-labelledby="explore-health-title">[\s\S]*?<\/section>\s*\n\s*<section class="explore-workspace"/, `<section class="health-panel" aria-labelledby="explore-health-title">
                 <div class="panel-heading">
@@ -411,6 +431,8 @@ ${trimLineEnds(globalThis.DataHealth.renderSourceHealth(exploreSources, { today:
             </section>
 
             <section class="explore-workspace"`, "explore source health");
+    exploreHtml = replacePattern(exploreHtml, /(<div class="explore-results" data-explore-results>)[\s\S]*?(\r?\n[ \t]*<\/div>\r?\n[ \t]*<\/section>\r?\n[ \t]*<\/section>\r?\n[ \t]*<\/main>)/, `$1
+${indentBlock(exploreApp.renderExploreCards(exploreItems), 24)}$2`, "explore results");
     await writeIfChanged("explore/index.html", exploreHtml);
 
     let statusHtml = await readFile("status/index.html", "utf8");

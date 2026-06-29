@@ -40,6 +40,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Documented GitHub Actions pinning and Dependabot decisions for the current dependency-free workflow posture.
 - Clarified partial source detail copy so npm `n8n-workflow` 429 names the failed package, hides the long API URL, and keeps retry guidance visible.
 - Prevented source coverage from reporting emitted rows above tracked rows in generated data and refresh reports.
+- Aligned Explore dynamic and checked-in fallback cards around score reasons, source context, signal-fit ARIA text, and source links.
 
 ## 2026-06-28
 

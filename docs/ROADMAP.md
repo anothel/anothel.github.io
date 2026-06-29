@@ -117,6 +117,10 @@ Absorbs analysis items:
 - Accessibility smoke checks.
 - First-screen explanation only when owner asks or the current first screen blocks use.
 
+Current state:
+
+- Dynamic and checked-in Explore cards expose score reasons, signal-fit ARIA text, source context when available, and a real source link.
+
 Verification:
 
 - Run `node --test tests/explore-ui.test.mjs tests/local-state.test.mjs tests/topic-ui.test.mjs`.

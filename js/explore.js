@@ -45,6 +45,7 @@
 
     const escapeHtml = dom.escapeHtml;
     const safeHref = dom.safeHref;
+    const safeLinkAttrs = dom.safeLinkAttrs;
 
     function requireSignalSchema() {
         if (!signalSchema) {
@@ -377,6 +378,7 @@
                     ` : ""}
                     ${item.sourceContext ? `<p class="source-context">${escapeHtml(item.sourceContext)}</p>` : ""}
                     <div class="explore-card-actions">
+                        <a ${safeLinkAttrs(item.url)}>Open source</a>
                         <button type="button" data-save-id="${escapeHtml(buttonId)}" aria-pressed="${saved ? "true" : "false"}" aria-label="${escapeHtml(saved ? `Saved ${item.title} for Review` : `Save ${item.title} for Review`)}">
                             ${saved ? "Saved" : "Save"}
                         </button>

@@ -222,6 +222,14 @@ test("explore source cards use refresh report time for freshness detail", () => 
     }
 });
 
+test("explore static fallback carries the same score explanation as dynamic cards", () => {
+    const html = read("explore/index.html");
+
+    assert.match(html, /<ul class="score-reasons" aria-label="Score reasons">/);
+    assert.match(html, /<span class="quality-marker" aria-label="Signal fit score \d+">Signal fit \d+<\/span>/);
+    assert.match(html, /<p class="source-context">/);
+});
+
 test("module page stamps do not drift behind checked-in manifest", () => {
     for (const module of manifest.modules) {
         const html = read(module.route);
