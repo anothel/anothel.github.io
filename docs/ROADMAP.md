@@ -159,6 +159,10 @@ Absorbs analysis items:
 - Dependabot and GitHub Actions update policy.
 - Release checklist and support scope maintenance.
 
+Current state:
+
+- Explore external item anchors use `rel="noopener noreferrer"`, and card activation opens with `noopener,noreferrer` instead of `location.assign` when `window.open` is available.
+
 Verification:
 
 - Run `node --test tests/safe-dom.test.mjs tests/module-renderers-ui.test.mjs tests/static-fallback.test.mjs`.

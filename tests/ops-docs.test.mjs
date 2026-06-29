@@ -332,6 +332,7 @@ test("security and threat docs preserve the static-site trust model", () => {
     assert.match(threatModel, /There is no backend, account system, sync service, or database/s);
     assert.match(threatModel, /Remote sources: Hacker News, GitHub, npm/s);
     assert.match(threatModel, /Shared safe DOM helpers escape HTML and restrict hrefs/s);
+    assert.match(threatModel, /Explore card activation uses `noopener,noreferrer`/s);
     assert.match(threatModel, /Referrer policy decision: external item links rely on `rel="noopener noreferrer"`/s);
     assert.match(threatModel, /GitHub Actions pinning decision: major-version actions remain accepted/s);
     assert.match(threatModel, /Dependabot decision: no dependency update automation is enabled while the repo has no package dependencies or lockfile/s);

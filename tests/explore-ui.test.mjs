@@ -789,6 +789,10 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
 
     const context = {
         console,
+        opened: null,
+        open(href, target, features) {
+            this.opened = { href, target, features };
+        },
         document: {
             currentScript: { dataset: {} },
             querySelector(selector) {
@@ -842,7 +846,12 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
     assert.equal(focusButtons[0].ariaPressed, "true");
     assert.ok(fetchPaths.includes("../data/signal-policy.json"));
     card.listeners.click({ target: { closest: () => null } });
-    assert.equal(context.location.opened, "https://example.com/trend");
+    assert.deepEqual(context.opened, {
+        href: "https://example.com/trend",
+        target: "_blank",
+        features: "noopener,noreferrer"
+    });
+    assert.equal(context.location.opened, "");
 
     elements["[data-explore-query]"].dispatch("input", "missing");
     assert.equal(elements["[data-explore-total]"].textContent, "0");

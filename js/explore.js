@@ -602,7 +602,8 @@
             const open = () => {
                 const href = card.dataset.cardHref;
                 if (!href || href === "#") return;
-                if (typeof global.location?.assign === "function") global.location.assign(href);
+                if (typeof global.open === "function") global.open(href, "_blank", "noopener,noreferrer");
+                else if (typeof global.location?.assign === "function") global.location.assign(href);
                 else if (global.location) global.location.href = href;
             };
 
