@@ -171,6 +171,37 @@ test("refresh run renderer surfaces checked-in report context safely", () => {
     assert.doesNotMatch(html, /manual <retry>/);
 });
 
+test("refresh run partial attention reuses source detail recovery copy", () => {
+    const html = renderRefreshRun({
+        generatedAt: "2026-06-29T09:47:12.791Z",
+        manifestUpdated: "2026-06-29",
+        changedModules: [],
+        totals: { status: "partial", items: 25, errors: 1, sources: 1 },
+        modules: [
+            {
+                id: "packages",
+                title: "Package watchlist",
+                status: "partial",
+                count: 25,
+                sources: [{
+                    source: "npm",
+                    status: "partial",
+                    count: 25,
+                    updatedAt: "2026-06-29T09:47:12.791Z",
+                    previousUpdated: "2026-06-29",
+                    rateLimited: true,
+                    errors: ["n8n-workflow: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"]
+                }]
+            }
+        ]
+    });
+
+    assert.match(html, /Package watchlist: npm partial/);
+    assert.match(html, /1 failed: n8n-workflow - 429 Too Many Requests/);
+    assert.match(html, /retry data refresh/);
+    assert.doesNotMatch(html, /api\.npmjs\.org/);
+});
+
 test("refresh run treats stale ok sources as attention", () => {
     const html = renderRefreshRun({
         generatedAt: "2026-06-24T00:00:00.000Z",
@@ -220,5 +251,5 @@ test("refresh run fallback attention keeps previous data context", () => {
     });
 
     assert.match(html, /Package watchlist: npm fallback/);
-    assert.match(html, /fallback used \/ previous data kept \/ rate limited \/ No package rows fetched \/ previous 2026-06-19/);
+    assert.match(html, /npm Fallback - using 2026-06-19 data \/ using fallback \/ previous data kept \/ rate limited \/ No package rows fetched \/ previous refresh 2026-06-19/);
 });

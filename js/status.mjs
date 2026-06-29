@@ -147,16 +147,10 @@ function sourceAttentionLabel(report, source) {
 }
 
 function sourceIssueText(source, report) {
-    const errors = Array.isArray(source.errors) ? source.errors.filter(Boolean).join(" / ") : "";
-    const freshness = isStaleSource(report, source) ? sourceFreshness(report, source) : "";
-    const safety = [
-        source.fallbackUsed ? "fallback used" : "",
-        source.staleButSafe ? "previous data kept" : "",
-        source.rateLimited ? "rate limited" : "",
-        source.fallbackReason || "",
-        source.previousUpdated ? `previous ${source.previousUpdated}` : ""
-    ].filter(Boolean).join(" / ");
-    return [source.source || "unknown", sourceAttentionLabel(report, source), errors || safety || freshness]
+    const detail = globalThis.DataHealth?.sourceDetail
+        ? globalThis.DataHealth.sourceDetail(source, report.generatedAt)
+        : "";
+    return [source.source || "unknown", detail]
         .filter(Boolean)
         .join(" ");
 }

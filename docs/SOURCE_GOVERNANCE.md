@@ -51,3 +51,5 @@ Governance validation rejects future `history.date` values after the current dat
 ## Current Rate Limit Decision
 
 npm `n8n-workflow` returned 429 during refresh. The accepted behavior is visible `partial` source health with `rateLimited: true`, preserved previous rows, sanitized source detail that names `n8n-workflow`, and refresh-report detail. Revisit only if repeated npm 429s hide useful package rows or make Status recovery unclear.
+
+Status refresh-run detail uses the same sanitized recovery copy as source health cards.

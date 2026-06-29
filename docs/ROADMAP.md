@@ -192,6 +192,7 @@ Current state:
 
 - Shared source detail copy names npm `n8n-workflow` 429, keeps `rateLimited` and previous refresh context visible, removes long API URLs from rendered errors, and names `retry data refresh` as the recovery action.
 - Source recovery coverage now keeps `emitted <= tracked`, so refresh reports do not show impossible ratios like `4/1` or `2/1`.
+- Status refresh-run attention now reuses shared source detail copy, including sanitized failed-source errors and `retry data refresh`.
 - The bundle should wake again only when a new source health state becomes unclear or useful preserved rows disappear.
 
 Absorbs analysis items:

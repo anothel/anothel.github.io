@@ -113,8 +113,15 @@
         const errors = Array.isArray(source?.errors) ? source.errors : [];
         if (errors.length === 0) return "";
 
-        const names = errors.map((error) => error.name).filter(Boolean).join(", ");
-        const messages = errors.map((error) => cleanErrorMessage(error.error)).filter(Boolean).join(" / ");
+        const normalized = errors.map((error) => {
+            if (typeof error === "string") {
+                const [name, ...rest] = error.split(": ");
+                return { name, error: rest.join(": ") };
+            }
+            return error || {};
+        });
+        const names = normalized.map((error) => error.name).filter(Boolean).join(", ");
+        const messages = normalized.map((error) => cleanErrorMessage(error.error)).filter(Boolean).join(" / ");
         return `${errors.length} failed: ${names}${messages ? ` - ${messages}` : ""}`;
     }
 

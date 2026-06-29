@@ -42,6 +42,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Prevented source coverage from reporting emitted rows above tracked rows in generated data and refresh reports.
 - Aligned Explore dynamic and checked-in fallback cards around score reasons, source context, signal-fit ARIA text, and source links.
 - Hardened Explore card activation so external item clicks use `noopener,noreferrer` when opened from JavaScript.
+- Reused shared source detail copy in Status refresh-run attention so partial errors stay sanitized and keep retry guidance.
 
 ## 2026-06-28
 
