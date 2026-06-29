@@ -51,9 +51,9 @@ test("buildSourceMeta records source status and item counts", () => {
             status: "ok",
             count: 2,
             updatedAt: generatedAt,
-            tracked: 1,
+            tracked: 2,
             emitted: 2,
-            coverage: "2/1"
+            coverage: "2/2"
         },
         {
             name: "npm",
@@ -90,6 +90,21 @@ test("buildSourceMeta marks query-level source errors as partial", () => {
         errors: [{ name: "coding agent", error: "403 rate limit exceeded" }],
         rateLimited: true
     }]);
+});
+
+test("buildSourceMeta never reports coverage above tracked count", () => {
+    const meta = buildSourceMeta(
+        [
+            { source: "Hacker News", title: "one" },
+            { source: "Hacker News", title: "two" },
+            { source: "Hacker News", title: "three" }
+        ],
+        [{ name: "Hacker News", ok: true, tracked: 1 }],
+        "2026-06-14T00:00:00.000Z"
+    );
+
+    assert.equal(meta[0].tracked, 3);
+    assert.equal(meta[0].coverage, "3/3");
 });
 
 test("default trend inputs leave room for AI agent signals", () => {

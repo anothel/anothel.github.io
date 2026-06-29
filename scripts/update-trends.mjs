@@ -311,7 +311,7 @@ export function buildSourceMeta(items, results, generatedAt) {
 
     return results.map((result) => {
         const emitted = countBySource.get(result.name) || 0;
-        const tracked = result.tracked || 1;
+        const tracked = Math.max(result.tracked || 1, emitted);
         const errors = Array.isArray(result.errors) ? result.errors : [];
         const meta = {
             name: result.name,
@@ -413,7 +413,8 @@ export function prepareTrendDataForWrite(data, previousData) {
                         status: "fallback",
                         count: restoredCount,
                         emitted: restoredCount,
-                        coverage: `${restoredCount}/${source.tracked || 1}`,
+                        tracked: Math.max(source.tracked || 1, restoredCount),
+                        coverage: `${restoredCount}/${Math.max(source.tracked || 1, restoredCount)}`,
                         fallbackUsed: true,
                         staleButSafe: true,
                         previousUpdated: previousData.updated || source.previousUpdated,

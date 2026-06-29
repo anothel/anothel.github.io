@@ -39,6 +39,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Documented the referrer policy decision: keep external data links on `rel="noopener noreferrer"` and defer a site-wide meta referrer tag until outbound links cannot use `noreferrer`.
 - Documented GitHub Actions pinning and Dependabot decisions for the current dependency-free workflow posture.
 - Clarified partial source detail copy so npm `n8n-workflow` 429 names the failed package, hides the long API URL, and keeps retry guidance visible.
+- Prevented trend source coverage from reporting emitted rows above tracked rows in data and refresh reports.
 
 ## 2026-06-28
 

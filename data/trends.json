@@ -11,9 +11,9 @@
       "name": "Hacker News",
       "status": "ok",
       "count": 4,
-      "tracked": 1,
+      "tracked": 4,
       "emitted": 4,
-      "coverage": "4/1",
+      "coverage": "4/4",
       "updatedAt": "2026-06-29T09:47:12.587Z"
     },
     {

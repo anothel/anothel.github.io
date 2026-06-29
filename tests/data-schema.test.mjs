@@ -72,6 +72,9 @@ function assertSourceMeta(sourceMeta, label) {
         }
         if (source.rateLimited !== undefined) assert.equal(typeof source.rateLimited, "boolean", `${label} source ${index} rateLimited`);
         if (source.updatedAt) assertTimestamp(source.updatedAt, `${label} source ${index} updatedAt`);
+        if (source.emitted !== undefined && source.tracked !== undefined) {
+            assert.ok(source.emitted <= source.tracked, `${label} source ${index} coverage must not exceed tracked`);
+        }
     }
 }
 
