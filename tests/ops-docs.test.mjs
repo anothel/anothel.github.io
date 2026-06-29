@@ -18,7 +18,6 @@ const roadmapQueueHeadings = [
     "P1 - Explore Repeat-Use Tightening",
     "P1 - Security and Release Hardening",
     "P2 - Status and Source Trust",
-    "P3 - Architecture Gate",
 ];
 
 test("README explains data refresh automation for operators", () => {
@@ -416,6 +415,13 @@ test("roadmap work bundles define trigger, scope, verification, and exit", () =>
         assert.match(section, /Verification:/);
         assert.match(section, /Exit:/);
     }
+});
+
+test("roadmap keeps architecture as a trigger gate, not active work", () => {
+    assert.match(roadmap, /## Trigger Gates/);
+    assert.match(roadmap, /### Architecture Gate/);
+    assert.match(roadmap, /Gate trigger: a measured vanilla JavaScript blocker/);
+    assert.doesNotMatch(roadmap, /^### P3 - Architecture Gate$/m);
 });
 
 test("roadmap keeps product boundaries explicit for future work", () => {

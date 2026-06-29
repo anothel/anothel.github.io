@@ -214,16 +214,17 @@ Exit:
 - Every non-ok source state names whether data remains usable and what recovery action exists.
 - Any live-source uncertainty is either refreshed with approval or documented as known partial state.
 
-### P3 - Architecture Gate
+## Trigger Gates
 
-Trigger: a measured vanilla JavaScript blocker makes Review or Explore harder to maintain than the no-build path.
+### Architecture Gate
 
-Scope:
+Gate trigger: a measured vanilla JavaScript blocker makes Review or Explore harder to maintain than the no-build path.
 
-- Start with the smallest affected surface, likely Review first and Explore second.
-- Keep GitHub Pages, checked-in HTML, no-JS messaging, blocked-fetch fallbacks, and public routes intact.
-- No backend, account, sync, database, framework, bundler, package dependency, or lockfile unless the PoC beats the current path on measured complexity.
-- Delete the PoC if it does not clearly reduce shipped maintenance cost.
+Do not start a framework, bundler, dependency, lockfile, backend, account, sync, database, or server-function PoC before this trigger exists.
+
+Boundary:
+
+- No backend, account, sync, database, framework, bundler, package dependency, or lockfile without a triggered PoC that beats the current static path.
 
 Absorbs analysis items:
 
@@ -231,12 +232,12 @@ Absorbs analysis items:
 - Framework conversion.
 - Browser global helper risk.
 
-Verification:
+When triggered:
 
+- Start with the smallest affected surface, likely Review first and Explore second.
+- Keep GitHub Pages, checked-in HTML, no-JS messaging, blocked-fetch fallbacks, and public routes intact.
 - Add or update one focused architecture PoC test for the measured blocker.
-- Run affected UI tests for the chosen surface.
-- Run `npm.cmd run check`.
-- Run `git diff --check`.
+- Delete the PoC if it does not clearly reduce shipped maintenance cost.
 
 Exit:
 
