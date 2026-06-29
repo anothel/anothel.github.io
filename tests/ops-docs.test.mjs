@@ -332,6 +332,8 @@ test("security and threat docs preserve the static-site trust model", () => {
     assert.match(threatModel, /There is no backend, account system, sync service, or database/s);
     assert.match(threatModel, /Remote sources: Hacker News, GitHub, npm/s);
     assert.match(threatModel, /Shared safe DOM helpers escape HTML and restrict hrefs/s);
+    assert.match(threatModel, /Referrer policy decision: external item links rely on `rel="noopener noreferrer"`/s);
+    assert.match(releaseChecklist, /Referrer policy still matches the external-link `noreferrer` decision/s);
 });
 
 test("data contract docs describe schema and source governance", () => {

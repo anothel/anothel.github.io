@@ -36,6 +36,7 @@ There is no backend, account system, sync service, or database.
 
 - Shared safe DOM helpers escape HTML and restrict hrefs.
 - External item links rendered from data use `rel="noopener noreferrer"`.
+- Referrer policy decision: external item links rely on `rel="noopener noreferrer"` instead of a site-wide meta referrer policy while the site has no backend, account, or analytics surface.
 - Renderer tests cover unsafe links and generated text escaping.
 - Source metadata exposes `ok`, `partial`, `fallback`, and `error`.
 - Static fallback pages keep useful checked-in content without JavaScript.
@@ -49,6 +50,7 @@ There is no backend, account system, sync service, or database.
 - External sites may change or disappear after links are rendered.
 - GitHub Actions use major-version actions today; stricter SHA pinning is deferred until CI basics are in place.
 - CSP is not enforced yet; renderer safety tests remain the first control.
+- A site-wide referrer meta tag is not enforced yet; add it if new outbound links cannot use `noreferrer`.
 
 ## Review Triggers
 

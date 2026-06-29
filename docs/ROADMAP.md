@@ -139,7 +139,7 @@ Scope:
 - Audit renderer `innerHTML` usage when rendering generated or saved data changes.
 - Expand malicious URL/text fixture tests when renderer security changes.
 - Keep external link policy in `js/safe-dom.js`, `docs/THREAT_MODEL.md`, and renderer tests aligned.
-- Decide referrer policy, GitHub Actions SHA pinning, and Dependabot policy before raising the workflow hardening bar.
+- Keep the referrer policy decision aligned with external-link `noreferrer`; decide GitHub Actions SHA pinning and Dependabot policy before raising the workflow hardening bar.
 - Keep release checks tied to `npm.cmd run check`, generated-data review, and dated changelog entries.
 
 Absorbs analysis items:

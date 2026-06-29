@@ -38,6 +38,7 @@ Check when rendering or source handling changed:
 - Unsafe URLs are blocked or replaced.
 - Generated text is escaped.
 - External links keep safe attributes where rendered.
+- Referrer policy still matches the external-link `noreferrer` decision.
 - localStorage import/export treats payload as untrusted.
 
 ## Docs Review
