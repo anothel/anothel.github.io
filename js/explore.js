@@ -194,6 +194,7 @@
 
     function savedSearchStatusText(status) {
         if (status === "saved") return "Search saved.";
+        if (status === "applied") return "Search applied.";
         if (status === "updated") return "Saved search moved to top.";
         if (status === "removed") return "Saved search removed.";
         if (status === "full") return "Remove one to save another.";
@@ -518,7 +519,7 @@
         if (els.savedSearchStatus) els.savedSearchStatus.textContent = savedSearchStatusText(status);
     }
 
-    function render(els, store, pinnedStore, savedSearchStore) {
+    function render(els, store, pinnedStore, savedSearchStore, savedSearchStatus = "empty") {
         const items = visibleItems(state.items, state, state.savedIds);
         const categoryCount = uniqueValues(items, "category").length;
 
@@ -529,7 +530,7 @@
         if (els.topicLenses) els.topicLenses.innerHTML = renderTopicLenses(sortTopicLensesByPins(buildTopicLenses(state.items), state.pinnedTopics), state.focus, state.pinnedTopics);
         if (els.results) els.results.innerHTML = renderExploreCards(items, state.savedIds);
         if (els.saved) els.saved.innerHTML = renderSavedQueue(state.items, state.savedIds);
-        renderSavedSearchPanel(els);
+        renderSavedSearchPanel(els, savedSearchStatus);
         bindDynamicActions(els, store, pinnedStore, savedSearchStore);
         if (savedSearchStore) bindSavedSearchActions(els, savedSearchStore, store, pinnedStore);
     }
@@ -640,7 +641,7 @@
 
                 if (applyId) {
                     if (applySavedSearchById(els, savedSearchStore, applyId)) {
-                        render(els, store, pinnedStore, savedSearchStore);
+                        render(els, store, pinnedStore, savedSearchStore, "applied");
                     }
                     return;
                 }

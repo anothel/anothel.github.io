@@ -95,6 +95,12 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Queue copy makes unread-first ordering explicit; selected-item detail gives a status-specific next action for unread, read, and done items.
 - Export and import stay local portability affordances, not sync, account, backend, or route expansion.
 
+## Explore Repeat-Use Feedback
+
+- Saved searches keep the existing localStorage key, cap, label format, and apply behavior.
+- Applying a saved search now leaves visible status feedback after Explore restores focus, query, and sort.
+- No route, account, sync, backend, source data, or storage schema changed.
+
 ## Signal Quality Regression Audit
 
 - The signal quality golden fixture now excludes broad baseline tooling from the top Explore priority set when enough agent, MCP, eval, skills, or workflow signals exist.

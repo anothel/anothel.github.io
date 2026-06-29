@@ -35,6 +35,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Fixed static fallback regeneration on CRLF-checked-out Trends pages.
 - Ran token-backed 2026-06-29 publish-health rerun; GitHub trends recovered to `ok`, leaving npm `n8n-workflow` 429 as the only visible partial source.
 - Capped broad baseline repo scoring in shared signal normalization and updated the golden signal-quality fixture so workflow signals displace generic high-star repos in Explore priority.
+- Kept Explore saved-search apply feedback visible after a saved search restores focus, query, and sort.
 
 ## 2026-06-28
 

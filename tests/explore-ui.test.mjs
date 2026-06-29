@@ -576,6 +576,7 @@ test("Explore saved search renderer emits empty, item, and full states safely", 
     assert.match(html, /data-remove-search-id="x"/);
     assert.doesNotMatch(html, /<script>/);
     assert.match(app.savedSearchStatusText("full"), /Remove one to save another/);
+    assert.equal(app.savedSearchStatusText("applied"), "Search applied.");
 });
 
 test("Explore topic lenses render pin state", () => {
@@ -1442,6 +1443,8 @@ test("Explore default controls save and reset explicit preferred state", async (
 });
 
 test("Explore saved search controls save, apply, remove, and keep URL unchanged", async () => {
+    let dynamicButtons = [];
+
     function createElement() {
         return {
             innerHTML: "",
@@ -1454,6 +1457,15 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
             dispatch(type, value = this.value) {
                 this.value = value;
                 this.listeners[type]?.({ target: this });
+            }
+        };
+    }
+    function createButton(dataset = {}) {
+        return {
+            dataset,
+            listeners: {},
+            addEventListener(type, listener) {
+                this.listeners[type] = listener;
             }
         };
     }
@@ -1511,6 +1523,7 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
             },
             querySelectorAll(selector) {
                 if (selector === "[data-focus-filter]") return focusButtons;
+                if (selector === "[data-apply-search-id], [data-remove-search-id]") return dynamicButtons;
                 return [];
             }
         },
@@ -1568,6 +1581,19 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
     assert.equal(elements["[data-explore-sort]"].value, "saved");
     assert.equal(focusButtons[1].ariaPressed, "true");
     assert.equal(location.search, "");
+
+    dynamicButtons = [createButton({ applySearchId: savedPayload.items[0].id })];
+    context.ExploreApp.bindSavedSearchActions(
+        appEls,
+        savedSearchStore,
+        context.ExploreApp.createExploreStore(context.localStorage),
+        context.ExploreApp.createPinnedTopicStore(context.localStorage)
+    );
+    elements["[data-explore-query]"].dispatch("input", "other");
+    dynamicButtons[0].listeners.click({ target: dynamicButtons[0] });
+
+    assert.equal(elements["[data-explore-query]"].value, "server");
+    assert.equal(elements["[data-saved-search-status]"].textContent, "Search applied.");
 
     const removed = savedSearchStore.remove(savedPayload.items[0].id);
 
