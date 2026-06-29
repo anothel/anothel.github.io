@@ -308,3 +308,40 @@ test("preparePackageDataForWrite preserves previous rows for partial rate limits
     assert.equal(prepared.sourceMeta.coverage, "2/2");
     assert.deepEqual(prepared.packages.map((item) => item.name), ["react", "openai"]);
 });
+
+test("preparePackageDataForWrite keeps restored coverage within tracked count", () => {
+    const prepared = preparePackageDataForWrite(
+        {
+            updated: "2026-06-20",
+            generatedAt: "2026-06-20T00:00:00.000Z",
+            sourceMeta: {
+                name: "npm",
+                status: "partial",
+                count: 1,
+                tracked: 1,
+                emitted: 1,
+                coverage: "1/1",
+                errors: [{ name: "openai", error: "429 Too Many Requests" }]
+            },
+            packages: [
+                { rank: 1, name: "react", downloads: 9000 }
+            ]
+        },
+        {
+            updated: "2026-06-19",
+            generatedAt: "2026-06-19T00:00:00.000Z",
+            sourceMeta: {
+                name: "npm",
+                status: "ok",
+                count: 2
+            },
+            packages: [
+                { rank: 1, name: "react", downloads: 8500 },
+                { rank: 2, name: "openai", downloads: 5000 }
+            ]
+        }
+    );
+
+    assert.equal(prepared.sourceMeta.tracked, 2);
+    assert.equal(prepared.sourceMeta.coverage, "2/2");
+});

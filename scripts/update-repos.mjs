@@ -149,13 +149,15 @@ export function prepareRepoDataForWrite(data, previousData) {
 
         if (restored.length > 0) {
             const repos = rerankRepos([...nextItems, ...restored]);
+            const tracked = Math.max(data.sourceMeta.tracked || repoDefinitions.length, repos.length);
             data = {
                 ...data,
                 sourceMeta: {
                     ...data.sourceMeta,
+                    tracked,
                     count: repos.length,
                     emitted: repos.length,
-                    coverage: `${repos.length}/${data.sourceMeta.tracked || repoDefinitions.length}`,
+                    coverage: `${repos.length}/${tracked}`,
                     previousUpdated: previousData.updated || data.sourceMeta.previousUpdated,
                     rateLimited: sourceSafetyFlags(errors).rateLimited
                 },

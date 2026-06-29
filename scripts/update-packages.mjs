@@ -168,13 +168,15 @@ export function preparePackageDataForWrite(data, previousData) {
         if (restored.length > 0) {
             const packages = rerankPackages([...nextItems, ...restored]);
             const flags = sourceSafetyFlags(errors);
+            const tracked = Math.max(data.sourceMeta.tracked || packageDefinitions.length, packages.length);
             data = {
                 ...data,
                 sourceMeta: {
                     ...data.sourceMeta,
+                    tracked,
                     count: packages.length,
                     emitted: packages.length,
-                    coverage: `${packages.length}/${data.sourceMeta.tracked || packageDefinitions.length}`,
+                    coverage: `${packages.length}/${tracked}`,
                     ...(flags.rateLimited ? { rateLimited: true } : {}),
                     previousUpdated: previousData.updated || data.sourceMeta.previousUpdated
                 },
