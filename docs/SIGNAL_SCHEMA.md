@@ -73,6 +73,11 @@ Markers:
 - `staleButSafe`: previous data is old but better than empty output.
 - `fallbackReason`: short operator-facing reason.
 
+Source detail copy:
+
+- Non-ok source details must preserve usable-data context and name the recovery action.
+- Partial rate-limit details name the failed source, remove long API URLs from the rendered error, keep `rateLimited` visible, and say to retry data refresh.
+
 ## Validation
 
 Current validation lives in:

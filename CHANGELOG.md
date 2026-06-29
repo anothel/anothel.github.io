@@ -38,6 +38,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Kept Explore saved-search apply feedback visible after a saved search restores focus, query, and sort.
 - Documented the referrer policy decision: keep external data links on `rel="noopener noreferrer"` and defer a site-wide meta referrer tag until outbound links cannot use `noreferrer`.
 - Documented GitHub Actions pinning and Dependabot decisions for the current dependency-free workflow posture.
+- Clarified partial source detail copy so npm `n8n-workflow` 429 names the failed package, hides the long API URL, and keeps retry guidance visible.
 
 ## 2026-06-28
 

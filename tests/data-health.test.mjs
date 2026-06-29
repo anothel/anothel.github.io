@@ -154,3 +154,24 @@ test("DataHealth exposes shared source detail text", () => {
         "Stale - 5 days old / retry data refresh"
     );
 });
+
+test("DataHealth partial detail names failing source and recovery action", () => {
+    const DataHealth = loadDataHealth();
+
+    const detail = DataHealth.sourceDetail({
+        status: "partial",
+        updatedAt: "2026-06-29T09:47:12.791Z",
+        errors: [{
+            name: "n8n-workflow",
+            error: "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
+        }],
+        rateLimited: true,
+        previousUpdated: "2026-06-29"
+    });
+
+    assert.equal(
+        detail,
+        "Partial - updated 2026-06-29 / rate limited / previous refresh 2026-06-29 / 1 failed: n8n-workflow - 429 Too Many Requests / retry data refresh"
+    );
+    assert.doesNotMatch(detail, /api\.npmjs\.org/);
+});

@@ -105,6 +105,19 @@
         return `Stale - ${age} days old`;
     }
 
+    function cleanErrorMessage(value) {
+        return String(value || "").replace(/:\s*https?:\/\/\S+$/i, "");
+    }
+
+    function sourceErrorDetail(source) {
+        const errors = Array.isArray(source?.errors) ? source.errors : [];
+        if (errors.length === 0) return "";
+
+        const names = errors.map((error) => error.name).filter(Boolean).join(", ");
+        const messages = errors.map((error) => cleanErrorMessage(error.error)).filter(Boolean).join(" / ");
+        return `${errors.length} failed: ${names}${messages ? ` - ${messages}` : ""}`;
+    }
+
     function dataModeText(sourceMeta, options = {}) {
         const status = aggregateSourceStatus(sourceMeta);
         if (status === "fallback") return "Source health fallback. Previous data remains available; retry data refresh.";
@@ -127,15 +140,12 @@
         if (source?.rateLimited) safety.push("rate limited");
         if (source?.fallbackReason) safety.push(source.fallbackReason);
         if (source?.previousUpdated) safety.push(`previous refresh ${source.previousUpdated}`);
+
+        const errorDetail = sourceErrorDetail(source);
+        if (errorDetail) safety.push(errorDetail);
+        if ((source?.status === "partial" || source?.status === "error") && safety.length > 0) safety.push("retry data refresh");
         if (safety.length > 0) return `${freshness} / ${safety.join(" / ")}`;
         if (freshness.startsWith("Stale -")) return `${freshness} / retry data refresh`;
-
-        const errors = Array.isArray(source?.errors) ? source.errors : [];
-        if (errors.length > 0) {
-            const names = errors.map((error) => error.name).filter(Boolean).join(", ");
-            const messages = errors.map((error) => error.error).filter(Boolean).join(" / ");
-            return `${freshness} / ${errors.length} failed: ${names}${messages ? ` - ${messages}` : ""}`;
-        }
         if (source?.error) return `${freshness} / ${source.error}`;
         return freshness;
     }
