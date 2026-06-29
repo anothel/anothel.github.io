@@ -32,6 +32,8 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Removed the completed Saved Review Workflow bundle from the active Roadmap and queued native file chooser smoke as a later trigger.
 - Ran 2026-06-29 unauthenticated publish-health refresh; generated data stayed publishable with GitHub trend 403 partial and npm `n8n-workflow` 429 partial visible.
 - Updated Roadmap P0 current state to queue a token-backed rerun for full GitHub trend confirmation.
+- Fixed static fallback regeneration on CRLF-checked-out Trends pages.
+- Ran token-backed 2026-06-29 publish-health rerun; GitHub trends recovered to `ok`, leaving npm `n8n-workflow` 429 as the only visible partial source.
 
 ## 2026-06-28
 

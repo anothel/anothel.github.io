@@ -436,7 +436,7 @@ ${renderRefreshRun(report).trim()}
         html = replaceTaggedText(html, "data-updated", module.updated);
         html = replacePattern(html, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(dataset.sourceMeta, { updated: dataset.updated || module.updated }))}</p>`, `${module.id} data mode`);
         if (renderedRows.grid) {
-            html = replacePattern(html, /(<section class="dashboard-grid module-primary-panel" aria-label="Trend cards" data-grid>)[\s\S]*?(\n\s*<\/section>\n\s*<section class="rank-panel module-primary-panel")/, `$1
+            html = replacePattern(html, /(<section class="dashboard-grid module-primary-panel" aria-label="Trend cards" data-grid>)[\s\S]*?(\r?\n\s*<\/section>\r?\n\s*<section class="rank-panel module-primary-panel")/, `$1
 ${indentBlock(renderedRows.grid, 16)}$2`, `${module.id} cards`);
         }
         if (renderedRows.table) {

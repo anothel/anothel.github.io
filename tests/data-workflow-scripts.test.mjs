@@ -81,3 +81,9 @@ test("static fallback renderer derives topic pages from taxonomy", () => {
     assert.match(script, /function renderTopicPage/);
     assert.doesNotMatch(script, /const topicPages = \[/);
 });
+
+test("static fallback trend card replacement accepts CRLF pages", () => {
+    const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
+
+    assert.match(script, /\\r\?\\n\\s\*<\\\/section>\\r\?\\n\\s\*<section class="rank-panel module-primary-panel"/);
+});

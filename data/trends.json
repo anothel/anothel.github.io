@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-28",
-  "generatedAt": "2026-06-28T22:13:55.256Z",
+  "updated": "2026-06-29",
+  "generatedAt": "2026-06-29T09:47:12.587Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,16 +14,16 @@
       "tracked": 1,
       "emitted": 4,
       "coverage": "4/1",
-      "updatedAt": "2026-06-28T22:13:55.256Z"
+      "updatedAt": "2026-06-29T09:47:12.587Z"
     },
     {
       "name": "GitHub",
-      "status": "partial",
+      "status": "ok",
       "count": 12,
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-28T22:13:55.256Z"
+      "updatedAt": "2026-06-29T09:47:12.587Z"
     },
     {
       "name": "npm",
@@ -32,23 +32,34 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-06-28T22:13:55.256Z"
+      "updatedAt": "2026-06-29T09:47:12.587Z"
     }
   ],
   "items": [
     {
       "rank": 1,
+      "title": "activepieces/activepieces",
+      "source": "GitHub",
+      "category": "Workflow automation",
+      "score": 100,
+      "velocity": "23K stars",
+      "signal": "3.9K forks",
+      "url": "https://github.com/activepieces/activepieces",
+      "summary": "AI Agents & MCPs & AI Workflow Automation (~400 MCP servers for AI agents) AI Automation / AI Agent with MCPs AI Workflows & AI Agents MCPs for AI Agents"
+    },
+    {
+      "rank": 2,
       "title": "affaan-m/ECC",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "223K stars",
+      "velocity": "223.2K stars",
       "signal": "34.2K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
     {
-      "rank": 2,
+      "rank": 3,
       "title": "AgentOps-AI/agentops",
       "source": "GitHub",
       "category": "AI evals",
@@ -59,18 +70,18 @@
       "summary": "Python SDK for AI agent monitoring, LLM cost tracking, benchmarking, and more. Integrates with most LLMs and agent frameworks including CrewAI, Agno, OpenAI Agents SDK, Langchain, Autogen, AG2, and CamelAI"
     },
     {
-      "rank": 3,
+      "rank": 4,
       "title": "anomalyco/opencode",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "180.2K stars",
+      "velocity": "180.4K stars",
       "signal": "22.2K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
     },
     {
-      "rank": 4,
+      "rank": 5,
       "title": "anthropics/claude-code",
       "source": "GitHub",
       "category": "AI agents",
@@ -81,18 +92,18 @@
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
     },
     {
-      "rank": 5,
+      "rank": 6,
       "title": "anthropics/skills",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "156.2K stars",
+      "velocity": "156.5K stars",
       "signal": "18.4K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
     },
     {
-      "rank": 6,
+      "rank": 7,
       "title": "Arize-ai/phoenix",
       "source": "GitHub",
       "category": "AI evals",
@@ -103,7 +114,7 @@
       "summary": "AI Observability & Evaluation"
     },
     {
-      "rank": 7,
+      "rank": 8,
       "title": "awslabs/mcp",
       "source": "GitHub",
       "category": "MCP",
@@ -119,7 +130,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "63.9K stars",
+      "velocity": "64.1K stars",
       "signal": "5.2K forks",
       "url": "https://github.com/code-yeongyu/oh-my-openagent",
       "summary": "omo/lazycodex: The coding agent for tokenmaxxers;the one and only agent harness for complex codebases. For your Codex, for your OpenCode"
@@ -141,13 +152,13 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "109.9K stars",
+      "velocity": "110.4K stars",
       "signal": "7.3K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
     },
     {
-      "rank": 9,
+      "rank": 12,
       "title": "github/awesome-copilot",
       "source": "GitHub",
       "category": "AI agents",
@@ -156,39 +167,6 @@
       "signal": "4.4K forks",
       "url": "https://github.com/github/awesome-copilot",
       "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot."
-    },
-    {
-      "rank": 10,
-      "title": "Kiln-AI/Kiln",
-      "source": "GitHub",
-      "category": "AI evals",
-      "score": 100,
-      "velocity": "4.9K stars",
-      "signal": "374 forks",
-      "url": "https://github.com/Kiln-AI/Kiln",
-      "summary": "Build, Evaluate, and Optimize AI Systems. Includes evals, RAG, agents, fine-tuning, synthetic data generation, dataset management, MCP, and more."
-    },
-    {
-      "rank": 11,
-      "title": "langgenius/dify",
-      "source": "GitHub",
-      "category": "MCP",
-      "score": 100,
-      "velocity": "146.9K stars",
-      "signal": "23.1K forks",
-      "url": "https://github.com/langgenius/dify",
-      "summary": "Production-ready platform for agentic workflow development."
-    },
-    {
-      "rank": 12,
-      "title": "lobehub/lobehub",
-      "source": "GitHub",
-      "category": "Agent skills",
-      "score": 100,
-      "velocity": "79.2K stars",
-      "signal": "15.5K forks",
-      "url": "https://github.com/lobehub/lobehub",
-      "summary": "LobeHub is your Chief Agent Operator, organizing your agents into 724 operations by hiring, scheduling, and reporting on your entire AI team."
     },
     {
       "rank": 13,
@@ -258,6 +236,28 @@
     },
     {
       "rank": 19,
+      "title": "I used Claude Code to get a second opinion on my MRI",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 80,
+      "velocity": "569 comments",
+      "signal": "431 points",
+      "url": "https://antoine.fi/mri-analysis-using-claude-code-opus",
+      "summary": "HN story by engmarketer with 569 comments."
+    },
+    {
+      "rank": 20,
+      "title": "Professor denounces mass AI fraud on an exam at Brown",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 77,
+      "velocity": "538 comments",
+      "signal": "405 points",
+      "url": "https://english.elpais.com/education/2026-06-28/ai-fraud-at-brown-university-academic-integrity-is-at-risk.html",
+      "summary": "HN story by geox with 538 comments."
+    },
+    {
+      "rank": 21,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",
@@ -268,7 +268,7 @@
       "summary": "2.5M downloads over the last available week."
     },
     {
-      "rank": 20,
+      "rank": 22,
       "title": "langfuse",
       "source": "npm",
       "category": "AI evals",
@@ -279,48 +279,26 @@
       "summary": "1.5M downloads over the last available week."
     },
     {
-      "rank": 21,
-      "title": "I used Claude Code to get a second opinion on my MRI",
+      "rank": 23,
+      "title": "GLM 5.2 beats Claude in our benchmarks",
       "source": "Hacker News",
       "category": "AI",
-      "score": 63,
-      "velocity": "372 comments",
-      "signal": "265 points",
-      "url": "https://antoine.fi/mri-analysis-using-claude-code-opus",
-      "summary": "HN story by engmarketer with 372 comments."
-    },
-    {
-      "rank": 22,
-      "title": "EU to legislate about Chat Control behind closed doors",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 45,
-      "velocity": "312 comments",
-      "signal": "556 points",
-      "url": "https://www.patrick-breyer.de/en/double-threat-to-private-communications-undemocratic-chat-control-backroom-deals-and-imminent-concessions-spark-relaunch-of-fightchatcontrol-eu/",
-      "summary": "HN story by NeutralForest with 312 comments."
-    },
-    {
-      "rank": 23,
-      "title": "California legislature agrees to upload driver's licenses to national database",
-      "source": "Hacker News",
-      "category": "Database",
-      "score": 42,
-      "velocity": "48 comments",
-      "signal": "107 points",
-      "url": "https://papersplease.org/wp/2026/06/27/california-legislature-agrees-to-upload-drivers-licenses-to-national-database/",
-      "summary": "HN story by iamnothere with 48 comments."
+      "score": 66,
+      "velocity": "392 comments",
+      "signal": "840 points",
+      "url": "https://semgrep.dev/blog/2026/we-have-mythos-at-home-glm-52-beats-claude-in-our-cyber-benchmarks/",
+      "summary": "HN story by jms703 with 392 comments."
     },
     {
       "rank": 24,
-      "title": "Professor denounces mass AI fraud on an exam at Brown",
+      "title": "EU to legislate about Chat Control behind closed doors",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 42,
-      "velocity": "82 comments",
-      "signal": "81 points",
-      "url": "https://english.elpais.com/education/2026-06-28/ai-fraud-at-brown-university-academic-integrity-is-at-risk.html",
-      "summary": "HN story by geox with 82 comments."
+      "category": "Developer tools",
+      "score": 54,
+      "velocity": "376 comments",
+      "signal": "661 points",
+      "url": "https://www.patrick-breyer.de/en/double-threat-to-private-communications-undemocratic-chat-control-backroom-deals-and-imminent-concessions-spark-relaunch-of-fightchatcontrol-eu/",
+      "summary": "HN story by NeutralForest with 376 comments."
     }
   ]
 }

@@ -317,6 +317,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - 108 generated items stayed publishable across trends, packages, repos, and links, with repos and links still `ok`.
 - Roadmap P0 now records this current partial cause and queues a token-backed rerun for full GitHub trend confirmation.
 
+## 2026-06-29 Token-backed Publish Health Rerun
+
+- `gh auth token` supplied `GITHUB_TOKEN` to the existing refresh path without printing the token.
+- The first rerun exposed a static fallback regeneration bug on CRLF-checked-out Trends pages; the trend-card replacement now accepts `\r?\n` boundaries.
+- The second token-backed rerun completed the full update path and recovered GitHub trends to `ok`.
+- npm `n8n-workflow` 429 remains the only visible partial source, with 25 package rows preserved and 108 generated items still publishable.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.

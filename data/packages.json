@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-28",
-  "generatedAt": "2026-06-28T22:13:55.292Z",
+  "updated": "2026-06-29",
+  "generatedAt": "2026-06-29T09:47:12.791Z",
   "sourceMeta": {
     "name": "npm",
     "status": "partial",
@@ -8,7 +8,7 @@
     "tracked": 25,
     "emitted": 25,
     "coverage": "25/25",
-    "updatedAt": "2026-06-28T22:13:55.292Z",
+    "updatedAt": "2026-06-29T09:47:12.791Z",
     "errors": [
       {
         "name": "n8n-workflow",
@@ -16,7 +16,7 @@
       }
     ],
     "rateLimited": true,
-    "previousUpdated": "2026-06-28"
+    "previousUpdated": "2026-06-29"
   },
   "packages": [
     {

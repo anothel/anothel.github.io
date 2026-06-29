@@ -41,8 +41,9 @@ Scope:
 
 Current state:
 
-- 2026-06-29 unauthenticated refresh is publishable but partial: GitHub trend search hit 403 on four queries, and npm `n8n-workflow` hit 429 with previous package rows preserved from 2026-06-28.
-- Next full confirmation should be a token-backed rerun when GitHub trend health must be proven `ok`.
+- 2026-06-29 token-backed refresh recovered GitHub trend health to `ok`.
+- npm `n8n-workflow` still returns 429, with previous package rows preserved from 2026-06-29, so current data remains publishable partial.
+- Next full confirmation is only needed when package source health must prove all sources `ok` or `n8n-workflow` stops preserving useful rows.
 
 Absorbs analysis items:
 
