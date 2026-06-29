@@ -1,11 +1,6 @@
 {
-<<<<<<< HEAD
-  "updated": "2026-06-29",
-  "generatedAt": "2026-06-29T09:34:49.240Z",
-=======
   "updated": "2026-06-28",
   "generatedAt": "2026-06-28T22:13:55.256Z",
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
   "sources": [
     "Hacker News",
     "GitHub",
@@ -19,11 +14,7 @@
       "tracked": 1,
       "emitted": 4,
       "coverage": "4/1",
-<<<<<<< HEAD
-      "updatedAt": "2026-06-29T09:34:49.240Z"
-=======
       "updatedAt": "2026-06-28T22:13:55.256Z"
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
     },
     {
       "name": "GitHub",
@@ -32,30 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-<<<<<<< HEAD
-      "updatedAt": "2026-06-29T09:34:49.240Z",
-      "errors": [
-        {
-          "name": "llm observability evals stars:>100",
-          "error": "403 rate limit exceeded"
-        },
-        {
-          "name": "workflow automation ai agents stars:>100",
-          "error": "403 rate limit exceeded"
-        },
-        {
-          "name": "durable workflow typescript stars:>100",
-          "error": "403 rate limit exceeded"
-        },
-        {
-          "name": "opencode coding agent stars:>100",
-          "error": "403 rate limit exceeded"
-        }
-      ],
-      "rateLimited": true
-=======
       "updatedAt": "2026-06-28T22:13:55.256Z"
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
     },
     {
       "name": "npm",
@@ -64,11 +32,7 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-<<<<<<< HEAD
-      "updatedAt": "2026-06-29T09:34:49.240Z"
-=======
       "updatedAt": "2026-06-28T22:13:55.256Z"
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
     }
   ],
   "items": [
@@ -78,11 +42,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-<<<<<<< HEAD
-      "velocity": "223.2K stars",
-=======
       "velocity": "223K stars",
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "signal": "34.2K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
@@ -104,11 +64,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-<<<<<<< HEAD
-      "velocity": "180.4K stars",
-=======
       "velocity": "180.2K stars",
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "signal": "22.2K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
@@ -130,11 +86,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-<<<<<<< HEAD
-      "velocity": "156.5K stars",
-=======
       "velocity": "156.2K stars",
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "signal": "18.4K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
@@ -162,9 +114,6 @@
       "summary": "Open source MCP Servers for AWS"
     },
     {
-<<<<<<< HEAD
-      "rank": 8,
-=======
       "rank": 9,
       "title": "code-yeongyu/oh-my-openagent",
       "source": "GitHub",
@@ -188,16 +137,11 @@
     },
     {
       "rank": 11,
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "title": "farion1231/cc-switch",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-<<<<<<< HEAD
-      "velocity": "110.4K stars",
-=======
       "velocity": "109.9K stars",
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "signal": "7.3K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
@@ -314,31 +258,6 @@
     },
     {
       "rank": 19,
-<<<<<<< HEAD
-      "title": "I used Claude Code to get a second opinion on my MRI",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 79,
-      "velocity": "564 comments",
-      "signal": "427 points",
-      "url": "https://antoine.fi/mri-analysis-using-claude-code-opus",
-      "summary": "HN story by engmarketer with 564 comments."
-    },
-    {
-      "rank": 20,
-      "title": "Professor denounces mass AI fraud on an exam at Brown",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 77,
-      "velocity": "538 comments",
-      "signal": "403 points",
-      "url": "https://english.elpais.com/education/2026-06-28/ai-fraud-at-brown-university-academic-integrity-is-at-risk.html",
-      "summary": "HN story by geox with 538 comments."
-    },
-    {
-      "rank": 21,
-=======
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",
@@ -349,11 +268,7 @@
       "summary": "2.5M downloads over the last available week."
     },
     {
-<<<<<<< HEAD
-      "rank": 22,
-=======
       "rank": 20,
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "title": "langfuse",
       "source": "npm",
       "category": "AI evals",
@@ -364,28 +279,6 @@
       "summary": "1.5M downloads over the last available week."
     },
     {
-<<<<<<< HEAD
-      "rank": 23,
-      "title": "GLM 5.2 beats Claude in our benchmarks",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 65,
-      "velocity": "389 comments",
-      "signal": "833 points",
-      "url": "https://semgrep.dev/blog/2026/we-have-mythos-at-home-glm-52-beats-claude-in-our-cyber-benchmarks/",
-      "summary": "HN story by jms703 with 389 comments."
-    },
-    {
-      "rank": 24,
-      "title": "EU to legislate about Chat Control behind closed doors",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 54,
-      "velocity": "375 comments",
-      "signal": "659 points",
-      "url": "https://www.patrick-breyer.de/en/double-threat-to-private-communications-undemocratic-chat-control-backroom-deals-and-imminent-concessions-spark-relaunch-of-fightchatcontrol-eu/",
-      "summary": "HN story by NeutralForest with 375 comments."
-=======
       "rank": 21,
       "title": "I used Claude Code to get a second opinion on my MRI",
       "source": "Hacker News",
@@ -428,7 +321,6 @@
       "signal": "81 points",
       "url": "https://english.elpais.com/education/2026-06-28/ai-fraud-at-brown-university-academic-integrity-is-at-risk.html",
       "summary": "HN story by geox with 82 comments."
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
     }
   ]
 }

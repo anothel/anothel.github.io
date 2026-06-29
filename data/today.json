@@ -1,20 +1,11 @@
 {
-<<<<<<< HEAD
-  "updated": "2026-06-29",
-  "generatedAt": "2026-06-29T09:34:56.844Z",
-=======
   "updated": "2026-06-28",
   "generatedAt": "2026-06-28T22:13:58.990Z",
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
   "sourceMeta": {
     "name": "generated",
     "status": "partial",
     "count": 13,
-<<<<<<< HEAD
-    "updatedAt": "2026-06-29T09:34:56.844Z"
-=======
     "updatedAt": "2026-06-28T22:13:58.990Z"
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
   },
   "sections": [
     {
@@ -35,13 +26,8 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
             "Agent skills reference for reusable tool instructions.",
-<<<<<<< HEAD
-            "156.5K stars from GitHub",
-            "156.5K stars / 18.4K forks"
-=======
             "156.2K stars from GitHub",
             "156.2K stars / 18.4K forks"
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
           ],
           "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/anthropics/skills",
@@ -243,13 +229,8 @@
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
             "Coding-agent ecosystem signal with practical workflow value.",
-<<<<<<< HEAD
-            "223.2K stars from GitHub",
-            "223.2K stars / 34.2K forks"
-=======
             "223K stars from GitHub",
             "223K stars / 34.2K forks"
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/affaan-m/ECC",
@@ -261,9 +242,6 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/affaan-m/ecc",
-<<<<<<< HEAD
-          "updated": "2026-06-29"
-=======
           "updated": "2026-06-28"
         },
         {
@@ -349,7 +327,6 @@
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/anomalyco/opencode",
           "updated": "2026-06-28"
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
         },
         {
           "schemaVersion": 2,
@@ -369,11 +346,7 @@
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/n8n-io/n8n",
-<<<<<<< HEAD
-          "rawScore": 194445,
-=======
           "rawScore": 194387,
->>>>>>> 124381d15cd163c2094a956ed9c137498cace928
           "qualityScore": 100,
           "score": 85,
           "sources": [
