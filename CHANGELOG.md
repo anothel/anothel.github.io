@@ -30,6 +30,8 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Browser-smoked Explore save to Review, Review status and metadata updates, exports, and cleanup on the local static server.
 - Added a Paste JSON Review import path so local saved queues can be restored without automating a file chooser.
 - Removed the completed Saved Review Workflow bundle from the active Roadmap and queued native file chooser smoke as a later trigger.
+- Ran 2026-06-29 unauthenticated publish-health refresh; generated data stayed publishable with GitHub trend 403 partial and npm `n8n-workflow` 429 partial visible.
+- Updated Roadmap P0 current state to queue a token-backed rerun for full GitHub trend confirmation.
 
 ## 2026-06-28
 

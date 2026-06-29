@@ -310,6 +310,13 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - The refresh report totals stayed at 108 generated items across 4 modules, and errors dropped to 0.
 - Static fallbacks regenerated from the same checked-in data, so Home, Today, Explore, Status, module, and topic pages share the same source-health truth.
 
+## 2026-06-29 Publish Health Refresh
+
+- Network-approved refresh ran while `GITHUB_TOKEN` was not set, so GitHub trend source became `partial` with 403 rate limits across four trend queries.
+- npm `n8n-workflow` stayed `partial` with 429, while package rows stayed preserved from 2026-06-28.
+- 108 generated items stayed publishable across trends, packages, repos, and links, with repos and links still `ok`.
+- Roadmap P0 now records this current partial cause and queues a token-backed rerun for full GitHub trend confirmation.
+
 ## Signal Policy
 
 - Scoring policy ownership stays in `data/signal-policy.json`.
