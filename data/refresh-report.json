@@ -1,11 +1,16 @@
 {
+<<<<<<< HEAD
   "generatedAt": "2026-06-29T09:34:57.159Z",
   "manifestUpdated": "2026-06-29",
+=======
+  "generatedAt": "2026-06-28T22:13:59.087Z",
+  "manifestUpdated": "2026-06-28",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
   "runContext": {
     "reason": "",
-    "eventName": "",
-    "runId": "",
-    "refName": ""
+    "eventName": "schedule",
+    "runId": "28337755400",
+    "refName": "main"
   },
   "changedModules": [
     {
@@ -47,7 +52,11 @@
           "source": "Hacker News",
           "status": "ok",
           "count": 4,
+<<<<<<< HEAD
           "updatedAt": "2026-06-29T09:34:49.240Z",
+=======
+          "updatedAt": "2026-06-28T22:13:55.256Z",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
           "coverage": "4/1",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -62,7 +71,11 @@
           "source": "GitHub",
           "status": "partial",
           "count": 12,
+<<<<<<< HEAD
           "updatedAt": "2026-06-29T09:34:49.240Z",
+=======
+          "updatedAt": "2026-06-28T22:13:55.256Z",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
           "coverage": "12/14",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -84,7 +97,11 @@
           "source": "npm",
           "status": "ok",
           "count": 8,
+<<<<<<< HEAD
           "updatedAt": "2026-06-29T09:34:49.240Z",
+=======
+          "updatedAt": "2026-06-28T22:13:55.256Z",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
           "coverage": "8/16",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -109,7 +126,11 @@
           "source": "npm",
           "status": "partial",
           "count": 25,
+<<<<<<< HEAD
           "updatedAt": "2026-06-29T09:34:50.951Z",
+=======
+          "updatedAt": "2026-06-28T22:13:55.292Z",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
           "coverage": "25/25",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -139,7 +160,11 @@
           "source": "GitHub",
           "status": "ok",
           "count": 30,
+<<<<<<< HEAD
           "updatedAt": "2026-06-29T09:34:56.051Z",
+=======
+          "updatedAt": "2026-06-28T22:13:58.454Z",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
           "coverage": "30/30",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -164,7 +189,11 @@
           "source": "manual",
           "status": "ok",
           "count": 29,
+<<<<<<< HEAD
           "updatedAt": "2026-06-29T09:34:56.696Z",
+=======
+          "updatedAt": "2026-06-28T22:13:58.942Z",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
           "coverage": "29/29",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -182,6 +211,10 @@
     "sources": 6,
     "items": 108,
     "status": "partial",
+<<<<<<< HEAD
     "errors": 2
+=======
+    "errors": 1
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
   }
 }

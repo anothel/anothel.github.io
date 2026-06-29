@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   "updated": "2026-06-29",
   "generatedAt": "2026-06-29T09:34:56.051Z",
+=======
+  "updated": "2026-06-28",
+  "generatedAt": "2026-06-28T22:13:58.454Z",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
   "sourceMeta": {
     "name": "GitHub",
     "status": "ok",
@@ -8,7 +13,11 @@
     "tracked": 30,
     "emitted": 30,
     "coverage": "30/30",
+<<<<<<< HEAD
     "updatedAt": "2026-06-29T09:34:56.051Z"
+=======
+    "updatedAt": "2026-06-28T22:13:58.454Z"
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
   },
   "repos": [
     {
@@ -16,7 +25,11 @@
       "name": "n8n-io/n8n",
       "category": "Workflow automation",
       "focus": "workflow automation",
+<<<<<<< HEAD
       "stars": 194445,
+=======
+      "stars": 194387,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "194.4K",
       "forksLabel": "58.9K",
       "pushedAt": "2026-06-29",
@@ -50,10 +63,17 @@
       "name": "anomalyco/opencode",
       "category": "AI agents",
       "focus": "open source coding agent",
+<<<<<<< HEAD
       "stars": 180387,
       "starsLabel": "180.4K",
       "forksLabel": "22.2K",
       "pushedAt": "2026-06-29",
+=======
+      "stars": 180201,
+      "starsLabel": "180.2K",
+      "forksLabel": "22.2K",
+      "pushedAt": "2026-06-28",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent.",
       "topics": []
@@ -63,8 +83,13 @@
       "name": "anthropics/skills",
       "category": "Agent skills",
       "focus": "official Agent Skills examples",
+<<<<<<< HEAD
       "stars": 156456,
       "starsLabel": "156.5K",
+=======
+      "stars": 156221,
+      "starsLabel": "156.2K",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "forksLabel": "18.4K",
       "pushedAt": "2026-06-27",
       "url": "https://github.com/anthropics/skills",
@@ -78,9 +103,15 @@
       "name": "mattpocock/skills",
       "category": "Agent skills",
       "focus": "engineering workflow skills",
+<<<<<<< HEAD
       "stars": 149984,
       "starsLabel": "150K",
       "forksLabel": "13K",
+=======
+      "stars": 149234,
+      "starsLabel": "149.2K",
+      "forksLabel": "12.9K",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "pushedAt": "2026-06-25",
       "url": "https://github.com/mattpocock/skills",
       "summary": "Skills for Real Engineers. Straight from my .claude directory.",
@@ -91,7 +122,11 @@
       "name": "google-gemini/gemini-cli",
       "category": "AI agents",
       "focus": "Gemini terminal coding agent",
+<<<<<<< HEAD
       "stars": 105644,
+=======
+      "stars": 105635,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "105.6K",
       "forksLabel": "14.2K",
       "pushedAt": "2026-06-29",
@@ -112,8 +147,13 @@
       "name": "openai/codex",
       "category": "AI agents",
       "focus": "terminal coding agent",
+<<<<<<< HEAD
       "stars": 94346,
       "starsLabel": "94.3K",
+=======
+      "stars": 94206,
+      "starsLabel": "94.2K",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "forksLabel": "14K",
       "pushedAt": "2026-06-29",
       "url": "https://github.com/openai/codex",
@@ -125,8 +165,13 @@
       "name": "punkpeye/awesome-mcp-servers",
       "category": "MCP",
       "focus": "curated MCP server directory",
+<<<<<<< HEAD
       "stars": 89953,
       "starsLabel": "90K",
+=======
+      "stars": 89919,
+      "starsLabel": "89.9K",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "forksLabel": "12.2K",
       "pushedAt": "2026-06-26",
       "url": "https://github.com/punkpeye/awesome-mcp-servers",
@@ -141,7 +186,11 @@
       "name": "modelcontextprotocol/servers",
       "category": "MCP",
       "focus": "MCP reference servers",
+<<<<<<< HEAD
       "stars": 87823,
+=======
+      "stars": 87794,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "87.8K",
       "forksLabel": "11.1K",
       "pushedAt": "2026-06-29",
@@ -154,7 +203,11 @@
       "name": "karpathy/nanoGPT",
       "category": "AI engineering",
       "focus": "small GPT training",
+<<<<<<< HEAD
       "stars": 60297,
+=======
+      "stars": 60265,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "60.3K",
       "forksLabel": "10.4K",
       "pushedAt": "2025-11-12",
@@ -167,7 +220,11 @@
       "name": "karpathy/nanochat",
       "category": "AI engineering",
       "focus": "minimal ChatGPT stack",
+<<<<<<< HEAD
       "stars": 55579,
+=======
+      "stars": 55559,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "55.6K",
       "forksLabel": "7.6K",
       "pushedAt": "2026-05-05",
@@ -180,7 +237,11 @@
       "name": "aaif-goose/goose",
       "category": "AI agents",
       "focus": "local extensible AI agent",
+<<<<<<< HEAD
       "stars": 50387,
+=======
+      "stars": 50354,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "50.4K",
       "forksLabel": "5.4K",
       "pushedAt": "2026-06-29",
@@ -198,7 +259,11 @@
       "name": "Aider-AI/aider",
       "category": "AI agents",
       "focus": "terminal AI pair programming",
+<<<<<<< HEAD
       "stars": 46822,
+=======
+      "stars": 46794,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "46.8K",
       "forksLabel": "4.7K",
       "pushedAt": "2026-05-22",
@@ -225,10 +290,17 @@
       "name": "github/awesome-copilot",
       "category": "AI agents",
       "focus": "Copilot agents and skills",
+<<<<<<< HEAD
       "stars": 35890,
       "starsLabel": "35.9K",
       "forksLabel": "4.4K",
       "pushedAt": "2026-06-29",
+=======
+      "stars": 35859,
+      "starsLabel": "35.9K",
+      "forksLabel": "4.4K",
+      "pushedAt": "2026-06-28",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "url": "https://github.com/github/awesome-copilot",
       "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot.",
       "topics": [
@@ -247,7 +319,11 @@
       "name": "karpathy/llm.c",
       "category": "AI engineering",
       "focus": "LLM training in C/CUDA",
+<<<<<<< HEAD
       "stars": 30382,
+=======
+      "stars": 30378,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "30.4K",
       "forksLabel": "3.7K",
       "pushedAt": "2025-06-26",
@@ -260,7 +336,11 @@
       "name": "langfuse/langfuse",
       "category": "AI evals",
       "focus": "LLM observability and evals",
+<<<<<<< HEAD
       "stars": 30020,
+=======
+      "stars": 29960,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "30K",
       "forksLabel": "3.1K",
       "pushedAt": "2026-06-29",
@@ -293,7 +373,11 @@
       "name": "openai/openai-agents-python",
       "category": "AI agents",
       "focus": "Python multi-agent framework",
+<<<<<<< HEAD
       "stars": 27500,
+=======
+      "stars": 27488,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "27.5K",
       "forksLabel": "4.2K",
       "pushedAt": "2026-06-29",
@@ -314,10 +398,17 @@
       "name": "modelcontextprotocol/python-sdk",
       "category": "MCP",
       "focus": "MCP Python SDK",
+<<<<<<< HEAD
       "stars": 23477,
       "starsLabel": "23.5K",
       "forksLabel": "3.6K",
       "pushedAt": "2026-06-29",
+=======
+      "stars": 23474,
+      "starsLabel": "23.5K",
+      "forksLabel": "3.6K",
+      "pushedAt": "2026-06-28",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "url": "https://github.com/modelcontextprotocol/python-sdk",
       "summary": "The official Python SDK for Model Context Protocol servers and clients",
       "topics": []
@@ -327,10 +418,17 @@
       "name": "promptfoo/promptfoo",
       "category": "AI evals",
       "focus": "LLM evals and prompt testing",
+<<<<<<< HEAD
       "stars": 22713,
       "starsLabel": "22.7K",
       "forksLabel": "2K",
       "pushedAt": "2026-06-29",
+=======
+      "stars": 22689,
+      "starsLabel": "22.7K",
+      "forksLabel": "2K",
+      "pushedAt": "2026-06-28",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "url": "https://github.com/promptfoo/promptfoo",
       "summary": "Test your prompts, agents, and RAGs. Red teaming/pentesting/vulnerability scanning for AI. Compare performance of GPT, Claude, Gemini, DeepSeek, and more. Simple declarative configs with command line and CI/CD integration.  Used by OpenAI and Anthropic.",
       "topics": [
@@ -372,7 +470,11 @@
       "name": "confident-ai/deepeval",
       "category": "AI evals",
       "focus": "LLM evaluation framework",
+<<<<<<< HEAD
       "stars": 16525,
+=======
+      "stars": 16511,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "16.5K",
       "forksLabel": "1.6K",
       "pushedAt": "2026-06-26",
@@ -392,10 +494,17 @@
       "name": "triggerdotdev/trigger.dev",
       "category": "Workflow automation",
       "focus": "durable workflow platform",
+<<<<<<< HEAD
       "stars": 15498,
       "starsLabel": "15.5K",
       "forksLabel": "1.3K",
       "pushedAt": "2026-06-29",
+=======
+      "stars": 15496,
+      "starsLabel": "15.5K",
+      "forksLabel": "1.3K",
+      "pushedAt": "2026-06-28",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "url": "https://github.com/triggerdotdev/trigger.dev",
       "summary": "Trigger.dev – build and deploy fully‑managed AI agents and workflows",
       "topics": [
@@ -419,8 +528,13 @@
       "name": "modelcontextprotocol/typescript-sdk",
       "category": "MCP",
       "focus": "MCP TypeScript SDK",
+<<<<<<< HEAD
       "stars": 12752,
       "starsLabel": "12.8K",
+=======
+      "stars": 12749,
+      "starsLabel": "12.7K",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "forksLabel": "1.9K",
       "pushedAt": "2026-06-29",
       "url": "https://github.com/modelcontextprotocol/typescript-sdk",
@@ -500,7 +614,11 @@
       "name": "modelcontextprotocol/inspector",
       "category": "MCP",
       "focus": "MCP debugging and inspection",
+<<<<<<< HEAD
       "stars": 10216,
+=======
+      "stars": 10212,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "10.2K",
       "forksLabel": "1.4K",
       "pushedAt": "2026-06-28",
@@ -513,7 +631,11 @@
       "name": "lastmile-ai/mcp-agent",
       "category": "MCP",
       "focus": "MCP agent workflow framework",
+<<<<<<< HEAD
       "stars": 8394,
+=======
+      "stars": 8392,
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "starsLabel": "8.4K",
       "forksLabel": "855",
       "pushedAt": "2026-01-25",
@@ -537,7 +659,11 @@
       "focus": "MCP server registry",
       "stars": 6967,
       "starsLabel": "7K",
+<<<<<<< HEAD
       "forksLabel": "886",
+=======
+      "forksLabel": "883",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
       "pushedAt": "2026-06-26",
       "url": "https://github.com/modelcontextprotocol/registry",
       "summary": "A community driven registry service for Model Context Protocol (MCP) servers.",

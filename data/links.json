@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   "updated": "2026-06-29",
   "generatedAt": "2026-06-29T09:34:56.696Z",
+=======
+  "updated": "2026-06-28",
+  "generatedAt": "2026-06-28T22:13:58.942Z",
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
   "sourceMeta": {
     "name": "manual",
     "status": "ok",
@@ -8,7 +13,11 @@
     "tracked": 29,
     "emitted": 29,
     "coverage": "29/29",
+<<<<<<< HEAD
     "updatedAt": "2026-06-29T09:34:56.696Z"
+=======
+    "updatedAt": "2026-06-28T22:13:58.942Z"
+>>>>>>> 124381d15cd163c2094a956ed9c137498cace928
   },
   "links": [
     {
