@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-29",
-  "generatedAt": "2026-06-29T09:47:12.587Z",
+  "generatedAt": "2026-06-29T22:19:40.339Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-06-29T09:47:12.587Z"
+      "updatedAt": "2026-06-29T22:19:40.339Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-29T09:47:12.587Z"
+      "updatedAt": "2026-06-29T22:19:40.339Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-06-29T09:47:12.587Z"
+      "updatedAt": "2026-06-29T22:19:40.339Z"
     }
   ],
   "items": [
@@ -53,7 +53,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "223.2K stars",
+      "velocity": "223.5K stars",
       "signal": "34.2K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
@@ -75,7 +75,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "180.4K stars",
+      "velocity": "180.6K stars",
       "signal": "22.2K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
@@ -86,7 +86,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "134.9K stars",
+      "velocity": "135K stars",
       "signal": "21.8K forks",
       "url": "https://github.com/anthropics/claude-code",
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
@@ -97,7 +97,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "156.5K stars",
+      "velocity": "156.6K stars",
       "signal": "18.4K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
@@ -109,7 +109,7 @@
       "category": "AI evals",
       "score": 100,
       "velocity": "10.3K stars",
-      "signal": "947 forks",
+      "signal": "946 forks",
       "url": "https://github.com/Arize-ai/phoenix",
       "summary": "AI Observability & Evaluation"
     },
@@ -130,7 +130,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "64.1K stars",
+      "velocity": "64.2K stars",
       "signal": "5.2K forks",
       "url": "https://github.com/code-yeongyu/oh-my-openagent",
       "summary": "omo/lazycodex: The coding agent for tokenmaxxers;the one and only agent harness for complex codebases. For your Codex, for your OpenCode"
@@ -141,7 +141,7 @@
       "source": "GitHub",
       "category": "Workflow automation",
       "score": 100,
-      "velocity": "23.5K stars",
+      "velocity": "23.6K stars",
       "signal": "6.2K forks",
       "url": "https://github.com/enescingoz/awesome-n8n-templates",
       "summary": "280+ free n8n automation templates ready-to-use workflows for Gmail, Telegram, Slack, Discord, WhatsApp, Google Drive, Notion, OpenAI, and more. AI agents, RAG chatbots, email automation, social media, DevOps, and document processing. The largest open-source n8n template collection."
@@ -152,7 +152,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "110.4K stars",
+      "velocity": "110.6K stars",
       "signal": "7.3K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
@@ -225,6 +225,17 @@
     },
     {
       "rank": 18,
+      "title": "GLM 5.2 beats Claude in our benchmarks",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 83,
+      "velocity": "495 comments",
+      "signal": "1056 points",
+      "url": "https://semgrep.dev/blog/2026/we-have-mythos-at-home-glm-52-beats-claude-in-our-cyber-benchmarks/",
+      "summary": "HN story by jms703 with 495 comments."
+    },
+    {
+      "rank": 19,
       "title": "@ai-sdk/openai",
       "source": "npm",
       "category": "AI",
@@ -235,26 +246,15 @@
       "summary": "7.9M downloads over the last available week."
     },
     {
-      "rank": 19,
-      "title": "I used Claude Code to get a second opinion on my MRI",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 80,
-      "velocity": "569 comments",
-      "signal": "431 points",
-      "url": "https://antoine.fi/mri-analysis-using-claude-code-opus",
-      "summary": "HN story by engmarketer with 569 comments."
-    },
-    {
       "rank": 20,
-      "title": "Professor denounces mass AI fraud on an exam at Brown",
+      "title": "Age verification is just a precursor to automated attribution of speech",
       "source": "Hacker News",
-      "category": "AI",
+      "category": "Developer tools",
       "score": 77,
-      "velocity": "538 comments",
-      "signal": "405 points",
-      "url": "https://english.elpais.com/education/2026-06-28/ai-fraud-at-brown-university-academic-integrity-is-at-risk.html",
-      "summary": "HN story by geox with 538 comments."
+      "velocity": "579 comments",
+      "signal": "931 points",
+      "url": "https://nonogra.ph/age-verification-is-just-a-precursor-to-attribution-of-speech-06-29-2026",
+      "summary": "HN story by arkhiver with 579 comments."
     },
     {
       "rank": 21,
@@ -280,25 +280,25 @@
     },
     {
       "rank": 23,
-      "title": "GLM 5.2 beats Claude in our benchmarks",
+      "title": "HackerRank open sourced its ATS. My resume scored 90/100. Oh wait 74. No 88",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 66,
-      "velocity": "392 comments",
-      "signal": "840 points",
-      "url": "https://semgrep.dev/blog/2026/we-have-mythos-at-home-glm-52-beats-claude-in-our-cyber-benchmarks/",
-      "summary": "HN story by jms703 with 392 comments."
+      "category": "Developer tools",
+      "score": 72,
+      "velocity": "400 comments",
+      "signal": "938 points",
+      "url": "https://danunparsed.com/p/hackerrank-open-source-ats",
+      "summary": "HN story by sambellll with 400 comments."
     },
     {
       "rank": 24,
-      "title": "EU to legislate about Chat Control behind closed doors",
+      "title": "The CEO of Mullvad is the main financer of the Swedish rebro party",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 54,
-      "velocity": "376 comments",
-      "signal": "661 points",
-      "url": "https://www.patrick-breyer.de/en/double-threat-to-private-communications-undemocratic-chat-control-backroom-deals-and-imminent-concessions-spark-relaunch-of-fightchatcontrol-eu/",
-      "summary": "HN story by NeutralForest with 376 comments."
+      "score": 68,
+      "velocity": "1111 comments",
+      "signal": "493 points",
+      "url": "https://det.social/@lostgen/116820546568940358",
+      "summary": "HN story by Risse with 1111 comments."
     }
   ]
 }
