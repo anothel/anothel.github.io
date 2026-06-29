@@ -37,6 +37,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Capped broad baseline repo scoring in shared signal normalization and updated the golden signal-quality fixture so workflow signals displace generic high-star repos in Explore priority.
 - Kept Explore saved-search apply feedback visible after a saved search restores focus, query, and sort.
 - Documented the referrer policy decision: keep external data links on `rel="noopener noreferrer"` and defer a site-wide meta referrer tag until outbound links cannot use `noreferrer`.
+- Documented GitHub Actions pinning and Dependabot decisions for the current dependency-free workflow posture.
 
 ## 2026-06-28
 

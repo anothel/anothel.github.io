@@ -333,7 +333,10 @@ test("security and threat docs preserve the static-site trust model", () => {
     assert.match(threatModel, /Remote sources: Hacker News, GitHub, npm/s);
     assert.match(threatModel, /Shared safe DOM helpers escape HTML and restrict hrefs/s);
     assert.match(threatModel, /Referrer policy decision: external item links rely on `rel="noopener noreferrer"`/s);
+    assert.match(threatModel, /GitHub Actions pinning decision: major-version actions remain accepted/s);
+    assert.match(threatModel, /Dependabot decision: no dependency update automation is enabled while the repo has no package dependencies or lockfile/s);
     assert.match(releaseChecklist, /Referrer policy still matches the external-link `noreferrer` decision/s);
+    assert.match(releaseChecklist, /GitHub Actions pinning and Dependabot decisions still match the current dependency-free workflow posture/s);
 });
 
 test("data contract docs describe schema and source governance", () => {

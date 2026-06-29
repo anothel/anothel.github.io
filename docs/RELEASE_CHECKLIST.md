@@ -39,6 +39,7 @@ Check when rendering or source handling changed:
 - Generated text is escaped.
 - External links keep safe attributes where rendered.
 - Referrer policy still matches the external-link `noreferrer` decision.
+- GitHub Actions pinning and Dependabot decisions still match the current dependency-free workflow posture.
 - localStorage import/export treats payload as untrusted.
 
 ## Docs Review

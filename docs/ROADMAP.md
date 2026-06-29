@@ -139,7 +139,9 @@ Scope:
 - Audit renderer `innerHTML` usage when rendering generated or saved data changes.
 - Expand malicious URL/text fixture tests when renderer security changes.
 - Keep external link policy in `js/safe-dom.js`, `docs/THREAT_MODEL.md`, and renderer tests aligned.
-- Keep the referrer policy decision aligned with external-link `noreferrer`; decide GitHub Actions SHA pinning and Dependabot policy before raising the workflow hardening bar.
+- Keep the referrer policy decision aligned with external-link `noreferrer`.
+- Keep GitHub Actions SHA pinning and Dependabot deferred while workflows use only GitHub-owned actions, local scripts, no package dependencies, and no lockfile.
+- Revisit SHA pinning or Dependabot when third-party actions, broader workflow permissions, package dependencies, or a lockfile appear.
 - Keep release checks tied to `npm.cmd run check`, generated-data review, and dated changelog entries.
 
 Absorbs analysis items:
@@ -149,8 +151,8 @@ Absorbs analysis items:
 - URL sanitization fixture expansion.
 - External link policy.
 - Referrer policy.
-- Actions pinning.
-- Dependabot or GitHub Actions update policy.
+- Actions pinning policy.
+- Dependabot and GitHub Actions update policy.
 - Release checklist and support scope maintenance.
 
 Verification:
