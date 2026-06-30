@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-29",
-  "generatedAt": "2026-06-29T22:19:40.339Z",
+  "updated": "2026-06-30",
+  "generatedAt": "2026-06-30T22:38:12.537Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-06-29T22:19:40.339Z"
+      "updatedAt": "2026-06-30T22:38:12.537Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-06-29T22:19:40.339Z"
+      "updatedAt": "2026-06-30T22:38:12.537Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-06-29T22:19:40.339Z"
+      "updatedAt": "2026-06-30T22:38:12.537Z"
     }
   ],
   "items": [
@@ -42,7 +42,7 @@
       "source": "GitHub",
       "category": "Workflow automation",
       "score": 100,
-      "velocity": "23K stars",
+      "velocity": "23.1K stars",
       "signal": "3.9K forks",
       "url": "https://github.com/activepieces/activepieces",
       "summary": "AI Agents & MCPs & AI Workflow Automation (~400 MCP servers for AI agents) AI Automation / AI Agent with MCPs AI Workflows & AI Agents MCPs for AI Agents"
@@ -53,8 +53,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "223.5K stars",
-      "signal": "34.2K forks",
+      "velocity": "224K stars",
+      "signal": "34.3K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
@@ -65,7 +65,7 @@
       "category": "AI evals",
       "score": 100,
       "velocity": "5.7K stars",
-      "signal": "603 forks",
+      "signal": "602 forks",
       "url": "https://github.com/AgentOps-AI/agentops",
       "summary": "Python SDK for AI agent monitoring, LLM cost tracking, benchmarking, and more. Integrates with most LLMs and agent frameworks including CrewAI, Agno, OpenAI Agents SDK, Langchain, Autogen, AG2, and CamelAI"
     },
@@ -75,8 +75,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "180.6K stars",
-      "signal": "22.2K forks",
+      "velocity": "180.9K stars",
+      "signal": "22.3K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
     },
@@ -86,7 +86,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "135K stars",
+      "velocity": "135.1K stars",
       "signal": "21.8K forks",
       "url": "https://github.com/anthropics/claude-code",
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
@@ -97,8 +97,8 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "156.6K stars",
-      "signal": "18.4K forks",
+      "velocity": "157K stars",
+      "signal": "18.5K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
     },
@@ -109,7 +109,7 @@
       "category": "AI evals",
       "score": 100,
       "velocity": "10.3K stars",
-      "signal": "946 forks",
+      "signal": "948 forks",
       "url": "https://github.com/Arize-ai/phoenix",
       "summary": "AI Observability & Evaluation"
     },
@@ -130,8 +130,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "64.2K stars",
-      "signal": "5.2K forks",
+      "velocity": "64.4K stars",
+      "signal": "5.3K forks",
       "url": "https://github.com/code-yeongyu/oh-my-openagent",
       "summary": "omo/lazycodex: The coding agent for tokenmaxxers;the one and only agent harness for complex codebases. For your Codex, for your OpenCode"
     },
@@ -152,8 +152,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "110.6K stars",
-      "signal": "7.3K forks",
+      "velocity": "111.3K stars",
+      "signal": "7.4K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
     },
@@ -163,13 +163,24 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "35.9K stars",
+      "velocity": "36K stars",
       "signal": "4.4K forks",
       "url": "https://github.com/github/awesome-copilot",
       "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot."
     },
     {
       "rank": 13,
+      "title": "Claude Code is steganographically marking requests",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 100,
+      "velocity": "323 comments",
+      "signal": "1222 points",
+      "url": "https://thereallo.dev/blog/claude-code-prompt-steganography",
+      "summary": "HN story by kirushik with 323 comments."
+    },
+    {
+      "rank": 14,
       "title": "@modelcontextprotocol/sdk",
       "source": "npm",
       "category": "MCP",
@@ -180,7 +191,7 @@
       "summary": "40.9M downloads over the last available week."
     },
     {
-      "rank": 14,
+      "rank": 15,
       "title": "@ai-sdk/provider",
       "source": "npm",
       "category": "AI",
@@ -191,7 +202,7 @@
       "summary": "24M downloads over the last available week."
     },
     {
-      "rank": 15,
+      "rank": 16,
       "title": "@anthropic-ai/sdk",
       "source": "npm",
       "category": "AI",
@@ -202,7 +213,7 @@
       "summary": "22.7M downloads over the last available week."
     },
     {
-      "rank": 16,
+      "rank": 17,
       "title": "openai",
       "source": "npm",
       "category": "AI",
@@ -213,7 +224,7 @@
       "summary": "21.6M downloads over the last available week."
     },
     {
-      "rank": 17,
+      "rank": 18,
       "title": "ai",
       "source": "npm",
       "category": "AI",
@@ -222,17 +233,6 @@
       "signal": "2026-06-22 to 2026-06-28",
       "url": "https://www.npmjs.com/package/ai",
       "summary": "15.8M downloads over the last available week."
-    },
-    {
-      "rank": 18,
-      "title": "GLM 5.2 beats Claude in our benchmarks",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 83,
-      "velocity": "495 comments",
-      "signal": "1056 points",
-      "url": "https://semgrep.dev/blog/2026/we-have-mythos-at-home-glm-52-beats-claude-in-our-cyber-benchmarks/",
-      "summary": "HN story by jms703 with 495 comments."
     },
     {
       "rank": 19,
@@ -247,14 +247,14 @@
     },
     {
       "rank": 20,
-      "title": "Age verification is just a precursor to automated attribution of speech",
+      "title": "Open Source Low Tech",
       "source": "Hacker News",
       "category": "Developer tools",
       "score": 77,
-      "velocity": "579 comments",
-      "signal": "931 points",
-      "url": "https://nonogra.ph/age-verification-is-just-a-precursor-to-attribution-of-speech-06-29-2026",
-      "summary": "HN story by arkhiver with 579 comments."
+      "velocity": "127 comments",
+      "signal": "618 points",
+      "url": "https://opensourcelowtech.org/",
+      "summary": "HN story by grep_it with 127 comments."
     },
     {
       "rank": 21,
@@ -280,25 +280,25 @@
     },
     {
       "rank": 23,
-      "title": "HackerRank open sourced its ATS. My resume scored 90/100. Oh wait 74. No 88",
+      "title": "Claude Sonnet 5",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 72,
-      "velocity": "400 comments",
-      "signal": "938 points",
-      "url": "https://danunparsed.com/p/hackerrank-open-source-ats",
-      "summary": "HN story by sambellll with 400 comments."
+      "category": "AI",
+      "score": 61,
+      "velocity": "420 comments",
+      "signal": "758 points",
+      "url": "https://www.anthropic.com/news/claude-sonnet-5",
+      "summary": "HN story by marinesebastian with 420 comments."
     },
     {
       "rank": 24,
-      "title": "The CEO of Mullvad is the main financer of the Swedish rebro party",
+      "title": "I ported Kubernetes to the browser",
       "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 68,
-      "velocity": "1111 comments",
-      "signal": "493 points",
-      "url": "https://det.social/@lostgen/116820546568940358",
-      "summary": "HN story by Risse with 1111 comments."
+      "category": "Frontend",
+      "score": 41,
+      "velocity": "21 comments",
+      "signal": "96 points",
+      "url": "https://ngrok.com/blog/i-ported-kubernetes-to-the-browser",
+      "summary": "HN story by peterdemin with 21 comments."
     }
   ]
 }
