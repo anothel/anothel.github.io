@@ -4,6 +4,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 import { dataUpdateScripts } from "../scripts/update-all.mjs";
+import { replaceMarkedBlock } from "../scripts/update-static-fallbacks.mjs";
 import { checkTargets, listTestFiles } from "../scripts/validate-data.mjs";
 
 test("update-all owns the full data refresh order", () => {
@@ -80,6 +81,31 @@ test("static fallback renderer derives topic pages from taxonomy", () => {
     assert.match(script, /topicPageLabels/);
     assert.match(script, /function renderTopicPage/);
     assert.doesNotMatch(script, /const topicPages = \[/);
+});
+
+test("static fallback marked blocks replace only bounded generated content", () => {
+    const html = [
+        "<section>keep before</section>",
+        "<!-- static-fallback:demo:start -->",
+        "<article>old</article>",
+        "<!-- static-fallback:demo:end -->",
+        "<section>keep after</section>"
+    ].join("\n");
+
+    assert.equal(
+        replaceMarkedBlock(html, "demo", "<article>new</article>"),
+        [
+            "<section>keep before</section>",
+            "<!-- static-fallback:demo:start -->",
+            "<article>new</article>",
+            "<!-- static-fallback:demo:end -->",
+            "<section>keep after</section>"
+        ].join("\n")
+    );
+    assert.equal(
+        replaceMarkedBlock(`  <!-- static-fallback:demo:start -->\nold\n  <!-- static-fallback:demo:end -->`, "demo", "new"),
+        `  <!-- static-fallback:demo:start -->\nnew\n  <!-- static-fallback:demo:end -->`
+    );
 });
 
 test("static fallback trend card replacement accepts CRLF pages", () => {

@@ -247,6 +247,11 @@ Absorbs analysis items:
 - Large updater scripts should only be split where it reduces current edit risk.
 - New formatter, parser, framework, or build step needs a measured maintenance trigger.
 
+Current state:
+
+- Explore source-health and fallback-result replacement now use explicit `static-fallback` markers instead of page-adjacent section regex.
+- Remaining static fallback regex should move only when the touched block is already being changed.
+
 Verification:
 
 - Run `node scripts/validate-data.mjs`.

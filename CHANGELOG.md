@@ -46,6 +46,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Moved Architecture Gate out of the active Roadmap queue so framework PoC work only starts after a measured blocker exists.
 - Clarified that public repository reuse remains source-available with all rights reserved unless `LICENSE` says otherwise.
 - Aligned Roadmap P0 current state with the checked-in 2026-06-30 scheduled refresh report.
+- Added explicit static fallback markers for Explore source-health and result blocks to reduce generator regex fragility.
 
 ## 2026-06-28
 

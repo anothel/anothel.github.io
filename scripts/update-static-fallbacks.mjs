@@ -50,6 +50,19 @@ function replacePattern(html, pattern, replacement, label) {
     return html.replace(pattern, replacement);
 }
 
+function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export function replaceMarkedBlock(html, name, replacement) {
+    const start = `<!-- static-fallback:${name}:start -->`;
+    const end = `<!-- static-fallback:${name}:end -->`;
+    const pattern = new RegExp(`(^[ \\t]*${escapeRegExp(start)})[\\s\\S]*?(^[ \\t]*${escapeRegExp(end)})`, "m");
+    if (!pattern.test(html)) throw new Error(`Missing static fallback marker: ${name}`);
+    const body = trimLineEnds(replacement).replace(/^\s*\n/, "").replace(/\n\s*$/, "");
+    return html.replace(pattern, `$1\n${body}\n$2`);
+}
+
 function renderTrendCards(items = [], limit = 8) {
     return items.slice(0, limit).map((item) => `
         <a class="trend-card" ${safeLinkAttrs(item.url)}>
@@ -420,7 +433,7 @@ ${todayExploreLinks}
         ...normalizedExploreItems
     ].filter(Boolean).map((item) => [item.id, item])).values()].slice(0, 3);
     let exploreHtml = await readFile("explore/index.html", "utf8");
-    exploreHtml = replacePattern(exploreHtml, /<section class="health-panel" aria-labelledby="explore-health-title">[\s\S]*?<\/section>\s*\n\s*<section class="explore-workspace"/, `<section class="health-panel" aria-labelledby="explore-health-title">
+    exploreHtml = replaceMarkedBlock(exploreHtml, "explore-source-health", `            <section class="health-panel" aria-labelledby="explore-health-title">
                 <div class="panel-heading">
                     <h2 id="explore-health-title">Source health</h2>
                     <p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(exploreSources, { updated }))}</p>
@@ -428,11 +441,8 @@ ${todayExploreLinks}
                 <div class="source-health-grid" data-source-health>
 ${trimLineEnds(globalThis.DataHealth.renderSourceHealth(exploreSources, { today: generatedAt }))}
                 </div>
-            </section>
-
-            <section class="explore-workspace"`, "explore source health");
-    exploreHtml = replacePattern(exploreHtml, /(<div class="explore-results" data-explore-results>)[\s\S]*?(\r?\n[ \t]*<\/div>\r?\n[ \t]*<\/section>\r?\n[ \t]*<\/section>\r?\n[ \t]*<\/main>)/, `$1
-${indentBlock(exploreApp.renderExploreCards(exploreItems), 24)}$2`, "explore results");
+            </section>`);
+    exploreHtml = replaceMarkedBlock(exploreHtml, "explore-results", indentBlock(exploreApp.renderExploreCards(exploreItems), 24));
     await writeIfChanged("explore/index.html", exploreHtml);
 
     let statusHtml = await readFile("status/index.html", "utf8");
