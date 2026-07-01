@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
+const refreshReport = JSON.parse(readFileSync("data/refresh-report.json", "utf8"));
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
 const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
@@ -412,6 +413,22 @@ test("roadmap names concrete next work bundles in priority order", () => {
     const headings = [...roadmap.matchAll(/^### (P\d - .+)$/gm)].map((match) => match[1]);
 
     assert.deepEqual(headings, roadmapQueueHeadings);
+});
+
+test("roadmap P0 current state matches the checked-in refresh report", () => {
+    const start = roadmap.indexOf("### P0 - Publish Health Refresh");
+    const next = roadmap.indexOf("\n### ", start + 1);
+    const section = roadmap.slice(start, next);
+    const partialSource = refreshReport.modules
+        .flatMap((module) => module.sources || [])
+        .find((source) => source.status === "partial");
+
+    assert.match(section, new RegExp(refreshReport.manifestUpdated));
+    assert.match(section, new RegExp(refreshReport.runContext.eventName));
+    assert.match(section, new RegExp(String(refreshReport.totals.items)));
+    assert.match(section, new RegExp(refreshReport.totals.status));
+    assert.match(section, new RegExp(partialSource.source));
+    assert.match(section, /n8n-workflow/);
 });
 
 test("roadmap work bundles define trigger, scope, verification, and exit", () => {
