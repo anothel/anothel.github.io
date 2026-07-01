@@ -14,15 +14,28 @@ Use it to choose the next useful bundle, not to store completed history. Keep sh
 
 ## Current Baseline
 
-The 2026-06-28 repository analysis called for several trust, tooling, and documentation basics. These are already part of the current repo and should stay maintained, not re-added:
+The 2026-06-28 and 2026-06-30 repository analyses called for several trust, tooling, and documentation basics. These are already part of the current repo and should stay maintained, not re-added:
 
 - Public trust docs: README product purpose, `SECURITY.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `docs/THREAT_MODEL.md`, `docs/SIGNAL_SCHEMA.md`, source governance in `docs/SOURCE_GOVERNANCE.md`, and `docs/RELEASE_CHECKLIST.md`.
 - Tooling entry points: `package.json`, Node `>=20`, `serve`, `validate`, `test`, `check`, and `update:data` scripts.
 - Workflow split: PR CI is separate from scheduled/manual data refresh.
 - Data contract baseline: Signal Schema v2, source health vocabulary, score policy ownership, generated-file ownership, and schema migration behavior are documented and tested.
 - Existing safety tests: safe DOM helpers, external link `rel="noopener noreferrer"`, malicious URL/text escaping, localStorage migration, route/sitemap/404 behavior, partial/fallback/rate-limit handling, and checked-in schema drift.
+- Product identity baseline: this remains a static AI engineering / developer-workflow signal dashboard, not a security utility rewrite.
+- Public reuse baseline: this repository stays source-available with all rights reserved unless `LICENSE` says otherwise.
 
 Do not turn the baseline into new work unless it drifts from current behavior.
+
+## 2026-06-30 Analysis Intake
+
+The 2026-06-30 report is absorbed as follows:
+
+- Keep active: publish health refresh, signal quality, Explore repeat-use, security/release hardening, source trust copy, and formatting/generator maintainability.
+- Treat as baseline, not new work: README structure, security docs, contribution docs, changelog, threat model, release checklist, source governance, Signal Schema v2, safe-DOM tests, sitemap/route coverage, package scripts, and source-available reuse boundary.
+- Defer with triggers: separate `DATA_CONTRACT.md`, JSON Schema files, Playwright/E2E, visual regression, release tags, `CODE_OF_CONDUCT.md`, route/link checker, large source expansion, backend/account/sync, and framework/bundler work.
+- Do not pursue: security-utility product rewrite unless the owner explicitly asks for that pivot.
+
+If a future analysis repeats one of these items, update the matching bundle or Later Queue trigger instead of adding a duplicate task.
 
 ## Next Work Queue
 
@@ -214,6 +227,37 @@ Exit:
 - Every non-ok source state names whether data remains usable and what recovery action exists.
 - Any live-source uncertainty is either refreshed with approval or documented as known partial state.
 
+### P2 - Formatting and Generator Maintainability
+
+Trigger: review, security audit, or generator change is slowed by long lines, regex replacement fragility, or mixed rendering patterns.
+
+Scope:
+
+- Prefer formatting-only diffs before behavior changes.
+- Keep dependency-free formatting unless repeated drift proves a tool is worth owning.
+- Split only the smallest helper needed when an updater or renderer change is already underway.
+- Prefer explicit static fallback markers before adding broader HTML parsing or a framework.
+- Keep generated HTML, source data, manifest, refresh report, and static fallbacks aligned after any generator edit.
+
+Absorbs analysis items:
+
+- Long JS/MJS/YAML lines reduce review quality.
+- Regex-based static fallback replacement is fragile when page structure changes.
+- Large updater scripts should only be split where it reduces current edit risk.
+- New formatter, parser, framework, or build step needs a measured maintenance trigger.
+
+Verification:
+
+- Run `node scripts/validate-data.mjs`.
+- Run `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs tests/workflow.test.mjs`.
+- Run `npm.cmd run check`.
+- Run `git diff --check`.
+
+Exit:
+
+- The touched file is easier to review without unrelated behavior changes.
+- Any remaining long-line or regex fragility has a concrete pull-forward trigger.
+
 ## Trigger Gates
 
 ### Architecture Gate
@@ -269,6 +313,12 @@ These items are queued with lower priority. They stay below the active queue bec
 - Release tags and GitHub releases
   - Why later: dated changelog plus GitHub Pages publish is enough for the current site.
   - Pull forward when: users need installable/versioned artifacts or rollback points by version.
+- Separate `DATA_CONTRACT.md`
+  - Why later: `docs/SIGNAL_SCHEMA.md`, `docs/SOURCE_GOVERNANCE.md`, `scripts/validate-data.mjs`, and data contract tests already cover the current contract.
+  - Pull forward when: external contributors need one contract entry point or schema drift escapes existing docs/tests.
+- README structure contract test
+  - Why later: README now describes runtime areas with wildcards instead of pretending to enumerate every file.
+  - Pull forward when: README again drifts from actual source layout or starts naming exact inventories.
 - Provenance or SLSA
   - Why later: there is no release artifact chain beyond checked-in static files and GitHub Pages publish.
   - Pull forward when: release tags, generated artifacts, or external consumers need supply-chain attestation.

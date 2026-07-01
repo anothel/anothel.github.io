@@ -63,4 +63,5 @@ Publish when:
 - Known partial/fallback states are intentional and documented.
 - No unrelated generated drift is mixed into the change.
 - Roadmap contains only future work.
+- Public reuse boundary still matches `LICENSE`.
 - GitHub Pages publish can be explained from the checks and generated-data review above.

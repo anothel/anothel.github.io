@@ -126,6 +126,10 @@ Push checked-in HTML, CSS, JavaScript, JSON, and docs to the GitHub Pages branch
 
 Do not publish a refresh result if `data/manifest.json`, `data/refresh-report.json`, Today data, or static fallback pages are out of sync. Run `node scripts/validate-data.mjs` first.
 
+## License and Reuse
+
+This repository is source-available with all rights reserved unless otherwise noted in `LICENSE`. The current `LICENSE` is not an open-source license.
+
 ## Boundaries
 
 - No backend, account, sync, or database.

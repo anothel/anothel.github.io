@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
 const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
+const license = readFileSync("LICENSE", "utf8");
 const security = readFileSync("SECURITY.md", "utf8");
 const contributing = readFileSync("CONTRIBUTING.md", "utf8");
 const changelog = readFileSync("CHANGELOG.md", "utf8");
@@ -18,6 +19,7 @@ const roadmapQueueHeadings = [
     "P1 - Explore Repeat-Use Tightening",
     "P1 - Security and Release Hardening",
     "P2 - Status and Source Trust",
+    "P2 - Formatting and Generator Maintainability",
 ];
 
 test("README explains data refresh automation for operators", () => {
@@ -372,6 +374,14 @@ test("contribution and release docs name the runnable checks", () => {
     assert.match(changelog, /2026-06-28/);
 });
 
+test("root docs state the source-available reuse boundary", () => {
+    assert.match(license, /All rights reserved unless otherwise noted/);
+    assert.match(readme, /source-available with all rights reserved/s);
+    assert.match(readme, /not an open-source license/s);
+    assert.match(contributing, /Do not assume public reuse rights beyond `LICENSE`/s);
+    assert.match(releaseChecklist, /reuse boundary still matches `LICENSE`/s);
+});
+
 test("docs explain checked-in signal policy ownership", () => {
     assert.match(readme, /data\/signal-policy\.json/);
     assert.match(ia, /Signal Policy/);
@@ -477,4 +487,6 @@ test("roadmap folds repo analysis work into baselines, bundles, and deferrals", 
     assert.match(roadmap, /not re-added/);
     assert.match(roadmap, /queued with lower priority/);
     assert.match(roadmap, /Pull forward when:/);
+    assert.match(roadmap, /source-available reuse boundary/);
+    assert.doesNotMatch(roadmap, /^### P1 - License and Public Reuse Boundary$/m);
 });

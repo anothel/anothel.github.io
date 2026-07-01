@@ -44,6 +44,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Hardened Explore card activation so external item clicks use `noopener,noreferrer` when opened from JavaScript.
 - Reused shared source detail copy in Status refresh-run attention so partial errors stay sanitized and keep retry guidance.
 - Moved Architecture Gate out of the active Roadmap queue so framework PoC work only starts after a measured blocker exists.
+- Clarified that public repository reuse remains source-available with all rights reserved unless `LICENSE` says otherwise.
 
 ## 2026-06-28
 

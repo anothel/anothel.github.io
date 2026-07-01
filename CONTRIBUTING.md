@@ -20,6 +20,7 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd run check`.
 - Keep public route additions out unless `docs/ROADMAP.md` accepts the route job.
 - Keep completed work out of `docs/ROADMAP.md`.
 - Update docs when changing source health, data contract, refresh workflow, release process, or security posture.
+- Do not assume public reuse rights beyond `LICENSE`.
 
 ## Data Changes
 
