@@ -1,11 +1,11 @@
 {
   "updated": "2026-07-03",
-  "generatedAt": "2026-07-03T21:21:26.959Z",
+  "generatedAt": "2026-07-03T21:54:23.924Z",
   "sourceMeta": {
     "name": "generated",
     "status": "partial",
     "count": 13,
-    "updatedAt": "2026-07-03T21:21:26.959Z"
+    "updatedAt": "2026-07-03T21:54:23.924Z"
   },
   "sections": [
     {
@@ -178,7 +178,7 @@
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
-          "rawScore": 155495,
+          "rawScore": 155505,
           "qualityScore": 100,
           "score": 82,
           "sources": [
@@ -262,7 +262,7 @@
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/n8n-io/n8n",
-          "rawScore": 195057,
+          "rawScore": 195059,
           "qualityScore": 100,
           "score": 85,
           "sources": [

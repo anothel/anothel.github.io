@@ -55,6 +55,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Fixed Explore priority tie-breaking so saturated scores keep source rank ahead of alphabetic package names.
 - Kept stale Explore saved-search module/category filters from restoring obsolete empty result sets.
 - Kept single-error source health details sanitized while naming retry data refresh as recovery.
+- Ran 2026-07-04 KST token-backed publish-health refresh; GitHub-backed sources stayed `ok`, leaving npm `n8n-workflow` 429 as the only non-ok source.
 
 ## 2026-06-28
 

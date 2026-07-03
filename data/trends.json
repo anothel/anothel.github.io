@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-03",
-  "generatedAt": "2026-07-03T21:21:23.927Z",
+  "generatedAt": "2026-07-03T21:54:21.191Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-07-03T21:21:23.927Z"
+      "updatedAt": "2026-07-03T21:54:21.191Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-07-03T21:21:23.927Z"
+      "updatedAt": "2026-07-03T21:54:21.191Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-07-03T21:21:23.927Z"
+      "updatedAt": "2026-07-03T21:54:21.191Z"
     }
   ],
   "items": [
@@ -152,7 +152,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "36.1K stars",
+      "velocity": "36.2K stars",
       "signal": "4.5K forks",
       "url": "https://github.com/github/awesome-copilot",
       "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot."
@@ -228,11 +228,11 @@
       "title": "Half-Baked Product",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 84,
-      "velocity": "351 comments",
-      "signal": "1152 points",
+      "score": 85,
+      "velocity": "355 comments",
+      "signal": "1163 points",
       "url": "https://weli.dev/blog/half-baked-product/",
-      "summary": "HN story by weli with 351 comments."
+      "summary": "HN story by weli with 355 comments."
     },
     {
       "rank": 19,
@@ -272,33 +272,33 @@
       "title": "Protect your right to run local AI",
       "source": "Hacker News",
       "category": "AI",
-      "score": 69,
-      "velocity": "167 comments",
-      "signal": "478 points",
+      "score": 70,
+      "velocity": "168 comments",
+      "signal": "480 points",
       "url": "https://righttointelligence.org/",
-      "summary": "HN story by thoughtpeddler with 167 comments."
+      "summary": "HN story by thoughtpeddler with 168 comments."
     },
     {
       "rank": 23,
-      "title": "The Safari MCP server for web developers",
-      "source": "Hacker News",
-      "category": "MCP",
-      "score": 52,
-      "velocity": "68 comments",
-      "signal": "252 points",
-      "url": "https://webkit.org/blog/18136/introducing-the-safari-mcp-server-for-web-developers/",
-      "summary": "HN story by coloneltcb with 68 comments."
-    },
-    {
-      "rank": 24,
       "title": "Wordgard: In-browser rich-text editor from the creator of ProseMirror",
       "source": "Hacker News",
       "category": "Frontend",
       "score": 51,
-      "velocity": "82 comments",
-      "signal": "225 points",
+      "velocity": "83 comments",
+      "signal": "234 points",
       "url": "https://wordgard.net/",
-      "summary": "HN story by indy with 82 comments."
+      "summary": "HN story by indy with 83 comments."
+    },
+    {
+      "rank": 24,
+      "title": "60% Fable cost cut by converting code to images and having the model OCR it",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 48,
+      "velocity": "70 comments",
+      "signal": "185 points",
+      "url": "https://github.com/teamchong/pxpipe",
+      "summary": "HN story by dimitropoulos with 70 comments."
     }
   ]
 }
