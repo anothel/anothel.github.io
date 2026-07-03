@@ -495,11 +495,16 @@
         };
     }
 
+    function selectValueOrAll(select, value) {
+        if (!select?.options) return value;
+        return [...select.options].some((option) => option.value === value) ? value : "all";
+    }
+
     function applySearchState(els, search) {
         const normalized = normalizeSavedSearch(search);
         state.focus = normalized.focus;
-        state.module = normalized.module;
-        state.category = normalized.category;
+        state.module = selectValueOrAll(els.module, normalized.module);
+        state.category = selectValueOrAll(els.category, normalized.category);
         state.query = normalized.query;
         state.sort = normalized.sort;
         if (els.module) els.module.value = state.module;

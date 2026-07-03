@@ -565,6 +565,37 @@ test("Explore saved search labels omit default fields", () => {
     assert.equal(app.savedSearchLabel({ focus: "Agent skills", module: "all", category: "all", query: "skills", sort: "priority" }), "Agent skills / skills");
 });
 
+test("Explore saved search apply ignores stale module and category values", () => {
+    const app = loadExplore();
+    const module = { value: "all", options: [{ value: "all" }, { value: "Trends" }] };
+    const category = { value: "all", options: [{ value: "all" }, { value: "MCP" }] };
+    const query = { value: "" };
+    const sort = { value: "priority" };
+    const focusButtons = [
+        { dataset: { focusFilter: "all" }, ariaPressed: "", setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
+        { dataset: { focusFilter: "MCP" }, ariaPressed: "", setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
+    ];
+
+    app.applySearchState({ module, category, query, sort, focusButtons }, {
+        focus: "MCP",
+        module: "Old module",
+        category: "Old category",
+        query: "server",
+        sort: "saved"
+    });
+
+    assert.deepEqual(JSON.parse(JSON.stringify(app.currentSearchState())), {
+        focus: "MCP",
+        module: "all",
+        category: "all",
+        query: "server",
+        sort: "saved"
+    });
+    assert.equal(module.value, "all");
+    assert.equal(category.value, "all");
+    assert.equal(focusButtons[1].ariaPressed, "true");
+});
+
 test("Explore saved search renderer emits empty, item, and full states safely", () => {
     const app = loadExplore();
 

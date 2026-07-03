@@ -99,6 +99,7 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 
 - Saved searches keep the existing localStorage key, cap, label format, and apply behavior.
 - Applying a saved search now leaves visible status feedback after Explore restores focus, query, and sort.
+- Saved searches with stale module or category filters fall back to all modules/categories instead of restoring an empty obsolete filter.
 - No route, account, sync, backend, source data, or storage schema changed.
 
 ## Signal Quality Regression Audit
