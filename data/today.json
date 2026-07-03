@@ -1,11 +1,11 @@
 {
   "updated": "2026-07-03",
-  "generatedAt": "2026-07-03T21:08:18.746Z",
+  "generatedAt": "2026-07-03T21:21:26.959Z",
   "sourceMeta": {
     "name": "generated",
     "status": "partial",
     "count": 13,
-    "updatedAt": "2026-07-03T21:08:18.746Z"
+    "updatedAt": "2026-07-03T21:21:26.959Z"
   },
   "sections": [
     {
@@ -106,22 +106,22 @@
       "items": [
         {
           "schemaVersion": 2,
-          "id": "url:https://github.com/agentops-ai/agentops",
+          "id": "url:https://github.com/activepieces/activepieces",
           "sourceModule": "trends",
           "sourceKind": "trend",
-          "title": "AgentOps-AI/agentops",
+          "title": "activepieces/activepieces",
           "module": "Trends",
           "origin": "GitHub",
-          "category": "AI evals",
+          "category": "Workflow automation",
           "metric": "100 score",
-          "reason": "Evaluation signal for measuring agent and model behavior.",
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
-            "Evaluation signal for measuring agent and model behavior.",
-            "5.7K stars from GitHub",
-            "5.7K stars / 603 forks"
+            "Coding-agent ecosystem signal with practical workflow value.",
+            "23.1K stars from GitHub",
+            "23.1K stars / 3.9K forks"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
-          "url": "https://github.com/AgentOps-AI/agentops",
+          "url": "https://github.com/activepieces/activepieces",
           "rawScore": 100,
           "qualityScore": 100,
           "score": 100,
@@ -129,27 +129,27 @@
             "Trends"
           ],
           "sourceContext": "",
-          "canonicalKey": "url:https://github.com/agentops-ai/agentops",
+          "canonicalKey": "url:https://github.com/activepieces/activepieces",
           "updated": "2026-07-03"
         },
         {
           "schemaVersion": 2,
-          "id": "url:https://github.com/langgenius/dify",
+          "id": "url:https://github.com/affaan-m/ecc",
           "sourceModule": "trends",
           "sourceKind": "trend",
-          "title": "langgenius/dify",
+          "title": "affaan-m/ECC",
           "module": "Trends",
           "origin": "GitHub",
-          "category": "MCP",
+          "category": "AI agents",
           "metric": "100 score",
-          "reason": "MCP infrastructure worth tracking for agent workflows.",
+          "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
-            "MCP infrastructure worth tracking for agent workflows.",
-            "147.6K stars from GitHub",
-            "147.6K stars / 23.2K forks"
+            "Coding-agent ecosystem signal with practical workflow value.",
+            "225.7K stars from GitHub",
+            "225.7K stars / 34.5K forks"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
-          "url": "https://github.com/langgenius/dify",
+          "url": "https://github.com/affaan-m/ECC",
           "rawScore": 100,
           "qualityScore": 100,
           "score": 100,
@@ -157,7 +157,7 @@
             "Trends"
           ],
           "sourceContext": "",
-          "canonicalKey": "url:https://github.com/langgenius/dify",
+          "canonicalKey": "url:https://github.com/affaan-m/ecc",
           "updated": "2026-07-03"
         },
         {
@@ -178,7 +178,7 @@
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
-          "rawScore": 155493,
+          "rawScore": 155495,
           "qualityScore": 100,
           "score": 82,
           "sources": [
@@ -218,10 +218,10 @@
         },
         {
           "schemaVersion": 2,
-          "id": "url:https://github.com/affaan-m/ecc",
+          "id": "url:https://github.com/anomalyco/opencode",
           "sourceModule": "trends",
           "sourceKind": "trend",
-          "title": "affaan-m/ECC",
+          "title": "anomalyco/opencode",
           "module": "Trends",
           "origin": "GitHub",
           "category": "AI agents",
@@ -229,11 +229,11 @@
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
             "Coding-agent ecosystem signal with practical workflow value.",
-            "225.7K stars from GitHub",
-            "225.7K stars / 34.5K forks"
+            "182.1K stars from GitHub",
+            "182.1K stars / 22.5K forks"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
-          "url": "https://github.com/affaan-m/ECC",
+          "url": "https://github.com/anomalyco/opencode",
           "rawScore": 100,
           "qualityScore": 100,
           "score": 100,
@@ -241,7 +241,7 @@
             "Trends"
           ],
           "sourceContext": "",
-          "canonicalKey": "url:https://github.com/affaan-m/ecc",
+          "canonicalKey": "url:https://github.com/anomalyco/opencode",
           "updated": "2026-07-03"
         },
         {

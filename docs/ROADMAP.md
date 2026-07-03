@@ -54,10 +54,10 @@ Scope:
 
 Current state:
 
-- 2026-07-03 local unauthenticated refresh reported 108 generated items with overall `partial` status.
-- GitHub trend source is `partial` because `GITHUB_TOKEN` was not set and four GitHub queries returned 403 rate-limit errors.
-- npm `n8n-workflow` still returns 429, with previous package rows preserved from 2026-06-30, so current data remains publishable partial.
-- Next full confirmation should supply `GITHUB_TOKEN` when GitHub trend health must prove `ok` or `n8n-workflow` stops preserving useful rows.
+- 2026-07-03 token-backed refresh reported 108 generated items with overall `partial` status.
+- GitHub trend, repo, HN, trend npm, and manual link sources are `ok`.
+- npm `n8n-workflow` still returns 429, with previous package rows preserved from 2026-07-03, so current data remains publishable partial.
+- Next full confirmation is only needed when package source health must prove all sources `ok` or `n8n-workflow` stops preserving useful rows.
 
 Absorbs analysis items:
 

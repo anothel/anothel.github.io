@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-03",
-  "generatedAt": "2026-07-03T21:08:17.430Z",
+  "generatedAt": "2026-07-03T21:21:25.538Z",
   "sourceMeta": {
     "name": "GitHub",
     "status": "ok",
@@ -8,7 +8,7 @@
     "tracked": 30,
     "emitted": 30,
     "coverage": "30/30",
-    "updatedAt": "2026-07-03T21:08:17.430Z"
+    "updatedAt": "2026-07-03T21:21:25.538Z"
   },
   "repos": [
     {
@@ -50,7 +50,7 @@
       "name": "anomalyco/opencode",
       "category": "AI agents",
       "focus": "open source coding agent",
-      "stars": 182087,
+      "stars": 182092,
       "starsLabel": "182.1K",
       "forksLabel": "22.5K",
       "pushedAt": "2026-07-03",
@@ -78,7 +78,7 @@
       "name": "mattpocock/skills",
       "category": "Agent skills",
       "focus": "engineering workflow skills",
-      "stars": 155493,
+      "stars": 155495,
       "starsLabel": "155.5K",
       "forksLabel": "13.4K",
       "pushedAt": "2026-07-03",
@@ -91,7 +91,7 @@
       "name": "google-gemini/gemini-cli",
       "category": "AI agents",
       "focus": "Gemini terminal coding agent",
-      "stars": 105733,
+      "stars": 105732,
       "starsLabel": "105.7K",
       "forksLabel": "14.2K",
       "pushedAt": "2026-07-03",
@@ -125,7 +125,7 @@
       "name": "punkpeye/awesome-mcp-servers",
       "category": "MCP",
       "focus": "curated MCP server directory",
-      "stars": 90245,
+      "stars": 90246,
       "starsLabel": "90.2K",
       "forksLabel": "12.4K",
       "pushedAt": "2026-06-26",
@@ -225,7 +225,7 @@
       "name": "github/awesome-copilot",
       "category": "AI agents",
       "focus": "Copilot agents and skills",
-      "stars": 36148,
+      "stars": 36149,
       "starsLabel": "36.1K",
       "forksLabel": "4.5K",
       "pushedAt": "2026-07-03",
@@ -293,7 +293,7 @@
       "name": "openai/openai-agents-python",
       "category": "AI agents",
       "focus": "Python multi-agent framework",
-      "stars": 27627,
+      "stars": 27628,
       "starsLabel": "27.6K",
       "forksLabel": "4.3K",
       "pushedAt": "2026-07-02",
