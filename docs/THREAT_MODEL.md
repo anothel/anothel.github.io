@@ -51,7 +51,7 @@ There is no backend, account system, sync service, or database.
 
 - localStorage data is user-controlled and local to the browser.
 - External sites may change or disappear after links are rendered.
-- GitHub Actions use major-version actions today; stricter SHA pinning is deferred until CI basics are in place.
+- GitHub Actions use major-version actions today; stricter SHA pinning is deferred while workflows use only GitHub-owned actions and local scripts.
 - Pin GitHub Actions to full SHAs if third-party actions are introduced or workflow permissions expand beyond current publish/update jobs.
 - Add Dependabot when package dependencies, a lockfile, or third-party actions need routine update monitoring.
 - CSP is not enforced yet; renderer safety tests remain the first control.

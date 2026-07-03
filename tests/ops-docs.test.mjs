@@ -337,6 +337,8 @@ test("security and threat docs preserve the static-site trust model", () => {
     assert.match(threatModel, /Explore card activation uses `noopener,noreferrer`/s);
     assert.match(threatModel, /Referrer policy decision: external item links rely on `rel="noopener noreferrer"`/s);
     assert.match(threatModel, /GitHub Actions pinning decision: major-version actions remain accepted/s);
+    assert.match(threatModel, /stricter SHA pinning is deferred while workflows use only GitHub-owned actions and local scripts/s);
+    assert.doesNotMatch(threatModel, /deferred until CI basics are in place/s);
     assert.match(threatModel, /Dependabot decision: no dependency update automation is enabled while the repo has no package dependencies or lockfile/s);
     assert.match(releaseChecklist, /Referrer policy still matches the external-link `noreferrer` decision/s);
     assert.match(releaseChecklist, /GitHub Actions pinning and Dependabot decisions still match the current dependency-free workflow posture/s);

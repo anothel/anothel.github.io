@@ -51,6 +51,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Clarified Roadmap working rules for explicitly approved agent staging and commits while keeping push, deploy, release, and external changes approval-gated.
 - Aligned contribution Git ownership guidance with the approval-gated agent staging and commit rules.
 - Ran 2026-07-03 token-backed publish-health refresh; GitHub trend health recovered to `ok`, leaving npm `n8n-workflow` 429 as the only non-ok source.
+- Aligned threat-model SHA pinning rationale with the current GitHub-owned-actions and dependency-free workflow posture.
 
 ## 2026-06-28
 
