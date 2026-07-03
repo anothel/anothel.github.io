@@ -297,19 +297,20 @@
     }
 
     function sortExploreItems(items, sort, savedIds = new Set()) {
+        const comparePriority = requireSignalSchema().compareSignalPriority;
         return [...items].sort((a, b) => {
             if (sort === "saved") {
                 const savedDiff = Number(isItemSaved(b, savedIds)) - Number(isItemSaved(a, savedIds));
                 if (savedDiff !== 0) return savedDiff;
-                return Number(b.score || 0) - Number(a.score || 0);
+                return comparePriority(a, b);
             }
             if (sort === "module") {
-                return a.module.localeCompare(b.module) || Number(b.score || 0) - Number(a.score || 0);
+                return a.module.localeCompare(b.module) || comparePriority(a, b);
             }
             if (sort === "category") {
-                return a.category.localeCompare(b.category) || Number(b.score || 0) - Number(a.score || 0);
+                return a.category.localeCompare(b.category) || comparePriority(a, b);
             }
-            return Number(b.score || 0) - Number(a.score || 0);
+            return comparePriority(a, b);
         });
     }
 

@@ -1,17 +1,6 @@
 {
   "explore": [
     {
-      "title": "Agents SDK docs",
-      "module": "Links",
-      "category": "AI agents",
-      "score": 100,
-      "reasons": [
-        "Docs from Docs",
-        "Agent workflow reference.",
-        "Signal fit 100/100"
-      ]
-    },
-    {
       "title": "openai/codex",
       "module": "Repos",
       "category": "AI agents",
@@ -19,6 +8,17 @@
       "reasons": [
         "92K stars from GitHub",
         "terminal coding agent",
+        "Signal fit 100/100"
+      ]
+    },
+    {
+      "title": "Agents SDK docs",
+      "module": "Links",
+      "category": "AI agents",
+      "score": 100,
+      "reasons": [
+        "Docs from Docs",
+        "Agent workflow reference.",
         "Signal fit 100/100"
       ]
     },
@@ -34,17 +34,6 @@
       ]
     },
     {
-      "title": "MCP TypeScript SDK",
-      "module": "Links",
-      "category": "MCP",
-      "score": 94,
-      "reasons": [
-        "Docs from Docs",
-        "Protocol SDK reference.",
-        "Signal fit 94/100"
-      ]
-    },
-    {
       "title": "Zero-Touch OAuth for MCP",
       "module": "Trends",
       "category": "MCP",
@@ -52,6 +41,17 @@
       "reasons": [
         "120 comments from Hacker News",
         "120 comments / 420 points",
+        "Signal fit 94/100"
+      ]
+    },
+    {
+      "title": "MCP TypeScript SDK",
+      "module": "Links",
+      "category": "MCP",
+      "score": 94,
+      "reasons": [
+        "Docs from Docs",
+        "Protocol SDK reference.",
         "Signal fit 94/100"
       ]
     },
@@ -67,17 +67,6 @@
       ]
     },
     {
-      "title": "mattpocock/skills",
-      "module": "Repos",
-      "category": "Agent skills",
-      "score": 88,
-      "reasons": [
-        "12K stars from GitHub",
-        "coding agent skills",
-        "Signal fit 88/100"
-      ]
-    },
-    {
       "title": "trigger.dev durable workflow",
       "module": "Trends",
       "category": "Workflow automation",
@@ -85,6 +74,17 @@
       "reasons": [
         "10K stars from GitHub",
         "10K stars / 900 forks",
+        "Signal fit 88/100"
+      ]
+    },
+    {
+      "title": "mattpocock/skills",
+      "module": "Repos",
+      "category": "Agent skills",
+      "score": 88,
+      "reasons": [
+        "12K stars from GitHub",
+        "coding agent skills",
         "Signal fit 88/100"
       ]
     }

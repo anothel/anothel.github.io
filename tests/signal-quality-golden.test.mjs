@@ -58,7 +58,7 @@ function fixtureSources() {
 function actualGolden() {
     const sources = fixtureSources();
     const explore = signalSchema.normalizeSignalData(sources)
-        .sort((a, b) => Number(b.score) - Number(a.score) || a.title.localeCompare(b.title))
+        .sort(signalSchema.compareSignalPriority)
         .slice(0, 8)
         .map((item) => ({
             title: item.title,
@@ -89,4 +89,32 @@ test("signal quality golden fixture keeps agent workflow signals above broad bas
     assert.deepEqual(exploreBaseline, []);
     assert.ok(todayBaseline.length <= 1);
     assert.ok(actual.todayStart.some((item) => ["MCP", "Agent skills", "AI evals", "Workflow automation", "AI agents"].includes(item.category)));
+});
+
+test("signal priority uses source rank before title when scores saturate", () => {
+    const sources = {
+        trends: {
+            updated: "2026-07-03",
+            sourceMeta: [],
+            items: [
+                { rank: 1, title: "activepieces/activepieces", source: "GitHub", category: "Workflow automation", score: 100, velocity: "23K stars", signal: "3K forks", url: "https://example.com/activepieces", summary: "AI workflow automation." },
+                { rank: 14, title: "@ai-sdk/provider", source: "npm", category: "AI", score: 89, velocity: "25M/week", signal: "last week", url: "https://example.com/provider", summary: "AI SDK provider." }
+            ]
+        },
+        packages: {
+            updated: "2026-07-03",
+            sourceMeta: [],
+            packages: [
+                { rank: 1, name: "@ai-sdk/provider", category: "AI SDK", focus: "AI SDK provider interface", downloads: 25000000, downloadsLabel: "25M/week", url: "https://example.com/provider" }
+            ]
+        },
+        repos: { updated: "2026-07-03", sourceMeta: [], repos: [] },
+        links: { updated: "2026-07-03", sourceMeta: [], links: [] }
+    };
+
+    const sorted = signalSchema.normalizeSignalData(sources).sort(signalSchema.compareSignalPriority);
+
+    assert.equal(sorted[0].title, "activepieces/activepieces");
+    assert.equal(sorted[1].title, "@ai-sdk/provider");
+    assert.equal(sorted[0].score, sorted[1].score);
 });

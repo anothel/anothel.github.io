@@ -113,6 +113,27 @@
         return [...new Set(reasons)].slice(0, 3);
     }
 
+    function rankValue(item) {
+        const rank = Number(item?.sourceRank || item?.rank || 0);
+        return Number.isFinite(rank) && rank > 0 ? rank : Number.MAX_SAFE_INTEGER;
+    }
+
+    function modulePriority(item) {
+        return {
+            Trends: 0,
+            Repos: 1,
+            Links: 2,
+            Packages: 3
+        }[item?.module] ?? 4;
+    }
+
+    function compareSignalPriority(a, b) {
+        return Number(b?.score || 0) - Number(a?.score || 0)
+            || modulePriority(a) - modulePriority(b)
+            || rankValue(a) - rankValue(b)
+            || String(a?.title || "").localeCompare(String(b?.title || ""));
+    }
+
     function sourceContextFor(sources, moduleName) {
         const alsoIn = sources.filter((source) => source !== moduleName);
         return alsoIn.length > 0 ? `Also in ${alsoIn.join(" / ")}` : "";
@@ -316,6 +337,7 @@
         duplicateKey,
         mergeSignalItems,
         dedupeSignalItems,
+        compareSignalPriority,
         normalizeSignalData,
         collectSourceMeta,
         validateSignalItem

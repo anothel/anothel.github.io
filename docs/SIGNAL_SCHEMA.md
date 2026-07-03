@@ -44,6 +44,7 @@ Common optional fields:
 - `data/signal-policy.json` owns baseline titles, baseline penalty, and intent threshold.
 - Broad baseline tooling should not outrank specific agent-workflow signals by popularity alone.
 - Shared normalization caps matching broad baseline packages, repos, and npm trends before Today or Explore rank them.
+- Priority ranking breaks saturated score ties by source family and source rank before title, so checked-in trend order is not displaced by alphabetic package names.
 - Today and Explore may present different views, but they must share the same checked-in scoring policy.
 
 ## Contract Gate
