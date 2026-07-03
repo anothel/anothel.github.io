@@ -21,6 +21,15 @@ function escapeRegExp(value) {
     return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+}
+
 function collapseMarkup(value) {
     return String(value).replace(/\s+/g, " ").trim();
 }
@@ -218,7 +227,8 @@ test("explore source cards use refresh report time for freshness detail", () => 
     const DataHealth = dataHealth();
 
     for (const source of sourceMeta()) {
-        assert.match(html, new RegExp(DataHealth.sourceDetail(source, refreshReport.generatedAt).replaceAll("/", "\\/")));
+        const detail = escapeHtml(DataHealth.sourceDetail(source, refreshReport.generatedAt));
+        assert.match(html, new RegExp(detail.replaceAll("/", "\\/")));
     }
 });
 
