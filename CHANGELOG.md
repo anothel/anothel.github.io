@@ -49,6 +49,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Added explicit static fallback markers for Explore source-health and result blocks to reduce generator regex fragility.
 - Ran 2026-07-03 local unauthenticated publish-health refresh; generated data stayed publishable partial with GitHub trend 403 rate limits and npm `n8n-workflow` 429 visible.
 - Clarified Roadmap working rules for explicitly approved agent staging and commits while keeping push, deploy, release, and external changes approval-gated.
+- Aligned contribution Git ownership guidance with the approval-gated agent staging and commit rules.
 
 ## 2026-06-28
 

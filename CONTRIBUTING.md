@@ -52,4 +52,4 @@ node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs
 
 ## Git Ownership
 
-This workspace uses user-owned staging, commits, and pushes. Contributors should not rewrite history, force push, or stage unrelated files without explicit instruction.
+This workspace uses user-owned staging, commits, and pushes by default. Automation agents may stage and commit only when the current task explicitly allows it. Nobody should rewrite history, force push, deploy, release, or stage unrelated files without explicit instruction.
