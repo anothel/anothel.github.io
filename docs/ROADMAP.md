@@ -54,9 +54,9 @@ Scope:
 
 Current state:
 
-- 2026-07-03 token-backed refresh reported 108 generated items with overall `partial` status.
+- Latest checked-in token-backed refresh (`2026-07-03T21:54:24.341Z`, 2026-07-04 KST) reported 108 generated items with overall `partial` status.
 - GitHub trend, repo, HN, trend npm, and manual link sources are `ok`.
-- npm `n8n-workflow` still returns 429, with previous package rows preserved from 2026-07-03, so current data remains publishable partial.
+- npm `n8n-workflow` still returns 429, with previous package rows preserved from 2026-07-03 and `coverage: 25/25`, so current data remains publishable partial.
 - Next full confirmation is only needed when package source health must prove all sources `ok` or `n8n-workflow` stops preserving useful rows.
 
 Absorbs analysis items:
