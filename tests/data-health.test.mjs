@@ -175,3 +175,18 @@ test("DataHealth partial detail names failing source and recovery action", () =>
     );
     assert.doesNotMatch(detail, /api\.npmjs\.org/);
 });
+
+test("DataHealth error detail names recovery action and strips long URLs", () => {
+    const DataHealth = loadDataHealth();
+
+    const detail = DataHealth.sourceDetail({
+        status: "error",
+        error: "403 rate limit exceeded: https://api.github.com/search/repositories?q=agent"
+    });
+
+    assert.equal(
+        detail,
+        "Error - no current timestamp / 403 rate limit exceeded / retry data refresh"
+    );
+    assert.doesNotMatch(detail, /api\.github\.com/);
+});

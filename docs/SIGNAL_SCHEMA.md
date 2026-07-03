@@ -78,6 +78,7 @@ Source detail copy:
 
 - Non-ok source details must preserve usable-data context and name the recovery action.
 - Partial rate-limit details name the failed source, remove long API URLs from the rendered error, keep `rateLimited` visible, and say to retry data refresh.
+- Error details remove long API URLs and name `retry data refresh` as the recovery action.
 - Source coverage must not report more emitted rows than tracked rows.
 
 ## Validation

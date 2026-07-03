@@ -150,10 +150,10 @@
 
         const errorDetail = sourceErrorDetail(source);
         if (errorDetail) safety.push(errorDetail);
+        else if (source?.error) safety.push(cleanErrorMessage(source.error));
         if ((source?.status === "partial" || source?.status === "error") && safety.length > 0) safety.push("retry data refresh");
         if (safety.length > 0) return `${freshness} / ${safety.join(" / ")}`;
         if (freshness.startsWith("Stale -")) return `${freshness} / retry data refresh`;
-        if (source?.error) return `${freshness} / ${source.error}`;
         return freshness;
     }
 

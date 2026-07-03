@@ -56,7 +56,7 @@ test("collectSourceRows expands module source metadata into rows", () => {
             status: "error",
             count: 0,
             updated: "-",
-            detail: "Error - no current timestamp / rate limited"
+            detail: "Error - no current timestamp / rate limited / retry data refresh"
         },
         {
             module: "Package watchlist",
