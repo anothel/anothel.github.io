@@ -364,6 +364,8 @@ These items are queued with lower priority. They stay below the active queue bec
 
 ## Working Rules
 
-- User owns staging, commits, and pushes.
+- User owns staging, commits, and pushes by default.
+- Agents may stage and commit only when the current task explicitly allows it.
+- Never push, deploy, release, or change external services without explicit approval.
 - Before a large task, consult this file and pick one bundle.
 - After a large task, remove completed work from this file and record outcome in `CHANGELOG.md`.
