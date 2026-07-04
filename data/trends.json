@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-03",
-  "generatedAt": "2026-07-03T21:54:21.191Z",
+  "updated": "2026-07-04",
+  "generatedAt": "2026-07-04T06:35:06.312Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -10,11 +10,11 @@
     {
       "name": "Hacker News",
       "status": "ok",
-      "count": 4,
-      "tracked": 4,
-      "emitted": 4,
-      "coverage": "4/4",
-      "updatedAt": "2026-07-03T21:54:21.191Z"
+      "count": 6,
+      "tracked": 6,
+      "emitted": 6,
+      "coverage": "6/6",
+      "updatedAt": "2026-07-04T06:35:06.312Z"
     },
     {
       "name": "GitHub",
@@ -23,16 +23,16 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-07-03T21:54:21.191Z"
+      "updatedAt": "2026-07-04T06:35:06.312Z"
     },
     {
       "name": "npm",
       "status": "ok",
-      "count": 8,
+      "count": 0,
       "tracked": 16,
-      "emitted": 8,
-      "coverage": "8/16",
-      "updatedAt": "2026-07-03T21:54:21.191Z"
+      "emitted": 0,
+      "coverage": "0/16",
+      "updatedAt": "2026-07-04T06:35:06.312Z"
     }
   ],
   "items": [
@@ -53,7 +53,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "225.7K stars",
+      "velocity": "225.8K stars",
       "signal": "34.5K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
@@ -75,7 +75,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "182.1K stars",
+      "velocity": "182.2K stars",
       "signal": "22.5K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
@@ -86,7 +86,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "135.8K stars",
+      "velocity": "135.9K stars",
       "signal": "21.9K forks",
       "url": "https://github.com/anthropics/claude-code",
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
@@ -141,7 +141,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "112.8K stars",
+      "velocity": "112.9K stars",
       "signal": "7.5K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
@@ -163,142 +163,76 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "82.8K stars",
+      "velocity": "83.2K stars",
       "signal": "4.6K forks",
       "url": "https://github.com/JuliusBrussee/caveman",
       "summary": "why use many token when few token do trick Claude Code skill that cuts 65% of tokens by talking like caveman"
     },
     {
       "rank": 13,
-      "title": "@modelcontextprotocol/sdk",
-      "source": "npm",
-      "category": "MCP",
-      "score": 92,
-      "velocity": "43.4M/week",
-      "signal": "2026-06-26 to 2026-07-02",
-      "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-      "summary": "43.4M downloads over the last available week."
-    },
-    {
-      "rank": 14,
-      "title": "@ai-sdk/provider",
-      "source": "npm",
-      "category": "AI",
-      "score": 89,
-      "velocity": "25M/week",
-      "signal": "2026-06-26 to 2026-07-02",
-      "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider",
-      "summary": "25M downloads over the last available week."
-    },
-    {
-      "rank": 15,
-      "title": "openai",
-      "source": "npm",
-      "category": "AI",
-      "score": 89,
-      "velocity": "25.3M/week",
-      "signal": "2026-06-26 to 2026-07-02",
-      "url": "https://www.npmjs.com/package/openai",
-      "summary": "25.3M downloads over the last available week."
-    },
-    {
-      "rank": 16,
-      "title": "@anthropic-ai/sdk",
-      "source": "npm",
-      "category": "AI",
-      "score": 88,
-      "velocity": "22.7M/week",
-      "signal": "2026-06-26 to 2026-07-02",
-      "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk",
-      "summary": "22.7M downloads over the last available week."
-    },
-    {
-      "rank": 17,
-      "title": "ai",
-      "source": "npm",
-      "category": "AI",
-      "score": 86,
-      "velocity": "15.5M/week",
-      "signal": "2026-06-26 to 2026-07-02",
-      "url": "https://www.npmjs.com/package/ai",
-      "summary": "15.5M downloads over the last available week."
-    },
-    {
-      "rank": 18,
       "title": "Half-Baked Product",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 85,
-      "velocity": "355 comments",
-      "signal": "1163 points",
+      "score": 90,
+      "velocity": "374 comments",
+      "signal": "1238 points",
       "url": "https://weli.dev/blog/half-baked-product/",
-      "summary": "HN story by weli with 355 comments."
+      "summary": "HN story by weli with 374 comments."
     },
     {
-      "rank": 19,
-      "title": "@ai-sdk/openai",
-      "source": "npm",
-      "category": "AI",
-      "score": 83,
-      "velocity": "7.7M/week",
-      "signal": "2026-06-26 to 2026-07-02",
-      "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai",
-      "summary": "7.7M downloads over the last available week."
-    },
-    {
-      "rank": 20,
-      "title": "@temporalio/client",
-      "source": "npm",
-      "category": "Workflow automation",
-      "score": 77,
-      "velocity": "2.5M/week",
-      "signal": "2026-06-26 to 2026-07-02",
-      "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
-      "summary": "2.5M downloads over the last available week."
-    },
-    {
-      "rank": 21,
-      "title": "langfuse",
-      "source": "npm",
-      "category": "AI evals",
-      "score": 74,
-      "velocity": "1.5M/week",
-      "signal": "2026-06-26 to 2026-07-02",
-      "url": "https://www.npmjs.com/package/langfuse",
-      "summary": "1.5M downloads over the last available week."
-    },
-    {
-      "rank": 22,
-      "title": "Protect your right to run local AI",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 70,
-      "velocity": "168 comments",
-      "signal": "480 points",
-      "url": "https://righttointelligence.org/",
-      "summary": "HN story by thoughtpeddler with 168 comments."
-    },
-    {
-      "rank": 23,
+      "rank": 14,
       "title": "Wordgard: In-browser rich-text editor from the creator of ProseMirror",
       "source": "Hacker News",
       "category": "Frontend",
-      "score": 51,
-      "velocity": "83 comments",
-      "signal": "234 points",
+      "score": 55,
+      "velocity": "94 comments",
+      "signal": "292 points",
       "url": "https://wordgard.net/",
-      "summary": "HN story by indy with 83 comments."
+      "summary": "HN story by indy with 94 comments."
     },
     {
-      "rank": 24,
+      "rank": 15,
       "title": "60% Fable cost cut by converting code to images and having the model OCR it",
       "source": "Hacker News",
       "category": "AI",
-      "score": 48,
-      "velocity": "70 comments",
-      "signal": "185 points",
+      "score": 53,
+      "velocity": "89 comments",
+      "signal": "256 points",
       "url": "https://github.com/teamchong/pxpipe",
-      "summary": "HN story by dimitropoulos with 70 comments."
+      "summary": "HN story by dimitropoulos with 89 comments."
+    },
+    {
+      "rank": 16,
+      "title": "Hunting a 16-year-old SQLite WAL bug with TLA+",
+      "source": "Hacker News",
+      "category": "Database",
+      "score": 47,
+      "velocity": "21 comments",
+      "signal": "194 points",
+      "url": "https://ubuntu.com/blog/hunting-a-16-year-old-sqlite-bug-with-tla-is-dqlite-affected",
+      "summary": "HN story by peterparker204 with 21 comments."
+    },
+    {
+      "rank": 17,
+      "title": "Software, from First Principles",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 40,
+      "velocity": "15 comments",
+      "signal": "82 points",
+      "url": "https://fazamhd.com/mental-models/software/",
+      "summary": "HN story by faza with 15 comments."
+    },
+    {
+      "rank": 18,
+      "title": "Gone but Not Forgotten: Recovering the Dead Web",
+      "source": "Hacker News",
+      "category": "Frontend",
+      "score": 38,
+      "velocity": "13 comments",
+      "signal": "55 points",
+      "url": "https://blog.archive.org/2026/04/23/gone-but-not-forgotten-recovering-the-dead-web/",
+      "summary": "HN story by wslh with 13 comments."
     }
   ]
 }

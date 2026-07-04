@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-03",
-  "generatedAt": "2026-07-03T21:54:21.290Z",
+  "updated": "2026-07-04",
+  "generatedAt": "2026-07-04T06:35:06.417Z",
   "sourceMeta": {
     "name": "npm",
     "status": "partial",
@@ -8,15 +8,59 @@
     "tracked": 25,
     "emitted": 25,
     "coverage": "25/25",
-    "updatedAt": "2026-07-03T21:54:21.290Z",
+    "updatedAt": "2026-07-04T06:35:06.417Z",
     "errors": [
+      {
+        "name": "mastra",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/mastra"
+      },
+      {
+        "name": "@openai/agents",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40openai%2Fagents"
+      },
+      {
+        "name": "langchain",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/langchain"
+      },
+      {
+        "name": "@modelcontextprotocol/sdk",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40modelcontextprotocol%2Fsdk"
+      },
+      {
+        "name": "@modelcontextprotocol/server-filesystem",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40modelcontextprotocol%2Fserver-filesystem"
+      },
+      {
+        "name": "@modelcontextprotocol/server-github",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40modelcontextprotocol%2Fserver-github"
+      },
+      {
+        "name": "braintrust",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/braintrust"
+      },
+      {
+        "name": "promptfoo",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/promptfoo"
+      },
+      {
+        "name": "langfuse",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/langfuse"
+      },
+      {
+        "name": "@trigger.dev/sdk",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40trigger.dev%2Fsdk"
+      },
+      {
+        "name": "@temporalio/workflow",
+        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40temporalio%2Fworkflow"
+      },
       {
         "name": "n8n-workflow",
         "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
       }
     ],
     "rateLimited": true,
-    "previousUpdated": "2026-07-03"
+    "previousUpdated": "2026-07-04"
   },
   "packages": [
     {

@@ -55,8 +55,8 @@ Scope:
 
 Current state:
 
-- Checked-in token-backed refresh `2026-07-03T21:54:24.341Z` generated 108 items with overall `partial` status; GitHub trend, repo, HN, trend npm, and manual sources are `ok`.
-- Active non-ok source: npm `n8n-workflow` 429 with preserved 2026-07-03 package rows and `coverage: 25/25`; rerun only when all-source-`ok` proof is needed or preserved rows stop being useful.
+- Checked-in token-backed refresh `2026-07-04T06:35:21.214Z` generated 102 items with overall `partial` status; GitHub trend, repo, HN, trend npm, and manual sources are `ok`.
+- Active non-ok source: npm package refresh 429, including `n8n-workflow`, with preserved 2026-07-04 package rows and `coverage: 25/25`; rerun only when all-source-`ok` proof is needed or preserved rows stop being useful.
 
 Absorbs analysis items:
 
