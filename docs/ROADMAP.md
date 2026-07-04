@@ -27,7 +27,7 @@ The 2026-06-28 and 2026-06-30 repository analyses called for several trust, tool
 
 Do not turn the baseline into new work unless it drifts from current behavior.
 
-## 2026-06-30 Analysis Intake
+## Analysis Intake
 
 The 2026-06-30 report is absorbed as follows:
 
@@ -38,11 +38,18 @@ The 2026-06-30 report is absorbed as follows:
 
 If a future analysis repeats one of these items, update the matching bundle or Later Queue trigger instead of adding a duplicate task.
 
+The 2026-07-04 freshness/framework reassessment is absorbed without adding duplicate bundles:
+
+- P0 owns date and source-health consistency across checked-in Home, Today, Status, Explore, `data/manifest.json`, `data/refresh-report.json`, and `sitemap.xml`; public-page cache lag is a publish-smoke finding, not a new product track.
+- P2 owns trust copy that distinguishes data date, refresh attempt, source health, and static fallback generation; do not claim GitHub Pages publish time unless it is measured.
+- P2 Formatting owns static fallback marker and contract-test work only when generator blocks are already being touched.
+- Architecture Gate keeps Astro as a measured Review or Explore island PoC only after a vanilla/static maintenance blocker exists.
+
 ## Next Work Queue
 
 ### P0 - Publish Health Refresh
 
-Trigger: checked-in data is older than the publish window, source health changes, a publish needs fresh evidence, or owner asks for a live source confirmation.
+Trigger: checked-in data is older than the publish window, source health changes, a public page/date mismatch is reported, a publish needs fresh evidence, or owner asks for a live source confirmation.
 
 Scope:
 
@@ -51,12 +58,14 @@ Scope:
 - If `GITHUB_TOKEN` is missing, keep GitHub 403 as known partial state and queue a token-backed rerun.
 - Keep npm `n8n-workflow` active while preserved rows remain useful and rate-limited health stays visible.
 - Review generated data, Today, manifest, refresh report, and static fallbacks as one publish bundle.
+- Check `sitemap.xml` lastmod policy alongside static fallbacks; define whether it follows route content or data refresh before changing it.
 - Keep Roadmap P0 aligned with the real current partial cause after every refresh.
 
 Current state:
 
 - Checked-in token-backed refresh `2026-07-04T06:35:21.214Z` generated 102 items with overall `partial` status; GitHub trend, repo, HN, trend npm, and manual sources are `ok`.
 - Active non-ok source: npm package refresh 429, including `n8n-workflow`, with preserved 2026-07-04 package rows and `coverage: 25/25`; rerun only when all-source-`ok` proof is needed or preserved rows stop being useful.
+- Data-driven `sitemap.xml` lastmod values now follow `data/manifest.json` `updated`; Review and Notes remain content-date routes.
 
 Absorbs analysis items:
 
@@ -65,10 +74,12 @@ Absorbs analysis items:
 - npm `n8n-workflow` 429 policy.
 - Live refresh probe, gated on network/token approval.
 - Data freshness and recovery criteria before publish.
+- Static page, sitemap, manifest, and refresh-report date consistency.
 
 Verification:
 
 - Run `node scripts/update-all.mjs` only when network and token access are approved.
+- Run `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
 - Run `npm.cmd run check`.
 - Run `node scripts/validate-data.mjs`.
 - Run `git diff --check`.
@@ -191,6 +202,8 @@ Scope:
 - Keep useful checked-in rows visible for no-JS and blocked-fetch visits.
 - Do not hide partial data that still has preserved useful rows.
 - Track whether the current partial is GitHub 403, npm 429, or another source before changing copy.
+- Distinguish data date, last refresh attempt, source health, and static fallback generation when those claims are shown.
+- Do not claim GitHub Pages publish time unless it is measured by an approved smoke check.
 - Keep source freshness and recovery copy documented in `docs/SIGNAL_SCHEMA.md` and `docs/SOURCE_GOVERNANCE.md`.
 
 Current state:
@@ -203,6 +216,7 @@ Absorbs analysis items:
 - Data refresh failure recovery copy.
 - Source freshness criteria.
 - Current GitHub 403 / npm 429 explanation.
+- Data-generated vs refresh-attempt vs fallback-generated copy boundaries.
 
 Verification:
 

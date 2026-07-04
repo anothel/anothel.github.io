@@ -29,6 +29,7 @@ Check before publishing generated data:
 - `data/refresh-report.json` explains source health.
 - Today data exists and has expected sections.
 - Static fallback pages were regenerated after data changes.
+- `sitemap.xml` data-driven route `lastmod` values match `data/manifest.json` `updated`.
 - Any `partial`, `fallback`, `staleButSafe`, or `rateLimited` state is visible and acceptable.
 
 ## Security Review

@@ -206,6 +206,29 @@ function canonicalTopicUrl(routePath) {
     return `https://anothel.github.io/${routePath.replace(/index\.html$/, "")}`;
 }
 
+function replaceSitemapLastmod(sitemap, routePath, lastmod) {
+    const url = canonicalTopicUrl(routePath);
+    const pattern = new RegExp(`(<loc>${escapeRegExp(url)}</loc>\\s*<lastmod>)[^<]+(</lastmod>)`);
+    if (!pattern.test(sitemap)) throw new Error(`Missing sitemap route: ${url}`);
+    return sitemap.replace(pattern, `$1${lastmod}$2`);
+}
+
+async function updateSitemapLastmod(manifest, taxonomy) {
+    const routes = [
+        "index.html",
+        "today/index.html",
+        "explore/index.html",
+        "status/index.html",
+        ...(manifest.modules || []).map((module) => module.route),
+        ...taxonomy.topicPageLabels.map((topic) => taxonomy.topicPageConfig(topic).routePath)
+    ];
+    let sitemap = await readFile("sitemap.xml", "utf8");
+    for (const route of routes) {
+        sitemap = replaceSitemapLastmod(sitemap, route, manifest.updated);
+    }
+    await writeIfChanged("sitemap.xml", sitemap);
+}
+
 function renderTopicPage({ app, taxonomy, topic, items, summary, today }) {
     const config = taxonomy.topicPageConfig(topic);
     const signalLabel = displaySignalLabel(config);
@@ -518,6 +541,7 @@ ${indentBlock(renderedRows.list, 20)}
 ${trimLineEnds(notes.renderNotes(noteItems))}
             $2`, "notes list");
     await writeIfChanged("notes/index.html", notesHtml);
+    await updateSitemapLastmod(manifest, taxonomy);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

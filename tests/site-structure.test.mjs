@@ -7,6 +7,7 @@ function read(path) {
 }
 
 const styles = read("css/site.css");
+const manifest = JSON.parse(read("data/manifest.json"));
 const pages = [
     ["index.html", "Home", ""],
     ["today/index.html", "Today", "../"],
@@ -28,6 +29,13 @@ const topicPages = [
     ["topics/workflow-automation/index.html", "Workflow automation", "../../", "Workflow automation signals."],
     ["topics/security/index.html", "Security", "../../", "Security signals."]
 ];
+
+function sitemapLastmod(sitemap, routePath) {
+    const route = routePath.replace(/index\.html$/, "");
+    const url = `https://anothel.github.io/${route}`;
+    const pattern = new RegExp(`<loc>${url.replaceAll("/", "\\/")}</loc>\\s*<lastmod>([^<]+)<\\/lastmod>`);
+    return pattern.exec(sitemap)?.[1] || "";
+}
 
 test("public pages expose shared primary navigation", () => {
     for (const [path, label, prefix] of pages) {
@@ -432,6 +440,22 @@ test("notes page indexes durable topic notes", () => {
     assert.match(notes, /href="..\/topics\/security\/index\.html"/);
     assert.match(notes, /href="..\/index\.html"/);
     assert.match(sitemap, /https:\/\/anothel\.github\.io\/notes\//);
+});
+
+test("sitemap lastmod follows manifest date for data-driven routes", () => {
+    const sitemap = read("sitemap.xml");
+    const routes = [
+        "index.html",
+        "today/index.html",
+        "explore/index.html",
+        "status/index.html",
+        ...manifest.modules.map((module) => module.route),
+        ...topicPages.map(([path]) => path)
+    ];
+
+    for (const route of routes) {
+        assert.equal(sitemapLastmod(sitemap, route), manifest.updated, route);
+    }
 });
 
 test("public scope excludes profile and worklog routes", () => {
