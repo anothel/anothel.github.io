@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-04",
-  "generatedAt": "2026-07-04T21:46:29.896Z",
+  "generatedAt": "2026-07-04T22:02:14.586Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-07-04T21:46:29.896Z"
+      "updatedAt": "2026-07-04T22:02:14.586Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-07-04T21:46:29.896Z"
+      "updatedAt": "2026-07-04T22:02:14.586Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-07-04T21:46:29.896Z"
+      "updatedAt": "2026-07-04T22:02:14.586Z"
     }
   ],
   "items": [
@@ -261,11 +261,11 @@
       "title": "The bottleneck might be the air in the room",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 58,
-      "velocity": "414 comments",
-      "signal": "714 points",
+      "score": 59,
+      "velocity": "415 comments",
+      "signal": "718 points",
       "url": "https://blog.mikebowler.ca/2026/07/03/co2-and-decision-making/",
-      "summary": "HN story by gslin with 414 comments."
+      "summary": "HN story by gslin with 415 comments."
     },
     {
       "rank": 22,
@@ -274,7 +274,7 @@
       "category": "Developer tools",
       "score": 57,
       "velocity": "46 comments",
-      "signal": "348 points",
+      "signal": "351 points",
       "url": "https://peteris.rocks/blog/htop/",
       "summary": "HN story by theanonymousone with 46 comments."
     },
@@ -285,7 +285,7 @@
       "category": "Database",
       "score": 45,
       "velocity": "50 comments",
-      "signal": "151 points",
+      "signal": "152 points",
       "url": "https://www.databricks.com/blog/lakebase-ltap-rethinking-database-storage",
       "summary": "HN story by andrenotgiant with 50 comments."
     },
@@ -295,10 +295,10 @@
       "source": "Hacker News",
       "category": "Frontend",
       "score": 42,
-      "velocity": "43 comments",
-      "signal": "106 points",
+      "velocity": "44 comments",
+      "signal": "107 points",
       "url": "https://blog.archive.org/2026/04/23/gone-but-not-forgotten-recovering-the-dead-web/",
-      "summary": "HN story by wslh with 43 comments."
+      "summary": "HN story by wslh with 44 comments."
     }
   ]
 }
