@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Added a static fallback freshness contract covering Home, Today, Status, Explore, manifest, and refresh-report dates.
 - Updated data-driven sitemap lastmod values from the manifest date during static fallback generation.
 - Applied the 2026-07-04 freshness/framework reassessment to Roadmap triggers without adding duplicate work queues.
 - Reused the static fallback tagged-text updater for single-field data-mode copy to reduce page-specific regex replacement.

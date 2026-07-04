@@ -222,6 +222,16 @@ test("home today explore and status fallbacks use one source health truth", () =
     assert.match(read("explore/index.html"), new RegExp(`<p data-data-mode>${dataModeText().replaceAll(".", "\\.")}</p>`));
 });
 
+test("home today status and explore freshness dates follow manifest and refresh report", () => {
+    assert.equal(today.updated, manifest.updated);
+    assert.equal(refreshReport.manifestUpdated, manifest.updated);
+    assert.match(read("index.html"), new RegExp(`<p class="stamp">Data date ${manifest.updated}</p>`));
+    assert.match(read("today/index.html"), new RegExp(`<span data-today-updated>${manifest.updated}</span>`));
+    assert.match(read("status/index.html"), new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
+    assert.match(read("status/index.html"), new RegExp(`<strong>${escapeRegExp(refreshReport.generatedAt)}</strong>`));
+    assert.match(read("explore/index.html"), new RegExp(`updated ${manifest.updated}`));
+});
+
 test("explore source cards use refresh report time for freshness detail", () => {
     const html = read("explore/index.html");
     const DataHealth = dataHealth();
