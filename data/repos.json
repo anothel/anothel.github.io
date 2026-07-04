@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-04",
-  "generatedAt": "2026-07-04T22:02:16.566Z",
+  "generatedAt": "2026-07-04T22:07:28.761Z",
   "sourceMeta": {
     "name": "GitHub",
     "status": "ok",
@@ -8,7 +8,7 @@
     "tracked": 30,
     "emitted": 30,
     "coverage": "30/30",
-    "updatedAt": "2026-07-04T22:02:16.566Z"
+    "updatedAt": "2026-07-04T22:07:28.761Z"
   },
   "repos": [
     {
@@ -50,7 +50,7 @@
       "name": "anomalyco/opencode",
       "category": "AI agents",
       "focus": "open source coding agent",
-      "stars": 182360,
+      "stars": 182362,
       "starsLabel": "182.4K",
       "forksLabel": "22.6K",
       "pushedAt": "2026-07-04",
@@ -78,7 +78,7 @@
       "name": "mattpocock/skills",
       "category": "Agent skills",
       "focus": "engineering workflow skills",
-      "stars": 156492,
+      "stars": 156497,
       "starsLabel": "156.5K",
       "forksLabel": "13.5K",
       "pushedAt": "2026-07-03",
@@ -260,7 +260,7 @@
       "name": "langfuse/langfuse",
       "category": "AI evals",
       "focus": "LLM observability and evals",
-      "stars": 30414,
+      "stars": 30415,
       "starsLabel": "30.4K",
       "forksLabel": "3.2K",
       "pushedAt": "2026-07-04",

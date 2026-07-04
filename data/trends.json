@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-04",
-  "generatedAt": "2026-07-04T22:02:14.586Z",
+  "generatedAt": "2026-07-04T22:07:27.192Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-07-04T22:02:14.586Z"
+      "updatedAt": "2026-07-04T22:07:27.192Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-07-04T22:02:14.586Z"
+      "updatedAt": "2026-07-04T22:07:27.192Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-07-04T22:02:14.586Z"
+      "updatedAt": "2026-07-04T22:07:27.192Z"
     }
   ],
   "items": [
@@ -263,7 +263,7 @@
       "category": "Developer tools",
       "score": 59,
       "velocity": "415 comments",
-      "signal": "718 points",
+      "signal": "722 points",
       "url": "https://blog.mikebowler.ca/2026/07/03/co2-and-decision-making/",
       "summary": "HN story by gslin with 415 comments."
     },
@@ -272,14 +272,25 @@
       "title": "Explanation of everything you can see in htop/top on Linux (2019)",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 57,
+      "score": 58,
       "velocity": "46 comments",
-      "signal": "351 points",
+      "signal": "352 points",
       "url": "https://peteris.rocks/blog/htop/",
       "summary": "HN story by theanonymousone with 46 comments."
     },
     {
       "rank": 23,
+      "title": "Costco is the anti-Amazon",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 51,
+      "velocity": "535 comments",
+      "signal": "534 points",
+      "url": "https://phenomenalworld.org/analysis/the-anti-amazon/",
+      "summary": "HN story by bookofjoe with 535 comments."
+    },
+    {
+      "rank": 24,
       "title": "Postgres data stored in Parquet on S3: LTAP architecture explained",
       "source": "Hacker News",
       "category": "Database",
@@ -288,17 +299,6 @@
       "signal": "152 points",
       "url": "https://www.databricks.com/blog/lakebase-ltap-rethinking-database-storage",
       "summary": "HN story by andrenotgiant with 50 comments."
-    },
-    {
-      "rank": 24,
-      "title": "Gone but Not Forgotten: Recovering the Dead Web",
-      "source": "Hacker News",
-      "category": "Frontend",
-      "score": 42,
-      "velocity": "44 comments",
-      "signal": "107 points",
-      "url": "https://blog.archive.org/2026/04/23/gone-but-not-forgotten-recovering-the-dead-web/",
-      "summary": "HN story by wslh with 44 comments."
     }
   ]
 }

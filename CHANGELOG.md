@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Ran 2026-07-05 KST token-backed publish-health refresh; npm `n8n-workflow` 429 remained the only non-ok source and generated data stayed publishable.
 - Ran 2026-07-05 KST token-backed publish-health refresh; generated data stayed publishable with npm `n8n-workflow` 429 as the only non-ok source.
 - Diversified Today `Start here` picks across tracked topics when high-priority alternatives are available.
 - Added saved queue count to Explore active-filter summaries so saved-first repeat visits keep context visible.

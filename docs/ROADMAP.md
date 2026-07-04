@@ -13,7 +13,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Current Source State
 
-- Last checked-in refresh: `2026-07-04T22:02:18.454Z`.
+- Last checked-in refresh: `2026-07-04T22:07:30.155Z`.
 - Generated items: 108.
 - Overall status: `partial`.
 - GitHub, Hacker News, trend npm, repo, and manual sources are `ok`.

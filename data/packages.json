@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-04",
-  "generatedAt": "2026-07-04T22:02:14.721Z",
+  "generatedAt": "2026-07-04T22:07:27.318Z",
   "sourceMeta": {
     "name": "npm",
     "status": "partial",
@@ -8,7 +8,7 @@
     "tracked": 25,
     "emitted": 25,
     "coverage": "25/25",
-    "updatedAt": "2026-07-04T22:02:14.721Z",
+    "updatedAt": "2026-07-04T22:07:27.318Z",
     "errors": [
       {
         "name": "n8n-workflow",
