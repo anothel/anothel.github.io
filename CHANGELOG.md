@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Reused the static fallback tagged-text updater for single-field data-mode copy to reduce page-specific regex replacement.
 - Ran 2026-07-04 token-backed publish-health refresh; GitHub-backed sources stayed `ok`, leaving npm package 429 as the accepted partial source with preserved rows.
 - Pruned completed implementation details from Roadmap current-state notes so the Roadmap stays a next-work queue.
 - Rewrote Roadmap as a future-work queue with concrete publish, review, signal-quality, Explore, trust, and architecture-gate bundles.

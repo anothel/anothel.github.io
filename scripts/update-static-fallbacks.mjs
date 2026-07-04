@@ -412,7 +412,7 @@ ${indentBlock(renderSkimList(getTodaySection(today, "skim")), 20)}$2`, "home ski
 
     let todayHtml = await readFile("today/index.html", "utf8");
     todayHtml = replaceTaggedText(todayHtml, "data-today-updated", today.updated);
-    todayHtml = replacePattern(todayHtml, /<p data-today-status>[\s\S]*?<\/p>/, `<p data-today-status>${escapeHtml(renderTodayStatus(today))}</p>`, "today status");
+    todayHtml = replaceTaggedText(todayHtml, "data-today-status", renderTodayStatus(today));
     todayHtml = replacePattern(todayHtml, /(<section class="stats-grid today-stats" aria-label="Today section summary" data-today-stats>)[\s\S]*?(\s*<\/section>\s*<section class="today-brief")/, `$1
 ${indentBlock(renderTodayStats(today.sections), 16)}$2`, "today stats");
     todayHtml = replacePattern(todayHtml, /(<section class="today-brief" data-today-sections aria-label="Today priority sections">)[\s\S]*?(\s*<\/section>\s*<section class="explore-strip")/, `$1
@@ -450,7 +450,11 @@ ${trimLineEnds(globalThis.DataHealth.renderSourceHealth(exploreSources, { today:
     statusHtml = replaceTaggedText(statusHtml, "data-status-sources", statusSummary.totalSources);
     statusHtml = replaceTaggedText(statusHtml, "data-status-health", statusSummary.healthLabel);
     statusHtml = replaceTaggedText(statusHtml, "data-status-updated", statusSummary.updated);
-    statusHtml = replacePattern(statusHtml, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(rows, { updated: statusSummary.updated }))}</p>`, "status data mode");
+    statusHtml = replaceTaggedText(
+        statusHtml,
+        "data-data-mode",
+        globalThis.DataHealth.dataModeText(rows, { updated: statusSummary.updated })
+    );
     statusHtml = replacePattern(statusHtml, /(<div data-refresh-run>)[\s\S]*?\n\s*<\/section>\s*\n\s*(<section class="rank-panel" aria-labelledby="status-table-title">)/, `$1
 ${renderRefreshRun(report).trim()}
                 </div>
@@ -466,7 +470,11 @@ ${renderRefreshRun(report).trim()}
         const renderedRows = renderModuleRows(module, dataset);
         let html = await readFile(module.route, "utf8");
         html = replaceTaggedText(html, "data-updated", module.updated);
-        html = replacePattern(html, /<p data-data-mode>[\s\S]*?<\/p>/, `<p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(dataset.sourceMeta, { updated: dataset.updated || module.updated }))}</p>`, `${module.id} data mode`);
+        html = replaceTaggedText(
+            html,
+            "data-data-mode",
+            globalThis.DataHealth.dataModeText(dataset.sourceMeta, { updated: dataset.updated || module.updated })
+        );
         if (renderedRows.grid) {
             html = replacePattern(html, /(<section class="dashboard-grid module-primary-panel" aria-label="Trend cards" data-grid>)[\s\S]*?(\r?\n\s*<\/section>\r?\n\s*<section class="rank-panel module-primary-panel")/, `$1
 ${indentBlock(renderedRows.grid, 16)}$2`, `${module.id} cards`);
