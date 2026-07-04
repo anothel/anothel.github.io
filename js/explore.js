@@ -182,13 +182,17 @@
         ].map(([key, value]) => `${key}:${String(value).toLowerCase()}`).join("|");
     }
 
+    function displayQuery(query = "") {
+        return query.length > 42 ? `${query.slice(0, 42)}...` : query;
+    }
+
     function savedSearchLabel(value) {
         const normalized = normalizeSavedSearch(value);
         const parts = [];
         if (normalized.focus !== "all") parts.push(normalized.focus);
         if (normalized.module !== "all") parts.push(normalized.module);
         if (normalized.category !== "all") parts.push(normalized.category);
-        if (normalized.query) parts.push(normalized.query);
+        if (normalized.query) parts.push(displayQuery(normalized.query));
         if (normalized.sort !== "priority") parts.push(sortLabels[normalized.sort] || normalized.sort);
         return parts.length > 0 ? parts.join(" / ") : "All signals";
     }
@@ -328,7 +332,7 @@
         if (filters.focus && filters.focus !== "all") parts.push(`Focus: ${filters.focus}`);
         if (filters.module !== "all") parts.push(`Module: ${filters.module}`);
         if (filters.category !== "all") parts.push(`Category: ${filters.category}`);
-        if (filters.query) parts.push(`Search: ${filters.query}`);
+        if (filters.query) parts.push(`Search: ${displayQuery(filters.query)}`);
         if (filters.sort === "saved") parts.push("Sort: saved first");
         return parts.length > 0 ? parts.join(" / ") : "Showing all tracked items.";
     }

@@ -563,6 +563,24 @@ test("Explore saved search labels omit default fields", () => {
     assert.equal(app.savedSearchLabel({ focus: "Agent skills", module: "all", category: "all", query: "skills", sort: "priority" }), "Agent skills / skills");
 });
 
+test("Explore shortens long query copy without changing saved query ids", () => {
+    const app = loadExplore();
+    const query = "agent workflow automation evaluation benchmark orchestration";
+
+    assert.equal(
+        app.savedSearchLabel({ focus: "MCP", module: "all", category: "all", query, sort: "priority" }),
+        "MCP / agent workflow automation evaluation bench..."
+    );
+    assert.equal(
+        app.savedSearchId({ focus: "MCP", module: "all", category: "all", query, sort: "priority" }),
+        "focus:mcp|module:all|category:all|query:agent workflow automation evaluation benchmark orchestration|sort:priority"
+    );
+    assert.equal(
+        app.activeExploreSummary({ module: "all", category: "all", focus: "MCP", query, sort: "priority" }),
+        "Focus: MCP / Search: agent workflow automation evaluation bench..."
+    );
+});
+
 test("Explore saved search apply ignores stale module and category values", () => {
     const app = loadExplore();
     const module = { value: "all", options: [{ value: "all" }, { value: "Trends" }] };

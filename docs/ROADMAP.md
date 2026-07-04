@@ -134,6 +134,7 @@ Absorbs analysis items:
 Current state:
 
 - Dynamic and checked-in Explore cards expose score reasons, signal-fit ARIA text, and source context when available; JavaScript card activation opens the original item without a duplicate visible link.
+- Saved search labels and active-filter summaries shorten long query copy without changing stored query ids.
 
 Verification:
 
