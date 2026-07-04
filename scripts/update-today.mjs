@@ -187,6 +187,11 @@ function baselineCount(items) {
     return items.filter((item) => item.isBaseline).length;
 }
 
+function unseenCategoryItems(pool, selectedItems) {
+    const selectedCategories = new Set(selectedItems.map((item) => item.category).filter(Boolean));
+    return pool.filter((item) => !selectedCategories.has(item.category));
+}
+
 function fillStartFrom(picker, startItems, pool, options = {}) {
     const {
         limit = sectionCounts.start,
@@ -211,6 +216,7 @@ function pickStartItems(picker, intentPool, primaryPool, fallbackPool) {
     const startItems = [];
 
     fillStartFrom(picker, startItems, intentPool, { limit: 1 });
+    fillStartFrom(picker, startItems, unseenCategoryItems(primaryPool, startItems));
     fillStartFrom(picker, startItems, primaryPool);
     fillStartFrom(picker, startItems, fallbackPool);
 

@@ -197,6 +197,16 @@ test("buildTodayBrief surfaces expanded eval or workflow coverage from checked-i
     assert.ok(categories.has("AI evals") || categories.has("Workflow automation"));
 });
 
+test("Start here avoids repeating a tracked topic when other high-priority topics are available", () => {
+    const brief = buildTodayBrief(checkedInSources(), "2026-06-15T00:00:00.000Z");
+    const startItems = brief.sections.find((section) => section.id === "start").items;
+    const startCategories = startItems.map((item) => item.category);
+
+    assert.equal(new Set(startCategories).size, startItems.length);
+    assert.ok(startCategories.includes("MCP"));
+    assert.ok(startCategories.includes("AI evals") || startCategories.includes("Workflow automation"));
+});
+
 test("buildTodayBrief removes URL and title collisions from output", () => {
     const brief = buildTodayBrief({
         trends: {
