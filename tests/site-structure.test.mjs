@@ -537,6 +537,8 @@ test("root page exposes command center slots", () => {
     assert.match(root, /Trust state/);
     assert.match(root, /Topic lenses/);
     assert.match(root, /Browse modules/);
+    assert.match(root, /Projects/);
+    assert.match(root, /href="https:\/\/anothel\.github\.io\/securekit\/" rel="noopener noreferrer"/);
     assert.match(root, /Worth skimming/);
     assert.match(root, /Local state/);
     assert.match(root, /Open priority brief/);
@@ -556,6 +558,7 @@ test("root page exposes command center slots", () => {
     assert.match(root, /class="[^"]*\bstart-list\b/);
     assert.match(root, /class="skim-list"/);
     assert.match(root, /class="[^"]*\bmodule-strip\b/);
+    assert.match(root, /class="project-list"/);
     assert.doesNotMatch(root, /aria-label="Topic focus pages"/);
     assert.doesNotMatch(root, />Topic focus</);
     assert.doesNotMatch(root, /class="today-grid"/);
@@ -569,6 +572,7 @@ test("root page exposes command center slots", () => {
     assert.match(styles, /\.utility-card-wide\s*{[^}]*grid-column: span 2/s);
     assert.match(styles, /\.home-priority-list\s*{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/s);
     assert.match(styles, /\.home-module-board\s*{[^}]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/s);
+    assert.match(styles, /\.project-list\s*{[^}]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/s);
     assert.match(styles, /\.home-priority-panel \.section-heading\s*{[^}]*align-items: start/s);
     assert.match(styles, /\.home-priority-panel \.section-heading > a\s*{[^}]*border: 1px solid var\(--line\)/s);
 });

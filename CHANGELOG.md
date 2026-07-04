@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Added a Home Projects card for SecureKit while preserving static fallback regeneration boundaries.
 - Pruned Roadmap to live triggers, source state, architecture gate, and cut list.
 - Replaced stale audit wording in docs and test names with mismatch/alignment language.
 - Rebuilt Roadmap as a trigger-based next-work queue and removed stale audit wording.

@@ -217,6 +217,7 @@ main {
 
 .home-priority-panel,
 .home-module-section,
+.home-project-section,
 .home-skim-panel,
 .topic-movement-section {
     display: grid;
@@ -423,14 +424,16 @@ main {
 
 .start-list,
 .skim-list,
-.module-strip {
+.module-strip,
+.project-list {
     display: grid;
     gap: 12px;
 }
 
 .start-item,
 .skim-item,
-.module-route {
+.module-route,
+.project-card {
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background: var(--panel);
@@ -449,6 +452,11 @@ main {
 }
 
 .module-route:hover {
+    border-color: var(--accent-soft);
+    background: var(--panel-strong);
+}
+
+.project-card:hover {
     border-color: var(--accent-soft);
     background: var(--panel-strong);
 }
@@ -513,6 +521,22 @@ main {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.project-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.project-card {
+    display: grid;
+    gap: 8px;
+    min-height: 96px;
+    padding: 16px;
+}
+
+.project-card span {
+    color: var(--muted);
+    font-size: 0.84rem;
+}
+
 .module-route {
     display: grid;
     gap: 8px;
@@ -537,6 +561,8 @@ main {
 .start-item p,
 .skim-item strong,
 .skim-item span,
+.project-card strong,
+.project-card span,
 .module-route strong,
 .module-route small {
     overflow-wrap: anywhere;
@@ -2183,6 +2209,7 @@ button {
     .module-strip,
     .home-priority-list,
     .home-module-board,
+    .project-list,
     .home-utility-strip,
     .explore-controls {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2220,6 +2247,7 @@ button {
     .module-strip,
     .home-priority-list,
     .home-module-board,
+    .project-list,
     .explore-workbench,
     .explore-controls,
     .advanced-filter-grid {

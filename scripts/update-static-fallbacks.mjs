@@ -427,8 +427,8 @@ async function updateStaticFallbacks() {
 ${indentBlock(renderStartItems(getTodaySection(today, "start")), 24)}$2`, "home start");
     home = replacePattern(home, /(<div class="topic-movement-grid" data-home-topic-movements>)[\s\S]*?(\s*<\/div>\s*<\/section>\s*<section class="home-module-section")/, `$1
 ${indentBlock(renderTopicMovements(topicMovements), 20)}$2`, "home topic movement");
-    home = replacePattern(home, /(<section class="module-strip home-module-board" aria-label="Module routes" data-home-routes>)[\s\S]*?(\s*<\/section>\s*<\/section>\s*<section class="home-skim-panel")/, `$1
-${indentBlock(renderModuleRoutes(homeRoutes), 20)}$2`, "home module routes");
+    home = replacePattern(home, /(<section class="module-strip home-module-board" aria-label="Module routes" data-home-routes>)[\s\S]*?(\s*<\/section>\s*<\/section>\s*<section class="home-project-section")/, `$1
+${indentBlock(renderModuleRoutes(homeRoutes), 20)}$2`, "home project boundary");
     home = replacePattern(home, /(<div class="skim-list" data-home-skim>)[\s\S]*?(\s*<\/div>\s*<\/section>\s*<\/main>)/, `$1
 ${indentBlock(renderSkimList(getTodaySection(today, "skim")), 20)}$2`, "home skim");
     await writeIfChanged("index.html", home);

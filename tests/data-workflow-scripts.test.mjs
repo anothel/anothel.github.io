@@ -75,6 +75,13 @@ test("static fallback renderer reuses public render helpers instead of duplicati
     assert.doesNotMatch(script, /function (ageDays|dataState|todayStatusText|sourceDetail|renderStatusRows)\b/);
 });
 
+test("static fallback renderer preserves the home projects section", () => {
+    const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
+
+    assert.match(script, /<section class="home-project-section"/);
+    assert.match(script, /"home project boundary"/);
+});
+
 test("static fallback renderer derives topic pages from taxonomy", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
