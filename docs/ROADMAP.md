@@ -133,7 +133,7 @@ Absorbs analysis items:
 
 Current state:
 
-- Dynamic and checked-in Explore cards expose score reasons, signal-fit ARIA text, source context when available, and a real source link.
+- Dynamic and checked-in Explore cards expose score reasons, signal-fit ARIA text, and source context when available; JavaScript card activation opens the original item without a duplicate visible link.
 
 Verification:
 
@@ -175,7 +175,7 @@ Absorbs analysis items:
 
 Current state:
 
-- Explore external item anchors use `rel="noopener noreferrer"`, and card activation opens with `noopener,noreferrer` instead of `location.assign` when `window.open` is available.
+- Explore card activation opens external items with `noopener,noreferrer` instead of `location.assign` when `window.open` is available; duplicate visible item links stay out of the card UI.
 - Threat model SHA pinning rationale matches the current GitHub-owned actions, local scripts, no dependency, and no lockfile posture.
 
 Verification:

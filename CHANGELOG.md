@@ -57,6 +57,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Kept single-error source health details sanitized while naming retry data refresh as recovery.
 - Ran 2026-07-04 KST token-backed publish-health refresh; GitHub-backed sources stayed `ok`, leaving npm `n8n-workflow` 429 as the only non-ok source.
 - Aligned Roadmap P0 current state with the latest checked-in token-backed refresh report.
+- Removed redundant Explore item-link copy and aligned Roadmap current-state notes with card activation behavior.
 
 ## 2026-06-28
 
