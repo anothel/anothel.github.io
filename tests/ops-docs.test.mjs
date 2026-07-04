@@ -16,11 +16,9 @@ const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const roadmapQueueHeadings = [
     "P0 - Publish Health Refresh",
-    "P1 - Signal Quality Watchlist",
-    "P1 - Explore Repeat-Use Tightening",
-    "P1 - Security and Release Hardening",
-    "P2 - Status and Source Trust",
-    "P2 - Formatting and Generator Maintainability",
+    "P1 - Signal Quality",
+    "P1 - Explore Repeat Use",
+    "P2 - Trust Copy and Generator Cleanup",
 ];
 
 test("README explains data refresh automation for operators", () => {
@@ -401,12 +399,14 @@ test("IA records public scope triage outcomes", () => {
     assert.match(ia, /Active navigation and sitemap should expose signal-dashboard routes/s);
 });
 
-test("roadmap is a future work queue, not a completed-work ledger", () => {
+test("roadmap is a lean future work queue, not a completed-work ledger", () => {
     assert.match(roadmap, /## Next Work Queue/);
-    assert.match(roadmap, /## Later Queue/);
-    assert.match(roadmap, /Keep shipped outcomes in `CHANGELOG\.md`/);
+    assert.match(roadmap, /Completed work belongs in `CHANGELOG\.md`/);
     assert.doesNotMatch(roadmap, /## Current Surface/);
     assert.doesNotMatch(roadmap, /## Product Direction/);
+    assert.doesNotMatch(roadmap, /## Current Baseline/);
+    assert.doesNotMatch(roadmap, /## Later Queue/);
+    assert.doesNotMatch(roadmap, /Absorbs analysis items:/);
     assert.doesNotMatch(roadmap, /Post-publish smoke:/);
     assert.doesNotMatch(roadmap, /Publish readiness:/);
 });
@@ -418,15 +418,14 @@ test("roadmap names concrete next work bundles in priority order", () => {
 });
 
 test("roadmap P0 current state matches the checked-in refresh report", () => {
-    const start = roadmap.indexOf("### P0 - Publish Health Refresh");
-    const next = roadmap.indexOf("\n### ", start + 1);
+    const start = roadmap.indexOf("## Current Source State");
+    const next = roadmap.indexOf("\n## Next Work Queue", start + 1);
     const section = roadmap.slice(start, next);
     const partialSource = refreshReport.modules
         .flatMap((module) => module.sources || [])
         .find((source) => source.status === "partial");
 
-    assert.match(section, new RegExp(refreshReport.manifestUpdated));
-    assert.match(section, new RegExp(refreshReport.runContext.eventName));
+    assert.match(section, new RegExp(refreshReport.generatedAt));
     assert.match(section, new RegExp(String(refreshReport.totals.items)));
     assert.match(section, new RegExp(refreshReport.totals.status));
     assert.match(section, new RegExp(partialSource.source));
@@ -446,66 +445,28 @@ test("roadmap work bundles define trigger, scope, verification, and exit", () =>
     }
 });
 
-test("roadmap keeps architecture as a trigger gate, not active work", () => {
-    assert.match(roadmap, /## Trigger Gates/);
-    assert.match(roadmap, /### Architecture Gate/);
-    assert.match(roadmap, /Gate trigger: a measured vanilla JavaScript blocker/);
+test("roadmap keeps architecture behind a gate, not active work", () => {
+    assert.match(roadmap, /## Architecture Gate/);
+    assert.match(roadmap, /Trigger: a measured vanilla JavaScript blocker/);
     assert.doesNotMatch(roadmap, /^### P3 - Architecture Gate$/m);
 });
 
 test("roadmap keeps product boundaries explicit for future work", () => {
     assert.match(roadmap, /No backend, account, sync, database, framework, bundler, package dependency, or lockfile/);
-    assert.match(roadmap, /Do not run live refresh unless the selected bundle needs fresh source evidence/);
-    assert.match(roadmap, /Keep npm `n8n-workflow` active while preserved rows remain useful/);
-    assert.match(roadmap, /If `GITHUB_TOKEN` is missing, keep GitHub 403 as known partial state and queue a token-backed rerun/);
-    assert.match(roadmap, /Framework PoC waits for a measured vanilla JavaScript blocker/);
+    assert.match(roadmap, /Do not run live refresh unless fresh source evidence is needed/);
+    assert.match(roadmap, /Keep `n8n-workflow` visible while preserved rows are useful/);
+    assert.match(roadmap, /If `GITHUB_TOKEN` is missing, keep GitHub rate limits as known partial state/);
+    assert.match(roadmap, /no framework, bundler, dependency, lockfile, backend, account, sync, database, or server function/i);
 });
 
-test("roadmap folds repo analysis work into baselines, bundles, and deferrals", () => {
-    assert.match(roadmap, /## Current Baseline/);
-    assert.match(roadmap, /Absorbs analysis items:/);
-    assert.match(roadmap, /## Later Queue/);
-    assert.match(roadmap, /Why later:/);
-    assert.match(roadmap, /Pull forward when:/);
+test("roadmap keeps cut items out of the active queue", () => {
+    assert.match(roadmap, /## Cut List/);
     assert.doesNotMatch(roadmap, /C:\/Users\/anoth\/Downloads\/anothel_repo_analysis_2026-06-28\.md/);
     assert.doesNotMatch(roadmap, /Report item \| Decision \| Reason/);
 
-    for (const label of [
-        "SECURITY.md",
-        "package.json",
-        "PR CI",
-        "Roadmap P0",
-        "Signal Schema v2",
-        "renderer XSS",
-        "GitHub 403",
-        "CONTRIBUTING.md",
-        "CHANGELOG.md",
-        "source governance",
-        "external link policy",
-        "update-trends.yml",
-        "Status partial copy",
-        "accessibility",
-        "Astro/React",
-        "visual regression",
-        "provenance",
-        "advanced ranking",
-        "export/import",
-        "Native file chooser import smoke",
-        "source expansion",
-        "README product purpose",
-        "JSON Schema",
-        "route/link checker",
-        "Actions pinning",
-        "Dependabot",
-        "release checklist",
-    ]) {
-        assert.match(roadmap, new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
-    }
-
-    assert.match(roadmap, /already part of the current repo/);
-    assert.match(roadmap, /not re-added/);
-    assert.match(roadmap, /queued with lower priority/);
-    assert.match(roadmap, /Pull forward when:/);
-    assert.match(roadmap, /source-available reuse boundary/);
+    assert.doesNotMatch(roadmap, /Why later:/);
+    assert.doesNotMatch(roadmap, /Pull forward when:/);
+    assert.match(roadmap, /Do not re-add backlog lists/);
+    assert.match(roadmap, /Pull one back only when a real trigger above exists/);
     assert.doesNotMatch(roadmap, /^### P1 - License and Public Reuse Boundary$/m);
 });
