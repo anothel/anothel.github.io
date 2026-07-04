@@ -118,3 +118,43 @@ test("signal priority uses source rank before title when scores saturate", () =>
     assert.equal(sorted[1].title, "@ai-sdk/provider");
     assert.equal(sorted[0].score, sorted[1].score);
 });
+
+test("shared signal normalization caps broad repo short names", () => {
+    const sources = {
+        trends: { updated: "2026-07-03", sourceMeta: [], items: [] },
+        packages: { updated: "2026-07-03", sourceMeta: [], packages: [] },
+        repos: {
+            updated: "2026-07-03",
+            sourceMeta: [],
+            repos: [
+                {
+                    rank: 1,
+                    name: "facebook/react",
+                    category: "Frontend",
+                    focus: "frontend runtime",
+                    stars: 1000000000,
+                    starsLabel: "1B",
+                    url: "https://example.com/react",
+                    summary: "UI runtime."
+                },
+                {
+                    rank: 2,
+                    name: "openai/codex",
+                    category: "AI agents",
+                    focus: "terminal coding agent",
+                    stars: 92000,
+                    starsLabel: "92K",
+                    url: "https://example.com/codex",
+                    summary: "Coding agent."
+                }
+            ]
+        },
+        links: { updated: "2026-07-03", sourceMeta: [], links: [] }
+    };
+
+    const sorted = signalSchema.normalizeSignalData(sources).sort(signalSchema.compareSignalPriority);
+    const byTitle = Object.fromEntries(sorted.map((item) => [item.title, item]));
+
+    assert.equal(sorted[0].title, "openai/codex");
+    assert.ok(byTitle["facebook/react"].score <= 76);
+});

@@ -101,6 +101,10 @@ Absorbs analysis items:
 - Data schema golden coverage.
 - Partial/fallback/rate-limit fixtures.
 
+Current state:
+
+- Shared signal normalization caps broad repo short-name matches, so `facebook/react` follows the same baseline policy as `react`.
+
 Verification:
 
 - Run `node --test tests/signal-quality-golden.test.mjs tests/signal-taxonomy.test.mjs`.

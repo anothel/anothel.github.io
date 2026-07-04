@@ -74,7 +74,9 @@
 
     function isBroadBaselineSignal(item, options = {}) {
         const name = String(item.name || item.title || "").toLowerCase();
-        return new Set(signalPolicyFor(options).baselineTitles || []).has(name);
+        const repoName = name.includes("/") ? name.split("/").at(-1) : name;
+        const baselineTitles = new Set(signalPolicyFor(options).baselineTitles || []);
+        return baselineTitles.has(name) || baselineTitles.has(repoName);
     }
 
     function qualityScoreForItem(moduleKey, item, options = {}) {
