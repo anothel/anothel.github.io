@@ -273,7 +273,8 @@ function applyStatus(root, manifest, datasets, report = null) {
         total: root.querySelector("[data-status-total]"),
         sources: root.querySelector("[data-status-sources]"),
         health: root.querySelector("[data-status-health]"),
-        updated: root.querySelector("[data-status-updated]")
+        updated: root.querySelector("[data-status-updated]"),
+        fallbackGenerated: root.querySelector("[data-status-fallback-generated]")
     };
     const rowList = root.querySelector("[data-status-rows]");
     const sourceCards = root.querySelector("[data-source-health]");
@@ -284,6 +285,7 @@ function applyStatus(root, manifest, datasets, report = null) {
     if (summarySlots.sources) summarySlots.sources.textContent = String(summary.totalSources);
     if (summarySlots.health) summarySlots.health.textContent = summary.healthLabel;
     if (summarySlots.updated) summarySlots.updated.textContent = summary.updated;
+    if (summarySlots.fallbackGenerated && report) summarySlots.fallbackGenerated.textContent = report.generatedAt || "-";
     if (rowList) rowList.innerHTML = renderSourceRows(rows, dataBase);
     if (sourceCards) sourceCards.innerHTML = renderSourceCards(rows);
     if (refreshRun && report) refreshRun.innerHTML = renderRefreshRun(report);

@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Added Status page snapshot time copy so data date, refresh run, source health, and checked-in page generation stay distinct.
 - Added a static fallback freshness contract covering Home, Today, Status, Explore, manifest, and refresh-report dates.
 - Updated data-driven sitemap lastmod values from the manifest date during static fallback generation.
 - Applied the 2026-07-04 freshness/framework reassessment to Roadmap triggers without adding duplicate work queues.

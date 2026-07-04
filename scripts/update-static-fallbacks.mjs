@@ -473,6 +473,7 @@ ${trimLineEnds(globalThis.DataHealth.renderSourceHealth(exploreSources, { today:
     statusHtml = replaceTaggedText(statusHtml, "data-status-sources", statusSummary.totalSources);
     statusHtml = replaceTaggedText(statusHtml, "data-status-health", statusSummary.healthLabel);
     statusHtml = replaceTaggedText(statusHtml, "data-status-updated", statusSummary.updated);
+    statusHtml = replaceTaggedText(statusHtml, "data-status-fallback-generated", generatedAt);
     statusHtml = replaceTaggedText(
         statusHtml,
         "data-data-mode",

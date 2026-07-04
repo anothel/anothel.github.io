@@ -204,6 +204,7 @@ test("status static fallback matches current manifest summary", () => {
     assert.match(html, new RegExp(`<strong data-status-total>${moduleTotal()}</strong>`));
     assert.match(html, new RegExp(`<strong data-status-health>${sourceHealth()}</strong>`));
     assert.match(html, new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
+    assert.match(html, new RegExp(`<strong data-status-fallback-generated>${escapeRegExp(refreshReport.generatedAt)}</strong>`));
     assert.match(html, new RegExp(dataModeText().replaceAll(".", "\\.")));
     assert.match(html, new RegExp(`<strong>${refreshReport.generatedAt}</strong>`));
     if (refreshReport.totals.status === "ok") {
@@ -228,6 +229,7 @@ test("home today status and explore freshness dates follow manifest and refresh 
     assert.match(read("index.html"), new RegExp(`<p class="stamp">Data date ${manifest.updated}</p>`));
     assert.match(read("today/index.html"), new RegExp(`<span data-today-updated>${manifest.updated}</span>`));
     assert.match(read("status/index.html"), new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
+    assert.match(read("status/index.html"), new RegExp(`<strong data-status-fallback-generated>${escapeRegExp(refreshReport.generatedAt)}</strong>`));
     assert.match(read("status/index.html"), new RegExp(`<strong>${escapeRegExp(refreshReport.generatedAt)}</strong>`));
     assert.match(read("explore/index.html"), new RegExp(`updated ${manifest.updated}`));
 });

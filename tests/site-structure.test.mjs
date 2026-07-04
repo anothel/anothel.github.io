@@ -642,6 +642,7 @@ test("status page owns the source health overview", () => {
         "data-status-sources",
         "data-status-health",
         "data-status-updated",
+        "data-status-fallback-generated",
         "data-status-rows",
         "data-source-health",
         "data-refresh-run",
