@@ -41,63 +41,6 @@ Verification:
 
 Exit: generated data is publishable, or the exact source blocker is recorded here.
 
-### P1 - Signal Quality
-
-Trigger: generic tooling outranks specific agent-workflow signals, a watched source goes empty, or owner review says ranking is wrong.
-
-Scope:
-
-- Prefer `data/watchlists.json` and `data/signal-policy.json` changes before updater code.
-- Retire weak broad sources with `disabled: true` and `history`; do not delete provenance.
-- Keep Today and Explore ranking policy aligned.
-
-Verification:
-
-- `node --test tests/signal-quality-golden.test.mjs tests/signal-taxonomy.test.mjs`.
-- `node --test tests/trend-data.test.mjs tests/package-data.test.mjs tests/repo-data.test.mjs tests/link-data.test.mjs`.
-- `npm.cmd run check`.
-- `git diff --check`.
-
-Exit: agent-workflow signals beat broad baseline tooling for the reviewed case.
-
-### P1 - Explore Repeat Use
-
-Trigger: repeated visits require redoing the same search, sort, focus, topic pin, or source/ranking interpretation.
-
-Scope:
-
-- Improve saved searches, preferred defaults, topic pins, active-filter clarity, and score/source explanation.
-- Keep existing localStorage keys unless a failing test proves they block use.
-- Do not add account sync, backend, or a new route.
-
-Verification:
-
-- `node --test tests/explore-ui.test.mjs tests/local-state.test.mjs tests/topic-ui.test.mjs`.
-- `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs`.
-- `npm.cmd run check`.
-- `git diff --check`.
-
-Exit: repeat Explore use needs less manual setup without changing storage scope.
-
-### P2 - Trust Copy and Generator Cleanup
-
-Trigger: source health, stale data, partial recovery, or generated/static fallback copy becomes unclear.
-
-Scope:
-
-- Keep ok, partial, error, stale, fallback, staleButSafe, and rateLimited wording consistent.
-- Prefer shared renderer/generator fixes over page-local copy.
-- Touch formatting/static fallback helpers only when they are already slowing review or maintenance.
-
-Verification:
-
-- `node --test tests/status-ui.test.mjs tests/data-health.test.mjs tests/refresh-report.test.mjs`.
-- `node --test tests/static-fallback.test.mjs tests/home-data.test.mjs tests/today-data.test.mjs tests/workflow.test.mjs`.
-- `npm.cmd run check`.
-- `git diff --check`.
-
-Exit: source state copy and generated fallback output match the checked-in data.
-
 ## Architecture Gate
 
 Trigger: a measured vanilla JavaScript blocker makes Review or Explore harder to maintain than the no-build path.

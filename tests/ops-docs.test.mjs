@@ -16,9 +16,6 @@ const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const roadmapQueueHeadings = [
     "P0 - Publish Health Refresh",
-    "P1 - Signal Quality",
-    "P1 - Explore Repeat Use",
-    "P2 - Trust Copy and Generator Cleanup",
 ];
 
 test("README explains data refresh automation for operators", () => {
@@ -409,6 +406,9 @@ test("roadmap is a lean future work queue, not a completed-work ledger", () => {
     assert.doesNotMatch(roadmap, /Absorbs analysis items:/);
     assert.doesNotMatch(roadmap, /Post-publish smoke:/);
     assert.doesNotMatch(roadmap, /Publish readiness:/);
+    assert.doesNotMatch(roadmap, /^### P1 - Signal Quality$/m);
+    assert.doesNotMatch(roadmap, /^### P1 - Explore Repeat Use$/m);
+    assert.doesNotMatch(roadmap, /^### P2 - Trust Copy and Generator Cleanup$/m);
 });
 
 test("roadmap names concrete next work bundles in priority order", () => {
