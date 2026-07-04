@@ -334,6 +334,7 @@
         if (filters.category !== "all") parts.push(`Category: ${filters.category}`);
         if (filters.query) parts.push(`Search: ${displayQuery(filters.query)}`);
         if (filters.sort === "saved") parts.push("Sort: saved first");
+        if (savedCount > 0) parts.push(`Saved: ${savedCount}`);
         return parts.length > 0 ? parts.join(" / ") : "Showing all tracked items.";
     }
 

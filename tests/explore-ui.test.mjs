@@ -389,7 +389,7 @@ test("Explore summarizes active saved workflow state", () => {
     );
     assert.equal(
         app.activeExploreSummary({ module: "Repos", category: "AI agents", focus: "MCP", query: "codex", sort: "saved" }, 2),
-        "Focus: MCP / Module: Repos / Category: AI agents / Search: codex / Sort: saved first"
+        "Focus: MCP / Module: Repos / Category: AI agents / Search: codex / Sort: saved first / Saved: 2"
     );
 });
 
@@ -1003,7 +1003,7 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
 
     elements["[data-explore-sort]"].dispatch("change", "saved");
     assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
-    assert.doesNotMatch(elements["[data-explore-summary]"].textContent, /Saved:/);
+    assert.match(elements["[data-explore-summary]"].textContent, /Saved: 1/);
     assert.equal(elements["[data-explore-saved-count]"].textContent, "1");
 
     focusButtons[1].listeners.click({ target: focusButtons[1] });
@@ -1013,6 +1013,7 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
     assert.equal(elements["[data-explore-query]"].value, "");
     assert.equal(elements["[data-explore-sort]"].value, "saved");
     assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
+    assert.match(elements["[data-explore-summary]"].textContent, /Saved: 1/);
     assert.equal(elements["[data-explore-total]"].textContent, "2");
 });
 
