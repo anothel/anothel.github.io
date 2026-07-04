@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Pruned completed implementation details from Roadmap current-state notes so the Roadmap stays a next-work queue.
 - Rewrote Roadmap as a future-work queue with concrete publish, review, signal-quality, Explore, trust, and architecture-gate bundles.
 - Folded the repo analysis intake and accepted follow-up work directly into the Roadmap.
 - Added public security, contribution, signal schema, source governance, threat model, and release checklist docs.

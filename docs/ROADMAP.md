@@ -11,6 +11,7 @@ Use it to choose the next useful bundle, not to store completed history. Keep sh
 - Each active bundle must keep Trigger, Scope, Verification, and Exit.
 - Prefer copy, data, docs, and focused tests before new routes or abstractions.
 - Do not run live refresh unless the selected bundle needs fresh source evidence.
+- Keep Current state short: live blocker, trigger fact, or next proof only. Move shipped details to `CHANGELOG.md` and durable docs.
 
 ## Current Baseline
 
@@ -54,10 +55,8 @@ Scope:
 
 Current state:
 
-- Latest checked-in token-backed refresh (`2026-07-03T21:54:24.341Z`, 2026-07-04 KST) reported 108 generated items with overall `partial` status.
-- GitHub trend, repo, HN, trend npm, and manual link sources are `ok`.
-- npm `n8n-workflow` still returns 429, with previous package rows preserved from 2026-07-03 and `coverage: 25/25`, so current data remains publishable partial.
-- Next full confirmation is only needed when package source health must prove all sources `ok` or `n8n-workflow` stops preserving useful rows.
+- Checked-in token-backed refresh `2026-07-03T21:54:24.341Z` generated 108 items with overall `partial` status; GitHub trend, repo, HN, trend npm, and manual sources are `ok`.
+- Active non-ok source: npm `n8n-workflow` 429 with preserved 2026-07-03 package rows and `coverage: 25/25`; rerun only when all-source-`ok` proof is needed or preserved rows stop being useful.
 
 Absorbs analysis items:
 
@@ -101,10 +100,6 @@ Absorbs analysis items:
 - Data schema golden coverage.
 - Partial/fallback/rate-limit fixtures.
 
-Current state:
-
-- Shared signal normalization caps broad repo short-name matches, so `facebook/react` follows the same baseline policy as `react`.
-
 Verification:
 
 - Run `node --test tests/signal-quality-golden.test.mjs tests/signal-taxonomy.test.mjs`.
@@ -134,11 +129,6 @@ Absorbs analysis items:
 - Score/reason/source explanation.
 - Accessibility smoke checks.
 - First-screen explanation only when owner asks or the current first screen blocks use.
-
-Current state:
-
-- Dynamic and checked-in Explore cards expose score reasons, signal-fit ARIA text, and source context when available; JavaScript card activation opens the original item without a duplicate visible link.
-- Saved search labels and active-filter summaries shorten long query copy without changing stored query ids.
 
 Verification:
 
@@ -178,12 +168,6 @@ Absorbs analysis items:
 - Dependabot and GitHub Actions update policy.
 - Release checklist and support scope maintenance.
 
-Current state:
-
-- Explore card activation opens external items with `noopener,noreferrer` instead of `location.assign` when `window.open` is available; duplicate visible item links stay out of the card UI.
-- Explore cards with unsafe item URLs render without card activation attributes.
-- Threat model SHA pinning rationale matches the current GitHub-owned actions, local scripts, no dependency, and no lockfile posture.
-
 Verification:
 
 - Run `node --test tests/safe-dom.test.mjs tests/module-renderers-ui.test.mjs tests/static-fallback.test.mjs`.
@@ -211,10 +195,7 @@ Scope:
 
 Current state:
 
-- Shared source detail copy names npm `n8n-workflow` 429, keeps `rateLimited` and previous refresh context visible, removes long API URLs from rendered errors, and names `retry data refresh` as the recovery action.
-- Source recovery coverage now keeps `emitted <= tracked`, so refresh reports do not show impossible ratios like `4/1` or `2/1`.
-- Status refresh-run attention now reuses shared source detail copy, including sanitized failed-source errors and `retry data refresh`.
-- The bundle should wake again only when a new source health state becomes unclear or useful preserved rows disappear.
+- Wake this bundle only when a new source health state becomes unclear, partial copy hides useful preserved rows, or recovery guidance drifts from the shared source detail copy.
 
 Absorbs analysis items:
 
@@ -256,7 +237,6 @@ Absorbs analysis items:
 
 Current state:
 
-- Explore source-health and fallback-result replacement now use explicit `static-fallback` markers instead of page-adjacent section regex.
 - Remaining static fallback regex should move only when the touched block is already being changed.
 
 Verification:
