@@ -252,7 +252,7 @@ test("explore static fallback carries the same score explanation as dynamic card
     assert.match(html, /<p class="source-context">/);
 });
 
-test("module page stamps do not drift behind checked-in manifest", () => {
+test("module page stamps stay aligned with checked-in manifest", () => {
     for (const module of manifest.modules) {
         const html = read(module.route);
         assert.match(html, new RegExp(`<span data-updated>${module.updated}</span>`), module.route);

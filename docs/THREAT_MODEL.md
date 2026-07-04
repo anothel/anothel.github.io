@@ -28,7 +28,7 @@ There is no backend, account system, sync service, or database.
 - External source data injects HTML or unsafe URLs into rendered pages.
 - Malicious or mistaken watchlist entries create unsafe links.
 - Rate-limited or failed refresh hides stale data.
-- Generated data and manifest counts drift apart.
+- Generated data and manifest counts fall out of sync.
 - Workflow commits incomplete generated output.
 - localStorage import contains hostile text or URLs.
 

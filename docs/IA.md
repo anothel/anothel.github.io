@@ -75,7 +75,7 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - `disabled: true` keeps retired sources documented without appearing in current generated output.
 - `history` records why a source changed or retired with `date` and `note`.
 
-## Source Quality Drift Review
+## Source Quality Alignment Review
 
 - Broad baseline trend inputs stay retired when they duplicate generic TypeScript, framework, linting, formatting, validation, CSS, server, or runner demand.
 - Broad package, repo, and reference entries use `disabled: true` plus `history` instead of deletion, so provenance remains auditable.
@@ -130,9 +130,9 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - Saved queue remove buttons gain the same hover/focus affordance as other local action buttons.
 - No route, localStorage schema, refresh script, signal policy, framework, backend, or account scope changed.
 
-## Static Snapshot Drift Audit
+## Static Snapshot Alignment Audit
 
-- `scripts/update-static-fallbacks.mjs` regenerated Home, Today, Explore, Status, module, topic, and Notes snapshots without producing drift.
+- `scripts/update-static-fallbacks.mjs` regenerated Home, Today, Explore, Status, module, topic, and Notes snapshots without producing unexpected changes.
 - Checked-in static pages already matched shared renderer output after the interaction and recovery-copy changes.
 - Static fallback copy stayed user-facing and aligned across Home, Today, Explore, Status, modules, and topics.
 - No route, localStorage schema, source data, signal policy, framework, backend, or account scope changed.
@@ -234,8 +234,8 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 ## Data Contract Enforcement
 
 - `node scripts/validate-data.mjs` remains the single data contract gate for manifest, refresh-report, signal policy, normalized items, watchlists, source metadata, and syntax checks.
-- `tests/data-schema.test.mjs` now includes focused negative drift fixtures for duplicate manifest module ids, refresh-report module mismatch, and non-downranking signal policy penalty.
-- JSON Schema files stay deferred until current tests miss real drift; no dependency, package manager lockfile, framework, backend, account, or sync scope changed.
+- `tests/data-schema.test.mjs` now includes focused negative mismatch fixtures for duplicate manifest module ids, refresh-report module mismatch, and non-downranking signal policy penalty.
+- JSON Schema files stay deferred until current tests miss real mismatches; no dependency, package manager lockfile, framework, backend, account, or sync scope changed.
 
 ## Release Discipline Pass
 

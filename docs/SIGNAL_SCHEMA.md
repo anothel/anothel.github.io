@@ -56,7 +56,7 @@ Common optional fields:
 - Signal policy contract: `data/signal-policy.json` owns baseline penalty, intent threshold, and baseline titles.
 - Normalized item example: any rendered signal must validate through `js/signal-schema.js`, keep `schemaVersion: 2`, carry a stable id, source module, source kind, canonical key, source list, safe URL, and bounded scores.
 
-JSON Schema files stay deferred. Add them only when `tests/data-schema.test.mjs` and current validator tests miss real drift.
+JSON Schema files stay deferred. Add them only when `tests/data-schema.test.mjs` and current validator tests miss real mismatches.
 
 ## Source Metadata
 
@@ -91,4 +91,4 @@ Current validation lives in:
 - `tests/explore-ui.test.mjs`
 - `scripts/validate-data.mjs`
 
-Future JSON Schema files should start only when they catch drift that current tests miss.
+Future JSON Schema files should start only when they catch mismatches that current tests miss.

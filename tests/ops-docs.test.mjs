@@ -84,8 +84,8 @@ test("IA documents source governance decisions", () => {
     assert.match(ia, /Framework islands stay deferred/);
 });
 
-test("IA records source quality drift review outcomes", () => {
-    assert.match(ia, /Source Quality Drift Review/);
+test("IA records source quality alignment review outcomes", () => {
+    assert.match(ia, /Source Quality Alignment Review/);
     assert.match(ia, /Broad baseline trend inputs stay retired/s);
     assert.match(ia, /Broad package, repo, and reference entries use `disabled: true`/s);
 });
@@ -131,9 +131,9 @@ test("IA records interaction state visual audit outcomes", () => {
     assert.match(ia, /Saved queue remove buttons gain the same hover\/focus affordance/s);
 });
 
-test("IA records static snapshot drift audit outcomes", () => {
-    assert.match(ia, /Static Snapshot Drift Audit/);
-    assert.match(ia, /regenerated Home, Today, Explore, Status, module, topic, and Notes snapshots without producing drift/s);
+test("IA records static snapshot alignment audit outcomes", () => {
+    assert.match(ia, /Static Snapshot Alignment Audit/);
+    assert.match(ia, /regenerated Home, Today, Explore, Status, module, topic, and Notes snapshots without producing unexpected changes/s);
     assert.match(ia, /already matched shared renderer output/s);
     assert.match(ia, /Static fallback copy stayed user-facing and aligned/s);
 });
@@ -228,7 +228,7 @@ test("IA records renderer safety audit outcomes", () => {
 test("IA records contract and release discipline outcomes", () => {
     assert.match(ia, /Data Contract Enforcement/);
     assert.match(ia, /`node scripts\/validate-data\.mjs` remains the single data contract gate/s);
-    assert.match(ia, /JSON Schema files stay deferred until current tests miss real drift/s);
+    assert.match(ia, /JSON Schema files stay deferred until current tests miss real mismatches/s);
     assert.match(ia, /Release Discipline Pass/);
     assert.match(ia, /dated changelog entries and normal GitHub Pages publishes/s);
     assert.match(ia, /No Git tag, provenance, SLSA, framework, backend, account, or sync scope changed/s);

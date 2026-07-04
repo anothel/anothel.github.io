@@ -41,7 +41,7 @@ test("watchlist governance rejects history dates after the data date", () => {
     assert.deepEqual(errors, ["packages[0].history[0].date must not be after 2026-06-27"]);
 });
 
-test("source quality drift review retires broad duplicate sources", () => {
+test("source quality alignment review retires broad duplicate sources", () => {
     const watchlists = json("data/watchlists.json");
     const activeTrendPackages = new Set(activeNames(watchlists.trends.npmPackages));
     const activeQueries = new Set(activeItems(watchlists.trends.githubQueries).map((item) => item.query));

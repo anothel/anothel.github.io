@@ -62,7 +62,7 @@ Publish when:
 - Required checks pass.
 - A dated `CHANGELOG.md` entry covers user-visible or operator-visible changes.
 - Known partial/fallback states are intentional and documented.
-- No unrelated generated drift is mixed into the change.
+- No unrelated generated changes are mixed into the change.
 - Roadmap contains only future work.
 - Public reuse boundary still matches `LICENSE`.
 - GitHub Pages publish can be explained from the checks and generated-data review above.

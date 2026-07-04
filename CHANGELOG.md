@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Replaced stale audit wording in docs and test names with mismatch/alignment language.
 - Rebuilt Roadmap as a trigger-based next-work queue and removed stale audit wording.
 - Added Status page snapshot time copy so data date, refresh run, source health, and checked-in page generation stay distinct.
 - Added a static fallback freshness contract covering Home, Today, Status, Explore, manifest, and refresh-report dates.

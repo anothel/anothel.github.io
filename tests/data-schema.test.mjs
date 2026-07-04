@@ -309,7 +309,7 @@ test("signal policy stays editable data with stable fields", () => {
     }
 });
 
-test("data contract helpers reject focused drift fixtures", () => {
+test("data contract helpers reject focused mismatch fixtures", () => {
     const manifest = json("data/manifest.json");
     const report = json("data/refresh-report.json");
     const policy = json("data/signal-policy.json");
