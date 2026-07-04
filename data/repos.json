@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-04",
-  "generatedAt": "2026-07-04T21:44:35.078Z",
+  "generatedAt": "2026-07-04T21:46:31.642Z",
   "sourceMeta": {
     "name": "GitHub",
     "status": "ok",
@@ -8,7 +8,7 @@
     "tracked": 30,
     "emitted": 30,
     "coverage": "30/30",
-    "updatedAt": "2026-07-04T21:44:35.078Z"
+    "updatedAt": "2026-07-04T21:46:31.642Z"
   },
   "repos": [
     {
@@ -50,7 +50,7 @@
       "name": "anomalyco/opencode",
       "category": "AI agents",
       "focus": "open source coding agent",
-      "stars": 182356,
+      "stars": 182357,
       "starsLabel": "182.4K",
       "forksLabel": "22.6K",
       "pushedAt": "2026-07-04",
@@ -154,7 +154,7 @@
       "name": "karpathy/nanoGPT",
       "category": "AI engineering",
       "focus": "small GPT training",
-      "stars": 60522,
+      "stars": 60524,
       "starsLabel": "60.5K",
       "forksLabel": "10.4K",
       "pushedAt": "2025-11-12",
