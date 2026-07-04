@@ -11,45 +11,32 @@ Use it to choose the next useful bundle, not to store completed history. Keep sh
 - Each active bundle must keep Trigger, Scope, Verification, and Exit.
 - Prefer copy, data, docs, and focused tests before new routes or abstractions.
 - Do not run live refresh unless the selected bundle needs fresh source evidence.
-- Keep Current state short: live blocker, trigger fact, or next proof only. Move shipped details to `CHANGELOG.md` and durable docs.
+- Keep live facts short: blocker, trigger, proof needed. Move shipped details to `CHANGELOG.md` and durable docs.
 
 ## Current Baseline
 
-The 2026-06-28 and 2026-06-30 repository analyses called for several trust, tooling, and documentation basics. These are already part of the current repo and should stay maintained, not re-added:
+The 2026-06-28, 2026-06-30, and 2026-07-04 repository analyses are already folded into this queue. Baseline items are already part of the current repo and are not re-added as work unless behavior changes:
 
-- Public trust docs: README product purpose, `SECURITY.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `docs/THREAT_MODEL.md`, `docs/SIGNAL_SCHEMA.md`, source governance in `docs/SOURCE_GOVERNANCE.md`, and `docs/RELEASE_CHECKLIST.md`.
-- Tooling entry points: `package.json`, Node `>=20`, `serve`, `validate`, `test`, `check`, and `update:data` scripts.
-- Workflow split: PR CI is separate from scheduled/manual data refresh.
-- Data contract baseline: Signal Schema v2, source health vocabulary, score policy ownership, generated-file ownership, and schema migration behavior are documented and tested.
-- Existing safety tests: safe DOM helpers, external link `rel="noopener noreferrer"`, malicious URL/text escaping, localStorage migration, route/sitemap/404 behavior, partial/fallback/rate-limit handling, and checked-in schema drift.
+- Public trust docs: README product purpose, `SECURITY.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `docs/THREAT_MODEL.md`, `docs/SIGNAL_SCHEMA.md`, source governance in `docs/SOURCE_GOVERNANCE.md`, `docs/RELEASE_CHECKLIST.md`, and the source-available reuse boundary.
+- Tooling entry points: `package.json`, Node `>=20`, `serve`, `validate`, `test`, `check`, `update:data`, PR CI, and `.github/workflows/update-trends.yml`.
+- Data contract baseline: Signal Schema v2, source health vocabulary, score policy ownership, generated-file ownership, schema migration behavior, and checked-in schema mismatch tests.
+- Existing safety tests: safe DOM helpers, renderer XSS coverage, external link `rel="noopener noreferrer"`, malicious URL/text escaping, localStorage migration, route/sitemap/404 behavior, partial/fallback/rate-limit handling, and generated static page checks.
 - Product identity baseline: this remains a static AI engineering / developer-workflow signal dashboard, not a security utility rewrite.
-- Public reuse baseline: this repository stays source-available with all rights reserved unless `LICENSE` says otherwise.
 
-Do not turn the baseline into new work unless it drifts from current behavior.
+Absorbed analysis handling:
 
-## Analysis Intake
-
-The 2026-06-30 report is absorbed as follows:
-
-- Keep active: publish health refresh, signal quality, Explore repeat-use, security/release hardening, source trust copy, and formatting/generator maintainability.
-- Treat as baseline, not new work: README structure, security docs, contribution docs, changelog, threat model, release checklist, source governance, Signal Schema v2, safe-DOM tests, sitemap/route coverage, package scripts, and source-available reuse boundary.
-- Defer with triggers: separate `DATA_CONTRACT.md`, JSON Schema files, Playwright/E2E, visual regression, release tags, `CODE_OF_CONDUCT.md`, route/link checker, large source expansion, backend/account/sync, and framework/bundler work.
-- Do not pursue: security-utility product rewrite unless the owner explicitly asks for that pivot.
-
-If a future analysis repeats one of these items, update the matching bundle or Later Queue trigger instead of adding a duplicate task.
-
-The 2026-07-04 freshness/framework reassessment is absorbed without adding duplicate bundles:
-
-- P0 owns date and source-health consistency across checked-in Home, Today, Status, Explore, `data/manifest.json`, `data/refresh-report.json`, and `sitemap.xml`; public-page cache lag is a publish-smoke finding, not a new product track.
-- P2 owns trust copy that distinguishes data date, refresh attempt, source health, and static fallback generation; do not claim GitHub Pages publish time unless it is measured.
-- P2 Formatting owns static fallback marker and contract-test work only when generator blocks are already being touched.
-- Architecture Gate keeps Astro as a measured Review or Explore island PoC only after a vanilla/static maintenance blocker exists.
+- Put live, user-visible source/date/release issues into P0 or P2.
+- Put ranking and source selection issues into P1 Signal Quality.
+- Put repeated Explore use issues into P1 Explore.
+- Put renderer, external link policy, Actions pinning, Dependabot, and release checklist issues into P1 Security.
+- Put formatter, generator, snapshot, and reviewability issues into P2 Formatting.
+- Put Astro/React, JSON Schema, route/link checker, provenance, visual regression, source expansion, advanced ranking, export/import, and Native file chooser import smoke into Later Queue until their trigger exists.
 
 ## Next Work Queue
 
 ### P0 - Publish Health Refresh
 
-Trigger: checked-in data is older than the publish window, source health changes, a public page/date mismatch is reported, a publish needs fresh evidence, or owner asks for a live source confirmation.
+Trigger: checked-in data is older than the publish window, source health changes, a public page/date mismatch is reported, a publish needs fresh evidence, or owner asks for live source confirmation.
 
 Scope:
 
@@ -57,15 +44,15 @@ Scope:
 - Confirm whether the current partial state is GitHub 403, npm 429, or another source failure.
 - If `GITHUB_TOKEN` is missing, keep GitHub 403 as known partial state and queue a token-backed rerun.
 - Keep npm `n8n-workflow` active while preserved rows remain useful and rate-limited health stays visible.
-- Review generated data, Today, manifest, refresh report, and static fallbacks as one publish bundle.
-- Check `sitemap.xml` lastmod policy alongside static fallbacks; define whether it follows route content or data refresh before changing it.
+- Review generated data, Today, manifest, refresh report, sitemap, and static fallbacks as one publish bundle.
 - Keep Roadmap P0 aligned with the real current partial cause after every refresh.
 
-Current state:
+Live facts:
 
-- Checked-in token-backed refresh `2026-07-04T06:35:21.214Z` generated 102 items with overall `partial` status; GitHub trend, repo, HN, trend npm, and manual sources are `ok`.
-- Active non-ok source: npm package refresh 429, including `n8n-workflow`, with preserved 2026-07-04 package rows and `coverage: 25/25`; rerun only when all-source-`ok` proof is needed or preserved rows stop being useful.
-- Data-driven `sitemap.xml` lastmod values now follow `data/manifest.json` `updated`; Review and Notes remain content-date routes.
+- Checked-in token-backed refresh `2026-07-04T06:35:21.214Z` generated 102 items with overall `partial` status.
+- GitHub trend, repo, HN, trend npm, and manual sources are `ok`.
+- Active non-ok source: npm package refresh 429, including `n8n-workflow`, with preserved 2026-07-04 package rows and `coverage: 25/25`.
+- Data-driven `sitemap.xml` lastmod values follow `data/manifest.json` `updated`; Review and Notes remain content-date routes.
 
 Absorbs analysis items:
 
@@ -129,7 +116,7 @@ Trigger: owner request or repeated visits require the same search, focus, sort, 
 
 Scope:
 
-- Improve saved searches, preferred defaults, topic pins, active-filter clarity, and score/reason/source explanation inside Explore.
+- Improve saved searches, preferred defaults, topic pins, active-filter clarity, visible-vs-tracked count copy, and score/reason/source explanation inside Explore.
 - Keep existing localStorage keys and caps unless a failing test proves they block repeat use.
 - Reuse existing local-state and safe-DOM helpers.
 - Do not add account sync, backend, or a new route.
@@ -139,6 +126,7 @@ Absorbs analysis items:
 
 - Score/reason/source explanation.
 - Accessibility smoke checks.
+- Visible item count vs total tracked count explanation.
 - First-screen explanation only when owner asks or the current first screen blocks use.
 
 Verification:
@@ -166,7 +154,7 @@ Scope:
 - Keep the referrer policy decision aligned with external-link `noreferrer`.
 - Keep GitHub Actions SHA pinning and Dependabot deferred while workflows use only GitHub-owned actions, local scripts, no package dependencies, and no lockfile.
 - Revisit SHA pinning or Dependabot when third-party actions, broader workflow permissions, package dependencies, or a lockfile appear.
-- Keep release checks tied to `npm.cmd run check`, generated-data review, and dated changelog entries.
+- Keep release checks tied to `npm.cmd run check`, generated-data review, public page smoke checks, and dated changelog entries.
 
 Absorbs analysis items:
 
@@ -202,13 +190,9 @@ Scope:
 - Keep useful checked-in rows visible for no-JS and blocked-fetch visits.
 - Do not hide partial data that still has preserved useful rows.
 - Track whether the current partial is GitHub 403, npm 429, or another source before changing copy.
-- Distinguish data date, last refresh attempt, source health, and static fallback generation when those claims are shown.
+- Distinguish data date, last refresh attempt, source health, and page snapshot generation when those claims are shown.
 - Do not claim GitHub Pages publish time unless it is measured by an approved smoke check.
 - Keep source freshness and recovery copy documented in `docs/SIGNAL_SCHEMA.md` and `docs/SOURCE_GOVERNANCE.md`.
-
-Current state:
-
-- Wake this bundle only when a new source health state becomes unclear, partial copy hides useful preserved rows, or recovery guidance drifts from the shared source detail copy.
 
 Absorbs analysis items:
 
@@ -216,7 +200,7 @@ Absorbs analysis items:
 - Data refresh failure recovery copy.
 - Source freshness criteria.
 - Current GitHub 403 / npm 429 explanation.
-- Data-generated vs refresh-attempt vs fallback-generated copy boundaries.
+- Data-generated vs refresh-attempt vs page-generated copy boundaries.
 
 Verification:
 
@@ -237,10 +221,14 @@ Trigger: review, security audit, or generator change is slowed by long lines, re
 Scope:
 
 - Prefer formatting-only diffs before behavior changes.
-- Keep dependency-free formatting unless repeated drift proves a tool is worth owning.
+- Keep dependency-free formatting unless repeated mismatch proves a tool is worth owning.
 - Split only the smallest helper needed when an updater or renderer change is already underway.
 - Prefer explicit static fallback markers before adding broader HTML parsing or a framework.
-- Keep generated HTML, source data, manifest, refresh report, and static fallbacks aligned after any generator edit.
+- Keep generated HTML, source data, manifest, refresh report, sitemap, and static fallbacks aligned after any generator edit.
+
+Live facts:
+
+- Remaining static fallback regex should move only when the touched block is already being changed.
 
 Absorbs analysis items:
 
@@ -248,10 +236,6 @@ Absorbs analysis items:
 - Regex-based static fallback replacement is fragile when page structure changes.
 - Large updater scripts should only be split where it reduces current edit risk.
 - New formatter, parser, framework, or build step needs a measured maintenance trigger.
-
-Current state:
-
-- Remaining static fallback regex should move only when the touched block is already being changed.
 
 Verification:
 
@@ -312,8 +296,8 @@ These items are queued with lower priority. They stay below the active queue bec
   - Why later: workflow display name already says `Update data`, so behavior is clear in GitHub Actions UI.
   - Pull forward when: operator mistakes or docs confusion keep coming from the legacy filename.
 - JSON Schema files
-  - Why later: `scripts/validate-data.mjs` and focused data contract tests already catch current drift.
-  - Pull forward when: schema drift escapes tests, external contributors need machine-readable contracts, or new source types make JS-only validation unclear.
+  - Why later: `scripts/validate-data.mjs` and focused data contract tests already catch current mismatches.
+  - Pull forward when: schema mismatches escape tests, external contributors need machine-readable contracts, or new source types make JS-only validation unclear.
 - Meta CSP
   - Why later: GitHub Pages constraints and current renderer behavior need checking before adding a policy that can break pages.
   - Pull forward when: Security and Release Hardening reviews static-page policy headers or renderer risk increases.
@@ -322,10 +306,10 @@ These items are queued with lower priority. They stay below the active queue bec
   - Pull forward when: users need installable/versioned artifacts or rollback points by version.
 - Separate `DATA_CONTRACT.md`
   - Why later: `docs/SIGNAL_SCHEMA.md`, `docs/SOURCE_GOVERNANCE.md`, `scripts/validate-data.mjs`, and data contract tests already cover the current contract.
-  - Pull forward when: external contributors need one contract entry point or schema drift escapes existing docs/tests.
+  - Pull forward when: external contributors need one contract entry point or schema mismatches escape existing docs/tests.
 - README structure contract test
   - Why later: README now describes runtime areas with wildcards instead of pretending to enumerate every file.
-  - Pull forward when: README again drifts from actual source layout or starts naming exact inventories.
+  - Pull forward when: README again disagrees with actual source layout or starts naming exact inventories.
 - Provenance or SLSA
   - Why later: there is no release artifact chain beyond checked-in static files and GitHub Pages publish.
   - Pull forward when: release tags, generated artifacts, or external consumers need supply-chain attestation.
