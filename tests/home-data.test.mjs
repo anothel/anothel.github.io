@@ -38,7 +38,7 @@ test("buildHomeOverview summarizes manifest modules", () => {
         updated: "2026-06-14",
         healthLabel: "2 ok / 1 partial",
         dataState: "Aging",
-        recoveryText: "Source health partial. Usable data remains available; retry data refresh for missing sources."
+        recoveryText: "Source health partial. Usable data remains available; source details name missing sources and retry data refresh."
     });
 });
 

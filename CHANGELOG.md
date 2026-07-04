@@ -6,6 +6,9 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Diversified Today `Start here` picks across tracked topics when high-priority alternatives are available.
+- Added saved queue count to Explore active-filter summaries so saved-first repeat visits keep context visible.
+- Clarified partial source-health copy so shared and static surfaces point users to source details for missing sources and retry guidance.
 - Ran 2026-07-05 KST unauthenticated publish-health refresh; generated data stayed publishable with GitHub trend 403 rate limits and npm `n8n-workflow` 429 visible.
 - Ran 2026-07-05 KST token-backed publish-health rerun; GitHub trend health recovered to `ok`, leaving npm `n8n-workflow` 429 as the only non-ok source.
 - Added a Home Projects card for SecureKit while preserving static fallback regeneration boundaries.

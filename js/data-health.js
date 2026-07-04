@@ -128,7 +128,7 @@
     function dataModeText(sourceMeta, options = {}) {
         const status = aggregateSourceStatus(sourceMeta);
         if (status === "fallback") return "Source health fallback. Previous data remains available; retry data refresh.";
-        if (status === "partial") return "Source health partial. Usable data remains available; retry data refresh for missing sources.";
+        if (status === "partial") return "Source health partial. Usable data remains available; source details name missing sources and retry data refresh.";
         if (status === "error") return "Source health failed. Retry data refresh before trusting freshness.";
         if (status === "ok") {
             const updatedDate = datePart(options.updated);

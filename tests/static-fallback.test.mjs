@@ -123,14 +123,14 @@ function todayStatusText() {
     const status = today.sourceMeta?.status || "ok";
 
     if (status === "fallback") return `${total} generated picks. Source health fallback. Previous data remains available; retry data refresh.`;
-    if (status === "partial") return `${total} generated picks. Source health partial. Usable data remains available; retry data refresh for missing sources.`;
+    if (status === "partial") return `${total} generated picks. Source health partial. Usable data remains available; source details name missing sources and retry data refresh.`;
     if (status === "error") return `${total} generated picks from failed source refresh. Retry data refresh before trusting freshness.`;
     return `${total} generated picks. Source health ok. Data date ${today.updated}. No recovery needed.`;
 }
 
 function dataModeText() {
     const health = moduleHealth();
-    if (health.includes("partial")) return "Source health partial. Usable data remains available; retry data refresh for missing sources.";
+    if (health.includes("partial")) return "Source health partial. Usable data remains available; source details name missing sources and retry data refresh.";
     if (health.includes("fallback")) return "Source health fallback. Previous data remains available; retry data refresh.";
     return `Source health ok. Data date ${manifest.updated}. No recovery needed.`;
 }
