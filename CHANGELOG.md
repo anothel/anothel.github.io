@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Ran 2026-07-05 KST unauthenticated publish-health refresh; generated data stayed publishable with GitHub trend 403 rate limits and npm `n8n-workflow` 429 visible.
 - Added a Home Projects card for SecureKit while preserving static fallback regeneration boundaries.
 - Pruned Roadmap to live triggers, source state, architecture gate, and cut list.
 - Replaced stale audit wording in docs and test names with mismatch/alignment language.

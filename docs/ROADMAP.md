@@ -13,11 +13,11 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Current Source State
 
-- Last checked-in refresh: `2026-07-04T06:35:21.214Z`.
-- Generated items: 102.
+- Last checked-in refresh: `2026-07-04T21:44:37.064Z`.
+- Generated items: 108.
 - Overall status: `partial`.
-- GitHub, Hacker News, trend npm, repo, and manual sources are `ok`.
-- Active blocker: npm package refresh 429 for `n8n-workflow`; preserved package rows remain usable.
+- Hacker News, trend npm, repo, and manual sources are `ok`.
+- Active blockers: unauthenticated GitHub trend search 403 rate limits and npm package refresh 429 for `n8n-workflow`; preserved package rows remain usable.
 
 ## Next Work Queue
 

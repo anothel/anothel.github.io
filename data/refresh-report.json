@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T06:35:21.214Z",
+  "generatedAt": "2026-07-04T21:44:37.064Z",
   "manifestUpdated": "2026-07-04",
   "runContext": {
     "reason": "",
@@ -11,7 +11,7 @@
     {
       "id": "trends",
       "title": "Tech trends",
-      "count": 18,
+      "count": 24,
       "updated": "2026-07-04"
     },
     {
@@ -37,8 +37,8 @@
     {
       "id": "trends",
       "title": "Tech trends",
-      "status": "ok",
-      "count": 18,
+      "status": "partial",
+      "count": 24,
       "updated": "2026-07-04",
       "changed": true,
       "sources": [
@@ -46,9 +46,9 @@
           "module": "trends",
           "source": "Hacker News",
           "status": "ok",
-          "count": 6,
-          "updatedAt": "2026-07-04T06:35:06.312Z",
-          "coverage": "6/6",
+          "count": 4,
+          "updatedAt": "2026-07-04T21:44:29.773Z",
+          "coverage": "4/4",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -60,25 +60,32 @@
         {
           "module": "trends",
           "source": "GitHub",
-          "status": "ok",
+          "status": "partial",
           "count": 12,
-          "updatedAt": "2026-07-04T06:35:06.312Z",
+          "updatedAt": "2026-07-04T21:44:29.773Z",
           "coverage": "12/14",
           "fallbackUsed": false,
           "staleButSafe": false,
-          "rateLimited": false,
+          "rateLimited": true,
           "fallbackReason": "",
           "previousUpdated": "",
-          "safetyDetails": [],
-          "errors": []
+          "safetyDetails": [
+            "rate limited"
+          ],
+          "errors": [
+            "llm observability evals stars:>100: 403 rate limit exceeded",
+            "workflow automation ai agents stars:>100: 403 rate limit exceeded",
+            "durable workflow typescript stars:>100: 403 rate limit exceeded",
+            "opencode coding agent stars:>100: 403 rate limit exceeded"
+          ]
         },
         {
           "module": "trends",
           "source": "npm",
           "status": "ok",
-          "count": 0,
-          "updatedAt": "2026-07-04T06:35:06.312Z",
-          "coverage": "0/16",
+          "count": 8,
+          "updatedAt": "2026-07-04T21:44:29.773Z",
+          "coverage": "8/16",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -102,7 +109,7 @@
           "source": "npm",
           "status": "partial",
           "count": 25,
-          "updatedAt": "2026-07-04T06:35:06.417Z",
+          "updatedAt": "2026-07-04T21:44:29.887Z",
           "coverage": "25/25",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -114,17 +121,6 @@
             "previous 2026-07-04"
           ],
           "errors": [
-            "mastra: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/mastra",
-            "@openai/agents: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40openai%2Fagents",
-            "langchain: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/langchain",
-            "@modelcontextprotocol/sdk: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40modelcontextprotocol%2Fsdk",
-            "@modelcontextprotocol/server-filesystem: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40modelcontextprotocol%2Fserver-filesystem",
-            "@modelcontextprotocol/server-github: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40modelcontextprotocol%2Fserver-github",
-            "braintrust: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/braintrust",
-            "promptfoo: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/promptfoo",
-            "langfuse: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/langfuse",
-            "@trigger.dev/sdk: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40trigger.dev%2Fsdk",
-            "@temporalio/workflow: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/%40temporalio%2Fworkflow",
             "n8n-workflow: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
           ]
         }
@@ -143,7 +139,7 @@
           "source": "GitHub",
           "status": "ok",
           "count": 30,
-          "updatedAt": "2026-07-04T06:35:19.776Z",
+          "updatedAt": "2026-07-04T21:44:35.078Z",
           "coverage": "30/30",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -168,7 +164,7 @@
           "source": "manual",
           "status": "ok",
           "count": 29,
-          "updatedAt": "2026-07-04T06:35:20.677Z",
+          "updatedAt": "2026-07-04T21:44:36.111Z",
           "coverage": "29/29",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -184,8 +180,8 @@
   "totals": {
     "modules": 4,
     "sources": 6,
-    "items": 102,
+    "items": 108,
     "status": "partial",
-    "errors": 1
+    "errors": 2
   }
 }
