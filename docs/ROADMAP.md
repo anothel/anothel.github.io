@@ -181,6 +181,7 @@ Absorbs analysis items:
 Current state:
 
 - Explore card activation opens external items with `noopener,noreferrer` instead of `location.assign` when `window.open` is available; duplicate visible item links stay out of the card UI.
+- Explore cards with unsafe item URLs render without card activation attributes.
 - Threat model SHA pinning rationale matches the current GitHub-owned actions, local scripts, no dependency, and no lockfile posture.
 
 Verification:

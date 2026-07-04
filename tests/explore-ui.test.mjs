@@ -767,7 +767,9 @@ test("Explore rendering escapes generated text and blocks unsafe links", () => {
     ], new Set(["repos:bad"]));
 
     assert.doesNotMatch(html, /javascript:alert/);
-    assert.match(html, /href="#"/);
+    assert.doesNotMatch(html, /data-card-href/);
+    assert.doesNotMatch(html, /tabindex="0"/);
+    assert.doesNotMatch(html, /aria-label="Open/);
     assert.match(html, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;summary&quot;/);
     assert.match(html, /aria-pressed="true"/);

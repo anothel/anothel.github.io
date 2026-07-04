@@ -60,6 +60,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 - Removed redundant Explore item-link copy and aligned Roadmap current-state notes with card activation behavior.
 - Shortened long Explore query copy in saved search labels and active-filter summaries while preserving stored query ids.
 - Capped broad repo short-name matches in shared signal normalization so Today and Explore ranking policy stay aligned.
+- Removed Explore card activation attributes from cards whose item URLs are blocked by the shared safe-href policy.
 
 ## 2026-06-28
 

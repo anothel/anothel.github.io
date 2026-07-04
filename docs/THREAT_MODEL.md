@@ -37,6 +37,7 @@ There is no backend, account system, sync service, or database.
 - Shared safe DOM helpers escape HTML and restrict hrefs.
 - External item links rendered from data use `rel="noopener noreferrer"`.
 - Explore card activation uses `noopener,noreferrer` when opening external item URLs.
+- Explore cards with blocked unsafe item URLs do not receive card activation attributes.
 - Referrer policy decision: external item links rely on `rel="noopener noreferrer"` instead of a site-wide meta referrer policy while the site has no backend, account, or analytics surface.
 - Renderer tests cover unsafe links and generated text escaping.
 - Source metadata exposes `ok`, `partial`, `fallback`, and `error`.

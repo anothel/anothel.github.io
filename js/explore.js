@@ -362,8 +362,12 @@
             const saved = Boolean(savedId);
             const buttonId = savedId || item.id;
             const scoreReasons = (item.scoreReasons || []).slice(0, 3);
+            const href = safeHref(item.url);
+            const cardAttrs = href === "#"
+                ? ""
+                : ` data-card-href="${escapeHtml(href)}" tabindex="0" aria-label="Open ${escapeHtml(item.title)}"`;
             return `
-                <article class="explore-card" data-item-id="${escapeHtml(item.id)}" data-card-href="${escapeHtml(safeHref(item.url))}" tabindex="0" aria-label="Open ${escapeHtml(item.title)}">
+                <article class="explore-card" data-item-id="${escapeHtml(item.id)}"${cardAttrs}>
                     <div class="card-topline">
                         <span>${escapeHtml(item.module)}</span>
                         <span>${escapeHtml(item.category)}</span>
