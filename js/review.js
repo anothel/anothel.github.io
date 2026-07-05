@@ -199,6 +199,7 @@
         const savedTag = item.savedTag || "";
         const savedNote = item.savedNote || "";
         const noteHref = topicNotesHref(item);
+        const scoreReasons = (item.scoreReasons || []).slice(0, 3);
 
         return `
             <article class="review-detail-card">
@@ -209,6 +210,11 @@
                 <h2>${escapeHtml(item.title)}</h2>
                 <p class="why-copy"><strong>Why this matters</strong> ${escapeHtml(item.summary)}</p>
                 <p class="source-context"><strong>Source context</strong> ${escapeHtml(context)}</p>
+                ${scoreReasons.length ? `
+                    <ul class="score-reasons" aria-label="Score reasons">
+                        ${scoreReasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}
+                    </ul>
+                ` : ""}
                 <p class="review-next-action"><strong>Next action</strong> ${escapeHtml(nextActionCopy(status))}</p>
                 <div class="card-meta">
                     <span>${escapeHtml(item.metric)}</span>

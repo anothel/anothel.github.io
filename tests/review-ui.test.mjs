@@ -42,6 +42,7 @@ const items = [
         updated: "2026-06-19",
         sources: ["Packages"],
         sourceContext: "",
+        scoreReasons: ["1M/week from npm", "MCP SDK demand"],
         score: 88,
         qualityScore: 88
     }
@@ -158,6 +159,8 @@ test("Review renders queue and selected detail with actions", () => {
     assert.match(queue, /@modelcontextprotocol\/sdk/);
     assert.match(detail, /Why this matters/);
     assert.match(detail, /Source context/);
+    assert.match(detail, /Score reasons/);
+    assert.match(detail, /1M\/week from npm/);
     assert.match(detail, /Signal fit 88/);
     assert.match(detail, /href="https:\/\/example\.com\/mcp"/);
     assert.match(detail, /aria-label="Mark @modelcontextprotocol\/sdk read"/);
