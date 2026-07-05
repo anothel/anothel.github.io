@@ -6,6 +6,7 @@ const refreshReport = JSON.parse(readFileSync("data/refresh-report.json", "utf8"
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
 const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
+const decisions = readFileSync("docs/DECISIONS.md", "utf8");
 const license = readFileSync("LICENSE", "utf8");
 const security = readFileSync("SECURITY.md", "utf8");
 const contributing = readFileSync("CONTRIBUTING.md", "utf8");
@@ -405,7 +406,9 @@ test("IA records public scope triage outcomes", () => {
 test("roadmap is a lean future work queue, not a completed-work ledger", () => {
     assert.match(roadmap, /## Next Work Queue/);
     assert.match(roadmap, /Completed work belongs in `CHANGELOG\.md`/);
+    assert.match(decisions, /Completed items now live in `CHANGELOG\.md`, not the active Roadmap/);
     assert.doesNotMatch(roadmap, /### Completed Since Last Review/);
+    assert.doesNotMatch(decisions, /roadmap completed section/i);
     assert.doesNotMatch(roadmap, /## Current Surface/);
     assert.doesNotMatch(roadmap, /## Product Direction/);
     assert.doesNotMatch(roadmap, /## Current Baseline/);

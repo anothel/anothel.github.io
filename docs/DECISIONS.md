@@ -18,6 +18,6 @@
 
 - `P1 - Explore Repeat Use`: completed.
   - Saved-search controls now include portable export/import and status feedback consistent with Review.
-  - Completed items were moved to the roadmap completed section.
+  - Completed items now live in `CHANGELOG.md`, not the active Roadmap.
 - `P1 - Signal Quality`: regression watch is active when ranking drift affects top signals; scope remains policy/watchlist adjustments only when evidence appears.
 - `P2 - Trust Copy`: shared recovery and partial copy is handled through `DataHealth` and static/dynamic surfaces.
