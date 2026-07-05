@@ -15,7 +15,7 @@ const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const roadmapQueueHeadings = [
-    "P0 - npm `n8n-workflow` 429 Partial Handling",
+    "P0 - Publish Health Refresh",
     "P1 - Explore Repeat Use",
     "P1 - Review Workflow",
     "P1 - Documentation Slimming",

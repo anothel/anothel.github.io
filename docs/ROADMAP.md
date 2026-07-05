@@ -1,5 +1,4 @@
 # Roadmap
-
 Use this file only to pick the next safe work bundle.
 
 Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
@@ -23,27 +22,25 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Next Work Queue
 
-### P0 - npm `n8n-workflow` 429 Partial Handling
+### P0 - Publish Health Refresh
 
-Trigger: `n8n-workflow` partial repeats, users are unclear about partial status, or owner asks for publish confirmation.
+Trigger: checked-in data is old, source health changes, public page dates look wrong, or owner asks for publish confirmation.
 
 Scope:
 
-- Track consecutive `n8n-workflow` 429 failures in refresh report.
-- Split `partial` into user-visible states such as `accepted partial` vs `action required partial`.
-- Decide watchlist or alternate indicator changes after repeated failures (3~5+ events) and document the threshold policy.
-- Review npm package call ordering/frequency to reduce rate-limit pressure.
-- Update status wording to explicitly say when data is usable but stale.
-- Keep `n8n-workflow` in watchlist while rows are preserved and reliable.
+- Run existing data refresh only when network/token access is approved.
+- Review generated data, manifest, refresh report, sitemap, Today, Status, Explore, and static fallbacks together.
+- If `GITHUB_TOKEN` is missing, keep GitHub rate limits as known partial state and rerun only when token-backed proof matters.
+- Keep `n8n-workflow` visible while preserved rows are useful.
 
 Verification:
 
+- `node scripts/update-all.mjs` when live refresh is approved.
 - `node scripts/validate-data.mjs`.
 - `npm.cmd run check`.
 - `git diff --check`.
-- Preserve source-health clarity for both live and static pathways.
 
-Exit: partial is immediately understandable from status and source-health copy, and action policy is documented.
+Exit: generated data is publishable, or the exact source blocker is recorded here.
 
 ### P1 - Explore Repeat Use
 
@@ -98,13 +95,13 @@ Scope:
 - Keep `docs/IA.md` focused on routes, vocabulary, and UX principles.
 - Move completed large changes to `CHANGELOG.md` and/or decision log.
 - Keep `ROADMAP.md` as a forward-looking queue.
-- Add explicit “current conclusion” and “history location” sections at document tops.
+- Add explicit sections for current conclusion and history location at document tops.
 
 Verification:
 
 - `npm.cmd run check`.
 - `git diff --check`.
-- Manual doc audit: README → IA/ROADMAP/Release Checklist leads to the current decision quickly.
+- Manual doc audit: README -> IA/ROADMAP/Release Checklist leads to the current decision quickly.
 
 Exit: new contributors can find current decisions quickly and archived discussion no longer appears as active work.
 
