@@ -32,6 +32,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - Explore: saved search rows now expose Apply, Rename, and Delete actions with clearer labels, and include a one-line note that saved searches are full filter snapshots separate from topic pins.
 - Explore: saved search export/import is now consistent with Review-local storage workflows, including JSON payload format, status messaging, and smoke-tested copy/paste + invalid-input behavior.
 - P1 Explore Repeat Use work is complete: saved search portability and repeat-use controls are now aligned between sessions and with Review-like local data workflows.
+- Documentation split is complete: `docs/DECISIONS.md` stores durable conclusions and history, while `docs/IA.md` keeps current route, vocabulary, and workflow decisions.
 
 ### P0 - Publish Health Refresh
 
@@ -115,26 +116,6 @@ Verification:
 - Manual smoke: export/import round-trip preserves data integrity and warns on collisions.
 
 Exit: Review behaves as a practical processing queue with clear local-only boundaries.
-
-### P1 - Documentation Slimming and Decision Log Separation
-
-Trigger: docs mix current decisions with long audit history and users struggle to find the current conclusion.
-
-Scope:
-
-- Introduce `docs/DECISIONS.md` or `docs/adr/` for durable decisions.
-- Keep `docs/IA.md` focused on routes, vocabulary, and UX principles.
-- Move completed large changes to `CHANGELOG.md` and/or decision log.
-- Keep `ROADMAP.md` as a forward-looking queue.
-- Add explicit sections for current conclusion and history location at document tops.
-
-Verification:
-
-- `npm.cmd run check`.
-- `git diff --check`.
-- Manual doc audit: README -> IA/ROADMAP/Release Checklist leads to the current decision quickly.
-
-Exit: new contributors can find current decisions quickly and archived discussion no longer appears as active work.
 
 ### P1 - InnerHTML Rendering Audit
 
