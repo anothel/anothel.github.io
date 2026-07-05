@@ -506,20 +506,21 @@ test("Explore preferred state store saves explicit focus and sort only", () => {
     };
     const store = app.createPreferredExploreStore(storage);
 
-    assert.deepEqual(JSON.parse(JSON.stringify(store.read())), { focus: "all", sort: "priority" });
-    assert.deepEqual(JSON.parse(JSON.stringify(store.save({ focus: "MCP", sort: "saved", query: "ignored", module: "Repos" }))), { focus: "MCP", sort: "saved" });
-    assert.deepEqual(JSON.parse(memory.get("anothel.preferences.exploreState.v1")), { version: 1, focus: "MCP", sort: "saved" });
-    assert.deepEqual(JSON.parse(JSON.stringify(store.save({ focus: "Unknown", sort: "bad" }))), { focus: "all", sort: "priority" });
-    assert.deepEqual(JSON.parse(JSON.stringify(store.reset())), { focus: "all", sort: "priority" });
+    assert.deepEqual(JSON.parse(JSON.stringify(store.read())), { focus: "all", module: "all", category: "all", sort: "priority" });
+    assert.deepEqual(JSON.parse(JSON.stringify(store.save({ focus: "MCP", sort: "saved", query: "ignored", module: "Repos" }))), { focus: "MCP", module: "Repos", category: "all", sort: "saved" });
+    assert.deepEqual(JSON.parse(memory.get("anothel.preferences.exploreState.v1")), { version: 1, focus: "MCP", module: "Repos", category: "all", sort: "saved" });
+    assert.deepEqual(JSON.parse(JSON.stringify(store.save({ focus: "Unknown", sort: "bad" }))), { focus: "all", module: "all", category: "all", sort: "priority" });
+    assert.deepEqual(JSON.parse(JSON.stringify(store.reset())), { focus: "all", module: "all", category: "all", sort: "priority" });
     assert.equal(memory.has("anothel.preferences.exploreState.v1"), false);
-    assert.deepEqual(JSON.parse(JSON.stringify(app.createPreferredExploreStore({ getItem() { throw new Error("blocked"); } }).read())), { focus: "all", sort: "priority" });
+    assert.deepEqual(JSON.parse(JSON.stringify(app.createPreferredExploreStore({ getItem() { throw new Error("blocked"); } }).read())), { focus: "all", module: "all", category: "all", sort: "priority" });
 });
 
 test("Explore default status text describes explicit preferred state", () => {
     const app = loadExplore();
 
-    assert.equal(app.defaultStatusText({ focus: "all", sort: "priority" }), "Default: All / priority");
-    assert.equal(app.defaultStatusText({ focus: "MCP", sort: "saved" }, "Default saved"), "Default saved: MCP / saved first");
+    assert.equal(app.defaultStatusText({ focus: "all", module: "all", category: "all", sort: "priority" }), "Default: All / All modules / All categories / priority");
+    assert.equal(app.defaultStatusText({ focus: "MCP", module: "all", category: "all", sort: "saved" }, "Default saved"), "Default saved: MCP / All modules / All categories / saved first");
+    assert.equal(app.defaultStatusText({ focus: "MCP", module: "Repos", category: "AI", sort: "module" }, "Default saved"), "Default saved: MCP / Repos / AI / module");
 });
 
 test("Explore saved search store normalizes, dedupes, caps, and removes presets", () => {
@@ -1396,7 +1397,7 @@ test("Explore browser init restores explicit default focus and sort", async () =
     assert.equal(elements["[data-explore-sort]"].value, "saved");
     assert.match(elements["[data-explore-summary]"].textContent, /Focus: MCP/);
     assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
-    assert.equal(elements["[data-explore-default-status]"].textContent, "Default: MCP / saved first");
+    assert.equal(elements["[data-explore-default-status]"].textContent, "Default: MCP / All modules / All categories / saved first");
     assert.equal(focusButtons[1].ariaPressed, "true");
 });
 
@@ -1495,14 +1496,14 @@ test("Explore default controls save and reset explicit preferred state", async (
     elements["[data-explore-sort]"].dispatch("change", "saved");
     elements["[data-save-explore-default]"].listeners.click({ target: elements["[data-save-explore-default]"] });
 
-    assert.deepEqual(JSON.parse(memory.get("anothel.preferences.exploreState.v1")), { version: 1, focus: "MCP", sort: "saved" });
-    assert.equal(elements["[data-explore-default-status]"].textContent, "Default saved: MCP / saved first");
+    assert.deepEqual(JSON.parse(memory.get("anothel.preferences.exploreState.v1")), { version: 1, focus: "MCP", module: "all", category: "all", sort: "saved" });
+    assert.equal(elements["[data-explore-default-status]"].textContent, "Default saved: MCP / All modules / All categories / saved first");
 
     elements["[data-reset-explore-default]"].listeners.click({ target: elements["[data-reset-explore-default]"] });
 
     assert.equal(memory.has("anothel.preferences.exploreState.v1"), false);
     assert.equal(elements["[data-explore-sort]"].value, "priority");
-    assert.equal(elements["[data-explore-default-status]"].textContent, "Default reset: All / priority");
+    assert.equal(elements["[data-explore-default-status]"].textContent, "Default reset: All / All modules / All categories / priority");
     assert.match(elements["[data-explore-summary]"].textContent, /Showing all tracked items/);
     assert.equal(focusButtons[0].ariaPressed, "true");
 });

@@ -6,7 +6,12 @@
     const signalSchema = global.SignalSchema;
     const dom = global.AnothelDom;
     const topicTaxonomy = global.TopicTaxonomy;
-    const defaultExploreState = { focus: "all", sort: "priority" };
+    const defaultExploreState = {
+        focus: "all",
+        module: "all",
+        category: "all",
+        sort: "priority"
+    };
     const maxSavedSearches = 5;
 
     const defaultPaths = {
@@ -125,6 +130,8 @@
         function normalize(value = {}) {
             return {
                 focus: allowedFocusValues.has(value.focus) ? value.focus : defaultExploreState.focus,
+                module: value.module || defaultExploreState.module,
+                category: value.category || defaultExploreState.category,
                 sort: allowedSortValues.has(value.sort) ? value.sort : defaultExploreState.sort
             };
         }
@@ -608,8 +615,14 @@
     }
 
     function defaultStatusText(preferredState, prefix = "Default") {
-        const focus = preferredState.focus === "all" ? "All" : preferredState.focus;
-        return `${prefix}: ${focus} / ${sortLabels[preferredState.sort] || preferredState.sort}`;
+        const safeState = {
+            ...defaultExploreState,
+            ...preferredState
+        };
+        const focus = safeState.focus === "all" ? "All" : safeState.focus;
+        const module = safeState.module === "all" ? "All modules" : safeState.module;
+        const category = safeState.category === "all" ? "All categories" : safeState.category;
+        return `${prefix}: ${focus} / ${module} / ${category} / ${sortLabels[safeState.sort] || safeState.sort}`;
     }
 
     function updateDefaultStatus(els, preferredState, prefix) {
@@ -761,13 +774,22 @@
             bindSavedSearchActions(els, savedSearchStore, store, pinnedStore);
         });
         els.saveDefault?.addEventListener("click", () => {
-            const preferredState = preferredStore.save({ focus: state.focus, sort: state.sort });
+            const preferredState = preferredStore.save({
+                focus: state.focus,
+                module: state.module,
+                category: state.category,
+                sort: state.sort
+            });
             updateDefaultStatus(els, preferredState, "Default saved");
         });
         els.resetDefault?.addEventListener("click", () => {
             const defaults = preferredStore.reset();
             state.focus = defaults.focus;
+            state.module = defaults.module;
+            state.category = defaults.category;
             state.sort = defaults.sort;
+            if (els.module) els.module.value = state.module;
+            if (els.category) els.category.value = state.category;
             if (els.sort) els.sort.value = state.sort;
             updateFocusButtons(els);
             updateDefaultStatus(els, defaults, "Default reset");
@@ -823,10 +845,14 @@
         state.pinnedTopics = new Set(pinnedStore.read());
         state.savedSearches = savedSearchStore.read();
         state.focus = initialFocus(els.focusButtons, preferredState);
+        state.module = selectValueOrAll(els.module, preferredState.module);
+        state.category = selectValueOrAll(els.category, preferredState.category);
         state.sort = preferredState.sort;
 
         fillSelect(els.module, uniqueValues(state.items, "module"), "All modules");
         fillSelect(els.category, uniqueValues(state.items, "category"), "All categories");
+        if (els.module) els.module.value = state.module;
+        if (els.category) els.category.value = state.category;
         if (els.sort) els.sort.value = state.sort;
         updateFocusButtons(els);
         updateDefaultStatus(els, preferredState);

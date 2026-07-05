@@ -24,6 +24,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ### Completed Since Last Review
 
+- Explore: default filter restore state (focus/module/category/sort) is now persisted and recoverable via Save/Reset default controls.
 - Trust-copy wording and recovery copy are shared and test-covered across Today, Home, Explore, Status, and module/static fallback surfaces via `DataHealth`.
   - Keep this as a baseline; repeat-work here is now a regression review, not roadmap expansion.
 
@@ -96,7 +97,6 @@ Trigger: users lose context between visits, saved searches feel hidden, or repea
 Scope:
 
 - Improve saved search edit/delete UX and expose it in common actions.
-- Make default filter reset state obvious and recoverable.
 - Clarify relationship between pinned topics and saved searches.
 - Keep score reasoning short and consistent in cards.
 - Show how source-health partial affects Explore results.
