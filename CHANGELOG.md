@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Removed completed npm partial copy work from the active Roadmap, leaving only the 3~5-repeat operator decision.
 - Reviewed npm package refresh call shape; package downloads already run sequentially with bounded retries, so no extra throttling was added before 3~5 repeated `n8n-workflow` 429s.
 - Ran 2026-07-05 unauthenticated publish-health refresh; generated data stayed at 108 items with GitHub trend 403 partial and npm `n8n-workflow` 429 repeated x2.
 - Ran 2026-07-05 KST token-backed publish-health refresh; npm `n8n-workflow` 429 remained the only non-ok source and generated data stayed publishable.

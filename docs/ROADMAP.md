@@ -37,6 +37,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - P0 npm 429 partial policy now records consecutive repeated-run streaks in refresh report output and classifies partial status copy as `accepted partial` for preserved rows vs `action required partial` when trust impact is immediate.
 - P0 publish health refresh ran for 2026-07-05 without `GITHUB_TOKEN`; generated data remains publishable with GitHub trend 403 partial and npm `n8n-workflow` 429 x2 recorded.
 - npm package watchlist updater review is complete: package downloads already run sequentially with bounded retries, so extra throttling is deferred until 3~5 repeated 429s prove it helps.
+- P0 npm partial user-facing copy is complete: shared and static status text says some data is stale but still usable and labels preserved `n8n-workflow` rows as accepted partial.
 
 ### P0 - Publish Health Refresh
 
@@ -64,12 +65,8 @@ Trigger: `n8n-workflow` stays 429 repeatedly while preserving package rows.
 
 Scope:
 
-- Record how many consecutive npm `n8n-workflow` 429 runs occurred in refresh report.
-- Split partial meaning into:
-  - `accepted partial`: preserved rows keep utility and no new data is required immediately.
-  - `action required partial`: missing/watchlist coverage degrades trust or staleness.
-- Remaining: operator rule and action once 3~5 repeated partials are observed.
-- Add user-facing copy that explicitly says "Some data is stale but still usable".
+- Once 3~5 consecutive npm `n8n-workflow` 429 runs are observed, decide whether to keep the accepted partial, disable the watchlist entry, or replace the metric source.
+- Keep the current accepted partial while preserved rows keep workflow-automation package coverage useful.
 
 Verification:
 
