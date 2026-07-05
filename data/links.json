@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-05",
-  "generatedAt": "2026-07-05T05:00:23.530Z",
+  "generatedAt": "2026-07-05T05:19:11.236Z",
   "sourceMeta": {
     "name": "manual",
     "status": "ok",
@@ -8,7 +8,7 @@
     "tracked": 29,
     "emitted": 29,
     "coverage": "29/29",
-    "updatedAt": "2026-07-05T05:00:23.530Z"
+    "updatedAt": "2026-07-05T05:19:11.236Z"
   },
   "links": [
     {

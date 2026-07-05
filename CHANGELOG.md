@@ -6,6 +6,8 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Ran token-backed publish-health refresh; GitHub trend health recovered to `ok`, while npm `n8n-workflow` remained accepted partial at 4 consecutive 429 runs.
+- Removed completed npm 429 decision work from the active Roadmap.
 - Added a renderer insertion inventory to the threat model and removed completed InnerHTML audit work from the active Roadmap.
 - Added Review import collision preview before writes and prevented duplicate incoming records from creating duplicate saved rows.
 - Removed completed Review Workflow work from the active Roadmap.

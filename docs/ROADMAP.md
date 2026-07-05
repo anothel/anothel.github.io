@@ -14,12 +14,11 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Current Source State
 
-- Last checked-in refresh: `2026-07-05T05:00:23.964Z`.
+- Last checked-in refresh: `2026-07-05T05:19:11.615Z`.
 - Generated items: 108.
 - Overall status: `partial`.
-- Hacker News, trend npm, repo, and manual sources are `ok`.
-- Active blocker: GitHub trend refresh is unauthenticated and rate-limited on 4 queries.
-- Active blocker: npm package refresh 429 for `n8n-workflow` has repeated 2 times; preserved package rows remain usable.
+- Hacker News, GitHub trends, trend npm, repo, and manual sources are `ok`.
+- Active blocker: npm package refresh 429 for `n8n-workflow` has repeated 4 times; preserved package rows remain usable, so this stays an accepted partial.
 
 ## Next Work Queue
 
@@ -41,6 +40,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - Review detail now shows source context and score reasons for saved items without changing local storage.
 - P1 Review Workflow work is complete: saved items have note/tag/reason metadata, status filters, schema-v2 JSON export/import, Markdown export, local-only copy, source context, score reasons, and import collision preview before write.
 - P1 InnerHTML Rendering Audit is complete: `docs/THREAT_MODEL.md` inventories current insertion surfaces, input trust boundaries, and fixture ownership for renderer safety.
+- P0 npm 429 decision is complete for the current evidence: `n8n-workflow` stays visible as an accepted partial while preserved rows keep workflow-automation package coverage useful.
 
 ### P0 - Publish Health Refresh
 
@@ -61,24 +61,6 @@ Verification:
 - `git diff --check`.
 
 Exit: generated data is publishable, or the exact source blocker is recorded here.
-
-### P0 - npm 429 Partial Policy Clarification
-
-Trigger: `n8n-workflow` stays 429 repeatedly while preserving package rows.
-
-Scope:
-
-- Once 3~5 consecutive npm `n8n-workflow` 429 runs are observed, decide whether to keep the accepted partial, disable the watchlist entry, or replace the metric source.
-- Keep the current accepted partial while preserved rows keep workflow-automation package coverage useful.
-
-Verification:
-
-- `node scripts/validate-data.mjs`
-- `npm.cmd run check`
-- `git diff --check`
-- Manual review of refresh report and Status copy when partial repeats (3+ times).
-
-Exit: source state explains partial cause and response rule; repeat run threshold is documented in docs.
 
 ### P1 - Signal Quality Drift Tuning
 
