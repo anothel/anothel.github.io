@@ -1,11 +1,11 @@
 {
   "updated": "2026-07-05",
-  "generatedAt": "2026-07-05T05:19:11.336Z",
+  "generatedAt": "2026-07-05T08:10:34.944Z",
   "sourceMeta": {
     "name": "generated",
     "status": "partial",
     "count": 13,
-    "updatedAt": "2026-07-05T05:19:11.336Z"
+    "updatedAt": "2026-07-05T08:10:34.944Z"
   },
   "sections": [
     {
@@ -145,8 +145,8 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
             "Agent skills reference for reusable tool instructions.",
-            "84.1K stars from GitHub",
-            "84.1K stars / 4.7K forks"
+            "84.3K stars from GitHub",
+            "84.3K stars / 4.7K forks"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/JuliusBrussee/caveman",
@@ -169,16 +169,16 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "156.7K stars",
+          "metric": "156.9K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
             "Agent skills reference for reusable tool instructions.",
-            "156.7K stars from GitHub",
+            "156.9K stars from GitHub",
             "engineering workflow skills"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
-          "rawScore": 156743,
+          "rawScore": 156891,
           "qualityScore": 100,
           "score": 82,
           "sources": [
@@ -197,16 +197,16 @@
           "module": "Packages",
           "origin": "npm",
           "category": "MCP",
-          "metric": "43.4M/week",
+          "metric": "43.2M/week",
           "reason": "MCP infrastructure worth tracking for agent workflows.",
           "scoreReasons": [
             "MCP infrastructure worth tracking for agent workflows.",
-            "43.4M/week from npm",
+            "43.2M/week from npm",
             "Model Context Protocol SDK"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-          "rawScore": 43391543,
+          "rawScore": 43196036,
           "qualityScore": 93,
           "score": 75,
           "sources": [
@@ -262,7 +262,7 @@
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/n8n-io/n8n",
-          "rawScore": 195216,
+          "rawScore": 195232,
           "qualityScore": 100,
           "score": 85,
           "sources": [

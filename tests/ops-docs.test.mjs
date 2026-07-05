@@ -363,8 +363,8 @@ test("data contract docs describe schema and source governance", () => {
     assert.match(sourceGovernance, /Governance validation rejects future `history.date` values/s);
     assert.match(sourceGovernance, /npm `n8n-workflow` returned 429/s);
     assert.match(sourceGovernance, /visible `partial` source health with `rateLimited: true`/s);
-    assert.match(sourceGovernance, /4 consecutive 429 runs/s);
-    assert.match(sourceGovernance, /watchlist replacement candidate/s);
+    assert.match(sourceGovernance, /6 consecutive 429 runs/s);
+    assert.match(sourceGovernance, /choose whether to disable or replace it before the next publish confirmation/s);
     assert.match(sourceGovernance, /Status refresh-run detail uses the same sanitized recovery copy/s);
 });
 

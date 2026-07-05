@@ -6,6 +6,8 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Ran an approved token-backed publish-health refresh; GitHub trends stayed `ok`, generated data stayed at 108 items, and npm `n8n-workflow` 429 repeated x6.
+- Updated source governance and Roadmap current state for the npm 5-run decision threshold without disabling or replacing the package.
 - Removed the completed release-checklist workflow link from the active Roadmap queue.
 - Linked contributor and Roadmap workflows to the release checklist and added minimum checks by work type.
 - Recorded npm `n8n-workflow` as a watchlist replacement candidate after 4 consecutive 429 runs while preserving the accepted partial state.

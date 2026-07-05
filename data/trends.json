@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-05",
-  "generatedAt": "2026-07-05T05:19:08.897Z",
+  "generatedAt": "2026-07-05T08:10:31.870Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-07-05T05:19:08.897Z"
+      "updatedAt": "2026-07-05T08:10:31.870Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-07-05T05:19:08.897Z"
+      "updatedAt": "2026-07-05T08:10:31.870Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-07-05T05:19:08.897Z"
+      "updatedAt": "2026-07-05T08:10:31.870Z"
     }
   ],
   "items": [
@@ -163,7 +163,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "84.1K stars",
+      "velocity": "84.3K stars",
       "signal": "4.7K forks",
       "url": "https://github.com/JuliusBrussee/caveman",
       "summary": "why use many token when few token do trick Claude Code skill that cuts 65% of tokens by talking like caveman"
@@ -174,10 +174,10 @@
       "source": "npm",
       "category": "MCP",
       "score": 92,
-      "velocity": "43.4M/week",
-      "signal": "2026-06-26 to 2026-07-02",
+      "velocity": "43.2M/week",
+      "signal": "2026-06-28 to 2026-07-04",
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-      "summary": "43.4M downloads over the last available week."
+      "summary": "43.2M downloads over the last available week."
     },
     {
       "rank": 14,
@@ -185,10 +185,10 @@
       "source": "npm",
       "category": "AI",
       "score": 89,
-      "velocity": "25M/week",
-      "signal": "2026-06-26 to 2026-07-02",
+      "velocity": "24.5M/week",
+      "signal": "2026-06-28 to 2026-07-04",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider",
-      "summary": "25M downloads over the last available week."
+      "summary": "24.5M downloads over the last available week."
     },
     {
       "rank": 15,
@@ -196,10 +196,10 @@
       "source": "npm",
       "category": "AI",
       "score": 89,
-      "velocity": "25.3M/week",
-      "signal": "2026-06-26 to 2026-07-02",
+      "velocity": "25.1M/week",
+      "signal": "2026-06-28 to 2026-07-04",
       "url": "https://www.npmjs.com/package/openai",
-      "summary": "25.3M downloads over the last available week."
+      "summary": "25.1M downloads over the last available week."
     },
     {
       "rank": 16,
@@ -207,10 +207,10 @@
       "source": "npm",
       "category": "AI",
       "score": 88,
-      "velocity": "22.7M/week",
-      "signal": "2026-06-26 to 2026-07-02",
+      "velocity": "22.9M/week",
+      "signal": "2026-06-28 to 2026-07-04",
       "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk",
-      "summary": "22.7M downloads over the last available week."
+      "summary": "22.9M downloads over the last available week."
     },
     {
       "rank": 17,
@@ -218,10 +218,10 @@
       "source": "npm",
       "category": "AI",
       "score": 86,
-      "velocity": "15.5M/week",
-      "signal": "2026-06-26 to 2026-07-02",
+      "velocity": "15.1M/week",
+      "signal": "2026-06-28 to 2026-07-04",
       "url": "https://www.npmjs.com/package/ai",
-      "summary": "15.5M downloads over the last available week."
+      "summary": "15.1M downloads over the last available week."
     },
     {
       "rank": 18,
@@ -229,21 +229,21 @@
       "source": "npm",
       "category": "AI",
       "score": 83,
-      "velocity": "7.7M/week",
-      "signal": "2026-06-26 to 2026-07-02",
+      "velocity": "7.6M/week",
+      "signal": "2026-06-28 to 2026-07-04",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai",
-      "summary": "7.7M downloads over the last available week."
+      "summary": "7.6M downloads over the last available week."
     },
     {
       "rank": 19,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",
-      "score": 77,
-      "velocity": "2.5M/week",
-      "signal": "2026-06-26 to 2026-07-02",
+      "score": 76,
+      "velocity": "2.3M/week",
+      "signal": "2026-06-28 to 2026-07-04",
       "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
-      "summary": "2.5M downloads over the last available week."
+      "summary": "2.3M downloads over the last available week."
     },
     {
       "rank": 20,
@@ -252,7 +252,7 @@
       "category": "AI evals",
       "score": 74,
       "velocity": "1.5M/week",
-      "signal": "2026-06-26 to 2026-07-02",
+      "signal": "2026-06-28 to 2026-07-04",
       "url": "https://www.npmjs.com/package/langfuse",
       "summary": "1.5M downloads over the last available week."
     },
@@ -261,44 +261,44 @@
       "title": "Explanation of everything you can see in htop/top on Linux (2019)",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 64,
-      "velocity": "55 comments",
-      "signal": "448 points",
+      "score": 65,
+      "velocity": "57 comments",
+      "signal": "465 points",
       "url": "https://peteris.rocks/blog/htop/",
-      "summary": "HN story by theanonymousone with 55 comments."
+      "summary": "HN story by theanonymousone with 57 comments."
     },
     {
       "rank": 22,
-      "title": "Zig: All Package Management Functionality Moved from Compiler to Build System",
-      "source": "Hacker News",
-      "category": "Frontend",
-      "score": 45,
-      "velocity": "34 comments",
-      "signal": "165 points",
-      "url": "https://ziglang.org/devlog/2026/#2026-06-30",
-      "summary": "HN story by tosh with 34 comments."
-    },
-    {
-      "rank": 23,
       "title": "Leaking YouTube creators' private videos",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 44,
-      "velocity": "307 comments",
-      "signal": "541 points",
+      "score": 48,
+      "velocity": "328 comments",
+      "signal": "596 points",
       "url": "https://javoriuski.com/post/youtube",
-      "summary": "HN story by javxfps with 307 comments."
+      "summary": "HN story by javxfps with 328 comments."
+    },
+    {
+      "rank": 23,
+      "title": "Zig: All Package Management Functionality Moved from Compiler to Build System",
+      "source": "Hacker News",
+      "category": "Frontend",
+      "score": 47,
+      "velocity": "56 comments",
+      "signal": "185 points",
+      "url": "https://ziglang.org/devlog/2026/#2026-06-30",
+      "summary": "HN story by tosh with 56 comments."
     },
     {
       "rank": 24,
-      "title": "It's not me, it's the compiler",
+      "title": "Command and Conquer Generals natively ported to macOS, iPhone, iPad using Fable",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 39,
-      "velocity": "12 comments",
-      "signal": "77 points",
-      "url": "https://parsa.wtf/cast/",
-      "summary": "HN story by SVI with 12 comments."
+      "score": 41,
+      "velocity": "222 comments",
+      "signal": "541 points",
+      "url": "https://github.com/ammaarreshi/Generals-Mac-iOS-iPad/tree/main",
+      "summary": "HN story by asronline with 222 comments."
     }
   ]
 }

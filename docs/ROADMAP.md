@@ -15,11 +15,11 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Current Source State
 
-- Last checked-in refresh: `2026-07-05T05:19:11.615Z`.
+- Last checked-in refresh: `2026-07-05T08:10:35.289Z`.
 - Generated items: 108.
 - Overall status: `partial`.
 - Hacker News, GitHub trends, trend npm, repo, and manual sources are `ok`.
-- Active blocker: npm package refresh 429 for `n8n-workflow` has repeated 4 times; preserved package rows remain usable, so this stays an accepted partial and watchlist replacement candidate.
+- Active blocker: npm package refresh 429 for `n8n-workflow` has repeated 6 times. Preserved package rows remain usable, so the data stays an accepted partial; choose disable or replacement for `n8n-workflow` before the next publish confirmation.
 
 ## Next Work Queue
 
