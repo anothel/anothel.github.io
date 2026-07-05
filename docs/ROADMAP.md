@@ -29,6 +29,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
   - Keep this as a baseline; repeat-work here is now a regression review, not roadmap expansion.
 - Explore: browser summary now displays a source-health partial warning when source metadata is partial, and this path is covered by tests.
 - Explore: card copy now shortens reason snippets and truncates long summaries/reasons for quicker scanning.
+- Explore: saved search rows now expose Apply, Rename, and Delete actions with clearer labels, and include a one-line note that saved searches are full filter snapshots separate from topic pins.
 
 ### P0 - Publish Health Refresh
 
@@ -98,8 +99,6 @@ Trigger: users lose context between visits, saved searches feel hidden, or repea
 
 Scope:
 
-- Improve saved search edit/delete UX and expose it in common actions.
-- Clarify relationship between pinned topics and saved searches.
 - Make localStorage export/import behavior consistent between Explore and Review.
 
 Verification:

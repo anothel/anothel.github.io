@@ -431,7 +431,7 @@ test("Explore card reasons are compact and escaped", () => {
     const cards = app.renderExploreCards([item], new Set([item.id]));
 
     assert.match(cards, /<strong>Why<\/strong>/);
-    assert.match(cards, /\u2026/);
+    assert.match(cards, /\.\.\./);
     assert.doesNotMatch(cards, /<script>bad<\/script>/);
     assert.doesNotMatch(cards, /<bad>should be removed<\/bad>/);
 });
@@ -659,7 +659,10 @@ test("Explore saved search renderer emits empty, item, and full states safely", 
     assert.match(html, /data-apply-search-id="x"/);
     assert.match(html, /data-edit-search-id="x"/);
     assert.match(html, /data-remove-search-id="x"/);
-    assert.match(html, />Edit</);
+    assert.match(html, />Apply</);
+    assert.match(html, /Rename/);
+    assert.match(html, /Delete/);
+    assert.match(html, /Saved searches store full filter states/);
     assert.doesNotMatch(html, /<script>/);
     assert.match(app.savedSearchStatusText("full"), /Remove one to save another/);
     assert.equal(app.savedSearchStatusText("applied"), "Search applied.");

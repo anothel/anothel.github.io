@@ -1272,17 +1272,19 @@ button {
 
 .saved-search-item {
     display: grid;
-    grid-template-columns: minmax(120px, auto) auto;
+    grid-template-columns: minmax(120px, 1fr) auto auto auto;
     gap: 8px;
     width: auto;
     max-width: 100%;
+    align-items: center;
 }
 
-.saved-search-item button:first-child {
-    width: auto;
-    min-width: 150px;
+.saved-search-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
     overflow-wrap: anywhere;
-    text-align: left;
+    white-space: normal;
 }
 
 .saved-search-empty,

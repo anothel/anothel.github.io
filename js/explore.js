@@ -197,7 +197,7 @@
     function compactText(value, limit = 120) {
         const text = String(value || "").replace(/\s+/g, " ").trim();
         if (text.length <= limit) return text;
-        return `${text.slice(0, limit - 1)}…`;
+        return `${text.slice(0, limit - 1)}...`;
     }
 
     function savedSearchLabel(value) {
@@ -229,13 +229,21 @@
             return `<p class="saved-search-empty">${escapeHtml(savedSearchStatusText(status))}</p>`;
         }
 
-        return searches.map((search) => `
-            <article class="saved-search-item">
-                <button type="button" data-apply-search-id="${escapeHtml(search.id)}">${escapeHtml(savedSearchLabel(search))}</button>
-                <button type="button" data-edit-search-id="${escapeHtml(search.id)}" aria-label="Edit ${escapeHtml(savedSearchLabel(search))}">Edit</button>
-                <button type="button" data-remove-search-id="${escapeHtml(search.id)}" aria-label="Remove ${escapeHtml(savedSearchLabel(search))}">Remove</button>
-            </article>
-        `).join("");
+        const rendered = searches.map((search) => {
+            const label = escapeHtml(savedSearchLabel(search));
+            return `
+                <article class="saved-search-item">
+                    <span class="saved-search-label">${label}</span>
+                    <button type="button" data-apply-search-id="${escapeHtml(search.id)}" aria-label="Apply ${label}">Apply</button>
+                    <button type="button" data-edit-search-id="${escapeHtml(search.id)}" aria-label="Rename ${label}">Rename</button>
+                    <button type="button" data-remove-search-id="${escapeHtml(search.id)}" aria-label="Delete ${label}">Delete</button>
+                </article>
+            `;
+        });
+
+        return `${rendered.join("")}
+            <p class="saved-search-help">Saved searches store full filter states. Topic pins only prioritize lens focus.</p>
+        `;
     }
 
     function createSavedSearchStore(storage) {
@@ -417,7 +425,7 @@
                     </div>
                     ${scoreReasons.length ? `
                         <ul class="score-reasons" aria-label="Why this item ranks highly">
-                            <li><strong>Why</strong> ${escapeHtml(scoreReasons.join(" · "))}</li>
+                            <li><strong>Why</strong> ${escapeHtml(scoreReasons.join(" / "))}</li>
                         </ul>
                     ` : ""}
                     ${item.sourceContext ? `<p class="source-context">${escapeHtml(item.sourceContext)}</p>` : ""}
