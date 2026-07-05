@@ -289,7 +289,7 @@ test("renderTodayStatus explains partial and fallback generated data", () => {
             sourceMeta: { status: "partial" },
             sections: [{ items: [{}, {}] }]
         }),
-        "2 generated picks. Source health partial. Usable data remains available; source details name missing sources and retry data refresh."
+        "2 generated picks. Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness."
     );
     assert.equal(
         renderTodayStatus({

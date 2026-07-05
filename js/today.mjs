@@ -1,4 +1,5 @@
 import "./safe-dom.js";
+import "./data-health.js";
 
 const todayUrl = typeof document === "undefined"
     ? "../data/today.json"
@@ -146,11 +147,19 @@ function updatedLabel(data) {
 export function renderTodayStatus(data) {
     const total = totalSectionItems(data.sections);
     const status = data.sourceMeta?.status || "ok";
+    const sourceMode = globalThis.DataHealth?.dataModeText
+        ? globalThis.DataHealth.dataModeText(data.sourceMeta, { updated: updatedLabel(data) })
+        : null;
 
-    if (status === "fallback") return `${total} generated picks. Source health fallback. Previous data remains available; retry data refresh.`;
-    if (status === "partial") return `${total} generated picks. Source health partial. Usable data remains available; source details name missing sources and retry data refresh.`;
-    if (status === "error") return `${total} generated picks from failed source refresh. Retry data refresh before trusting freshness.`;
-    return `${total} generated picks. Source health ok. Data date ${updatedLabel(data)}. No recovery needed.`;
+    if (status !== "ok" && sourceMode) {
+        return `${total} generated picks. ${sourceMode}`;
+    }
+
+    if (status === "ok") return `${total} generated picks. Source health ok. Data date ${updatedLabel(data)}. No recovery needed.`;
+
+    return sourceMode
+        ? `${total} generated picks. ${sourceMode}`
+        : `${total} generated picks. Retry data refresh to recover the source status.`;
 }
 
 function renderToday(data) {

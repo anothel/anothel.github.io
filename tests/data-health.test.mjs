@@ -60,7 +60,7 @@ test("DataHealth describes fallback and partial modes", () => {
     );
     assert.equal(
         DataHealth.dataModeText({ status: "partial" }),
-        "Source health partial. Usable data remains available; source details name missing sources and retry data refresh."
+        "Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness."
     );
     assert.equal(
         DataHealth.dataModeText({ status: "ok" }),

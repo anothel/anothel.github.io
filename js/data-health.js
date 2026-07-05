@@ -86,6 +86,8 @@
         return Math.max(0, Math.floor(diff / 86400000));
     }
 
+    const partialCopy = "Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness.";
+
     function freshnessText(source, today) {
         const status = source?.status || "unknown";
         const updated = source?.updatedAt || source?.updated;
@@ -128,7 +130,7 @@
     function dataModeText(sourceMeta, options = {}) {
         const status = aggregateSourceStatus(sourceMeta);
         if (status === "fallback") return "Source health fallback. Previous data remains available; retry data refresh.";
-        if (status === "partial") return "Source health partial. Usable data remains available; source details name missing sources and retry data refresh.";
+        if (status === "partial") return partialCopy;
         if (status === "error") return "Source health failed. Retry data refresh before trusting freshness.";
         if (status === "ok") {
             const updatedDate = datePart(options.updated);

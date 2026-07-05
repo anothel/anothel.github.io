@@ -16,10 +16,13 @@ const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const roadmapQueueHeadings = [
     "P0 - Publish Health Refresh",
+    "P0 - npm 429 Partial Policy Clarification",
+    "P1 - Signal Quality Drift Tuning",
     "P1 - Explore Repeat Use",
     "P1 - Review Workflow",
-    "P1 - Documentation Slimming",
-    "P1 - InnerHTML Audit",
+    "P1 - Documentation Slimming and Decision Log Separation",
+    "P1 - InnerHTML Rendering Audit",
+    "P2 - Trust Copy Clarity",
     "P2 - Route and Link Checks",
 ];
 

@@ -42,6 +42,48 @@ Verification:
 
 Exit: generated data is publishable, or the exact source blocker is recorded here.
 
+### P0 - npm 429 Partial Policy Clarification
+
+Trigger: `n8n-workflow` stays 429 repeatedly while preserving package rows.
+
+Scope:
+
+- Record how many consecutive npm `n8n-workflow` 429 runs occurred in refresh report.
+- Split partial meaning into:
+  - `accepted partial`: preserved rows keep utility and no new data is required immediately.
+  - `action required partial`: missing/watchlist coverage degrades trust or staleness.
+- After 3~5 consecutive repeats, decide whether to adjust watchlist policy or adopt replacement metric source.
+- Review npm API call order/frequency in watchlist updater for rate-limit load reduction.
+- Add user-facing copy that explicitly says "Some data is stale but still usable".
+
+Verification:
+
+- `node scripts/validate-data.mjs`
+- `npm.cmd run check`
+- `git diff --check`
+- Manual review of refresh report and Status copy when partial repeats (3+ times).
+
+Exit: source state explains partial cause and response rule; repeat run threshold is documented in docs.
+
+### P1 - Signal Quality Drift Tuning
+
+Trigger: ranking drift causes broad or non-actionable signals to dominate Today/Explore.
+
+Scope:
+
+- Add a quick decision rule: if observed ranking quality regresses, prune from active watchlists first; if needed, tighten `data/signal-policy.json`.
+- Keep broad baseline guards explicit and testable so signal quality and topic relevance stay durable.
+- Keep watchlist and policy changes scoped to measured quality regressions only.
+
+Verification:
+
+- `node scripts/validate-data.mjs`
+- `npm.cmd run check`
+- `git diff --check`
+- Manual check: Today's and Explore's top 10 are workflow/agent/eval/supported-topic signals under current fixture and checked-in data.
+
+Exit: ranking drift triggers an explicit policy/watchlist adjustment path and does not grow hidden complexity.
+
 ### P1 - Explore Repeat Use
 
 Trigger: users lose context between visits, saved searches feel hidden, or repeated filtering takes too long.
@@ -85,7 +127,7 @@ Verification:
 
 Exit: Review behaves as a practical processing queue with clear local-only boundaries.
 
-### P1 - Documentation Slimming
+### P1 - Documentation Slimming and Decision Log Separation
 
 Trigger: docs mix current decisions with long audit history and users struggle to find the current conclusion.
 
@@ -105,7 +147,7 @@ Verification:
 
 Exit: new contributors can find current decisions quickly and archived discussion no longer appears as active work.
 
-### P1 - InnerHTML Audit
+### P1 - InnerHTML Rendering Audit
 
 Trigger: any client-rendered HTML insertion path reappears without an explicit escape review.
 
@@ -125,6 +167,26 @@ Verification:
 - Manual review of all `innerHTML` call sites and associated fixtures.
 
 Exit: every user-facing HTML insertion is explainable, tested, and policy-consistent.
+
+### P2 - Trust Copy Clarity
+
+Trigger: users report confusion between stale, partial, fallback, and error states.
+
+Scope:
+
+- Consolidate shared copy for partial and recovery states across renderers.
+- Make partial/recovery paths explicit: why data is still visible, what is stale, and next action.
+- Keep wording consistent between Today, Home, Explore, Status, and static fallbacks.
+- Ensure copy changes are test-covered and explain the difference between source freshness and recovery requirement.
+
+Verification:
+
+- `node scripts/validate-data.mjs`.
+- `npm.cmd run check`.
+- `git diff --check`.
+- Manual smoke: Today and Explore surface the same partial/recovery phrase when source health is partial.
+
+Exit: users can distinguish partial/recovery outcomes without checking Status first.
 
 ### P2 - Route and Link Checks
 

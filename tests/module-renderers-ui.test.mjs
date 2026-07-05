@@ -74,7 +74,7 @@ test("package watchlist escapes generated text and blocks unsafe links", async (
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;pkg&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;focus&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Source health partial. Usable data remains available; source details name missing sources and retry data refresh.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness.");
     assert.match(html, /status-partial/);
     assert.match(html, /1 failed: openai/);
 });
@@ -114,7 +114,7 @@ test("repo watchlist escapes generated text and blocks unsafe links", async () =
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;repo&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;focus&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Source health partial. Usable data remains available; source details name missing sources and retry data refresh.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness.");
     assert.match(html, /status-partial/);
     assert.match(html, /1 failed: bad\/repo/);
 });
