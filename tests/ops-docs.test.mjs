@@ -321,6 +321,7 @@ test("docs record the public trust baseline", () => {
     assert.match(readme, /CHANGELOG\.md/);
     assert.match(ia, /Documentation Trust Baseline/);
     assert.match(ia, /Package entry point and PR CI are established without dependencies/s);
+    assert.match(ia, /Roadmap now separates current source state, live trigger-based work, architecture gates, and cut items/s);
 });
 
 test("security and threat docs preserve the static-site trust model", () => {

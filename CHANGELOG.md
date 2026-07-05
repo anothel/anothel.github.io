@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Aligned IA Roadmap summary with the current trigger-only Roadmap structure.
 - Removed completed-work notes from Roadmap so it only lists current source state, live triggers, gates, and cut items.
 - Added a checked-in top-signal guard so current Today and Explore priority items stay within supported workflow, agent, eval, MCP, and skills topics.
 - Ran token-backed publish-health refresh; GitHub trend health recovered to `ok`, while npm `n8n-workflow` remained accepted partial at 4 consecutive 429 runs.

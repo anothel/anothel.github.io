@@ -223,7 +223,7 @@ anothel.github.io gathers AI engineering and developer-workflow signals from Hac
 - README now uses the same product sentence as IA: a static-first personal signal dashboard for deciding what to open next.
 - Public operating docs now cover security reporting, contribution workflow, Signal Schema v2, source governance, threat model, release checklist, and changelog.
 - Package entry point and PR CI are established without dependencies, lockfiles, framework tooling, backend, account, sync, or build output.
-- Roadmap now separates future operational work from completed documentation work, with data contract enforcement as the next P0 queue.
+- Roadmap now separates current source state, live trigger-based work, architecture gates, and cut items from completed documentation work.
 - npm `n8n-workflow` 429 remains an accepted visible partial state because previous rows are preserved and `rateLimited` metadata is explicit.
 
 ## Renderer Safety Audit
