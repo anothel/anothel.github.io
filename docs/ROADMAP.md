@@ -22,27 +22,6 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Next Work Queue
 
-### Completed Since Last Review
-
-- Explore: default filter restore state (focus/module/category/sort) is now persisted and recoverable via Save/Reset default controls.
-- Trust-copy wording and recovery copy are shared and test-covered across Today, Home, Explore, Status, and module/static fallback surfaces via `DataHealth`.
-  - Keep this as a baseline; repeat-work here is now a regression review, not roadmap expansion.
-- Explore: browser summary now displays a source-health partial warning when source metadata is partial, and this path is covered by tests.
-- Explore: card copy now shortens reason snippets and truncates long summaries/reasons for quicker scanning.
-- Explore: saved search rows now expose Apply, Rename, and Delete actions with clearer labels, and include a one-line note that saved searches are full filter snapshots separate from topic pins.
-- Explore: saved search export/import is now consistent with Review-local storage workflows, including JSON payload format, status messaging, and smoke-tested copy/paste + invalid-input behavior.
-- P1 Explore Repeat Use work is complete: saved search portability and repeat-use controls are now aligned between sessions and with Review-like local data workflows.
-- Documentation split is complete: `docs/DECISIONS.md` stores durable conclusions and history, while `docs/IA.md` keeps current route, vocabulary, and workflow decisions.
-- P0 npm 429 partial policy now records consecutive repeated-run streaks in refresh report output and classifies partial status copy as `accepted partial` for preserved rows vs `action required partial` when trust impact is immediate.
-- P0 publish health refresh ran for 2026-07-05 without `GITHUB_TOKEN`; generated data remains publishable with GitHub trend 403 partial and npm `n8n-workflow` 429 x2 recorded.
-- npm package watchlist updater review is complete: package downloads already run sequentially with bounded retries, so extra throttling is deferred until 3~5 repeated 429s prove it helps.
-- P0 npm partial user-facing copy is complete: shared and static status text says some data is stale but still usable and labels preserved `n8n-workflow` rows as accepted partial.
-- Review detail now shows source context and score reasons for saved items without changing local storage.
-- P1 Review Workflow work is complete: saved items have note/tag/reason metadata, status filters, schema-v2 JSON export/import, Markdown export, local-only copy, source context, score reasons, and import collision preview before write.
-- P1 InnerHTML Rendering Audit is complete: `docs/THREAT_MODEL.md` inventories current insertion surfaces, input trust boundaries, and fixture ownership for renderer safety.
-- P0 npm 429 decision is complete for the current evidence: `n8n-workflow` stays visible as an accepted partial while preserved rows keep workflow-automation package coverage useful.
-- P1 Signal Quality current-data guard is complete: checked-in Today and Explore top priority items stay within supported workflow, agent, eval, MCP, and skills topics.
-
 ### P0 - Publish Health Refresh
 
 Trigger: checked-in data is old, source health changes, public page dates look wrong, or owner asks for publish confirmation.

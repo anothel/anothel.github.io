@@ -19,14 +19,6 @@ const roadmapQueueHeadings = [
     "P1 - Signal Quality Drift Tuning"
 ];
 
-const roadmapCompletedItems = [
-    "Trust-copy wording and recovery copy are shared and test-covered",
-    "P1 Review Workflow work is complete",
-    "P1 InnerHTML Rendering Audit is complete",
-    "P0 npm 429 decision is complete",
-    "P1 Signal Quality current-data guard is complete"
-];
-
 test("README explains data refresh automation for operators", () => {
     assert.match(readme, /## Data Refresh Automation/);
     assert.match(readme, /workflow_dispatch/);
@@ -412,6 +404,7 @@ test("IA records public scope triage outcomes", () => {
 test("roadmap is a lean future work queue, not a completed-work ledger", () => {
     assert.match(roadmap, /## Next Work Queue/);
     assert.match(roadmap, /Completed work belongs in `CHANGELOG\.md`/);
+    assert.doesNotMatch(roadmap, /### Completed Since Last Review/);
     assert.doesNotMatch(roadmap, /## Current Surface/);
     assert.doesNotMatch(roadmap, /## Product Direction/);
     assert.doesNotMatch(roadmap, /## Current Baseline/);
@@ -457,15 +450,12 @@ test("roadmap work bundles define trigger, scope, verification, and exit", () =>
     }
 });
 
-test("roadmap records completed work in the completed section", () => {
-    const completedSection = roadmap.slice(roadmap.indexOf("### Completed Since Last Review"));
-    const queueBoundary = completedSection.indexOf("\n### P0 - Publish Health Refresh");
-    const section = completedSection.slice(0, queueBoundary === -1 ? undefined : queueBoundary);
-    for (const heading of roadmapCompletedItems) {
-        assert.match(section, new RegExp(`- ${heading}`));
-    }
-    assert.match(section, /Trust-copy wording and recovery copy are shared and test-covered/);
-    assert.doesNotMatch(section, /Trigger:/);
+test("roadmap keeps completed work out of the active queue", () => {
+    const queue = roadmap.slice(roadmap.indexOf("## Next Work Queue"), roadmap.indexOf("## Architecture Gate"));
+
+    assert.doesNotMatch(queue, /is complete/);
+    assert.doesNotMatch(queue, /now /);
+    assert.doesNotMatch(queue, /Completed Since Last Review/);
 });
 
 test("roadmap keeps architecture behind a gate, not active work", () => {
