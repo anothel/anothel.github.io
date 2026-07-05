@@ -167,7 +167,8 @@
             module: typeof value.module === "string" && value.module ? value.module : "all",
             category: typeof value.category === "string" && value.category ? value.category : "all",
             query: String(value.query || "").trim(),
-            sort: allowedSortValues.has(value.sort) ? value.sort : "priority"
+            sort: allowedSortValues.has(value.sort) ? value.sort : "priority",
+            label: String(value.label || "").trim()
         };
     }
 
@@ -188,6 +189,7 @@
 
     function savedSearchLabel(value) {
         const normalized = normalizeSavedSearch(value);
+        if (normalized.label) return normalized.label;
         const parts = [];
         if (normalized.focus !== "all") parts.push(normalized.focus);
         if (normalized.module !== "all") parts.push(normalized.module);
@@ -200,6 +202,8 @@
     function savedSearchStatusText(status) {
         if (status === "saved") return "Search saved.";
         if (status === "applied") return "Search applied.";
+        if (status === "editing") return "Edit this saved search name or filters and save again.";
+        if (status === "renamed") return "Saved search renamed.";
         if (status === "updated") return "Saved search moved to top.";
         if (status === "removed") return "Saved search removed.";
         if (status === "full") return "Remove one to save another.";
@@ -215,6 +219,7 @@
         return searches.map((search) => `
             <article class="saved-search-item">
                 <button type="button" data-apply-search-id="${escapeHtml(search.id)}">${escapeHtml(savedSearchLabel(search))}</button>
+                <button type="button" data-edit-search-id="${escapeHtml(search.id)}" aria-label="Edit ${escapeHtml(savedSearchLabel(search))}">Edit</button>
                 <button type="button" data-remove-search-id="${escapeHtml(search.id)}" aria-label="Remove ${escapeHtml(savedSearchLabel(search))}">Remove</button>
             </article>
         `).join("");
@@ -255,14 +260,23 @@
 
         return {
             read,
-            save(value) {
-                const item = { id: savedSearchId(value), ...normalizeSavedSearch(value) };
+            save(value, options = {}) {
+                const normalized = normalizeSavedSearch(value);
+                const item = { id: savedSearchId(normalized), ...normalized };
                 const currentItems = read();
-                const current = currentItems.filter((saved) => saved.id !== item.id);
-                const existing = current.length !== currentItems.length;
-                if (!existing && current.length >= maxSavedSearches) return { status: "full", items: currentItems };
+                const existingId = options.existingId || "";
+                const currentWithoutExisting = existingId
+                    ? currentItems.filter((saved) => saved.id !== existingId)
+                    : currentItems;
+                const matchingIdIndex = currentWithoutExisting.findIndex((saved) => saved.id === item.id);
+                const hasExistingReplacement = matchingIdIndex >= 0 || existingId === item.id;
+                const replacementOrEdit = hasExistingReplacement || existingId;
+
+                const current = currentWithoutExisting.filter((saved) => saved.id !== item.id);
+                if (!replacementOrEdit && current.length >= maxSavedSearches) return { status: "full", items: currentItems };
+
                 const written = write([item, ...current]);
-                return { status: existing ? "updated" : written.status, items: written.items };
+                return { status: replacementOrEdit ? "updated" : written.status, items: written.items };
             },
             remove(id) {
                 const written = write(read().filter((item) => item.id !== id));
@@ -530,6 +544,23 @@
         return true;
     }
 
+    function renameSavedSearch(savedSearchStore, id, label) {
+        const current = state.savedSearches.find((item) => item.id === id)
+            || savedSearchStore.read().find((item) => item.id === id);
+        if (!current || !id) return { status: "not-found", items: state.savedSearches };
+
+        const result = savedSearchStore.save({
+            focus: current.focus,
+            module: current.module,
+            category: current.category,
+            query: current.query,
+            sort: current.sort,
+            label
+        }, { existingId: id });
+        state.savedSearches = result.items;
+        return { ...result, items: result.items, status: label === current.label ? "updated" : "renamed" };
+    }
+
     function renderSavedSearchPanel(els, status = "empty") {
         if (els.savedSearches) els.savedSearches.innerHTML = renderSavedSearches(state.savedSearches, status);
         if (els.savedSearchStatus) els.savedSearchStatus.textContent = savedSearchStatusText(status);
@@ -651,15 +682,27 @@
     function bindSavedSearchActions(els, savedSearchStore, store, pinnedStore) {
         if (typeof document.querySelectorAll !== "function") return;
 
-        document.querySelectorAll("[data-apply-search-id], [data-remove-search-id]").forEach((button) => {
+        document.querySelectorAll("[data-apply-search-id], [data-edit-search-id], [data-remove-search-id]").forEach((button) => {
             button.addEventListener("click", () => {
                 const applyId = button.dataset.applySearchId;
+                const editId = button.dataset.editSearchId;
                 const removeId = button.dataset.removeSearchId;
 
                 if (applyId) {
                     if (applySavedSearchById(els, savedSearchStore, applyId)) {
                         render(els, store, pinnedStore, savedSearchStore, "applied");
                     }
+                    return;
+                }
+
+                if (editId) {
+                    const target = state.savedSearches.find((search) => search.id === editId);
+                    const label = target ? target.label || savedSearchLabel(target) : "";
+                    const promptLabel = typeof global.prompt === "function" ? global.prompt("Edit saved search name:", label) : "";
+                    if (typeof promptLabel !== "string") return;
+                    const result = renameSavedSearch(savedSearchStore, editId, promptLabel);
+                    renderSavedSearchPanel(els, result.status);
+                    bindSavedSearchActions(els, savedSearchStore, store, pinnedStore);
                     return;
                 }
 

@@ -21,8 +21,11 @@ const roadmapQueueHeadings = [
     "P1 - Explore Repeat Use",
     "P1 - Review Workflow",
     "P1 - Documentation Slimming and Decision Log Separation",
-    "P1 - InnerHTML Rendering Audit",
-    "P2 - Trust Copy Clarity",
+    "P1 - InnerHTML Rendering Audit"
+];
+
+const roadmapCompletedItems = [
+    "Trust-copy wording and recovery copy are shared and test-covered"
 ];
 
 test("README explains data refresh automation for operators", () => {
@@ -449,6 +452,17 @@ test("roadmap work bundles define trigger, scope, verification, and exit", () =>
         assert.match(section, /Verification:/);
         assert.match(section, /Exit:/);
     }
+});
+
+test("roadmap records completed work in the completed section", () => {
+    const completedSection = roadmap.slice(roadmap.indexOf("### Completed Since Last Review"));
+    const queueBoundary = completedSection.indexOf("\n### P0 - Publish Health Refresh");
+    const section = completedSection.slice(0, queueBoundary === -1 ? undefined : queueBoundary);
+    for (const heading of roadmapCompletedItems) {
+        assert.match(section, new RegExp(`- ${heading}`));
+    }
+    assert.match(section, /Trust-copy wording and recovery copy are shared and test-covered/);
+    assert.doesNotMatch(section, /Trigger:/);
 });
 
 test("roadmap keeps architecture behind a gate, not active work", () => {

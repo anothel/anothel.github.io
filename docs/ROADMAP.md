@@ -22,6 +22,11 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Next Work Queue
 
+### Completed Since Last Review
+
+- Trust-copy wording and recovery copy are shared and test-covered across Today, Home, Explore, Status, and module/static fallback surfaces via `DataHealth`.
+  - Keep this as a baseline; repeat-work here is now a regression review, not roadmap expansion.
+
 ### P0 - Publish Health Refresh
 
 Trigger: checked-in data is old, source health changes, public page dates look wrong, or owner asks for publish confirmation.
@@ -167,26 +172,6 @@ Verification:
 - Manual review of all `innerHTML` call sites and associated fixtures.
 
 Exit: every user-facing HTML insertion is explainable, tested, and policy-consistent.
-
-### P2 - Trust Copy Clarity
-
-Trigger: users report confusion between stale, partial, fallback, and error states.
-
-Scope:
-
-- Consolidate shared copy for partial and recovery states across renderers.
-- Make partial/recovery paths explicit: why data is still visible, what is stale, and next action.
-- Keep wording consistent between Today, Home, Explore, Status, and static fallbacks.
-- Ensure copy changes are test-covered and explain the difference between source freshness and recovery requirement.
-
-Verification:
-
-- `node scripts/validate-data.mjs`.
-- `npm.cmd run check`.
-- `git diff --check`.
-- Manual smoke: Today and Explore surface the same partial/recovery phrase when source health is partial.
-
-Exit: users can distinguish partial/recovery outcomes without checking Status first.
 
 ## Architecture Gate
 

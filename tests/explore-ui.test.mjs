@@ -560,6 +560,7 @@ test("Explore saved search labels omit default fields", () => {
 
     assert.equal(app.savedSearchLabel({ focus: "all", module: "all", category: "all", query: "", sort: "priority" }), "All signals");
     assert.equal(app.savedSearchLabel({ focus: "MCP", module: "Repos", category: "all", query: "", sort: "saved" }), "MCP / Repos / saved first");
+    assert.equal(app.savedSearchLabel({ focus: "all", module: "all", category: "all", query: "", sort: "priority", label: "Focus lane" }), "Focus lane");
     assert.equal(app.savedSearchLabel({ focus: "Agent skills", module: "all", category: "all", query: "skills", sort: "priority" }), "Agent skills / skills");
 });
 
@@ -622,10 +623,13 @@ test("Explore saved search renderer emits empty, item, and full states safely", 
 
     assert.match(html, /MCP \/ Repos \/ &lt;script&gt; \/ saved first/);
     assert.match(html, /data-apply-search-id="x"/);
+    assert.match(html, /data-edit-search-id="x"/);
     assert.match(html, /data-remove-search-id="x"/);
+    assert.match(html, />Edit</);
     assert.doesNotMatch(html, /<script>/);
     assert.match(app.savedSearchStatusText("full"), /Remove one to save another/);
     assert.equal(app.savedSearchStatusText("applied"), "Search applied.");
+    assert.equal(app.savedSearchStatusText("renamed"), "Saved search renamed.");
 });
 
 test("Explore topic lenses render pin state", () => {
@@ -1584,9 +1588,13 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
             },
             querySelectorAll(selector) {
                 if (selector === "[data-focus-filter]") return focusButtons;
-                if (selector === "[data-apply-search-id], [data-remove-search-id]") return dynamicButtons;
+                if (selector === "[data-apply-search-id], [data-edit-search-id], [data-remove-search-id]") return dynamicButtons;
                 return [];
             }
+        },
+        prompt(message, value) {
+            this.promptLast = { message, value };
+            return "Renamed MCP";
         },
         localStorage: {
             getItem(key) {
@@ -1630,6 +1638,8 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
         category: elements["[data-explore-category]"],
         query: elements["[data-explore-query]"],
         sort: elements["[data-explore-sort]"],
+        savedSearches: elements["[data-saved-searches]"],
+        savedSearchStatus: elements["[data-saved-search-status]"],
         focusButtons
     };
     assert.equal(context.ExploreApp.applySavedSearchById(
@@ -1655,6 +1665,22 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
 
     assert.equal(elements["[data-explore-query]"].value, "server");
     assert.equal(elements["[data-saved-search-status]"].textContent, "Search applied.");
+
+    dynamicButtons = [createButton({ editSearchId: savedPayload.items[0].id })];
+    context.ExploreApp.bindSavedSearchActions(
+        appEls,
+        savedSearchStore,
+        context.ExploreApp.createExploreStore(context.localStorage),
+        context.ExploreApp.createPinnedTopicStore(context.localStorage)
+    );
+    dynamicButtons[0].listeners.click({ target: dynamicButtons[0] });
+
+    assert.equal(context.promptLast.message, "Edit saved search name:");
+    assert.equal(context.promptLast.value, "MCP / server / saved first");
+    const renamedSearch = JSON.parse(memory.get("anothel.preferences.savedSearches.v1")).items[0];
+    assert.equal(renamedSearch.label, "Renamed MCP");
+    assert.equal(elements["[data-saved-search-status]"].textContent, "Saved search renamed.");
+    assert.match(elements["[data-saved-searches]"].innerHTML, /Renamed MCP/);
 
     const removed = savedSearchStore.remove(savedPayload.items[0].id);
 
