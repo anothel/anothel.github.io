@@ -15,7 +15,12 @@ const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const roadmapQueueHeadings = [
-    "P0 - Publish Health Refresh",
+    "P0 - npm `n8n-workflow` 429 Partial Handling",
+    "P1 - Explore Repeat Use",
+    "P1 - Review Workflow",
+    "P1 - Documentation Slimming",
+    "P1 - InnerHTML Audit",
+    "P2 - Route and Link Checks",
 ];
 
 test("README explains data refresh automation for operators", () => {
@@ -407,7 +412,6 @@ test("roadmap is a lean future work queue, not a completed-work ledger", () => {
     assert.doesNotMatch(roadmap, /Post-publish smoke:/);
     assert.doesNotMatch(roadmap, /Publish readiness:/);
     assert.doesNotMatch(roadmap, /^### P1 - Signal Quality$/m);
-    assert.doesNotMatch(roadmap, /^### P1 - Explore Repeat Use$/m);
     assert.doesNotMatch(roadmap, /^### P2 - Trust Copy and Generator Cleanup$/m);
 });
 
