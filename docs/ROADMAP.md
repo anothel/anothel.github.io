@@ -28,6 +28,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - Trust-copy wording and recovery copy are shared and test-covered across Today, Home, Explore, Status, and module/static fallback surfaces via `DataHealth`.
   - Keep this as a baseline; repeat-work here is now a regression review, not roadmap expansion.
 - Explore: browser summary now displays a source-health partial warning when source metadata is partial, and this path is covered by tests.
+- Explore: card copy now shortens reason snippets and truncates long summaries/reasons for quicker scanning.
 
 ### P0 - Publish Health Refresh
 
@@ -99,7 +100,6 @@ Scope:
 
 - Improve saved search edit/delete UX and expose it in common actions.
 - Clarify relationship between pinned topics and saved searches.
-- Keep score reasoning short and consistent in cards.
 - Make localStorage export/import behavior consistent between Explore and Review.
 
 Verification:

@@ -194,6 +194,12 @@
         return query.length > 42 ? `${query.slice(0, 42)}...` : query;
     }
 
+    function compactText(value, limit = 120) {
+        const text = String(value || "").replace(/\s+/g, " ").trim();
+        if (text.length <= limit) return text;
+        return `${text.slice(0, limit - 1)}…`;
+    }
+
     function savedSearchLabel(value) {
         const normalized = normalizeSavedSearch(value);
         if (normalized.label) return normalized.label;
@@ -389,7 +395,8 @@
             const savedId = itemSavedId(item, savedIds);
             const saved = Boolean(savedId);
             const buttonId = savedId || item.id;
-            const scoreReasons = (item.scoreReasons || []).slice(0, 3);
+            const summaryText = compactText(item.summary, 140);
+            const scoreReasons = (item.scoreReasons || []).slice(0, 2).map((reason) => compactText(reason, 96));
             const href = safeHref(item.url);
             const cardAttrs = href === "#"
                 ? ""
@@ -401,7 +408,7 @@
                         <span>${escapeHtml(item.category)}</span>
                     </div>
                     <h3>${escapeHtml(item.title)}</h3>
-                    <p class="why-copy"><strong>Why this matters</strong> ${escapeHtml(item.summary)}</p>
+                    <p class="why-copy"><strong>Why</strong> ${escapeHtml(summaryText)}</p>
                     <div class="card-meta">
                         <span>${escapeHtml(item.origin)}</span>
                         <span>${escapeHtml(item.metric)}</span>
@@ -409,8 +416,8 @@
                         <span class="quality-marker" aria-label="Signal fit score ${escapeHtml(item.qualityScore || item.score || 0)}">Signal fit ${escapeHtml(item.qualityScore || item.score || 0)}</span>
                     </div>
                     ${scoreReasons.length ? `
-                        <ul class="score-reasons" aria-label="Score reasons">
-                            ${scoreReasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}
+                        <ul class="score-reasons" aria-label="Why this item ranks highly">
+                            <li><strong>Why</strong> ${escapeHtml(scoreReasons.join(" · "))}</li>
                         </ul>
                     ` : ""}
                     ${item.sourceContext ? `<p class="source-context">${escapeHtml(item.sourceContext)}</p>` : ""}

@@ -365,8 +365,8 @@ test("Explore renders merged source context in cards and saved queue", () => {
     assert.match(cards, /Also in Links/);
     assert.match(saved, /Also in Links/);
     assert.match(cards, /Reusable &quot;skills&quot;\./);
-    assert.match(cards, /Why this matters/);
-    assert.match(cards, /Score reasons/);
+    assert.match(cards, /<strong>Why<\/strong>/);
+    assert.match(cards, /Why this item ranks highly/);
     assert.match(cards, /Reusable &lt;skills&gt;\./);
     assert.doesNotMatch(cards, /Reusable <skills>\./);
     assert.match(cards, /tabindex="0"/);
@@ -405,6 +405,35 @@ test("Explore ignores stale saved ids when current data is known", () => {
     const savedIds = new Set(["repos:current", "repos:stale"]);
 
     assert.deepEqual([...app.filterSavedIds(items, savedIds)], ["repos:current"]);
+});
+
+test("Explore card reasons are compact and escaped", () => {
+    const app = loadExplore();
+    const item = {
+        id: "repos:https://example.com/very-long-reason",
+        module: "Repos",
+        title: "Reason test",
+        category: "AI agents",
+        origin: "GitHub",
+        metric: "42 stars",
+        summary: `A summary that is intentionally long to confirm compacting in the card copy path to avoid noisy wrap and help repeat use for quick scans. <script>bad</script>`,
+        url: "https://example.com/very-long-reason",
+        updated: "2026-06-18",
+        sources: ["Repos"],
+        scoreReasons: [
+            "This first reason includes repeated explanatory context that should be compacted for card readability.",
+            "<bad>should be removed</bad>"
+        ],
+        score: 88,
+        qualityScore: 88
+    };
+
+    const cards = app.renderExploreCards([item], new Set([item.id]));
+
+    assert.match(cards, /<strong>Why<\/strong>/);
+    assert.match(cards, /\u2026/);
+    assert.doesNotMatch(cards, /<script>bad<\/script>/);
+    assert.doesNotMatch(cards, /<bad>should be removed<\/bad>/);
 });
 
 test("Explore clear behavior preserves saved-first sort only", () => {
