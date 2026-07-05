@@ -127,6 +127,16 @@
                             </div>
                             <p class="preference-status" data-explore-default-status>Default: All / priority</p>
                         </div>
+                        <div class="explore-search-portability" aria-label="Saved search portability">
+                            <div class="preference-actions" aria-label="Saved search portability actions">
+                                <button type="button" data-saved-search-export>Export JSON</button>
+                                <button type="button" data-saved-search-import>Import JSON</button>
+                            </div>
+                            <textarea class="search-portability-text" data-saved-search-import-text placeholder="Paste saved-search JSON"></textarea>
+                            <button type="button" data-saved-search-import-paste>Import pasted JSON</button>
+                            <input type="file" accept="application/json,.json" data-saved-search-import-file hidden>
+                            <p class="preference-status" data-saved-search-portability-status>Saved searches stay local.</p>
+                        </div>
                     </aside>
                     </div>
                 </details>

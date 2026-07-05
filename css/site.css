@@ -1429,6 +1429,26 @@ button {
     border-top: 0;
 }
 
+.explore-search-portability {
+    display: grid;
+    gap: 8px;
+}
+
+.search-portability-text {
+    min-height: 68px;
+    width: 100%;
+    resize: vertical;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--text);
+    font-size: 0.82rem;
+    font-family: inherit;
+    line-height: 1.35;
+}
+
 .explore-command-header {
     display: flex;
     min-width: 0;

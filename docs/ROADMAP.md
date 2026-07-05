@@ -30,6 +30,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - Explore: browser summary now displays a source-health partial warning when source metadata is partial, and this path is covered by tests.
 - Explore: card copy now shortens reason snippets and truncates long summaries/reasons for quicker scanning.
 - Explore: saved search rows now expose Apply, Rename, and Delete actions with clearer labels, and include a one-line note that saved searches are full filter snapshots separate from topic pins.
+- Explore: saved search export/import is now consistent with Review-local storage workflows, including JSON payload format, status messaging, and smoke-tested copy/paste + invalid-input behavior.
 
 ### P0 - Publish Health Refresh
 
@@ -92,23 +93,6 @@ Verification:
 - Manual check: Today's and Explore's top 10 are workflow/agent/eval/supported-topic signals under current fixture and checked-in data.
 
 Exit: ranking drift triggers an explicit policy/watchlist adjustment path and does not grow hidden complexity.
-
-### P1 - Explore Repeat Use
-
-Trigger: users lose context between visits, saved searches feel hidden, or repeated filtering takes too long.
-
-Scope:
-
-- Make localStorage export/import behavior consistent between Explore and Review.
-
-Verification:
-
-- `node scripts/validate-data.mjs`.
-- `npm.cmd run check`.
-- `git diff --check`.
-- Manual smoke: saved search, defaults, pinned topics, and export/import flows persist across reload.
-
-Exit: returning users can continue previous filter state and make a shortlist decision in 1~2 minutes.
 
 ### P1 - Review Workflow
 

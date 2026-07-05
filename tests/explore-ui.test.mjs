@@ -616,6 +616,62 @@ test("Explore shortens long query copy without changing saved query ids", () => 
     );
 });
 
+test("Explore saved search export payload and parser support each other", () => {
+    const app = loadExplore({
+        Date: class extends Date {
+            constructor(...args) {
+                super(...(args.length > 0 ? args : ["2026-06-25T00:00:00.000Z"]));
+            }
+            static now() {
+                return Date.parse("2026-06-25T00:00:00.000Z");
+            }
+        }
+    });
+
+    const payload = app.savedSearchExportPayload([
+        { focus: "MCP", module: "Repos", category: "all", query: "server", sort: "saved", label: "MCP queue" },
+        { focus: "AI agents", module: "Links", category: "Reference", query: "agents", sort: "priority" },
+        "legacy query"
+    ]);
+    const parsed = JSON.parse(payload);
+
+    assert.match(payload, /"version": 1/);
+    assert.match(payload, /"exportedAt": "2026-06-25T00:00:00\.000Z"/);
+    assert.equal(parsed.items.length, 3);
+    const normalized = app.savedSearchesFromRaw(payload);
+
+    assert.equal(normalized.length, 3);
+    assert.equal(normalized[0].label, "MCP queue");
+    assert.equal(normalized[1].sort, "priority");
+    assert.equal(normalized[2].query, "legacy query");
+});
+
+test("Explore saved search store merges imports and skips duplicates", () => {
+    const app = loadExplore();
+    const memory = new Map();
+    const storage = {
+        getItem(key) {
+            return memory.get(key) || null;
+        },
+        setItem(key, value) {
+            memory.set(key, value);
+        }
+    };
+    const store = app.createSavedSearchStore(storage);
+
+    store.save({ focus: "MCP", module: "Repos", category: "all", query: "server", sort: "saved", label: "original" });
+    const importPayload = app.savedSearchExportPayload([
+        { focus: "MCP", module: "Repos", category: "all", query: "server", sort: "saved", label: "duplicate" },
+        { focus: "AI agents", module: "Links", category: "Reference", query: "agents", sort: "priority", label: "agents" }
+    ]);
+    const result = store.merge(app.savedSearchesFromRaw(importPayload));
+
+    assert.equal(result.status, "imported");
+    assert.equal(result.added, 1);
+    assert.equal(result.skipped, 1);
+    assert.equal(result.items.length, 2);
+});
+
 test("Explore saved search apply ignores stale module and category values", () => {
     const app = loadExplore();
     const module = { value: "all", options: [{ value: "all" }, { value: "Trends" }] };
@@ -824,6 +880,7 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
             textContent: "",
             value: "all",
             listeners: {},
+            dataset: {},
             addEventListener(type, listener) {
                 this.listeners[type] = listener;
             },
@@ -956,6 +1013,7 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
             textContent: "",
             value: "all",
             listeners: {},
+            dataset: {},
             addEventListener(type, listener) {
                 this.listeners[type] = listener;
             },
@@ -1066,6 +1124,7 @@ test("Explore topic lens click applies the matching focus filter", async () => {
             textContent: "",
             value: "all",
             listeners: {},
+            dataset: {},
             addEventListener(type, listener) {
                 this.listeners[type] = listener;
             },
@@ -1554,6 +1613,7 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
             textContent: "",
             value: "all",
             listeners: {},
+            dataset: {},
             addEventListener(type, listener) {
                 this.listeners[type] = listener;
             },
@@ -1592,9 +1652,17 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
         "[data-reset-explore-default]",
         "[data-explore-default-status]",
         "[data-save-search]",
+        "[data-saved-search-export]",
         "[data-saved-searches]",
-        "[data-saved-search-status]"
+        "[data-saved-search-status]",
+        "[data-saved-search-import-text]",
+        "[data-saved-search-import-paste]",
+        "[data-saved-search-import]",
+        "[data-saved-search-import-file]",
+        "[data-saved-search-portability-status]"
     ].map((selector) => [selector, createElement()]));
+    const importTextInput = elements["[data-saved-search-import-text]"];
+    const portabilityStatus = elements["[data-saved-search-portability-status]"];
     const focusButtons = [
         { dataset: { focusFilter: "all" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
         { dataset: { focusFilter: "MCP" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
@@ -1720,8 +1788,25 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
     assert.equal(elements["[data-saved-search-status]"].textContent, "Saved search renamed.");
     assert.match(elements["[data-saved-searches]"].innerHTML, /Renamed MCP/);
 
+    importTextInput.value = context.ExploreApp.savedSearchExportPayload([
+        { focus: "AI agents", module: "Links", category: "Reference", query: "agents", sort: "priority", label: "Agents" }
+    ]);
+    elements["[data-saved-search-import-paste]"].listeners.click();
+    const importedPayload = JSON.parse(memory.get("anothel.preferences.savedSearches.v1"));
+    assert.equal(importedPayload.items.length, 2);
+    assert.equal(portabilityStatus.textContent, "Saved searches imported.");
+
+    elements["[data-saved-search-import-text]"].value = "not-json";
+    elements["[data-saved-search-import-paste]"].listeners.click();
+    assert.equal(portabilityStatus.textContent, "No new saved searches to import.");
+
+    elements["[data-saved-search-import-text]"].value = "";
+    elements["[data-saved-search-import-paste]"].listeners.click();
+    assert.equal(portabilityStatus.textContent, "Paste Search JSON first.");
+
     const removed = savedSearchStore.remove(savedPayload.items[0].id);
 
-    assert.deepEqual(JSON.parse(JSON.stringify(removed.items)), []);
-    assert.deepEqual(JSON.parse(memory.get("anothel.preferences.savedSearches.v1")).items, []);
+    assert.equal(removed.items.length, 1);
+    assert.equal(removed.items[0].label, "Agents");
+    assert.equal(JSON.parse(memory.get("anothel.preferences.savedSearches.v1")).items[0].label, "Agents");
 });

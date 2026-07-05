@@ -169,6 +169,17 @@
     }
 
     function normalizeSavedSearch(value = {}) {
+        if (typeof value === "string") {
+            return {
+                focus: "all",
+                module: "all",
+                category: "all",
+                query: value.trim(),
+                sort: "priority",
+                label: ""
+            };
+        }
+
         return {
             focus: allowedFocusValues.has(value.focus) ? value.focus : "all",
             module: typeof value.module === "string" && value.module ? value.module : "all",
@@ -219,9 +230,34 @@
         if (status === "renamed") return "Saved search renamed.";
         if (status === "updated") return "Saved search moved to top.";
         if (status === "removed") return "Saved search removed.";
+        if (status === "imported") return "Saved searches imported.";
+        if (status === "not-imported") return "No new saved searches to import.";
         if (status === "full") return "Remove one to save another.";
         if (status === "blocked") return "Saved searches are unavailable in this browser.";
         return "Save reusable filter sets here.";
+    }
+
+    function savedSearchExportPayload(searches = []) {
+        return JSON.stringify({
+            version: 1,
+            exportedAt: new Date().toISOString(),
+            items: (searches || []).map((search) => normalizeSavedSearch(search))
+        }, null, 2);
+    }
+
+    function savedSearchesFromRaw(rawValue) {
+        try {
+            const parsed = JSON.parse(rawValue || "[]");
+            if (parsed?.version === 1 && Array.isArray(parsed.items)) {
+                return parsed.items.map((entry) => normalizeSavedSearch(entry)).filter(Boolean);
+            }
+            if (Array.isArray(parsed)) {
+                return parsed.map((entry) => normalizeSavedSearch(typeof entry === "string" ? { query: entry } : entry)).filter(Boolean);
+            }
+        } catch {
+            return [];
+        }
+        return [];
     }
 
     function renderSavedSearches(searches = [], status = "empty") {
@@ -281,6 +317,26 @@
 
         return {
             read,
+            merge(incoming = []) {
+                const current = read();
+                const currentIds = new Set(current.map((item) => item.id));
+                const normalizedIncoming = normalizeItems(incoming);
+                const addedItems = [];
+                const incomingIds = new Set();
+                for (const item of normalizedIncoming) {
+                    if (currentIds.has(item.id) || incomingIds.has(item.id)) continue;
+                    incomingIds.add(item.id);
+                    addedItems.push(item);
+                }
+                const written = write([...current, ...addedItems]);
+                const status = written.status === "blocked" ? "blocked" : (addedItems.length ? "imported" : "not-imported");
+                return {
+                    status,
+                    items: written.items,
+                    added: addedItems.length,
+                    skipped: normalizedIncoming.length - addedItems.length
+                };
+            },
             save(value, options = {}) {
                 const normalized = normalizeSavedSearch(value);
                 const item = { id: savedSearchId(normalized), ...normalized };
@@ -297,7 +353,12 @@
                 if (!replacementOrEdit && current.length >= maxSavedSearches) return { status: "full", items: currentItems };
 
                 const written = write([item, ...current]);
-                return { status: replacementOrEdit ? "updated" : written.status, items: written.items };
+                return {
+                    status: written.status === "blocked"
+                        ? "blocked"
+                        : replacementOrEdit ? "updated" : written.status,
+                    items: written.items
+                };
             },
             remove(id) {
                 const written = write(read().filter((item) => item.id !== id));
@@ -525,6 +586,12 @@
             saveSearch: document.querySelector("[data-save-search]"),
             savedSearches: document.querySelector("[data-saved-searches]"),
             savedSearchStatus: document.querySelector("[data-saved-search-status]"),
+            searchExport: document.querySelector("[data-saved-search-export]"),
+            searchImport: document.querySelector("[data-saved-search-import]"),
+            searchImportText: document.querySelector("[data-saved-search-import-text]"),
+            searchImportPaste: document.querySelector("[data-saved-search-import-paste]"),
+            searchImportFile: document.querySelector("[data-saved-search-import-file]"),
+            searchPortabilityStatus: document.querySelector("[data-saved-search-portability-status]"),
             filterShell: document.querySelector("[data-explore-filter-shell]")
         };
     }
@@ -607,7 +674,10 @@
         if (els.saved) els.saved.innerHTML = renderSavedQueue(state.items, state.savedIds);
         renderSavedSearchPanel(els, savedSearchStatus);
         bindDynamicActions(els, store, pinnedStore, savedSearchStore);
-        if (savedSearchStore) bindSavedSearchActions(els, savedSearchStore, store, pinnedStore);
+        if (savedSearchStore) {
+            bindSavedSearchActions(els, savedSearchStore, store, pinnedStore);
+            bindSavedSearchPortability(els, savedSearchStore, store, pinnedStore);
+        }
     }
 
     function updateFocusButtons(els) {
@@ -748,6 +818,66 @@
                 }
             });
         });
+    }
+
+    function downloadText(filename, text, type = "text/plain") {
+        if (typeof document === "undefined" || !document.createElement) return;
+        const blob = new Blob([text], { type });
+        const url = global.URL?.createObjectURL?.(blob);
+        if (!url) return;
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        link.click();
+        if (global.URL?.revokeObjectURL) global.URL.revokeObjectURL(url);
+    }
+
+    function bindSavedSearchPortability(els, savedSearchStore, store, pinnedStore) {
+        if (typeof document.querySelectorAll !== "function" || !els) return;
+
+        if (els.searchExport && els.searchExport.dataset.savedSearchExportBound !== "true") {
+            els.searchExport.dataset.savedSearchExportBound = "true";
+            els.searchExport.addEventListener("click", () => {
+                const payload = savedSearchExportPayload(state.savedSearches || []);
+                downloadText("anothel-saved-searches.json", payload, "application/json");
+                if (els.searchPortabilityStatus) els.searchPortabilityStatus.textContent = "Saved searches exported.";
+            });
+        }
+
+        if (els.searchImportPaste && els.searchImportPaste.dataset.savedSearchImportPasteBound !== "true") {
+            els.searchImportPaste.dataset.savedSearchImportPasteBound = "true";
+            els.searchImportPaste.addEventListener("click", () => {
+                const text = els.searchImportText?.value || "";
+                if (!text && els.searchPortabilityStatus) {
+                    els.searchPortabilityStatus.textContent = "Paste Search JSON first.";
+                    return;
+                }
+                const result = savedSearchStore.merge(savedSearchesFromRaw(text));
+                state.savedSearches = result.items;
+                render(els, store, pinnedStore, savedSearchStore, result.status);
+                if (els.searchImportText) els.searchImportText.value = "";
+                if (els.searchPortabilityStatus) {
+                    els.searchPortabilityStatus.textContent = savedSearchStatusText(result.status);
+                }
+            });
+        }
+
+        if (els.searchImport && els.searchImportFile && els.searchImport.dataset.savedSearchImportBound !== "true") {
+            els.searchImport.dataset.savedSearchImportBound = "true";
+            els.searchImport.addEventListener("click", () => els.searchImportFile.click());
+            els.searchImportFile.addEventListener("change", async () => {
+                const file = els.searchImportFile.files?.[0];
+                if (!file) return;
+                const text = await file.text();
+                const result = savedSearchStore.merge(savedSearchesFromRaw(text));
+                state.savedSearches = result.items;
+                render(els, store, pinnedStore, savedSearchStore, result.status);
+                if (els.searchImportFile) els.searchImportFile.value = "";
+                if (els.searchPortabilityStatus) {
+                    els.searchPortabilityStatus.textContent = savedSearchStatusText(result.status);
+                }
+            });
+        }
     }
 
     function bindControls(els, store, pinnedStore, preferredStore, savedSearchStore) {
@@ -901,6 +1031,8 @@
         savedSearchId,
         savedSearchLabel,
         savedSearchStatusText,
+        savedSearchExportPayload,
+        savedSearchesFromRaw,
         renderSavedSearches,
         filterSavedIds,
         bindSavedSearchActions,
