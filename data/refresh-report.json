@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-04T22:07:30.155Z",
-  "manifestUpdated": "2026-07-04",
+  "generatedAt": "2026-07-05T05:00:23.964Z",
+  "manifestUpdated": "2026-07-05",
   "runContext": {
     "reason": "",
     "eventName": "",
@@ -12,34 +12,34 @@
       "id": "trends",
       "title": "Tech trends",
       "count": 24,
-      "updated": "2026-07-04"
+      "updated": "2026-07-05"
     },
     {
       "id": "packages",
       "title": "Package watchlist",
       "count": 25,
-      "updated": "2026-07-04"
+      "updated": "2026-07-05"
     },
     {
       "id": "repos",
       "title": "Repo watchlist",
       "count": 30,
-      "updated": "2026-07-04"
+      "updated": "2026-07-05"
     },
     {
       "id": "links",
       "title": "Reference shelf",
       "count": 29,
-      "updated": "2026-07-04"
+      "updated": "2026-07-05"
     }
   ],
   "modules": [
     {
       "id": "trends",
       "title": "Tech trends",
-      "status": "ok",
+      "status": "partial",
       "count": 24,
-      "updated": "2026-07-04",
+      "updated": "2026-07-05",
       "changed": true,
       "sources": [
         {
@@ -47,43 +47,53 @@
           "source": "Hacker News",
           "status": "ok",
           "count": 4,
-          "updatedAt": "2026-07-04T22:07:27.192Z",
+          "updatedAt": "2026-07-05T05:00:16.753Z",
           "coverage": "4/4",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
           "fallbackReason": "",
           "previousUpdated": "",
+          "consecutiveRateLimitedRuns": 0,
           "safetyDetails": [],
           "errors": []
         },
         {
           "module": "trends",
           "source": "GitHub",
-          "status": "ok",
+          "status": "partial",
           "count": 12,
-          "updatedAt": "2026-07-04T22:07:27.192Z",
+          "updatedAt": "2026-07-05T05:00:16.753Z",
           "coverage": "12/14",
           "fallbackUsed": false,
           "staleButSafe": false,
-          "rateLimited": false,
+          "rateLimited": true,
           "fallbackReason": "",
           "previousUpdated": "",
-          "safetyDetails": [],
-          "errors": []
+          "consecutiveRateLimitedRuns": 0,
+          "safetyDetails": [
+            "rate limited"
+          ],
+          "errors": [
+            "llm observability evals stars:>100: 403 rate limit exceeded",
+            "workflow automation ai agents stars:>100: 403 rate limit exceeded",
+            "durable workflow typescript stars:>100: 403 rate limit exceeded",
+            "opencode coding agent stars:>100: 403 rate limit exceeded"
+          ]
         },
         {
           "module": "trends",
           "source": "npm",
           "status": "ok",
           "count": 8,
-          "updatedAt": "2026-07-04T22:07:27.192Z",
+          "updatedAt": "2026-07-05T05:00:16.753Z",
           "coverage": "8/16",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
           "fallbackReason": "",
           "previousUpdated": "",
+          "consecutiveRateLimitedRuns": 0,
           "safetyDetails": [],
           "errors": []
         }
@@ -94,7 +104,7 @@
       "title": "Package watchlist",
       "status": "partial",
       "count": 25,
-      "updated": "2026-07-04",
+      "updated": "2026-07-05",
       "changed": true,
       "sources": [
         {
@@ -102,15 +112,17 @@
           "source": "npm",
           "status": "partial",
           "count": 25,
-          "updatedAt": "2026-07-04T22:07:27.318Z",
+          "updatedAt": "2026-07-05T05:00:16.892Z",
           "coverage": "25/25",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": true,
           "fallbackReason": "",
           "previousUpdated": "2026-07-04",
+          "consecutiveRateLimitedRuns": 2,
           "safetyDetails": [
             "rate limited",
+            "consecutive 429 x2",
             "previous 2026-07-04"
           ],
           "errors": [
@@ -124,7 +136,7 @@
       "title": "Repo watchlist",
       "status": "ok",
       "count": 30,
-      "updated": "2026-07-04",
+      "updated": "2026-07-05",
       "changed": true,
       "sources": [
         {
@@ -132,13 +144,14 @@
           "source": "GitHub",
           "status": "ok",
           "count": 30,
-          "updatedAt": "2026-07-04T22:07:28.761Z",
+          "updatedAt": "2026-07-05T05:00:22.608Z",
           "coverage": "30/30",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
           "fallbackReason": "",
           "previousUpdated": "",
+          "consecutiveRateLimitedRuns": 0,
           "safetyDetails": [],
           "errors": []
         }
@@ -149,7 +162,7 @@
       "title": "Reference shelf",
       "status": "ok",
       "count": 29,
-      "updated": "2026-07-04",
+      "updated": "2026-07-05",
       "changed": true,
       "sources": [
         {
@@ -157,13 +170,14 @@
           "source": "manual",
           "status": "ok",
           "count": 29,
-          "updatedAt": "2026-07-04T22:07:29.585Z",
+          "updatedAt": "2026-07-05T05:00:23.530Z",
           "coverage": "29/29",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
           "fallbackReason": "",
           "previousUpdated": "",
+          "consecutiveRateLimitedRuns": 0,
           "safetyDetails": [],
           "errors": []
         }
@@ -175,6 +189,6 @@
     "sources": 6,
     "items": 108,
     "status": "partial",
-    "errors": 1
+    "errors": 2
   }
 }

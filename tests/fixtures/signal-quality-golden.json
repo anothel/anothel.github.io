@@ -101,6 +101,16 @@
       ]
     },
     {
+      "title": "langfuse/langfuse",
+      "module": "Repos",
+      "category": "AI evals",
+      "reasons": [
+        "Evaluation signal for measuring agent and model behavior.",
+        "15K stars from GitHub",
+        "LLM observability and evals"
+      ]
+    },
+    {
       "title": "openai/codex",
       "module": "Repos",
       "category": "AI agents",
@@ -108,16 +118,6 @@
         "Coding-agent ecosystem signal with practical workflow value.",
         "92K stars from GitHub",
         "terminal coding agent"
-      ]
-    },
-    {
-      "title": "Zero-Touch OAuth for MCP",
-      "module": "Trends",
-      "category": "MCP",
-      "reasons": [
-        "MCP infrastructure worth tracking for agent workflows.",
-        "120 comments from Hacker News",
-        "120 comments / 420 points"
       ]
     }
   ]

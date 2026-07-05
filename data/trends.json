@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-04",
-  "generatedAt": "2026-07-04T22:07:27.192Z",
+  "updated": "2026-07-05",
+  "generatedAt": "2026-07-05T05:00:16.753Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,16 +14,35 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-07-04T22:07:27.192Z"
+      "updatedAt": "2026-07-05T05:00:16.753Z"
     },
     {
       "name": "GitHub",
-      "status": "ok",
+      "status": "partial",
       "count": 12,
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-07-04T22:07:27.192Z"
+      "updatedAt": "2026-07-05T05:00:16.753Z",
+      "errors": [
+        {
+          "name": "llm observability evals stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "workflow automation ai agents stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "durable workflow typescript stars:>100",
+          "error": "403 rate limit exceeded"
+        },
+        {
+          "name": "opencode coding agent stars:>100",
+          "error": "403 rate limit exceeded"
+        }
+      ],
+      "rateLimited": true
     },
     {
       "name": "npm",
@@ -32,34 +51,23 @@
       "tracked": 16,
       "emitted": 8,
       "coverage": "8/16",
-      "updatedAt": "2026-07-04T22:07:27.192Z"
+      "updatedAt": "2026-07-05T05:00:16.753Z"
     }
   ],
   "items": [
     {
       "rank": 1,
-      "title": "activepieces/activepieces",
-      "source": "GitHub",
-      "category": "Workflow automation",
-      "score": 100,
-      "velocity": "23.1K stars",
-      "signal": "3.9K forks",
-      "url": "https://github.com/activepieces/activepieces",
-      "summary": "AI Agents & MCPs & AI Workflow Automation (~400 MCP servers for AI agents) AI Automation / AI Agent with MCPs AI Workflows & AI Agents MCPs for AI Agents"
-    },
-    {
-      "rank": 2,
       "title": "affaan-m/ECC",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "226K stars",
+      "velocity": "226.1K stars",
       "signal": "34.6K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
     {
-      "rank": 3,
+      "rank": 2,
       "title": "AgentOps-AI/agentops",
       "source": "GitHub",
       "category": "AI evals",
@@ -70,7 +78,7 @@
       "summary": "Python SDK for AI agent monitoring, LLM cost tracking, benchmarking, and more. Integrates with most LLMs and agent frameworks including CrewAI, Agno, OpenAI Agents SDK, Langchain, Autogen, AG2, and CamelAI"
     },
     {
-      "rank": 4,
+      "rank": 3,
       "title": "anomalyco/opencode",
       "source": "GitHub",
       "category": "AI agents",
@@ -81,7 +89,7 @@
       "summary": "The open source coding agent."
     },
     {
-      "rank": 5,
+      "rank": 4,
       "title": "anthropics/claude-code",
       "source": "GitHub",
       "category": "AI agents",
@@ -92,29 +100,29 @@
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
     },
     {
-      "rank": 6,
+      "rank": 5,
       "title": "anthropics/skills",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "158.2K stars",
+      "velocity": "158.3K stars",
       "signal": "18.7K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
     },
     {
-      "rank": 7,
+      "rank": 6,
       "title": "Arize-ai/phoenix",
       "source": "GitHub",
       "category": "AI evals",
       "score": 100,
       "velocity": "10.4K stars",
-      "signal": "954 forks",
+      "signal": "955 forks",
       "url": "https://github.com/Arize-ai/phoenix",
       "summary": "AI Observability & Evaluation"
     },
     {
-      "rank": 8,
+      "rank": 7,
       "title": "awslabs/mcp",
       "source": "GitHub",
       "category": "MCP",
@@ -125,29 +133,18 @@
       "summary": "Open source MCP Servers for AWS"
     },
     {
-      "rank": 9,
-      "title": "enescingoz/awesome-n8n-templates",
-      "source": "GitHub",
-      "category": "Workflow automation",
-      "score": 100,
-      "velocity": "23.6K stars",
-      "signal": "6.2K forks",
-      "url": "https://github.com/enescingoz/awesome-n8n-templates",
-      "summary": "280+ free n8n automation templates ready-to-use workflows for Gmail, Telegram, Slack, Discord, WhatsApp, Google Drive, Notion, OpenAI, and more. AI agents, RAG chatbots, email automation, social media, DevOps, and document processing. The largest open-source n8n template collection."
-    },
-    {
-      "rank": 10,
+      "rank": 8,
       "title": "farion1231/cc-switch",
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "113.2K stars",
+      "velocity": "113.3K stars",
       "signal": "7.5K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
     },
     {
-      "rank": 11,
+      "rank": 9,
       "title": "github/awesome-copilot",
       "source": "GitHub",
       "category": "AI agents",
@@ -158,15 +155,37 @@
       "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot."
     },
     {
-      "rank": 12,
+      "rank": 10,
       "title": "JuliusBrussee/caveman",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "83.9K stars",
+      "velocity": "84.1K stars",
       "signal": "4.7K forks",
       "url": "https://github.com/JuliusBrussee/caveman",
       "summary": "why use many token when few token do trick Claude Code skill that cuts 65% of tokens by talking like caveman"
+    },
+    {
+      "rank": 11,
+      "title": "Kiln-AI/Kiln",
+      "source": "GitHub",
+      "category": "AI evals",
+      "score": 100,
+      "velocity": "4.9K stars",
+      "signal": "375 forks",
+      "url": "https://github.com/Kiln-AI/Kiln",
+      "summary": "Build, Evaluate, and Optimize AI Systems. Includes evals, RAG, agents, fine-tuning, synthetic data generation, dataset management, MCP, and more."
+    },
+    {
+      "rank": 12,
+      "title": "langgenius/dify",
+      "source": "GitHub",
+      "category": "MCP",
+      "score": 100,
+      "velocity": "147.7K stars",
+      "signal": "23.3K forks",
+      "url": "https://github.com/langgenius/dify",
+      "summary": "Production-ready platform for agentic workflow development."
     },
     {
       "rank": 13,
@@ -258,47 +277,47 @@
     },
     {
       "rank": 21,
-      "title": "The bottleneck might be the air in the room",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 59,
-      "velocity": "415 comments",
-      "signal": "722 points",
-      "url": "https://blog.mikebowler.ca/2026/07/03/co2-and-decision-making/",
-      "summary": "HN story by gslin with 415 comments."
-    },
-    {
-      "rank": 22,
       "title": "Explanation of everything you can see in htop/top on Linux (2019)",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 58,
-      "velocity": "46 comments",
-      "signal": "352 points",
+      "score": 64,
+      "velocity": "55 comments",
+      "signal": "443 points",
       "url": "https://peteris.rocks/blog/htop/",
-      "summary": "HN story by theanonymousone with 46 comments."
+      "summary": "HN story by theanonymousone with 55 comments."
+    },
+    {
+      "rank": 22,
+      "title": "Zig: All Package Management Functionality Moved from Compiler to Build System",
+      "source": "Hacker News",
+      "category": "Frontend",
+      "score": 45,
+      "velocity": "33 comments",
+      "signal": "164 points",
+      "url": "https://ziglang.org/devlog/2026/#2026-06-30",
+      "summary": "HN story by tosh with 33 comments."
     },
     {
       "rank": 23,
-      "title": "Costco is the anti-Amazon",
+      "title": "Leaking YouTube creators' private videos",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 51,
-      "velocity": "535 comments",
-      "signal": "534 points",
-      "url": "https://phenomenalworld.org/analysis/the-anti-amazon/",
-      "summary": "HN story by bookofjoe with 535 comments."
+      "score": 44,
+      "velocity": "303 comments",
+      "signal": "537 points",
+      "url": "https://javoriuski.com/post/youtube",
+      "summary": "HN story by javxfps with 303 comments."
     },
     {
       "rank": 24,
-      "title": "Postgres data stored in Parquet on S3: LTAP architecture explained",
+      "title": "It's not me, it's the compiler",
       "source": "Hacker News",
-      "category": "Database",
-      "score": 45,
-      "velocity": "50 comments",
-      "signal": "152 points",
-      "url": "https://www.databricks.com/blog/lakebase-ltap-rethinking-database-storage",
-      "summary": "HN story by andrenotgiant with 50 comments."
+      "category": "Developer tools",
+      "score": 39,
+      "velocity": "12 comments",
+      "signal": "77 points",
+      "url": "https://parsa.wtf/cast/",
+      "summary": "HN story by SVI with 12 comments."
     }
   ]
 }

@@ -14,11 +14,12 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Current Source State
 
-- Last checked-in refresh: `2026-07-04T22:07:30.155Z`.
+- Last checked-in refresh: `2026-07-05T05:00:23.964Z`.
 - Generated items: 108.
 - Overall status: `partial`.
-- GitHub, Hacker News, trend npm, repo, and manual sources are `ok`.
-- Active blocker: npm package refresh 429 for `n8n-workflow`; preserved package rows remain usable.
+- Hacker News, trend npm, repo, and manual sources are `ok`.
+- Active blocker: GitHub trend refresh is unauthenticated and rate-limited on 4 queries.
+- Active blocker: npm package refresh 429 for `n8n-workflow` has repeated 2 times; preserved package rows remain usable.
 
 ## Next Work Queue
 
@@ -34,6 +35,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - P1 Explore Repeat Use work is complete: saved search portability and repeat-use controls are now aligned between sessions and with Review-like local data workflows.
 - Documentation split is complete: `docs/DECISIONS.md` stores durable conclusions and history, while `docs/IA.md` keeps current route, vocabulary, and workflow decisions.
 - P0 npm 429 partial policy now records consecutive repeated-run streaks in refresh report output and classifies partial status copy as `accepted partial` for preserved rows vs `action required partial` when trust impact is immediate.
+- P0 publish health refresh ran for 2026-07-05 without `GITHUB_TOKEN`; generated data remains publishable with GitHub trend 403 partial and npm `n8n-workflow` 429 x2 recorded.
 
 ### P0 - Publish Health Refresh
 

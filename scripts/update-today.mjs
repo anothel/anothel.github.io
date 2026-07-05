@@ -189,7 +189,11 @@ function baselineCount(items) {
 
 function unseenCategoryItems(pool, selectedItems) {
     const selectedCategories = new Set(selectedItems.map((item) => item.category).filter(Boolean));
-    return pool.filter((item) => !selectedCategories.has(item.category));
+    return pool.filter((item) => {
+        if (selectedCategories.has(item.category)) return false;
+        selectedCategories.add(item.category);
+        return true;
+    });
 }
 
 function fillStartFrom(picker, startItems, pool, options = {}) {
@@ -212,10 +216,11 @@ function fillStartFrom(picker, startItems, pool, options = {}) {
     return startItems;
 }
 
-function pickStartItems(picker, intentPool, primaryPool, fallbackPool) {
+function pickStartItems(picker, intentPool, primaryPool, fallbackPool, expandedPool = []) {
     const startItems = [];
 
     fillStartFrom(picker, startItems, intentPool, { limit: 1 });
+    fillStartFrom(picker, startItems, unseenCategoryItems(expandedPool, startItems), { limit: 2 });
     fillStartFrom(picker, startItems, unseenCategoryItems(primaryPool, startItems));
     fillStartFrom(picker, startItems, primaryPool);
     fillStartFrom(picker, startItems, fallbackPool);
@@ -312,11 +317,11 @@ export function buildTodayBrief(sources = {}, generatedAt = new Date().toISOStri
     const packages = stableSort(candidates.filter((item) => item.module === "Packages"));
     const links = stableSort(candidates.filter((item) => item.module === "Links"));
     const intentItems = stableSort(candidates.filter((item) => item.isIntentMatch));
-    const expandedCoverageItems = stableSort(candidates.filter((item) => expandedCoverageCategories.has(item.category)));
     const skimPool = stableSort(candidates.filter((item) => ["Trends", "Repos", "Packages"].includes(item.module)));
+    const expandedCoverageItems = stableSort(skimPool.filter((item) => expandedCoverageCategories.has(item.category)));
     const allByScore = stableSort(candidates);
 
-    const startItems = pickStartItems(picker, intentItems, allByScore, allByScore);
+    const startItems = pickStartItems(picker, intentItems, skimPool, allByScore, expandedCoverageItems);
 
     const skimItems = picker.pickFrom(expandedCoverageItems, 1);
     const skimModules = [trends, repos, packages];
