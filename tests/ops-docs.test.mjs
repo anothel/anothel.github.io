@@ -19,8 +19,7 @@ const roadmapQueueHeadings = [
     "P0 - Publish Health Refresh and Source Partial Policy",
     "P1 - Explore Repeat-use Clarity",
     "P1 - Today Ranking Diversity Guard",
-    "P2 - Static Fallback Generator Cleanup",
-    "P2 - Release Checklist Workflow Link"
+    "P2 - Static Fallback Generator Cleanup"
 ];
 
 test("README explains data refresh automation for operators", () => {
@@ -475,14 +474,13 @@ test("roadmap queues repeat-use and ranking guard work without feature sprawl", 
     assert.match(queue, /without adding a larger ranking model/);
 });
 
-test("roadmap keeps fallback cleanup and release checklist work scoped", () => {
+test("roadmap keeps fallback cleanup scoped", () => {
     const queue = roadmap.slice(roadmap.indexOf("## Next Work Queue"), roadmap.indexOf("## Architecture Gate"));
 
     assert.match(queue, /route-neutral fallback replacement helpers/);
     assert.match(queue, /CRLF\/LF coverage/);
     assert.match(queue, /errors name the route and marker/);
-    assert.match(queue, /work-type to minimum-command map/);
-    assert.match(queue, /release tags, provenance, SLSA, coverage tooling, and package dependencies out of scope/);
+    assert.doesNotMatch(queue, /^### P2 - Release Checklist Workflow Link$/m);
 });
 
 test("roadmap work bundles define trigger, scope, verification, and exit", () => {

@@ -111,24 +111,6 @@ Verification:
 
 Exit: fallback regeneration remains predictable and route drift is easier to diagnose without framework, bundler, or dependency changes.
 
-### P2 - Release Checklist Workflow Link
-
-Trigger: a PR, commit, or publish task lacks an obvious minimum verification set for its work type.
-
-Scope:
-
-- Link `docs/RELEASE_CHECKLIST.md` from contributor and Roadmap workflows without duplicating checklist content.
-- Add a small work-type to minimum-command map for docs-only, UI, data refresh, and fallback-generator changes.
-- Keep release tags, provenance, SLSA, coverage tooling, and package dependencies out of scope.
-
-Verification:
-
-- `node --test tests/ops-docs.test.mjs`
-- `npm.cmd run check`
-- `git diff --check`
-
-Exit: contributors can choose the minimum relevant checks for a change type before staging or committing.
-
 ## Architecture Gate
 
 Trigger: a measured vanilla JavaScript blocker makes Review or Explore harder to maintain than the no-build path.
