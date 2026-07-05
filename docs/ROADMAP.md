@@ -31,6 +31,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - Explore: card copy now shortens reason snippets and truncates long summaries/reasons for quicker scanning.
 - Explore: saved search rows now expose Apply, Rename, and Delete actions with clearer labels, and include a one-line note that saved searches are full filter snapshots separate from topic pins.
 - Explore: saved search export/import is now consistent with Review-local storage workflows, including JSON payload format, status messaging, and smoke-tested copy/paste + invalid-input behavior.
+- P1 Explore Repeat Use work is complete: saved search portability and repeat-use controls are now aligned between sessions and with Review-like local data workflows.
 
 ### P0 - Publish Health Refresh
 

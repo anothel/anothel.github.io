@@ -4,6 +4,8 @@ This site is a static-first personal signal dashboard for deciding what technica
 
 It is not a portfolio, resume, broad blog, company-history page, or social product.
 
+Current decisions and durable trade-offs are recorded in `docs/DECISIONS.md`. This document keeps route, vocabulary, and workflow guidance.
+
 ## Product Sentence
 
 anothel.github.io gathers AI engineering and developer-workflow signals from Hacker News, GitHub, npm, and curated references so repeat visitors can decide what to open today.

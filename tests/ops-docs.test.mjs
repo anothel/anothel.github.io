@@ -18,7 +18,6 @@ const roadmapQueueHeadings = [
     "P0 - Publish Health Refresh",
     "P0 - npm 429 Partial Policy Clarification",
     "P1 - Signal Quality Drift Tuning",
-    "P1 - Explore Repeat Use",
     "P1 - Review Workflow",
     "P1 - Documentation Slimming and Decision Log Separation",
     "P1 - InnerHTML Rendering Audit"
