@@ -6,6 +6,8 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Added Review import collision preview before writes and prevented duplicate incoming records from creating duplicate saved rows.
+- Removed completed Review Workflow work from the active Roadmap.
 - Added score reasons to Review detail cards so saved items keep the same ranking context as Explore and Today.
 - Removed completed npm partial copy work from the active Roadmap, leaving only the 3~5-repeat operator decision.
 - Reviewed npm package refresh call shape; package downloads already run sequentially with bounded retries, so no extra throttling was added before 3~5 repeated `n8n-workflow` 429s.

@@ -93,10 +93,11 @@ test("saved item store imports new records without overwriting existing records"
     const result = store.mergeRecords([
         { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" },
         { id: "links:b", savedAt: "2026-06-21T00:00:00.000Z", status: "read" },
+        { id: "links:b", savedAt: "2026-06-22T00:00:00.000Z", status: "done" },
         { id: 7 }
     ]);
 
-    assert.deepEqual(plain(result), { added: 1, skipped: 1, total: 2 });
+    assert.deepEqual(plain(result), { added: 1, skipped: 2, total: 2 });
     assert.deepEqual(plain(store.readRecords()), [
         { id: "repos:a", savedAt: "2026-06-24T00:00:00.000Z", status: "done" },
         { id: "links:b", savedAt: "2026-06-21T00:00:00.000Z", status: "read" }

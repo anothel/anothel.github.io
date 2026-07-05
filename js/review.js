@@ -295,6 +295,27 @@
         return global.AnothelState.savedRecordsFromRaw(text);
     }
 
+    function reviewImportPreview(incomingRecords = [], existingRecords = []) {
+        const existing = new Set(existingRecords.map((record) => record.id));
+        let added = 0;
+        let skipped = 0;
+        for (const record of incomingRecords) {
+            if (!record?.id || existing.has(record.id)) {
+                skipped += 1;
+                continue;
+            }
+            existing.add(record.id);
+            added += 1;
+        }
+        return { added, skipped };
+    }
+
+    function reviewImportPreviewText(records, existingRecords) {
+        if (!records.length) return "No valid Review items to import.";
+        const preview = reviewImportPreview(records, existingRecords);
+        return `Import preview: ${preview.added} new, ${preview.skipped} existing or duplicate.`;
+    }
+
     function selectors() {
         return {
             total: document.querySelector("[data-review-total]"),
@@ -378,21 +399,32 @@
             });
         }
 
+        if (els.importText && els.importText.dataset.reviewImportPreviewBound !== "true") {
+            els.importText.dataset.reviewImportPreviewBound = "true";
+            els.importText.addEventListener("input", () => {
+                const text = els.importText?.value || "";
+                if (!text) {
+                    if (els.portabilityStatus) els.portabilityStatus.textContent = "Review JSON stays local.";
+                    return;
+                }
+                if (els.portabilityStatus) {
+                    els.portabilityStatus.textContent = reviewImportPreviewText(reviewImportRecords(text), store.readRecords());
+                }
+            });
+        }
+
         if (els.importButton && els.importInput && els.importButton.dataset.reviewImportBound !== "true") {
             els.importButton.dataset.reviewImportBound = "true";
             els.importButton.addEventListener("click", () => els.importInput.click());
             els.importInput.addEventListener("change", async () => {
                 const file = els.importInput.files?.[0];
                 if (!file) return;
-                const records = reviewImportRecords(await file.text());
-                const result = store.mergeRecords(records);
-                state.savedIds = store.read();
-                state.savedRecords = store.recordsById();
+                const text = await file.text();
+                if (els.importText) els.importText.value = text;
                 if (els.portabilityStatus) {
-                    els.portabilityStatus.textContent = `Imported ${result.added} items. Kept ${result.skipped} existing.`;
+                    els.portabilityStatus.textContent = reviewImportPreviewText(reviewImportRecords(text), store.readRecords());
                 }
                 els.importInput.value = "";
-                render(els, store);
             });
         }
 
@@ -507,6 +539,7 @@
         reviewExportPayload,
         reviewMarkdownPayload,
         reviewImportRecords,
+        reviewImportPreview,
         similarExploreHref
     };
 

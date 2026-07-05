@@ -296,6 +296,19 @@ test("Review exports saved records and imports valid payloads", () => {
     assert.deepEqual(JSON.parse(JSON.stringify(app.reviewImportRecords("not json"))), []);
 });
 
+test("Review previews import collisions before writing records", () => {
+    const app = loadReview();
+    const preview = app.reviewImportPreview([
+        { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "read" },
+        { id: "repos:a", savedAt: "2026-06-21T00:00:00.000Z", status: "done" },
+        { id: "links:b", savedAt: "2026-06-22T00:00:00.000Z", status: "unread" }
+    ], [
+        { id: "repos:a", savedAt: "2026-06-19T00:00:00.000Z", status: "done" }
+    ]);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(preview)), { added: 1, skipped: 2 });
+});
+
 test("Review exports current saved items as Markdown", () => {
     const app = loadReview({ Date: class extends Date {
         constructor() { super("2026-06-25T00:00:00.000Z"); }
@@ -544,7 +557,7 @@ test("Review browser filters workflow status", async () => {
     assert.match(elements["[data-review-queue]"].innerHTML, /Done item/);
 });
 
-test("Review browser imports pasted JSON without file chooser", async () => {
+test("Review browser previews and imports pasted JSON without file chooser", async () => {
     function createElement() {
         return {
             innerHTML: "",
@@ -571,7 +584,10 @@ test("Review browser imports pasted JSON without file chooser", async () => {
         "[data-review-import-paste]",
         "[data-review-portability-status]"
     ].map((selector) => [selector, createElement()]));
-    let savedValue = JSON.stringify({ version: 2, items: [] });
+    let savedValue = JSON.stringify({
+        version: 2,
+        items: [{ id: "trends:https://example.com/existing", savedAt: "2026-06-19T00:00:00.000Z", status: "done" }]
+    });
     const sources = {
         "../data/trends.json": {
             updated: "2026-06-20",
@@ -585,6 +601,15 @@ test("Review browser imports pasted JSON without file chooser", async () => {
                 velocity: "+5%",
                 url: "https://example.com/imported",
                 summary: "Imported summary."
+            }, {
+                rank: 2,
+                title: "Existing item",
+                source: "GitHub",
+                category: "AI agents",
+                score: 70,
+                velocity: "+2%",
+                url: "https://example.com/existing",
+                summary: "Existing summary."
             }]
         },
         "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
@@ -626,11 +651,19 @@ test("Review browser imports pasted JSON without file chooser", async () => {
 
     elements["[data-review-import-text]"].value = JSON.stringify({
         version: 2,
-        items: [{ id: "trends:https://example.com/imported", savedAt: "2026-06-20T00:00:00.000Z", status: "read" }]
+        items: [
+            { id: "trends:https://example.com/imported", savedAt: "2026-06-20T00:00:00.000Z", status: "read" },
+            { id: "trends:https://example.com/existing", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" }
+        ]
     });
+    elements["[data-review-import-text]"].listeners.input();
+
+    assert.match(elements["[data-review-portability-status]"].textContent, /Import preview: 1 new, 1 existing or duplicate/);
+
     elements["[data-review-import-paste]"].listeners.click();
 
-    assert.equal(elements["[data-review-total]"].textContent, "1");
-    assert.match(elements["[data-review-portability-status]"].textContent, /Imported 1 items/);
+    assert.equal(elements["[data-review-total]"].textContent, "2");
+    assert.match(elements["[data-review-portability-status]"].textContent, /Imported 1 items\. Kept 1 existing/);
     assert.match(elements["[data-review-queue]"].innerHTML, /Imported item/);
+    assert.equal(JSON.parse(savedValue).items.find((item) => item.id.endsWith("/existing")).status, "done");
 });

@@ -39,6 +39,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - npm package watchlist updater review is complete: package downloads already run sequentially with bounded retries, so extra throttling is deferred until 3~5 repeated 429s prove it helps.
 - P0 npm partial user-facing copy is complete: shared and static status text says some data is stale but still usable and labels preserved `n8n-workflow` rows as accepted partial.
 - Review detail now shows source context and score reasons for saved items without changing local storage.
+- P1 Review Workflow work is complete: saved items have note/tag/reason metadata, status filters, schema-v2 JSON export/import, Markdown export, local-only copy, source context, score reasons, and import collision preview before write.
 
 ### P0 - Publish Health Refresh
 
@@ -97,26 +98,6 @@ Verification:
 
 Exit: ranking drift triggers an explicit policy/watchlist adjustment path and does not grow hidden complexity.
 
-### P1 - Review Workflow
-
-Trigger: Review works as a temporary buffer but does not feel like an actionable queue.
-
-Scope:
-
-- Add lightweight note/tag support for saved items if useful.
-- Revisit whether a fourth state (ex. `later`) is needed without over-expanding state complexity.
-- Add explicit schema versioning for export JSON.
-- Add import duplicate/collision preview before write.
-
-Verification:
-
-- `node scripts/validate-data.mjs`.
-- `npm.cmd run check`.
-- `git diff --check`.
-- Manual smoke: export/import round-trip preserves data integrity and warns on collisions.
-
-Exit: Review behaves as a practical processing queue with clear local-only boundaries.
-
 ### P1 - InnerHTML Rendering Audit
 
 Trigger: any client-rendered HTML insertion path reappears without an explicit escape review.
@@ -155,6 +136,6 @@ Exit: adopt only if the PoC reduces shipped maintenance cost; otherwise delete i
 
 Do not re-add backlog lists for:
 
-- code of conduct, release tags, GitHub releases, provenance, SLSA, coverage tooling, JSON Schema, large source expansion, advanced ranking, native file chooser smoke, link previews, profile/worklog pages, or framework conversion.
+- code of conduct, release tags, GitHub releases, provenance, SLSA, coverage tooling, JSON Schema, large source expansion, advanced ranking, native file chooser smoke, Review fourth workflow state, link previews, profile/worklog pages, or framework conversion.
 
 Pull one back only when a real trigger above exists.

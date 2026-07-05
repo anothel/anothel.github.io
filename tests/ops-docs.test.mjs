@@ -18,12 +18,12 @@ const roadmapQueueHeadings = [
     "P0 - Publish Health Refresh",
     "P0 - npm 429 Partial Policy Clarification",
     "P1 - Signal Quality Drift Tuning",
-    "P1 - Review Workflow",
     "P1 - InnerHTML Rendering Audit"
 ];
 
 const roadmapCompletedItems = [
-    "Trust-copy wording and recovery copy are shared and test-covered"
+    "Trust-copy wording and recovery copy are shared and test-covered",
+    "P1 Review Workflow work is complete"
 ];
 
 test("README explains data refresh automation for operators", () => {

@@ -116,11 +116,20 @@
                 const records = readRecords();
                 const seen = new Set(records.map((record) => record.id));
                 const incoming = incomingRecords.map((record) => normalizeRecord(record, options)).filter(Boolean);
-                const added = incoming.filter((record) => !seen.has(record.id));
+                const added = [];
+                let skipped = 0;
+                for (const record of incoming) {
+                    if (seen.has(record.id)) {
+                        skipped += 1;
+                        continue;
+                    }
+                    seen.add(record.id);
+                    added.push(record);
+                }
                 writeRecords([...records, ...added]);
                 return {
                     added: added.length,
-                    skipped: incoming.length - added.length,
+                    skipped,
                     total: records.length + added.length
                 };
             }
