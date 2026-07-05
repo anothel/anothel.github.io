@@ -21,6 +21,15 @@ node --test tests/ops-docs.test.mjs
 node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs
 ```
 
+## Minimum Checks By Work Type
+
+| Work type | Minimum extra checks |
+|---|---|
+| Docs-only | `node --test tests/ops-docs.test.mjs` |
+| UI | `node --test tests/site-structure.test.mjs` plus the touched renderer test |
+| Data refresh | `node scripts/validate-data.mjs` and generated data review below |
+| Fallback generator | `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs` |
+
 ## Generated Data Review
 
 Check before publishing generated data:

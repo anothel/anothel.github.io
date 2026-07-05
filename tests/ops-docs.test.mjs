@@ -372,9 +372,15 @@ test("data contract docs describe schema and source governance", () => {
 test("contribution and release docs name the runnable checks", () => {
     assert.match(contributing, /npm run check/);
     assert.match(contributing, /git diff --check/);
+    assert.match(contributing, /docs\/RELEASE_CHECKLIST\.md/);
+    assert.match(roadmap, /docs\/RELEASE_CHECKLIST\.md/);
     assert.match(readme, /This repo uses dated changelog entries and normal GitHub Pages publishes, not release tags yet/s);
     assert.match(releaseChecklist, /node scripts\/validate-data\.mjs/);
     assert.match(releaseChecklist, /npm run check/);
+    assert.match(releaseChecklist, /Docs-only[\s\S]*node --test tests\/ops-docs\.test\.mjs/);
+    assert.match(releaseChecklist, /UI[\s\S]*node --test tests\/site-structure\.test\.mjs/);
+    assert.match(releaseChecklist, /Data refresh[\s\S]*node scripts\/validate-data\.mjs/);
+    assert.match(releaseChecklist, /Fallback generator[\s\S]*node --test tests\/static-fallback\.test\.mjs tests\/site-structure\.test\.mjs/);
     assert.match(releaseChecklist, /GitHub Pages publish/);
     assert.match(releaseChecklist, /No Git tag is required/);
     assert.match(releaseChecklist, /dated `CHANGELOG\.md` entry/s);

@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Linked contributor and Roadmap workflows to the release checklist and added minimum checks by work type.
 - Recorded npm `n8n-workflow` as a watchlist replacement candidate after 4 consecutive 429 runs while preserving the accepted partial state.
 - Expanded Roadmap next-work bundles around source partial policy, Explore repeat-use clarity, Today ranking guards, static fallback cleanup, and release checklist workflow links.
 - Aligned durable decision history with the trigger-only Roadmap policy.

@@ -36,6 +36,8 @@ If `GITHUB_TOKEN` is missing, GitHub-backed sources may stay `partial` or `rateL
 
 ## Verification
 
+Use `docs/RELEASE_CHECKLIST.md` to choose the minimum checks for the work type.
+
 Before handing off a change:
 
 ```powershell

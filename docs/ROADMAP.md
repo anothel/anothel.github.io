@@ -7,6 +7,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 - Start the highest priority bundle whose trigger is true.
 - Keep each bundle small enough to implement, test, and commit alone.
+- Use `docs/RELEASE_CHECKLIST.md` to pick minimum checks before staging or committing.
 - Do not run live refresh unless fresh source evidence is needed.
 - No backend, account, sync, database, framework, bundler, package dependency, or lockfile without an explicit approved architecture change.
 - Keep `n8n-workflow` visible while preserved rows are useful.
