@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Expanded Roadmap next-work bundles around source partial policy, Explore repeat-use clarity, Today ranking guards, static fallback cleanup, and release checklist workflow links.
 - Aligned durable decision history with the trigger-only Roadmap policy.
 - Aligned IA Roadmap summary with the current trigger-only Roadmap structure.
 - Removed completed-work notes from Roadmap so it only lists current source state, live triggers, gates, and cut items.

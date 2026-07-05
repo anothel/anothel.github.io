@@ -16,8 +16,11 @@ const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
 const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const roadmapQueueHeadings = [
-    "P0 - Publish Health Refresh",
-    "P1 - Signal Quality Drift Tuning"
+    "P0 - Publish Health Refresh and Source Partial Policy",
+    "P1 - Explore Repeat-use Clarity",
+    "P1 - Today Ranking Diversity Guard",
+    "P2 - Static Fallback Generator Cleanup",
+    "P2 - Release Checklist Workflow Link"
 ];
 
 test("README explains data refresh automation for operators", () => {
@@ -439,6 +442,39 @@ test("roadmap P0 current state matches the checked-in refresh report", () => {
     assert.match(section, new RegExp(refreshReport.totals.status));
     assert.match(section, new RegExp(partialSource.source));
     assert.match(section, /n8n-workflow/);
+});
+
+test("roadmap records source partial decision thresholds", () => {
+    const section = roadmap.slice(
+        roadmap.indexOf("### P0 - Publish Health Refresh and Source Partial Policy"),
+        roadmap.indexOf("\n### P1 - Explore Repeat-use Clarity")
+    );
+
+    assert.match(section, /After 3 repeated same-package 429s/);
+    assert.match(section, /after 5 repeats or stale preserved rows/);
+    assert.match(section, /one-package npm downloads 429s as package-source partials/);
+    assert.match(section, /Status detail, and page health strips/);
+});
+
+test("roadmap queues repeat-use and ranking guard work without feature sprawl", () => {
+    const queue = roadmap.slice(roadmap.indexOf("## Next Work Queue"), roadmap.indexOf("## Architecture Gate"));
+
+    assert.match(queue, /active filter\/focus summary/);
+    assert.match(queue, /saved-search apply feedback/);
+    assert.match(queue, /partial sources affect the visible result set/);
+    assert.match(queue, /Strengthen golden fixtures before changing ranking logic/);
+    assert.match(queue, /duplicate URL identity stays consistent across Today, Explore, and Review/);
+    assert.match(queue, /without adding a larger ranking model/);
+});
+
+test("roadmap keeps fallback cleanup and release checklist work scoped", () => {
+    const queue = roadmap.slice(roadmap.indexOf("## Next Work Queue"), roadmap.indexOf("## Architecture Gate"));
+
+    assert.match(queue, /route-neutral fallback replacement helpers/);
+    assert.match(queue, /CRLF\/LF coverage/);
+    assert.match(queue, /errors name the route and marker/);
+    assert.match(queue, /work-type to minimum-command map/);
+    assert.match(queue, /release tags, provenance, SLSA, coverage tooling, and package dependencies out of scope/);
 });
 
 test("roadmap work bundles define trigger, scope, verification, and exit", () => {

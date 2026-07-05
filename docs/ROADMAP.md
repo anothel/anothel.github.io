@@ -22,44 +22,111 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Next Work Queue
 
-### P0 - Publish Health Refresh
+### P0 - Publish Health Refresh and Source Partial Policy
 
-Trigger: checked-in data is old, source health changes, public page dates look wrong, or owner asks for publish confirmation.
+Trigger: checked-in data is old, source health changes, public page dates look wrong, owner asks for publish confirmation, or the same source partial repeats.
 
 Scope:
 
 - Run existing data refresh only when network/token access is approved.
 - Review generated data, manifest, refresh report, sitemap, Today, Status, Explore, and static fallbacks together.
 - If `GITHUB_TOKEN` is missing, keep GitHub rate limits as known partial state and rerun only when token-backed proof matters.
-- Keep `n8n-workflow` visible while preserved rows are useful.
+- Keep `n8n-workflow` visible while preserved rows are useful: previous rows exist, package coverage stays visible, Status names the failed package, and the data date is not stale.
+- Treat one-package npm downloads 429s as package-source partials, not automatic watchlist disables, while preserved rows remain useful.
+- After 3 repeated same-package 429s, record the package as a watchlist replacement candidate; after 5 repeats or stale preserved rows, decide whether to disable or replace it before the next publish confirmation.
+- Keep user-facing warning copy limited to source health, Status detail, and page health strips while the partial is accepted; escalate only when the data becomes stale or rows disappear.
 
 Verification:
 
 - `node scripts/update-all.mjs` when live refresh is approved.
 - `node scripts/validate-data.mjs`.
-- `npm.cmd run check`.
 - `git diff --check`.
+- `npm.cmd run check`.
 
-Exit: generated data is publishable, or the exact source blocker is recorded here.
+Exit: generated data is publishable, or the exact source blocker and next watchlist action threshold are recorded here.
 
-### P1 - Signal Quality Drift Tuning
+### P1 - Explore Repeat-use Clarity
 
-Trigger: ranking drift causes broad or non-actionable signals to dominate Today/Explore.
+Trigger: repeated Explore use shows unclear active filters, saved-search feedback, topic-lens intent, or partial-source impact.
 
 Scope:
 
-- Add a quick decision rule: if observed ranking quality regresses, prune from active watchlists first; if needed, tighten `data/signal-policy.json`.
-- Keep broad baseline guards explicit and testable so signal quality and topic relevance stay durable.
-- Keep watchlist and policy changes scoped to measured quality regressions only.
+- Shorten the active filter/focus summary around visible count, active filter, and source health.
+- Make saved-search apply feedback name the restored filter/focus/sort state.
+- Keep saved-search labels short without changing saved ids or localStorage schema.
+- Reword topic lenses around why to open the lens, not only counts.
+- Show whether partial sources affect the visible result set.
 
 Verification:
 
-- `node scripts/validate-data.mjs`
+- `node --test tests/explore-ui.test.mjs`
+- `node --test tests/local-state.test.mjs`
+- `node --test tests/topic-ui.test.mjs`
+- `node --test tests/static-fallback.test.mjs`
 - `npm.cmd run check`
 - `git diff --check`
-- Manual check: Today's and Explore's top 10 are workflow/agent/eval/supported-topic signals under current fixture and checked-in data.
 
-Exit: ranking drift triggers an explicit policy/watchlist adjustment path and does not grow hidden complexity.
+Exit: repeat visitors can see applied state, saved-search effect, lens intent, and partial-source impact without route, backend, sync, or schema changes.
+
+### P1 - Today Ranking Diversity Guard
+
+Trigger: Today or Explore top priority results drift toward one source family, broad baseline tooling, duplicate URLs, or raw popularity over topic relevance.
+
+Scope:
+
+- Strengthen golden fixtures before changing ranking logic.
+- Guard Start section diversity so one source family does not dominate the top set.
+- Keep broad baseline package/repo signals from beating agent/workflow/eval/MCP signals by popularity alone.
+- Verify duplicate URL identity stays consistent across Today, Explore, and Review saved ids.
+- Change `data/signal-policy.json` only when a fixture proves a ranking regression.
+
+Verification:
+
+- `node --test tests/signal-quality-golden.test.mjs`
+- `node --test tests/today-generator.test.mjs`
+- `node --test tests/data-schema.test.mjs`
+- `npm.cmd run check`
+- `git diff --check`
+
+Exit: top priority remains workflow, agent, eval, MCP, or supported-topic centered without adding a larger ranking model.
+
+### P2 - Static Fallback Generator Cleanup
+
+Trigger: fallback drift, route-specific replacement fragility, CRLF/LF mismatch, or unclear static-fallback error output slows a checked-in page update.
+
+Scope:
+
+- Split route-neutral fallback replacement helpers from route-specific renderers only where drift tests need it.
+- Keep Home, Today, Explore, Status, module, topic, and Notes snapshot fixtures distinct.
+- Preserve CRLF/LF coverage for tagged replacement blocks.
+- Make fallback drift errors name the route and marker that failed.
+
+Verification:
+
+- `node --test tests/static-fallback.test.mjs`
+- `node --test tests/site-structure.test.mjs`
+- `npm.cmd run check`
+- `git diff --check`
+
+Exit: fallback regeneration remains predictable and route drift is easier to diagnose without framework, bundler, or dependency changes.
+
+### P2 - Release Checklist Workflow Link
+
+Trigger: a PR, commit, or publish task lacks an obvious minimum verification set for its work type.
+
+Scope:
+
+- Link `docs/RELEASE_CHECKLIST.md` from contributor and Roadmap workflows without duplicating checklist content.
+- Add a small work-type to minimum-command map for docs-only, UI, data refresh, and fallback-generator changes.
+- Keep release tags, provenance, SLSA, coverage tooling, and package dependencies out of scope.
+
+Verification:
+
+- `node --test tests/ops-docs.test.mjs`
+- `npm.cmd run check`
+- `git diff --check`
+
+Exit: contributors can choose the minimum relevant checks for a change type before staging or committing.
 
 ## Architecture Gate
 
