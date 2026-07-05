@@ -23,7 +23,8 @@ const roadmapCompletedItems = [
     "Trust-copy wording and recovery copy are shared and test-covered",
     "P1 Review Workflow work is complete",
     "P1 InnerHTML Rendering Audit is complete",
-    "P0 npm 429 decision is complete"
+    "P0 npm 429 decision is complete",
+    "P1 Signal Quality current-data guard is complete"
 ];
 
 test("README explains data refresh automation for operators", () => {

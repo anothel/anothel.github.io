@@ -41,6 +41,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - P1 Review Workflow work is complete: saved items have note/tag/reason metadata, status filters, schema-v2 JSON export/import, Markdown export, local-only copy, source context, score reasons, and import collision preview before write.
 - P1 InnerHTML Rendering Audit is complete: `docs/THREAT_MODEL.md` inventories current insertion surfaces, input trust boundaries, and fixture ownership for renderer safety.
 - P0 npm 429 decision is complete for the current evidence: `n8n-workflow` stays visible as an accepted partial while preserved rows keep workflow-automation package coverage useful.
+- P1 Signal Quality current-data guard is complete: checked-in Today and Explore top priority items stay within supported workflow, agent, eval, MCP, and skills topics.
 
 ### P0 - Publish Health Refresh
 

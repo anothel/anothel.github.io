@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Added a checked-in top-signal guard so current Today and Explore priority items stay within supported workflow, agent, eval, MCP, and skills topics.
 - Ran token-backed publish-health refresh; GitHub trend health recovered to `ok`, while npm `n8n-workflow` remained accepted partial at 4 consecutive 429 runs.
 - Removed completed npm 429 decision work from the active Roadmap.
 - Added a renderer insertion inventory to the threat model and removed completed InnerHTML audit work from the active Roadmap.

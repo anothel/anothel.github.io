@@ -79,6 +79,15 @@ function actualGolden() {
     return { explore, todayStart };
 }
 
+function checkedInSources() {
+    return {
+        trends: JSON.parse(readFileSync("data/trends.json", "utf8")),
+        packages: JSON.parse(readFileSync("data/packages.json", "utf8")),
+        repos: JSON.parse(readFileSync("data/repos.json", "utf8")),
+        links: JSON.parse(readFileSync("data/links.json", "utf8"))
+    };
+}
+
 test("signal quality golden fixture keeps agent workflow signals above broad baseline tooling", () => {
     const expected = JSON.parse(readFileSync("tests/fixtures/signal-quality-golden.json", "utf8"));
     const actual = actualGolden();
@@ -89,6 +98,21 @@ test("signal quality golden fixture keeps agent workflow signals above broad bas
     assert.deepEqual(exploreBaseline, []);
     assert.ok(todayBaseline.length <= 1);
     assert.ok(actual.todayStart.some((item) => ["MCP", "Agent skills", "AI evals", "Workflow automation", "AI agents"].includes(item.category)));
+});
+
+test("checked-in top signals stay within supported topics", () => {
+    const sources = checkedInSources();
+    const allowed = new Set(["MCP", "Agent skills", "AI evals", "Workflow automation", "AI agents"]);
+    const baselineTitles = new Set(JSON.parse(readFileSync("data/signal-policy.json", "utf8")).baselineTitles);
+    const exploreTop = signalSchema.normalizeSignalData(sources)
+        .sort(signalSchema.compareSignalPriority)
+        .slice(0, 10);
+    const todayStart = buildTodayBrief(sources, sources.trends.generatedAt)
+        .sections.find((section) => section.id === "start").items;
+
+    assert.equal(exploreTop.filter((item) => allowed.has(item.category)).length, exploreTop.length);
+    assert.equal(todayStart.filter((item) => allowed.has(item.category)).length, todayStart.length);
+    assert.deepEqual(exploreTop.filter((item) => baselineTitles.has(item.title.toLowerCase())).map((item) => item.title), []);
 });
 
 test("signal priority uses source rank before title when scores saturate", () => {
