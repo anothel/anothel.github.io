@@ -188,24 +188,6 @@ Verification:
 
 Exit: users can distinguish partial/recovery outcomes without checking Status first.
 
-### P2 - Route and Link Checks
-
-Trigger: route or link regressions appear after data updates or static refreshes.
-
-Scope:
-
-- Verify all public routes return 200 in a lightweight local check.
-- Verify no obvious broken internal links in rendered pages.
-- Add smoke checks for status/today/explore DOM readiness.
-- Keep checks lightweight first; add heavier tooling only when value is proven.
-
-Verification:
-
-- `node scripts/validate-data.mjs`.
-- `npm.cmd run check`.
-- `git diff --check`.
-- Manual: top public routes and critical links load after refresh.
-
 ## Architecture Gate
 
 Trigger: a measured vanilla JavaScript blocker makes Review or Explore harder to maintain than the no-build path.

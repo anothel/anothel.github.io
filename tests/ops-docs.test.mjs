@@ -23,7 +23,6 @@ const roadmapQueueHeadings = [
     "P1 - Documentation Slimming and Decision Log Separation",
     "P1 - InnerHTML Rendering Audit",
     "P2 - Trust Copy Clarity",
-    "P2 - Route and Link Checks",
 ];
 
 test("README explains data refresh automation for operators", () => {
