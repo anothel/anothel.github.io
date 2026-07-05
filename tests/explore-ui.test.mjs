@@ -391,6 +391,10 @@ test("Explore summarizes active saved workflow state", () => {
         app.activeExploreSummary({ module: "Repos", category: "AI agents", focus: "MCP", query: "codex", sort: "saved" }, 2),
         "Focus: MCP / Module: Repos / Category: AI agents / Search: codex / Sort: saved first / Saved: 2"
     );
+    assert.equal(
+        app.activeExploreSummary({ module: "all", category: "all", query: "", sort: "priority" }, 0, [{ name: "npm", status: "partial", count: 0 }]),
+        "Data is partial: some sources may be missing."
+    );
 });
 
 test("Explore ignores stale saved ids when current data is known", () => {
@@ -892,6 +896,7 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
 
     assert.equal(elements["[data-explore-total]"].textContent, "1");
     assert.equal(elements["[data-explore-saved-count]"].textContent, "1");
+    assert.match(elements["[data-explore-summary]"].textContent, /Data is partial: some sources may be missing\./);
     assert.match(elements["[data-explore-results]"].innerHTML, /Agent trend/);
     assert.match(elements["[data-explore-saved]"].innerHTML, /Agent trend/);
     assert.match(elements["[data-topic-lenses]"].innerHTML, /AI agents/);

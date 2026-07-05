@@ -348,7 +348,7 @@
         return new Set([...savedIds].filter((id) => validIds.has(id)));
     }
 
-    function activeExploreSummary(filters, savedCount = 0) {
+    function activeExploreSummary(filters, savedCount = 0, sourceMeta = []) {
         const parts = [];
         if (filters.focus && filters.focus !== "all") parts.push(`Focus: ${filters.focus}`);
         if (filters.module !== "all") parts.push(`Module: ${filters.module}`);
@@ -356,6 +356,12 @@
         if (filters.query) parts.push(`Search: ${displayQuery(filters.query)}`);
         if (filters.sort === "saved") parts.push("Sort: saved first");
         if (savedCount > 0) parts.push(`Saved: ${savedCount}`);
+        if (dataHealth && dataHealth.aggregateSourceStatus) {
+            const dataStatus = dataHealth.aggregateSourceStatus(sourceMeta);
+            if (dataStatus === "partial") {
+                parts.push("Data is partial: some sources may be missing.");
+            }
+        }
         return parts.length > 0 ? parts.join(" / ") : "Showing all tracked items.";
     }
 
@@ -580,7 +586,7 @@
         if (els.total) els.total.textContent = String(items.length);
         if (els.savedCount) els.savedCount.textContent = String(state.savedIds.size);
         if (els.categories) els.categories.textContent = String(categoryCount);
-        if (els.summary) els.summary.textContent = activeExploreSummary(state, state.savedIds.size);
+        if (els.summary) els.summary.textContent = activeExploreSummary(state, state.savedIds.size, state.sourceMeta);
         if (els.topicLenses) els.topicLenses.innerHTML = renderTopicLenses(sortTopicLensesByPins(buildTopicLenses(state.items), state.pinnedTopics), state.focus, state.pinnedTopics);
         if (els.results) els.results.innerHTML = renderExploreCards(items, state.savedIds);
         if (els.saved) els.saved.innerHTML = renderSavedQueue(state.items, state.savedIds);
