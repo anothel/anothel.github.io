@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-05",
-  "generatedAt": "2026-07-05T08:10:31.870Z",
+  "generatedAt": "2026-07-05T08:15:08.121Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-07-05T08:10:31.870Z"
+      "updatedAt": "2026-07-05T08:15:08.121Z"
     },
     {
       "name": "GitHub",
@@ -23,16 +23,16 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-07-05T08:10:31.870Z"
+      "updatedAt": "2026-07-05T08:15:08.121Z"
     },
     {
       "name": "npm",
       "status": "ok",
       "count": 8,
-      "tracked": 16,
+      "tracked": 15,
       "emitted": 8,
-      "coverage": "8/16",
-      "updatedAt": "2026-07-05T08:10:31.870Z"
+      "coverage": "8/15",
+      "updatedAt": "2026-07-05T08:15:08.121Z"
     }
   ],
   "items": [
@@ -263,7 +263,7 @@
       "category": "Developer tools",
       "score": 65,
       "velocity": "57 comments",
-      "signal": "465 points",
+      "signal": "466 points",
       "url": "https://peteris.rocks/blog/htop/",
       "summary": "HN story by theanonymousone with 57 comments."
     },
@@ -283,11 +283,11 @@
       "title": "Zig: All Package Management Functionality Moved from Compiler to Build System",
       "source": "Hacker News",
       "category": "Frontend",
-      "score": 47,
-      "velocity": "56 comments",
-      "signal": "185 points",
+      "score": 48,
+      "velocity": "57 comments",
+      "signal": "186 points",
       "url": "https://ziglang.org/devlog/2026/#2026-06-30",
-      "summary": "HN story by tosh with 56 comments."
+      "summary": "HN story by tosh with 57 comments."
     },
     {
       "rank": 24,
@@ -296,7 +296,7 @@
       "category": "Developer tools",
       "score": 41,
       "velocity": "222 comments",
-      "signal": "541 points",
+      "signal": "542 points",
       "url": "https://github.com/ammaarreshi/Generals-Mac-iOS-iPad/tree/main",
       "summary": "HN story by asronline with 222 comments."
     }

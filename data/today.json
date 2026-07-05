@@ -1,11 +1,11 @@
 {
   "updated": "2026-07-05",
-  "generatedAt": "2026-07-05T08:10:34.944Z",
+  "generatedAt": "2026-07-05T08:15:10.899Z",
   "sourceMeta": {
     "name": "generated",
-    "status": "partial",
+    "status": "ok",
     "count": 13,
-    "updatedAt": "2026-07-05T08:10:34.944Z"
+    "updatedAt": "2026-07-05T08:15:10.899Z"
   },
   "sections": [
     {
@@ -178,7 +178,7 @@
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
-          "rawScore": 156891,
+          "rawScore": 156895,
           "qualityScore": 100,
           "score": 82,
           "sources": [

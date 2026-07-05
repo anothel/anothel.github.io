@@ -10,16 +10,16 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - Use `docs/RELEASE_CHECKLIST.md` to pick minimum checks before staging or committing.
 - Do not run live refresh unless fresh source evidence is needed.
 - No backend, account, sync, database, framework, bundler, package dependency, or lockfile without an explicit approved architecture change.
-- Keep `n8n-workflow` visible while preserved rows are useful.
+- Keep retired `n8n-workflow` out of npm refreshes while repo/link coverage remains useful.
 - If `GITHUB_TOKEN` is missing, keep GitHub rate limits as known partial state.
 
 ## Current Source State
 
-- Last checked-in refresh: `2026-07-05T08:10:35.289Z`.
-- Generated items: 108.
-- Overall status: `partial`.
+- Last checked-in refresh: `2026-07-05T08:15:11.409Z`.
+- Generated items: 107.
+- Overall status: `ok`.
 - Hacker News, GitHub trends, trend npm, repo, and manual sources are `ok`.
-- Active blocker: npm package refresh 429 for `n8n-workflow` has repeated 6 times. Preserved package rows remain usable, so the data stays an accepted partial; choose disable or replacement for `n8n-workflow` before the next publish confirmation.
+- No active source blocker. npm `n8n-workflow` is retired from npm refreshes after 6 consecutive 429s; workflow automation remains covered by n8n repo/link plus Inngest, Trigger.dev, and Temporal packages.
 
 ## Next Work Queue
 
@@ -32,8 +32,8 @@ Scope:
 - Run existing data refresh only when network/token access is approved.
 - Review generated data, manifest, refresh report, sitemap, Today, Status, Explore, and static fallbacks together.
 - If `GITHUB_TOKEN` is missing, keep GitHub rate limits as known partial state and rerun only when token-backed proof matters.
-- Keep `n8n-workflow` visible while preserved rows are useful: previous rows exist, package coverage stays visible, Status names the failed package, and the data date is not stale.
-- Treat one-package npm downloads 429s as package-source partials, not automatic watchlist disables, while preserved rows remain useful.
+- Keep retired `n8n-workflow` out of npm refreshes while repo/link coverage remains useful.
+- Treat future one-package npm downloads 429s as package-source partials, not automatic watchlist disables, while preserved rows remain useful.
 - After 3 repeated same-package 429s, record the package as a watchlist replacement candidate; after 5 repeats or stale preserved rows, decide whether to disable or replace it before the next publish confirmation.
 - Keep user-facing warning copy limited to source health, Status detail, and page health strips while the partial is accepted; escalate only when the data becomes stale or rows disappear.
 

@@ -136,7 +136,16 @@
       "@trigger.dev/sdk",
       "@temporalio/workflow",
       "@temporalio/client",
-      "n8n-workflow"
+      {
+        "name": "n8n-workflow",
+        "disabled": true,
+        "history": [
+          {
+            "date": "2026-07-05",
+            "note": "Retired from npm refreshes after repeated 429s; workflow automation remains covered by n8n repo/link plus Inngest, Trigger.dev, and Temporal packages."
+          }
+        ]
+      }
     ],
     "githubQueries": [
       {
@@ -439,7 +448,14 @@
     {
       "name": "n8n-workflow",
       "category": "Workflow automation",
-      "focus": "n8n workflow primitives"
+      "focus": "n8n workflow primitives",
+      "disabled": true,
+      "history": [
+        {
+          "date": "2026-07-05",
+          "note": "Retired from package refresh after 6 consecutive 429s; workflow automation remains covered by n8n repo/link plus Inngest, Trigger.dev, and Temporal packages."
+        }
+      ]
     }
   ],
   "repos": [

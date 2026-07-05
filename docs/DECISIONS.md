@@ -5,7 +5,7 @@
 - This site stays static-first and trust-first: no backend, no account/sync layer, no database, and no dependency management layer in the runtime path.
 - Review and saved searches are browser-local; portability is explicit via export/import JSON, not cloud sync.
 - Source health drives trust copy and fallback behavior through the shared `DataHealth` language across Today, Home, Explore, Status, and module pages.
-- `npm` package `n8n-workflow` can remain active in an accepted partial state while preserved rows keep package coverage usable.
+- `npm` package `n8n-workflow` is retired from npm refreshes after repeated 429s; workflow automation stays covered by n8n repo/link plus Inngest, Trigger.dev, and Temporal packages.
 - Ranking quality policy remains in `data/signal-policy.json`, applied consistently across Today and Explore.
 
 ## Decision Locations

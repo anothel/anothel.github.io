@@ -55,9 +55,10 @@ test("source quality alignment review retires broad duplicate sources", () => {
     for (const query of ["topic:typescript stars:>500", "topic:developer-tools ai stars:>300"]) {
         assert.equal(activeQueries.has(query), false, `${query} should be retired`);
     }
-    for (const name of ["react", "typescript", "playwright", "vite", "next", "zod", "eslint", "prettier"]) {
+    for (const name of ["react", "typescript", "playwright", "vite", "next", "zod", "eslint", "prettier", "n8n-workflow"]) {
         assert.equal(activePackages.has(name), false, `${name} package should be retired`);
     }
+    assert.equal(activeTrendPackages.has("n8n-workflow"), false, "n8n-workflow trend package should be retired");
     for (const name of ["react/react", "vercel/next.js", "vitejs/vite", "microsoft/playwright", "colinhacks/zod"]) {
         assert.equal(activeRepos.has(name), false, `${name} repo should be retired`);
     }

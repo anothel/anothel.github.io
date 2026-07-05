@@ -50,6 +50,6 @@ Governance validation rejects future `history.date` values after the current dat
 
 ## Current Rate Limit Decision
 
-npm `n8n-workflow` returned 429 during refresh and is at 6 consecutive 429 runs. The accepted behavior is visible `partial` source health with `rateLimited: true`, preserved previous rows, sanitized source detail that names `n8n-workflow`, and refresh-report detail. Because it passed the 5-run threshold, choose whether to disable or replace it before the next publish confirmation. Do not churn the watchlist while preserved package rows still keep workflow automation coverage useful.
+npm `n8n-workflow` returned 429 during refresh and reached 6 consecutive 429 runs. It is retired from npm package and trend refreshes with `disabled: true` plus history instead of deletion. No replacement is added because workflow automation remains covered by n8n repo/link plus Inngest, Trigger.dev, and Temporal packages.
 
 Status refresh-run detail uses the same sanitized recovery copy as source health cards.

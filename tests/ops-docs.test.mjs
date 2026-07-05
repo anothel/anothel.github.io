@@ -362,9 +362,9 @@ test("data contract docs describe schema and source governance", () => {
     assert.match(sourceGovernance, /data\/watchlists\.json/);
     assert.match(sourceGovernance, /Governance validation rejects future `history.date` values/s);
     assert.match(sourceGovernance, /npm `n8n-workflow` returned 429/s);
-    assert.match(sourceGovernance, /visible `partial` source health with `rateLimited: true`/s);
-    assert.match(sourceGovernance, /6 consecutive 429 runs/s);
-    assert.match(sourceGovernance, /choose whether to disable or replace it before the next publish confirmation/s);
+    assert.match(sourceGovernance, /reached 6 consecutive 429 runs/s);
+    assert.match(sourceGovernance, /retired from npm package and trend refreshes/s);
+    assert.match(sourceGovernance, /No replacement is added because workflow automation remains covered/s);
     assert.match(sourceGovernance, /Status refresh-run detail uses the same sanitized recovery copy/s);
 });
 
@@ -447,7 +447,9 @@ test("roadmap P0 current state matches the checked-in refresh report", () => {
     assert.match(section, new RegExp(refreshReport.generatedAt));
     assert.match(section, new RegExp(String(refreshReport.totals.items)));
     assert.match(section, new RegExp(refreshReport.totals.status));
-    assert.match(section, new RegExp(partialSource.source));
+    if (partialSource) {
+        assert.match(section, new RegExp(partialSource.source));
+    }
     assert.match(section, /n8n-workflow/);
 });
 
@@ -513,7 +515,7 @@ test("roadmap keeps architecture behind a gate, not active work", () => {
 test("roadmap keeps product boundaries explicit for future work", () => {
     assert.match(roadmap, /No backend, account, sync, database, framework, bundler, package dependency, or lockfile/);
     assert.match(roadmap, /Do not run live refresh unless fresh source evidence is needed/);
-    assert.match(roadmap, /Keep `n8n-workflow` visible while preserved rows are useful/);
+    assert.match(roadmap, /Keep retired `n8n-workflow` out of npm refreshes while repo\/link coverage remains useful/);
     assert.match(roadmap, /If `GITHUB_TOKEN` is missing, keep GitHub rate limits as known partial state/);
     assert.match(roadmap, /no framework, bundler, dependency, lockfile, backend, account, sync, database, or server function/i);
 });

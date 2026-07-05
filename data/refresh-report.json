@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-05T08:10:35.289Z",
+  "generatedAt": "2026-07-05T08:15:11.409Z",
   "manifestUpdated": "2026-07-05",
   "runContext": {
     "reason": "",
@@ -17,7 +17,7 @@
     {
       "id": "packages",
       "title": "Package watchlist",
-      "count": 25,
+      "count": 24,
       "updated": "2026-07-05"
     },
     {
@@ -47,7 +47,7 @@
           "source": "Hacker News",
           "status": "ok",
           "count": 4,
-          "updatedAt": "2026-07-05T08:10:31.870Z",
+          "updatedAt": "2026-07-05T08:15:08.121Z",
           "coverage": "4/4",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -63,7 +63,7 @@
           "source": "GitHub",
           "status": "ok",
           "count": 12,
-          "updatedAt": "2026-07-05T08:10:31.870Z",
+          "updatedAt": "2026-07-05T08:15:08.121Z",
           "coverage": "12/14",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -79,8 +79,8 @@
           "source": "npm",
           "status": "ok",
           "count": 8,
-          "updatedAt": "2026-07-05T08:10:31.870Z",
-          "coverage": "8/16",
+          "updatedAt": "2026-07-05T08:15:08.121Z",
+          "coverage": "8/15",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -95,32 +95,26 @@
     {
       "id": "packages",
       "title": "Package watchlist",
-      "status": "partial",
-      "count": 25,
+      "status": "ok",
+      "count": 24,
       "updated": "2026-07-05",
       "changed": true,
       "sources": [
         {
           "module": "packages",
           "source": "npm",
-          "status": "partial",
-          "count": 25,
-          "updatedAt": "2026-07-05T08:10:32.021Z",
-          "coverage": "25/25",
+          "status": "ok",
+          "count": 24,
+          "updatedAt": "2026-07-05T08:15:08.334Z",
+          "coverage": "24/24",
           "fallbackUsed": false,
           "staleButSafe": false,
-          "rateLimited": true,
+          "rateLimited": false,
           "fallbackReason": "",
-          "previousUpdated": "2026-07-05",
-          "consecutiveRateLimitedRuns": 6,
-          "safetyDetails": [
-            "rate limited",
-            "consecutive 429 x6",
-            "previous 2026-07-05"
-          ],
-          "errors": [
-            "n8n-workflow: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
-          ]
+          "previousUpdated": "",
+          "consecutiveRateLimitedRuns": 0,
+          "safetyDetails": [],
+          "errors": []
         }
       ]
     },
@@ -137,7 +131,7 @@
           "source": "GitHub",
           "status": "ok",
           "count": 30,
-          "updatedAt": "2026-07-05T08:10:33.709Z",
+          "updatedAt": "2026-07-05T08:15:09.390Z",
           "coverage": "30/30",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -163,7 +157,7 @@
           "source": "manual",
           "status": "ok",
           "count": 29,
-          "updatedAt": "2026-07-05T08:10:34.814Z",
+          "updatedAt": "2026-07-05T08:15:10.623Z",
           "coverage": "29/29",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -180,8 +174,8 @@
   "totals": {
     "modules": 4,
     "sources": 6,
-    "items": 108,
-    "status": "partial",
-    "errors": 1
+    "items": 107,
+    "status": "ok",
+    "errors": 0
   }
 }

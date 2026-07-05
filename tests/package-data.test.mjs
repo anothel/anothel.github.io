@@ -107,7 +107,7 @@ test("default package watchlist expands AI evals and workflow automation", () =>
     assert.ok(names.has("@trigger.dev/sdk"));
     assert.ok(names.has("@temporalio/workflow"));
     assert.ok(names.has("@temporalio/client"));
-    assert.ok(names.has("n8n-workflow"));
+    assert.equal(names.has("n8n-workflow"), false);
 });
 
 test("checked-in packages prune broad baseline while keeping agent coverage", () => {

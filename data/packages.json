@@ -1,22 +1,14 @@
 {
   "updated": "2026-07-05",
-  "generatedAt": "2026-07-05T08:10:32.021Z",
+  "generatedAt": "2026-07-05T08:15:08.334Z",
   "sourceMeta": {
     "name": "npm",
-    "status": "partial",
-    "count": 25,
-    "tracked": 25,
-    "emitted": 25,
-    "coverage": "25/25",
-    "updatedAt": "2026-07-05T08:10:32.021Z",
-    "errors": [
-      {
-        "name": "n8n-workflow",
-        "error": "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"
-      }
-    ],
-    "rateLimited": true,
-    "previousUpdated": "2026-07-05"
+    "status": "ok",
+    "count": 24,
+    "tracked": 24,
+    "emitted": 24,
+    "coverage": "24/24",
+    "updatedAt": "2026-07-05T08:15:08.334Z"
   },
   "packages": [
     {
@@ -231,16 +223,6 @@
     },
     {
       "rank": 22,
-      "name": "n8n-workflow",
-      "category": "Workflow automation",
-      "focus": "n8n workflow primitives",
-      "downloads": 289704,
-      "downloadsLabel": "289.7K/week",
-      "period": "2026-06-21 to 2026-06-27",
-      "url": "https://www.npmjs.com/package/n8n-workflow"
-    },
-    {
-      "rank": 23,
       "name": "evalite",
       "category": "AI evals",
       "focus": "LLM evaluation toolkit",
@@ -250,7 +232,7 @@
       "url": "https://www.npmjs.com/package/evalite"
     },
     {
-      "rank": 24,
+      "rank": 23,
       "name": "@modelcontextprotocol/server-github",
       "category": "MCP",
       "focus": "MCP GitHub server",
@@ -260,7 +242,7 @@
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-github"
     },
     {
-      "rank": 25,
+      "rank": 24,
       "name": "mcp-agent",
       "category": "MCP",
       "focus": "MCP agent helper package",

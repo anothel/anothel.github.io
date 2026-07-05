@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-05",
-  "generatedAt": "2026-07-05T08:10:33.709Z",
+  "generatedAt": "2026-07-05T08:15:09.390Z",
   "sourceMeta": {
     "name": "GitHub",
     "status": "ok",
@@ -8,7 +8,7 @@
     "tracked": 30,
     "emitted": 30,
     "coverage": "30/30",
-    "updatedAt": "2026-07-05T08:10:33.709Z"
+    "updatedAt": "2026-07-05T08:15:09.390Z"
   },
   "repos": [
     {
@@ -50,7 +50,7 @@
       "name": "anomalyco/opencode",
       "category": "AI agents",
       "focus": "open source coding agent",
-      "stars": 182438,
+      "stars": 182439,
       "starsLabel": "182.4K",
       "forksLabel": "22.6K",
       "pushedAt": "2026-07-05",
@@ -78,7 +78,7 @@
       "name": "mattpocock/skills",
       "category": "Agent skills",
       "focus": "engineering workflow skills",
-      "stars": 156891,
+      "stars": 156895,
       "starsLabel": "156.9K",
       "forksLabel": "13.5K",
       "pushedAt": "2026-07-03",
@@ -112,7 +112,7 @@
       "name": "openai/codex",
       "category": "AI agents",
       "focus": "terminal coding agent",
-      "stars": 95562,
+      "stars": 95563,
       "starsLabel": "95.6K",
       "forksLabel": "14.2K",
       "pushedAt": "2026-07-05",
@@ -141,7 +141,7 @@
       "name": "modelcontextprotocol/servers",
       "category": "MCP",
       "focus": "MCP reference servers",
-      "stars": 88064,
+      "stars": 88065,
       "starsLabel": "88.1K",
       "forksLabel": "11.2K",
       "pushedAt": "2026-07-04",
@@ -154,7 +154,7 @@
       "name": "karpathy/nanoGPT",
       "category": "AI engineering",
       "focus": "small GPT training",
-      "stars": 60659,
+      "stars": 60660,
       "starsLabel": "60.7K",
       "forksLabel": "10.4K",
       "pushedAt": "2025-11-12",
@@ -293,7 +293,7 @@
       "name": "openai/openai-agents-python",
       "category": "AI agents",
       "focus": "Python multi-agent framework",
-      "stars": 27651,
+      "stars": 27652,
       "starsLabel": "27.7K",
       "forksLabel": "4.3K",
       "pushedAt": "2026-07-04",
