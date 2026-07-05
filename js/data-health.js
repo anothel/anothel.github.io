@@ -88,6 +88,26 @@
 
     const partialCopy = "Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness.";
 
+    function isObject(value) {
+        return value !== null && typeof value === "object";
+    }
+
+    function isNpmRateLimitedFailure(error) {
+        const source = isObject(error)
+            ? `${error.name || ""} ${error.error || ""}`
+            : `${error || ""}`;
+        return /\bn8n-workflow\b/i.test(source) && /\b429\b/.test(source);
+    }
+
+    function sourcePartialMode(source) {
+        if (source?.status !== "partial") return "";
+        if (source?.rateLimited && Array.isArray(source?.errors) && source.errors.some(isNpmRateLimitedFailure)) {
+            return "accepted partial";
+        }
+
+        return "action required partial";
+    }
+
     function freshnessText(source, today) {
         const status = source?.status || "unknown";
         const updated = source?.updatedAt || source?.updated;
@@ -153,6 +173,10 @@
         const errorDetail = sourceErrorDetail(source);
         if (errorDetail) safety.push(errorDetail);
         else if (source?.error) safety.push(cleanErrorMessage(source.error));
+        if (source?.status === "partial") {
+            const mode = sourcePartialMode(source);
+            if (mode) safety.push(mode);
+        }
         if ((source?.status === "partial" || source?.status === "error") && safety.length > 0) safety.push("retry data refresh");
         if (safety.length > 0) return `${freshness} / ${safety.join(" / ")}`;
         if (freshness.startsWith("Stale -")) return `${freshness} / retry data refresh`;

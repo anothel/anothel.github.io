@@ -33,6 +33,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - Explore: saved search export/import is now consistent with Review-local storage workflows, including JSON payload format, status messaging, and smoke-tested copy/paste + invalid-input behavior.
 - P1 Explore Repeat Use work is complete: saved search portability and repeat-use controls are now aligned between sessions and with Review-like local data workflows.
 - Documentation split is complete: `docs/DECISIONS.md` stores durable conclusions and history, while `docs/IA.md` keeps current route, vocabulary, and workflow decisions.
+- P0 npm 429 partial policy now records consecutive repeated-run streaks in refresh report output and classifies partial status copy as `accepted partial` for preserved rows vs `action required partial` when trust impact is immediate.
 
 ### P0 - Publish Health Refresh
 
@@ -64,7 +65,7 @@ Scope:
 - Split partial meaning into:
   - `accepted partial`: preserved rows keep utility and no new data is required immediately.
   - `action required partial`: missing/watchlist coverage degrades trust or staleness.
-- After 3~5 consecutive repeats, decide whether to adjust watchlist policy or adopt replacement metric source.
+- Remaining: operator rule and action once 3~5 repeated partials are observed.
 - Review npm API call order/frequency in watchlist updater for rate-limit load reduction.
 - Add user-facing copy that explicitly says "Some data is stale but still usable".
 

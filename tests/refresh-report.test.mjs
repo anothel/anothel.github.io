@@ -146,3 +146,69 @@ test("refresh report renders fallback safety flags", () => {
     assert.match(markdown, /rate limited/);
     assert.match(markdown, /No package rows fetched/);
 });
+
+test("refresh report carries consecutive npm 429 partial run counts from prior report", () => {
+    const priorReport = {
+        modules: [
+            {
+                id: "packages",
+                sources: [
+                    {
+                        source: "npm",
+                        status: "partial",
+                        consecutiveRateLimitedRuns: 2,
+                        errors: ["n8n-workflow: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"]
+                    }
+                ]
+            }
+        ]
+    };
+    const report = buildRefreshReport(manifest, {
+        packages: {
+            sourceMeta: {
+                name: "npm",
+                status: "partial",
+                count: 25,
+                updatedAt: "2026-06-30T00:00:00.000Z",
+                errors: [{ name: "n8n-workflow", error: "429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow" }],
+                rateLimited: true
+            }
+        }
+    }, "2026-06-30T00:00:00.000Z", priorReport);
+
+    assert.equal(report.modules[0].sources[0].consecutiveRateLimitedRuns, 3);
+    assert.equal(report.modules[0].sources[0].safetyDetails.at(-1), "consecutive 429 x3");
+});
+
+test("refresh report resets consecutive 429 tracking when current run is not the same 429 partial", () => {
+    const priorReport = {
+        modules: [
+            {
+                id: "packages",
+                sources: [
+                    {
+                        source: "npm",
+                        status: "partial",
+                        consecutiveRateLimitedRuns: 4,
+                        errors: ["n8n-workflow: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"]
+                    }
+                ]
+            }
+        ]
+    };
+    const report = buildRefreshReport(manifest, {
+        packages: {
+            sourceMeta: {
+                name: "npm",
+                status: "partial",
+                count: 25,
+                updatedAt: "2026-06-30T00:00:00.000Z",
+                errors: [{ name: "n8n-workflow", error: "503 Service Unavailable" }],
+                rateLimited: true
+            }
+        }
+    }, "2026-06-30T00:00:00.000Z", priorReport);
+
+    assert.equal(report.modules[0].sources[0].consecutiveRateLimitedRuns, 0);
+    assert.equal(report.modules[0].sources[0].safetyDetails.includes("consecutive 429"), false);
+});

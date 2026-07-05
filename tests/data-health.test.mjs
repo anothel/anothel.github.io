@@ -171,9 +171,25 @@ test("DataHealth partial detail names failing source and recovery action", () =>
 
     assert.equal(
         detail,
-        "Partial - updated 2026-06-29 / rate limited / previous refresh 2026-06-29 / 1 failed: n8n-workflow - 429 Too Many Requests / retry data refresh"
+        "Partial - updated 2026-06-29 / rate limited / previous refresh 2026-06-29 / 1 failed: n8n-workflow - 429 Too Many Requests / accepted partial / retry data refresh"
     );
     assert.doesNotMatch(detail, /api\.npmjs\.org/);
+});
+
+test("DataHealth marks action-required partial states", () => {
+    const DataHealth = loadDataHealth();
+
+    const detail = DataHealth.sourceDetail({
+        status: "partial",
+        updatedAt: "2026-06-29T09:47:12.791Z",
+        errors: [{ name: "unknown", error: "503 service unavailable" }],
+        rateLimited: false,
+        previousUpdated: "2026-06-29"
+    });
+
+    assert.match(detail, /Partial - updated 2026-06-29/);
+    assert.match(detail, /action required partial/);
+    assert.match(detail, /retry data refresh/);
 });
 
 test("DataHealth error detail names recovery action and strips long URLs", () => {

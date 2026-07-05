@@ -6,6 +6,7 @@ import { promisify } from "node:util";
 
 const DEFAULT_OUT_DIR = new URL("../.refresh-report/", import.meta.url);
 const manifestFile = new URL("../data/manifest.json", import.meta.url);
+const priorReportFile = new URL("../data/refresh-report.json", import.meta.url);
 const execFileAsync = promisify(execFile);
 
 function sourceList(sourceMeta) {
@@ -28,6 +29,9 @@ function safetyDetail(source) {
     if (source?.fallbackUsed) details.push("fallback used");
     if (source?.staleButSafe) details.push("stale but safe");
     if (source?.rateLimited) details.push("rate limited");
+    if (source?.consecutiveRateLimitedRuns > 1) {
+        details.push(`consecutive 429 x${source.consecutiveRateLimitedRuns}`);
+    }
     if (source?.fallbackReason) details.push(source.fallbackReason);
     if (source?.previousUpdated) details.push(`previous ${source.previousUpdated}`);
     return details;
@@ -44,7 +48,45 @@ function worstStatus(statuses) {
         .at(0) || "unknown";
 }
 
-function summarizeSources(module, dataset) {
+function safeName(value) {
+    return String(value || "").trim().toLowerCase();
+}
+
+function hasRateLimitedPackageError(source) {
+    return Array.isArray(source.errors) && source.errors.some((error) => {
+        if (typeof error === "string") {
+            return /\bn8n-workflow\b/i.test(error) && /\b429\b/.test(error);
+        }
+
+        const name = safeName(error?.name);
+        const message = safeName(error?.error);
+        return name === "n8n-workflow" && /\b429\b/.test(message);
+    });
+}
+
+function isPackageRateLimitedPartial(source) {
+    const sourceName = safeName(source?.name || source?.source);
+    return sourceName === "npm" && source?.status === "partial" && hasRateLimitedPackageError(source);
+}
+
+function priorPackageSource(priorReport, moduleId, sourceName) {
+    const priorModule = Array.isArray(priorReport?.modules)
+        ? priorReport.modules.find((entry) => safeName(entry.id) === safeName(moduleId))
+        : null;
+    if (!priorModule) return null;
+    return (priorModule.sources || []).find((source) => safeName(source?.source) === safeName(sourceName));
+}
+
+function countConsecutiveRateLimitedRuns(current, previous) {
+    if (!isPackageRateLimitedPartial(current)) return 0;
+    const previousCount = isPackageRateLimitedPartial(previous)
+        ? Math.max(1, previous.consecutiveRateLimitedRuns || 1)
+        : 0;
+    const currentCount = Math.max(1, current.consecutiveRateLimitedRuns || 1);
+    return previousCount ? previousCount + 1 : currentCount;
+}
+
+function summarizeSources(module, dataset, priorReport = {}) {
     const sources = sourceList(dataset.sourceMeta);
     if (sources.length === 0) {
         return [{
@@ -57,27 +99,35 @@ function summarizeSources(module, dataset) {
         }];
     }
 
-    return sources.map((source) => ({
-        module: module.id,
-        source: source.name || "unknown",
-        status: source.status || "unknown",
-        count: source.count || 0,
-        updatedAt: source.updatedAt || source.updated || "-",
-        coverage: source.coverage || "",
-        fallbackUsed: Boolean(source.fallbackUsed),
-        staleButSafe: Boolean(source.staleButSafe),
-        rateLimited: Boolean(source.rateLimited),
-        fallbackReason: source.fallbackReason || "",
-        previousUpdated: source.previousUpdated || "",
-        safetyDetails: safetyDetail(source),
-        errors: sourceErrors(source)
-    }));
+    return sources.map((source) => {
+        const consecutiveRateLimitedRuns = isPackageRateLimitedPartial(source)
+            ? countConsecutiveRateLimitedRuns(source, priorPackageSource(priorReport, module.id, source.name))
+            : 0;
+        const row = {
+            module: module.id,
+            source: source.name || "unknown",
+            status: source.status || "unknown",
+            count: source.count || 0,
+            updatedAt: source.updatedAt || source.updated || "-",
+            coverage: source.coverage || "",
+            fallbackUsed: Boolean(source.fallbackUsed),
+            staleButSafe: Boolean(source.staleButSafe),
+            rateLimited: Boolean(source.rateLimited),
+            fallbackReason: source.fallbackReason || "",
+            previousUpdated: source.previousUpdated || "",
+            consecutiveRateLimitedRuns
+        };
+
+        row.safetyDetails = safetyDetail(row);
+        row.errors = sourceErrors(source);
+        return row;
+    });
 }
 
-export function buildRefreshReport(manifest, datasets, generatedAt = new Date().toISOString()) {
+export function buildRefreshReport(manifest, datasets, generatedAt = new Date().toISOString(), priorReport = {}) {
     const modules = (manifest.modules || []).map((module) => {
         const dataset = datasets[module.id] || {};
-        const sources = summarizeSources(module, dataset);
+        const sources = summarizeSources(module, dataset, priorReport);
         const changed = (datasets.__changedFiles || []).includes(module.data);
 
         return {
@@ -176,6 +226,14 @@ async function readJson(url) {
     return JSON.parse(await readFile(url, "utf8"));
 }
 
+async function readPriorReport() {
+    try {
+        return await readJson(priorReportFile);
+    } catch {
+        return null;
+    }
+}
+
 async function collectDatasets(manifest) {
     const entries = await Promise.all((manifest.modules || []).map(async (module) => {
         const data = await readJson(new URL(`../${module.data}`, import.meta.url));
@@ -216,7 +274,8 @@ async function main() {
     const datasets = await collectDatasets(manifest);
     datasets.__changedFiles = await changedDataFiles();
     datasets.__runContext = runContext();
-    const report = buildRefreshReport(manifest, datasets);
+    const priorReport = await readPriorReport();
+    const report = buildRefreshReport(manifest, datasets, new Date().toISOString(), priorReport);
     const markdown = renderRefreshMarkdown(report, { reason: process.env.REFRESH_REASON });
     const jsonOut = argValue("--json-out");
 
