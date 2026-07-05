@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Added a renderer insertion inventory to the threat model and removed completed InnerHTML audit work from the active Roadmap.
 - Added Review import collision preview before writes and prevented duplicate incoming records from creating duplicate saved rows.
 - Removed completed Review Workflow work from the active Roadmap.
 - Added score reasons to Review detail cards so saved items keep the same ranking context as Explore and Today.

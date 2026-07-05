@@ -17,13 +17,13 @@ const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const roadmapQueueHeadings = [
     "P0 - Publish Health Refresh",
     "P0 - npm 429 Partial Policy Clarification",
-    "P1 - Signal Quality Drift Tuning",
-    "P1 - InnerHTML Rendering Audit"
+    "P1 - Signal Quality Drift Tuning"
 ];
 
 const roadmapCompletedItems = [
     "Trust-copy wording and recovery copy are shared and test-covered",
-    "P1 Review Workflow work is complete"
+    "P1 Review Workflow work is complete",
+    "P1 InnerHTML Rendering Audit is complete"
 ];
 
 test("README explains data refresh automation for operators", () => {
@@ -337,6 +337,10 @@ test("security and threat docs preserve the static-site trust model", () => {
     assert.match(threatModel, /There is no backend, account system, sync service, or database/s);
     assert.match(threatModel, /Remote sources: Hacker News, GitHub, npm/s);
     assert.match(threatModel, /Shared safe DOM helpers escape HTML and restrict hrefs/s);
+    assert.match(threatModel, /Renderer Insertion Inventory/s);
+    assert.match(threatModel, /All current `innerHTML` assignments insert strings produced by local render helpers/s);
+    assert.match(threatModel, /Explore.*normalized generated JSON, localStorage saved items\/searches\/pins/s);
+    assert.match(threatModel, /Review.*normalized generated JSON and localStorage Review records\/import payloads/s);
     assert.match(threatModel, /Explore card activation uses `noopener,noreferrer`/s);
     assert.match(threatModel, /Referrer policy decision: external item links rely on `rel="noopener noreferrer"`/s);
     assert.match(threatModel, /GitHub Actions pinning decision: major-version actions remain accepted/s);

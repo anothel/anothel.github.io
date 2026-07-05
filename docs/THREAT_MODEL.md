@@ -48,6 +48,21 @@ There is no backend, account system, sync service, or database.
 - GitHub Actions pinning decision: major-version actions remain accepted while workflows only run GitHub-owned actions and local scripts.
 - Dependabot decision: no dependency update automation is enabled while the repo has no package dependencies or lockfile.
 
+## Renderer Insertion Inventory
+
+All current `innerHTML` assignments insert strings produced by local render helpers. Data from remote sources, watchlists, or localStorage must pass through `escapeHtml`, `safeHref`, or `safeLinkAttrs` before insertion.
+
+| Surface | Insertion sites | Input boundary | Safety proof |
+| --- | --- | --- | --- |
+| Trends dashboard | filter options, cards, table, source health | generated trends JSON and source metadata | `tests/dashboard-ui.test.mjs`, `tests/data-health.test.mjs`, `tests/safe-dom.test.mjs` |
+| Today, Home, Status | section cards, stats, source rows/cards, refresh report, saved summary | generated JSON, manifest, refresh report, localStorage summary | `tests/today-generator.test.mjs`, `tests/today-data.test.mjs`, `tests/home-data.test.mjs`, `tests/status-ui.test.mjs`, `tests/static-fallback.test.mjs` |
+| Explore | filters, saved searches, topic lenses, result cards, saved queue, source health | normalized generated JSON, localStorage saved items/searches/pins | `tests/explore-ui.test.mjs`, `tests/local-state.test.mjs`, `tests/safe-dom.test.mjs` |
+| Review | queue, detail card, import/export status output | normalized generated JSON and localStorage Review records/import payloads | `tests/review-ui.test.mjs`, `tests/local-state.test.mjs`, `tests/safe-dom.test.mjs` |
+| Package, repo, and link modules | module lists, category options, source health | generated packages/repos/links JSON and source metadata | `tests/module-renderers-ui.test.mjs`, `tests/link-data.test.mjs`, `tests/package-data.test.mjs`, `tests/repo-data.test.mjs` |
+| Topics and Notes | topic notes, guidance, movement groups, cards, pin controls, note index | generated JSON and checked-in topic taxonomy/config | `tests/topic-ui.test.mjs`, `tests/notes-ui.test.mjs`, `tests/static-fallback.test.mjs` |
+
+Non-data literals such as empty states are allowed inline. New renderer code should either reuse the same helpers or add malicious fixture coverage before the Roadmap audit is considered still satisfied.
+
 ## Accepted Risks
 
 - localStorage data is user-controlled and local to the browser.

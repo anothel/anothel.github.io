@@ -40,6 +40,7 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 - P0 npm partial user-facing copy is complete: shared and static status text says some data is stale but still usable and labels preserved `n8n-workflow` rows as accepted partial.
 - Review detail now shows source context and score reasons for saved items without changing local storage.
 - P1 Review Workflow work is complete: saved items have note/tag/reason metadata, status filters, schema-v2 JSON export/import, Markdown export, local-only copy, source context, score reasons, and import collision preview before write.
+- P1 InnerHTML Rendering Audit is complete: `docs/THREAT_MODEL.md` inventories current insertion surfaces, input trust boundaries, and fixture ownership for renderer safety.
 
 ### P0 - Publish Health Refresh
 
@@ -97,27 +98,6 @@ Verification:
 - Manual check: Today's and Explore's top 10 are workflow/agent/eval/supported-topic signals under current fixture and checked-in data.
 
 Exit: ranking drift triggers an explicit policy/watchlist adjustment path and does not grow hidden complexity.
-
-### P1 - InnerHTML Rendering Audit
-
-Trigger: any client-rendered HTML insertion path reappears without an explicit escape review.
-
-Scope:
-
-- Inventory all `innerHTML` usage and annotate input trust boundaries.
-- For each site, verify escaping / safeHref policy and source-of-trust assumptions.
-- Add or strengthen malicious fixture coverage for renderer behavior.
-- Prefer DOM API or centralized safe render helpers for future output.
-- Track maintenance cost for any future template-layer shift.
-
-Verification:
-
-- `node scripts/validate-data.mjs`.
-- `npm.cmd run check`.
-- `git diff --check`.
-- Manual review of all `innerHTML` call sites and associated fixtures.
-
-Exit: every user-facing HTML insertion is explainable, tested, and policy-consistent.
 
 ## Architecture Gate
 
