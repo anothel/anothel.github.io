@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-07",
-  "generatedAt": "2026-07-07T12:34:37.366Z",
+  "generatedAt": "2026-07-07T12:40:09.128Z",
   "modules": [
     {
       "id": "trends",
@@ -8,7 +8,7 @@
       "route": "trends/index.html",
       "data": "data/trends.json",
       "source": "Hacker News, GitHub, npm",
-      "status": "partial",
+      "status": "ok",
       "count": 24,
       "updated": "2026-07-07"
     },

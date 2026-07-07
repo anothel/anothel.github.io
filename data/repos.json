@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-07",
-  "generatedAt": "2026-07-07T12:34:35.692Z",
+  "generatedAt": "2026-07-07T12:40:07.496Z",
   "sourceMeta": {
     "name": "GitHub",
     "status": "ok",
@@ -8,7 +8,7 @@
     "tracked": 30,
     "emitted": 30,
     "coverage": "30/30",
-    "updatedAt": "2026-07-07T12:34:35.692Z"
+    "updatedAt": "2026-07-07T12:40:07.496Z"
   },
   "repos": [
     {
@@ -16,7 +16,7 @@
       "name": "n8n-io/n8n",
       "category": "Workflow automation",
       "focus": "workflow automation",
-      "stars": 195503,
+      "stars": 195504,
       "starsLabel": "195.5K",
       "forksLabel": "59.1K",
       "pushedAt": "2026-07-07",
@@ -63,8 +63,8 @@
       "name": "mattpocock/skills",
       "category": "Agent skills",
       "focus": "engineering workflow skills",
-      "stars": 159449,
-      "starsLabel": "159.4K",
+      "stars": 159450,
+      "starsLabel": "159.5K",
       "forksLabel": "13.7K",
       "pushedAt": "2026-07-06",
       "url": "https://github.com/mattpocock/skills",
@@ -76,7 +76,7 @@
       "name": "anthropics/skills",
       "category": "Agent skills",
       "focus": "official Agent Skills examples",
-      "stars": 159045,
+      "stars": 159047,
       "starsLabel": "159K",
       "forksLabel": "18.8K",
       "pushedAt": "2026-07-01",
@@ -112,7 +112,7 @@
       "name": "openai/codex",
       "category": "AI agents",
       "focus": "terminal coding agent",
-      "stars": 96018,
+      "stars": 96020,
       "starsLabel": "96K",
       "forksLabel": "14.2K",
       "pushedAt": "2026-07-07",
@@ -167,7 +167,7 @@
       "name": "karpathy/nanochat",
       "category": "AI engineering",
       "focus": "minimal ChatGPT stack",
-      "stars": 55983,
+      "stars": 55984,
       "starsLabel": "56K",
       "forksLabel": "7.7K",
       "pushedAt": "2026-07-04",
