@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 
-const refreshReport = JSON.parse(readFileSync("data/refresh-report.json", "utf8"));
+const checkedInRefreshReport = JSON.parse(execFileSync("git", ["show", "HEAD:data/refresh-report.json"], { encoding: "utf8" }));
 const readme = readFileSync("README.md", "utf8");
 const ia = readFileSync("docs/IA.md", "utf8");
 const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
@@ -440,13 +441,13 @@ test("roadmap P0 current state matches the checked-in refresh report", () => {
     const start = roadmap.indexOf("## Current Source State");
     const next = roadmap.indexOf("\n## Next Work Queue", start + 1);
     const section = roadmap.slice(start, next);
-    const partialSource = refreshReport.modules
+    const partialSource = checkedInRefreshReport.modules
         .flatMap((module) => module.sources || [])
         .find((source) => source.status === "partial");
 
-    assert.match(section, new RegExp(refreshReport.generatedAt));
-    assert.match(section, new RegExp(String(refreshReport.totals.items)));
-    assert.match(section, new RegExp(refreshReport.totals.status));
+    assert.match(section, new RegExp(checkedInRefreshReport.generatedAt));
+    assert.match(section, new RegExp(String(checkedInRefreshReport.totals.items)));
+    assert.match(section, new RegExp(checkedInRefreshReport.totals.status));
     if (partialSource) {
         assert.match(section, new RegExp(partialSource.source));
     }
