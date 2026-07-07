@@ -223,9 +223,9 @@
         return parts.length > 0 ? parts.join(" / ") : "All signals";
     }
 
-    function savedSearchStatusText(status) {
+    function savedSearchStatusText(status, search = null) {
         if (status === "saved") return "Search saved.";
-        if (status === "applied") return "Search applied.";
+        if (status === "applied") return search ? `Applied: ${savedSearchLabel(search)}.` : "Search applied.";
         if (status === "editing") return "Edit this saved search name or filters and save again.";
         if (status === "renamed") return "Saved search renamed.";
         if (status === "updated") return "Saved search moved to top.";
@@ -423,21 +423,49 @@
         return new Set([...savedIds].filter((id) => validIds.has(id)));
     }
 
-    function activeExploreSummary(filters, savedCount = 0, sourceMeta = []) {
-        const parts = [];
-        if (filters.focus && filters.focus !== "all") parts.push(`Focus: ${filters.focus}`);
-        if (filters.module !== "all") parts.push(`Module: ${filters.module}`);
-        if (filters.category !== "all") parts.push(`Category: ${filters.category}`);
-        if (filters.query) parts.push(`Search: ${displayQuery(filters.query)}`);
-        if (filters.sort === "saved") parts.push("Sort: saved first");
-        if (savedCount > 0) parts.push(`Saved: ${savedCount}`);
+    function partialSourceNames(sourceMeta = []) {
+        return (sourceMeta || [])
+            .filter((source) => source?.status === "partial")
+            .map((source) => source.name || source.source)
+            .filter(Boolean);
+    }
+
+    function partialSourceTouchesItem(sourceName, item = {}) {
+        const name = String(sourceName || "").toLowerCase();
+        const values = [
+            item.module,
+            item.origin,
+            item.source,
+            item.sourceModule,
+            item.sourceKind,
+            ...(item.sources || [])
+        ].map((value) => String(value || "").toLowerCase());
+
+        return values.includes(name)
+            || (name === "npm" && item.module === "Packages")
+            || (name === "manual" && item.module === "Links")
+            || (name === "github" && ["Repos", "Trends"].includes(item.module));
+    }
+
+    function activeExploreSummary(filters, visibleCount = 0, savedCount = 0, sourceMeta = [], visibleItems = []) {
+        const parts = [`${visibleCount} visible`];
+        if (filters.focus && filters.focus !== "all") parts.push(filters.focus);
+        if (filters.module !== "all") parts.push(filters.module);
+        if (filters.category !== "all") parts.push(filters.category);
+        if (filters.query) parts.push(displayQuery(filters.query));
+        if (filters.sort === "saved") parts.push("saved first");
+        if (savedCount > 0) parts.push(`${savedCount} saved`);
         if (dataHealth && dataHealth.aggregateSourceStatus) {
-            const dataStatus = dataHealth.aggregateSourceStatus(sourceMeta);
-            if (dataStatus === "partial") {
-                parts.push("Data is partial: some sources may be missing.");
+            const names = partialSourceNames(sourceMeta);
+            if (names.length > 0) {
+                const affectsVisible = visibleItems.length > 0
+                    && visibleItems.some((item) => names.some((name) => partialSourceTouchesItem(name, item)));
+                parts.push(visibleItems.length > 0
+                    ? `Partial ${affectsVisible ? "affects" : "outside"} visible: ${names.join(", ")}`
+                    : `Partial sources: ${names.join(", ")}`);
             }
         }
-        return parts.length > 0 ? parts.join(" / ") : "Showing all tracked items.";
+        return parts.join(" / ");
     }
 
     function clearedExploreState(filters) {
@@ -632,11 +660,15 @@
     }
 
     function applySavedSearchById(els, savedSearchStore, id) {
-        const search = state.savedSearches.find((item) => item.id === id)
-            || savedSearchStore.read().find((item) => item.id === id);
+        const search = savedSearchById(savedSearchStore, id);
         if (!search) return false;
         applySearchState(els, search);
         return true;
+    }
+
+    function savedSearchById(savedSearchStore, id) {
+        return state.savedSearches.find((item) => item.id === id)
+            || savedSearchStore.read().find((item) => item.id === id);
     }
 
     function renameSavedSearch(savedSearchStore, id, label) {
@@ -656,23 +688,23 @@
         return { ...result, items: result.items, status: label === current.label ? "updated" : "renamed" };
     }
 
-    function renderSavedSearchPanel(els, status = "empty") {
+    function renderSavedSearchPanel(els, status = "empty", search = null) {
         if (els.savedSearches) els.savedSearches.innerHTML = renderSavedSearches(state.savedSearches, status);
-        if (els.savedSearchStatus) els.savedSearchStatus.textContent = savedSearchStatusText(status);
+        if (els.savedSearchStatus) els.savedSearchStatus.textContent = savedSearchStatusText(status, search);
     }
 
-    function render(els, store, pinnedStore, savedSearchStore, savedSearchStatus = "empty") {
+    function render(els, store, pinnedStore, savedSearchStore, savedSearchStatus = "empty", savedSearch = null) {
         const items = visibleItems(state.items, state, state.savedIds);
         const categoryCount = uniqueValues(items, "category").length;
 
         if (els.total) els.total.textContent = String(items.length);
         if (els.savedCount) els.savedCount.textContent = String(state.savedIds.size);
         if (els.categories) els.categories.textContent = String(categoryCount);
-        if (els.summary) els.summary.textContent = activeExploreSummary(state, state.savedIds.size, state.sourceMeta);
+        if (els.summary) els.summary.textContent = activeExploreSummary(state, items.length, state.savedIds.size, state.sourceMeta, items);
         if (els.topicLenses) els.topicLenses.innerHTML = renderTopicLenses(sortTopicLensesByPins(buildTopicLenses(state.items), state.pinnedTopics), state.focus, state.pinnedTopics);
         if (els.results) els.results.innerHTML = renderExploreCards(items, state.savedIds);
         if (els.saved) els.saved.innerHTML = renderSavedQueue(state.items, state.savedIds);
-        renderSavedSearchPanel(els, savedSearchStatus);
+        renderSavedSearchPanel(els, savedSearchStatus, savedSearch);
         bindDynamicActions(els, store, pinnedStore, savedSearchStore);
         if (savedSearchStore) {
             bindSavedSearchActions(els, savedSearchStore, store, pinnedStore);
@@ -793,8 +825,10 @@
                 const removeId = button.dataset.removeSearchId;
 
                 if (applyId) {
-                    if (applySavedSearchById(els, savedSearchStore, applyId)) {
-                        render(els, store, pinnedStore, savedSearchStore, "applied");
+                    const search = savedSearchById(savedSearchStore, applyId);
+                    if (search) {
+                        applySearchState(els, search);
+                        render(els, store, pinnedStore, savedSearchStore, "applied", search);
                     }
                     return;
                 }

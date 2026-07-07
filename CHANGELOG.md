@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Improved Explore repeat-use clarity: active summaries now show visible count, compact filter state, saved-search apply feedback names the restored state, topic lenses explain when to open them, and partial sources say whether visible results are affected.
 - Retired npm `n8n-workflow` from trend and package refreshes after 6 consecutive 429s without adding a replacement source.
 - Ran an approved token-backed publish-health refresh; GitHub trends stayed `ok`, generated data stayed at 108 items, and npm `n8n-workflow` 429 repeated x6.
 - Updated source governance and Roadmap current state for the npm 5-run decision threshold without disabling or replacing the package.

@@ -298,7 +298,7 @@
         return topicDefinitions.map((topic) => ({
             focus: topic.label,
             label: topic.label,
-            description: topic.lensDescription || topic.description,
+            description: topic.guidance?.whenToOpen || topic.lensDescription || topic.description,
             route: routeForTopic(topic.label, prefix)
         }));
     }

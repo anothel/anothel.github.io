@@ -384,16 +384,42 @@ test("Explore summarizes active saved workflow state", () => {
     const app = loadExplore();
 
     assert.equal(
-        app.activeExploreSummary({ module: "all", category: "all", query: "", sort: "priority" }, 0),
-        "Showing all tracked items."
+        app.activeExploreSummary({ module: "all", category: "all", query: "", sort: "priority" }, 12),
+        "12 visible"
     );
     assert.equal(
-        app.activeExploreSummary({ module: "Repos", category: "AI agents", focus: "MCP", query: "codex", sort: "saved" }, 2),
-        "Focus: MCP / Module: Repos / Category: AI agents / Search: codex / Sort: saved first / Saved: 2"
+        app.activeExploreSummary({ module: "Repos", category: "AI agents", focus: "MCP", query: "codex", sort: "saved" }, 2, 1),
+        "2 visible / MCP / Repos / AI agents / codex / saved first / 1 saved"
     );
     assert.equal(
-        app.activeExploreSummary({ module: "all", category: "all", query: "", sort: "priority" }, 0, [{ name: "npm", status: "partial", count: 0 }]),
-        "Data is partial: some sources may be missing."
+        app.activeExploreSummary(
+            { module: "Repos", category: "all", query: "", sort: "priority" },
+            1,
+            0,
+            [{ name: "npm", status: "partial", count: 0 }],
+            [{ module: "Repos", origin: "GitHub" }]
+        ),
+        "1 visible / Repos / Partial outside visible: npm"
+    );
+    assert.equal(
+        app.activeExploreSummary(
+            { module: "Packages", category: "all", query: "", sort: "priority" },
+            1,
+            0,
+            [{ name: "npm", status: "partial", count: 0 }],
+            [{ module: "Packages", origin: "npm" }]
+        ),
+        "1 visible / Packages / Partial affects visible: npm"
+    );
+    assert.equal(
+        app.activeExploreSummary(
+            { module: "Links", category: "all", query: "", sort: "priority" },
+            1,
+            0,
+            [{ name: "manual", status: "partial", count: 0 }],
+            [{ module: "Links", origin: "Docs" }]
+        ),
+        "1 visible / Links / Partial affects visible: manual"
     );
 });
 
@@ -490,6 +516,7 @@ test("Explore builds topic lenses with counts, module spread, and topic routes",
     assert.equal(byFocus["AI agents"].count, 2);
     assert.equal(byFocus["AI agents"].modules, 2);
     assert.equal(byFocus["AI agents"].topItem.title, "openai/codex");
+    assert.equal(byFocus["AI agents"].description, "Open when a tool changes how code gets written, reviewed, tested, or automated.");
     assert.equal(byFocus.MCP.count, 1);
     assert.equal(byFocus["Agent skills"].route, "../topics/agent-skills/index.html");
     assert.equal(byFocus["AI evals"].route, "../topics/ai-evals/index.html");
@@ -501,6 +528,7 @@ test("Explore builds topic lenses with counts, module spread, and topic routes",
     assert.match(html, /aria-label="Pin AI agents topic"/);
     assert.match(html, /Open topic/);
     assert.match(html, /2 items \/ 2 modules/);
+    assert.match(html, /Open when a protocol or server signal could change how agents connect to tools\./);
     assert.match(html, /href="..\/topics\/agent-skills\/index\.html"/);
 });
 
@@ -612,7 +640,7 @@ test("Explore shortens long query copy without changing saved query ids", () => 
     );
     assert.equal(
         app.activeExploreSummary({ module: "all", category: "all", focus: "MCP", query, sort: "priority" }),
-        "Focus: MCP / Search: agent workflow automation evaluation bench..."
+        "0 visible / MCP / agent workflow automation evaluation bench..."
     );
 });
 
@@ -985,7 +1013,7 @@ test("Explore browser init renders stats, health, filters, and saved queue", asy
 
     assert.equal(elements["[data-explore-total]"].textContent, "1");
     assert.equal(elements["[data-explore-saved-count]"].textContent, "1");
-    assert.match(elements["[data-explore-summary]"].textContent, /Data is partial: some sources may be missing\./);
+    assert.match(elements["[data-explore-summary]"].textContent, /Partial affects visible: GitHub/);
     assert.match(elements["[data-explore-results]"].innerHTML, /Agent trend/);
     assert.match(elements["[data-explore-saved]"].innerHTML, /Agent trend/);
     assert.match(elements["[data-topic-lenses]"].innerHTML, /AI agents/);
@@ -1102,18 +1130,18 @@ test("Explore browser flow keeps saved queue visible through filters and preserv
     assert.match(elements["[data-explore-saved]"].innerHTML, /Saved agent/);
 
     elements["[data-explore-sort]"].dispatch("change", "saved");
-    assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
-    assert.match(elements["[data-explore-summary]"].textContent, /Saved: 1/);
+    assert.match(elements["[data-explore-summary]"].textContent, /saved first/);
+    assert.match(elements["[data-explore-summary]"].textContent, /1 saved/);
     assert.equal(elements["[data-explore-saved-count]"].textContent, "1");
 
     focusButtons[1].listeners.click({ target: focusButtons[1] });
-    assert.match(elements["[data-explore-summary]"].textContent, /Focus: AI agents/);
+    assert.match(elements["[data-explore-summary]"].textContent, /AI agents/);
 
     elements["[data-clear-filters]"].listeners.click({ target: elements["[data-clear-filters]"] });
     assert.equal(elements["[data-explore-query]"].value, "");
     assert.equal(elements["[data-explore-sort]"].value, "saved");
-    assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
-    assert.match(elements["[data-explore-summary]"].textContent, /Saved: 1/);
+    assert.match(elements["[data-explore-summary]"].textContent, /saved first/);
+    assert.match(elements["[data-explore-summary]"].textContent, /1 saved/);
     assert.equal(elements["[data-explore-total]"].textContent, "2");
 });
 
@@ -1214,7 +1242,7 @@ test("Explore topic lens click applies the matching focus filter", async () => {
     lensButton.listeners.click({ target: lensButton });
 
     assert.equal(elements["[data-explore-total]"].textContent, "1");
-    assert.match(elements["[data-explore-summary]"].textContent, /Focus: MCP/);
+    assert.match(elements["[data-explore-summary]"].textContent, /MCP/);
     assert.equal(focusButtons[1].ariaPressed, "true");
 });
 
@@ -1401,7 +1429,7 @@ test("Explore browser init applies focus from URL query", async () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     assert.equal(elements["[data-explore-total]"].textContent, "1");
-    assert.match(elements["[data-explore-summary]"].textContent, /Focus: MCP/);
+    assert.match(elements["[data-explore-summary]"].textContent, /MCP/);
     assert.equal(focusButtons[1].ariaPressed, "true");
 });
 
@@ -1491,8 +1519,8 @@ test("Explore browser init restores explicit default focus and sort", async () =
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     assert.equal(elements["[data-explore-sort]"].value, "saved");
-    assert.match(elements["[data-explore-summary]"].textContent, /Focus: MCP/);
-    assert.match(elements["[data-explore-summary]"].textContent, /Sort: saved first/);
+    assert.match(elements["[data-explore-summary]"].textContent, /MCP/);
+    assert.match(elements["[data-explore-summary]"].textContent, /saved first/);
     assert.equal(elements["[data-explore-default-status]"].textContent, "Default: MCP / All modules / All categories / saved first");
     assert.equal(focusButtons[1].ariaPressed, "true");
 });
@@ -1600,7 +1628,7 @@ test("Explore default controls save and reset explicit preferred state", async (
     assert.equal(memory.has("anothel.preferences.exploreState.v1"), false);
     assert.equal(elements["[data-explore-sort]"].value, "priority");
     assert.equal(elements["[data-explore-default-status]"].textContent, "Default reset: All / All modules / All categories / priority");
-    assert.match(elements["[data-explore-summary]"].textContent, /Showing all tracked items/);
+    assert.match(elements["[data-explore-summary]"].textContent, /1 visible/);
     assert.equal(focusButtons[0].ariaPressed, "true");
 });
 
@@ -1770,7 +1798,7 @@ test("Explore saved search controls save, apply, remove, and keep URL unchanged"
     dynamicButtons[0].listeners.click({ target: dynamicButtons[0] });
 
     assert.equal(elements["[data-explore-query]"].value, "server");
-    assert.equal(elements["[data-saved-search-status]"].textContent, "Search applied.");
+    assert.equal(elements["[data-saved-search-status]"].textContent, "Applied: MCP / server / saved first.");
 
     dynamicButtons = [createButton({ editSearchId: savedPayload.items[0].id })];
     context.ExploreApp.bindSavedSearchActions(

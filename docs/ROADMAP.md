@@ -46,29 +46,6 @@ Verification:
 
 Exit: generated data is publishable, or the exact source blocker and next watchlist action threshold are recorded here.
 
-### P1 - Explore Repeat-use Clarity
-
-Trigger: repeated Explore use shows unclear active filters, saved-search feedback, topic-lens intent, or partial-source impact.
-
-Scope:
-
-- Shorten the active filter/focus summary around visible count, active filter, and source health.
-- Make saved-search apply feedback name the restored filter/focus/sort state.
-- Keep saved-search labels short without changing saved ids or localStorage schema.
-- Reword topic lenses around why to open the lens, not only counts.
-- Show whether partial sources affect the visible result set.
-
-Verification:
-
-- `node --test tests/explore-ui.test.mjs`
-- `node --test tests/local-state.test.mjs`
-- `node --test tests/topic-ui.test.mjs`
-- `node --test tests/static-fallback.test.mjs`
-- `npm.cmd run check`
-- `git diff --check`
-
-Exit: repeat visitors can see applied state, saved-search effect, lens intent, and partial-source impact without route, backend, sync, or schema changes.
-
 ### P1 - Today Ranking Diversity Guard
 
 Trigger: Today or Explore top priority results drift toward one source family, broad baseline tooling, duplicate URLs, or raw popularity over topic relevance.

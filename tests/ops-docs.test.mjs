@@ -18,7 +18,6 @@ const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
 const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
 const roadmapQueueHeadings = [
     "P0 - Publish Health Refresh and Source Partial Policy",
-    "P1 - Explore Repeat-use Clarity",
     "P1 - Today Ranking Diversity Guard",
     "P2 - Static Fallback Generator Cleanup"
 ];
@@ -457,7 +456,7 @@ test("roadmap P0 current state matches the checked-in refresh report", () => {
 test("roadmap records source partial decision thresholds", () => {
     const section = roadmap.slice(
         roadmap.indexOf("### P0 - Publish Health Refresh and Source Partial Policy"),
-        roadmap.indexOf("\n### P1 - Explore Repeat-use Clarity")
+        roadmap.indexOf("\n### P1 - Today Ranking Diversity Guard")
     );
 
     assert.match(section, /After 3 repeated same-package 429s/);
@@ -466,15 +465,13 @@ test("roadmap records source partial decision thresholds", () => {
     assert.match(section, /Status detail, and page health strips/);
 });
 
-test("roadmap queues repeat-use and ranking guard work without feature sprawl", () => {
+test("roadmap queues ranking guard work without feature sprawl", () => {
     const queue = roadmap.slice(roadmap.indexOf("## Next Work Queue"), roadmap.indexOf("## Architecture Gate"));
 
-    assert.match(queue, /active filter\/focus summary/);
-    assert.match(queue, /saved-search apply feedback/);
-    assert.match(queue, /partial sources affect the visible result set/);
     assert.match(queue, /Strengthen golden fixtures before changing ranking logic/);
     assert.match(queue, /duplicate URL identity stays consistent across Today, Explore, and Review/);
     assert.match(queue, /without adding a larger ranking model/);
+    assert.doesNotMatch(queue, /Explore Repeat-use Clarity/);
 });
 
 test("roadmap keeps fallback cleanup scoped", () => {
