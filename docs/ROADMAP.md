@@ -15,11 +15,10 @@ Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
 
 ## Current Source State
 
-- Last checked-in refresh: `2026-07-07T12:34:37.536Z`.
+- Last checked-in refresh: `2026-07-07T12:40:09.312Z`.
 - Generated items: 107.
-- Overall status: `partial`.
-- Hacker News, trend npm, package npm, repo GitHub, and manual sources are `ok`.
-- GitHub trends are `partial` because unauthenticated GitHub API calls hit 403 rate limits on 4 queries; keep this as known partial state while `GITHUB_TOKEN` is missing.
+- Overall status: `ok`.
+- Hacker News, GitHub trends, trend npm, package npm, repo GitHub, and manual sources are `ok`.
 - No npm source blocker. npm `n8n-workflow` is retired from npm refreshes after 6 consecutive 429s; workflow automation remains covered by n8n repo/link plus Inngest, Trigger.dev, and Temporal packages.
 
 ## Next Work Queue
