@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-05T08:15:11.409Z",
-  "manifestUpdated": "2026-07-05",
+  "generatedAt": "2026-07-07T12:34:37.536Z",
+  "manifestUpdated": "2026-07-07",
   "runContext": {
     "reason": "",
     "eventName": "",
@@ -12,34 +12,34 @@
       "id": "trends",
       "title": "Tech trends",
       "count": 24,
-      "updated": "2026-07-05"
+      "updated": "2026-07-07"
     },
     {
       "id": "packages",
       "title": "Package watchlist",
       "count": 24,
-      "updated": "2026-07-05"
+      "updated": "2026-07-07"
     },
     {
       "id": "repos",
       "title": "Repo watchlist",
       "count": 30,
-      "updated": "2026-07-05"
+      "updated": "2026-07-07"
     },
     {
       "id": "links",
       "title": "Reference shelf",
       "count": 29,
-      "updated": "2026-07-05"
+      "updated": "2026-07-07"
     }
   ],
   "modules": [
     {
       "id": "trends",
       "title": "Tech trends",
-      "status": "ok",
+      "status": "partial",
       "count": 24,
-      "updated": "2026-07-05",
+      "updated": "2026-07-07",
       "changed": true,
       "sources": [
         {
@@ -47,7 +47,7 @@
           "source": "Hacker News",
           "status": "ok",
           "count": 4,
-          "updatedAt": "2026-07-05T08:15:08.121Z",
+          "updatedAt": "2026-07-07T12:34:30.376Z",
           "coverage": "4/4",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -61,25 +61,32 @@
         {
           "module": "trends",
           "source": "GitHub",
-          "status": "ok",
+          "status": "partial",
           "count": 12,
-          "updatedAt": "2026-07-05T08:15:08.121Z",
+          "updatedAt": "2026-07-07T12:34:30.376Z",
           "coverage": "12/14",
           "fallbackUsed": false,
           "staleButSafe": false,
-          "rateLimited": false,
+          "rateLimited": true,
           "fallbackReason": "",
           "previousUpdated": "",
           "consecutiveRateLimitedRuns": 0,
-          "safetyDetails": [],
-          "errors": []
+          "safetyDetails": [
+            "rate limited"
+          ],
+          "errors": [
+            "llm observability evals stars:>100: 403 rate limit exceeded",
+            "workflow automation ai agents stars:>100: 403 rate limit exceeded",
+            "durable workflow typescript stars:>100: 403 rate limit exceeded",
+            "opencode coding agent stars:>100: 403 rate limit exceeded"
+          ]
         },
         {
           "module": "trends",
           "source": "npm",
           "status": "ok",
           "count": 8,
-          "updatedAt": "2026-07-05T08:15:08.121Z",
+          "updatedAt": "2026-07-07T12:34:30.376Z",
           "coverage": "8/15",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -97,7 +104,7 @@
       "title": "Package watchlist",
       "status": "ok",
       "count": 24,
-      "updated": "2026-07-05",
+      "updated": "2026-07-07",
       "changed": true,
       "sources": [
         {
@@ -105,7 +112,7 @@
           "source": "npm",
           "status": "ok",
           "count": 24,
-          "updatedAt": "2026-07-05T08:15:08.334Z",
+          "updatedAt": "2026-07-07T12:34:30.498Z",
           "coverage": "24/24",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -123,7 +130,7 @@
       "title": "Repo watchlist",
       "status": "ok",
       "count": 30,
-      "updated": "2026-07-05",
+      "updated": "2026-07-07",
       "changed": true,
       "sources": [
         {
@@ -131,7 +138,7 @@
           "source": "GitHub",
           "status": "ok",
           "count": 30,
-          "updatedAt": "2026-07-05T08:15:09.390Z",
+          "updatedAt": "2026-07-07T12:34:35.692Z",
           "coverage": "30/30",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -149,7 +156,7 @@
       "title": "Reference shelf",
       "status": "ok",
       "count": 29,
-      "updated": "2026-07-05",
+      "updated": "2026-07-07",
       "changed": true,
       "sources": [
         {
@@ -157,7 +164,7 @@
           "source": "manual",
           "status": "ok",
           "count": 29,
-          "updatedAt": "2026-07-05T08:15:10.623Z",
+          "updatedAt": "2026-07-07T12:34:37.066Z",
           "coverage": "29/29",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -175,7 +182,7 @@
     "modules": 4,
     "sources": 6,
     "items": 107,
-    "status": "ok",
-    "errors": 0
+    "status": "partial",
+    "errors": 1
   }
 }
