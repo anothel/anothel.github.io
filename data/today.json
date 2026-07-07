@@ -1,11 +1,11 @@
 {
   "updated": "2026-07-07",
-  "generatedAt": "2026-07-07T12:40:08.964Z",
+  "generatedAt": "2026-07-07T22:21:45.879Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-07-07T12:40:08.964Z"
+    "updatedAt": "2026-07-07T22:21:45.879Z"
   },
   "sections": [
     {
@@ -26,8 +26,8 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
             "Agent skills reference for reusable tool instructions.",
-            "159K stars from GitHub",
-            "159K stars / 18.8K forks"
+            "159.2K stars from GitHub",
+            "159.2K stars / 18.8K forks"
           ],
           "action": "Open the source now, then decide whether to save it.",
           "url": "https://github.com/anthropics/skills",
@@ -145,8 +145,8 @@
           "reason": "Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
             "Agent skills reference for reusable tool instructions.",
-            "86K stars from GitHub",
-            "86K stars / 4.8K forks"
+            "86.2K stars from GitHub",
+            "86.2K stars / 4.8K forks"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/JuliusBrussee/caveman",
@@ -169,16 +169,16 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "159.5K stars",
+          "metric": "159.8K stars",
           "reason": "Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
             "Agent skills reference for reusable tool instructions.",
-            "159.5K stars from GitHub",
+            "159.8K stars from GitHub",
             "engineering workflow skills"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/mattpocock/skills",
-          "rawScore": 159450,
+          "rawScore": 159762,
           "qualityScore": 100,
           "score": 83,
           "sources": [
@@ -229,8 +229,8 @@
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
             "Coding-agent ecosystem signal with practical workflow value.",
-            "226.8K stars from GitHub",
-            "226.8K stars / 34.7K forks"
+            "227K stars from GitHub",
+            "227K stars / 34.7K forks"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/affaan-m/ECC",
@@ -253,16 +253,16 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Workflow automation",
-          "metric": "195.5K stars",
+          "metric": "195.6K stars",
           "reason": "Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
             "Coding-agent ecosystem signal with practical workflow value.",
-            "195.5K stars from GitHub",
+            "195.6K stars from GitHub",
             "workflow automation"
           ],
           "action": "Skim the source and save it only if it changes what to watch next.",
           "url": "https://github.com/n8n-io/n8n",
-          "rawScore": 195504,
+          "rawScore": 195558,
           "qualityScore": 100,
           "score": 85,
           "sources": [

@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-07",
-  "generatedAt": "2026-07-07T12:40:06.462Z",
+  "generatedAt": "2026-07-07T22:21:42.368Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-07-07T12:40:06.462Z"
+      "updatedAt": "2026-07-07T22:21:42.368Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-07-07T12:40:06.462Z"
+      "updatedAt": "2026-07-07T22:21:42.368Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 15,
       "emitted": 8,
       "coverage": "8/15",
-      "updatedAt": "2026-07-07T12:40:06.462Z"
+      "updatedAt": "2026-07-07T22:21:42.368Z"
     }
   ],
   "items": [
@@ -53,7 +53,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "226.8K stars",
+      "velocity": "227K stars",
       "signal": "34.7K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
@@ -75,7 +75,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "183.2K stars",
+      "velocity": "183.3K stars",
       "signal": "22.7K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
@@ -97,7 +97,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "159K stars",
+      "velocity": "159.2K stars",
       "signal": "18.8K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
@@ -109,7 +109,7 @@
       "category": "AI evals",
       "score": 100,
       "velocity": "10.4K stars",
-      "signal": "958 forks",
+      "signal": "960 forks",
       "url": "https://github.com/Arize-ai/phoenix",
       "summary": "AI Observability & Evaluation"
     },
@@ -141,7 +141,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "114.3K stars",
+      "velocity": "114.4K stars",
       "signal": "7.6K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
@@ -163,7 +163,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "86K stars",
+      "velocity": "86.2K stars",
       "signal": "4.8K forks",
       "url": "https://github.com/JuliusBrussee/caveman",
       "summary": "why use many token when few token do trick Claude Code skill that cuts 65% of tokens by talking like caveman"
@@ -236,14 +236,14 @@
     },
     {
       "rank": 19,
-      "title": "GLM 5.2 and the coming AI margin collapse",
+      "title": "Microsoft fire idTech team at Id software",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 77,
-      "velocity": "316 comments",
-      "signal": "518 points",
-      "url": "https://martinalderson.com/posts/the-upcoming-ai-margin-collapse-part-1-glm-5-2/",
-      "summary": "HN story by martinald with 316 comments."
+      "category": "Developer tools",
+      "score": 78,
+      "velocity": "440 comments",
+      "signal": "465 points",
+      "url": "https://gamefromscratch.com/microsoft-fire-idtech-team-at-id-software/",
+      "summary": "HN story by bauc with 440 comments."
     },
     {
       "rank": 20,
@@ -269,36 +269,36 @@
     },
     {
       "rank": 22,
-      "title": "Resetting Xbox",
+      "title": "OpenWrt One Open Hardware Router",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 66,
-      "velocity": "739 comments",
-      "signal": "666 points",
-      "url": "https://news.xbox.com/en-us/2026/07/06/resetting-xbox/",
-      "summary": "HN story by dijksterhuis with 739 comments."
+      "score": 60,
+      "velocity": "301 comments",
+      "signal": "793 points",
+      "url": "https://openwrt.org/toh/openwrt/one",
+      "summary": "HN story by peter_d_sherman with 301 comments."
     },
     {
       "rank": 23,
-      "title": "AMD Ryzen AI Halo $4k AI Dev Kit",
+      "title": "The Art of Computer Programming by Donald E. Knuth",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 63,
-      "velocity": "232 comments",
-      "signal": "346 points",
-      "url": "https://www.lttlabs.com/articles/2026/07/06/amd-ryzen-ai-halo",
-      "summary": "HN story by LabsLucas with 232 comments."
+      "category": "Developer tools",
+      "score": 48,
+      "velocity": "52 comments",
+      "signal": "197 points",
+      "url": "https://www-cs-faculty.stanford.edu/~knuth/taocp.html",
+      "summary": "HN story by archargelod with 52 comments."
     },
     {
       "rank": 24,
-      "title": "Learning to code is still worthwhile",
+      "title": "StreetComplete: Fixing OpenStreetMap, one tiny quest at a time",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 57,
-      "velocity": "234 comments",
-      "signal": "244 points",
-      "url": "https://stevekrouse.com/learn-to-code",
-      "summary": "HN story by stevekrouse with 234 comments."
+      "score": 45,
+      "velocity": "153 comments",
+      "signal": "634 points",
+      "url": "https://streetcomplete.app/",
+      "summary": "HN story by kls0e with 153 comments."
     }
   ]
 }
