@@ -54,15 +54,22 @@ export function collectSourceRows(manifest, datasets, options = {}) {
             }];
         }
 
-        return sources.map((source) => ({
+        return sources.map((source) => {
+            const freshness = globalThis.DataHealth.freshnessForSource(source, options.today);
+            return {
             module: module.title,
             moduleRoute: module.route,
             source: source.name || "unknown",
             status: source.status || "unknown",
             count: source.count || 0,
             updated: sourceUpdated(source),
+            lastSuccessfulUpdate: freshness.lastSuccessfulUpdate,
+            ageDays: freshness.ageDays,
+            freshnessState: freshness.state,
+            staleReason: freshness.staleReason,
             detail: globalThis.DataHealth.sourceDetail(source, options.today)
-        }));
+            };
+        });
     });
 }
 
@@ -102,7 +109,7 @@ export function renderStatusSummary(summary) {
 
 export function renderSourceRows(rows, base = "") {
     return rows.map((row) => `
-        <a class="status-row status-${escapeHtml(row.status)}" href="${safeHref(`${base}${row.moduleRoute}`)}">
+        <a class="status-row status-${escapeHtml(row.status)}" href="${safeHref(`${base}${row.moduleRoute}`)}" data-freshness-state="${escapeHtml(row.freshnessState || "unknown")}" data-age-days="${escapeHtml(row.ageDays ?? "")}" data-last-successful-update="${escapeHtml(row.lastSuccessfulUpdate || "")}" data-stale-reason="${escapeHtml(row.staleReason || "")}">
             <span>${escapeHtml(row.module)}</span>
             <strong>${escapeHtml(row.source)}</strong>
             <span>${escapeHtml(row.status)}</span>
@@ -122,14 +129,8 @@ function reportContext(report) {
     ].filter(Boolean).join(" / ") || "No run context recorded.";
 }
 
-function sourceFreshness(report, source) {
-    return globalThis.DataHealth?.freshnessText
-        ? globalThis.DataHealth.freshnessText({ status: source.status, updatedAt: source.updatedAt || source.updated }, report.generatedAt)
-        : "";
-}
-
 function isStaleSource(report, source) {
-    return source.status === "ok" && sourceFreshness(report, source).startsWith("Stale -");
+    return source.status === "ok" && globalThis.DataHealth.freshnessForSource(source, report.generatedAt).state === "stale";
 }
 
 function sourceNeedsAttention(report, source) {

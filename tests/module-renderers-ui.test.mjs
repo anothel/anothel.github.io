@@ -151,6 +151,6 @@ test("reference shelf renderer escapes generated text and blocks unsafe links", 
     assert.match(html, /href="#"/);
     assert.match(html, /&lt;script&gt;alert\(&quot;link&quot;\)&lt;\/script&gt;/);
     assert.match(html, /bad &quot;summary&quot;/);
-    assert.equal(elements["[data-data-mode]"].textContent, "Source health ok. Data date 2026-06-16. No recovery needed.");
+    assert.equal(elements["[data-data-mode]"].textContent, "Source health ok. Data age: 1 unknown.");
     assert.match(html, /status-ok/);
 });

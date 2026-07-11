@@ -6,6 +6,8 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Added deterministic documentation checks for internal Markdown links, repository paths, npm scripts, stale architecture labels, and required architecture statements.
+- Aligned architecture, deployment, development, IA, roadmap, data, release, and security docs with the completed Astro migration and current React-island/build workflow.
 - Ran 2026-07-07 token-backed publish-health refresh; GitHub trends recovered to `ok`, all sources were `ok`, and generated data stayed at 107 items.
 - Ran 2026-07-07 unauthenticated publish-health refresh; generated data stayed at 107 items, packages/repos/links were `ok`, and GitHub trends stayed `partial` under missing `GITHUB_TOKEN` rate limits.
 - Improved Explore repeat-use clarity: active summaries now show visible count, compact filter state, saved-search apply feedback names the restored state, topic lenses explain when to open them, and partial sources say whether visible results are affected.

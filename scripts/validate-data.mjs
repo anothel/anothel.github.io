@@ -1,9 +1,13 @@
 import { spawn } from "node:child_process";
 import { readdir } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { dataFiles, printDiagnostics, validateDataFiles } from "./data-contract.mjs";
 
 export const checkTargets = [
     "scripts/update-all.mjs",
+    "scripts/check-docs.mjs",
+    "scripts/check-dist.mjs",
+    "scripts/data-contract.mjs",
     "scripts/validate-data.mjs",
     "scripts/signal-taxonomy.mjs",
     "scripts/watchlist-governance.mjs",
@@ -60,8 +64,16 @@ export function runCommand(command, args, options = {}) {
     });
 }
 
-export async function runValidation(runner = runCommand) {
+export async function runValidation(runner = runCommand, options = {}) {
     const testFiles = await listTestFiles();
+    if (!options.skipData) {
+        const dataResult = await validateDataFiles();
+
+        printDiagnostics(dataResult);
+        if (dataResult.errors.length > 0) {
+            throw new Error(`data validation failed with ${dataResult.errors.length} error(s)`);
+        }
+    }
 
     await runner(process.execPath, ["--test", ...testFiles], { label: "tests" });
 
@@ -71,13 +83,20 @@ export async function runValidation(runner = runCommand) {
 }
 
 async function main() {
-    if (process.argv.includes("--list")) {
-        const testFiles = await listTestFiles();
-        console.log(["# tests", ...testFiles, "# syntax", ...checkTargets].join("\n"));
+    if (process.argv.includes("--data-only")) {
+        const dataResult = await validateDataFiles();
+        printDiagnostics(dataResult);
+        if (dataResult.errors.length > 0) process.exitCode = 1;
         return;
     }
 
-    await runValidation();
+    if (process.argv.includes("--list")) {
+        const testFiles = await listTestFiles();
+        console.log(["# data", ...dataFiles, "# tests", ...testFiles, "# syntax", ...checkTargets].join("\n"));
+        return;
+    }
+
+    await runValidation(runCommand, { skipData: process.argv.includes("--skip-data") });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

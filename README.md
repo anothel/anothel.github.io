@@ -2,141 +2,108 @@
 
 Static-first personal signal dashboard for deciding what technical signal to open next.
 
-The site gathers AI engineering and developer-workflow signals from Hacker News, GitHub, npm, and checked-in references. It ships as plain HTML, CSS, JavaScript, and checked-in JSON on GitHub Pages.
+This repository is an Astro static site deployed to GitHub Pages. Astro generates routes and shared layout/components; React is limited to hydrated islands on Explore and Review. It is not a React SPA. Checked-in `data/*.json` files are the build-time data contract.
 
 ## Start Here
 
-```powershell
-npm run serve
-npm run check
-```
-
-Then open `http://127.0.0.1:58117/`.
-
-If PowerShell blocks `npm.ps1`, use `npm.cmd run check`.
-
-Use `docs/ROADMAP.md` for next work. Keep completed work out of the roadmap.
-
-## Project Docs
-
-- `docs/ROADMAP.md`: future work queue, decision metrics, deferred boundaries.
-- `docs/IA.md`: product sentence, route jobs, vocabulary, completed information-architecture decisions.
-- `docs/ARCHITECTURE.md`: static architecture and framework PoC gate.
-- `docs/SIGNAL_SCHEMA.md`: normalized Signal Schema v2 contract.
-- `docs/SOURCE_GOVERNANCE.md`: source, watchlist, partial, and fallback rules.
-- `docs/THREAT_MODEL.md`: static-site threat model and current controls.
-- `docs/RELEASE_CHECKLIST.md`: release and generated-data review checklist.
-- `SECURITY.md`: vulnerability reporting and security posture.
-- `CONTRIBUTING.md`: local workflow and change rules.
-- `CHANGELOG.md`: user-visible and operations-visible changes.
-
-## Runtime Surface
-
-| Area | Files | Job |
-|---|---|---|
-| Decision | `index.html`, `today/index.html` | Open-now hub and generated priority brief. |
-| Discovery | `explore/index.html`, `topics/*`, `notes/index.html` | Search, filter, save, and inspect focused themes. |
-| Trust / state | `review/index.html`, `status/index.html` | Local saved queue and source health. |
-| Source detail | `trends/index.html`, `packages/index.html`, `repos/index.html`, `links/index.html` | Inspect one source family or reference shelf. |
-| Data | `data/*.json` | Checked-in source snapshots, manifest, report, watchlists, and `data/signal-policy.json` for Today and Explore scoring policy. |
-| Client JS | `js/*.js` | Page renderers plus shared safe DOM, data health, local state, signal schema. |
-| Refresh scripts | `scripts/update-*.mjs`, `scripts/report-refresh.mjs` | Generate data, reports, and no-JS static fallbacks. |
-| Tests | `tests/*.test.mjs` | Data, UI renderer, workflow, static fallback, and governance checks. |
-
-## Local Preview
-
-Use the local static server so nested routes and JSON fetches match GitHub Pages:
+Requires Node.js 22.12.0 or newer.
 
 ```powershell
-node scripts/serve.mjs
+npm ci
+npm run build
+npm run preview
 ```
 
-## Data Updates
+Open `http://127.0.0.1:4321/`. `npm run preview` serves the current `dist/` build; rebuild after source or data changes.
 
-Run the full local refresh in the same order as GitHub Actions:
-
-```powershell
-$env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
-npm run update:data
-npm run check
-```
-
-`GITHUB_TOKEN` is optional for local runs, but unauthenticated GitHub API calls can stay `partial` or `rateLimited`. `node scripts/update-all.mjs` warns when it is missing.
-
-The full refresh order is:
-
-1. `node scripts/update-trends.mjs`
-2. `node scripts/update-packages.mjs`
-3. `node scripts/update-repos.mjs`
-4. `node scripts/update-links.mjs`
-5. `node scripts/update-today.mjs`
-6. `node scripts/update-manifest.mjs`
-7. `node scripts/report-refresh.mjs`
-8. `node scripts/update-static-fallbacks.mjs`
-
-Use individual updater scripts only for focused debugging. Use `update-all` before committing generated data so Today, Manifest, refresh-report, and static fallback pages stay aligned.
-
-Equivalent direct commands remain:
-
-```powershell
-node scripts/update-all.mjs
-node scripts/validate-data.mjs
-```
-
-## Data Refresh Automation
-
-`.github/workflows/update-trends.yml` keeps generated data warm. The workflow name is `Update data`; the file name is legacy.
-
-- Manual refresh: `workflow_dispatch`.
-- Manual note: `reason` input appears in the refresh report.
-- Scheduled refresh: `schedule` runs `17 21 * * *` UTC daily.
-- Auth: GitHub API calls use `GITHUB_TOKEN` from workflow secrets.
-- Scope: generated `data/*.json` files and refreshed static fallback pages are committed.
-- Safety: `concurrency` prevents overlapping data refresh jobs, updater logs are grouped, and `node scripts/validate-data.mjs` runs before commit.
-- Run summary: each workflow writes GitHub Step Summary, commits `data/refresh-report.json`, and uploads a `refresh-report` artifact.
-- Failure model: source fetch failures are stored as `error` or `partial` when useful rows remain. Empty full refreshes reuse stale but safe previous data where supported.
-- Fallback markers: source metadata uses `fallbackUsed`, `staleButSafe`, `fallbackReason`, and `rateLimited` when applicable. Status and refresh-report expose those markers.
-
-## Verification
-
-Primary check:
+Primary verification:
 
 ```powershell
 npm run check
 git diff --check
 ```
 
-Focused checks used often:
+If PowerShell blocks `npm.ps1`, use `npm.cmd`, for example `npm.cmd run check`.
+
+## Architecture
+
+- `src/pages/`: Astro route entry points. Nine primary routes are implemented directly in Astro.
+- `src/components/`: shared Astro layout/presentation components plus `ExploreIsland.jsx` and `ReviewIsland.jsx`.
+- `src/pages/[...legacy].ts`: build-time pass-through for existing Notes, topic, and 404 HTML routes not yet converted to Astro components.
+- `data/*.json`: checked-in source snapshots, manifest, refresh report, watchlists, Today brief, and scoring policy.
+- `scripts/`: data generation, contract validation, static fallback generation, and build-output checks.
+- `js/`: browser behavior reused by hydrated islands and preserved legacy pages.
+- `dist/`: ignored Astro build output.
+
+Only Explore and Review hydrate React, both with `client:load`. Other primary routes render static Astro HTML. Useful initial Explore content and Review guidance exist before client behavior loads; legacy topic/Notes routes preserve checked-in no-JS HTML.
+
+See [Architecture](docs/ARCHITECTURE.md), [Deployment](docs/DEPLOYMENT.md), and [Contributing](CONTRIBUTING.md) for canonical details.
+
+## Routes
+
+| Route | Job |
+|---|---|
+| `/` | Open-now hub, priority signals, trust summary, and local saved-count summary. |
+| `/today/` | Generated priority brief with reasons and next actions. |
+| `/explore/` | Cross-source search, filters, saved searches, and save actions. |
+| `/review/` | Browser-local saved queue and workflow state. |
+| `/status/` | Data completeness, freshness, validation, and recovery evidence. |
+| `/trends/` | Ranked movement across Hacker News, GitHub, and npm. |
+| `/packages/` | npm package watchlist. |
+| `/repos/` | GitHub repository watchlist. |
+| `/links/` | Curated reference shelf. |
+
+Route ownership and intentional overlaps are documented in [Information Architecture](docs/IA.md).
+
+## Data
+
+`data/*.json` is the source contract consumed by Astro builds and browser behavior. `data/watchlists.json` owns refresh inputs; `npm run update:data` runs all updater scripts, produces module snapshots and Today, updates manifest/report metadata, then refreshes legacy static fallbacks.
 
 ```powershell
-node scripts/validate-data.mjs
-node --test tests/ops-docs.test.mjs
-node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs
-node --test tests/package-data.test.mjs tests/status-ui.test.mjs
-node --check scripts/update-all.mjs
-node --check scripts/validate-data.mjs
-node --check scripts/report-refresh.mjs
+$env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
+npm run update:data
+npm run validate:data
+npm run check
 ```
 
-## Publishing
+Refreshes use external APIs. `GITHUB_TOKEN` is optional, but missing authentication can leave GitHub sources `partial` or `rateLimited`. Do not run live refresh merely to validate a code or docs change.
 
-This repo uses dated changelog entries and normal GitHub Pages publishes, not release tags yet.
+Validation commands:
 
-Push checked-in HTML, CSS, JavaScript, JSON, and docs to the GitHub Pages branch configured for this repository.
+- `npm run validate:data`: focused `data/*.json` contract validation.
+- `npm run check:docs`: deterministic internal Markdown links, repository paths, npm scripts, and architecture-label checks; external URLs are not requested.
+- `npm run validate`: data validation, Node tests, and syntax checks.
+- `npm run check`: data/documentation validation, Astro build, `dist/` checks, repository tests/syntax checks, and Playwright.
 
-Do not publish a refresh result if `data/manifest.json`, `data/refresh-report.json`, Today data, or static fallback pages are out of sync. Run `node scripts/validate-data.mjs` first.
+Timestamp, freshness, field, and score semantics are canonical in [Signal Schema v2](docs/SIGNAL_SCHEMA.md). Repository JSON uses `generatedAt` (camelCase), not `generated_at`.
+
+## Automation
+
+- `.github/workflows/ci.yml`: read-only CI on pull requests and pushes to `main`; installs Node/Chromium and runs `npm run check` plus `git diff --check`.
+- `.github/workflows/update-trends.yml`: scheduled/manual data refresh; runs `node scripts/update-all.mjs`, validates output, commits checked-in data and legacy fallback pages.
+- `.github/workflows/deploy-pages.yml`: builds and validates `dist/`, deploys only that artifact to GitHub Pages, and verifies production routes.
+
+Pages must use `Settings -> Pages -> Source -> GitHub Actions`. See [Deployment](docs/DEPLOYMENT.md).
+
+## Product Constraints
+
+- No backend or server runtime.
+- No database, account, login, or cloud sync.
+- Review and saved-search state stays in browser `localStorage`; JSON import/export provides local portability.
+- Keep useful static/no-JS output where practical.
+- Keep React limited to justified interactive islands; do not turn the site into a full React SPA.
+
+## Project Docs
+
+- [Architecture](docs/ARCHITECTURE.md): current Astro/React-island design and decision record.
+- [Deployment](docs/DEPLOYMENT.md): build output, Pages requirements, workflows, and local verification.
+- [Information Architecture](docs/IA.md): route roles, navigation, and intentional overlaps.
+- [Roadmap](docs/ROADMAP.md): completed migration summary, current stabilization, and future triggers.
+- [Signal Schema v2](docs/SIGNAL_SCHEMA.md): data, timestamps, freshness, and scoring.
+- [Source Governance](docs/SOURCE_GOVERNANCE.md): watchlist, partial, and fallback policy.
+- [Threat Model](docs/THREAT_MODEL.md), [Security Policy](SECURITY.md), and [Release Checklist](docs/RELEASE_CHECKLIST.md).
+- [Accessibility Testing](docs/ACCESSIBILITY_TESTING.md), [Durable Decisions](docs/DECISIONS.md), and [Changelog](CHANGELOG.md).
 
 ## License and Reuse
 
 This repository is source-available with all rights reserved unless otherwise noted in `LICENSE`. The current `LICENSE` is not an open-source license.
-
-## Boundaries
-
-- No backend, account, sync, or database.
-- No framework unless the architecture gate records a measured vanilla JavaScript blocker.
-- No portfolio, resume, worklog, or company-history route while the product remains a signal dashboard.
-- Local saved review state stays browser-only.
-
-## Notes
-
-The old SB Admin template files were removed. This site now uses plain HTML and CSS.

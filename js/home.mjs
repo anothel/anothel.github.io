@@ -67,24 +67,6 @@ function healthLabel(counts) {
     ].filter(Boolean).join(" / ") || "0 ok";
 }
 
-function ageDays(updated, today = new Date()) {
-    const updatedDate = String(updated || "").match(/^\d{4}-\d{2}-\d{2}/)?.[0];
-    const todayDate = (today instanceof Date ? today.toISOString() : String(today || "")).match(/^\d{4}-\d{2}-\d{2}/)?.[0];
-    if (!updatedDate || !todayDate) return null;
-
-    const diff = Date.parse(`${todayDate}T00:00:00.000Z`) - Date.parse(`${updatedDate}T00:00:00.000Z`);
-    if (!Number.isFinite(diff)) return null;
-    return Math.max(0, Math.floor(diff / 86400000));
-}
-
-function dataState(updated, today) {
-    const age = ageDays(updated, today);
-    if (age === null) return "unknown";
-    if (age <= 1) return "Fresh";
-    if (age <= 3) return "Aging";
-    return "Stale";
-}
-
 function safeCount(value) {
     const count = Number(value);
     return Number.isFinite(count) && count > 0 ? Math.floor(count) : 0;
@@ -184,6 +166,8 @@ export function buildHomeOverview(manifest, options = {}) {
     const modules = manifest.modules || [];
     const counts = statusCounts(modules);
     const updated = modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || "-";
+    const sourceMeta = options.sourceMeta || modules.map((module) => ({ status: module.status }));
+    const trust = globalThis.DataHealth.trustState(sourceMeta, { today: options.today });
 
     return {
         totalItems: modules.reduce((sum, module) => sum + module.count, 0),
@@ -192,9 +176,9 @@ export function buildHomeOverview(manifest, options = {}) {
         errorModules: counts.error,
         totalModules: modules.length,
         updated,
-        healthLabel: healthLabel(counts),
-        dataState: dataState(updated, options.today),
-        recoveryText: globalThis.DataHealth.dataModeText(modules.map((module) => ({ status: module.status })), { updated })
+        healthLabel: trust.pipelineStatus,
+        dataState: trust.freshness,
+        recoveryText: globalThis.DataHealth.dataModeText(sourceMeta, { updated, today: options.today })
     };
 }
 
@@ -388,8 +372,12 @@ export function renderTopicMovements(movements) {
     `).join("");
 }
 
-function applyOverview(root, manifest) {
-    const overview = buildHomeOverview(manifest);
+function applyOverview(root, manifest, dataByModule) {
+    const sourceMeta = Object.values(dataByModule).flatMap((dataset) => {
+        if (Array.isArray(dataset?.sourceMeta)) return dataset.sourceMeta;
+        return dataset?.sourceMeta ? [dataset.sourceMeta] : [];
+    });
+    const overview = buildHomeOverview(manifest, { sourceMeta });
     const total = root.querySelector("[data-home-total]");
     const live = root.querySelector("[data-home-live]");
     const updated = root.querySelector("[data-home-updated]");
@@ -480,7 +468,7 @@ async function init() {
         const topicMovements = sortTopicMovementsByPins(buildTopicMovements(dataByModule), pinnedTopics);
 
         if (manifest) {
-            applyOverview(document, manifest);
+            applyOverview(document, manifest, dataByModule);
             applyRoutes(document, manifest);
         }
         if (today) {

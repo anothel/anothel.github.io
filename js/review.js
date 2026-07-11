@@ -328,6 +328,7 @@
             detail: document.querySelector("[data-review-detail]"),
             exportButton: document.querySelector("[data-review-export]"),
             exportMarkdownButton: document.querySelector("[data-review-export-markdown]"),
+            clearButton: document.querySelector("[data-review-clear]"),
             importButton: document.querySelector("[data-review-import]"),
             importText: document.querySelector("[data-review-import-text]"),
             importPasteButton: document.querySelector("[data-review-import-paste]"),
@@ -379,6 +380,18 @@
                 link.click();
                 URL.revokeObjectURL(url);
                 if (els.portabilityStatus) els.portabilityStatus.textContent = "Review Markdown exported.";
+            });
+        }
+
+        if (els.clearButton && els.clearButton.dataset.reviewClearBound !== "true") {
+            els.clearButton.dataset.reviewClearBound = "true";
+            els.clearButton.addEventListener("click", () => {
+                state.savedIds = store.clear();
+                state.savedRecords = store.recordsById();
+                state.selectedId = "";
+                state.statusFilter = "all";
+                if (els.portabilityStatus) els.portabilityStatus.textContent = "Review queue cleared.";
+                render(els, store);
             });
         }
 

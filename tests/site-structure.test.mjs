@@ -130,7 +130,9 @@ test("desktop layout uses a wider workbench instead of stretched mobile stacks",
 
     assert.match(explore, /<div class="explore-workbench">/);
     assert.match(styles, /\.shell\s*{[^}]*grid-template-columns: 300px minmax\(0, 1fr\)/s);
-    assert.match(styles, /\.shell\s*{[^}]*width: min\(100% - 56px, 1440px\)/s);
+    assert.match(styles, /--shell-gutter: 56px/);
+    assert.match(styles, /--shell-max: 1440px/);
+    assert.match(styles, /\.shell\s*{[^}]*width: min\(100% - var\(--shell-gutter\), var\(--shell-max\)\)/s);
     assert.match(styles, /\.explore-command-bar\s*{[^}]*background: color-mix\(in srgb, var\(--panel\) 86%, var\(--bg\)\)/s);
     assert.match(styles, /\.explore-filter-board\s*{[^}]*grid-template-columns: minmax\(220px, 0\.32fr\) minmax\(0, 1fr\)/s);
     assert.match(styles, /\.explore-saved-tools\s*{[^}]*align-content: start/s);
@@ -574,7 +576,7 @@ test("root page exposes command center slots", () => {
     assert.match(styles, /\.home-module-board\s*{[^}]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/s);
     assert.match(styles, /\.project-list\s*{[^}]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/s);
     assert.match(styles, /\.home-priority-panel \.section-heading\s*{[^}]*align-items: start/s);
-    assert.match(styles, /\.home-priority-panel \.section-heading > a\s*{[^}]*border: 1px solid var\(--line\)/s);
+    assert.match(styles, /\.home-priority-panel \.section-heading > a\s*{[^}]*border: var\(--surface-border\)/s);
 });
 
 test("module pages expose data health strips", () => {

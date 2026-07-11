@@ -1,0 +1,34 @@
+---
+import manifest from "../../../data/manifest.json";
+import trends from "../../../data/trends.json";
+import packages from "../../../data/packages.json";
+import repos from "../../../data/repos.json";
+import links from "../../../data/links.json";
+import signalPolicy from "../../../data/signal-policy.json";
+import report from "../../../data/refresh-report.json";
+import AppShell from "../../components/AppShell.astro";
+import HeroHeader from "../../components/HeroHeader.astro";
+import ExploreIsland from "../../components/ExploreIsland.jsx";
+import { buildExploreFallback } from "../../lib/explore-static.js";
+
+const fallback = buildExploreFallback({
+    manifest,
+    trends,
+    packages,
+    repos,
+    links,
+    signalPolicy,
+    generatedAt: report.generatedAt || manifest.generatedAt
+});
+---
+<AppShell title="Explore - anothel" description="Search and save tracked technical signals across HN, GitHub, npm, and references." canonicalPath="/explore/" stylesheetHref="../css/site.css">
+    <div class="shell hub-shell explore-shell">
+        <HeroHeader eyebrow="Cross-module search" title="Explore tracked signals." current="Explore" prefix="../">
+            <Fragment slot="stamp">Search, filter, save</Fragment>
+        </HeroHeader>
+
+        <main class="explore-main">
+            <ExploreIsland client:load prefix="../" fallback={fallback} />
+        </main>
+    </div>
+</AppShell>

@@ -2,13 +2,28 @@
   "name": "anothel.github.io",
   "private": true,
   "engines": {
-    "node": ">=20"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "serve": "node scripts/serve.mjs",
     "validate": "node scripts/validate-data.mjs",
+    "validate:data": "node scripts/data-contract.mjs",
+    "build": "astro build",
+    "preview": "astro preview --host 127.0.0.1 --port 4321",
+    "check:docs": "node scripts/check-docs.mjs",
+    "check:dist": "node scripts/check-dist.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node scripts/validate-data.mjs",
+    "test:e2e": "npm run build && playwright test",
+    "test:e2e:run": "playwright test",
+    "check": "npm run validate:data && npm run check:docs && npm run build && npm run check:dist && node scripts/validate-data.mjs --skip-data && npm run test:e2e:run",
     "update:data": "node scripts/update-all.mjs"
+  },
+  "devDependencies": {
+    "@astrojs/react": "^6.0.1",
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.61.1",
+    "astro": "^6.4.8",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   }
 }

@@ -47,6 +47,10 @@ test("collectSourceRows expands module source metadata into rows", () => {
             status: "ok",
             count: 6,
             updated: "2026-06-20T00:00:00.000Z",
+            lastSuccessfulUpdate: "2026-06-20T00:00:00.000Z",
+            ageDays: 4,
+            freshnessState: "stale",
+            staleReason: "older than 3 days",
             detail: "Stale - 4 days old / retry data refresh"
         },
         {
@@ -56,7 +60,11 @@ test("collectSourceRows expands module source metadata into rows", () => {
             status: "error",
             count: 0,
             updated: "-",
-            detail: "Error - no current timestamp / rate limited / retry data refresh"
+            lastSuccessfulUpdate: null,
+            ageDays: null,
+            freshnessState: "unavailable",
+            staleReason: "rate limited",
+            detail: "Unavailable - no usable source data / rate limited / retry data refresh"
         },
         {
             module: "Package watchlist",
@@ -65,6 +73,10 @@ test("collectSourceRows expands module source metadata into rows", () => {
             status: "ok",
             count: 4,
             updated: "2026-06-19T00:00:00.000Z",
+            lastSuccessfulUpdate: "2026-06-19T00:00:00.000Z",
+            ageDays: 5,
+            freshnessState: "stale",
+            staleReason: "older than 3 days",
             detail: "Stale - 5 days old / retry data refresh"
         }
     ]);
@@ -110,7 +122,7 @@ test("status rows and summary surface fallback safety detail", () => {
                 fallbackUsed: true,
                 staleButSafe: true,
                 fallbackReason: "No package rows fetched",
-                previousUpdated: "2026-06-19",
+                previousUpdated: "2026-06-19T00:00:00.000Z",
                 rateLimited: true
             }
         }
@@ -129,7 +141,7 @@ test("status rows and summary surface fallback safety detail", () => {
     };
     const rows = collectSourceRows(fallbackManifest, fallbackDatasets);
 
-    assert.equal(rows[0].detail, "Fallback - using 2026-06-19 data / using fallback / previous data kept / rate limited / No package rows fetched / previous refresh 2026-06-19");
+    assert.equal(rows[0].detail, "Fallback - using 2026-06-19 data (stale) / using fallback / previous data kept / rate limited / No package rows fetched / previous refresh 2026-06-19");
     assert.match(renderSourceRows(rows), /using fallback \/ previous data kept \/ rate limited/);
     assert.equal(buildStatusSummary(fallbackManifest, fallbackDatasets).healthLabel, "1 fallback");
 });
@@ -188,7 +200,7 @@ test("refresh run partial attention reuses source detail recovery copy", () => {
                     status: "partial",
                     count: 25,
                     updatedAt: "2026-06-29T09:47:12.791Z",
-                    previousUpdated: "2026-06-29",
+                    previousUpdated: "2026-06-29T00:00:00.000Z",
                     rateLimited: true,
                     errors: ["n8n-workflow: 429 Too Many Requests: https://api.npmjs.org/downloads/point/last-week/n8n-workflow"]
                 }]
@@ -244,12 +256,12 @@ test("refresh run fallback attention keeps previous data context", () => {
                     staleButSafe: true,
                     rateLimited: true,
                     fallbackReason: "No package rows fetched",
-                    previousUpdated: "2026-06-19"
+                    previousUpdated: "2026-06-19T00:00:00.000Z"
                 }]
             }
         ]
     });
 
     assert.match(html, /Package watchlist: npm fallback/);
-    assert.match(html, /npm Fallback - using 2026-06-19 data \/ using fallback \/ previous data kept \/ rate limited \/ No package rows fetched \/ previous refresh 2026-06-19/);
+    assert.match(html, /npm Fallback - using 2026-06-19 data \(stale\) \/ using fallback \/ previous data kept \/ rate limited \/ No package rows fetched \/ previous refresh 2026-06-19/);
 });

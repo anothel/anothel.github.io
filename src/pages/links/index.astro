@@ -1,0 +1,46 @@
+---
+import data from "../../../data/links.json";
+import AppShell from "../../components/AppShell.astro";
+import HeroHeader from "../../components/HeroHeader.astro";
+import SignalCard from "../../components/SignalCard.astro";
+import StatCard from "../../components/StatCard.astro";
+import DataHealthPanel from "../../components/DataHealthPanel.astro";
+import { topCategory, linkSignal, externalRel } from "../../lib/site-data.js";
+
+const links = data.links || [];
+---
+<AppShell title="Reference shelf - anothel" description="Curated reference shelf for docs, APIs, and durable tools." canonicalPath="/links/" stylesheetHref="../css/site.css">
+    <div class="shell module-shell">
+        <HeroHeader eyebrow="Reference shelf" title="References worth keeping close." current="Reference shelf" prefix="../">
+            <Fragment slot="stamp">Data date <span data-updated>{data.updated}</span></Fragment>
+        </HeroHeader>
+
+        <main class="module-main">
+            <section class="module-overview-grid" aria-label="Module overview">
+                <section class="stats-grid" aria-label="Reference stats">
+                    <StatCard label="References" value={links.length} />
+                    <StatCard label="Top category" value={topCategory(links)} />
+                    <StatCard label="Data status" value={data.sourceMeta?.status || "unknown"} />
+                </section>
+                <DataHealthPanel id="links" title="Data health" sourceMeta={data.sourceMeta} updated={data.updated} compact />
+            </section>
+
+            <section class="dashboard-grid module-primary-panel" aria-label="Reference highlights">
+                {links.slice(0, 4).map((item) => <SignalCard item={linkSignal(item)} />)}
+            </section>
+
+            <section class="link-grid module-primary-panel" aria-label="Reference links" data-link-list>
+                {links.map((link) => (
+                    <a class="link-card" href={link.url} rel={externalRel(link.url)}>
+                        <div>
+                            <span>{link.category}</span>
+                            <span>{link.kind}</span>
+                        </div>
+                        <h2>{link.title}</h2>
+                        <p>{link.summary}</p>
+                    </a>
+                ))}
+            </section>
+        </main>
+    </div>
+</AppShell>

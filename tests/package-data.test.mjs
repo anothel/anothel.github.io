@@ -303,7 +303,7 @@ test("preparePackageDataForWrite preserves previous rows for partial rate limits
     assert.equal(prepared.sourceMeta.fallbackUsed, undefined);
     assert.equal(prepared.sourceMeta.staleButSafe, undefined);
     assert.equal(prepared.sourceMeta.fallbackReason, undefined);
-    assert.equal(prepared.sourceMeta.previousUpdated, "2026-06-19");
+    assert.equal(prepared.sourceMeta.previousUpdated, "2026-06-19T00:00:00.000Z");
     assert.equal(prepared.sourceMeta.count, 2);
     assert.equal(prepared.sourceMeta.coverage, "2/2");
     assert.deepEqual(prepared.packages.map((item) => item.name), ["react", "openai"]);

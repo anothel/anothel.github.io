@@ -6,9 +6,10 @@ This repository publishes a static GitHub Pages signal dashboard.
 
 Supported security scope:
 
-- Checked-in HTML, CSS, JavaScript, and JSON.
+- Astro route/components, generated `dist/`, preserved legacy HTML, CSS, JavaScript, and checked-in JSON.
 - Data refresh scripts under `scripts/`.
 - GitHub Actions data refresh workflow.
+- npm build/test dependencies and lockfile.
 - Public rendering of external titles, summaries, URLs, source metadata, and watchlist entries.
 - Browser-only localStorage review state.
 
@@ -33,21 +34,23 @@ Use GitHub private vulnerability reporting if enabled for the repository. If it 
 ## Current Controls
 
 - Static-first deployment: no server runtime, account system, sync service, or database.
+- Astro build-time escaping plus safe URL handling in data-driven components.
 - Safe rendering helpers in `js/safe-dom.js`.
 - URL allowlist behavior for public links through `safeHref` and `setSafeLink`.
 - Source health metadata for `ok`, `partial`, `fallback`, and `error`.
 - Stale-but-safe fallback behavior for supported refresh failures.
 - localStorage state is browser-only and treated as user-controlled data.
-- `node scripts/validate-data.mjs` runs data tests and public JavaScript syntax checks.
+- `npm run check` validates data, Astro output, repository tests/syntax, accessibility, and mobile behavior.
 
 ## Security Review Triggers
 
 Run a focused security review when changing:
 
-- HTML rendering of external data.
+- Astro or browser rendering of external data.
 - Link normalization or external link attributes.
 - Watchlist ingestion.
 - Refresh scripts or workflow permissions.
+- Build dependencies, lockfile, or GitHub Pages publishing configuration.
 - localStorage schema or import/export.
 - Any public route that renders generated text.
 

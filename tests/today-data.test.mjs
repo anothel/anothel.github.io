@@ -279,24 +279,24 @@ test("renderTodayStatus explains partial and fallback generated data", () => {
     assert.equal(
         renderTodayStatus({
             updated: "2026-06-22",
-            sourceMeta: { status: "ok" },
+            sourceMeta: { status: "ok", updatedAt: "2026-06-22T00:00:00.000Z" },
             sections: [{ items: [{}, {}] }]
-        }),
-        "2 generated picks. Source health ok. Data date 2026-06-22. No recovery needed."
+        }, { today: "2026-06-22" }),
+        "2 generated picks. Pipeline status ok. Freshness fresh. Data date 2026-06-22. No recovery needed."
     );
     assert.equal(
         renderTodayStatus({
             sourceMeta: { status: "partial" },
             sections: [{ items: [{}, {}] }]
         }),
-        "2 generated picks. Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness."
+        "2 generated picks. Pipeline status partial. Freshness unknown. Check Status before trusting currentness."
     );
     assert.equal(
         renderTodayStatus({
             sourceMeta: { status: "fallback" },
             sections: []
         }),
-        "0 generated picks. Source health fallback. Previous data remains available; retry data refresh."
+        "0 generated picks. Pipeline status fallback. Freshness unknown. Check Status before trusting currentness."
     );
 });
 

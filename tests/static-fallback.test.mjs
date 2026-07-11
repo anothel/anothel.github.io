@@ -12,6 +12,7 @@ import {
     renderStartItems,
     renderTopicMovements
 } from "../js/home.mjs";
+import { renderTodayStatus } from "../js/today.mjs";
 
 function read(path) {
     return readFileSync(path, "utf8");
@@ -119,20 +120,19 @@ function dataHealth() {
 }
 
 function todayStatusText() {
-    const total = today.sections.reduce((sum, section) => sum + section.items.length, 0);
-    const status = today.sourceMeta?.status || "ok";
-
-    if (status === "fallback") return `${total} generated picks. Source health fallback. Previous data remains available; retry data refresh.`;
-    if (status === "partial") return `${total} generated picks. Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness.`;
-    if (status === "error") return `${total} generated picks from failed source refresh. Retry data refresh before trusting freshness.`;
-    return `${total} generated picks. Source health ok. Data date ${today.updated}. No recovery needed.`;
+    return renderTodayStatus({ ...today, sourceMeta: sourceMeta() });
 }
 
 function dataModeText() {
-    const health = moduleHealth();
-    if (health.includes("partial")) return "Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness.";
-    if (health.includes("fallback")) return "Source health fallback. Previous data remains available; retry data refresh.";
-    return `Source health ok. Data date ${manifest.updated}. No recovery needed.`;
+    return dataHealth().dataModeText(sourceMeta(), { updated: manifest.updated });
+}
+
+function homeDataModeText() {
+    return dataHealth().dataModeText(sourceMeta(), { updated: manifest.updated });
+}
+
+function sharedTrust() {
+    return dataHealth().trustState(sourceMeta());
 }
 
 function topicApp() {
@@ -156,13 +156,13 @@ function topicSummary(topic) {
 
 test("home static fallback matches current manifest summary", () => {
     const home = read("index.html");
-    const overview = buildHomeOverview(manifest, { today: refreshReport.generatedAt || manifest.generatedAt });
+    const overview = buildHomeOverview(manifest, { sourceMeta: sourceMeta() });
 
     assert.match(home, new RegExp(`<strong data-home-total>${moduleTotal()}</strong>`));
-    assert.match(home, new RegExp(`<strong data-home-live>${moduleHealth()}</strong>`));
+    assert.match(home, new RegExp(`<strong data-home-live>${sharedTrust().pipelineStatus}</strong>`));
     assert.match(home, new RegExp(`<strong data-home-updated>${manifest.updated}</strong>`));
     assert.match(home, new RegExp(`<strong data-home-freshness>${overview.dataState}</strong>`));
-    assert.match(home, new RegExp(`<p class="review-summary-note" data-home-recovery>${dataModeText().replaceAll(".", "\\.")}</p>`));
+    assert.match(home, new RegExp(`<p class="review-summary-note" data-home-recovery>${homeDataModeText().replaceAll(".", "\\.")}</p>`));
     for (const route of buildModuleRoutes(manifest)) {
         assert.match(home, new RegExp(`href="${escapeRegExp(route.route)}"`), route.id);
         assert.match(home, new RegExp(`<small>${route.count} items / ${route.updated} / Status ${route.status}</small>`), route.id);
@@ -217,13 +217,13 @@ test("status static fallback matches current manifest summary", () => {
 });
 
 test("home today explore and status fallbacks use one source health truth", () => {
-    assert.match(read("index.html"), new RegExp(`<strong data-home-live>${moduleHealth()}</strong>`));
+    assert.match(read("index.html"), new RegExp(`<strong data-home-live>${sharedTrust().pipelineStatus}</strong>`));
     assert.match(read("today/index.html"), new RegExp(todayStatusText().replaceAll(".", "\\.")));
     assert.match(read("status/index.html"), new RegExp(`<strong data-status-health>${sourceHealth()}</strong>`));
     assert.match(read("explore/index.html"), new RegExp(`<p data-data-mode>${dataModeText().replaceAll(".", "\\.")}</p>`));
 });
 
-test("home today status and explore freshness dates follow manifest and refresh report", () => {
+test("home today and status data dates follow manifest and refresh report", () => {
     assert.equal(today.updated, manifest.updated);
     assert.equal(refreshReport.manifestUpdated, manifest.updated);
     assert.match(read("index.html"), new RegExp(`<p class="stamp">Data date ${manifest.updated}</p>`));
@@ -231,15 +231,14 @@ test("home today status and explore freshness dates follow manifest and refresh 
     assert.match(read("status/index.html"), new RegExp(`<strong data-status-updated>${manifest.updated}</strong>`));
     assert.match(read("status/index.html"), new RegExp(`<strong data-status-fallback-generated>${escapeRegExp(refreshReport.generatedAt)}</strong>`));
     assert.match(read("status/index.html"), new RegExp(`<strong>${escapeRegExp(refreshReport.generatedAt)}</strong>`));
-    assert.match(read("explore/index.html"), new RegExp(`updated ${manifest.updated}`));
 });
 
-test("explore source cards use refresh report time for freshness detail", () => {
+test("explore source cards use the shared current freshness policy", () => {
     const html = read("explore/index.html");
     const DataHealth = dataHealth();
 
     for (const source of sourceMeta()) {
-        const detail = escapeHtml(DataHealth.sourceDetail(source, refreshReport.generatedAt));
+        const detail = escapeHtml(DataHealth.sourceDetail(source));
         assert.match(html, new RegExp(detail.replaceAll("/", "\\/")));
     }
 });

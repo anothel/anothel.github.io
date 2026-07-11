@@ -1,0 +1,55 @@
+---
+import data from "../../../data/trends.json";
+import AppShell from "../../components/AppShell.astro";
+import HeroHeader from "../../components/HeroHeader.astro";
+import SignalCard from "../../components/SignalCard.astro";
+import StatCard from "../../components/StatCard.astro";
+import DataHealthPanel from "../../components/DataHealthPanel.astro";
+import { topCategory, trendSignal, externalRel } from "../../lib/site-data.js";
+
+const items = data.items || [];
+const top = items[0];
+---
+<AppShell title="Tech Trends - anothel" description="Ranked movement with origin, category, and momentum." canonicalPath="/trends/" stylesheetHref="../css/site.css">
+    <div class="shell module-shell">
+        <HeroHeader eyebrow="Cross-source movement" title="What is moving across HN, GitHub, and npm." current="Trends" prefix="../">
+            <Fragment slot="stamp">Data date <span data-updated>{data.updated}</span></Fragment>
+        </HeroHeader>
+
+        <main class="module-main">
+            <section class="module-overview-grid" aria-label="Module overview">
+                <section class="stats-grid" aria-label="Dashboard stats">
+                    <StatCard label="Signals" value={items.length} />
+                    <StatCard label="Highest score" value={top?.score || "-"} />
+                    <StatCard label="Leading category" value={topCategory(items)} />
+                </section>
+                <DataHealthPanel id="trends" title="Source health" sourceMeta={data.sourceMeta} updated={data.updated} compact />
+            </section>
+
+            <section class="dashboard-grid module-primary-panel" aria-label="Trend cards" data-grid>
+                {items.slice(0, 8).map((item) => <SignalCard item={trendSignal(item)} />)}
+            </section>
+
+            <section class="rank-panel module-primary-panel" aria-labelledby="rank-title">
+                <div class="panel-heading">
+                    <h2 id="rank-title">Signal table</h2>
+                    <p>Ranked movement across source, category, score, and momentum.</p>
+                </div>
+                <div class="rank-head" aria-hidden="true">
+                    <span>#</span><span>Signal</span><span>Category</span><span>Origin</span><span>Score</span>
+                </div>
+                <div class="rank-list" data-table>
+                    {items.map((item) => (
+                        <a class="rank-row" href={item.url} rel={externalRel(item.url)}>
+                            <span>{item.rank}</span>
+                            <strong>{item.title}</strong>
+                            <span>{item.category}</span>
+                            <span>{item.source}</span>
+                            <span>{item.score}</span>
+                        </a>
+                    ))}
+                </div>
+            </section>
+        </main>
+    </div>
+</AppShell>

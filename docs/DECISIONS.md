@@ -1,23 +1,21 @@
-﻿# Durable Decisions
+# Durable Decisions
 
 ## Current Conclusions
 
-- This site stays static-first and trust-first: no backend, no account/sync layer, no database, and no dependency management layer in the runtime path.
-- Review and saved searches are browser-local; portability is explicit via export/import JSON, not cloud sync.
-- Source health drives trust copy and fallback behavior through the shared `DataHealth` language across Today, Home, Explore, Status, and module pages.
-- `npm` package `n8n-workflow` is retired from npm refreshes after repeated 429s; workflow automation stays covered by n8n repo/link plus Inngest, Trigger.dev, and Temporal packages.
-- Ranking quality policy remains in `data/signal-policy.json`, applied consistently across Today and Explore.
+- Astro static output owns primary routes and shared components; React is limited to Explore and Review islands. See `docs/ARCHITECTURE.md` for the decision record.
+- GitHub Pages remains the deployment target, but no checked-in workflow currently deploys `dist/`. See `docs/DEPLOYMENT.md`.
+- No backend, account/sync layer, database, server function, or full React SPA.
+- Review, saved searches, defaults, and pins remain browser-local; JSON export/import provides portability, not cloud sync.
+- `data/*.json` remains the build/data contract. Ranking policy remains in `data/signal-policy.json` and timestamp/score semantics remain in `docs/SIGNAL_SCHEMA.md`.
+- Source health and fallback behavior stay shared across decision, discovery, status, and source routes.
+- `n8n-workflow` remains retired from npm refreshes after repeated 429s; workflow automation remains covered by other repo/link/package sources.
 
 ## Decision Locations
 
-- Operational decisions and live refresh state: `docs/ROADMAP.md` and `data/refresh-report.json`.
-- Data contracts and schema rules: `docs/SIGNAL_SCHEMA.md` and `scripts/validate-data.mjs`.
-- Trust and threat posture: `docs/THREAT_MODEL.md` and `SECURITY.md`.
-
-## History
-
-- `P1 - Explore Repeat Use`: completed.
-  - Saved-search controls now include portable export/import and status feedback consistent with Review.
-  - Completed items now live in `CHANGELOG.md`, not the active Roadmap.
-- `P1 - Signal Quality`: regression watch is active when ranking drift affects top signals; scope remains policy/watchlist adjustments only when evidence appears.
-- `P2 - Trust Copy`: shared recovery and partial copy is handled through `DataHealth` and static/dynamic surfaces.
+- Architecture and revisit conditions: `docs/ARCHITECTURE.md`.
+- Deployment/build/workflows: `docs/DEPLOYMENT.md`.
+- Route jobs and overlaps: `docs/IA.md`.
+- Data contracts and scoring: `docs/SIGNAL_SCHEMA.md`.
+- Current/future triggers: `docs/ROADMAP.md`.
+- Trust and security: `docs/THREAT_MODEL.md` and `SECURITY.md`.
+- Completed work: `CHANGELOG.md`.

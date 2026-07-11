@@ -64,7 +64,7 @@ test("saved item store migrates v1 ids and normalizes missing fields", () => {
     ]);
 });
 
-test("saved item store toggles, removes, sets status, and ignores blocked storage", () => {
+test("saved item store toggles, removes, clears, sets status, and ignores blocked storage", () => {
     const state = loadLocalState();
     const storage = memoryStorage();
     const store = state.createSavedItemStore(storage, { now: () => "2026-06-24T00:00:00.000Z" });
@@ -74,6 +74,10 @@ test("saved item store toggles, removes, sets status, and ignores blocked storag
     assert.deepEqual([...store.setStatus("repos:a", "done")], ["repos:a"]);
     assert.equal(store.recordsById().get("repos:a").status, "done");
     assert.deepEqual([...store.remove("repos:a")], []);
+    store.toggle("repos:a");
+    store.toggle("repos:b");
+    assert.deepEqual([...store.clear()], []);
+    assert.deepEqual(plain(store.readRecords()), []);
 
     const blocked = state.createSavedItemStore({
         getItem() { throw new Error("blocked"); },

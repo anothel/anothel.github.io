@@ -38,6 +38,7 @@ test("validate-data discovers repository test files without shell globs", async 
 test("validate-data syntax checks data workflow scripts and public JavaScript", () => {
     for (const target of [
         "scripts/update-all.mjs",
+        "scripts/check-dist.mjs",
         "scripts/validate-data.mjs",
         "scripts/signal-taxonomy.mjs",
         "scripts/watchlist-governance.mjs",

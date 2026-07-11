@@ -1,531 +1,174 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync } from "node:fs";
 
-const checkedInRefreshReport = JSON.parse(execFileSync("git", ["show", "HEAD:data/refresh-report.json"], { encoding: "utf8" }));
-const readme = readFileSync("README.md", "utf8");
-const ia = readFileSync("docs/IA.md", "utf8");
-const roadmap = readFileSync("docs/ROADMAP.md", "utf8");
-const decisions = readFileSync("docs/DECISIONS.md", "utf8");
-const license = readFileSync("LICENSE", "utf8");
-const security = readFileSync("SECURITY.md", "utf8");
-const contributing = readFileSync("CONTRIBUTING.md", "utf8");
-const changelog = readFileSync("CHANGELOG.md", "utf8");
-const signalSchema = readFileSync("docs/SIGNAL_SCHEMA.md", "utf8");
-const sourceGovernance = readFileSync("docs/SOURCE_GOVERNANCE.md", "utf8");
-const threatModel = readFileSync("docs/THREAT_MODEL.md", "utf8");
-const releaseChecklist = readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
-const roadmapQueueHeadings = [
-    "P0 - Publish Health Refresh and Source Partial Policy",
-    "P1 - Today Ranking Diversity Guard",
-    "P2 - Static Fallback Generator Cleanup"
-];
+const read = (path) => readFileSync(path, "utf8");
+const docs = {
+    readme: read("README.md"),
+    contributing: read("CONTRIBUTING.md"),
+    architecture: read("docs/ARCHITECTURE.md"),
+    deployment: read("docs/DEPLOYMENT.md"),
+    ia: read("docs/IA.md"),
+    roadmap: read("docs/ROADMAP.md"),
+    schema: read("docs/SIGNAL_SCHEMA.md"),
+    threat: read("docs/THREAT_MODEL.md"),
+    release: read("docs/RELEASE_CHECKLIST.md")
+};
+const manifest = JSON.parse(read("package.json"));
 
-test("README explains data refresh automation for operators", () => {
-    assert.match(readme, /## Data Refresh Automation/);
-    assert.match(readme, /workflow_dispatch/);
-    assert.match(readme, /schedule/);
-    assert.match(readme, /17 21 \* \* \*/);
-    assert.match(readme, /GITHUB_TOKEN/);
-    assert.match(readme, /checked-in JSON/);
-    assert.match(readme, /partial/);
-    assert.match(readme, /refresh-report/);
-    assert.match(readme, /GitHub Step Summary/);
-    assert.match(readme, /node scripts\/validate-data\.mjs/);
-    assert.match(readme, /stale but safe/);
-    assert.match(readme, /fallbackUsed/);
-    assert.match(readme, /rateLimited/);
-    assert.match(readme, /\$env:GITHUB_TOKEN/);
-    assert.match(readme, /warns when it is missing/);
+test("active docs describe current Astro architecture, not migration intent", () => {
+    assert.match(docs.readme, /This repository is an Astro static site/);
+    assert.match(docs.architecture, /Astro builds a static|Astro static site|Astro static output/);
+    assert.match(docs.architecture, /ExploreIsland\.jsx.*client:load/s);
+    assert.match(docs.architecture, /ReviewIsland\.jsx.*client:load/s);
+    assert.match(docs.architecture, /Reject a full React SPA|Reject a full React SPA/i);
+
+    const active = [docs.readme, docs.architecture, docs.roadmap, docs.contributing].join("\n");
+    assert.doesNotMatch(active, /Astro static output is approved for future route\/layout migration/i);
+    assert.doesNotMatch(active, /^### P\d - Astro Static Build Scaffold$/m);
+    assert.doesNotMatch(active, /Add Astro in a build-chain PR before migrating pages/i);
+    assert.doesNotMatch(active, /ships as plain HTML, CSS, JavaScript/i);
+    assert.doesNotMatch(active, /site now uses plain HTML and CSS/i);
 });
 
-test("README keeps local and scheduled data update command order aligned", () => {
-    const dataUpdates = readme.slice(readme.indexOf("## Data Updates"), readme.indexOf("## Data Refresh Automation"));
-    const verification = readme.slice(readme.indexOf("## Verification"));
-
-    assert.ok(dataUpdates.indexOf("node scripts/update-all.mjs") < dataUpdates.indexOf("node scripts/validate-data.mjs"));
-    assert.match(verification, /node --check scripts\/update-all\.mjs/);
-    assert.match(verification, /node --check scripts\/validate-data\.mjs/);
-    assert.match(verification, /node --check scripts\/report-refresh\.mjs/);
-});
-
-test("IA documents current schema and freshness vocabulary", () => {
-    assert.match(ia, /Signal Schema v2 is the current normalized item contract/);
-    assert.match(ia, /Fresh.*0-1 days/s);
-    assert.match(ia, /Aging.*2-3 days/s);
-    assert.match(ia, /Stale.*more than 3 days/s);
-    assert.match(ia, /Status attention.*Stale|Stale.*Status attention/s);
-    assert.doesNotMatch(ia, /Signal schema v2[^.\n]*deferred/i);
-    assert.doesNotMatch(ia, /Signal schema v2 should not replace/i);
-});
-
-test("IA documents topic governance decisions", () => {
-    assert.match(ia, /Topic Governance/);
-    assert.match(ia, /Promote/);
-    assert.match(ia, /Keep lens-only/);
-    assert.match(ia, /Retire/);
-    assert.match(ia, /Notes stays a decision-support index/);
-});
-
-test("IA records topic promotion review outcomes", () => {
-    assert.match(ia, /Topic Promotion Review/);
-    assert.match(ia, /Developer tooling stays lens-only.*broad baseline tooling/s);
-    assert.match(ia, /Existing seven topic pages stay promoted/s);
-    assert.match(ia, /No topic page is added from item count alone/s);
-});
-
-test("IA documents source governance decisions", () => {
-    assert.match(ia, /Source Governance/);
-    assert.match(ia, /data\/watchlists\.json/);
-    assert.match(ia, /disabled: true/);
-    assert.match(ia, /history.*date.*note/s);
-    assert.match(ia, /Framework islands stay deferred/);
-});
-
-test("IA records source quality alignment review outcomes", () => {
-    assert.match(ia, /Source Quality Alignment Review/);
-    assert.match(ia, /Broad baseline trend inputs stay retired/s);
-    assert.match(ia, /Broad package, repo, and reference entries use `disabled: true`/s);
-});
-
-test("IA records refresh stability follow-up outcomes", () => {
-    assert.match(ia, /Refresh Stability Follow-up/);
-    assert.match(ia, /Partial package and repo refreshes preserve prior active rows/s);
-    assert.match(ia, /Trend source failures preserve prior rows for the failed source/s);
-});
-
-test("IA records review queue workflow audit outcomes", () => {
-    assert.match(ia, /Review Queue Workflow Audit/);
-    assert.match(ia, /keeps the existing localStorage key, saved item schema, canonical ids, and legacy saved id matching/s);
-    assert.match(ia, /status-specific next action for unread, read, and done items/s);
-    assert.match(ia, /not sync, account, backend, or route expansion/s);
-});
-
-test("IA records signal quality regression audit outcomes", () => {
-    assert.match(ia, /Signal Quality Regression Audit/);
-    assert.match(ia, /golden fixture now excludes broad baseline tooling from the top Explore priority set/s);
-    assert.match(ia, /Shared signal normalization now applies baseline caps to broad repos/s);
-    assert.match(ia, /source health and fallback copy stayed consistent/s);
-});
-
-test("IA records home visit speed audit outcomes", () => {
-    assert.match(ia, /Home Visit Speed Audit/);
-    assert.match(ia, /Home utility choices are reduced to items tracked, one trust state, and the saved queue/s);
-    assert.match(ia, /Open first still points to Today as the priority brief/s);
-    assert.match(ia, /No route, localStorage schema, refresh script, framework, backend, or account scope changed/s);
-});
-
-test("IA records status recovery clarity audit outcomes", () => {
-    assert.match(ia, /Status Recovery Clarity Audit/);
-    assert.match(ia, /share recovery copy for ok, partial, fallback, stale, and error states/s);
-    assert.match(ia, /retry data refresh as the recovery action/s);
-    assert.match(ia, /Stale source details name retry data refresh/s);
-});
-
-test("IA records interaction state visual audit outcomes", () => {
-    assert.match(ia, /Interaction State Visual Audit/);
-    assert.match(ia, /Nested actions now get their own hover\/focus target/s);
-    assert.match(ia, /Review queue hover and selected states are visually distinct/s);
-    assert.match(ia, /Saved queue remove buttons gain the same hover\/focus affordance/s);
-});
-
-test("IA records static snapshot alignment audit outcomes", () => {
-    assert.match(ia, /Static Snapshot Alignment Audit/);
-    assert.match(ia, /regenerated Home, Today, Explore, Status, module, topic, and Notes snapshots without producing unexpected changes/s);
-    assert.match(ia, /already matched shared renderer output/s);
-    assert.match(ia, /Static fallback copy stayed user-facing and aligned/s);
-});
-
-test("IA records notes return path audit outcomes", () => {
-    assert.match(ia, /Notes Return Path Audit/);
-    assert.match(ia, /Topic note panels now link back to Notes/s);
-    assert.match(ia, /Review details add a topic notes return path/s);
-    assert.match(ia, /Home keeps one Notes entry from topic movement/s);
-});
-
-test("IA records end-to-end workflow consolidation outcomes", () => {
-    assert.match(ia, /End-to-End Workflow Consolidation/);
-    assert.match(ia, /Today now links to Review later/s);
-    assert.match(ia, /Home -> Today\/Explore -> Review -> Notes\/Status/s);
-    assert.match(ia, /No route, localStorage schema, source data, signal policy, framework, backend, account, or sync scope changed/s);
-});
-
-test("IA records refresh recovery drill outcomes", () => {
-    assert.match(ia, /Refresh Recovery Drill/);
-    assert.match(ia, /Status refresh-run fallback attention keeps previous data context/s);
-    assert.match(ia, /update-all dry-run and static fallback regeneration stayed local/s);
-    assert.match(ia, /Live source refresh stayed separate because it requires network approval/s);
-});
-
-test("IA records live source refresh probe outcomes", () => {
-    assert.match(ia, /Live Source Refresh Probe/);
-    assert.match(ia, /refreshed live HN, GitHub, npm, repo, package, link, Today, manifest, report, and static fallback data/s);
-    assert.match(ia, /live refresh report covered 4 modules, 6 sources, and 111 generated items/s);
-    assert.match(ia, /fallback-only `staleButSafe` metadata/s);
-    assert.match(ia, /fallback-only markers reserved for true fallback states/s);
-});
-
-test("IA records refresh cadence governance outcomes", () => {
-    assert.match(ia, /Refresh Cadence Governance Audit/);
-    assert.match(ia, /Scheduled refresh stays once daily at `17 21 \* \* \*` UTC/s);
-    assert.match(ia, /Trend GitHub query-level skips now mark the GitHub trend source `partial`/s);
-    assert.match(ia, /Query-level error copy drops long API URLs/s);
-    assert.match(ia, /set `GITHUB_TOKEN` before live refresh/s);
-});
-
-test("IA records signal surface prune outcomes", () => {
-    assert.match(ia, /Signal Surface Prune Pass/);
-    assert.match(ia, /Current routes remain justified by distinct jobs/s);
-    assert.match(ia, /Home -> Today\/Explore -> Review -> Notes\/Status remains the core workflow/s);
-    assert.match(ia, /Future Roadmap work should stay bundled by workflow/s);
-    assert.match(ia, /No route, localStorage schema, source family, framework, backend, account, or sync scope changed/s);
-});
-
-test("IA records source governance prune outcomes", () => {
-    assert.match(ia, /Source Governance Prune Pass/);
-    assert.match(ia, /`react`, `typescript`, and `playwright` are retired/s);
-    assert.match(ia, /Baseline scoring policy stays in `data\/signal-policy\.json`/s);
-});
-
-test("IA records live refresh confirmation outcomes", () => {
-    assert.match(ia, /Live Refresh Confirmation Pass/);
-    assert.match(ia, /108 generated items/s);
-    assert.match(ia, /Retired direct watchlist entries `react`, `typescript`, and `playwright` stayed absent/s);
-    assert.match(ia, /use `GITHUB_TOKEN` for the next confirmation pass/s);
-});
-
-test("IA records refresh auth preflight outcomes", () => {
-    assert.match(ia, /Refresh Auth Preflight Pass/);
-    assert.match(ia, /warns local operators when `GITHUB_TOKEN` is missing/s);
-    assert.match(ia, /may remain `partial` or `rateLimited`/s);
-    assert.match(ia, /authenticated confirmation itself remains gated on a real `GITHUB_TOKEN`/s);
-});
-
-test("IA records authenticated GitHub refresh outcomes", () => {
-    assert.match(ia, /Authenticated GitHub Refresh Pass/);
-    assert.match(ia, /GitHub trend source recovered to `ok`/s);
-    assert.match(ia, /No GitHub rate-limit or skipped-query errors remained/s);
-    assert.match(ia, /remaining refresh `partial` status came from npm `n8n-workflow` 429/s);
-});
-
-test("IA records roadmap analysis P0 corrections", () => {
-    assert.match(ia, /Roadmap Analysis P0 Corrections/);
-    assert.match(ia, /rejects `history.date` values after the current data date/s);
-    assert.match(ia, /baseline penalty from `data\/signal-policy\.json`/s);
-    assert.match(ia, /static pages now keep top source rows/s);
-    assert.match(ia, /remaining active data issue is npm `n8n-workflow` 429 partial state/s);
-});
-
-test("IA records renderer safety audit outcomes", () => {
-    assert.match(ia, /Renderer Safety Audit/);
-    assert.match(ia, /Shared `safe-dom\.js` owns text escaping, href blocking, and link attribute rendering/s);
-    assert.match(ia, /External item links rendered from generated data and static fallbacks carry `rel="noopener noreferrer"`/s);
-    assert.match(ia, /no sanitizer, framework, backend, route, account, or sync scope changed/s);
-});
-
-test("IA records contract and release discipline outcomes", () => {
-    assert.match(ia, /Data Contract Enforcement/);
-    assert.match(ia, /`node scripts\/validate-data\.mjs` remains the single data contract gate/s);
-    assert.match(ia, /JSON Schema files stay deferred until current tests miss real mismatches/s);
-    assert.match(ia, /Release Discipline Pass/);
-    assert.match(ia, /dated changelog entries and normal GitHub Pages publishes/s);
-    assert.match(ia, /No Git tag, provenance, SLSA, framework, backend, account, or sync scope changed/s);
-});
-
-test("IA records generated data publish drill outcomes", () => {
-    assert.match(ia, /Generated Data Publish Drill/);
-    assert.match(ia, /Current checked-in data is publishable from local checks/s);
-    assert.match(ia, /npm `n8n-workflow` 429 remains accepted visible partial source health with `rateLimited` metadata/s);
-    assert.match(ia, /No live network refresh, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
-});
-
-test("IA records module type warning cleanup outcomes", () => {
-    assert.match(ia, /Module Type Warning Cleanup/);
-    assert.match(ia, /Home, Today, and Status browser modules now use `.mjs`/s);
-    assert.match(ia, /CommonJS-compatible `signal-schema\.js` and `topic-taxonomy\.js` stay `.js`/s);
-    assert.match(ia, /No package-wide `"type": "module"`, dependency, bundler, transpiler, framework, backend, account, or sync scope changed/s);
-});
-
-test("IA records npm partial recovery confirmation outcomes", () => {
-    assert.match(ia, /npm Partial Recovery Confirmation/);
-    assert.match(ia, /Network-approved refresh still returned npm `n8n-workflow` 429/s);
-    assert.match(ia, /25 package rows stayed preserved with `rateLimited` metadata/s);
-    assert.match(ia, /The same local run lacked `GITHUB_TOKEN`, so GitHub trend refresh became `partial` again/s);
-});
-
-test("IA records authenticated refresh publish confirmation outcomes", () => {
-    assert.match(ia, /Authenticated Refresh Publish Confirmation/);
-    assert.match(ia, /`gh auth token` supplied `GITHUB_TOKEN` to the existing refresh path/s);
-    assert.match(ia, /GitHub trend source recovered to `ok`/s);
-    assert.match(ia, /Only npm `n8n-workflow` 429 remains non-ok/s);
-    assert.match(ia, /No route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
-});
-
-test("IA records current signal diff triage outcomes", () => {
-    assert.match(ia, /Current Signal Diff Triage/);
-    assert.match(ia, /refreshed Home, Today, Explore, topic, and module snapshots stayed publishable/s);
-    assert.match(ia, /agent-workflow signals still lead the priority surfaces/s);
-    assert.match(ia, /No watchlist, signal policy, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
-});
-
-test("IA records publish readiness diff review outcomes", () => {
-    assert.match(ia, /Publish Readiness Diff Review/);
-    assert.match(ia, /generated data, static snapshots, docs, and release notes matched the release checklist/s);
-    assert.match(ia, /route count, navigation, source health copy, dated changelog entry, and known npm partial state stayed publishable/s);
-    assert.match(ia, /User-owned staging, commit, push, and GitHub Pages publish remain outside repository automation/s);
-});
-
-test("IA records post-publish smoke outcomes", () => {
-    assert.match(ia, /Post-Publish Smoke Pass/);
-    assert.match(ia, /live Home, Today, Explore, Review, Status, source detail, and topic routes returned 200/s);
-    assert.match(ia, /live data JSON still showed GitHub trends `ok` and npm packages `partial` with one rate-limited source/s);
-    assert.match(ia, /No checked-in data, route, source family, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
-});
-
-test("IA records next refresh health watch outcomes", () => {
-    assert.match(ia, /Next Refresh Health Watch/);
-    assert.match(ia, /token-backed manual refresh kept GitHub trend health `ok`/s);
-    assert.match(ia, /npm `n8n-workflow` stayed the only non-ok source with preserved package rows/s);
-    assert.match(ia, /Refresh report, manifest, Today, static fallbacks, and source-health copy stayed consistent/s);
-});
-
-test("IA records repeated npm partial decision outcomes", () => {
-    assert.match(ia, /Repeated npm Partial Decision/);
-    assert.match(ia, /`n8n-workflow` stays active/s);
-    assert.match(ia, /preserves workflow-automation package coverage/s);
-    assert.match(ia, /visible `partial` source health with `rateLimited` metadata/s);
-    assert.match(ia, /No watchlist, route, source family, release policy, package dependency, lockfile, framework, backend, account, or sync scope changed/s);
-});
-
-test("IA records unauthenticated publish health refresh outcomes", () => {
-    assert.match(ia, /Unauthenticated Publish Health Refresh/);
-    assert.match(ia, /`GITHUB_TOKEN` was not set/s);
-    assert.match(ia, /GitHub trend source became `partial` with 403 rate limits/s);
-    assert.match(ia, /npm `n8n-workflow` stayed `partial` with 429/s);
-    assert.match(ia, /108 generated items stayed publishable/s);
-});
-
-test("IA records token-backed publish health rerun outcomes", () => {
-    assert.match(ia, /Token-backed Publish Health Rerun/);
-    assert.match(ia, /`gh auth token` supplied `GITHUB_TOKEN`/s);
-    assert.match(ia, /all 6 sources reported `ok`/s);
-    assert.match(ia, /refresh report totals stayed at 108 generated items/s);
-    assert.match(ia, /errors dropped to 0/s);
-});
-
-test("docs record the public trust baseline", () => {
-    assert.match(readme, /docs\/SIGNAL_SCHEMA\.md/);
-    assert.match(readme, /docs\/SOURCE_GOVERNANCE\.md/);
-    assert.match(readme, /docs\/THREAT_MODEL\.md/);
-    assert.match(readme, /docs\/RELEASE_CHECKLIST\.md/);
-    assert.match(readme, /SECURITY\.md/);
-    assert.match(readme, /CONTRIBUTING\.md/);
-    assert.match(readme, /CHANGELOG\.md/);
-    assert.match(ia, /Documentation Trust Baseline/);
-    assert.match(ia, /Package entry point and PR CI are established without dependencies/s);
-    assert.match(ia, /Roadmap now separates current source state, live trigger-based work, architecture gates, and cut items/s);
-});
-
-test("security and threat docs preserve the static-site trust model", () => {
-    assert.match(security, /static GitHub Pages signal dashboard/s);
-    assert.match(security, /Do not open a public issue for a suspected vulnerability/s);
-    assert.match(security, /GITHUB_TOKEN/s);
-    assert.match(threatModel, /There is no backend, account system, sync service, or database/s);
-    assert.match(threatModel, /Remote sources: Hacker News, GitHub, npm/s);
-    assert.match(threatModel, /Shared safe DOM helpers escape HTML and restrict hrefs/s);
-    assert.match(threatModel, /Renderer Insertion Inventory/s);
-    assert.match(threatModel, /All current `innerHTML` assignments insert strings produced by local render helpers/s);
-    assert.match(threatModel, /Explore.*normalized generated JSON, localStorage saved items\/searches\/pins/s);
-    assert.match(threatModel, /Review.*normalized generated JSON and localStorage Review records\/import payloads/s);
-    assert.match(threatModel, /Explore card activation uses `noopener,noreferrer`/s);
-    assert.match(threatModel, /Referrer policy decision: external item links rely on `rel="noopener noreferrer"`/s);
-    assert.match(threatModel, /GitHub Actions pinning decision: major-version actions remain accepted/s);
-    assert.match(threatModel, /stricter SHA pinning is deferred while workflows use only GitHub-owned actions and local scripts/s);
-    assert.doesNotMatch(threatModel, /deferred until CI basics are in place/s);
-    assert.match(threatModel, /Dependabot decision: no dependency update automation is enabled while the repo has no package dependencies or lockfile/s);
-    assert.match(releaseChecklist, /Referrer policy still matches the external-link `noreferrer` decision/s);
-    assert.match(releaseChecklist, /GitHub Actions pinning and Dependabot decisions still match the current dependency-free workflow posture/s);
-});
-
-test("data contract docs describe schema and source governance", () => {
-    assert.match(signalSchema, /Signal Schema v2 is the normalized item contract/s);
-    assert.match(signalSchema, /data\/signal-policy\.json/);
-    assert.match(signalSchema, /fallbackUsed/);
-    assert.match(signalSchema, /## Contract Gate/);
-    assert.match(signalSchema, /`node scripts\/validate-data\.mjs` is the data contract gate/s);
-    assert.match(signalSchema, /Manifest contract.*`data\/manifest\.json`/s);
-    assert.match(signalSchema, /Refresh report contract.*`data\/refresh-report\.json`/s);
-    assert.match(signalSchema, /Signal policy contract.*`data\/signal-policy\.json`/s);
-    assert.match(signalSchema, /Normalized item example/);
-    assert.match(signalSchema, /JSON Schema files stay deferred/s);
-    assert.match(sourceGovernance, /data\/watchlists\.json/);
-    assert.match(sourceGovernance, /Governance validation rejects future `history.date` values/s);
-    assert.match(sourceGovernance, /npm `n8n-workflow` returned 429/s);
-    assert.match(sourceGovernance, /reached 6 consecutive 429 runs/s);
-    assert.match(sourceGovernance, /retired from npm package and trend refreshes/s);
-    assert.match(sourceGovernance, /No replacement is added because workflow automation remains covered/s);
-    assert.match(sourceGovernance, /Status refresh-run detail uses the same sanitized recovery copy/s);
-});
-
-test("contribution and release docs name the runnable checks", () => {
-    assert.match(contributing, /npm run check/);
-    assert.match(contributing, /git diff --check/);
-    assert.match(contributing, /docs\/RELEASE_CHECKLIST\.md/);
-    assert.match(roadmap, /docs\/RELEASE_CHECKLIST\.md/);
-    assert.match(readme, /This repo uses dated changelog entries and normal GitHub Pages publishes, not release tags yet/s);
-    assert.match(releaseChecklist, /node scripts\/validate-data\.mjs/);
-    assert.match(releaseChecklist, /npm run check/);
-    assert.match(releaseChecklist, /Docs-only[\s\S]*node --test tests\/ops-docs\.test\.mjs/);
-    assert.match(releaseChecklist, /UI[\s\S]*node --test tests\/site-structure\.test\.mjs/);
-    assert.match(releaseChecklist, /Data refresh[\s\S]*node scripts\/validate-data\.mjs/);
-    assert.match(releaseChecklist, /Fallback generator[\s\S]*node --test tests\/static-fallback\.test\.mjs tests\/site-structure\.test\.mjs/);
-    assert.match(releaseChecklist, /GitHub Pages publish/);
-    assert.match(releaseChecklist, /No Git tag is required/);
-    assert.match(releaseChecklist, /dated `CHANGELOG\.md` entry/s);
-    assert.match(releaseChecklist, /data\/manifest\.json/);
-    assert.match(releaseChecklist, /Roadmap contains only future work/s);
-    assert.match(changelog, /Unreleased/);
-    assert.match(changelog, /2026-06-28/);
-});
-
-test("root docs state the source-available reuse boundary", () => {
-    assert.match(license, /All rights reserved unless otherwise noted/);
-    assert.match(readme, /source-available with all rights reserved/s);
-    assert.match(readme, /not an open-source license/s);
-    assert.match(contributing, /Do not assume public reuse rights beyond `LICENSE`/s);
-    assert.match(releaseChecklist, /reuse boundary still matches `LICENSE`/s);
-});
-
-test("docs explain checked-in signal policy ownership", () => {
-    assert.match(readme, /data\/signal-policy\.json/);
-    assert.match(ia, /Signal Policy/);
-    assert.match(ia, /baseline titles/);
-    assert.match(ia, /intent threshold/);
-    assert.match(ia, /Today and Explore/);
-    assert.match(readme, /Today and Explore scoring policy/);
-});
-
-test("IA records public scope triage outcomes", () => {
-    assert.match(ia, /Public Scope Triage/);
-    assert.match(ia, /Public worklog route stays out.*Notes already indexes durable topic judgment/s);
-    assert.match(ia, /Portfolio, resume, and company-history content stay out/s);
-    assert.match(ia, /Active navigation and sitemap should expose signal-dashboard routes/s);
-});
-
-test("roadmap is a lean future work queue, not a completed-work ledger", () => {
-    assert.match(roadmap, /## Next Work Queue/);
-    assert.match(roadmap, /Completed work belongs in `CHANGELOG\.md`/);
-    assert.match(decisions, /Completed items now live in `CHANGELOG\.md`, not the active Roadmap/);
-    assert.doesNotMatch(roadmap, /### Completed Since Last Review/);
-    assert.doesNotMatch(decisions, /roadmap completed section/i);
-    assert.doesNotMatch(roadmap, /## Current Surface/);
-    assert.doesNotMatch(roadmap, /## Product Direction/);
-    assert.doesNotMatch(roadmap, /## Current Baseline/);
-    assert.doesNotMatch(roadmap, /## Later Queue/);
-    assert.doesNotMatch(roadmap, /Absorbs analysis items:/);
-    assert.doesNotMatch(roadmap, /Post-publish smoke:/);
-    assert.doesNotMatch(roadmap, /Publish readiness:/);
-    assert.doesNotMatch(roadmap, /^### P1 - Signal Quality$/m);
-    assert.doesNotMatch(roadmap, /^### P2 - Trust Copy and Generator Cleanup$/m);
-});
-
-test("roadmap names concrete next work bundles in priority order", () => {
-    const headings = [...roadmap.matchAll(/^### (P\d - .+)$/gm)].map((match) => match[1]);
-
-    assert.deepEqual(headings, roadmapQueueHeadings);
-});
-
-test("roadmap P0 current state matches the checked-in refresh report", () => {
-    const start = roadmap.indexOf("## Current Source State");
-    const next = roadmap.indexOf("\n## Next Work Queue", start + 1);
-    const section = roadmap.slice(start, next);
-    const partialSource = checkedInRefreshReport.modules
-        .flatMap((module) => module.sources || [])
-        .find((source) => source.status === "partial");
-
-    assert.match(section, new RegExp(checkedInRefreshReport.generatedAt));
-    assert.match(section, new RegExp(String(checkedInRefreshReport.totals.items)));
-    assert.match(section, new RegExp(checkedInRefreshReport.totals.status));
-    if (partialSource) {
-        assert.match(section, new RegExp(partialSource.source));
+test("architecture records current routes, island boundary, constraints, and revisit conditions", () => {
+    for (const route of ["/", "/today/", "/explore/", "/review/", "/status/", "/trends/", "/packages/", "/repos/", "/links/"]) {
+        assert.match(docs.architecture, new RegExp(route.replaceAll("/", "\\/")));
     }
-    assert.match(section, /n8n-workflow/);
+    assert.match(docs.architecture, /src\/pages\/\[\.\.\.legacy\]\.ts/);
+    assert.match(docs.architecture, /data\/\*\.json.*source contract/s);
+    assert.match(docs.architecture, /No backend, server function, database, account\/login, or cloud sync/s);
+    assert.match(docs.architecture, /### Why Astro/);
+    assert.match(docs.architecture, /### Why not a full React SPA/);
+    assert.match(docs.architecture, /### Revisit only when/);
 });
 
-test("roadmap records source partial decision thresholds", () => {
-    const section = roadmap.slice(
-        roadmap.indexOf("### P0 - Publish Health Refresh and Source Partial Policy"),
-        roadmap.indexOf("\n### P1 - Today Ranking Diversity Guard")
-    );
+test("deployment docs match Astro config and checked-in workflows", () => {
+    const config = read("astro.config.mjs");
+    const ci = read(".github/workflows/ci.yml");
+    const refresh = read(".github/workflows/update-trends.yml");
+    const pages = read(".github/workflows/deploy-pages.yml");
 
-    assert.match(section, /After 3 repeated same-package 429s/);
-    assert.match(section, /after 5 repeats or stale preserved rows/);
-    assert.match(section, /one-package npm downloads 429s as package-source partials/);
-    assert.match(section, /Status detail, and page health strips/);
+    assert.match(config, /site: "https:\/\/anothel\.github\.io"/);
+    assert.match(config, /output: "static"/);
+    assert.doesNotMatch(config, /\bbase:/);
+    assert.match(docs.deployment, /npm run build/);
+    assert.match(docs.deployment, /Output is `dist\/`/);
+    assert.match(docs.deployment, /user site `anothel\.github\.io`/);
+    assert.match(docs.deployment, /no Astro `base` is configured/);
+    assert.match(docs.deployment, /ci\.yml.*does not deploy/s);
+    assert.match(docs.deployment, /deploy-pages\.yml.*dedicated Pages workflow/s);
+    assert.match(docs.deployment, /Production deployment remains unverified/);
+    assert.match(docs.deployment, /Keep the legacy root HTML/);
+    assert.match(docs.deployment, /Settings -> Pages -> Source -> GitHub Actions/);
+    assert.match(docs.deployment, /workflow_run.*GITHUB_TOKEN/s);
+    assert.match(ci, /npm run check/);
+    assert.doesNotMatch(ci, /deploy-pages|upload-pages-artifact/);
+    assert.match(refresh, /node scripts\/update-all\.mjs/);
+    assert.doesNotMatch(refresh, /deploy-pages|upload-pages-artifact/);
+    assert.match(pages, /npm run build[\s\S]*npm run check:dist[\s\S]*path: dist/);
+    assert.match(pages, /actions\/deploy-pages@v4/);
 });
 
-test("roadmap queues ranking guard work without feature sprawl", () => {
-    const queue = roadmap.slice(roadmap.indexOf("## Next Work Queue"), roadmap.indexOf("## Architecture Gate"));
-
-    assert.match(queue, /Strengthen golden fixtures before changing ranking logic/);
-    assert.match(queue, /duplicate URL identity stays consistent across Today, Explore, and Review/);
-    assert.match(queue, /without adding a larger ranking model/);
-    assert.doesNotMatch(queue, /Explore Repeat-use Clarity/);
+test("development docs describe every npm script without inventing a dev script", () => {
+    for (const [name, command] of Object.entries(manifest.scripts)) {
+        const documented = name === "test" ? "npm test" : `npm run ${name}`;
+        assert.match(docs.contributing, new RegExp(documented.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&")), `${name}: ${command}`);
+    }
+    assert.equal(manifest.scripts.dev, undefined);
+    assert.match(docs.contributing, /There is no `npm run dev` script/);
+    assert.match(docs.contributing, /Adding a Route/);
+    assert.match(docs.contributing, /Changing a Data Field Safely/);
+    assert.match(docs.contributing, /Astro versus React/);
 });
 
-test("roadmap keeps fallback cleanup scoped", () => {
-    const queue = roadmap.slice(roadmap.indexOf("## Next Work Queue"), roadmap.indexOf("## Architecture Gate"));
-
-    assert.match(queue, /route-neutral fallback replacement helpers/);
-    assert.match(queue, /CRLF\/LF coverage/);
-    assert.match(queue, /errors name the route and marker/);
-    assert.doesNotMatch(queue, /^### P2 - Release Checklist Workflow Link$/m);
-});
-
-test("roadmap work bundles define trigger, scope, verification, and exit", () => {
-    for (const heading of roadmapQueueHeadings) {
-        const start = roadmap.indexOf(`### ${heading}`);
-        const next = roadmap.indexOf("\n### ", start + 1);
-        const section = roadmap.slice(start, next === -1 ? undefined : next);
-
-        assert.match(section, /Trigger:/);
-        assert.match(section, /Scope:/);
-        assert.match(section, /Verification:/);
-        assert.match(section, /Exit:/);
+test("documented repository paths exist", () => {
+    for (const path of [
+        "astro.config.mjs",
+        "package-lock.json",
+        ".github/workflows/ci.yml",
+        ".github/workflows/deploy-pages.yml",
+        ".github/workflows/update-trends.yml",
+        "src/pages/[...legacy].ts",
+        "src/pages/index.astro",
+        "src/pages/today/index.astro",
+        "src/pages/explore/index.astro",
+        "src/pages/review/index.astro",
+        "src/pages/status/index.astro",
+        "src/pages/trends/index.astro",
+        "src/pages/packages/index.astro",
+        "src/pages/repos/index.astro",
+        "src/pages/links/index.astro",
+        "src/components/AppShell.astro",
+        "src/components/HeroHeader.astro",
+        "src/components/RouteNav.astro",
+        "src/components/ExploreIsland.jsx",
+        "src/components/ReviewIsland.jsx",
+        "scripts/data-contract.mjs",
+        "scripts/validate-data.mjs",
+        "scripts/check-dist.mjs",
+        "scripts/update-static-fallbacks.mjs",
+        "docs/ARCHITECTURE.md",
+        "docs/DEPLOYMENT.md",
+        "docs/IA.md",
+        "docs/SIGNAL_SCHEMA.md",
+        "docs/SOURCE_GOVERNANCE.md",
+        "docs/THREAT_MODEL.md",
+        "docs/RELEASE_CHECKLIST.md"
+    ]) {
+        assert.equal(existsSync(path), true, path);
     }
 });
 
-test("roadmap keeps completed work out of the active queue", () => {
-    const queue = roadmap.slice(roadmap.indexOf("## Next Work Queue"), roadmap.indexOf("## Architecture Gate"));
-
-    assert.doesNotMatch(queue, /is complete/);
-    assert.doesNotMatch(queue, /now /);
-    assert.doesNotMatch(queue, /Completed Since Last Review/);
+test("IA documents implemented page jobs, navigation, and intentional overlaps", () => {
+    for (const route of ["/today/", "/explore/", "/review/", "/status/", "/trends/", "/packages/", "/repos/", "/links/"]) {
+        assert.ok(docs.ia.includes(`| \`${route}\``), route);
+    }
+    assert.match(docs.ia, /Primary navigation: Home, Today, Explore, Review, Status/);
+    assert.match(docs.ia, /Source navigation: Trends, Packages, Repos, Reference shelf/);
+    assert.match(docs.ia, /## Intentional Overlaps/);
+    assert.match(docs.ia, /Home and Today both show priority signals/);
+    assert.match(docs.ia, /Explore and Review both show saved state/);
+    assert.match(docs.ia, /Status and health panels share source-health language/);
 });
 
-test("roadmap keeps architecture behind a gate, not active work", () => {
-    assert.match(roadmap, /## Architecture Gate/);
-    assert.match(roadmap, /Trigger: a measured vanilla JavaScript blocker/);
-    assert.doesNotMatch(roadmap, /^### P3 - Architecture Gate$/m);
+test("IA records the migration parity decision for Trends and Links filters", () => {
+    assert.match(docs.ia, /## Migration Parity Decisions/);
+    assert.match(docs.ia, /Legacy Trends exposed source, category, query, and sort controls/);
+    assert.match(docs.ia, /Legacy Links exposed category and query controls/);
+    assert.match(docs.ia, /Explore is the one cross-source filtering surface/);
 });
 
-test("roadmap keeps product boundaries explicit for future work", () => {
-    assert.match(roadmap, /No backend, account, sync, database, framework, bundler, package dependency, or lockfile/);
-    assert.match(roadmap, /Do not run live refresh unless fresh source evidence is needed/);
-    assert.match(roadmap, /Keep retired `n8n-workflow` out of npm refreshes while repo\/link coverage remains useful/);
-    assert.match(roadmap, /If `GITHUB_TOKEN` is missing, keep GitHub rate limits as known partial state/);
-    assert.match(roadmap, /no framework, bundler, dependency, lockfile, backend, account, sync, database, or server function/i);
+test("data contract, timestamps, freshness, and scores are discoverable", () => {
+    assert.match(docs.readme, /data\/\*\.json.*source contract/s);
+    assert.match(docs.schema, /Repository JSON uses camelCase `generatedAt`/);
+    assert.match(docs.schema, /`generated_at` is not a current field name/);
+    assert.match(docs.schema, /generatedAt.*pipeline generation time/s);
+    assert.match(docs.schema, /fresh.*0-1 whole UTC days/s);
+    assert.match(docs.schema, /aging.*2-3 whole UTC days/s);
+    assert.match(docs.schema, /stale.*more than 3 whole UTC days/s);
+    assert.match(docs.schema, /Scores are bounded `0\.\.100` ranking heuristics, not probabilities/s);
+    assert.match(docs.schema, /data\/signal-policy\.json/);
+    assert.match(docs.schema, /npm run validate:data/);
 });
 
-test("roadmap keeps cut items out of the active queue", () => {
-    assert.match(roadmap, /## Cut List/);
-    assert.doesNotMatch(roadmap, /C:\/Users\/anoth\/Downloads\/anothel_repo_analysis_2026-06-28\.md/);
-    assert.doesNotMatch(roadmap, /Report item \| Decision \| Reason/);
+test("roadmap separates completed migration, stabilization, and future work", () => {
+    assert.match(docs.roadmap, /## Completed Architecture Work/);
+    assert.match(docs.roadmap, /## Current Stabilization/);
+    assert.match(docs.roadmap, /## Future Work/);
+    assert.match(docs.roadmap, /Migration scaffold\/gate work is complete/);
+    assert.match(docs.roadmap, /dedicated GitHub Pages workflow builds, validates, deploys only `dist\/`/);
+    assert.doesNotMatch(docs.roadmap, /This feature does not exist today|no checked-in workflow deploys `dist\/`/);
+    assert.doesNotMatch(docs.roadmap, /^### P\d - Astro Static Build Scaffold$/m);
+});
 
-    assert.doesNotMatch(roadmap, /Why later:/);
-    assert.doesNotMatch(roadmap, /Pull forward when:/);
-    assert.match(roadmap, /Do not re-add backlog lists/);
-    assert.match(roadmap, /Pull one back only when a real trigger above exists/);
-    assert.doesNotMatch(roadmap, /^### P1 - License and Public Reuse Boundary$/m);
+test("security and release docs reflect dependencies and Pages deployment", () => {
+    assert.match(docs.threat, /npm dependency and lockfile integrity/);
+    assert.match(docs.threat, /package-lock\.json.*pins Astro, React, Playwright, axe/s);
+    assert.match(docs.threat, /Dependabot is not configured despite npm dependencies/);
+    assert.match(docs.threat, /Pages deployment has `contents: read`, `pages: write`, and `id-token: write`/);
+    assert.match(docs.release, /npm run build/);
+    assert.match(docs.release, /npm run check/);
+    assert.match(docs.release, /docs\/DEPLOYMENT\.md/);
+    assert.doesNotMatch([docs.threat, docs.release].join("\n"), /dependency-free workflow posture|no package dependencies or lockfile/i);
 });

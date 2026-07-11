@@ -144,22 +144,15 @@ function updatedLabel(data) {
     return "unavailable";
 }
 
-export function renderTodayStatus(data) {
+export function renderTodayStatus(data, options = {}) {
     const total = totalSectionItems(data.sections);
-    const status = data.sourceMeta?.status || "ok";
-    const sourceMode = globalThis.DataHealth?.dataModeText
-        ? globalThis.DataHealth.dataModeText(data.sourceMeta, { updated: updatedLabel(data) })
-        : null;
+    const trust = globalThis.DataHealth.trustState(data.sourceMeta, { today: options.today });
+    const current = trust.pipelineStatus === "ok" && trust.freshness === "fresh";
+    const detail = current
+        ? ` Data date ${updatedLabel(data)}. No recovery needed.`
+        : " Check Status before trusting currentness.";
 
-    if (status !== "ok" && sourceMode) {
-        return `${total} generated picks. ${sourceMode}`;
-    }
-
-    if (status === "ok") return `${total} generated picks. Source health ok. Data date ${updatedLabel(data)}. No recovery needed.`;
-
-    return sourceMode
-        ? `${total} generated picks. ${sourceMode}`
-        : `${total} generated picks. Retry data refresh to recover the source status.`;
+    return `${total} generated picks. Pipeline status ${trust.pipelineStatus}. Freshness ${trust.freshness}.${detail}`;
 }
 
 function renderToday(data) {

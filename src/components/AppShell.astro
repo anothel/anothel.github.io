@@ -1,0 +1,30 @@
+---
+const {
+    title,
+    description,
+    canonicalPath,
+    stylesheetHref,
+    lang = "en"
+} = Astro.props;
+const canonicalUrl = `https://anothel.github.io${canonicalPath}`;
+---
+<!DOCTYPE html>
+<html lang={lang}>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content={description}>
+        <meta name="author" content="anothel">
+        <link rel="canonical" href={canonicalUrl}>
+        <meta property="og:site_name" content="anothel">
+        <meta property="og:title" content={title}>
+        <meta property="og:description" content={description}>
+        <meta property="og:type" content="website">
+        <meta property="og:url" content={canonicalUrl}>
+        <title>{title}</title>
+        <link rel="stylesheet" href={stylesheetHref}>
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>

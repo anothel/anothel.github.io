@@ -1,5 +1,19 @@
-(function attachDataHealth(global) {
-    const { escapeHtml } = global.AnothelDom;
+(function attachDataHealth(root, factory) {
+    const dataHealth = factory(root.AnothelDom);
+    if (typeof module === "object" && module.exports) module.exports = dataHealth;
+    root.DataHealth = dataHealth;
+})(typeof globalThis !== "undefined" ? globalThis : this, function createDataHealth(dom = {}) {
+    const escapeHtml = dom.escapeHtml || ((value) => String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;"));
+    const freshnessStates = Object.freeze(["fresh", "aging", "stale", "unknown", "unavailable"]);
+    const freshnessThresholds = Object.freeze({
+        default: Object.freeze({ freshDays: 1, staleAfterDays: 3 }),
+        manual: Object.freeze({ freshDays: 30, staleAfterDays: 90 })
+    });
 
     function sourceList(sourceMeta) {
         if (Array.isArray(sourceMeta)) return sourceMeta;
@@ -86,6 +100,70 @@
         return Math.max(0, Math.floor(diff / 86400000));
     }
 
+    function validSourceTimestamp(value) {
+        return typeof value === "string"
+            && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value)
+            && Number.isFinite(Date.parse(value));
+    }
+
+    function thresholdFor(source) {
+        return freshnessThresholds[String(source?.name || source?.source || "").toLowerCase()]
+            || freshnessThresholds.default;
+    }
+
+    function freshnessForSource(source = {}, today = new Date()) {
+        const status = source.status || "unknown";
+        const lastSuccessfulUpdate = status === "fallback"
+            ? source.previousUpdated
+            : status === "error" ? "" : source.updatedAt || source.lastSuccessfulUpdate;
+
+        if (status === "error" && Number(source.count || 0) === 0) {
+            return {
+                state: "unavailable",
+                lastSuccessfulUpdate: null,
+                ageDays: null,
+                staleReason: source.error || "source failed with no usable data"
+            };
+        }
+
+        const age = validSourceTimestamp(lastSuccessfulUpdate) ? ageDays(lastSuccessfulUpdate, today) : null;
+        if (age === null) {
+            return {
+                state: "unknown",
+                lastSuccessfulUpdate: null,
+                ageDays: null,
+                staleReason: "last successful source update is missing or ambiguous"
+            };
+        }
+
+        const threshold = thresholdFor(source);
+        const state = age <= threshold.freshDays ? "fresh" : age <= threshold.staleAfterDays ? "aging" : "stale";
+        return {
+            state,
+            lastSuccessfulUpdate,
+            ageDays: age,
+            staleReason: state === "stale" ? `older than ${threshold.staleAfterDays} days` : null
+        };
+    }
+
+    function trustState(sourceMeta, options = {}) {
+        const sources = sourceList(sourceMeta);
+        const counts = sources
+            .map((source) => freshnessForSource(source, options.today))
+            .reduce((summary, freshness) => {
+                summary[freshness.state] = (summary[freshness.state] || 0) + 1;
+                return summary;
+            }, {});
+        const freshness = ["unavailable", "stale", "unknown", "aging", "fresh"]
+            .find((state) => counts[state] > 0) || "unknown";
+
+        return {
+            pipelineStatus: aggregateSourceStatus(sources),
+            freshness,
+            counts
+        };
+    }
+
     const partialCopy = "Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness.";
 
     function isObject(value) {
@@ -110,21 +188,17 @@
 
     function freshnessText(source, today) {
         const status = source?.status || "unknown";
-        const updated = source?.updatedAt || source?.updated;
-        const updatedDate = datePart(updated);
+        const freshness = freshnessForSource(source, today);
+        const updatedDate = datePart(freshness.lastSuccessfulUpdate);
 
         if (status === "fallback") {
-            const fallbackDate = datePart(source?.previousUpdated) || updatedDate;
-            return fallbackDate ? `Fallback - using ${fallbackDate} data` : "Fallback - previous data kept";
+            return updatedDate ? `Fallback - using ${updatedDate} data (${freshness.state})` : "Unknown - fallback timestamp unavailable";
         }
-        if (status === "error") return "Error - no current timestamp";
-        if (status === "partial") return updatedDate ? `Partial - updated ${updatedDate}` : "Partial - usable data remains";
-
-        const age = ageDays(updated, today);
-        if (age === null) return "Unknown - no timestamp";
-        if (age <= 1) return `Fresh - updated ${updatedDate}`;
-        if (age <= 3) return `Aging - ${age} days old`;
-        return `Stale - ${age} days old`;
+        if (freshness.state === "unavailable") return "Unavailable - no usable source data";
+        if (freshness.state === "unknown") return "Unknown - no reliable source timestamp";
+        const prefix = status === "partial" ? "Partial" : freshness.state[0].toUpperCase() + freshness.state.slice(1);
+        if (freshness.state === "fresh") return `${prefix} - updated ${updatedDate}`;
+        return `${prefix} - ${freshness.ageDays} days old`;
     }
 
     function cleanErrorMessage(value) {
@@ -148,11 +222,20 @@
     }
 
     function dataModeText(sourceMeta, options = {}) {
-        const status = aggregateSourceStatus(sourceMeta);
+        const trust = trustState(sourceMeta, options);
+        const status = trust.pipelineStatus;
         if (status === "fallback") return "Source health fallback. Previous data remains available; retry data refresh.";
         if (status === "partial") return partialCopy;
         if (status === "error") return "Source health failed. Retry data refresh before trusting freshness.";
         if (status === "ok") {
+            const freshnessCounts = trust.counts;
+            const attention = ["aging", "stale", "unknown", "unavailable"]
+                .filter((state) => freshnessCounts[state])
+                .map((state) => `${freshnessCounts[state]} ${state}`);
+            if (attention.length > 0) {
+                const recovery = freshnessCounts.stale || freshnessCounts.unavailable ? " Retry data refresh." : "";
+                return `Source health ok. Data age: ${attention.join(" / ")}.${recovery}`;
+            }
             const updatedDate = datePart(options.updated);
             return updatedDate
                 ? `Source health ok. Data date ${updatedDate}. No recovery needed.`
@@ -168,7 +251,7 @@
         if (source?.staleButSafe) safety.push("previous data kept");
         if (source?.rateLimited) safety.push("rate limited");
         if (source?.fallbackReason) safety.push(source.fallbackReason);
-        if (source?.previousUpdated) safety.push(`previous refresh ${source.previousUpdated}`);
+        if (source?.previousUpdated) safety.push(`previous refresh ${datePart(source.previousUpdated) || "unknown"}`);
 
         const errorDetail = sourceErrorDetail(source);
         if (errorDetail) safety.push(errorDetail);
@@ -179,7 +262,7 @@
         }
         if ((source?.status === "partial" || source?.status === "error") && safety.length > 0) safety.push("retry data refresh");
         if (safety.length > 0) return `${freshness} / ${safety.join(" / ")}`;
-        if (freshness.startsWith("Stale -")) return `${freshness} / retry data refresh`;
+        if (freshnessForSource(source, today).state === "stale") return `${freshness} / retry data refresh`;
         return freshness;
     }
 
@@ -196,12 +279,16 @@
         `).join("");
     }
 
-    global.DataHealth = {
+    return {
         aggregateSourceStatus,
         dataModeText,
+        freshnessForSource,
+        freshnessStates,
+        freshnessThresholds,
         freshnessText,
         renderSourceHealth,
         sourceDetail,
-        summarizeModules
+        summarizeModules,
+        trustState
     };
-})(globalThis);
+});

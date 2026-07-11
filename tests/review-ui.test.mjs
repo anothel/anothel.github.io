@@ -353,6 +353,7 @@ test("Review browser init renders saved queue and removes items", async () => {
         return {
             innerHTML: "",
             textContent: "",
+            dataset: {},
             listeners: {},
             addEventListener(type, listener) {
                 this.listeners[type] = listener;
@@ -366,7 +367,8 @@ test("Review browser init renders saved queue and removes items", async () => {
         "[data-review-focus-count]",
         "[data-review-source-count]",
         "[data-review-queue]",
-        "[data-review-detail]"
+        "[data-review-detail]",
+        "[data-review-clear]"
     ].map((selector) => [selector, createElement()]));
     let savedValue = "[\"trends:https://example.com/trend\"]";
     const clickHandlers = {};
@@ -452,6 +454,7 @@ test("Review browser init renders saved queue and removes items", async () => {
     assert.match(elements["[data-review-queue]"].innerHTML, /Agent trend/);
     assert.match(elements["[data-review-detail]"].innerHTML, /Saved agent trend/);
     assert.match(elements["[data-review-detail]"].innerHTML, /Unread/);
+    assert.equal(typeof elements["[data-review-clear]"].listeners.click, "function");
 
     clickHandlers.done();
     assert.equal(JSON.parse(savedValue).items[0].status, "done");

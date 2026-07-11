@@ -1,0 +1,104 @@
+---
+import today from "../../../data/today.json";
+import trends from "../../../data/trends.json";
+import packages from "../../../data/packages.json";
+import repos from "../../../data/repos.json";
+import links from "../../../data/links.json";
+import AppShell from "../../components/AppShell.astro";
+import HeroHeader from "../../components/HeroHeader.astro";
+import SignalCard from "../../components/SignalCard.astro";
+import { sourceMetaForDatasets, todayTrustText, trustState } from "../../lib/site-data.js";
+
+const sections = Array.isArray(today.sections) ? today.sections : [];
+const updated = today.updated || today.generatedAt?.slice(0, 10) || "unavailable";
+const total = sections.reduce((sum, section) => sum + (Array.isArray(section.items) ? section.items.length : 0), 0);
+const sourceMeta = sourceMetaForDatasets({ trends, packages, repos, links });
+const trust = trustState(sourceMeta);
+const statusText = todayTrustText({ total, updated, trust });
+const sectionStats = {
+    start: ["Start", "Open first"],
+    skim: ["Skim", "Scan next"],
+    reference: ["Reference", "Keep nearby"]
+};
+const exploreLinks = [
+    ["Explore", "../explore/index.html", "Search all tracked signals"],
+    ["Review later", "../review/index.html", "Return to saved items"],
+    ["Explore AI agents", "../explore/index.html?focus=AI%20agents", "Agent workflow signals"],
+    ["Explore MCP", "../explore/index.html?focus=MCP", "Protocol and server references"],
+    ["Explore skills", "../explore/index.html?focus=Agent%20skills", "Reusable agent instructions"],
+    ["AI agents", "../topics/ai-agents/index.html", "Focused landing page"],
+    ["MCP", "../topics/mcp/index.html", "Focused landing page"],
+    ["Agent skills", "../topics/agent-skills/index.html", "Focused landing page"],
+    ["Trends", "../trends/index.html", "Ranked movement"],
+    ["Repos", "../repos/index.html", "GitHub traction"],
+    ["Packages", "../packages/index.html", "npm movement"],
+    ["Reference shelf", "../links/index.html", "Curated references"]
+];
+---
+<AppShell
+    title="Today - anothel"
+    description="Thirteen generated picks from tracked technical signals."
+    canonicalPath="/today/"
+    stylesheetHref="../css/site.css"
+>
+    <div class="shell hub-shell today-shell">
+        <HeroHeader eyebrow="Priority brief" title="Today's priority brief." current="Today" prefix="../">
+            <Fragment slot="stamp">Generated at <span data-today-updated>{updated}</span></Fragment>
+        </HeroHeader>
+
+        <main class="hub-main">
+            <section class="module-detail">
+                <h2>Thirteen generated picks from tracked signals.</h2>
+                <p data-today-status>{statusText}</p>
+            </section>
+
+            <section class="stats-grid today-stats" aria-label="Today section summary" data-today-stats>
+                {sections.map((section) => {
+                    const [label, purpose] = sectionStats[section.id] || [section.title || "Section", "Generated picks"];
+                    const count = Array.isArray(section.items) ? section.items.length : 0;
+                    return (
+                        <article class="stat-card">
+                            <span>{label}</span>
+                            <strong>{count}</strong>
+                            <p>{purpose}</p>
+                        </article>
+                    );
+                })}
+            </section>
+
+            <section class="today-brief" data-today-sections aria-label="Today priority sections">
+                {sections.map((section) => {
+                    const items = Array.isArray(section.items) ? section.items : [];
+                    return (
+                        <section class="today-section" id={section.id} data-section-id={section.id}>
+                            <div class="section-heading">
+                                <div>
+                                    <h2>{section.title}</h2>
+                                    <p>{section.summary || `${items.length} generated picks`}</p>
+                                </div>
+                            </div>
+                            <div class="today-grid">
+                                {items.map((item) => <SignalCard item={item} variant="compact" />)}
+                            </div>
+                        </section>
+                    );
+                })}
+            </section>
+
+            <section class="explore-strip" data-today-explore aria-label="Explore full lists">
+                <div>
+                    <h2>Continue in Explore</h2>
+                    <p>Search all tracked signals, then save useful items locally.</p>
+                </div>
+                <nav aria-label="Explore and full module pages">
+                    {exploreLinks.map(([label, href, meta]) => (
+                        <a href={href}>
+                            <strong>{label}</strong>
+                            <span>{meta}</span>
+                        </a>
+                    ))}
+                </nav>
+            </section>
+        </main>
+    </div>
+</AppShell>

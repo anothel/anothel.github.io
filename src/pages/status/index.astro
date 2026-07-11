@@ -1,0 +1,140 @@
+---
+import manifest from "../../../data/manifest.json";
+import trends from "../../../data/trends.json";
+import packages from "../../../data/packages.json";
+import repos from "../../../data/repos.json";
+import links from "../../../data/links.json";
+import report from "../../../data/refresh-report.json";
+import { validateDataFiles } from "../../../scripts/data-contract.mjs";
+import AppShell from "../../components/AppShell.astro";
+import HeroHeader from "../../components/HeroHeader.astro";
+import { buildStatusDashboard } from "../../lib/status-data.mjs";
+
+let validation = null;
+try {
+    validation = await validateDataFiles();
+} catch {
+    validation = null;
+}
+
+const dashboard = buildStatusDashboard({
+    manifest,
+    datasets: { trends, packages, repos, links },
+    report,
+    validation
+});
+const dataAge = dashboard.dataAgeDays === null ? "unknown" : `${dashboard.dataAgeDays} ${dashboard.dataAgeDays === 1 ? "day" : "days"}`;
+const displayCount = (value) => value === null ? "unknown" : String(value);
+const displayTime = (value) => value && value !== "unknown" ? value : "unknown";
+---
+<AppShell title="Status - anothel" description="Data completeness, freshness, validation, and source health." canonicalPath="/status/" stylesheetHref="../css/site.css">
+    <div class="shell hub-shell status-shell">
+        <HeroHeader eyebrow="Data pipeline" title="Source status." current="Status" prefix="../">
+            <Fragment slot="stamp">Is today's data complete, current, and trustworthy?</Fragment>
+        </HeroHeader>
+
+        <main class="hub-main status-dashboard">
+            <section class={`status-overview health-${dashboard.overall}`} aria-labelledby="overall-health-title">
+                <div class="status-overview-heading">
+                    <div>
+                        <p class="eyebrow">Overall data health</p>
+                        <h2 id="overall-health-title">{dashboard.overall}</h2>
+                    </div>
+                    <span class={`health-label health-${dashboard.overall}`} role="status">{dashboard.overall}</span>
+                </div>
+                <p>{dashboard.overallSummary}</p>
+
+                <dl class="status-metrics" aria-label="Data health summary">
+                    <div>
+                        <dt>Generated at</dt>
+                        <dd>
+                            <time datetime={dashboard.generatedAt !== "unknown" ? dashboard.generatedAt : undefined}>{displayTime(dashboard.generatedAt)}</time>
+                            <small>Checked-in pipeline snapshot assembly time, not source freshness.</small>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>Data age</dt>
+                        <dd>{dataAge}<small>Whole UTC days since pipeline generation.</small></dd>
+                    </div>
+                    <div>
+                        <dt>Total sources</dt>
+                        <dd>{dashboard.counts.total}</dd>
+                    </div>
+                    <div>
+                        <dt>Healthy sources</dt>
+                        <dd>{dashboard.counts.healthy}</dd>
+                    </div>
+                    <div>
+                        <dt>Stale sources</dt>
+                        <dd>{dashboard.counts.stale}</dd>
+                    </div>
+                    <div>
+                        <dt>Failed / unavailable</dt>
+                        <dd>{dashboard.counts.failed}</dd>
+                    </div>
+                    <div>
+                        <dt>Validation</dt>
+                        <dd>{dashboard.validation}<small>{dashboard.validationDetail}</small></dd>
+                    </div>
+                    <div>
+                        <dt>Latest successful generation</dt>
+                        <dd><time datetime={dashboard.latestSuccessfulGeneration !== "unknown" ? dashboard.latestSuccessfulGeneration : undefined}>{displayTime(dashboard.latestSuccessfulGeneration)}</time></dd>
+                    </div>
+                </dl>
+            </section>
+
+            <section class="status-evidence" aria-labelledby="pipeline-evidence-title">
+                <div class="panel-heading">
+                    <h2 id="pipeline-evidence-title">Pipeline evidence</h2>
+                    <p>Facts from checked-in JSON and build-time schema validation. No live monitoring.</p>
+                </div>
+                <dl class="evidence-list">
+                    <div><dt>Refresh report result</dt><dd>{dashboard.reportStatus}</dd></div>
+                    <div><dt>Manifest data date</dt><dd>{manifest.updated || "unknown"}</dd></div>
+                    <div><dt>Published items</dt><dd>{Number.isInteger(report.totals?.items) ? report.totals.items : "unknown"}</dd></div>
+                    <div><dt>Legitimate empty sources</dt><dd>{dashboard.counts.empty}</dd></div>
+                </dl>
+            </section>
+
+            <section class="source-health-section" aria-labelledby="source-health-title">
+                <div class="panel-heading">
+                    <h2 id="source-health-title">Source health</h2>
+                    <p>Last successful source update, current age, validation, and known recovery state.</p>
+                </div>
+                <div class="source-health-table-wrap">
+                    <table class="source-health-table">
+                        <caption>Health evidence for {dashboard.counts.total} checked-in data sources</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Source</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Health</th>
+                                <th scope="col">Freshness</th>
+                                <th scope="col">Last successful update</th>
+                                <th scope="col">Items</th>
+                                <th scope="col">Validation</th>
+                                <th scope="col">Failure / warning</th>
+                                <th scope="col">Fallback</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {dashboard.rows.map((row) => (
+                                <tr class={`health-${row.health}`}>
+                                    <th scope="row" data-label="Source"><a href={`../${row.route}`}>{row.name}</a></th>
+                                    <td data-label="Category">{row.category}</td>
+                                    <td data-label="Health"><span class={`health-label health-${row.health}`}>{row.health}</span><small>{row.availability}</small></td>
+                                    <td data-label="Freshness"><strong>{row.freshness}</strong>{row.ageDays !== null && <small>{row.ageDays} {row.ageDays === 1 ? "day" : "days"} old</small>}</td>
+                                    <td data-label="Last successful update"><time datetime={row.lastSuccessfulUpdate || undefined}>{displayTime(row.lastSuccessfulUpdate)}</time></td>
+                                    <td data-label="Items"><strong>{displayCount(row.itemCount)}</strong><small>{row.coverage === "unknown" ? "coverage unknown" : row.coverage}</small></td>
+                                    <td data-label="Validation"><span class={`validation-label validation-${row.validation}`}>{row.validation}</span></td>
+                                    <td data-label="Failure / warning">{row.issue}</td>
+                                    <td data-label="Fallback"><strong>{row.fallback ? "yes" : "no"}</strong></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+</AppShell>

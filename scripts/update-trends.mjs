@@ -417,7 +417,9 @@ export function prepareTrendDataForWrite(data, previousData) {
                         coverage: `${restoredCount}/${Math.max(source.tracked || 1, restoredCount)}`,
                         fallbackUsed: true,
                         staleButSafe: true,
-                        previousUpdated: previousData.updated || source.previousUpdated,
+                        previousUpdated: previousData.sourceMeta?.find((previous) => previous.name === source.name)?.updatedAt
+                            || previousData.generatedAt
+                            || source.previousUpdated,
                         rateLimited: sourceSafetyFlags(errors).rateLimited
                     };
                 }),

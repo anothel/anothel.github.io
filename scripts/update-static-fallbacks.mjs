@@ -409,9 +409,11 @@ async function updateStaticFallbacks() {
     const datasets = await loadDatasets(manifest);
     const modules = manifest.modules || [];
     const generatedAt = report.generatedAt || manifest.generatedAt || manifest.updated || "-";
-    const homeOverview = buildHomeOverview(manifest, { today: generatedAt });
+    const evaluationTime = new Date();
+    const sourceMeta = sourceMetaList(datasets);
+    const homeOverview = buildHomeOverview(manifest, { sourceMeta, today: evaluationTime });
     const statusSummary = buildStatusSummary(manifest, datasets);
-    const rows = collectSourceRows(manifest, datasets, { today: generatedAt });
+    const rows = collectSourceRows(manifest, datasets, { today: evaluationTime });
     const updated = homeOverview.updated;
     const homeRoutes = buildModuleRoutes(manifest);
     const topicMovements = buildTopicMovements(datasets);
@@ -435,7 +437,7 @@ ${indentBlock(renderSkimList(getTodaySection(today, "skim")), 20)}$2`, "home ski
 
     let todayHtml = await readFile("today/index.html", "utf8");
     todayHtml = replaceTaggedText(todayHtml, "data-today-updated", today.updated);
-    todayHtml = replaceTaggedText(todayHtml, "data-today-status", renderTodayStatus(today));
+    todayHtml = replaceTaggedText(todayHtml, "data-today-status", renderTodayStatus({ ...today, sourceMeta }, { today: evaluationTime }));
     todayHtml = replacePattern(todayHtml, /(<section class="stats-grid today-stats" aria-label="Today section summary" data-today-stats>)[\s\S]*?(\s*<\/section>\s*<section class="today-brief")/, `$1
 ${indentBlock(renderTodayStats(today.sections), 16)}$2`, "today stats");
     todayHtml = replacePattern(todayHtml, /(<section class="today-brief" data-today-sections aria-label="Today priority sections">)[\s\S]*?(\s*<\/section>\s*<section class="explore-strip")/, `$1
@@ -462,7 +464,7 @@ ${todayExploreLinks}
                     <p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(exploreSources, { updated }))}</p>
                 </div>
                 <div class="source-health-grid" data-source-health>
-${trimLineEnds(globalThis.DataHealth.renderSourceHealth(exploreSources, { today: generatedAt }))}
+${trimLineEnds(globalThis.DataHealth.renderSourceHealth(exploreSources, { today: evaluationTime }))}
                 </div>
             </section>`);
     exploreHtml = replaceMarkedBlock(exploreHtml, "explore-results", indentBlock(exploreApp.renderExploreCards(exploreItems), 24));

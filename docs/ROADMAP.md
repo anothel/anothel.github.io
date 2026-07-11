@@ -1,110 +1,56 @@
 # Roadmap
-Use this file only to pick the next safe work bundle.
 
-Completed work belongs in `CHANGELOG.md`. Durable decisions belong in `docs/`.
+Use this file for current stabilization and future trigger-based work. Detailed completed history belongs in `CHANGELOG.md`; this document keeps only the architecture milestone needed to explain current state.
 
-## Rules
+## Completed Architecture Work
 
-- Start the highest priority bundle whose trigger is true.
-- Keep each bundle small enough to implement, test, and commit alone.
-- Use `docs/RELEASE_CHECKLIST.md` to pick minimum checks before staging or committing.
-- Do not run live refresh unless fresh source evidence is needed.
-- No backend, account, sync, database, framework, bundler, package dependency, or lockfile without an explicit approved architecture change.
-- Keep retired `n8n-workflow` out of npm refreshes while repo/link coverage remains useful.
-- If `GITHUB_TOKEN` is missing, keep GitHub rate limits as known partial state.
+- Astro 6 static build, npm lockfile, and React integration are installed.
+- `astro.config.mjs` defines `site: "https://anothel.github.io"` and `output: "static"`.
+- Home, Today, Explore, Review, Status, Trends, Packages, Repos, and Links are Astro routes using shared components.
+- Explore and Review are `client:load` React islands; no full React SPA or client router exists.
+- CSS, checked-in JSON, browser modules, robots, sitemap, Notes/topics, and 404 output are preserved in `dist/` through Astro build-time endpoints/pass-through routes.
+- CI builds and validates `dist/`, then runs Node and Playwright checks.
+- A dedicated GitHub Pages workflow builds, validates, deploys only `dist/`, and handles successful scheduled refresh runs.
+- Accessibility and 390x844 mobile regression checks cover critical routes.
 
-## Current Source State
+Migration scaffold/gate work is complete. Do not queue “adopt Astro,” “add build chain,” or “start React islands” as future work.
 
-- Last checked-in refresh: `2026-07-07T12:40:09.312Z`.
-- Generated items: 107.
-- Overall status: `ok`.
-- Hacker News, GitHub trends, trend npm, package npm, repo GitHub, and manual sources are `ok`.
-- No npm source blocker. npm `n8n-workflow` is retired from npm refreshes after 6 consecutive 429s; workflow automation remains covered by n8n repo/link plus Inngest, Trigger.dev, and Temporal packages.
+## Current Stabilization
 
-## Next Work Queue
+### S0 - Data Health and Ranking Regression Watch
 
-### P0 - Publish Health Refresh and Source Partial Policy
+Last checked-in refresh: `2026-07-07T12:40:09.312Z`; 107 generated items; overall status `ok`. Retired `n8n-workflow` remains excluded after repeated npm 429s.
 
-Trigger: checked-in data is old, source health changes, public page dates look wrong, owner asks for publish confirmation, or the same source partial repeats.
+Trigger: source health changes, checked-in data becomes stale, top results drift toward broad/duplicate signals, or owner requests a fresh publish-health confirmation.
 
-Scope:
+Scope: use existing update, source-governance, signal-policy, and golden-test paths. Live refresh requires network/token approval. Do not expand source families or ranking models without a failing product-quality case.
 
-- Run existing data refresh only when network/token access is approved.
-- Review generated data, manifest, refresh report, sitemap, Today, Status, Explore, and static fallbacks together.
-- If `GITHUB_TOKEN` is missing, keep GitHub rate limits as known partial state and rerun only when token-backed proof matters.
-- Keep retired `n8n-workflow` out of npm refreshes while repo/link coverage remains useful.
-- Treat future one-package npm downloads 429s as package-source partials, not automatic watchlist disables, while preserved rows remain useful.
-- After 3 repeated same-package 429s, record the package as a watchlist replacement candidate; after 5 repeats or stale preserved rows, decide whether to disable or replace it before the next publish confirmation.
-- Keep user-facing warning copy limited to source health, Status detail, and page health strips while the partial is accepted; escalate only when the data becomes stale or rows disappear.
+Verification: `npm run validate:data`, focused ranking/source tests, `npm run check`, `git diff --check`.
 
-Verification:
+Exit: generated state is explained and usable, or exact blocker/decision threshold is recorded.
 
-- `node scripts/update-all.mjs` when live refresh is approved.
-- `node scripts/validate-data.mjs`.
-- `git diff --check`.
-- `npm.cmd run check`.
+## Future Work
 
-Exit: generated data is publishable, or the exact source blocker and next watchlist action threshold are recorded here.
+### F1 - Convert Legacy Notes and Topic Routes
 
-### P1 - Today Ranking Diversity Guard
+Trigger: a Notes/topic change needs shared Astro layout behavior, pass-through maintenance becomes fragile, or route-specific build tests expose drift.
 
-Trigger: Today or Explore top priority results drift toward one source family, broad baseline tooling, duplicate URLs, or raw popularity over topic relevance.
+Scope: migrate one route family at a time from checked-in HTML/pass-through to Astro components while preserving URLs, content, sitemap entries, and useful no-JS output.
 
-Scope:
+Do not migrate solely for framework uniformity.
 
-- Strengthen golden fixtures before changing ranking logic.
-- Guard Start section diversity so one source family does not dominate the top set.
-- Keep broad baseline package/repo signals from beating agent/workflow/eval/MCP signals by popularity alone.
-- Verify duplicate URL identity stays consistent across Today, Explore, and Review saved ids.
-- Change `data/signal-policy.json` only when a fixture proves a ranking regression.
+### F2 - Simplify Island-to-Legacy Browser Module Bridge
 
-Verification:
+Trigger: Explore/Review script loading causes a measured bug, duplicated state, or maintenance cost.
 
-- `node --test tests/signal-quality-golden.test.mjs`
-- `node --test tests/today-generator.test.mjs`
-- `node --test tests/data-schema.test.mjs`
-- `npm.cmd run check`
-- `git diff --check`
+Scope: move only affected behavior into the existing island. Preserve localStorage schemas and static initial markup. Do not create global React state or a SPA shell.
 
-Exit: top priority remains workflow, agent, eval, MCP, or supported-topic centered without adding a larger ranking model.
+## Constraints
 
-### P2 - Static Fallback Generator Cleanup
-
-Trigger: fallback drift, route-specific replacement fragility, CRLF/LF mismatch, or unclear static-fallback error output slows a checked-in page update.
-
-Scope:
-
-- Split route-neutral fallback replacement helpers from route-specific renderers only where drift tests need it.
-- Keep Home, Today, Explore, Status, module, topic, and Notes snapshot fixtures distinct.
-- Preserve CRLF/LF coverage for tagged replacement blocks.
-- Make fallback drift errors name the route and marker that failed.
-
-Verification:
-
-- `node --test tests/static-fallback.test.mjs`
-- `node --test tests/site-structure.test.mjs`
-- `npm.cmd run check`
-- `git diff --check`
-
-Exit: fallback regeneration remains predictable and route drift is easier to diagnose without framework, bundler, or dependency changes.
-
-## Architecture Gate
-
-Trigger: a measured vanilla JavaScript blocker makes Review or Explore harder to maintain than the no-build path.
-
-Until then: no framework, bundler, dependency, lockfile, backend, account, sync, database, or server function.
-
-Verification:
-
-- One focused PoC test for the measured blocker.
-- `npm.cmd run check`.
-
-Exit: adopt only if the PoC reduces shipped maintenance cost; otherwise delete it.
-
-## Cut List
-
-Do not re-add backlog lists for:
-
-- code of conduct, release tags, GitHub releases, provenance, SLSA, coverage tooling, JSON Schema, large source expansion, advanced ranking, native file chooser smoke, Review fourth workflow state, link previews, profile/worklog pages, or framework conversion.
-
-Pull one back only when a real trigger above exists.
+- GitHub Pages-compatible static output and stable public URLs.
+- `data/*.json` remains the data contract.
+- No backend, database, server function, account/login, or cloud sync.
+- Review state remains browser-local.
+- React remains limited to justified islands; no full React SPA.
+- Keep static/no-JS output useful where practical.
+- Pull future work forward only when its trigger is true.

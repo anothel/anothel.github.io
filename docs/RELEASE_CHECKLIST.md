@@ -4,74 +4,65 @@ Use this before publishing meaningful site, data, or operations changes.
 
 ## Release Policy
 
-This repo uses dated `CHANGELOG.md` entries and normal GitHub Pages publish. No Git tag is required until versioned releases exist.
+The project uses dated `CHANGELOG.md` entries and GitHub Pages. No Git tag is required until versioned releases exist. Deployment source limitations are canonical in `docs/DEPLOYMENT.md`.
 
 ## Required Checks
 
 ```powershell
+npm run build
 npm run check
-node scripts/validate-data.mjs
 git diff --check
 ```
 
-Run focused tests for touched areas:
+`npm run check` already builds and validates `dist/`; the explicit build command remains listed because release handoff requires both commands to be valid and independently runnable.
 
-```powershell
-node --test tests/ops-docs.test.mjs
-node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs
-```
+## Minimum Extra Checks
 
-## Minimum Checks By Work Type
-
-| Work type | Minimum extra checks |
+| Work type | Focused check |
 |---|---|
-| Docs-only | `node --test tests/ops-docs.test.mjs` |
-| UI | `node --test tests/site-structure.test.mjs` plus the touched renderer test |
-| Data refresh | `node scripts/validate-data.mjs` and generated data review below |
-| Fallback generator | `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs` |
+| Docs-only | `node --test tests/ops-docs.test.mjs tests/architecture-poc.test.mjs` |
+| UI/route | Relevant Playwright spec plus `npm run test:e2e` |
+| Data contract | `npm run validate:data` plus focused schema/generator tests |
+| Data refresh | `npm run validate:data` and generated-data review below |
+| Legacy fallback | `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs` |
+
+## Build and Route Review
+
+- `dist/` contains all required routes from `scripts/check-dist.mjs`.
+- Astro-owned routes use shared shell/navigation components.
+- Explore/Review retain useful initial markup and localStorage compatibility.
+- Notes/topic pass-through routes still exist when touched.
+- Internal links and data/assets resolve under the configured root URL.
 
 ## Generated Data Review
 
-Check before publishing generated data:
-
 - `data/manifest.json` counts match module data.
 - `data/refresh-report.json` explains source health.
-- Today data exists and has expected sections.
-- Static fallback pages were regenerated after data changes.
-- `sitemap.xml` data-driven route `lastmod` values match `data/manifest.json` `updated`.
-- Any `partial`, `fallback`, `staleButSafe`, or `rateLimited` state is visible and acceptable.
+- Today has expected sections and bounded scores.
+- Any `partial`, `fallback`, `staleButSafe`, or `rateLimited` state is visible and intentional.
+- Legacy static fallbacks and sitemap dates were regenerated after live data changes.
+- Timestamp/freshness interpretation matches `docs/SIGNAL_SCHEMA.md`.
 
 ## Security Review
 
-Check when rendering or source handling changed:
+- Astro-rendered external data uses Astro escaping and safe URL handling.
+- Legacy/browser render helpers still escape text and block unsafe URLs.
+- External links retain required `noopener noreferrer` behavior.
+- localStorage import/export remains untrusted input.
+- Dependency/lockfile changes are reviewed; `package-lock.json` matches `package.json`.
+- Workflow permissions/actions match `docs/THREAT_MODEL.md`.
 
-- Unsafe URLs are blocked or replaced.
-- Generated text is escaped.
-- External links keep safe attributes where rendered.
-- Referrer policy still matches the external-link `noreferrer` decision.
-- GitHub Actions pinning and Dependabot decisions still match the current dependency-free workflow posture.
-- localStorage import/export treats payload as untrusted.
+## Documentation Review
 
-## Docs Review
-
-Update docs when behavior changes:
-
-- `README.md` for commands or surface changes.
-- `docs/ROADMAP.md` for future work only.
-- `docs/IA.md` for product, route, or vocabulary decisions.
-- `docs/SIGNAL_SCHEMA.md` for normalized data contract changes.
-- `docs/SOURCE_GOVERNANCE.md` for source policy changes.
-- `docs/THREAT_MODEL.md` or `SECURITY.md` for security posture changes.
-- `CHANGELOG.md` for user-visible or operator-visible changes.
+- Architecture changes -> `docs/ARCHITECTURE.md`.
+- Deployment/build/workflow changes -> `docs/DEPLOYMENT.md`.
+- Route jobs/navigation changes -> `docs/IA.md`.
+- Data/timestamp/score changes -> `docs/SIGNAL_SCHEMA.md`.
+- Source policy changes -> `docs/SOURCE_GOVERNANCE.md`.
+- Commands/development changes -> `README.md` and `CONTRIBUTING.md`.
+- Security changes -> `docs/THREAT_MODEL.md` or `SECURITY.md`.
+- Completed user/operator-visible work -> `CHANGELOG.md`.
 
 ## Publish Decision
 
-Publish when:
-
-- Required checks pass.
-- A dated `CHANGELOG.md` entry covers user-visible or operator-visible changes.
-- Known partial/fallback states are intentional and documented.
-- No unrelated generated changes are mixed into the change.
-- Roadmap contains only future work.
-- Public reuse boundary still matches `LICENSE`.
-- GitHub Pages publish can be explained from the checks and generated-data review above.
+Publish when required checks pass, generated partial/fallback states are intentional, docs match actual behavior, unrelated generated changes are excluded, and GitHub Pages publishing source has been confirmed according to `docs/DEPLOYMENT.md`.

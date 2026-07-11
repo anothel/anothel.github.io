@@ -1,0 +1,162 @@
+---
+import manifest from "../../data/manifest.json";
+import today from "../../data/today.json";
+import trends from "../../data/trends.json";
+import packages from "../../data/packages.json";
+import repos from "../../data/repos.json";
+import links from "../../data/links.json";
+import AppShell from "../components/AppShell.astro";
+import HeroHeader from "../components/HeroHeader.astro";
+import SignalCard from "../components/SignalCard.astro";
+import { dataModeText, sourceMetaForDatasets, trustState } from "../lib/site-data.js";
+
+const modules = manifest.modules || [];
+const startItems = today.sections?.find((section) => section.id === "start")?.items || [];
+const skimItems = today.sections?.find((section) => section.id === "skim")?.items || [];
+const total = modules.reduce((sum, module) => sum + (module.count || 0), 0);
+const updated = modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || manifest.updated || "-";
+const sourceMeta = sourceMetaForDatasets({ trends, packages, repos, links });
+const trust = trustState(sourceMeta);
+const moduleRoutes = [
+    { title: "Explore workspace", route: "explore/index.html", purpose: "Search and save across sources", count: total, updated, status: "ok" },
+    { title: "Source status", route: "status/index.html", purpose: "Refresh health across sources", count: total, updated, status: "ok" },
+    ...modules.map((module) => ({
+        title: module.title,
+        route: module.route,
+        purpose: module.id === "trends" ? "Cross-source movement" : module.source,
+        count: module.count,
+        updated: module.updated,
+        status: module.status
+    }))
+];
+---
+<AppShell
+    title="anothel"
+    description="A personal radar for AI engineering signals across HN, GitHub, npm, repos, packages, and curated references."
+    canonicalPath="/"
+    stylesheetHref="css/site.css"
+>
+    <div class="shell hub-shell">
+        <HeroHeader eyebrow="Personal signal radar" title="What is worth opening now?" current="Home" prefix="">
+            <Fragment slot="stamp">Data date {updated}</Fragment>
+        </HeroHeader>
+
+        <main class="hub-main">
+            <section class="home-command-board" aria-labelledby="home-priority-title">
+                <div class="home-priority-panel">
+                    <div class="section-heading">
+                        <div>
+                            <p class="eyebrow">Open first</p>
+                            <h2 id="home-priority-title">Start with these signals.</h2>
+                            <p>A personal radar for AI engineering signals across HN, GitHub, npm, repos, packages, and references.</p>
+                        </div>
+                        <a href="today/index.html">Open priority brief</a>
+                    </div>
+                    <div class="today-grid home-priority-list" data-home-start>
+                        {startItems.map((item) => <SignalCard item={item} variant="compact" />)}
+                    </div>
+                </div>
+
+                <aside class="home-utility-strip" aria-label="Local state">
+                    <article class="utility-card utility-card-wide">
+                        <span>Items tracked</span>
+                        <strong data-home-total>{total}</strong>
+                    </article>
+                    <article class="utility-card utility-card-wide">
+                        <span>Trust state</span>
+                        <strong data-home-freshness>{trust.freshness}</strong>
+                        <div class="review-summary-grid">
+                            <article>
+                                <span>Pipeline status</span>
+                                <strong data-home-live>{trust.pipelineStatus}</strong>
+                            </article>
+                            <article>
+                                <span>Data date</span>
+                                <strong data-home-updated>{updated}</strong>
+                            </article>
+                        </div>
+                        <p class="review-summary-note" data-home-recovery>{dataModeText(sourceMeta, updated)}</p>
+                    </article>
+                    <article class="utility-card utility-card-wide" data-home-review-summary>
+                        <span>Saved queue</span>
+                        <div class="review-summary-grid">
+                            <article><span>Saved items</span><strong data-home-review-saved>0</strong></article>
+                            <article><span>Unread</span><strong data-home-review-unread>0</strong></article>
+                        </div>
+                        <p class="review-summary-note">Local to this browser. Open Review for browser-saved items.</p>
+                        <a href="review/index.html">Open Review</a>
+                    </article>
+                </aside>
+            </section>
+
+            <section class="home-module-section" aria-labelledby="home-modules-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="home-modules-title">Browse modules</h2>
+                        <p>Jump into the workspace when a source deserves deeper reading.</p>
+                    </div>
+                    <a href="explore/index.html">Search all tracked signals</a>
+                </div>
+                <section class="module-strip home-module-board" aria-label="Module routes" data-home-routes>
+                    {moduleRoutes.map((route) => (
+                        <a class={`module-route status-${route.status || "unknown"}`} href={route.route}>
+                            <span>{route.title}</span>
+                            <strong>{route.purpose}</strong>
+                            <small>{route.count} items / {route.updated} / Status {route.status}</small>
+                        </a>
+                    ))}
+                </section>
+            </section>
+
+            <section class="home-project-section" aria-labelledby="home-projects-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="home-projects-title">Projects</h2>
+                        <p>Small things worth opening directly.</p>
+                    </div>
+                </div>
+                <div class="project-list">
+                    <a class="project-card" href="https://anothel.github.io/securekit/" rel="noopener noreferrer">
+                        <strong>SecureKit</strong>
+                        <span>C++20 security utility library backed by OpenSSL 3.x</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="home-skim-panel" aria-labelledby="skim-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="skim-title">Worth skimming</h2>
+                        <p>Useful signals that do not need first attention.</p>
+                    </div>
+                </div>
+                <div class="skim-list" data-home-skim>
+                    {skimItems.slice(0, 8).map((item) => (
+                        <a class="skim-item" href={item.url}>
+                            <strong>{item.title}</strong>
+                            <span>{item.module} / {item.metric}</span>
+                        </a>
+                    ))}
+                </div>
+            </section>
+        </main>
+    </div>
+    <script is:inline src="js/local-state.js"></script>
+    <script is:inline>
+        (() => {
+            const state = globalThis.AnothelState;
+            if (!state) return;
+            let raw = "[]";
+            try {
+                raw = localStorage.getItem(state.keys.savedItems) || "[]";
+            } catch {
+                // Browser storage can be unavailable.
+            }
+            const summary = state.savedSummaryFromRaw(raw);
+            const saved = document.querySelector("[data-home-review-saved]");
+            const unread = document.querySelector("[data-home-review-unread]");
+            if (saved) saved.textContent = String(summary.saved);
+            if (unread) unread.textContent = String(summary.unread);
+        })();
+    </script>
+</AppShell>

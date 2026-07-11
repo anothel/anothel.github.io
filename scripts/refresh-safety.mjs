@@ -37,7 +37,7 @@ function markSourceMeta(sourceMeta, previousCount, options, nextData) {
         fallbackUsed: true,
         staleButSafe: true,
         fallbackReason: options.fallbackReason,
-        previousUpdated: options.previousUpdated,
+        previousUpdated: source.updatedAt || options.previousUpdated,
         rateLimited: flags.rateLimited,
         ...(errors.length > 0 ? { errors } : {})
     }));
@@ -52,7 +52,7 @@ export function applyEmptyCollectionFallback(nextData, previousData, options) {
         return nextData;
     }
 
-    const previousUpdated = previousData.updated || "-";
+    const previousUpdated = previousData.sourceMeta?.updatedAt || previousData.generatedAt;
     const sourceMeta = markSourceMeta(previousData.sourceMeta, previousItems.length, {
         ...options,
         previousUpdated

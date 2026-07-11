@@ -1,0 +1,28 @@
+---
+import { sourceList, dataModeText, freshnessText } from "../lib/site-data.js";
+
+const {
+    title = "Data health",
+    sourceMeta,
+    updated,
+    compact = false
+} = Astro.props;
+const sources = sourceList(sourceMeta);
+const panelClass = compact ? "health-panel compact-health" : "health-panel";
+---
+<section class={panelClass} aria-labelledby={`${Astro.props.id || "data"}-health-title`}>
+    <div class="panel-heading">
+        <h2 id={`${Astro.props.id || "data"}-health-title`}>{title}</h2>
+        <p data-data-mode>{dataModeText(sourceMeta, updated)}</p>
+    </div>
+    <div class="source-health-grid" data-source-health>
+        {sources.map((source) => (
+            <article class={`source-health-card status-${source.status || "unknown"}`}>
+                <span>{source.name || "unknown"}</span>
+                <strong>{source.status || "unknown"}</strong>
+                <p>{source.count || 0} items / {source.coverage || "coverage unknown"}</p>
+                <small>{freshnessText(source)}</small>
+            </article>
+        ))}
+    </div>
+</section>

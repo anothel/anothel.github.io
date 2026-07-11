@@ -2,55 +2,98 @@
 
 ## Local Setup
 
-No package install is required today.
+Use Node.js 22.12.0 or newer and npm's checked-in lockfile.
 
 ```powershell
-npm run serve
-npm run check
+npm ci
+npm run build
+npm run preview
 ```
 
-Use Node 20 or newer.
+Open `http://127.0.0.1:4321/`. There is no `npm run dev` script. Rebuild before previewing source or data changes. `npm run serve` is retained only for inspecting checked-in legacy/root static files at `http://127.0.0.1:58117/`; it is not the Astro development server.
 
-If PowerShell blocks `npm.ps1`, use `npm.cmd run check`.
+If PowerShell blocks `npm.ps1`, use `npm.cmd`.
 
-## Change Rules
+## Commands
 
-- Keep the site static-first.
-- Prefer existing helpers over new abstractions.
-- Keep public route additions out unless `docs/ROADMAP.md` accepts the route job.
-- Keep completed work out of `docs/ROADMAP.md`.
-- Update docs when changing source health, data contract, refresh workflow, release process, or security posture.
-- Do not assume public reuse rights beyond `LICENSE`.
+| Command | Actual behavior |
+|---|---|
+| `npm ci` | Install exact dependencies from `package-lock.json`. |
+| `npm run build` | Run `astro build`; write static output to `dist/`. |
+| `npm run preview` | Serve current `dist/` at `127.0.0.1:4321`. |
+| `npm run serve` | Serve checked-in root/legacy static files at `127.0.0.1:58117`. |
+| `npm run validate:data` | Validate checked-in `data/*.json` through `scripts/data-contract.mjs`. |
+| `npm run check:docs` | Check internal Markdown links, repository paths, npm script names, and canonical architecture statements. External links are skipped. |
+| `npm run validate` | Validate data, run all Node tests, and syntax-check listed scripts/browser modules. |
+| `npm test` | Run `tests/*.test.mjs` with Node's test runner. |
+| `npm run check:dist` | Validate required `dist/` routes, assets, JSON, and internal links. |
+| `npm run test:e2e` | Build, then run Playwright desktop/mobile projects. |
+| `npm run test:e2e:run` | Run Playwright against current `dist/` via Astro preview. |
+| `npm run check` | Run data/docs checks, build, dist checks, repository validation, and Playwright. |
+| `npm run update:data` | Run the live data update sequence; may call Hacker News, GitHub, and npm. |
 
-## Data Changes
+Install the Playwright browser once when needed:
 
-Use the full refresh path before accepting generated data changes:
+```powershell
+npx playwright install chromium
+```
+
+## Adding a Route
+
+1. Add `src/pages/<route>/index.astro` (or `src/pages/index.astro` for `/`). New routes should not extend `src/pages/[...legacy].ts`.
+2. Reuse `AppShell.astro`, `HeroHeader.astro`, and existing presentation components.
+3. Import checked-in JSON in Astro frontmatter when the page is data-driven; do not fetch remote sources during build.
+4. Add navigation only when the route has an approved job in `docs/IA.md`.
+5. Update `scripts/check-dist.mjs`, sitemap/navigation, and route tests when the route belongs to the required public surface.
+6. Run `npm run build`, `npm run check:dist`, relevant Playwright checks, and `npm run check`.
+
+## Changing a Data Field Safely
+
+1. Identify ownership in `docs/SIGNAL_SCHEMA.md`, `data/watchlists.json`, or `data/signal-policy.json`.
+2. Update the producer under `scripts/` and validation in `scripts/data-contract.mjs` together.
+3. Update checked-in JSON fixtures/data only through the appropriate generator or a reviewed contract migration.
+4. Update Astro/browser consumers and focused tests.
+5. Run `npm run validate:data`, focused tests, then `npm run check`.
+
+Do not use page code as an alternate data contract. `data/*.json` remains the boundary.
+
+## Astro versus React
+
+Use Astro for routes, layout, navigation, cards, status panels, and other build-time/static output. Use semantic HTML or native browser behavior for simple interaction.
+
+React is justified only for a selected surface with sustained browser-local state or event-driven rerendering. Current examples are Explore and Review, each hydrated with `client:load`. Do not add React to a static route, create a site-wide React root, or turn the application into a SPA.
+
+## Data Refresh
+
+Live refresh requires network access and can change many generated files:
 
 ```powershell
 $env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
-node scripts/update-all.mjs
+npm run update:data
+npm run validate:data
 npm run check
 ```
 
-If `GITHUB_TOKEN` is missing, GitHub-backed sources may stay `partial` or `rateLimited`. That is acceptable only when Status and `data/refresh-report.json` explain the state.
+Missing `GITHUB_TOKEN` can leave GitHub-backed sources `partial` or `rateLimited`. Run refresh only when fresh source evidence is part of the task.
 
-## Verification
+## Change Rules
 
-Use `docs/RELEASE_CHECKLIST.md` to choose the minimum checks for the work type.
+- Keep GitHub Pages-compatible static output and existing public URLs.
+- Preserve useful initial/no-JS content where practical.
+- No backend, database, account/login, cloud sync, or server functions.
+- Preserve Review and Explore localStorage compatibility.
+- Prefer existing helpers/components over new abstractions.
+- Update canonical docs when changing architecture, deployment, route jobs, data semantics, refresh workflow, release process, or security posture.
+- Do not assume public reuse rights beyond `LICENSE`.
 
-Before handing off a change:
+Before handoff:
 
 ```powershell
 npm run check
 git diff --check
 ```
 
-Run focused tests for touched areas, for example:
-
-```powershell
-node --test tests/ops-docs.test.mjs
-node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs
-```
+Use `docs/RELEASE_CHECKLIST.md` for work-specific checks.
 
 ## Git Ownership
 

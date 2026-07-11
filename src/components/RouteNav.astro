@@ -1,0 +1,26 @@
+---
+const { current, prefix = "../" } = Astro.props;
+const primaryRoutes = [
+    ["Home", "index.html"],
+    ["Today", "today/index.html"],
+    ["Explore", "explore/index.html"],
+    ["Review", "review/index.html"],
+    ["Status", "status/index.html"]
+];
+const sourceRoutes = [
+    ["Trends", "trends/index.html"],
+    ["Packages", "packages/index.html"],
+    ["Repos", "repos/index.html"],
+    ["Reference shelf", "links/index.html"]
+];
+---
+<nav class="site-nav primary-nav" aria-label="Primary">
+    {primaryRoutes.map(([label, path]) => (
+        <a href={`${prefix}${path}`} aria-current={label === current ? "page" : undefined}>{label}</a>
+    ))}
+</nav>
+<nav class="source-nav" aria-label="Source pages">
+    {sourceRoutes.map(([label, path]) => (
+        <a href={`${prefix}${path}`} aria-current={label === current ? "page" : undefined}>{label}</a>
+    ))}
+</nav>

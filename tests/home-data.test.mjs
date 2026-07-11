@@ -27,7 +27,14 @@ test("buildHomeOverview summarizes manifest modules", () => {
             { status: "partial", count: 8, updated: "2026-06-13" },
             { status: "ok", count: 6, updated: "2026-06-14" }
         ]
-    }, { today: "2026-06-16" });
+    }, {
+        today: "2026-06-16",
+        sourceMeta: [
+            { status: "ok", updatedAt: "2026-06-14T00:00:00.000Z" },
+            { status: "partial", updatedAt: "2026-06-13T00:00:00.000Z" },
+            { status: "ok", updatedAt: "2026-06-14T00:00:00.000Z" }
+        ]
+    });
 
     assert.deepEqual(overview, {
         totalItems: 25,
@@ -36,8 +43,8 @@ test("buildHomeOverview summarizes manifest modules", () => {
         errorModules: 0,
         totalModules: 3,
         updated: "2026-06-14",
-        healthLabel: "2 ok / 1 partial",
-        dataState: "Aging",
+        healthLabel: "partial",
+        dataState: "aging",
         recoveryText: "Source health partial. Some data is stale but still usable; some sources may be missing. Retry data refresh to recover freshness."
     });
 });
@@ -378,7 +385,9 @@ test("checked-in data powers the home command center", () => {
     const packages = readJson("data/packages.json");
     const repos = readJson("data/repos.json");
     const links = readJson("data/links.json");
-    const overview = buildHomeOverview(manifest);
+    const overview = buildHomeOverview(manifest, {
+        sourceMeta: [trends, packages, repos, links].flatMap((dataset) => dataset.sourceMeta || [])
+    });
     const startItems = getTodaySection(today, "start");
     const skimItems = getTodaySection(today, "skim");
     const routes = buildModuleRoutes(manifest);

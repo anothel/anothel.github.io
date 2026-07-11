@@ -1,0 +1,52 @@
+---
+const { item, variant = "" } = Astro.props;
+const context = [item.origin, item.category].filter(Boolean).join(" / ");
+const action = item.action || "Open the source and decide whether it belongs in the saved queue.";
+const scoreReasons = Array.isArray(item.scoreReasons) ? item.scoreReasons.slice(0, 3) : [];
+const className = ["signal-card", "today-card", variant === "compact" ? "today-card-compact" : ""]
+    .filter(Boolean)
+    .join(" ");
+
+function safeHref(value) {
+    const href = String(value || "").trim();
+    if (!href || href.startsWith("//") || /[\u0000-\u001F\u007F]/.test(href)) return "#";
+
+    try {
+        const parsed = new URL(href, "https://anothel.github.io");
+        const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(href);
+        if (hasScheme && parsed.protocol !== "http:" && parsed.protocol !== "https:") return "#";
+        if (!hasScheme && parsed.origin !== "https://anothel.github.io") return "#";
+        return href;
+    } catch {
+        return "#";
+    }
+}
+
+const href = safeHref(item.url);
+let rel;
+try {
+    rel = href !== "#" && new URL(href, "https://anothel.github.io").origin !== "https://anothel.github.io"
+        ? "noopener noreferrer"
+        : undefined;
+} catch {
+    rel = undefined;
+}
+---
+<a class={className} href={href} rel={rel} data-signal-card>
+    <div>
+        <span>{item.module}</span>
+        <em>{item.metric}</em>
+    </div>
+    <strong data-signal-title>{item.title}</strong>
+    <small class="today-card-context">
+        <strong>Source context</strong>
+        {context}
+    </small>
+    <p class="why-copy"><strong>Why now</strong> {item.reason}</p>
+    {scoreReasons.length > 0 && (
+        <ul class="score-reasons" aria-label="Score reasons">
+            {scoreReasons.map((reason) => <li>{reason}</li>)}
+        </ul>
+    )}
+    <p class="action-copy"><strong>Next action</strong> {action}</p>
+</a>

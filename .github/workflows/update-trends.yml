@@ -28,15 +28,28 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22.12.0"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Fetch data
         run: node scripts/update-all.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Verify generated data
-        run: node scripts/validate-data.mjs
+      - name: Validate generated data
+        run: npm run validate:data
+
+      - name: Build generated site
+        run: npm run build
+
+      - name: Validate generated artifact
+        run: npm run check:dist
+
+      - name: Verify rendered output
+        run: node --test tests/astro-build.test.mjs tests/static-fallback.test.mjs tests/status-data.test.mjs
 
       - name: Summarize refresh
         if: always()
@@ -50,9 +63,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: refresh-report
-          path: ${{ runner.temp }}/refresh-report
+          path: |
+            ${{ runner.temp }}/refresh-report
+            data/refresh-report.json
 
       - name: Commit updated data
+        if: success()
         run: |
           if git diff --quiet -- data/trends.json data/packages.json data/repos.json data/links.json data/today.json data/manifest.json data/refresh-report.json index.html today/index.html status/index.html trends/index.html packages/index.html repos/index.html links/index.html notes/index.html topics/ai-agents/index.html topics/mcp/index.html topics/agent-skills/index.html topics/ai-evals/index.html topics/ai-engineering/index.html topics/workflow-automation/index.html topics/security/index.html; then
             echo "No data changes"

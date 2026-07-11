@@ -1,0 +1,18 @@
+---
+import RouteNav from "./RouteNav.astro";
+
+const {
+    eyebrow,
+    title,
+    current,
+    prefix = "../"
+} = Astro.props;
+---
+<header class="topbar">
+    <div>
+        <p class="eyebrow">{eyebrow}</p>
+        <h1>{title}</h1>
+    </div>
+    <p class="stamp"><slot name="stamp" /></p>
+    <RouteNav current={current} prefix={prefix} />
+</header>

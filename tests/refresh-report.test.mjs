@@ -133,7 +133,7 @@ test("refresh report renders fallback safety flags", () => {
                 fallbackUsed: true,
                 staleButSafe: true,
                 fallbackReason: "No package rows fetched",
-                previousUpdated: "2026-06-19",
+                previousUpdated: "2026-06-19T00:00:00.000Z",
                 rateLimited: true
             }
         }

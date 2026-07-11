@@ -42,8 +42,7 @@ export function collectLinks() {
             count: links.length,
             tracked: linkDefinitions.length,
             emitted: links.length,
-            coverage: `${links.length}/${linkDefinitions.length}`,
-            updatedAt: generatedAt
+            coverage: `${links.length}/${linkDefinitions.length}`
         },
         links
     };

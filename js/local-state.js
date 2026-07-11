@@ -89,6 +89,10 @@
                 writeRecords(records);
                 return new Set(records.map((record) => record.id));
             },
+            clear() {
+                writeRecords([]);
+                return new Set();
+            },
             setStatus(id, status) {
                 if (!validStatuses.has(status)) return read();
                 const records = readRecords();

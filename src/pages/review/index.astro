@@ -1,0 +1,16 @@
+---
+import AppShell from "../../components/AppShell.astro";
+import HeroHeader from "../../components/HeroHeader.astro";
+import ReviewIsland from "../../components/ReviewIsland.jsx";
+---
+<AppShell title="Review - anothel" description="Saved technical signals to review later in this browser." canonicalPath="/review/" stylesheetHref="../css/site.css">
+    <div class="shell hub-shell">
+        <HeroHeader eyebrow="Saved queue" title="Review later." current="Review" prefix="../">
+            <Fragment slot="stamp">Saved locally in this browser.</Fragment>
+        </HeroHeader>
+
+        <main class="hub-main">
+            <ReviewIsland client:load prefix="../" />
+        </main>
+    </div>
+</AppShell>

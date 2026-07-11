@@ -178,7 +178,7 @@ export function preparePackageDataForWrite(data, previousData) {
                     emitted: packages.length,
                     coverage: `${packages.length}/${tracked}`,
                     ...(flags.rateLimited ? { rateLimited: true } : {}),
-                    previousUpdated: previousData.updated || data.sourceMeta.previousUpdated
+                    previousUpdated: previousData.sourceMeta?.updatedAt || previousData.generatedAt || data.sourceMeta.previousUpdated
                 },
                 packages
             };

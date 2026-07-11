@@ -158,7 +158,7 @@ export function prepareRepoDataForWrite(data, previousData) {
                     count: repos.length,
                     emitted: repos.length,
                     coverage: `${repos.length}/${tracked}`,
-                    previousUpdated: previousData.updated || data.sourceMeta.previousUpdated,
+                    previousUpdated: previousData.sourceMeta?.updatedAt || previousData.generatedAt || data.sourceMeta.previousUpdated,
                     rateLimited: sourceSafetyFlags(errors).rateLimited
                 },
                 repos
