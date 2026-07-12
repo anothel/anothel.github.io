@@ -14,6 +14,7 @@ Use this file for current stabilization and future trigger-based work. Detailed 
 - Duplicate checked-in HTML for all nine Astro-owned primary routes has been removed.
 - Explore and Review directly own their React state and rendering without legacy browser-global bridges.
 - Obsolete Explore/Review bridge files and their global DOM tests are retired; scoped architecture and asset-size gates protect the island boundary.
+- Home reads the shared saved-record contract through a bundled native ES module; its obsolete `home.mjs` DOM runtime is retired without adding React.
 - Accessibility and 390x844 mobile regression checks cover critical routes.
 
 Migration scaffold/gate work is complete. Do not queue “adopt Astro,” “add build chain,” or “start React islands” as future work.
@@ -44,9 +45,9 @@ Do not migrate solely for framework uniformity.
 
 ### F2 - Retire Remaining Browser Modules by Consumer
 
-Trigger: Home or Notes/topic migration removes a proven runtime consumer, or fallback/build maintenance exposes measurable duplication.
+Trigger: a Notes/topic migration removes a proven runtime consumer, or fallback/build maintenance exposes measurable duplication.
 
-Scope: retire `local-state.js`, `topic-taxonomy.js`, and `safe-dom.js` only as their Home and Notes/topic consumers move. Reassess `signal-schema.js` and `data-health.js` separately after their data-generation and Astro build consumers move. Do not delete modules merely for uniformity.
+Scope: retire `local-state.js`, `topic-taxonomy.js`, and `safe-dom.js` only as their remaining Notes/topic consumers move. `local-state.js` currently remains for topic pinning and fallback output, not Home. Reassess `signal-schema.js` and `data-health.js` separately after their data-generation and Astro build consumers move. Do not delete modules merely for uniformity.
 
 ## Constraints
 

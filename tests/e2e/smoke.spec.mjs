@@ -120,6 +120,10 @@ test("Explore React controls filter, save, and preserve Review-compatible state"
     await expect(page.locator("[data-explore-saved-count]")).toHaveText("1");
     await page.goto("/review/");
     await expect(page.locator("[data-review-total]")).toHaveText("1");
+    await page.goto("/");
+    await page.reload();
+    await expect(page.locator("[data-home-review-saved]")).toHaveText("1");
+    await expect(page.locator("[data-home-review-unread]")).toHaveText("1");
 });
 
 test("Explore defaults and saved-search CRUD survive React rerenders", async ({ page }) => {
@@ -187,15 +191,37 @@ test("JavaScript-disabled Review gives honest browser-local guidance", async ({ 
     await context.close();
 });
 
-test("Home reads saved and unread counts from the existing Review localStorage contract", async ({ page }) => {
+test("Home reads legacy saved ids from the shared localStorage contract", async ({ page }) => {
     await page.addInitScript(({ key, value }) => {
         localStorage.setItem(key, JSON.stringify(value));
-    }, { key: reviewStorageKey, value: seededReview });
+    }, { key: reviewStorageKey, value: ["legacy:a", "legacy:b"] });
 
     await page.goto("/");
 
-    await expect(page.locator("[data-home-review-saved]")).toHaveText("1");
-    await expect(page.locator("[data-home-review-unread]")).toHaveText("1");
+    await expect(page.locator("[data-home-review-saved]")).toHaveText("2");
+    await expect(page.locator("[data-home-review-unread]")).toHaveText("2");
+});
+
+test("Home reads version 2 statuses from the shared localStorage contract", async ({ page }) => {
+    await page.addInitScript(({ key, value }) => {
+        localStorage.setItem(key, JSON.stringify(value));
+    }, {
+        key: reviewStorageKey,
+        value: {
+            version: 2,
+            items: [
+                recordFor(seededTrend),
+                recordFor(secondTrend, "read"),
+                recordFor(thirdTrend, "done"),
+                { id: "unknown-status", savedAt: "2026-07-07T12:00:00.000Z", status: "unknown" }
+            ]
+        }
+    });
+
+    await page.goto("/");
+
+    await expect(page.locator("[data-home-review-saved]")).toHaveText("4");
+    await expect(page.locator("[data-home-review-unread]")).toHaveText("2");
 });
 
 test("Home handles malformed Review localStorage without crashing", async ({ page }) => {
@@ -209,6 +235,33 @@ test("Home handles malformed Review localStorage without crashing", async ({ pag
     await expect(page.locator("[data-home-review-saved]")).toHaveText("0");
     await expect(page.locator("[data-home-review-unread]")).toHaveText("0");
     expect(pageErrors).toEqual([]);
+});
+
+test("Home exposes an unavailable state when localStorage cannot be read", async ({ page }) => {
+    const pageErrors = [];
+    page.on("pageerror", (error) => pageErrors.push(error.message));
+    await page.addInitScript(() => {
+        Storage.prototype.getItem = () => { throw new DOMException("blocked", "SecurityError"); };
+    });
+
+    await page.goto("/");
+
+    await expect(page.locator("[data-home-review-saved]")).toHaveText("??");
+    await expect(page.locator("[data-home-review-unread]")).toHaveText("??");
+    await expect(page.locator("[data-home-review-status]")).toContainText("unavailable");
+    expect(pageErrors).toEqual([]);
+});
+
+test("JavaScript-disabled Home keeps honest saved placeholders at 390x844", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+    const page = await context.newPage();
+    await page.goto("/");
+
+    await expect(page.locator("[data-home-review-saved]")).toHaveText("??");
+    await expect(page.locator("[data-home-review-unread]")).toHaveText("??");
+    await expect(page.locator("[data-home-review-status]")).toContainText("loads when JavaScript is available");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+    await context.close();
 });
 
 test("Review migrates legacy ids and persists workflow metadata", async ({ page }) => {

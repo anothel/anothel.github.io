@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 
-const files = ["home", "status", "today"];
+const files = ["status", "today"];
 
 export function getStaticPaths() {
     return files.map((file) => ({ params: { file } }));

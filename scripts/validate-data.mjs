@@ -22,7 +22,6 @@ export const checkTargets = [
     "scripts/report-refresh.mjs",
     "scripts/serve.mjs",
     "js/dashboard.js",
-    "js/home.mjs",
     "js/status.mjs",
     "js/today.mjs",
     "js/package-watchlist.js",

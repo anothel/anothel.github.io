@@ -33,10 +33,10 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd`, for example `npm.cmd run check`.
 - `src/pages/[...legacy].ts`: build-time pass-through for existing Notes, topic, and 404 HTML routes not yet converted to Astro components.
 - `data/*.json`: checked-in source snapshots, manifest, refresh report, watchlists, Today brief, and scoring policy.
 - `scripts/`: data generation, remaining Notes/topic HTML generation, and build-output checks.
-- `js/`: browser behavior retained for Home, Notes/topics, generators, and legacy regression coverage.
+- `js/`: browser behavior retained for Notes/topics, generators, and legacy regression coverage.
 - `dist/`: ignored Astro build output.
 
-Only Explore and Review hydrate React, both with `client:load`. Other primary routes render static Astro HTML. Useful initial Explore content and Review guidance exist before client behavior loads; legacy topic/Notes routes preserve checked-in no-JS HTML.
+Only Explore and Review hydrate React, both with `client:load`. Home uses a small Astro-bundled native module for its browser-local saved summary; other primary routes need no client runtime. Useful initial Explore content, Review guidance, and honest Home saved-count placeholders exist before client behavior loads; legacy topic/Notes routes preserve checked-in no-JS HTML.
 
 See [Architecture](docs/ARCHITECTURE.md), [Deployment](docs/DEPLOYMENT.md), and [Contributing](CONTRIBUTING.md) for canonical details.
 

@@ -3,9 +3,13 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { assertSizeBudgets, checkSize } from "../scripts/check-size.mjs";
 
-test("current Explore and Review assets stay within reviewed raw-byte budgets", () => {
+test("current Home, Explore, and Review assets stay within reviewed raw-byte budgets", () => {
     const result = checkSize();
     assert.equal(result.measurement, "raw build bytes");
+    assert.equal(result.actual.routes.home.routeAssets.length, 1);
+    assert.ok(result.actual.routes.home.jsAssets.length > 1);
+    assert.match(result.actual.routes.home.routeAssets[0], /^_astro\/index\.astro_astro_type_script_[^.]+\.[^.]+\.js$/);
+    assert.ok(!result.actual.routes.home.jsAssets.includes(result.actual.routes.explore.clientAsset));
     assert.ok(result.actual.routes.explore.jsAssets.length > 1);
     assert.ok(result.actual.routes.review.jsAssets.length > 1);
     assert.match(result.actual.routes.explore.islandAsset, /^_astro\/ExploreIsland\.[^.]+\.js$/);

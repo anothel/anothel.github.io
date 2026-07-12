@@ -49,6 +49,25 @@ export function readSavedRecords(storage, options) {
     return savedRecordsFromRaw(get(storage, storageKeys.savedItems, "[]"), options);
 }
 
+export function savedSummary(records = []) {
+    return {
+        saved: records.length,
+        unread: records.filter((record) => record.status === "unread").length
+    };
+}
+
+export function readSavedSummary(storage, options) {
+    try {
+        if (!storage || typeof storage.getItem !== "function") {
+            return { available: false, saved: null, unread: null };
+        }
+        const records = savedRecordsFromRaw(storage.getItem(storageKeys.savedItems) ?? "[]", options);
+        return { available: true, ...savedSummary(records) };
+    } catch {
+        return { available: false, saved: null, unread: null };
+    }
+}
+
 export function writeSavedRecords(storage, records, options = {}) {
     const now = options.now || (() => new Date().toISOString());
     const items = records.map((record) => normalizeRecord(record, now)).filter(Boolean);

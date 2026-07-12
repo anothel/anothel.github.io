@@ -34,7 +34,7 @@ git diff --check
 - Explore and Review render directly in React, retain useful static guidance/content, and share compatible localStorage records.
 - Notes/topic pass-through routes still exist when touched.
 - Internal links and data/assets resolve under the configured root URL.
-- Explore/Review raw HTML, island JavaScript, shared React client, and transitive route JavaScript stay within `asset-size-budgets.json`.
+- Home raw HTML/native JavaScript plus Explore/Review raw HTML, island JavaScript, shared React client, and transitive route JavaScript stay within `asset-size-budgets.json`.
 
 ## Generated Data Review
 

@@ -28,7 +28,7 @@ test("Astro build output renders Today from checked-in data", () => {
     assert.match(html, /href="\.\.\/review\/index\.html"/);
 });
 
-test("Astro Home output uses the shared source trust model", () => {
+test("Astro Home output uses shared trust data and an honest native-module saved summary", () => {
     ensureDist();
     const html = read("dist/index.html");
     const datasets = Object.fromEntries(["trends", "packages", "repos", "links"]
@@ -37,7 +37,13 @@ test("Astro Home output uses the shared source trust model", () => {
 
     assert.match(html, new RegExp(`data-home-freshness>${trust.freshness}<`));
     assert.match(html, new RegExp(`data-home-live>${trust.pipelineStatus}<`));
-    assert.match(html, /src="js\/local-state\.js"/);
+    assert.match(html, /data-home-review-saved>\?\?</);
+    assert.match(html, /data-home-review-unread>\?\?</);
+    assert.match(html, /Browser-local state loads when JavaScript is available\./);
+    assert.match(html, /<script type="module" src="\/_astro\/index\.[^"]+\.js"><\/script>/);
+    assert.doesNotMatch(html, /js\/local-state\.js|AnothelState/);
+    assert.doesNotMatch(html, /<astro-island\b|\bcomponent-url=|\brenderer-url=/);
+    assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i);
     assert.doesNotMatch(html, /data-home-freshness>Fresh</);
 });
 

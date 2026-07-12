@@ -25,15 +25,17 @@ test("a missing Astro route fixture fails the pre-commit dist gate", async () =>
     }
 });
 
-test("dist check rejects retired Explore and Review bridge assets", async () => {
-    const root = await fixture();
-    try {
-        await writeFile(join(root, "js", "explore.js"), "retired", "utf8");
-        assert.throws(() => checkDist(root), /retired asset reintroduced: js\/explore\.js/);
-    } finally {
-        await rm(root, { recursive: true, force: true });
-    }
-});
+for (const file of ["explore.js", "home.mjs", "review.js"]) {
+    test(`dist check rejects retired ${file}`, async () => {
+        const root = await fixture();
+        try {
+            await writeFile(join(root, "js", file), "retired", "utf8");
+            assert.throws(() => checkDist(root), new RegExp(`retired asset reintroduced: js/${file.replace(".", "\\.")}`));
+        } finally {
+            await rm(root, { recursive: true, force: true });
+        }
+    });
+}
 
 for (const file of ["robots.txt", "sitemap.xml"]) {
     test(`dist check fails when ${file} is removed`, async () => {

@@ -1,5 +1,10 @@
 {
   "measurement": "raw build bytes",
+  "home": {
+    "html": 11000,
+    "routeJs": 1500,
+    "totalJs": 18000
+  },
   "explore": {
     "html": 65000,
     "islandJs": 40000,

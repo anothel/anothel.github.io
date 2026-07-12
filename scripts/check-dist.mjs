@@ -30,7 +30,6 @@ const requiredAssets = [
     "css/site.css",
     "js/dashboard.js",
     "js/data-health.js",
-    "js/home.mjs",
     "js/link-queue.js",
     "js/local-state.js",
     "js/notes.js",
@@ -43,7 +42,7 @@ const requiredAssets = [
     "js/topic-taxonomy.js",
     "js/topics.js"
 ];
-const retiredAssets = ["js/explore.js", "js/review.js"];
+const retiredAssets = ["js/explore.js", "js/home.mjs", "js/review.js"];
 
 function routeFile(route) {
     return route === "/" ? "index.html" : `${route.slice(1)}index.html`;

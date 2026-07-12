@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
+import { measureAssetSizes } from "../scripts/check-size.mjs";
 
 const read = (path) => readFileSync(path, "utf8");
 const islands = ["src/components/ExploreIsland.jsx", "src/components/ReviewIsland.jsx"];
@@ -38,4 +39,34 @@ test("Astro browser-asset routes cannot republish retired bridge files", () => {
         assert.equal(existsSync(`js/${name}.js`), false);
         assert.equal(existsSync(`src/pages/js/${name}.js.ts`), false);
     }
+});
+
+test("Home uses only its bundled native module for browser-local saved counts", () => {
+    const page = read("src/pages/index.astro");
+    const module = read("src/scripts/home-saved-summary.js");
+    const html = read("dist/index.html");
+    const forbiddenWrites = /document\.createElement\s*\(\s*["']script["']\s*\)|\.innerHTML\s*(?:\+?=)/;
+
+    assert.doesNotMatch(page, /js\/local-state\.js|globalThis\.AnothelState|\bclient:[a-z]+\b|from\s*["']react["']/i);
+    assert.doesNotMatch(module, /\bAnothelState\b|from\s*["']react["']/i);
+    assert.doesNotMatch(page, forbiddenWrites);
+    assert.doesNotMatch(module, forbiddenWrites);
+    assert.doesNotMatch(html, /js\/local-state\.js|<astro-island\b|\bcomponent-url=|\brenderer-url=/i);
+
+    const sizes = measureAssetSizes();
+    assert.ok(!sizes.routes.home.jsAssets.includes(sizes.routes.explore.clientAsset));
+    assert.ok(sizes.routes.home.jsAssets.every((asset) => !/(?:Explore|Review)Island|(?:^|\/)client\.[^/]+\.js$/.test(asset)));
+});
+
+test("the retired Home browser module cannot be republished accidentally", () => {
+    const route = read("src/pages/js/[file].mjs.ts");
+    const checkDist = read("scripts/check-dist.mjs");
+    const requiredAssets = checkDist.match(/const requiredAssets = \[([\s\S]*?)\];/)?.[1] || "";
+    const retiredAssets = checkDist.match(/const retiredAssets = \[([\s\S]*?)\];/)?.[1] || "";
+
+    assert.equal(existsSync("js/home.mjs"), false);
+    assert.equal(existsSync("dist/js/home.mjs"), false);
+    assert.doesNotMatch(route, /^\s*["']home["']\s*,?/m);
+    assert.doesNotMatch(requiredAssets, /["']js\/home\.mjs["']/);
+    assert.match(retiredAssets, /["']js\/home\.mjs["']/);
 });

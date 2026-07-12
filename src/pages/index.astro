@@ -80,10 +80,10 @@ const moduleRoutes = [
                     <article class="utility-card utility-card-wide" data-home-review-summary>
                         <span>Saved queue</span>
                         <div class="review-summary-grid">
-                            <article><span>Saved items</span><strong data-home-review-saved>0</strong></article>
-                            <article><span>Unread</span><strong data-home-review-unread>0</strong></article>
+                            <article><span>Saved items</span><strong data-home-review-saved>??</strong></article>
+                            <article><span>Unread</span><strong data-home-review-unread>??</strong></article>
                         </div>
-                        <p class="review-summary-note">Local to this browser. Open Review for browser-saved items.</p>
+                        <p class="review-summary-note" data-home-review-status aria-live="polite">Browser-local state loads when JavaScript is available.</p>
                         <a href="review/index.html">Open Review</a>
                     </article>
                 </aside>
@@ -141,22 +141,9 @@ const moduleRoutes = [
             </section>
         </main>
     </div>
-    <script is:inline src="js/local-state.js"></script>
-    <script is:inline>
-        (() => {
-            const state = globalThis.AnothelState;
-            if (!state) return;
-            let raw = "[]";
-            try {
-                raw = localStorage.getItem(state.keys.savedItems) || "[]";
-            } catch {
-                // Browser storage can be unavailable.
-            }
-            const summary = state.savedSummaryFromRaw(raw);
-            const saved = document.querySelector("[data-home-review-saved]");
-            const unread = document.querySelector("[data-home-review-unread]");
-            if (saved) saved.textContent = String(summary.saved);
-            if (unread) unread.textContent = String(summary.unread);
-        })();
+    <script>
+        import { initHomeSavedSummary } from "../scripts/home-saved-summary.js";
+
+        initHomeSavedSummary();
     </script>
 </AppShell>

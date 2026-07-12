@@ -25,24 +25,26 @@ React is used only where browser-local interaction warrants hydration:
 
 Explore owns its filters, saved searches, pins, saved-item actions, and rendering directly through React state. Framework-independent behavior lives in `src/lib/explore-domain.js`, `explore-storage.js`, and `explore-model.js`; the island fetches checked-in JSON after hydration instead of serializing the full corpus into HTML. Its small build-time model renders useful controls, health, lenses, results, and saved guidance without JavaScript.
 
-Review owns queue matching, workflow state, metadata, import/export, and rendering directly through React state. It reuses `explore-domain.js` and `explore-storage.js`; Review-specific pure behavior lives in `src/lib/review-domain.js`. The island fetches checked-in JSON after hydration and keeps the versioned browser-local saved-item contract shared with Explore and Home. Other primary routes use Astro components without React hydration.
+Review owns queue matching, workflow state, metadata, import/export, and rendering directly through React state. It reuses `explore-domain.js` and `explore-storage.js`; Review-specific pure behavior lives in `src/lib/review-domain.js`. The island fetches checked-in JSON after hydration and keeps the versioned browser-local saved-item contract shared with Explore and Home.
+
+Home is not a React island. `src/scripts/home-saved-summary.js` is an Astro-bundled native ES module that reads the shared key and normalization contract through `explore-storage.js`, then updates only the saved-summary region with `textContent`. Its static output uses `??` until browser storage is readable and exposes an unavailable message when storage access is blocked. Other non-island primary routes need no client runtime.
 
 Retained legacy modules and consumers:
 
-- `js/local-state.js`: Home saved/unread summary, topic pinning, fallback output references, and state compatibility tests.
+- `js/local-state.js`: topic pinning, topic fallback output references, and retained topic/state compatibility tests. Seven topic pages still load it through `js/topics.js`; Notes and Home do not.
 - `js/signal-schema.js`: Today data generation and shared schema/ranking regression tests.
 - `js/topic-taxonomy.js`: Notes/topic runtime behavior, taxonomy generation, fallback generation, and taxonomy tests.
 - `js/safe-dom.js`: Notes/topic runtime escaping, fallback generation safety, and retained renderer tests.
 - `js/data-health.js`: Astro Home/Status build helpers, preserved health modules, and health regression tests.
 
-The former js/explore.js and js/review.js browser-global bridges have no production, build, generation, fallback, or test consumer and are not published to `dist/`.
+The former Explore and Review browser-global bridges and obsolete Home DOM runtime have no production, build, generation, fallback, or test consumer and are not published to `dist/`.
 
 React is justified when a surface needs sustained client state or event-driven updates that cannot be completed at build time. Prefer an Astro component, semantic HTML, or native browser behavior when output is static or interaction is simple. Do not introduce a site-wide React root, client router, or SPA state layer.
 
 ## Architecture and Asset Gates
 
-- `tests/island-architecture.test.mjs` scopes bridge checks to Explore/Review island source, their generated HTML, and the Astro browser-asset allowlist.
-- `scripts/check-size.mjs` resolves hashed island and renderer files from generated HTML, follows their local JavaScript import graph, and measures raw build bytes.
+- `tests/island-architecture.test.mjs` guards Explore/Review island boundaries and Home's native-module boundary, including retired bridge publication checks.
+- `scripts/check-size.mjs` resolves Home's hashed module plus Explore/Review island and renderer files from generated HTML, follows their local JavaScript import graphs, and measures raw build bytes.
 - Reviewed ceilings live only in `asset-size-budgets.json`; `npm run check:size` reports each route, asset, actual size, and budget.
 - `npm run check` runs the architecture tests and size gate in CI after building and validating `dist/`.
 
@@ -61,6 +63,7 @@ data/watchlists.json + remote sources
 ## Static and No-JS Behavior
 
 - Astro pages produce complete static HTML.
+- Home shows honest `??` saved counts and JavaScript guidance before its native module can read browser-local state.
 - Explore receives build-time fallback results, source health, and topic lenses before hydration.
 - Explore renders structured data through JSX; it does not inject source-provided HTML or load legacy global scripts.
 - Review renders honest browser-local guidance before hydration; it does not claim the inaccessible local queue is empty without JavaScript.
