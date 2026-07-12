@@ -97,6 +97,10 @@ test("Astro build output renders migrated static routes and preserves legacy rou
     assert.ok(existsSync("dist/js/review.js"), "Astro output should preserve legacy Review assets");
     assert.match(read("dist/explore/index.html"), /data-explore-results/);
     assert.match(read("dist/explore/index.html"), /astro-island/);
+    assert.doesNotMatch(read("dist/explore/index.html"), /js\/explore\.js|globalThis\.ExploreApp/);
+    const exploreIsland = read("src/components/ExploreIsland.jsx");
+    assert.doesNotMatch(exploreIsland, /dangerouslySetInnerHTML|loadScript|scriptNames|createElement\("script"\)|globalThis\.ExploreApp/);
+    assert.doesNotMatch(read("src/lib/explore-static.js"), /node:vm|runInNewContext/);
     assert.match(read("dist/review/index.html"), /data-review-queue/);
     assert.match(read("dist/review/index.html"), /data-review-clear/);
     assert.match(read("dist/review/index.html"), /astro-island/);

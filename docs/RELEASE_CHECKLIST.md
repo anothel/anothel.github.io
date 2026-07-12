@@ -30,7 +30,7 @@ git diff --check
 
 - `dist/` contains all required routes from `scripts/check-dist.mjs`.
 - Astro-owned routes use shared shell/navigation components.
-- Explore/Review retain useful initial markup and localStorage compatibility.
+- Explore and Review retain useful initial markup and localStorage compatibility; Explore renders directly in React while Review retains its legacy bridge.
 - Notes/topic pass-through routes still exist when touched.
 - Internal links and data/assets resolve under the configured root URL.
 

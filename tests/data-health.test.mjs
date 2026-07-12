@@ -189,7 +189,7 @@ test("DataHealth partial detail names failing source and recovery action", () =>
         }],
         rateLimited: true,
         previousUpdated: "2026-06-29T00:00:00.000Z"
-    });
+    }, "2026-07-11");
 
     assert.equal(
         detail,
@@ -207,7 +207,7 @@ test("DataHealth marks action-required partial states", () => {
         errors: [{ name: "unknown", error: "503 service unavailable" }],
         rateLimited: false,
         previousUpdated: "2026-06-29T00:00:00.000Z"
-    });
+    }, "2026-07-11");
 
     assert.match(detail, /Partial - 12 days old/);
     assert.match(detail, /action required partial/);

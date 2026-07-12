@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Moved Explore filtering, saved searches, pins, storage, trust models, and rendering into its React island; removed its runtime/global-script and build-time `node:vm` bridges while retaining Review compatibility.
 - Removed duplicate checked-in primary-route HTML after the verified Astro Pages cutover; refresh automation now updates only data plus remaining Notes/topic legacy HTML.
 - Added deterministic documentation checks for internal Markdown links, repository paths, npm scripts, stale architecture labels, and required architecture statements.
 - Aligned architecture, deployment, development, IA, roadmap, data, release, and security docs with the completed Astro migration and current React-island/build workflow.

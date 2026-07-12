@@ -13,6 +13,8 @@ const requiredRoutes = [
     "/links/"
 ];
 const reviewStorageKey = "anothel.explore.saved.v1";
+const exploreDefaultKey = "anothel.preferences.exploreState.v1";
+const savedSearchKey = "anothel.preferences.savedSearches.v1";
 const seededTrend = trends.items[0];
 const seededReview = {
     version: 2,
@@ -53,7 +55,8 @@ test("Explore search filters and restores checked-in results", async ({ page }) 
     await expect(resultCards).toHaveCount(0);
 
     await page.locator("[data-clear-filters]").click();
-    await expect(resultCards).toHaveCount(initialCount);
+    await expect.poll(() => resultCards.count()).toBeGreaterThan(0);
+    await expect(page.getByRole("heading", { name: "No matching items" })).toHaveCount(0);
 });
 
 test("Review reads the existing version 2 localStorage contract", async ({ page }) => {
@@ -80,6 +83,91 @@ test("Review handles malformed localStorage without crashing", async ({ page }) 
     await expect(page.locator("[data-review-total]")).toHaveText("0");
     await expect(page.getByRole("heading", { name: "No saved items yet" })).toBeVisible();
     expect(pageErrors).toEqual([]);
+});
+
+test("Explore React controls filter, save, and preserve Review-compatible state", async ({ page }) => {
+    await page.goto("/explore/?focus=MCP");
+    await expect.poll(() => page.locator("[data-explore-module] option").count()).toBeGreaterThan(1);
+    await expect(page.locator('[data-focus-filter="MCP"]')).toHaveAttribute("aria-pressed", "true");
+
+    await page.locator("[data-clear-filters]").click();
+    await page.locator("[data-explore-module]").selectOption("Repos");
+    const repoCards = page.locator("[data-explore-results] .explore-card:not(.empty-card)");
+    await expect(repoCards.first()).toBeVisible();
+    await expect(repoCards.first().locator(".card-topline span").first()).toHaveText("Repos");
+
+    await page.locator("[data-clear-filters]").click();
+    const category = await page.locator("[data-explore-category] option").nth(1).evaluate((option) => option.value);
+    await page.locator("[data-explore-category]").selectOption(category);
+    await expect(page.locator("[data-explore-results] .explore-card:not(.empty-card)").first().locator(".card-topline span").nth(1)).toHaveText(category);
+
+    await page.locator("[data-clear-filters]").click();
+    await page.locator('[data-focus-filter="Agent skills"]').click();
+    await expect(page.locator("[data-explore-results]")).toContainText(/skills/i);
+
+    const save = page.locator("[data-explore-results] [data-save-id]").first();
+    await save.click();
+    await expect(page.locator("[data-explore-saved-count]")).toHaveText("1");
+    const stored = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)), reviewStorageKey);
+    expect(stored.version).toBe(2);
+    expect(stored.items).toHaveLength(1);
+
+    await page.reload();
+    await expect(page.locator("[data-explore-saved-count]")).toHaveText("1");
+});
+
+test("Explore defaults and saved-search CRUD survive React rerenders", async ({ page }) => {
+    await page.goto("/explore/");
+    await expect.poll(() => page.locator("[data-explore-module] option").count()).toBeGreaterThan(1);
+    await page.locator('[data-focus-filter="MCP"]').click();
+    await page.locator("[data-save-explore-default]").click();
+    await page.locator("[data-explore-query]").fill("server");
+    await page.locator("[data-save-search]").click();
+    await expect(page.locator("[data-saved-searches] .saved-search-item")).toHaveCount(1);
+
+    await page.locator("[data-clear-filters]").click();
+    await page.locator("[data-apply-search-id]").click();
+    await expect(page.locator("[data-explore-query]")).toHaveValue("server");
+    page.once("dialog", (dialog) => dialog.accept("MCP servers"));
+    await page.locator("[data-edit-search-id]").click();
+    await expect(page.locator(".saved-search-label")).toHaveText("MCP servers");
+
+    await page.reload();
+    await expect(page.locator('[data-focus-filter="MCP"]')).toHaveAttribute("aria-pressed", "true");
+    expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)).version, exploreDefaultKey)).toBe(1);
+    expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)).items[0].label, savedSearchKey)).toBe("MCP servers");
+    await page.locator("[data-remove-search-id]").click();
+    await expect(page.locator("[data-saved-searches] .saved-search-item")).toHaveCount(0);
+});
+
+test("Explore rejects malformed local state and imported JSON without crashing", async ({ page }) => {
+    const errors = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.addInitScript((keys) => keys.forEach((key) => localStorage.setItem(key, "{broken")), [reviewStorageKey, exploreDefaultKey, savedSearchKey, "anothel.preferences.pinnedTopics.v1"]);
+    await page.goto("/explore/");
+    await expect(page.locator("[data-explore-results] .explore-card").first()).toBeVisible();
+    await page.locator("[data-saved-search-import-text]").fill('{"version":1,"items":[{"bad":true}]}');
+    await page.locator("[data-saved-search-import-paste]").click();
+    await expect(page.locator("[data-saved-search-portability-status]")).toHaveText("No new saved searches to import.");
+    await page.locator("[data-saved-search-import-file]").setInputFiles({
+        name: "saved-searches.json",
+        mimeType: "application/json",
+        buffer: Buffer.from('{"version":1,"items":[{"focus":"MCP","query":"server","sort":"priority"}]}')
+    });
+    await expect(page.locator("[data-saved-searches] .saved-search-item")).toHaveCount(1);
+    expect(errors).toEqual([]);
+});
+
+test("JavaScript-disabled Explore keeps useful controls, health, lenses, and results", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto("/explore/");
+    await expect(page.locator("[data-explore-query]")).toBeVisible();
+    await expect(page.locator("[data-source-health] .source-health-card").first()).toBeVisible();
+    await expect(page.locator("[data-topic-lenses] .topic-lens-card").first()).toBeVisible();
+    await expect(page.locator("[data-explore-results] .explore-card").first()).toBeVisible();
+    await expect(page.locator("[data-explore-saved]")).toContainText("Save items to review later");
+    await context.close();
 });
 
 test("Home reads saved and unread counts from the existing Review localStorage contract", async ({ page }) => {

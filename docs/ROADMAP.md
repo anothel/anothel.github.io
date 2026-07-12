@@ -40,11 +40,11 @@ Scope: migrate one route family at a time from checked-in HTML/pass-through to A
 
 Do not migrate solely for framework uniformity.
 
-### F2 - Simplify Island-to-Legacy Browser Module Bridge
+### F2 - Migrate Review off the Legacy Browser Module Bridge
 
-Trigger: Explore/Review script loading causes a measured bug, duplicated state, or maintenance cost.
+Trigger: Review script loading causes a measured bug, duplicated state, or maintenance cost.
 
-Scope: move only affected behavior into the existing island. Preserve localStorage schemas and static initial markup. Do not create global React state or a SPA shell.
+Scope: move Review behavior into its existing island. Preserve localStorage schemas and static initial markup. Do not create global React state or a SPA shell.
 
 ## Constraints
 

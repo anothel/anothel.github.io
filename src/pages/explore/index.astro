@@ -20,6 +20,14 @@ const fallback = buildExploreFallback({
     signalPolicy,
     generatedAt: report.generatedAt || manifest.generatedAt
 });
+const dataPaths = {
+    manifest: "../data/manifest.json",
+    trends: "../data/trends.json",
+    packages: "../data/packages.json",
+    repos: "../data/repos.json",
+    links: "../data/links.json",
+    signalPolicy: "../data/signal-policy.json"
+};
 ---
 <AppShell title="Explore - anothel" description="Search and save tracked technical signals across HN, GitHub, npm, and references." canonicalPath="/explore/" stylesheetHref="../css/site.css">
     <div class="shell hub-shell explore-shell">
@@ -28,7 +36,7 @@ const fallback = buildExploreFallback({
         </HeroHeader>
 
         <main class="explore-main">
-            <ExploreIsland client:load prefix="../" fallback={fallback} />
+            <ExploreIsland client:load prefix="../" fallback={fallback} dataPaths={dataPaths} />
         </main>
     </div>
 </AppShell>

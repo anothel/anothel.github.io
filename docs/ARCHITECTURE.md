@@ -23,7 +23,17 @@ React is used only where browser-local interaction warrants hydration:
 - `ExploreIsland.jsx` on `/explore/`, hydrated with `client:load`.
 - `ReviewIsland.jsx` on `/review/`, hydrated with `client:load`.
 
-Both islands render useful initial markup and then load existing browser modules from `js/`. Review state, saved searches, defaults, and pins remain browser-local through `localStorage`. Other primary routes use Astro components without React hydration.
+Explore owns its filters, saved searches, pins, saved-item actions, and rendering directly through React state. Framework-independent behavior lives in `src/lib/explore-domain.js`, `explore-storage.js`, and `explore-model.js`; the island fetches checked-in JSON after hydration instead of serializing the full corpus into HTML. Its small build-time model renders useful controls, health, lenses, results, and saved guidance without JavaScript.
+
+Review still loads the existing `js/local-state.js`, `js/signal-schema.js`, `js/topic-taxonomy.js`, `js/explore.js`, and `js/review.js` bridge. Those files remain until Review is migrated. Review state, saved searches, defaults, and pins remain browser-local through compatible `localStorage` schemas. Other primary routes use Astro components without React hydration.
+
+Retained legacy browser consumers:
+
+- `js/explore.js` remains for `ReviewIsland.jsx`/`js/review.js` normalization and Review tests; `/explore/` does not load it.
+- `js/local-state.js` remains for Review, Home saved-count compatibility, and topic pinning.
+- `js/signal-schema.js` remains for Review and shared data/ranking regression tests.
+- `js/topic-taxonomy.js` remains for Review, Home, Notes, and topic routes.
+- `js/data-health.js` remains for shared Astro build helpers and legacy module renderers; Explore uses its structured ES model.
 
 React is justified when a surface needs sustained client state or event-driven updates that cannot be completed at build time. Prefer an Astro component, semantic HTML, or native browser behavior when output is static or interaction is simple. Do not introduce a site-wide React root, client router, or SPA state layer.
 
@@ -43,6 +53,7 @@ data/watchlists.json + remote sources
 
 - Astro pages produce complete static HTML.
 - Explore receives build-time fallback results, source health, and topic lenses before hydration.
+- Explore renders structured data through JSX; it does not inject source-provided HTML or load legacy global scripts.
 - Review renders local-state guidance and an empty queue before hydration; saved browser state requires JavaScript.
 - Notes/topic routes keep existing checked-in HTML through the legacy pass-through.
 - `scripts/update-static-fallbacks.mjs` updates only checked-in Notes/topic HTML and sitemap dates used by the legacy pass-through.
