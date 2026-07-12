@@ -91,12 +91,12 @@ test("manifest preserves partial source status", () => {
     );
 });
 
-test("checked-in manifest points to existing pages and data", () => {
+test("checked-in manifest points to generated Astro pages and checked-in data", () => {
     const manifest = readJson("data/manifest.json");
 
     assert.equal(manifest.modules.length, 4);
     for (const module of manifest.modules) {
-        assert.ok(existsSync(module.route), `${module.route} should exist`);
+        assert.ok(existsSync(`dist/${module.route}`), `dist/${module.route} should exist`);
         assert.ok(existsSync(module.data), `${module.data} should exist`);
         assert.match(module.source, /\S/);
     }

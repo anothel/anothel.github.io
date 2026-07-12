@@ -19,7 +19,7 @@ function isInsideRoot(filePath, root) {
     return filePath === normalizedRoot || filePath.startsWith(`${normalizedRoot}${sep}`);
 }
 
-export function resolveStaticPath(pathname, root = process.cwd()) {
+export function resolveStaticPath(pathname, root = resolve(process.cwd(), "dist")) {
     const decoded = decodeURIComponent(pathname);
     const withIndex = decoded === "/" || decoded.endsWith("/")
         ? `${decoded}index.html`
@@ -66,7 +66,7 @@ async function handleRequest(request, response, root) {
     }
 }
 
-export function createStaticServer(root = process.cwd()) {
+export function createStaticServer(root = resolve(process.cwd(), "dist")) {
     return createServer((request, response) => {
         handleRequest(request, response, root);
     });

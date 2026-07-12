@@ -58,8 +58,8 @@ test("deployment docs match Astro config and checked-in workflows", () => {
     assert.match(docs.deployment, /no Astro `base` is configured/);
     assert.match(docs.deployment, /ci\.yml.*does not deploy/s);
     assert.match(docs.deployment, /deploy-pages\.yml.*dedicated Pages workflow/s);
-    assert.match(docs.deployment, /Production deployment remains unverified/);
-    assert.match(docs.deployment, /Keep the legacy root HTML/);
+    assert.match(docs.deployment, /production has been verified from a successful `Deploy Pages` run/);
+    assert.match(docs.deployment, /Primary-route HTML is never staged/);
     assert.match(docs.deployment, /Settings -> Pages -> Source -> GitHub Actions/);
     assert.match(docs.deployment, /workflow_run.*GITHUB_TOKEN/s);
     assert.match(ci, /npm run check/);

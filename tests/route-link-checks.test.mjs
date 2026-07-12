@@ -19,6 +19,7 @@ const coreRoutes = [
     ...manifest.modules.map((module) => module.route).sort()
 ];
 const publicRoutes = [...new Set([...coreRoutes, ...topicRoutes])];
+const artifactRoutes = publicRoutes.map((route) => resolve("dist", route));
 
 function extractAnchors(html) {
     const anchorRegex = /<a\b[^>]*\shref=(["'])(.*?)\1/gis;
@@ -51,9 +52,9 @@ function localRouteTarget(pagePath, href) {
     return existsSync(directoryCandidate) ? directoryCandidate : null;
 }
 
-test("public routes resolve to checked-in HTML pages", () => {
-    for (const route of publicRoutes) {
-        assert.ok(existsSync(route), `Public route should exist in-repo: ${route}`);
+test("public routes resolve to generated Astro HTML", () => {
+    for (const route of artifactRoutes) {
+        assert.ok(existsSync(route), `Generated public route should exist: ${route}`);
         assert.match(readFileSync(route, "utf8"), /<html\b[^>]*>/i, `${route} should be HTML`);
     }
 }
@@ -61,7 +62,7 @@ test("public routes resolve to checked-in HTML pages", () => {
 
 test("public anchors use resolvable local routes", () => {
     const missing = [];
-    for (const page of publicRoutes) {
+    for (const page of artifactRoutes) {
         const html = readFileSync(page, "utf8");
         const anchors = extractAnchors(html);
         for (const rawHref of anchors) {

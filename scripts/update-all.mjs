@@ -9,6 +9,7 @@ export const dataUpdateScripts = [
     "scripts/update-today.mjs",
     "scripts/update-manifest.mjs",
     "scripts/report-refresh.mjs",
+    // Notes/topic HTML and sitemap remain generated until their Astro migration.
     "scripts/update-static-fallbacks.mjs"
 ];
 

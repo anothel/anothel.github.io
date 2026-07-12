@@ -31,7 +31,7 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd`, for example `npm.cmd run check`.
 - `src/components/`: shared Astro layout/presentation components plus `ExploreIsland.jsx` and `ReviewIsland.jsx`.
 - `src/pages/[...legacy].ts`: build-time pass-through for existing Notes, topic, and 404 HTML routes not yet converted to Astro components.
 - `data/*.json`: checked-in source snapshots, manifest, refresh report, watchlists, Today brief, and scoring policy.
-- `scripts/`: data generation, contract validation, static fallback generation, and build-output checks.
+- `scripts/`: data generation, remaining Notes/topic HTML generation, and build-output checks.
 - `js/`: browser behavior reused by hydrated islands and preserved legacy pages.
 - `dist/`: ignored Astro build output.
 
@@ -57,7 +57,7 @@ Route ownership and intentional overlaps are documented in [Information Architec
 
 ## Data
 
-`data/*.json` is the source contract consumed by Astro builds and browser behavior. `data/watchlists.json` owns refresh inputs; `npm run update:data` runs all updater scripts, produces module snapshots and Today, updates manifest/report metadata, then refreshes legacy static fallbacks.
+`data/*.json` is the source contract consumed by Astro builds and browser behavior. `data/watchlists.json` owns refresh inputs; `npm run update:data` produces module snapshots and Today, updates manifest/report metadata, then refreshes the remaining Notes/topic HTML and sitemap. Primary-route HTML is generated only by Astro in `dist/`.
 
 ```powershell
 $env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
@@ -80,7 +80,7 @@ Timestamp, freshness, field, and score semantics are canonical in [Signal Schema
 ## Automation
 
 - `.github/workflows/ci.yml`: read-only CI on pull requests and pushes to `main`; installs Node/Chromium and runs `npm run check` plus `git diff --check`.
-- `.github/workflows/update-trends.yml`: scheduled/manual data refresh; runs `node scripts/update-all.mjs`, validates output, commits checked-in data and legacy fallback pages.
+- `.github/workflows/update-trends.yml`: scheduled/manual data refresh; validates output, then commits checked-in data and the remaining Notes/topic HTML.
 - `.github/workflows/deploy-pages.yml`: builds and validates `dist/`, deploys only that artifact to GitHub Pages, and verifies production routes.
 
 Pages must use `Settings -> Pages -> Source -> GitHub Actions`. See [Deployment](docs/DEPLOYMENT.md).

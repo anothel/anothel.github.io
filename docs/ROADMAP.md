@@ -11,6 +11,7 @@ Use this file for current stabilization and future trigger-based work. Detailed 
 - CSS, checked-in JSON, browser modules, robots, sitemap, Notes/topics, and 404 output are preserved in `dist/` through Astro build-time endpoints/pass-through routes.
 - CI builds and validates `dist/`, then runs Node and Playwright checks.
 - A dedicated GitHub Pages workflow builds, validates, deploys only `dist/`, and handles successful scheduled refresh runs.
+- Duplicate checked-in HTML for all nine Astro-owned primary routes has been removed.
 - Accessibility and 390x844 mobile regression checks cover critical routes.
 
 Migration scaffold/gate work is complete. Do not queue “adopt Astro,” “add build chain,” or “start React islands” as future work.

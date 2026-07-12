@@ -24,7 +24,7 @@ git diff --check
 | UI/route | Relevant Playwright spec plus `npm run test:e2e` |
 | Data contract | `npm run validate:data` plus focused schema/generator tests |
 | Data refresh | `npm run validate:data` and generated-data review below |
-| Legacy fallback | `node --test tests/static-fallback.test.mjs tests/site-structure.test.mjs` |
+| Legacy Notes/topics | `node --test tests/static-fallback.test.mjs tests/astro-build.test.mjs` |
 
 ## Build and Route Review
 
@@ -40,7 +40,7 @@ git diff --check
 - `data/refresh-report.json` explains source health.
 - Today has expected sections and bounded scores.
 - Any `partial`, `fallback`, `staleButSafe`, or `rateLimited` state is visible and intentional.
-- Legacy static fallbacks and sitemap dates were regenerated after live data changes.
+- Remaining Notes/topic HTML and sitemap dates were regenerated after live data changes.
 - Timestamp/freshness interpretation matches `docs/SIGNAL_SCHEMA.md`.
 
 ## Security Review

@@ -14,7 +14,7 @@ test("today generator runs after links and before manifest", () => {
     assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-links\.mjs[\s\S]*scripts\/update-today\.mjs[\s\S]*scripts\/update-manifest\.mjs/);
 });
 
-test("refresh report is generated after manifest and before static fallbacks", () => {
+test("refresh report is generated before remaining legacy HTML", () => {
     assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-manifest\.mjs[\s\S]*scripts\/report-refresh\.mjs[\s\S]*scripts\/update-static-fallbacks\.mjs/);
 });
 
@@ -32,15 +32,8 @@ test("data update workflow commits every generated data file", () => {
     }
 });
 
-test("data update workflow commits refreshed static fallback pages", () => {
+test("data update workflow commits only remaining legacy HTML", () => {
     for (const file of [
-        "index.html",
-        "today/index.html",
-        "status/index.html",
-        "trends/index.html",
-        "packages/index.html",
-        "repos/index.html",
-        "links/index.html",
         "notes/index.html",
         "topics/ai-agents/index.html",
         "topics/mcp/index.html",
@@ -51,6 +44,21 @@ test("data update workflow commits refreshed static fallback pages", () => {
         "topics/security/index.html"
     ]) {
         assert.match(workflow, new RegExp(file.replace("/", "\\/")));
+    }
+
+    const commitStep = workflow.slice(workflow.indexOf("name: Commit updated data"));
+    for (const file of [
+        "index.html",
+        "today/index.html",
+        "explore/index.html",
+        "review/index.html",
+        "status/index.html",
+        "trends/index.html",
+        "packages/index.html",
+        "repos/index.html",
+        "links/index.html"
+    ]) {
+        assert.doesNotMatch(commitStep, new RegExp(`(?:^|\\s)${file.replace("/", "\\/")}(?:\\s|$)`), file);
     }
 });
 
@@ -74,7 +82,7 @@ test("data update workflow verifies generated data before committing", () => {
     const validateIndex = workflow.indexOf("name: Validate generated data");
     const buildIndex = workflow.indexOf("name: Build generated site");
     const distIndex = workflow.indexOf("name: Validate generated artifact");
-    const renderedIndex = workflow.indexOf("name: Verify rendered output");
+    const renderedIndex = workflow.indexOf("name: Verify Astro and legacy output");
     const summaryIndex = workflow.indexOf("name: Summarize refresh");
     const uploadIndex = workflow.indexOf("name: Upload refresh report");
     const commitIndex = workflow.indexOf("name: Commit updated data");

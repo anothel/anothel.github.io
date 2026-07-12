@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Removed duplicate checked-in primary-route HTML after the verified Astro Pages cutover; refresh automation now updates only data plus remaining Notes/topic legacy HTML.
 - Added deterministic documentation checks for internal Markdown links, repository paths, npm scripts, stale architecture labels, and required architecture statements.
 - Aligned architecture, deployment, development, IA, roadmap, data, release, and security docs with the completed Astro migration and current React-island/build workflow.
 - Ran 2026-07-07 token-backed publish-health refresh; GitHub trends recovered to `ok`, all sources were `ok`, and generated data stayed at 107 items.

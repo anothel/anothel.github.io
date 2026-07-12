@@ -5,7 +5,7 @@ import { resolve } from "node:path";
 import { resolveStaticPath } from "../scripts/serve.mjs";
 
 test("resolveStaticPath maps routes to static files", () => {
-    const root = process.cwd();
+    const root = resolve(process.cwd(), "dist");
 
     assert.equal(resolveStaticPath("/", root), resolve(root, "index.html"));
     assert.equal(resolveStaticPath("/today/", root), resolve(root, "today/index.html"));
@@ -16,5 +16,5 @@ test("resolveStaticPath maps routes to static files", () => {
 });
 
 test("resolveStaticPath blocks traversal outside root", () => {
-    assert.equal(resolveStaticPath("/../secret.txt", process.cwd()), null);
+    assert.equal(resolveStaticPath("/../secret.txt", resolve(process.cwd(), "dist")), null);
 });

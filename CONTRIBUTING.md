@@ -10,7 +10,7 @@ npm run build
 npm run preview
 ```
 
-Open `http://127.0.0.1:4321/`. There is no `npm run dev` script. Rebuild before previewing source or data changes. `npm run serve` is retained only for inspecting checked-in legacy/root static files at `http://127.0.0.1:58117/`; it is not the Astro development server.
+Open `http://127.0.0.1:4321/`. There is no `npm run dev` script. Rebuild before previewing source or data changes. `npm run serve` provides the current `dist/` artifact at `http://127.0.0.1:58117/`; it is not the Astro development server.
 
 If PowerShell blocks `npm.ps1`, use `npm.cmd`.
 
@@ -21,7 +21,7 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd`.
 | `npm ci` | Install exact dependencies from `package-lock.json`. |
 | `npm run build` | Run `astro build`; write static output to `dist/`. |
 | `npm run preview` | Serve current `dist/` at `127.0.0.1:4321`. |
-| `npm run serve` | Serve checked-in root/legacy static files at `127.0.0.1:58117`. |
+| `npm run serve` | Serve the current `dist/` artifact at `127.0.0.1:58117`. |
 | `npm run validate:data` | Validate checked-in `data/*.json` through `scripts/data-contract.mjs`. |
 | `npm run check:docs` | Check internal Markdown links, repository paths, npm script names, and canonical architecture statements. External links are skipped. |
 | `npm run validate` | Validate data, run all Node tests, and syntax-check listed scripts/browser modules. |

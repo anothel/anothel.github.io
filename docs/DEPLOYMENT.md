@@ -2,7 +2,7 @@
 
 ## Cutover Status
 
-The Astro Pages workflow is ready to commit, but it has not run from remote `main` yet. Production deployment remains unverified until a real `Deploy Pages` GitHub Actions run succeeds and its post-deployment probes pass. Keep the legacy root HTML until that verification is complete.
+The Astro Pages workflow is committed on `main`, GitHub Pages uses GitHub Actions, and production has been verified from a successful `Deploy Pages` run. The nine primary routes are generated only in `dist/`; checked-in HTML remains only for 404, Notes, and topic routes consumed by `src/pages/[...legacy].ts`.
 
 ## Target and Build
 
@@ -28,7 +28,7 @@ This repository is the user site `anothel.github.io`, so routes are rooted at `/
 
 `.github/workflows/ci.yml` validates pull requests and pushes to `main`. It installs dependencies and Chromium, runs `npm run check`, uploads Playwright failure artifacts, and runs `git diff --check`. It does not deploy.
 
-`.github/workflows/update-trends.yml` runs scheduled/manual data refreshes. Its only live source stage is `node scripts/update-all.mjs`. It then runs `npm run validate:data`, `npm run build`, `npm run check:dist`, and focused Astro/static/Status output tests before committing generated data and legacy fallback pages. A failed data contract, build, route, asset, or rendered-output check skips the commit. The refresh report is still uploaded through `if: always()` steps.
+`.github/workflows/update-trends.yml` runs scheduled/manual data refreshes. Its only live source stage is `node scripts/update-all.mjs`. It then runs `npm run validate:data`, `npm run build`, `npm run check:dist`, and focused Astro/legacy/Status output tests before committing generated data and the remaining Notes/topic HTML. Primary-route HTML is never staged. A failed data contract, build, route, asset, or rendered-output check skips the commit. The refresh report is still uploaded through `if: always()` steps.
 
 Valid partial/fallback output remains publishable only when the existing updater safety policy retains usable data and the data/artifact checks pass. Failed refresh workflows do not reach Pages; successful runs trigger the deployment workflow through `workflow_run`.
 
@@ -45,7 +45,7 @@ The workflow has only `contents: read`, `pages: write`, and `id-token: write`. D
 
 The `workflow_run` trigger is required because a commit pushed by `update-trends.yml` with the repository `GITHUB_TOKEN` does not trigger another ordinary `push` workflow. No personal access token is used to force recursive execution.
 
-Repository setting required before first deployment:
+Repository setting:
 
 `Settings -> Pages -> Source -> GitHub Actions`
 

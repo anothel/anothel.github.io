@@ -3,144 +3,26 @@ import { dirname } from "node:path";
 import vm from "node:vm";
 import { pathToFileURL } from "node:url";
 import "../js/safe-dom.js";
-import {
-    buildHomeOverview,
-    buildModuleRoutes,
-    buildTopicMovements,
-    getTodaySection,
-    renderModuleRoutes,
-    renderSkimList,
-    renderStartItems,
-    renderTopicMovements
-} from "../js/home.mjs";
-import { renderExploreLinks, renderTodaySections, renderTodayStats, renderTodayStatus } from "../js/today.mjs";
-import { buildStatusSummary, collectSourceRows, renderRefreshRun, renderSourceRows } from "../js/status.mjs";
 
-const { escapeHtml, safeLinkAttrs } = globalThis.AnothelDom;
-
-function sourceMetaList(datasets) {
-    return Object.values(datasets).flatMap((dataset) => {
-        const sourceMeta = dataset?.sourceMeta;
-        if (Array.isArray(sourceMeta)) return sourceMeta;
-        return sourceMeta && typeof sourceMeta === "object" ? [sourceMeta] : [];
-    });
-}
+const { escapeHtml } = globalThis.AnothelDom;
 
 function trimLineEnds(markup) {
     return markup.split("\n").map((line) => line.trimEnd()).join("\n");
 }
 
-function indentBlock(markup, spaces) {
-    const prefix = " ".repeat(spaces);
-    return trimLineEnds(markup)
-        .trim()
-        .split("\n")
-        .map((line) => line.trim() ? `${prefix}${line.replace(/^ {12}/, "")}` : "")
-        .join("\n");
-}
-
 function replaceTaggedText(html, attr, value) {
     const pattern = new RegExp(`(<(strong|span|p)[^>]*${attr}[^>]*>)[\\s\\S]*?(<\\/\\2>)`);
-    if (!pattern.test(html)) throw new Error(`Missing static fallback field: ${attr}`);
+    if (!pattern.test(html)) throw new Error(`Missing legacy HTML field: ${attr}`);
     return html.replace(pattern, `$1${escapeHtml(value)}$3`);
 }
 
 function replacePattern(html, pattern, replacement, label) {
-    if (!pattern.test(html)) throw new Error(`Missing static fallback block: ${label}`);
+    if (!pattern.test(html)) throw new Error(`Missing legacy HTML block: ${label}`);
     return html.replace(pattern, replacement);
 }
 
 function escapeRegExp(value) {
     return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-export function replaceMarkedBlock(html, name, replacement) {
-    const start = `<!-- static-fallback:${name}:start -->`;
-    const end = `<!-- static-fallback:${name}:end -->`;
-    const pattern = new RegExp(`(^[ \\t]*${escapeRegExp(start)})[\\s\\S]*?(^[ \\t]*${escapeRegExp(end)})`, "m");
-    if (!pattern.test(html)) throw new Error(`Missing static fallback marker: ${name}`);
-    const body = trimLineEnds(replacement).replace(/^\s*\n/, "").replace(/\n\s*$/, "");
-    return html.replace(pattern, `$1\n${body}\n$2`);
-}
-
-function renderTrendCards(items = [], limit = 8) {
-    return items.slice(0, limit).map((item) => `
-        <a class="trend-card" ${safeLinkAttrs(item.url)}>
-            <div class="card-topline">
-                <span>#${escapeHtml(item.rank)}</span>
-                <span>${escapeHtml(item.source)}</span>
-            </div>
-            <h3>${escapeHtml(item.title)}</h3>
-            <p>${escapeHtml(item.summary)}</p>
-            <div class="card-meta">
-                <span>${escapeHtml(item.category)}</span>
-                <span>${escapeHtml(item.score)}</span>
-                <span>${escapeHtml(item.velocity)}</span>
-            </div>
-        </a>
-    `).join("");
-}
-
-function renderTrendRows(items = [], limit = 8) {
-    return items.slice(0, limit).map((item) => `
-        <a class="rank-row" ${safeLinkAttrs(item.url)}>
-            <span>${escapeHtml(item.rank)}</span>
-            <strong>${escapeHtml(item.title)}</strong>
-            <span>${escapeHtml(item.category)}</span>
-            <span>${escapeHtml(item.source)}</span>
-            <span>${escapeHtml(item.score)}</span>
-        </a>
-    `).join("");
-}
-
-function renderPackageRows(items = [], limit = 10) {
-    return items.slice(0, limit).map((item) => `
-        <a class="watch-row" ${safeLinkAttrs(item.url)}>
-            <span>#${escapeHtml(item.rank)}</span>
-            <strong>${escapeHtml(item.name)}</strong>
-            <span>${escapeHtml(item.category)}</span>
-            <span>${escapeHtml(item.downloadsLabel)}</span>
-            <span>${escapeHtml(item.focus)}</span>
-        </a>
-    `).join("");
-}
-
-function renderRepoRows(items = [], limit = 10) {
-    return items.slice(0, limit).map((item) => `
-        <a class="watch-row repo-row" ${safeLinkAttrs(item.url)}>
-            <span>#${escapeHtml(item.rank)}</span>
-            <strong>${escapeHtml(item.name)}</strong>
-            <span>${escapeHtml(item.category)}</span>
-            <span>${escapeHtml(item.starsLabel)} stars</span>
-            <span>${escapeHtml(item.focus)}</span>
-        </a>
-    `).join("");
-}
-
-function renderLinkCards(items = [], limit = 10) {
-    return items.slice(0, limit).map((link) => `
-        <a class="link-card" ${safeLinkAttrs(link.url)}>
-            <div>
-                <span>${escapeHtml(link.category)}</span>
-                <span>${escapeHtml(link.kind)}</span>
-            </div>
-            <h2>${escapeHtml(link.title)}</h2>
-            <p>${escapeHtml(link.summary)}</p>
-        </a>
-    `).join("");
-}
-
-function renderModuleRows(module, dataset) {
-    if (module.id === "trends") {
-        return {
-            grid: renderTrendCards(dataset.items),
-            table: renderTrendRows(dataset.items)
-        };
-    }
-    if (module.id === "packages") return { list: renderPackageRows(dataset.packages) };
-    if (module.id === "repos") return { list: renderRepoRows(dataset.repos) };
-    if (module.id === "links") return { list: renderLinkCards(dataset.links) };
-    return {};
 }
 
 async function readJson(path) {
@@ -183,17 +65,6 @@ async function notesApp() {
     vm.runInNewContext(await readFile("js/topic-taxonomy.js", "utf8"), context);
     vm.runInNewContext(await readFile("js/notes.js", "utf8"), context);
     return context.NotesApp;
-}
-
-async function exploreRuntime() {
-    const context = { console, URL };
-    vm.runInNewContext(await readFile("js/local-state.js", "utf8"), context);
-    vm.runInNewContext(await readFile("js/safe-dom.js", "utf8"), context);
-    vm.runInNewContext(await readFile("js/data-health.js", "utf8"), context);
-    vm.runInNewContext(await readFile("js/signal-schema.js", "utf8"), context);
-    vm.runInNewContext(await readFile("js/topic-taxonomy.js", "utf8"), context);
-    vm.runInNewContext(await readFile("js/explore.js", "utf8"), context);
-    return context.ExploreApp;
 }
 
 function displaySignalLabel(topic) {
@@ -239,7 +110,7 @@ function renderTopicPage({ app, taxonomy, topic, items, summary, today }) {
     const supportingSignals = app.topicSupportingSignals(items);
 
     return `${trimLineEnds(`<!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -404,122 +275,7 @@ ${trimLineEnds(app.renderTopicCards(items))}
 async function updateStaticFallbacks() {
     const manifest = await readJson("data/manifest.json");
     const today = await readJson("data/today.json");
-    const report = await readJson("data/refresh-report.json");
-    const signalPolicy = await readJson("data/signal-policy.json");
     const datasets = await loadDatasets(manifest);
-    const modules = manifest.modules || [];
-    const generatedAt = report.generatedAt || manifest.generatedAt || manifest.updated || "-";
-    const evaluationTime = new Date();
-    const sourceMeta = sourceMetaList(datasets);
-    const homeOverview = buildHomeOverview(manifest, { sourceMeta, today: evaluationTime });
-    const statusSummary = buildStatusSummary(manifest, datasets);
-    const rows = collectSourceRows(manifest, datasets, { today: evaluationTime });
-    const updated = homeOverview.updated;
-    const homeRoutes = buildModuleRoutes(manifest);
-    const topicMovements = buildTopicMovements(datasets);
-
-    let home = await readFile("index.html", "utf8");
-    home = replaceTaggedText(home, "data-home-total", homeOverview.totalItems);
-    home = replaceTaggedText(home, "data-home-live", homeOverview.healthLabel);
-    home = replaceTaggedText(home, "data-home-updated", updated);
-    home = replaceTaggedText(home, "data-home-freshness", homeOverview.dataState);
-    home = replaceTaggedText(home, "data-home-recovery", homeOverview.recoveryText);
-    home = replacePattern(home, /<p class="stamp">Data date [^<]+<\/p>/, `<p class="stamp">Data date ${escapeHtml(updated)}</p>`, "home stamp");
-    home = replacePattern(home, /(<div class="start-list home-priority-list" data-home-start>)[\s\S]*?(\s*<\/div>\s*<\/div>\s*<aside class="home-utility-strip")/, `$1
-${indentBlock(renderStartItems(getTodaySection(today, "start")), 24)}$2`, "home start");
-    home = replacePattern(home, /(<div class="topic-movement-grid" data-home-topic-movements>)[\s\S]*?(\s*<\/div>\s*<\/section>\s*<section class="home-module-section")/, `$1
-${indentBlock(renderTopicMovements(topicMovements), 20)}$2`, "home topic movement");
-    home = replacePattern(home, /(<section class="module-strip home-module-board" aria-label="Module routes" data-home-routes>)[\s\S]*?(\s*<\/section>\s*<\/section>\s*<section class="home-project-section")/, `$1
-${indentBlock(renderModuleRoutes(homeRoutes), 20)}$2`, "home project boundary");
-    home = replacePattern(home, /(<div class="skim-list" data-home-skim>)[\s\S]*?(\s*<\/div>\s*<\/section>\s*<\/main>)/, `$1
-${indentBlock(renderSkimList(getTodaySection(today, "skim")), 20)}$2`, "home skim");
-    await writeIfChanged("index.html", home);
-
-    let todayHtml = await readFile("today/index.html", "utf8");
-    todayHtml = replaceTaggedText(todayHtml, "data-today-updated", today.updated);
-    todayHtml = replaceTaggedText(todayHtml, "data-today-status", renderTodayStatus({ ...today, sourceMeta }, { today: evaluationTime }));
-    todayHtml = replacePattern(todayHtml, /(<section class="stats-grid today-stats" aria-label="Today section summary" data-today-stats>)[\s\S]*?(\s*<\/section>\s*<section class="today-brief")/, `$1
-${indentBlock(renderTodayStats(today.sections), 16)}$2`, "today stats");
-    todayHtml = replacePattern(todayHtml, /(<section class="today-brief" data-today-sections aria-label="Today priority sections">)[\s\S]*?(\s*<\/section>\s*<section class="explore-strip")/, `$1
-${indentBlock(renderTodaySections(today.sections), 16)}$2`, "today sections");
-    const todayExploreLinks = trimLineEnds(renderExploreLinks()).split("\n").map((line) => line ? `                ${line}` : line).join("\n");
-    todayHtml = replacePattern(todayHtml, /(<section class="explore-strip" data-today-explore aria-label="Explore full lists">)[\s\S]*?(<\/section>)/, `$1
-${todayExploreLinks}
-            $2`, "today explore links");
-    await writeIfChanged("today/index.html", todayHtml);
-
-    const exploreSources = sourceMetaList(datasets);
-    const exploreApp = await exploreRuntime();
-    const normalizedExploreItems = exploreApp.normalizeExploreData(datasets, { signalPolicy });
-    const sourceContextItem = normalizedExploreItems.find((item) => item.sourceContext);
-    const exploreItems = [...new Map([
-        ...normalizedExploreItems.slice(0, 2),
-        sourceContextItem,
-        ...normalizedExploreItems
-    ].filter(Boolean).map((item) => [item.id, item])).values()].slice(0, 3);
-    let exploreHtml = await readFile("explore/index.html", "utf8");
-    exploreHtml = replaceMarkedBlock(exploreHtml, "explore-source-health", `            <section class="health-panel" aria-labelledby="explore-health-title">
-                <div class="panel-heading">
-                    <h2 id="explore-health-title">Source health</h2>
-                    <p data-data-mode>${escapeHtml(globalThis.DataHealth.dataModeText(exploreSources, { updated }))}</p>
-                </div>
-                <div class="source-health-grid" data-source-health>
-${trimLineEnds(globalThis.DataHealth.renderSourceHealth(exploreSources, { today: evaluationTime }))}
-                </div>
-            </section>`);
-    exploreHtml = replaceMarkedBlock(exploreHtml, "explore-results", indentBlock(exploreApp.renderExploreCards(exploreItems), 24));
-    await writeIfChanged("explore/index.html", exploreHtml);
-
-    let statusHtml = await readFile("status/index.html", "utf8");
-    statusHtml = replaceTaggedText(statusHtml, "data-status-total", statusSummary.totalItems);
-    statusHtml = replaceTaggedText(statusHtml, "data-status-sources", statusSummary.totalSources);
-    statusHtml = replaceTaggedText(statusHtml, "data-status-health", statusSummary.healthLabel);
-    statusHtml = replaceTaggedText(statusHtml, "data-status-updated", statusSummary.updated);
-    statusHtml = replaceTaggedText(statusHtml, "data-status-fallback-generated", generatedAt);
-    statusHtml = replaceTaggedText(
-        statusHtml,
-        "data-data-mode",
-        globalThis.DataHealth.dataModeText(rows, { updated: statusSummary.updated })
-    );
-    statusHtml = replacePattern(statusHtml, /(<div data-refresh-run>)[\s\S]*?\n\s*<\/section>\s*\n\s*(<section class="rank-panel" aria-labelledby="status-table-title">)/, `$1
-${renderRefreshRun(report).trim()}
-                </div>
-            </section>
-
-            $2`, "refresh run");
-    statusHtml = replacePattern(statusHtml, /(<div class="status-table" data-status-rows>)[\s\S]*?(<\/div>)/, `$1${trimLineEnds(renderSourceRows(rows, "../"))}
-                $2`, "status rows");
-    await writeIfChanged("status/index.html", statusHtml);
-
-    for (const module of modules) {
-        const dataset = datasets[module.id] || {};
-        const renderedRows = renderModuleRows(module, dataset);
-        let html = await readFile(module.route, "utf8");
-        html = replaceTaggedText(html, "data-updated", module.updated);
-        html = replaceTaggedText(
-            html,
-            "data-data-mode",
-            globalThis.DataHealth.dataModeText(dataset.sourceMeta, { updated: dataset.updated || module.updated })
-        );
-        if (renderedRows.grid) {
-            html = replacePattern(html, /(<section class="dashboard-grid module-primary-panel" aria-label="Trend cards" data-grid>)[\s\S]*?(\r?\n\s*<\/section>\r?\n\s*<section class="rank-panel module-primary-panel")/, `$1
-${indentBlock(renderedRows.grid, 16)}$2`, `${module.id} cards`);
-        }
-        if (renderedRows.table) {
-            html = replacePattern(html, /(<div class="rank-list" data-table>)[\s\S]*?(<\/div>)/, `$1
-${indentBlock(renderedRows.table, 20)}
-                $2`, `${module.id} table`);
-        }
-        if (renderedRows.list) {
-            const listPattern = module.id === "links"
-                ? /(<section[^>]*data-link-list[^>]*>)[\s\S]*?(<\/section>)/
-                : /(<div[^>]*data-(?:package|repo)-list[^>]*>)[\s\S]*?(<\/div>)/;
-            html = replacePattern(html, listPattern, `$1
-${indentBlock(renderedRows.list, 20)}
-                $2`, `${module.id} list`);
-        }
-        await writeIfChanged(module.route, html);
-    }
 
     const { app, taxonomy } = await topicRuntime();
     const topicSources = {

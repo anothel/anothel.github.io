@@ -14,6 +14,8 @@ Astro owns primary route generation and shared page structure:
 
 Nine primary routes are Astro pages: `/`, `/today/`, `/explore/`, `/review/`, `/status/`, `/trends/`, `/packages/`, `/repos/`, and `/links/`. `src/pages/[...legacy].ts` copies the existing 404, robots, sitemap, Notes, and topic files into Astro output. Notes/topic pass-through routes remain checked-in static HTML; they are not Astro component implementations yet.
 
+No checked-in HTML duplicates the nine primary routes. Their only generated HTML lives in `dist/` after `astro build`.
+
 ## React Islands
 
 React is used only where browser-local interaction warrants hydration:
@@ -30,7 +32,7 @@ React is justified when a surface needs sustained client state or event-driven u
 ```text
 data/watchlists.json + remote sources
     -> scripts/update-*.mjs
-    -> data/*.json + refresh report + legacy static fallbacks
+    -> data/*.json + refresh report + remaining Notes/topic HTML
     -> Astro build imports checked-in JSON
     -> dist/ static HTML, CSS, JS, and JSON
 ```
@@ -43,7 +45,7 @@ data/watchlists.json + remote sources
 - Explore receives build-time fallback results, source health, and topic lenses before hydration.
 - Review renders local-state guidance and an empty queue before hydration; saved browser state requires JavaScript.
 - Notes/topic routes keep existing checked-in HTML through the legacy pass-through.
-- `scripts/update-static-fallbacks.mjs` continues updating checked-in legacy snapshots used by refresh automation.
+- `scripts/update-static-fallbacks.mjs` updates only checked-in Notes/topic HTML and sitemap dates used by the legacy pass-through.
 
 Useful static output is a constraint, not a promise that every browser-local workflow works without JavaScript.
 

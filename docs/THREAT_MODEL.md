@@ -29,7 +29,7 @@ There is no backend, server runtime, account system, sync service, or database.
 - Remote or localStorage data injects markup or unsafe URLs.
 - Watchlist mistakes create unsafe public links.
 - Rate-limited refreshes hide stale or missing data.
-- Generated data, manifest, legacy fallbacks, and Astro output drift apart.
+- Generated data, manifest, remaining Notes/topic HTML, and Astro output drift apart.
 - A workflow commits incomplete data or gains unnecessary permissions.
 - Dependency or lockfile changes alter build/test behavior unexpectedly.
 - Production Pages settings serve a different source than validated `dist/`.

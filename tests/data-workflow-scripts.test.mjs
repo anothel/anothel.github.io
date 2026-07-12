@@ -4,8 +4,19 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 import { dataUpdateScripts } from "../scripts/update-all.mjs";
-import { replaceMarkedBlock } from "../scripts/update-static-fallbacks.mjs";
 import { checkTargets, listTestFiles } from "../scripts/validate-data.mjs";
+
+const primaryHtml = [
+    "index.html",
+    "today/index.html",
+    "explore/index.html",
+    "review/index.html",
+    "status/index.html",
+    "trends/index.html",
+    "packages/index.html",
+    "repos/index.html",
+    "links/index.html"
+];
 
 test("update-all owns the full data refresh order", () => {
     assert.deepEqual(dataUpdateScripts, [
@@ -54,36 +65,14 @@ test("validate-data syntax checks data workflow scripts and public JavaScript", 
     }
 });
 
-test("static fallback renderer loads shared DOM safety before topic and note renderers", () => {
+test("legacy renderer loads shared DOM safety for topic and note output", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
     assert.match(script, /vm\.runInNewContext\(await readFile\("js\/safe-dom\.js", "utf8"\), context\);[\s\S]*vm\.runInNewContext\(await readFile\("js\/topics\.js", "utf8"\), context\);/);
     assert.match(script, /vm\.runInNewContext\(await readFile\("js\/safe-dom\.js", "utf8"\), context\);[\s\S]*vm\.runInNewContext\(await readFile\("js\/notes\.js", "utf8"\), context\);/);
 });
 
-test("static fallback renderer reuses public render helpers instead of duplicating freshness logic", () => {
-    const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
-
-    assert.match(script, /import \{[\s\S]*buildHomeOverview[\s\S]*renderModuleRoutes[\s\S]*renderTopicMovements[\s\S]*\} from "\.\.\/js\/home\.mjs";/);
-    assert.match(script, /import \{ renderExploreLinks, renderTodaySections, renderTodayStats, renderTodayStatus \} from "\.\.\/js\/today\.mjs";/);
-    assert.match(script, /renderExploreLinks\(\)/);
-    assert.match(script, /renderTodayStats\(today\.sections\)/);
-    assert.match(script, /renderTodaySections\(today\.sections\)/);
-    assert.match(script, /renderModuleRoutes\(homeRoutes\)/);
-    assert.match(script, /renderTopicMovements\(topicMovements\)/);
-    assert.match(script, /collectSourceRows/);
-    assert.match(script, /renderSourceRows/);
-    assert.doesNotMatch(script, /function (ageDays|dataState|todayStatusText|sourceDetail|renderStatusRows)\b/);
-});
-
-test("static fallback renderer preserves the home projects section", () => {
-    const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
-
-    assert.match(script, /<section class="home-project-section"/);
-    assert.match(script, /"home project boundary"/);
-});
-
-test("static fallback renderer derives topic pages from taxonomy", () => {
+test("legacy renderer derives topic pages from taxonomy", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
     assert.match(script, /topicPageLabels/);
@@ -91,33 +80,13 @@ test("static fallback renderer derives topic pages from taxonomy", () => {
     assert.doesNotMatch(script, /const topicPages = \[/);
 });
 
-test("static fallback marked blocks replace only bounded generated content", () => {
-    const html = [
-        "<section>keep before</section>",
-        "<!-- static-fallback:demo:start -->",
-        "<article>old</article>",
-        "<!-- static-fallback:demo:end -->",
-        "<section>keep after</section>"
-    ].join("\n");
-
-    assert.equal(
-        replaceMarkedBlock(html, "demo", "<article>new</article>"),
-        [
-            "<section>keep before</section>",
-            "<!-- static-fallback:demo:start -->",
-            "<article>new</article>",
-            "<!-- static-fallback:demo:end -->",
-            "<section>keep after</section>"
-        ].join("\n")
-    );
-    assert.equal(
-        replaceMarkedBlock(`  <!-- static-fallback:demo:start -->\nold\n  <!-- static-fallback:demo:end -->`, "demo", "new"),
-        `  <!-- static-fallback:demo:start -->\nnew\n  <!-- static-fallback:demo:end -->`
-    );
-});
-
-test("static fallback trend card replacement accepts CRLF pages", () => {
+test("legacy renderer cannot recreate Astro-owned primary HTML", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
-    assert.match(script, /\\r\?\\n\\s\*<\\\/section>\\r\?\\n\\s\*<section class="rank-panel module-primary-panel"/);
+    for (const path of primaryHtml) {
+        const escaped = path.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        assert.doesNotMatch(script, new RegExp(`(?:readFile|writeIfChanged)\\(\"${escaped}\"`), path);
+    }
+    assert.match(script, /writeIfChanged\("notes\/index\.html"/);
+    assert.match(script, /writeIfChanged\(config\.routePath/);
 });
