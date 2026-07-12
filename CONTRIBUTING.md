@@ -27,9 +27,10 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd`.
 | `npm run validate` | Validate data, run all Node tests, and syntax-check listed scripts/browser modules. |
 | `npm test` | Run `tests/*.test.mjs` with Node's test runner. |
 | `npm run check:dist` | Validate required `dist/` routes, assets, JSON, and internal links. |
+| `npm run check:size` | Measure raw Explore/Review HTML and transitive JavaScript against `asset-size-budgets.json`. |
 | `npm run test:e2e` | Build, then run Playwright desktop/mobile projects. |
 | `npm run test:e2e:run` | Run Playwright against current `dist/` via Astro preview. |
-| `npm run check` | Run data/docs checks, build, dist checks, repository validation, and Playwright. |
+| `npm run check` | Run data/docs checks, build, dist/size checks, repository validation, and Playwright. |
 | `npm run update:data` | Run the live data update sequence; may call Hacker News, GitHub, and npm. |
 
 Install the Playwright browser once when needed:

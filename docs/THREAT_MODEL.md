@@ -43,6 +43,7 @@ There is no backend, server runtime, account system, sync service, or database.
 - External data links retain `rel="noopener noreferrer"`.
 - `scripts/data-contract.mjs` validates checked-in JSON; `scripts/check-dist.mjs` validates built routes/assets/data/internal links.
 - Node renderer/security tests and Playwright accessibility/mobile/smoke tests run through `npm run check`.
+- Scoped island architecture tests block dynamic script/global bridges and raw-byte budgets cap generated Explore/Review JavaScript growth.
 - Source metadata exposes `ok`, `partial`, `fallback`, `error`, rate limits, and stale-but-safe reuse.
 - Data refresh validates before commit; workflow concurrency prevents overlapping refresh commits.
 - CI has `contents: read`; data refresh has `contents: write` because it commits generated files.

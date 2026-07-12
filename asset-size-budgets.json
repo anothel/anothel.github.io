@@ -1,0 +1,14 @@
+{
+  "measurement": "raw build bytes",
+  "explore": {
+    "html": 65000,
+    "islandJs": 40000,
+    "totalJs": 240000
+  },
+  "review": {
+    "html": 15000,
+    "islandJs": 25000,
+    "totalJs": 235000
+  },
+  "sharedReactClientJs": 210000
+}

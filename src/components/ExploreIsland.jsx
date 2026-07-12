@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
+    availableSearch,
     collectSourceMeta,
+    compactText,
     focusDefinitions,
     focusValues,
     normalizeExploreData,
@@ -65,7 +67,8 @@ function savedStatusText(status, search) {
 
 function ItemCard({ item, saved, onToggle }) {
     const href = safeExternalUrl(item.url);
-    const summary = String(item.summary || "").replace(/\s+/g, " ").trim().slice(0, 140);
+    const summary = compactText(item.summary, 140);
+    const reasons = item.scoreReasons?.slice(0, 2).map((reason) => compactText(reason, 96)) || [];
     return (
         <article className="explore-card" data-item-id={item.id} data-card-href={href === "#" ? undefined : href}>
             <div className="card-topline"><span>{item.module}</span><span>{item.category}</span></div>
@@ -75,7 +78,7 @@ function ItemCard({ item, saved, onToggle }) {
                 <span>{item.origin}</span><span>{item.metric}</span><span>{item.updated}</span>
                 <span className="quality-marker" aria-label={`Signal fit score ${item.qualityScore || item.score || 0}`}>Signal fit {item.qualityScore || item.score || 0}</span>
             </div>
-            {item.scoreReasons?.length > 0 && <ul className="score-reasons" aria-label="Why this item ranks highly"><li><strong>Why</strong> {item.scoreReasons.slice(0, 2).join(" / ")}</li></ul>}
+            {reasons.length > 0 && <ul className="score-reasons" aria-label="Why this item ranks highly"><li><strong>Why</strong> {reasons.join(" / ")}</li></ul>}
             {item.sourceContext && <p className="source-context">{item.sourceContext}</p>}
             <div className="explore-card-actions">
                 <button type="button" data-save-id={savedIdForItem(item, saved) || item.id} aria-pressed={Boolean(savedIdForItem(item, saved))} onClick={() => onToggle(item)}>
@@ -163,7 +166,7 @@ export default function ExploreIsland({ prefix = "../", fallback, dataPaths }) {
     }
 
     function applySearch(search) {
-        setFilters({ ...defaultExploreState, ...search });
+        setFilters({ ...defaultExploreState, ...availableSearch(search, items) });
         setSearchStatus("applied");
     }
 
@@ -204,7 +207,7 @@ export default function ExploreIsland({ prefix = "../", fallback, dataPaths }) {
         <>
             <section className="explore-command-bar" aria-labelledby="explore-command-title">
                 <div className="explore-command-header">
-                    <div><h2 id="explore-command-title">Find signals</h2><p data-explore-summary>{activeSummary(filters, visibleCount, saved.size, sourceMeta)}</p></div>
+                    <div><h2 id="explore-command-title">Find signals</h2><p data-explore-summary>{activeSummary(filters, visibleCount, saved.size, sourceMeta, visible)}</p></div>
                     <div className="explore-command-actions"><button className="ghost-button" type="button" data-clear-filters onClick={clearFilters}>Clear filters</button><a href={`${prefix}review/index.html`}>Review later</a></div>
                 </div>
                 <details className="explore-filter-shell" data-explore-filter-shell open>

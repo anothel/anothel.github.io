@@ -12,10 +12,11 @@
     "preview": "astro preview --host 127.0.0.1 --port 4321",
     "check:docs": "node scripts/check-docs.mjs",
     "check:dist": "node scripts/check-dist.mjs",
+    "check:size": "node scripts/check-size.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:e2e": "npm run build && playwright test",
     "test:e2e:run": "playwright test",
-    "check": "npm run validate:data && npm run check:docs && npm run build && npm run check:dist && node scripts/validate-data.mjs --skip-data && npm run test:e2e:run",
+    "check": "npm run validate:data && npm run check:docs && npm run build && npm run check:dist && npm run check:size && node scripts/validate-data.mjs --skip-data && npm run test:e2e:run",
     "update:data": "node scripts/update-all.mjs"
   },
   "devDependencies": {

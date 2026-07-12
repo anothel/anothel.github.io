@@ -3,7 +3,6 @@ import { readFile } from "node:fs/promises";
 const files = [
     "dashboard",
     "data-health",
-    "explore",
     "link-queue",
     "local-state",
     "notes",

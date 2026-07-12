@@ -82,7 +82,17 @@ export function buildTopicLenses(items, pinnedTopics = new Set()) {
     });
 }
 
-export function activeSummary(filters, visibleCount, savedCount, sourceMeta) {
+function partialSourceTouchesItem(sourceName, item = {}) {
+    const name = String(sourceName || "").toLowerCase();
+    const values = [item.module, item.origin, item.source, item.sourceModule, item.sourceKind, ...(item.sources || [])]
+        .map((value) => String(value || "").toLowerCase());
+    return values.includes(name)
+        || (name === "npm" && item.module === "Packages")
+        || (name === "manual" && item.module === "Links")
+        || (name === "github" && ["Repos", "Trends"].includes(item.module));
+}
+
+export function activeSummary(filters, visibleCount, savedCount, sourceMeta, visibleItems = []) {
     const parts = [`${visibleCount} visible`];
     if (filters.focus !== "all") parts.push(filters.focus);
     if (filters.module !== "all") parts.push(filters.module);
@@ -91,6 +101,9 @@ export function activeSummary(filters, visibleCount, savedCount, sourceMeta) {
     if (filters.sort === "saved") parts.push("saved first");
     if (savedCount) parts.push(`${savedCount} saved`);
     const partial = sourceList(sourceMeta).filter(({ status }) => status === "partial").map(({ name, source }) => name || source).filter(Boolean);
-    if (partial.length) parts.push(`Partial sources: ${partial.join(", ")}`);
+    if (partial.length) {
+        const affects = visibleItems.some((item) => partial.some((name) => partialSourceTouchesItem(name, item)));
+        parts.push(visibleItems.length ? `Partial ${affects ? "affects" : "outside"} visible: ${partial.join(", ")}` : `Partial sources: ${partial.join(", ")}`);
+    }
     return parts.join(" / ");
 }

@@ -29,14 +29,22 @@ Review owns queue matching, workflow state, metadata, import/export, and renderi
 
 Retained legacy modules and consumers:
 
-- `js/explore.js` remains for legacy normalization parity/regression tests; no primary route loads it.
-- `js/local-state.js` remains for Home saved-count compatibility, topic pinning, and legacy state tests.
-- `js/signal-schema.js` remains for Today generation and shared data/ranking regression tests.
-- `js/topic-taxonomy.js` remains for Notes, topic routes, fallback generation, and taxonomy tests.
-- `js/safe-dom.js` remains for Notes/topic rendering, fallback generation, and legacy renderer tests.
-- `js/data-health.js` remains for shared Astro build helpers and legacy module renderers; Explore uses its structured ES model.
+- `js/local-state.js`: Home saved/unread summary, topic pinning, fallback output references, and state compatibility tests.
+- `js/signal-schema.js`: Today data generation and shared schema/ranking regression tests.
+- `js/topic-taxonomy.js`: Notes/topic runtime behavior, taxonomy generation, fallback generation, and taxonomy tests.
+- `js/safe-dom.js`: Notes/topic runtime escaping, fallback generation safety, and retained renderer tests.
+- `js/data-health.js`: Astro Home/Status build helpers, preserved health modules, and health regression tests.
+
+The former js/explore.js and js/review.js browser-global bridges have no production, build, generation, fallback, or test consumer and are not published to `dist/`.
 
 React is justified when a surface needs sustained client state or event-driven updates that cannot be completed at build time. Prefer an Astro component, semantic HTML, or native browser behavior when output is static or interaction is simple. Do not introduce a site-wide React root, client router, or SPA state layer.
+
+## Architecture and Asset Gates
+
+- `tests/island-architecture.test.mjs` scopes bridge checks to Explore/Review island source, their generated HTML, and the Astro browser-asset allowlist.
+- `scripts/check-size.mjs` resolves hashed island and renderer files from generated HTML, follows their local JavaScript import graph, and measures raw build bytes.
+- Reviewed ceilings live only in `asset-size-budgets.json`; `npm run check:size` reports each route, asset, actual size, and budget.
+- `npm run check` runs the architecture tests and size gate in CI after building and validating `dist/`.
 
 ## Data Flow
 

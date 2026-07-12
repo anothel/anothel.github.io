@@ -13,6 +13,7 @@ Use this file for current stabilization and future trigger-based work. Detailed 
 - A dedicated GitHub Pages workflow builds, validates, deploys only `dist/`, and handles successful scheduled refresh runs.
 - Duplicate checked-in HTML for all nine Astro-owned primary routes has been removed.
 - Explore and Review directly own their React state and rendering without legacy browser-global bridges.
+- Obsolete Explore/Review bridge files and their global DOM tests are retired; scoped architecture and asset-size gates protect the island boundary.
 - Accessibility and 390x844 mobile regression checks cover critical routes.
 
 Migration scaffold/gate work is complete. Do not queue “adopt Astro,” “add build chain,” or “start React islands” as future work.
@@ -40,6 +41,12 @@ Trigger: a Notes/topic change needs shared Astro layout behavior, pass-through m
 Scope: migrate one route family at a time from checked-in HTML/pass-through to Astro components while preserving URLs, content, sitemap entries, and useful no-JS output.
 
 Do not migrate solely for framework uniformity.
+
+### F2 - Retire Remaining Browser Modules by Consumer
+
+Trigger: Home or Notes/topic migration removes a proven runtime consumer, or fallback/build maintenance exposes measurable duplication.
+
+Scope: retire `local-state.js`, `topic-taxonomy.js`, and `safe-dom.js` only as their Home and Notes/topic consumers move. Reassess `signal-schema.js` and `data-health.js` separately after their data-generation and Astro build consumers move. Do not delete modules merely for uniformity.
 
 ## Constraints
 

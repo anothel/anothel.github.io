@@ -30,7 +30,6 @@ const requiredAssets = [
     "css/site.css",
     "js/dashboard.js",
     "js/data-health.js",
-    "js/explore.js",
     "js/home.mjs",
     "js/link-queue.js",
     "js/local-state.js",
@@ -44,6 +43,7 @@ const requiredAssets = [
     "js/topic-taxonomy.js",
     "js/topics.js"
 ];
+const retiredAssets = ["js/explore.js", "js/review.js"];
 
 function routeFile(route) {
     return route === "/" ? "index.html" : `${route.slice(1)}index.html`;
@@ -99,6 +99,7 @@ export function checkDist(root = resolve(process.cwd(), "dist")) {
 
     for (const route of requiredRoutes) assertFile(root, routeFile(route), `missing required route ${route}`, failures);
     for (const asset of requiredAssets) assertFile(root, asset, "missing required asset", failures);
+    for (const asset of retiredAssets) if (existsSync(resolve(root, asset))) failures.push(`retired asset reintroduced: ${asset}`);
     if (existsSync(resolve(root, "sitemap.xml"))) checkSitemap(root, failures);
     if (!existsSync(resolve(root, "_astro")) || readdirSync(resolve(root, "_astro")).length === 0) failures.push("missing generated Astro assets: _astro/");
     for (const dataFile of dataFiles) {

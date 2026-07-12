@@ -164,7 +164,7 @@ Current validation lives in:
 - `tests/data-contract.test.mjs`
 - `tests/signal-quality-golden.test.mjs`
 - `tests/today-generator.test.mjs`
-- `tests/explore-ui.test.mjs`
+- `tests/explore-react-domain.test.mjs`
 - `scripts/validate-data.mjs`
 
 Use `npm run validate:data` for source contract changes and `npm run check` before accepting generated output.

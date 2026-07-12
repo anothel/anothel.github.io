@@ -73,8 +73,9 @@ Validation commands:
 
 - `npm run validate:data`: focused `data/*.json` contract validation.
 - `npm run check:docs`: deterministic internal Markdown links, repository paths, npm scripts, and architecture-label checks; external URLs are not requested.
+- `npm run check:size`: inspect current `dist/` against reviewed raw-byte budgets in `asset-size-budgets.json`.
 - `npm run validate`: data validation, Node tests, and syntax checks.
-- `npm run check`: data/documentation validation, Astro build, `dist/` checks, repository tests/syntax checks, and Playwright.
+- `npm run check`: data/documentation validation, Astro build, `dist/` and size checks, repository tests/syntax checks, and Playwright.
 
 Timestamp, freshness, field, and score semantics are canonical in [Signal Schema v2](docs/SIGNAL_SCHEMA.md). Repository JSON uses `generatedAt` (camelCase), not `generated_at`.
 

@@ -38,6 +38,7 @@ test("package entry point exposes current Astro plus React-island toolchain", ()
     assert.equal(manifest.scripts.build, "astro build");
     assert.equal(manifest.scripts.test, "node --test tests/*.test.mjs");
     assert.equal(manifest.scripts["check:dist"], "node scripts/check-dist.mjs");
+    assert.equal(manifest.scripts["check:size"], "node scripts/check-size.mjs");
     assert.equal(manifest.scripts["check:docs"], "node scripts/check-docs.mjs");
     assert.equal(manifest.scripts["test:e2e"], "npm run build && playwright test");
     assert.equal(manifest.scripts["test:e2e:run"], "playwright test");
@@ -45,6 +46,7 @@ test("package entry point exposes current Astro plus React-island toolchain", ()
     assert.match(manifest.scripts.check, /npm run check:docs/);
     assert.match(manifest.scripts.check, /npm run build/);
     assert.match(manifest.scripts.check, /npm run check:dist/);
+    assert.match(manifest.scripts.check, /npm run check:size/);
     assert.match(manifest.scripts.check, /npm run test:e2e:run/);
     assert.equal(manifest.scripts["update:data"], "node scripts/update-all.mjs");
     assert.equal(existsSync("astro.config.mjs"), true);

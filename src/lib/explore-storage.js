@@ -191,7 +191,8 @@ export function mergeSearches(storage, incoming) {
 export function savedSearchLabel(value) {
     const search = normalizeSearch(value);
     if (search.label) return search.label;
-    const parts = [search.focus !== "all" && search.focus, search.module !== "all" && search.module, search.category !== "all" && search.category, search.query, search.sort !== "priority" && (search.sort === "saved" ? "saved first" : search.sort)].filter(Boolean);
+    const query = search.query.length > 42 ? `${search.query.slice(0, 42)}...` : search.query;
+    const parts = [search.focus !== "all" && search.focus, search.module !== "all" && search.module, search.category !== "all" && search.category, query, search.sort !== "priority" && (search.sort === "saved" ? "saved first" : search.sort)].filter(Boolean);
     return parts.join(" / ") || "All signals";
 }
 

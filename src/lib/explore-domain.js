@@ -20,6 +20,11 @@ export const focusDefinitions = [
 
 export const focusValues = new Set(["all", "Packages", ...focusDefinitions.map(({ focus }) => focus)]);
 
+export function compactText(value, limit = 120) {
+    const text = String(value || "").replace(/\s+/g, " ").trim();
+    return text.length <= limit ? text : `${text.slice(0, limit - 1)}...`;
+}
+
 const fallbackSignalPolicy = {
     baselineTitles: ["typescript", "eslint", "prettier", "react", "react/react", "zod", "tailwindcss", "vite", "vitejs/vite", "next", "next.js", "vercel/next.js"]
 };
@@ -230,6 +235,16 @@ export function sortItems(items, sort = "priority", savedIds = new Set()) {
 
 export function visibleItems(items, filters, savedIds = new Set()) {
     return sortItems(filterItems(items, filters), filters.sort, savedIds);
+}
+
+export function availableSearch(search, items = []) {
+    const modules = new Set(items.map(({ module }) => module));
+    const categories = new Set(items.map(({ category }) => category));
+    return {
+        ...search,
+        module: search.module === "all" || modules.has(search.module) ? search.module : "all",
+        category: search.category === "all" || categories.has(search.category) ? search.category : "all"
+    };
 }
 
 export function safeExternalUrl(value) {
