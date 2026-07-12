@@ -37,7 +37,6 @@ const requiredAssets = [
     "js/notes.js",
     "js/package-watchlist.js",
     "js/repo-watchlist.js",
-    "js/review.js",
     "js/safe-dom.js",
     "js/signal-schema.js",
     "js/status.mjs",

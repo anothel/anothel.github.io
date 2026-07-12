@@ -107,6 +107,7 @@ test("documented repository paths exist", () => {
         "src/lib/explore-domain.js",
         "src/lib/explore-storage.js",
         "src/lib/explore-model.js",
+        "src/lib/review-domain.js",
         "scripts/data-contract.mjs",
         "scripts/validate-data.mjs",
         "scripts/check-dist.mjs",

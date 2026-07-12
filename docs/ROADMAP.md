@@ -12,6 +12,7 @@ Use this file for current stabilization and future trigger-based work. Detailed 
 - CI builds and validates `dist/`, then runs Node and Playwright checks.
 - A dedicated GitHub Pages workflow builds, validates, deploys only `dist/`, and handles successful scheduled refresh runs.
 - Duplicate checked-in HTML for all nine Astro-owned primary routes has been removed.
+- Explore and Review directly own their React state and rendering without legacy browser-global bridges.
 - Accessibility and 390x844 mobile regression checks cover critical routes.
 
 Migration scaffold/gate work is complete. Do not queue “adopt Astro,” “add build chain,” or “start React islands” as future work.
@@ -39,12 +40,6 @@ Trigger: a Notes/topic change needs shared Astro layout behavior, pass-through m
 Scope: migrate one route family at a time from checked-in HTML/pass-through to Astro components while preserving URLs, content, sitemap entries, and useful no-JS output.
 
 Do not migrate solely for framework uniformity.
-
-### F2 - Migrate Review off the Legacy Browser Module Bridge
-
-Trigger: Review script loading causes a measured bug, duplicated state, or maintenance cost.
-
-Scope: move Review behavior into its existing island. Preserve localStorage schemas and static initial markup. Do not create global React state or a SPA shell.
 
 ## Constraints
 

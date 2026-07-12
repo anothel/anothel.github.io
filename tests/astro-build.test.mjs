@@ -94,16 +94,20 @@ test("Astro build output renders migrated static routes and preserves legacy rou
 
     assert.ok(existsSync("dist/css/site.css"), "Astro output should include shared CSS");
     assert.ok(existsSync("dist/data/today.json"), "Astro output should preserve data JSON URLs");
-    assert.ok(existsSync("dist/js/review.js"), "Astro output should preserve legacy Review assets");
+    assert.equal(existsSync("dist/js/review.js"), false, "Astro output should not publish the removed Review bridge");
     assert.match(read("dist/explore/index.html"), /data-explore-results/);
     assert.match(read("dist/explore/index.html"), /astro-island/);
     assert.doesNotMatch(read("dist/explore/index.html"), /js\/explore\.js|globalThis\.ExploreApp/);
     const exploreIsland = read("src/components/ExploreIsland.jsx");
     assert.doesNotMatch(exploreIsland, /dangerouslySetInnerHTML|loadScript|scriptNames|createElement\("script"\)|globalThis\.ExploreApp/);
     assert.doesNotMatch(read("src/lib/explore-static.js"), /node:vm|runInNewContext/);
-    assert.match(read("dist/review/index.html"), /data-review-queue/);
-    assert.match(read("dist/review/index.html"), /data-review-clear/);
-    assert.match(read("dist/review/index.html"), /astro-island/);
+    const reviewHtml = read("dist/review/index.html");
+    assert.match(reviewHtml, /data-review-static-guidance/);
+    assert.match(reviewHtml, /Review is browser-local/);
+    assert.match(reviewHtml, /astro-island/);
+    assert.doesNotMatch(reviewHtml, /js\/review\.js|js\/explore\.js|globalThis\.(?:ExploreApp|ReviewApp)/);
+    const reviewIsland = read("src/components/ReviewIsland.jsx");
+    assert.doesNotMatch(reviewIsland, /dangerouslySetInnerHTML|\binnerHTML\b|loadScript|scriptNames|createElement\("script"\)|globalThis\.(?:ExploreApp|ReviewApp)/);
     assert.match(read("dist/index.html"), /href="today\/index\.html"/);
     const statusHtml = read("dist/status/index.html");
     assert.match(statusHtml, /href="\.\.\/trends\/index\.html"/);

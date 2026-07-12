@@ -28,7 +28,6 @@ export const checkTargets = [
     "js/repo-watchlist.js",
     "js/link-queue.js",
     "js/explore.js",
-    "js/review.js",
     "js/topics.js",
     "js/topic-taxonomy.js",
     "js/signal-schema.js",

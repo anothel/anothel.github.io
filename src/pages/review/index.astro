@@ -2,6 +2,13 @@
 import AppShell from "../../components/AppShell.astro";
 import HeroHeader from "../../components/HeroHeader.astro";
 import ReviewIsland from "../../components/ReviewIsland.jsx";
+
+const dataPaths = {
+    trends: "../data/trends.json",
+    packages: "../data/packages.json",
+    repos: "../data/repos.json",
+    links: "../data/links.json"
+};
 ---
 <AppShell title="Review - anothel" description="Saved technical signals to review later in this browser." canonicalPath="/review/" stylesheetHref="../css/site.css">
     <div class="shell hub-shell">
@@ -10,7 +17,7 @@ import ReviewIsland from "../../components/ReviewIsland.jsx";
         </HeroHeader>
 
         <main class="hub-main">
-            <ReviewIsland client:load prefix="../" />
+            <ReviewIsland client:load prefix="../" dataPaths={dataPaths} />
         </main>
     </div>
 </AppShell>

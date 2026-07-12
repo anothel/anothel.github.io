@@ -1,672 +1,142 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import vm from "node:vm";
+import {
+    clearSavedItems,
+    mergeSavedRecords,
+    readSavedRecords,
+    savedRecordsFromRaw,
+    setSavedItemMeta,
+    setSavedItemStatus,
+    storageKeys,
+    writeSavedRecords
+} from "../src/lib/explore-storage.js";
+import {
+    filterReviewItems,
+    matchSavedItems,
+    reviewImportPreview,
+    reviewImportRecords,
+    reviewJsonPayload,
+    reviewMarkdownPayload,
+    reviewStats,
+    selectedReviewItem,
+    similarExploreHref,
+    sortReviewItems,
+    topicNotesHref,
+    workflowStats
+} from "../src/lib/review-domain.js";
 
-function loadReview(extra = {}) {
-    const context = { console, URL, ...extra };
-    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
-    return context.ReviewApp;
-}
-
+const now = () => "2026-07-12T00:00:00.000Z";
 const items = [
-    {
-        id: "repos:https://example.com/skills",
-        module: "Repos",
-        title: "Skills repo",
-        category: "Agent skills",
-        origin: "GitHub",
-        metric: "135K stars",
-        summary: "Reusable agent instructions.",
-        url: "https://example.com/skills",
-        updated: "2026-06-20",
-        sources: ["Repos", "Links"],
-        sourceContext: "Also in Links",
-        score: 96,
-        qualityScore: 96
-    },
-    {
-        id: "packages:https://example.com/mcp",
-        module: "Packages",
-        title: "@modelcontextprotocol/sdk",
-        category: "MCP",
-        origin: "npm",
-        metric: "1M/week",
-        summary: "SDK for MCP servers.",
-        url: "https://example.com/mcp",
-        updated: "2026-06-19",
-        sources: ["Packages"],
-        sourceContext: "",
-        scoreReasons: ["1M/week from npm", "MCP SDK demand"],
-        score: 88,
-        qualityScore: 88
-    }
+    { id: "url:https://example.com/agents", legacyIds: ["trends:https://example.com/agents"], title: "Agent trend", module: "Trends", category: "AI agents", origin: "HN", metric: "Fast", summary: "Agent workflow", url: "https://example.com/agents", sources: ["Trends", "Links"], score: 90, updated: "2026-07-12" },
+    { id: "url:https://example.com/mcp", legacyIds: ["packages:https://example.com/mcp"], title: "MCP package", module: "Packages", category: "MCP", origin: "npm", metric: "1m downloads", summary: "MCP server", url: "https://example.com/mcp", sources: ["Packages"], score: 80, updated: "2026-07-11" },
+    { id: "url:https://example.com/tool", legacyIds: [], title: "Plain formatter", module: "Repos", category: "Developer tooling", origin: "GitHub", metric: "100 stars", summary: "Formatting tool", url: "https://example.com/tool", sources: ["Repos"], score: 60, updated: "2026-07-10" }
 ];
 
-test("Review matches saved ids against current normalized items", () => {
-    const app = loadReview();
-    const saved = app.matchSavedItems(items, new Set(["packages:https://example.com/mcp", "missing:id"]));
+function memoryStorage(raw = "[]") {
+    const values = new Map([[storageKeys.savedItems, raw]]);
+    return {
+        getItem: (key) => values.get(key) ?? null,
+        setItem: (key, value) => values.set(key, value),
+        value: () => JSON.parse(values.get(storageKeys.savedItems))
+    };
+}
 
-    assert.deepEqual(saved.map((item) => item.id), ["packages:https://example.com/mcp"]);
-});
-
-test("Review matches legacy saved ids against canonical current ids", () => {
-    const app = loadReview();
-    const saved = app.matchSavedItems([
-        {
-            id: "url:https://example.com/skills",
-            legacyIds: ["repos:https://example.com/skills"],
-            module: "Repos",
-            title: "Skills repo",
-            category: "Agent skills",
-            metric: "135K stars"
-        }
-    ], new Set(["repos:https://example.com/skills"]), new Map([
-        ["repos:https://example.com/skills", { id: "repos:https://example.com/skills", savedAt: "2026-06-20T00:00:00.000Z", status: "read" }]
-    ]));
-
-    assert.deepEqual(saved.map((item) => [item.id, item.savedAt, item.savedStatus]), [
-        ["url:https://example.com/skills", "2026-06-20T00:00:00.000Z", "read"]
-    ]);
-});
-
-test("Review joins saved records and sorts newest first", () => {
-    const app = loadReview();
-    const saved = app.matchSavedItems(items, new Set(["repos:https://example.com/skills", "packages:https://example.com/mcp"]), new Map([
-        ["repos:https://example.com/skills", { id: "repos:https://example.com/skills", savedAt: "2026-06-19T00:00:00.000Z", status: "done" }],
-        ["packages:https://example.com/mcp", { id: "packages:https://example.com/mcp", savedAt: "2026-06-20T00:00:00.000Z", status: "read" }]
-    ]));
-
-    assert.deepEqual(saved.map((item) => [item.id, item.savedAt, item.savedStatus]), [
-        ["packages:https://example.com/mcp", "2026-06-20T00:00:00.000Z", "read"],
-        ["repos:https://example.com/skills", "2026-06-19T00:00:00.000Z", "done"]
-    ]);
-});
-
-test("Review joins saved metadata and sorts reasoned items first within status", () => {
-    const app = loadReview();
-    const saved = app.matchSavedItems(items, new Set(["repos:https://example.com/skills", "packages:https://example.com/mcp"]), new Map([
-        ["repos:https://example.com/skills", { id: "repos:https://example.com/skills", savedAt: "2026-06-19T00:00:00.000Z", status: "unread", reason: "Use for reusable workflows.", tag: "skills", note: "Compare with MCP." }],
-        ["packages:https://example.com/mcp", { id: "packages:https://example.com/mcp", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" }]
-    ]));
-
-    assert.deepEqual(saved.map((item) => [item.id, item.savedReason, item.savedTag, item.savedNote]), [
-        ["repos:https://example.com/skills", "Use for reusable workflows.", "skills", "Compare with MCP."],
-        ["packages:https://example.com/mcp", undefined, undefined, undefined]
-    ]);
-});
-
-test("Review summarizes saved focus areas and sources", () => {
-    const app = loadReview();
-
-    assert.deepEqual(JSON.parse(JSON.stringify(app.reviewStats(items))), {
-        saved: 2,
-        focusAreas: 2,
-        sources: 3
-    });
-});
-
-test("Review workflow stats count statuses", () => {
-    const app = loadReview();
-
-    assert.deepEqual(JSON.parse(JSON.stringify(app.workflowStats([
-        { savedStatus: "unread" },
-        { savedStatus: "read" },
-        { savedStatus: "done" },
-        { savedStatus: "unread" }
-    ]))), {
-        unread: 2,
-        read: 1,
-        done: 1
-    });
-});
-
-test("Review filters and sorts workflow items by status priority", () => {
-    const app = loadReview();
-    const saved = [
-        { id: "done:new", savedAt: "2026-06-22T00:00:00.000Z", savedStatus: "done" },
-        { id: "read:old", savedAt: "2026-06-19T00:00:00.000Z", savedStatus: "read" },
-        { id: "unread:old", savedAt: "2026-06-18T00:00:00.000Z", savedStatus: "unread" },
-        { id: "unread:new", savedAt: "2026-06-20T00:00:00.000Z", savedStatus: "unread" }
+test("Review matches current and legacy ids and reports mixed stale records", () => {
+    const records = [
+        { id: items[0].id, savedAt: "2026-07-10", status: "read" },
+        { id: items[1].legacyIds[0], savedAt: "2026-07-11", status: "unread", reason: "Try it" },
+        { id: "missing:item", savedAt: "2026-07-09", status: "done" }
     ];
+    const result = matchSavedItems(items, records);
+    assert.deepEqual(result.items.map(({ savedRecordId }) => savedRecordId), [items[1].legacyIds[0], items[0].id]);
+    assert.deepEqual(result.staleRecords.map(({ id }) => id), ["missing:item"]);
+    assert.equal(result.items[0].savedReason, "Try it");
+});
 
-    assert.deepEqual(app.filterReviewItems(saved, "all").map((item) => item.id), [
-        "unread:new",
-        "unread:old",
-        "read:old",
-        "done:new"
+test("Review queue sorts unread, read, done then metadata and newest saved date", () => {
+    const sorted = sortReviewItems([
+        { id: "done", savedStatus: "done", savedAt: "2026-07-12" },
+        { id: "plain", savedStatus: "unread", savedAt: "2026-07-12" },
+        { id: "meta-old", savedStatus: "unread", savedAt: "2026-07-10", savedNote: "note" },
+        { id: "meta-new", savedStatus: "unread", savedAt: "2026-07-11", savedTag: "tag" },
+        { id: "read", savedStatus: "read", savedAt: "2026-07-12" }
     ]);
-    assert.deepEqual(app.filterReviewItems(saved, "unread").map((item) => item.id), [
-        "unread:new",
-        "unread:old"
-    ]);
-    assert.deepEqual(app.filterReviewItems(saved, "done").map((item) => item.id), ["done:new"]);
+    assert.deepEqual(sorted.map(({ id }) => id), ["meta-new", "meta-old", "plain", "read", "done"]);
 });
 
-test("Review renders queue and selected detail with actions", () => {
-    const app = loadReview();
-    const queue = app.renderReviewQueue(items, "packages:https://example.com/mcp");
-    const detail = app.renderReviewDetail(items[1]);
-
-    assert.match(queue, /data-review-select-id="repos:https:\/\/example\.com\/skills"/);
-    assert.match(queue, /aria-selected="true"/);
-    assert.match(queue, /aria-label="Select @modelcontextprotocol\/sdk"/);
-    assert.match(queue, /@modelcontextprotocol\/sdk/);
-    assert.match(detail, /Why this matters/);
-    assert.match(detail, /Source context/);
-    assert.match(detail, /Score reasons/);
-    assert.match(detail, /1M\/week from npm/);
-    assert.match(detail, /Signal fit 88/);
-    assert.match(detail, /href="https:\/\/example\.com\/mcp"/);
-    assert.match(detail, /aria-label="Mark @modelcontextprotocol\/sdk read"/);
-    assert.match(detail, /aria-label="Mark @modelcontextprotocol\/sdk done"/);
-    assert.match(detail, /aria-label="Remove @modelcontextprotocol\/sdk from Review"/);
-    assert.match(detail, /data-review-remove-id="packages:https:\/\/example\.com\/mcp"/);
-    assert.match(detail, /href="..\/explore\/index\.html\?focus=MCP"/);
-    assert.match(detail, /href="..\/notes\/index\.html"/);
-    assert.match(detail, /Open topic notes/);
+test("Review status filters preserve all four workflows", () => {
+    const queue = ["unread", "read", "done"].map((savedStatus) => ({ id: savedStatus, savedStatus }));
+    assert.deepEqual(filterReviewItems(queue, "all").map(({ id }) => id), ["unread", "read", "done"]);
+    for (const status of ["unread", "read", "done"]) assert.deepEqual(filterReviewItems(queue, status).map(({ id }) => id), [status]);
 });
 
-test("Review renders status and saved date metadata", () => {
-    const app = loadReview();
-    const item = {
-        ...items[1],
-        savedAt: "2026-06-20T01:02:03.000Z",
-        savedStatus: "read"
-    };
-    const queue = app.renderReviewQueue([item], item.id);
-    const detail = app.renderReviewDetail(item);
-
-    assert.match(queue, /Read/);
-    assert.match(queue, /Saved 2026-06-20/);
-    assert.match(detail, /Read/);
-    assert.match(detail, /Saved 2026-06-20/);
-    assert.match(detail, /data-review-status-id="packages:https:\/\/example\.com\/mcp" data-review-status="read"/);
-    assert.match(detail, /data-review-status-id="packages:https:\/\/example\.com\/mcp" data-review-status="done"/);
+test("Review stats count visible focus areas, sources, and every workflow status", () => {
+    const matched = matchSavedItems(items, items.map((item, index) => ({ id: item.id, savedAt: `2026-07-1${index}`, status: ["unread", "read", "done"][index] }))).items;
+    assert.deepEqual(reviewStats(matched), { visible: 3, focusAreas: 3, sources: 4 });
+    assert.deepEqual(workflowStats(matched), { unread: 1, read: 1, done: 1 });
 });
 
-test("Review renders next action guidance by workflow status", () => {
-    const app = loadReview();
-
-    assert.match(app.renderReviewDetail({ ...items[0], savedStatus: "unread" }), /Next action/);
-    assert.match(app.renderReviewDetail({ ...items[0], savedStatus: "unread" }), /Open this signal, then mark it read or done/);
-    assert.match(app.renderReviewDetail({ ...items[0], savedStatus: "read" }), /Add a reason, tag, or note, then mark done/);
-    assert.match(app.renderReviewDetail({ ...items[0], savedStatus: "done" }), /Remove it if it no longer needs to stay here/);
+test("Review selection keeps a valid id and falls back safely", () => {
+    assert.equal(selectedReviewItem(items, items[1].id).id, items[1].id);
+    assert.equal(selectedReviewItem(items, "missing").id, items[0].id);
+    assert.equal(selectedReviewItem([], "missing"), null);
 });
 
-test("Review renders saved metadata editor", () => {
-    const app = loadReview();
-    const item = {
-        ...items[0],
-        savedAt: "2026-06-20T01:02:03.000Z",
-        savedStatus: "unread",
-        savedReason: "Use \"soon\"",
-        savedTag: "skills",
-        savedNote: "Compare <later>"
-    };
-    const queue = app.renderReviewQueue([item], item.id);
-    const detail = app.renderReviewDetail(item);
-
-    assert.match(queue, /skills/);
-    assert.match(queue, /Use &quot;soon&quot;/);
-    assert.match(detail, /data-review-reason/);
-    assert.match(detail, /data-review-tag/);
-    assert.match(detail, /data-review-note/);
-    assert.match(detail, /data-review-meta-id="repos:https:\/\/example\.com\/skills"/);
-    assert.match(detail, /value="Use &quot;soon&quot;"/);
-    assert.match(detail, /value="skills"/);
-    assert.match(detail, /Compare &lt;later&gt;/);
+test("Review similar and topic-note links keep Explore focus semantics", () => {
+    assert.equal(similarExploreHref(items[1]), "../explore/index.html?focus=MCP");
+    assert.equal(topicNotesHref(items[1]), "../notes/index.html");
+    assert.equal(topicNotesHref(items[2]), "");
+    assert.equal(similarExploreHref({ module: "Packages", title: "Neutral package" }), "../explore/index.html?focus=Packages");
 });
 
-test("Review renders useful empty state", () => {
-    const app = loadReview();
-    const html = app.renderReviewEmpty();
-
-    assert.match(html, /No saved items yet/);
-    assert.match(html, /local to this browser/);
-    assert.match(html, /href="..\/explore\/index\.html"/);
+test("Review JSON export emits only compatible version 2 record fields", () => {
+    const payload = JSON.parse(reviewJsonPayload([{ id: "one", status: "read", savedAt: "2026-07-12", note: " note ", unsupported: "drop" }], now));
+    assert.deepEqual(payload, { version: 2, exportedAt: now(), items: [{ id: "one", savedAt: "2026-07-12", status: "read", note: "note" }] });
 });
 
-test("Review empty state distinguishes stale local saved records", () => {
-    const app = loadReview();
-    const empty = app.renderReviewEmpty(2);
-    const queue = app.renderReviewQueue([], "", 2);
-
-    assert.match(empty, /2 saved items are still local to this browser/);
-    assert.match(empty, /not in current data/);
-    assert.match(empty, /Export JSON/);
-    assert.match(queue, /2 saved items are local but not in current data/);
+test("Review Markdown export includes metadata and neutralizes unsafe URLs", () => {
+    const markdown = reviewMarkdownPayload([{ id: "one", title: "[Unsafe]", url: "javascript:alert(1)", module: "Links", category: "Security", metric: "Reference", savedStatus: "unread", savedReason: "Why\nnow", savedTag: "tag", savedNote: "note", summary: "summary", savedAt: "2026-07-12" }], now);
+    assert.match(markdown, /- \[unread\] Unsafe - Links \/ Security \/ Reference/);
+    assert.match(markdown, /Reason: Why now/);
+    assert.doesNotMatch(markdown, /javascript:|\]\(javascript/);
 });
 
-test("Review empty state distinguishes empty status filters", () => {
-    const app = loadReview();
-    const empty = app.renderReviewEmpty(0, "done");
-    const queue = app.renderReviewQueue([], "", 0, "done");
-
-    assert.match(empty, /No done items in Review/);
-    assert.match(empty, /Choose All or another status/);
-    assert.match(queue, /No done items match this filter/);
+test("Review import rejects malformed entries and previews duplicates", () => {
+    assert.deepEqual(reviewImportRecords("{broken"), []);
+    const incoming = reviewImportRecords(JSON.stringify({ version: 2, items: [{ id: "one" }, { id: "one" }, { nope: true }] }), { now });
+    assert.equal(incoming.length, 2);
+    assert.deepEqual(reviewImportPreview(incoming, [{ id: "one" }]), { added: 0, skipped: 2 });
 });
 
-test("Review rendering escapes generated text and blocks unsafe item links", () => {
-    const app = loadReview();
-    const detail = app.renderReviewDetail({
-        id: "repos:bad",
-        module: "Repos",
-        title: "<script>alert(\"x\")</script>",
-        category: "AI",
-        origin: "GitHub",
-        metric: "bad \"metric\"",
-        summary: "bad \"summary\"",
-        url: "javascript:alert(1)",
-        updated: "2026-06-20",
-        qualityScore: 40
-    });
-
-    assert.doesNotMatch(detail, /javascript:alert/);
-    assert.match(detail, /href="#"/);
-    assert.match(detail, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
-    assert.match(detail, /bad &quot;summary&quot;/);
-    assert.match(detail, /aria-label="Mark &lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt; read"/);
-    assert.match(detail, /aria-label="Remove &lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt; from Review"/);
+test("Explore storage accepts legacy arrays and normalizes version 2 records", () => {
+    assert.deepEqual(savedRecordsFromRaw('["legacy"]', { now }), [{ id: "legacy", savedAt: now(), status: "unread" }]);
+    assert.deepEqual(savedRecordsFromRaw(JSON.stringify({ version: 2, items: [{ id: "two", status: "unknown", reason: "", tag: " x " }] }), { now }), [{ id: "two", savedAt: now(), status: "unread", tag: "x" }]);
 });
 
-test("Review exports saved records and imports valid payloads", () => {
-    const app = loadReview({ Date: class extends Date {
-        constructor() { super("2026-06-25T00:00:00.000Z"); }
-        static now() { return Date.parse("2026-06-25T00:00:00.000Z"); }
-    } });
-    const payload = app.reviewExportPayload([
-        { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "done" }
-    ]);
-
-    assert.match(payload, /"version": 2/);
-    assert.match(payload, /"exportedAt": "2026-06-25T00:00:00\.000Z"/);
-    assert.deepEqual(JSON.parse(payload).items, [
-        { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "done" }
-    ]);
-    assert.deepEqual(JSON.parse(JSON.stringify(app.reviewImportRecords(payload))), [
-        { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "done" }
-    ]);
-    assert.deepEqual(JSON.parse(JSON.stringify(app.reviewImportRecords("not json"))), []);
+test("Review status and metadata writes remain Home and Explore compatible", () => {
+    const storage = memoryStorage(JSON.stringify({ version: 2, items: [{ id: "one", savedAt: "2026-07-12", status: "unread", note: "old" }] }));
+    setSavedItemStatus(storage, "one", "done", { now });
+    setSavedItemMeta(storage, "one", { reason: " why ", tag: "", note: "" }, { now });
+    assert.deepEqual(storage.value(), { version: 2, items: [{ id: "one", savedAt: "2026-07-12", status: "done", reason: "why" }] });
 });
 
-test("Review previews import collisions before writing records", () => {
-    const app = loadReview();
-    const preview = app.reviewImportPreview([
-        { id: "repos:a", savedAt: "2026-06-20T00:00:00.000Z", status: "read" },
-        { id: "repos:a", savedAt: "2026-06-21T00:00:00.000Z", status: "done" },
-        { id: "links:b", savedAt: "2026-06-22T00:00:00.000Z", status: "unread" }
-    ], [
-        { id: "repos:a", savedAt: "2026-06-19T00:00:00.000Z", status: "done" }
-    ]);
-
-    assert.deepEqual(JSON.parse(JSON.stringify(preview)), { added: 1, skipped: 2 });
+test("Review merge adds unique valid ids without replacing existing records", () => {
+    const storage = memoryStorage(JSON.stringify({ version: 2, items: [{ id: "one", savedAt: "2026-07-10", status: "read" }] }));
+    const result = mergeSavedRecords(storage, [{ id: "one", status: "done" }, { id: "two", status: "unread" }, { id: "two", status: "done" }, { bad: true }], { now });
+    assert.equal(result.added, 1);
+    assert.equal(result.skipped, 2);
+    assert.deepEqual(result.records, [{ id: "one", savedAt: "2026-07-10", status: "read" }, { id: "two", savedAt: now(), status: "unread" }]);
 });
 
-test("Review exports current saved items as Markdown", () => {
-    const app = loadReview({ Date: class extends Date {
-        constructor() { super("2026-06-25T00:00:00.000Z"); }
-        static now() { return Date.parse("2026-06-25T00:00:00.000Z"); }
-    } });
-    const payload = app.reviewMarkdownPayload([
-        {
-            title: "Skills repo",
-            url: "https://example.com/skills",
-            module: "Repos",
-            category: "Agent skills",
-            metric: "135K stars",
-            summary: "Reusable agent instructions.",
-            savedStatus: "read",
-            savedReason: "Use for reusable workflow.",
-            savedTag: "skills",
-            savedNote: "Compare with MCP.",
-            savedAt: "2026-06-20T00:00:00.000Z"
-        },
-        {
-            title: "No URL",
-            module: "Links",
-            category: "AI evals",
-            metric: "Docs",
-            summary: "",
-            savedStatus: "done"
-        }
-    ]);
-
-    assert.match(payload, /# Review queue/);
-    assert.match(payload, /Exported: 2026-06-25T00:00:00\.000Z/);
-    assert.match(payload, /- \[read\] \[Skills repo\]\(https:\/\/example\.com\/skills\) - Repos \/ Agent skills \/ 135K stars/);
-    assert.match(payload, /  - Reason: Use for reusable workflow\./);
-    assert.match(payload, /  - Tag: skills/);
-    assert.match(payload, /  - Note: Compare with MCP\./);
-    assert.match(payload, /  - Reusable agent instructions\./);
-    assert.match(payload, /- \[done\] No URL - Links \/ AI evals \/ Docs/);
+test("Review clear writes an empty compatible version 2 queue", () => {
+    const storage = memoryStorage('["one"]');
+    assert.deepEqual(clearSavedItems(storage, { now }), []);
+    assert.deepEqual(storage.value(), { version: 2, items: [] });
 });
 
-test("Review browser init renders saved queue and removes items", async () => {
-    function createElement() {
-        return {
-            innerHTML: "",
-            textContent: "",
-            dataset: {},
-            listeners: {},
-            addEventListener(type, listener) {
-                this.listeners[type] = listener;
-            }
-        };
-    }
-
-    const elements = Object.fromEntries([
-        "[data-review-total]",
-        "[data-review-portability-status]",
-        "[data-review-focus-count]",
-        "[data-review-source-count]",
-        "[data-review-queue]",
-        "[data-review-detail]",
-        "[data-review-clear]"
-    ].map((selector) => [selector, createElement()]));
-    let savedValue = "[\"trends:https://example.com/trend\"]";
-    const clickHandlers = {};
-    const sources = {
-        "../data/trends.json": {
-            updated: "2026-06-20",
-            sourceMeta: [{ name: "GitHub", status: "ok", count: 1 }],
-            items: [{
-                rank: 1,
-                title: "Agent trend",
-                source: "GitHub",
-                category: "AI agents",
-                score: 90,
-                velocity: "+5%",
-                url: "https://example.com/trend",
-                summary: "Saved agent trend."
-            }]
-        },
-        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
-        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
-        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
-    };
-    const context = {
-        console,
-        document: {
-            currentScript: { dataset: {} },
-            querySelector(selector) {
-                return elements[selector] || null;
-            },
-            querySelectorAll(selector) {
-                if (selector === "[data-review-remove-id]") {
-                    return [{
-                        dataset: { reviewRemoveId: "trends:https://example.com/trend" },
-                        addEventListener(type, listener) {
-                            clickHandlers.remove = listener;
-                        }
-                    }];
-                }
-                if (selector === "[data-review-status-id]") {
-                    return [
-                        {
-                            dataset: { reviewStatusId: "trends:https://example.com/trend", reviewStatus: "read" },
-                            addEventListener(type, listener) {
-                                clickHandlers.read = listener;
-                            }
-                        },
-                        {
-                            dataset: { reviewStatusId: "trends:https://example.com/trend", reviewStatus: "done" },
-                            addEventListener(type, listener) {
-                                clickHandlers.done = listener;
-                            }
-                        }
-                    ];
-                }
-                return [];
-            }
-        },
-        localStorage: {
-            getItem() {
-                return savedValue;
-            },
-            setItem(_key, value) {
-                savedValue = value;
-            }
-        },
-        fetch: async (path) => ({
-            ok: true,
-            json: async () => sources[path]
-        })
-    };
-
-    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    assert.equal(elements["[data-review-total]"].textContent, "1");
-    assert.equal(elements["[data-review-focus-count]"].textContent, "1");
-    assert.equal(elements["[data-review-source-count]"].textContent, "1");
-    assert.match(elements["[data-review-queue]"].innerHTML, /Agent trend/);
-    assert.match(elements["[data-review-detail]"].innerHTML, /Saved agent trend/);
-    assert.match(elements["[data-review-detail]"].innerHTML, /Unread/);
-    assert.equal(typeof elements["[data-review-clear]"].listeners.click, "function");
-
-    clickHandlers.done();
-    assert.equal(JSON.parse(savedValue).items[0].status, "done");
-    assert.match(elements["[data-review-detail]"].innerHTML, /Done/);
-
-    clickHandlers.remove();
-    assert.deepEqual(JSON.parse(savedValue), { version: 2, items: [] });
-    assert.equal(elements["[data-review-total]"].textContent, "0");
-    assert.match(elements["[data-review-detail]"].innerHTML, /No saved items yet/);
-});
-
-test("Review browser filters workflow status", async () => {
-    function createElement() {
-        return {
-            innerHTML: "",
-            textContent: "",
-            ariaPressed: "",
-            listeners: {},
-            addEventListener(type, listener) {
-                this.listeners[type] = listener;
-            },
-            setAttribute(name, value) {
-                if (name === "aria-pressed") this.ariaPressed = value;
-            }
-        };
-    }
-
-    const elements = Object.fromEntries([
-        "[data-review-total]",
-        "[data-review-unread]",
-        "[data-review-read]",
-        "[data-review-done]",
-        "[data-review-focus-count]",
-        "[data-review-source-count]",
-        "[data-review-queue]",
-        "[data-review-detail]"
-    ].map((selector) => [selector, createElement()]));
-    const filterButtons = [
-        { dataset: { reviewFilter: "all" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } },
-        { dataset: { reviewFilter: "done" }, ariaPressed: "", listeners: {}, addEventListener(type, listener) { this.listeners[type] = listener; }, setAttribute(name, value) { if (name === "aria-pressed") this.ariaPressed = value; } }
-    ];
-    const sources = {
-        "../data/trends.json": {
-            updated: "2026-06-20",
-            sourceMeta: [],
-            items: [
-                { rank: 1, title: "Unread item", source: "GitHub", category: "AI agents", score: 90, velocity: "+5%", url: "https://example.com/unread", summary: "Unread summary." },
-                { rank: 2, title: "Done item", source: "GitHub", category: "AI agents", score: 80, velocity: "+3%", url: "https://example.com/done", summary: "Done summary." }
-            ]
-        },
-        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
-        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
-        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
-    };
-    const context = {
-        console,
-        document: {
-            currentScript: { dataset: {} },
-            querySelector(selector) {
-                return elements[selector] || null;
-            },
-            querySelectorAll(selector) {
-                if (selector === "[data-review-filter]") return filterButtons;
-                return [];
-            }
-        },
-        localStorage: {
-            getItem() {
-                return JSON.stringify({
-                    version: 2,
-                    items: [
-                        { id: "trends:https://example.com/unread", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" },
-                        { id: "trends:https://example.com/done", savedAt: "2026-06-21T00:00:00.000Z", status: "done" }
-                    ]
-                });
-            },
-            setItem() {}
-        },
-        fetch: async (path) => ({
-            ok: true,
-            json: async () => sources[path]
-        })
-    };
-
-    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    assert.equal(elements["[data-review-total]"].textContent, "2");
-    assert.equal(elements["[data-review-unread]"].textContent, "1");
-    assert.equal(elements["[data-review-done]"].textContent, "1");
-    assert.match(elements["[data-review-queue]"].innerHTML, /Unread item/);
-    assert.match(elements["[data-review-queue]"].innerHTML, /Done item/);
-
-    filterButtons[1].listeners.click();
-    assert.equal(filterButtons[1].ariaPressed, "true");
-    assert.equal(elements["[data-review-total]"].textContent, "1");
-    assert.doesNotMatch(elements["[data-review-queue]"].innerHTML, /Unread item/);
-    assert.match(elements["[data-review-queue]"].innerHTML, /Done item/);
-});
-
-test("Review browser previews and imports pasted JSON without file chooser", async () => {
-    function createElement() {
-        return {
-            innerHTML: "",
-            textContent: "",
-            dataset: {},
-            listeners: {},
-            addEventListener(type, listener) {
-                this.listeners[type] = listener;
-            },
-            setAttribute() {}
-        };
-    }
-
-    const elements = Object.fromEntries([
-        "[data-review-total]",
-        "[data-review-unread]",
-        "[data-review-read]",
-        "[data-review-done]",
-        "[data-review-focus-count]",
-        "[data-review-source-count]",
-        "[data-review-queue]",
-        "[data-review-detail]",
-        "[data-review-import-text]",
-        "[data-review-import-paste]",
-        "[data-review-portability-status]"
-    ].map((selector) => [selector, createElement()]));
-    let savedValue = JSON.stringify({
-        version: 2,
-        items: [{ id: "trends:https://example.com/existing", savedAt: "2026-06-19T00:00:00.000Z", status: "done" }]
-    });
-    const sources = {
-        "../data/trends.json": {
-            updated: "2026-06-20",
-            sourceMeta: [],
-            items: [{
-                rank: 1,
-                title: "Imported item",
-                source: "GitHub",
-                category: "AI agents",
-                score: 90,
-                velocity: "+5%",
-                url: "https://example.com/imported",
-                summary: "Imported summary."
-            }, {
-                rank: 2,
-                title: "Existing item",
-                source: "GitHub",
-                category: "AI agents",
-                score: 70,
-                velocity: "+2%",
-                url: "https://example.com/existing",
-                summary: "Existing summary."
-            }]
-        },
-        "../data/packages.json": { updated: "2026-06-20", sourceMeta: { name: "npm", status: "ok", count: 0 }, packages: [] },
-        "../data/repos.json": { updated: "2026-06-20", sourceMeta: { name: "GitHub", status: "ok", count: 0 }, repos: [] },
-        "../data/links.json": { updated: "2026-06-20", sourceMeta: { name: "manual", status: "ok", count: 0 }, links: [] }
-    };
-    const context = {
-        console,
-        document: {
-            currentScript: { dataset: {} },
-            querySelector(selector) {
-                return elements[selector] || null;
-            },
-            querySelectorAll() {
-                return [];
-            }
-        },
-        localStorage: {
-            getItem() {
-                return savedValue;
-            },
-            setItem(_key, value) {
-                savedValue = value;
-            }
-        },
-        fetch: async (path) => ({
-            ok: true,
-            json: async () => sources[path]
-        })
-    };
-
-    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/signal-schema.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/explore.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/review.js", "utf8"), context);
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    elements["[data-review-import-text]"].value = JSON.stringify({
-        version: 2,
-        items: [
-            { id: "trends:https://example.com/imported", savedAt: "2026-06-20T00:00:00.000Z", status: "read" },
-            { id: "trends:https://example.com/existing", savedAt: "2026-06-20T00:00:00.000Z", status: "unread" }
-        ]
-    });
-    elements["[data-review-import-text]"].listeners.input();
-
-    assert.match(elements["[data-review-portability-status]"].textContent, /Import preview: 1 new, 1 existing or duplicate/);
-
-    elements["[data-review-import-paste]"].listeners.click();
-
-    assert.equal(elements["[data-review-total]"].textContent, "2");
-    assert.match(elements["[data-review-portability-status]"].textContent, /Imported 1 items\. Kept 1 existing/);
-    assert.match(elements["[data-review-queue]"].innerHTML, /Imported item/);
-    assert.equal(JSON.parse(savedValue).items.find((item) => item.id.endsWith("/existing")).status, "done");
+test("Unavailable localStorage never crashes Review storage operations", () => {
+    const blocked = { getItem() { throw new Error("blocked"); }, setItem() { throw new Error("blocked"); } };
+    assert.deepEqual(readSavedRecords(blocked, { now }), []);
+    assert.doesNotThrow(() => writeSavedRecords(blocked, [{ id: "one" }], { now }));
+    assert.doesNotThrow(() => setSavedItemStatus(blocked, "one", "done", { now }));
 });

@@ -39,7 +39,7 @@ There is no backend, server runtime, account system, sync service, or database.
 - Astro escapes interpolated text by default; data-driven Astro links use explicit safe URL/`rel` handling.
 - Preserved browser renderers use `js/safe-dom.js` helpers to escape HTML and restrict hrefs.
 - Explore renders structured source data through JSX, validates external URL protocols, and validates imported saved-search JSON before storage.
-- Review/import renderer tests treat localStorage/import payloads as untrusted.
+- Review renders source and localStorage data through JSX, validates imported records before versioned writes, and neutralizes unsafe Markdown URLs.
 - External data links retain `rel="noopener noreferrer"`.
 - `scripts/data-contract.mjs` validates checked-in JSON; `scripts/check-dist.mjs` validates built routes/assets/data/internal links.
 - Node renderer/security tests and Playwright accessibility/mobile/smoke tests run through `npm run check`.
@@ -56,7 +56,7 @@ There is no backend, server runtime, account system, sync service, or database.
 |---|---|---|
 | Home, Today, Status, Trends, Packages, Repos, Links | Astro pages/components | Astro text escaping; `SignalCard.astro` safe href handling; explicit external `rel`. |
 | Explore | Astro page + `ExploreIsland.jsx` + `src/lib/explore-*.js` | React renders structured data through JSX; external URLs and imported JSON are validated. |
-| Review | `ReviewIsland.jsx` + legacy `js/explore.js`/`js/review.js` bridge | Existing safe DOM helpers and versioned local storage remain required until Review migration. |
+| Review | `ReviewIsland.jsx` + `src/lib/review-domain.js` + shared Explore ES modules | React JSX escaping, safe external URLs, normalized versioned records, validated imports, and controlled metadata fields. |
 | Notes/topics and remaining legacy HTML | `src/pages/[...legacy].ts` pass-through | Checked-in fallback generator and renderer safety tests. |
 | Data/JS/CSS endpoints | Astro build-time endpoint routes | Fixed allowlists in route source; no request-time filesystem access after static build. |
 

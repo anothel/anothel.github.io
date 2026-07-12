@@ -28,12 +28,12 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd`, for example `npm.cmd run check`.
 ## Architecture
 
 - `src/pages/`: Astro route entry points. Nine primary routes are implemented directly in Astro.
-- `src/components/`: shared Astro presentation plus the direct React `ExploreIsland.jsx` and legacy-bridged `ReviewIsland.jsx`.
-- `src/lib/explore-*.js`: framework-independent Explore normalization, filtering, models, and storage compatibility.
+- `src/components/`: shared Astro presentation plus direct React islands for Explore and Review.
+- `src/lib/explore-*.js` and `src/lib/review-domain.js`: framework-independent normalization, filtering, Review workflow, models, and shared storage compatibility.
 - `src/pages/[...legacy].ts`: build-time pass-through for existing Notes, topic, and 404 HTML routes not yet converted to Astro components.
 - `data/*.json`: checked-in source snapshots, manifest, refresh report, watchlists, Today brief, and scoring policy.
 - `scripts/`: data generation, remaining Notes/topic HTML generation, and build-output checks.
-- `js/`: browser behavior reused by hydrated islands and preserved legacy pages.
+- `js/`: browser behavior retained for Home, Notes/topics, generators, and legacy regression coverage.
 - `dist/`: ignored Astro build output.
 
 Only Explore and Review hydrate React, both with `client:load`. Other primary routes render static Astro HTML. Useful initial Explore content and Review guidance exist before client behavior loads; legacy topic/Notes routes preserve checked-in no-JS HTML.

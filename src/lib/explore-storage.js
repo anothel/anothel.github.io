@@ -67,6 +67,42 @@ export function removeSavedItem(storage, id, options) {
     return writeSavedRecords(storage, readSavedRecords(storage, options).filter((record) => record.id !== id), options);
 }
 
+export function clearSavedItems(storage, options) {
+    return writeSavedRecords(storage, [], options);
+}
+
+export function setSavedItemStatus(storage, id, status, options) {
+    if (!validStatuses.has(status)) return readSavedRecords(storage, options);
+    return writeSavedRecords(storage, readSavedRecords(storage, options).map((record) => (
+        record.id === id ? { ...record, status } : record
+    )), options);
+}
+
+export function setSavedItemMeta(storage, id, fields = {}, options) {
+    return writeSavedRecords(storage, readSavedRecords(storage, options).map((record) => {
+        if (record.id !== id) return record;
+        const next = { ...record };
+        for (const field of ["note", "tag", "reason"]) {
+            const value = typeof fields[field] === "string" ? fields[field].trim() : "";
+            if (value) next[field] = value;
+            else delete next[field];
+        }
+        return next;
+    }), options);
+}
+
+export function mergeSavedRecords(storage, incomingRecords = [], options) {
+    const records = readSavedRecords(storage, options);
+    const normalized = savedRecordsFromRaw(JSON.stringify({ version: 2, items: incomingRecords }), options);
+    const ids = new Set(records.map(({ id }) => id));
+    const added = normalized.filter(({ id }) => !ids.has(id) && ids.add(id));
+    return {
+        records: writeSavedRecords(storage, [...records, ...added], options),
+        added: added.length,
+        skipped: normalized.length - added.length
+    };
+}
+
 export function readPinnedTopics(storage, validTopics) {
     try {
         const parsed = JSON.parse(get(storage, storageKeys.pinnedTopics, "[]"));

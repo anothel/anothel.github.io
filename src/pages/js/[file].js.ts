@@ -9,7 +9,6 @@ const files = [
     "notes",
     "package-watchlist",
     "repo-watchlist",
-    "review",
     "safe-dom",
     "signal-schema",
     "topic-taxonomy",

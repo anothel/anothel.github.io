@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Moved Review queue matching, status workflow, metadata, import/export, and rendering into its React island; removed its browser-global script bridge while preserving Explore/Home storage compatibility and honest no-JS guidance.
 - Moved Explore filtering, saved searches, pins, storage, trust models, and rendering into its React island; removed its runtime/global-script and build-time `node:vm` bridges while retaining Review compatibility.
 - Removed duplicate checked-in primary-route HTML after the verified Astro Pages cutover; refresh automation now updates only data plus remaining Notes/topic legacy HTML.
 - Added deterministic documentation checks for internal Markdown links, repository paths, npm scripts, stale architecture labels, and required architecture statements.
