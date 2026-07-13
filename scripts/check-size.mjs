@@ -3,6 +3,7 @@ import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const islandRouteNames = ["explore", "review"];
+const topicSlugs = ["agent-skills", "ai-agents", "ai-engineering", "ai-evals", "mcp", "security", "workflow-automation"];
 
 function assetPath(root, url) {
     const path = resolve(root, decodeURIComponent(String(url).split(/[?#]/)[0]).replace(/^\/+/, ""));
@@ -45,22 +46,36 @@ function moduleScriptUrls(html) {
         .map(({ src }) => src);
 }
 
+function measureModuleRoute(root, htmlFile, label) {
+    const html = readFileSync(htmlFile, "utf8");
+    const entries = [...new Set(moduleScriptUrls(html).map((url) => assetPath(root, url)))];
+    if (entries.length === 0) throw new Error(`${label} HTML is missing a bundled module script`);
+    const jsFiles = importedJavaScript(entries);
+    return {
+        html: statSync(htmlFile).size,
+        htmlAsset: relative(root, htmlFile).replaceAll("\\", "/"),
+        routeJs: entries.reduce((sum, file) => sum + statSync(file).size, 0),
+        routeAssets: entries.map((file) => relative(root, file).replaceAll("\\", "/")).sort(),
+        totalJs: jsFiles.reduce((sum, file) => sum + statSync(file).size, 0),
+        jsAssets: jsFiles.map((file) => relative(root, file).replaceAll("\\", "/")).sort()
+    };
+}
+
+function maximum(routes, field) {
+    return Object.entries(routes).reduce((largest, [route, sizes]) => (
+        !largest || sizes[field] > largest.size ? { route, size: sizes[field], sizes } : largest
+    ), null);
+}
+
 export function measureAssetSizes(root = resolve(process.cwd(), "dist")) {
     if (!existsSync(root)) throw new Error(`dist directory is missing: ${root}`);
-    const homeHtmlFile = resolve(root, "index.html");
-    const homeHtml = readFileSync(homeHtmlFile, "utf8");
-    const homeEntries = [...new Set(moduleScriptUrls(homeHtml).map((url) => assetPath(root, url)))];
-    if (homeEntries.length === 0) throw new Error("home HTML is missing a bundled module script");
-    const homeJsFiles = importedJavaScript(homeEntries);
+    const home = measureModuleRoute(root, resolve(root, "index.html"), "home");
+    const topics = Object.fromEntries(topicSlugs.map((slug) => [
+        slug,
+        measureModuleRoute(root, resolve(root, "topics", slug, "index.html"), `topic ${slug}`)
+    ]));
     const routes = {
-        home: {
-            html: statSync(homeHtmlFile).size,
-            htmlAsset: relative(root, homeHtmlFile).replaceAll("\\", "/"),
-            routeJs: homeEntries.reduce((sum, file) => sum + statSync(file).size, 0),
-            routeAssets: homeEntries.map((file) => relative(root, file).replaceAll("\\", "/")).sort(),
-            totalJs: homeJsFiles.reduce((sum, file) => sum + statSync(file).size, 0),
-            jsAssets: homeJsFiles.map((file) => relative(root, file).replaceAll("\\", "/")).sort()
-        },
+        home,
         ...Object.fromEntries(islandRouteNames.map((route) => {
             const htmlFile = resolve(root, route, "index.html");
             const html = readFileSync(htmlFile, "utf8");
@@ -79,14 +94,27 @@ export function measureAssetSizes(root = resolve(process.cwd(), "dist")) {
             }];
         }))
     };
-    return { routes, sharedReactClientJs: Math.max(...islandRouteNames.map((route) => routes[route].clientJs)) };
+    return {
+        routes,
+        topics,
+        topicMaximums: {
+            html: maximum(topics, "html"),
+            routeJs: maximum(topics, "routeJs"),
+            totalJs: maximum(topics, "totalJs")
+        },
+        sharedReactClientJs: Math.max(...islandRouteNames.map((route) => routes[route].clientJs))
+    };
 }
 
 export function assertSizeBudgets(actual, budgets) {
+    const topic = actual.topicMaximums;
     const checks = [
         ["home HTML", actual.routes.home.htmlAsset, actual.routes.home.html, budgets.home.html],
         ["home route JS", actual.routes.home.routeAssets.join(", "), actual.routes.home.routeJs, budgets.home.routeJs],
-        ["home total referenced JS", actual.routes.home.jsAssets.join(", "), actual.routes.home.totalJs, budgets.home.totalJs]
+        ["home total referenced JS", actual.routes.home.jsAssets.join(", "), actual.routes.home.totalJs, budgets.home.totalJs],
+        [`largest topic HTML (${topic.html.route})`, topic.html.sizes.htmlAsset, topic.html.size, budgets.topics.html],
+        [`topic pin entry JS (${topic.routeJs.route})`, topic.routeJs.sizes.routeAssets.join(", "), topic.routeJs.size, budgets.topics.routeJs],
+        [`topic total referenced JS (${topic.totalJs.route})`, topic.totalJs.sizes.jsAssets.join(", "), topic.totalJs.size, budgets.topics.totalJs]
     ].concat(islandRouteNames.flatMap((route) => [
         [`${route} HTML`, actual.routes[route].htmlAsset, actual.routes[route].html, budgets[route].html],
         [`${route} island JS`, actual.routes[route].islandAsset, actual.routes[route].islandJs, budgets[route].islandJs],

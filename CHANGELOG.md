@@ -6,11 +6,13 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Migrated all seven promoted topic routes to native Astro static generation with one shared topic model and a small non-React pin module; removed checked-in topic HTML, the `TopicApp`/`AnothelState` browser bridges, topic fallback generation, and obsolete workflow staging while keeping Notes as the sole legacy content route.
+- Aligned Topic results with Explore's canonical URL deduplication and priority ranking. Legacy raw counts are intentionally not preserved when duplicate source rows collapse: Agent skills 9→6, AI agents 43→33, AI engineering 28→23, AI evals 17→16, MCP 20→14, Security 2→2, and Workflow automation 15→14; audited golden tests now freeze count ranges, top-result sets, source diversity, purpose relevance, URL uniqueness, and URL safety.
 - Replaced Home's `local-state.js` global bridge with an Astro-bundled native saved-summary module using the shared Explore/Review storage contract, honest no-JS placeholders, unavailable-storage handling, and Home size/architecture gates; removed the obsolete Home DOM runtime.
 - Removed the obsolete Explore browser-global bridge and VM/DOM regression suite; added scoped island architecture guards and reviewed raw-byte asset budgets.
 - Moved Review queue matching, status workflow, metadata, import/export, and rendering into its React island; removed its browser-global script bridge while preserving Explore/Home storage compatibility and honest no-JS guidance.
 - Moved Explore filtering, saved searches, pins, storage, trust models, and rendering into its React island; removed its runtime/global-script and build-time `node:vm` bridges while retaining Review compatibility.
-- Removed duplicate checked-in primary-route HTML after the verified Astro Pages cutover; refresh automation now updates only data plus remaining Notes/topic legacy HTML.
+- Removed duplicate checked-in primary-route HTML after the verified Astro Pages cutover; refresh automation stopped updating primary HTML.
 - Added deterministic documentation checks for internal Markdown links, repository paths, npm scripts, stale architecture labels, and required architecture statements.
 - Aligned architecture, deployment, development, IA, roadmap, data, release, and security docs with the completed Astro migration and current React-island/build workflow.
 - Ran 2026-07-07 token-backed publish-health refresh; GitHub trends recovered to `ok`, all sources were `ok`, and generated data stayed at 107 items.

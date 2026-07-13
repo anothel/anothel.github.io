@@ -1,22 +1,8 @@
+import taxonomy from "./topic-taxonomy.js";
+
 export const sortValues = new Set(["priority", "saved", "module", "category"]);
 
-export const focusDefinitions = [
-    ["AI agents", "ai-agents", "Open when a tool changes how code gets written, reviewed, tested, or automated.", /\b(ai agents?|agentic|coding agents?|coding agent|claude code|codex|copilot|workflow automation|agent framework)\b/],
-    ["Agent skills", "agent-skills", "Open when a skill pattern can become repeatable work instead of one-off prompting.", /\b(agent skills?|skills? for (?:coding )?agents?|claude skills?|coding agent skills?)\b|(?:mattpocock|anthropics)[/\s]skills/],
-    ["MCP", "mcp", "Open when a protocol or server signal could change how agents connect to tools.", /\b(mcp|model context protocol|modelcontextprotocol)\b/],
-    ["AI evals", "ai-evals", "Open when a signal helps compare AI behavior instead of only showcasing a model.", /\b(evals?|evaluation|benchmarks?|harness|observability|braintrust|evalite)\b/, /\b(ai|llm|model|agents?|coding)\b/],
-    ["AI engineering", "ai-engineering", "Open when a signal helps explain how models are built, run, or adapted.", /\b(ai engineering|nanogpt|nanochat|llm\.c|llama2\.c|training|inference|gpt|llm|llama|cuda|model)\b/, /\b(ai|llm|gpt|nanogpt|nanochat|model|karpathy|llama)\b/],
-    ["Workflow automation", "workflow-automation", "Open when automation can turn repeated agent work into a reliable workflow.", /\b(workflow automation|durable workflow|inngest|n8n|automation|integration)\b/],
-    ["Security", "security", "Open when a signal changes how safe agent or developer workflow should be evaluated.", /\b(security|oauth|auth|malware|vulnerabilit(?:y|ies)|supply chain|permissions?|red teaming|pentesting)\b/],
-    ["Developer tooling", "", "Tools that affect coding, testing, and build flow.", /\b(developer tools?|tooling|typescript|javascript|node|npm|bun|deno|react|vite|playwright|eslint|prettier|zod|build tool|testing|browser automation)\b/]
-].map(([focus, slug, description, pattern, requires]) => ({
-    focus,
-    label: focus,
-    description,
-    route: slug ? `../topics/${slug}/index.html` : `../explore/index.html?focus=${encodeURIComponent(focus)}`,
-    pattern,
-    requires
-}));
+export const focusDefinitions = taxonomy.topicLensDefinitions("../");
 
 export const focusValues = new Set(["all", "Packages", ...focusDefinitions.map(({ focus }) => focus)]);
 
@@ -204,11 +190,9 @@ function searchableText(item) {
 export function focusMatches(item, focus = "all") {
     if (!focus || focus === "all") return true;
     if (focus === "Packages") return item.module === "Packages";
-    const definition = focusDefinitions.find((entry) => entry.focus === focus);
-    if (!definition) return true;
-    const text = searchableText(item);
-    return String(item.category || "").toLowerCase() === focus.toLowerCase()
-        || (definition.pattern.test(text) && (!definition.requires || definition.requires.test(text)));
+    return focusDefinitions.some((entry) => entry.focus === focus)
+        ? taxonomy.matchesTopic(item, focus)
+        : true;
 }
 
 export function filterItems(items, filters) {

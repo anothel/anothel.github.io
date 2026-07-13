@@ -1,10 +1,20 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { measureAssetSizes } from "../scripts/check-size.mjs";
 
 const read = (path) => readFileSync(path, "utf8");
 const islands = ["src/components/ExploreIsland.jsx", "src/components/ReviewIsland.jsx"];
+const topicSlugs = ["agent-skills", "ai-agents", "ai-engineering", "ai-evals", "mcp", "security", "workflow-automation"];
+
+function topicSourcePages() {
+    if (!existsSync("topics")) return [];
+    return readdirSync("topics", { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => `topics/${entry.name}/index.html`)
+        .filter(existsSync)
+        .sort();
+}
 
 test("Explore and Review islands cannot reintroduce browser-global script bridges", () => {
     const forbidden = [
@@ -69,4 +79,71 @@ test("the retired Home browser module cannot be republished accidentally", () =>
     assert.doesNotMatch(route, /^\s*["']home["']\s*,?/m);
     assert.doesNotMatch(requiredAssets, /["']js\/home\.mjs["']/);
     assert.match(retiredAssets, /["']js\/home\.mjs["']/);
+});
+
+test("topic routes use static Astro templates and only a native pin module", () => {
+    const sources = [
+        ["src/pages/topics/[slug].astro", read("src/pages/topics/[slug].astro")],
+        ["src/lib/topic-domain.js", read("src/lib/topic-domain.js")],
+        ["src/scripts/topic-pin.js", read("src/scripts/topic-pin.js")]
+    ];
+    const forbidden = [
+        [/js\/(?:topics|local-state)\.js/, "retired topic script"],
+        [/\b(?:TopicApp|AnothelState)\b/, "legacy browser global"],
+        [/\bclient:[a-z]+\b/, "React hydration directive"],
+        [/from\s*["']react["']|<astro-island\b/i, "React runtime"],
+        [/dangerouslySetInnerHTML|set:html/, "HTML injection escape hatch"],
+        [/\.innerHTML\s*(?:\+?=)/, "innerHTML write"],
+        [/document\.createElement\s*\(\s*["']script["']\s*\)/, "dynamic script creation"]
+    ];
+
+    for (const [path, source] of sources) {
+        for (const [pattern, label] of forbidden) assert.doesNotMatch(source, pattern, `${path}: ${label}`);
+    }
+    assert.doesNotMatch(sources[0][1], /\bfetch\s*\(/, "topic content should be available at build time");
+
+    for (const slug of topicSlugs) {
+        const html = read(`dist/topics/${slug}/index.html`);
+        assert.doesNotMatch(html, /js\/(?:topics|local-state)\.js|\b(?:TopicApp|AnothelState)\b|<astro-island\b|\bcomponent-url=|\brenderer-url=/i, slug);
+    }
+});
+
+test("Explore and Review use the canonical topic taxonomy", () => {
+    const explore = read("src/lib/explore-domain.js");
+    const review = read("src/lib/review-domain.js");
+
+    assert.match(explore, /import taxonomy from ["']\.\/topic-taxonomy\.js["']/);
+    assert.match(explore, /focusDefinitions\s*=\s*taxonomy\.topicLensDefinitions\(["']\.\.\/["']\)/);
+    assert.match(explore, /taxonomy\.matchesTopic\(item, focus\)/);
+    assert.doesNotMatch(explore, /(?:const|let|var)\s+focusDefinitions\s*=\s*\[/);
+    assert.doesNotMatch(review, /\.pattern\.test\(|\.requires\.test\(/);
+});
+
+test("retired topic HTML and browser globals cannot return through pass-through, updater, or workflow lists", () => {
+    const legacyRoute = read("src/pages/[...legacy].ts");
+    const browserAssets = read("src/pages/js/[file].js.ts");
+    const updater = read("scripts/update-static-fallbacks.mjs");
+    const workflow = read(".github/workflows/update-trends.yml");
+    const checkDist = read("scripts/check-dist.mjs");
+    const requiredAssets = checkDist.match(/const requiredAssets = \[([\s\S]*?)\];/)?.[1] || "";
+    const retiredAssets = checkDist.match(/const retiredAssets = \[([\s\S]*?)\];/)?.[1] || "";
+
+    assert.deepEqual(topicSourcePages(), [], "checked-in topics/*/index.html must stay retired");
+    assert.doesNotMatch(legacyRoute, /["']topics\//);
+    assert.doesNotMatch(browserAssets, /^\s*["'](?:local-state|topics)["']\s*,?/m);
+    const writeTargets = [...updater.matchAll(/\bawait\s+writeIfChanged\(\s*([^,\n)]+)/g)]
+        .map((match) => match[1].trim())
+        .sort();
+    assert.deepEqual(writeTargets, ['"notes/index.html"', '"sitemap.xml"']);
+    assert.match(updater, /const generatedFiles = new Set\(\[["']notes\/index\.html["'], ["']sitemap\.xml["']\]\)/);
+    assert.doesNotMatch(updater, /\bTopicApp\b|js\/topics\.js|function renderTopicPage/);
+    assert.doesNotMatch(workflow, /topics\/[a-z-]+\/index\.html/);
+
+    for (const asset of ["js/local-state.js", "js/topics.js"]) {
+        const escaped = asset.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        assert.equal(existsSync(asset), false, asset);
+        assert.equal(existsSync(`dist/${asset}`), false, `dist/${asset}`);
+        assert.doesNotMatch(requiredAssets, new RegExp(`["']${escaped}["']`));
+        assert.match(retiredAssets, new RegExp(`["']${escaped}["']`));
+    }
 });

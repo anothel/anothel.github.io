@@ -1,592 +1,196 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import vm from "node:vm";
 
-function loadTopics(extra = {}) {
-    const context = { console, URL, ...extra };
-    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topics.js", "utf8"), context);
-    return context.TopicApp;
-}
+import { normalizeExploreData, sortItems } from "../src/lib/explore-domain.js";
+import {
+    buildTopicPageModel,
+    relatedTopicLinks,
+    safeExternalUrl,
+    safeTopicActionHref,
+    sourceMix,
+    todayTopicItems,
+    topicBySlug,
+    topicItems,
+    topicRelatedGroups,
+    topicSummary,
+    topicSupportingSignals
+} from "../src/lib/topic-domain.js";
+import taxonomy, { topicDefinitions, topicPageLabels } from "../src/lib/topic-taxonomy.js";
 
-test("Topic pages normalize source data into focused items", () => {
-    const app = loadTopics();
-    const items = app.topicItems({
-        trends: {
-            updated: "2026-06-19",
-            items: [
-                { title: "Agent runtime", category: "AI agents", source: "GitHub", score: 91, velocity: "+20%", url: "https://example.com/agent", summary: "Agent workflow." },
-                { title: "Zero-Touch OAuth for MCP", category: "MCP", source: "HN", score: 80, velocity: "80 points", url: "https://example.com/mcp", summary: "MCP auth." }
-            ]
-        },
-        packages: {
-            updated: "2026-06-18",
-            packages: [
-                { name: "mcp-server", category: "MCP", focus: "MCP server SDK", downloads: 3000, downloadsLabel: "3K/week", url: "https://example.com/pkg" }
-            ]
-        },
-        repos: {
-            updated: "2026-06-17",
-            repos: [
-                { name: "mattpocock/skills", category: "Agent skills", focus: "coding agent skills", stars: 12000, starsLabel: "12K", url: "https://example.com/skills", summary: "Reusable skills." }
-            ]
-        },
-        links: {
-            updated: "2026-06-16",
-            links: [
-                { title: "Agent Skills standard", category: "Agent skills", kind: "Spec", url: "https://example.com/skills-spec", summary: "Spec reference." }
-            ]
-        }
-    }, "Agent skills");
+const json = (path) => JSON.parse(readFileSync(path, "utf8"));
+const data = {
+    trends: json("data/trends.json"),
+    packages: json("data/packages.json"),
+    repos: json("data/repos.json"),
+    links: json("data/links.json")
+};
+const today = json("data/today.json");
+const signalPolicy = json("data/signal-policy.json");
+const routes = [
+    ["agent-skills", "Agent skills"],
+    ["ai-agents", "AI agents"],
+    ["ai-engineering", "AI engineering"],
+    ["ai-evals", "AI evals"],
+    ["mcp", "MCP"],
+    ["security", "Security"],
+    ["workflow-automation", "Workflow automation"]
+];
 
-    assert.deepEqual(JSON.parse(JSON.stringify(items.map((item) => item.title))), ["mattpocock/skills", "Agent Skills standard"]);
-    assert.deepEqual(JSON.parse(JSON.stringify(items.map((item) => item.module))), ["Repos", "Links"]);
+test("topic slugs resolve exactly the seven public topic routes", () => {
+    assert.deepEqual(routes.map(([slug]) => topicBySlug(slug)?.label), routes.map(([, label]) => label));
+    assert.equal(topicBySlug("developer-tooling"), null);
+    assert.equal(topicBySlug("unknown"), null);
+    assert.equal(topicBySlug(""), null);
 });
 
-test("Topic pages summarize item count, module count, and latest update", () => {
-    const app = loadTopics();
-    const summary = app.topicSummary([
-        { module: "Repos", updated: "2026-06-17" },
-        { module: "Links", updated: "2026-06-19" },
-        { module: "Links", updated: "2026-06-16" }
-    ]);
-
-    assert.deepEqual(JSON.parse(JSON.stringify(summary)), {
-        total: 3,
-        modules: 2,
-        updated: "2026-06-19"
-    });
-});
-
-test("Topic pages summarize source mix and highlight the top signal", () => {
-    const app = loadTopics();
-    const items = [
-        { module: "Repos", title: "openai/codex", category: "AI agents", origin: "GitHub", metric: "92K stars", score: 96, updated: "2026-06-19" },
-        { module: "Repos", title: "contains-studio/agents", category: "AI agents", origin: "GitHub", metric: "12K stars", score: 80, updated: "2026-06-18" },
-        { module: "Packages", title: "mastra", category: "AI agents", origin: "npm", metric: "440K/week", score: 78, updated: "2026-06-19" }
+test("topic matching preserves every pattern and requires-pattern rule", () => {
+    const matches = [
+        ["AI agents", "Claude Code coding agent workflow"],
+        ["Agent skills", "mattpocock/skills for coding agents"],
+        ["MCP", "Model Context Protocol inspector"],
+        ["AI evals", "LLM evaluation benchmark harness"],
+        ["AI engineering", "nanoGPT model training"],
+        ["Workflow automation", "n8n durable workflow automation"],
+        ["Security", "OAuth supply chain security"]
     ];
+    for (const [topic, title] of matches) assert.equal(taxonomy.matchesTopic({ title }, topic), true, topic);
 
-    const insight = app.topicInsight(items, "AI agents");
-    const mixHtml = app.renderSourceMix(insight.sourceMix);
-    const actionHtml = app.renderTopicActions("AI agents");
+    assert.equal(taxonomy.matchesTopic({ title: "benchmark harness" }, "AI evals"), false);
+    assert.equal(taxonomy.matchesTopic({ title: "training course" }, "AI engineering"), false);
+    assert.equal(taxonomy.matchesTopic({ category: "AI evals", title: "benchmark harness" }, "AI evals"), true);
+    assert.equal(taxonomy.matchesTopic({ title: "unknown" }, "not-a-topic"), false);
+});
 
-    assert.equal(insight.lead, "2 source modules tracking 3 AI agent signals.");
-    assert.equal(insight.topItem.title, "openai/codex");
-    assert.deepEqual(JSON.parse(JSON.stringify(insight.sourceMix)), [
+test("topic items reuse Explore normalization, canonical ids, dedupe, and priority ranking", () => {
+    const normalized = normalizeExploreData(data, { signalPolicy });
+    for (const topic of topicPageLabels) {
+        const expected = sortItems(normalized.filter((item) => taxonomy.matchesTopic(item, topic)), "priority");
+        const actual = topicItems(data, topic, { signalPolicy });
+        assert.deepEqual(actual.map(({ id }) => id), expected.map(({ id }) => id), topic);
+        assert.equal(new Set(actual.map(({ id }) => id)).size, actual.length, `${topic} canonical ids`);
+        assert.ok(actual.every(({ schemaVersion, canonicalKey, sourceContext, scoreReasons }) => (
+            schemaVersion === 2
+            && canonicalKey
+            && typeof sourceContext === "string"
+            && Array.isArray(scoreReasons)
+        )), `${topic} Explore item contract`);
+    }
+});
+
+test("topic summary and source mix stay deterministic", () => {
+    const items = [
+        { module: "Repos", updated: "2026-07-10" },
+        { module: "Links", updated: "2026-07-12" },
+        { module: "Repos", updated: "2026-07-11" },
+        { module: "Packages", updated: "2026-07-09" }
+    ];
+    assert.deepEqual(topicSummary(items), { total: 4, modules: 3, updated: "2026-07-12" });
+    assert.deepEqual(sourceMix(items), [
         { module: "Repos", count: 2 },
+        { module: "Links", count: 1 },
         { module: "Packages", count: 1 }
     ]);
-    assert.match(mixHtml, /Repos/);
-    assert.match(mixHtml, /2 items/);
-    assert.match(actionHtml, /href="..\/..\/explore\/index\.html\?focus=AI%20agents"/);
-    assert.match(actionHtml, /href="..\/..\/repos\/index\.html"/);
-    assert.match(actionHtml, /href="..\/..\/packages\/index\.html"/);
 });
 
-test("Topic dashboard model builds why-now text, top movers, related groups, and cross-links", () => {
-    const app = loadTopics();
-    const items = [
-        { module: "Trends", title: "Agent runtime", category: "AI agents", origin: "GitHub", metric: "+20%", summary: "Agent workflow.", url: "https://example.com/agent", score: 91, updated: "2026-06-19" },
-        { module: "Repos", title: "openai/codex", category: "AI agents", origin: "GitHub", metric: "92K stars", summary: "Coding agent.", url: "https://example.com/codex", score: 96, updated: "2026-06-19" },
-        { module: "Packages", title: "mastra", category: "AI agents", origin: "npm", metric: "440K/week", summary: "Agent framework.", url: "https://example.com/mastra", score: 78, updated: "2026-06-18" },
-        { module: "Links", title: "Agents SDK", category: "AI agents", origin: "Docs", metric: "Docs", summary: "Agent docs.", url: "https://example.com/docs", score: 60, updated: "2026-06-17" }
-    ];
-    const today = {
-        sections: [
-            {
-                id: "start",
-                items: [
-                    { title: "Today agent", module: "Today", category: "AI agents", metric: "100 score", reason: "Open first.", url: "https://example.com/today", score: 100 },
-                    { title: "Other", module: "Today", category: "MCP", metric: "80 score", reason: "Other.", url: "https://example.com/other", score: 80 }
-                ]
-            }
-        ]
-    };
-
-    const dashboard = app.topicDashboard(items, today, "AI agents");
-
-    assert.match(dashboard.whyNow, /4 AI agent signals across 4 source modules/);
-    assert.match(dashboard.whyNow, /openai\/codex/);
-    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.topMovers.map((item) => item.title))), ["openai/codex", "Agent runtime", "mastra"]);
-    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.relatedGroups.map((group) => [group.label, group.items.map((item) => item.title)]))), [
-        ["Today picks", ["Today agent"]],
-        ["Packages", ["mastra"]],
-        ["Repos", ["openai/codex"]],
-        ["Links", ["Agents SDK"]]
+test("supporting signals keep the strongest three safe unique URLs", () => {
+    const signals = topicSupportingSignals([
+        { id: "a", title: "First", module: "Repos", url: "https://example.com/a", score: 70 },
+        { id: "b", title: "Best", module: "Trends", url: "https://example.com/b", score: 99 },
+        { id: "b2", title: "Duplicate", module: "Packages", url: "https://example.com/b", score: 98 },
+        { id: "c", title: "Second", module: "Links", url: "https://example.com/c", score: 80 },
+        { id: "d", title: "Third", module: "Packages", url: "https://example.com/d", score: 75 },
+        { id: "bad", title: "Unsafe", module: "Links", url: "javascript:alert(1)", score: 100 }
     ]);
-    assert.deepEqual(JSON.parse(JSON.stringify(dashboard.crossLinks.map((link) => link.topic))), ["MCP", "Agent skills", "AI evals", "AI engineering", "Workflow automation", "Security"]);
+    assert.deepEqual(signals.map(({ title }) => title), ["Best", "Second", "Third"]);
 });
 
-test("Topic guidance gives each topic concrete watch/open/action context", () => {
-    const app = loadTopics();
-
-    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("AI agents"))), {
-        whatToWatch: "Coding agents, local CLIs, orchestration frameworks, and agent runtime patterns.",
-        whenToOpen: "Open when a tool changes how code gets written, reviewed, tested, or automated.",
-        nextAction: "Compare the strongest repo and package signals before saving follow-up items."
-    });
-    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("MCP"))), {
-        whatToWatch: "SDKs, reference servers, registries, inspector tools, and server packages.",
-        whenToOpen: "Open when a protocol or server signal could change how agents connect to tools.",
-        nextAction: "Check packages for adoption, then keep stable server references nearby."
-    });
-    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("Agent skills"))), {
-        whatToWatch: "Skill specs, reusable instructions, examples, and workflow checklists.",
-        whenToOpen: "Open when a skill pattern can become repeatable work instead of one-off prompting.",
-        nextAction: "Start from stable references, then save repos that look reusable."
-    });
-    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("AI evals"))), {
-        whatToWatch: "Eval harnesses, prompt tests, observability, benchmark workflows, and scoring helpers.",
-        whenToOpen: "Open when a signal helps compare AI behavior instead of only showcasing a model.",
-        nextAction: "Check references for stable docs, then compare repo and package traction before saving."
-    });
-    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("AI engineering"))), {
-        whatToWatch: "Model training, inference, compact implementations, and practical AI systems.",
-        whenToOpen: "Open when a signal helps explain how models are built, run, or adapted.",
-        nextAction: "Start from stable references, then compare repos that make implementation details concrete."
-    });
-    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("Workflow automation"))), {
-        whatToWatch: "Durable workflows, event triggers, integration platforms, and orchestration SDKs.",
-        whenToOpen: "Open when automation can turn repeated agent work into a reliable workflow.",
-        nextAction: "Compare packages and repos, then save tools that fit repeatable work."
-    });
-    assert.deepEqual(JSON.parse(JSON.stringify(app.topicGuidance("Security"))), {
-        whatToWatch: "Auth, OAuth, supply chain, malware, vulnerability, and agent permission signals.",
-        whenToOpen: "Open when a signal changes how safe agent or developer workflow should be evaluated.",
-        nextAction: "Check source health, then save references that affect trusted execution."
-    });
-});
-
-test("Topic notes provide durable judgment copy per topic", () => {
-    const app = loadTopics();
-
-    assert.match(app.topicNote("AI agents").title, /agent workflow/i);
-    assert.match(app.topicNote("MCP").body, /protocol/i);
-    assert.match(app.topicNote("Agent skills").readWhen, /reusable/i);
-    assert.match(app.topicNote("AI evals").title, /measurement/i);
-    assert.match(app.topicNote("AI engineering").body, /implementation/i);
-    assert.match(app.topicNote("Workflow automation").body, /reliable runs/i);
-    assert.match(app.topicNote("Security").body, /trust boundary/i);
-});
-
-test("Topic page configs keep complete judgment notes and actions", () => {
-    const app = loadTopics();
-
-    for (const topic of ["AI agents", "MCP", "Agent skills", "AI evals", "AI engineering", "Workflow automation", "Security"]) {
-        const note = app.topicNote(topic);
-        const guidance = app.topicGuidance(topic);
-        const actions = app.renderTopicActions(topic);
-
-        assert.ok(note.title.length > 20, `${topic} note title`);
-        assert.ok(note.body.length > 60, `${topic} note body`);
-        assert.ok(note.readWhen.length > 40, `${topic} readWhen`);
-        assert.ok(guidance.whatToWatch.length > 40, `${topic} whatToWatch`);
-        assert.ok(guidance.whenToOpen.length > 40, `${topic} whenToOpen`);
-        assert.ok(guidance.nextAction.length > 40, `${topic} nextAction`);
-        assert.match(actions, /Open focused Explore/, `${topic} focused Explore action`);
-    }
-});
-
-test("Topic supporting signals dedupe URLs and keep strongest current signals", () => {
-    const app = loadTopics();
-    const signals = app.topicSupportingSignals([
-        { title: "First", module: "Repos", metric: "100 stars", url: "https://example.com/a", score: 70 },
-        { title: "Best", module: "Trends", metric: "100 score", url: "https://example.com/b", score: 99 },
-        { title: "Duplicate best", module: "Packages", metric: "1M/week", url: "https://example.com/b", score: 98 },
-        { title: "Second", module: "Links", metric: "Docs", url: "https://example.com/c", score: 80 },
-        { title: "Third", module: "Packages", metric: "20K/week", url: "https://example.com/d", score: 75 }
-    ]);
-
-    assert.deepEqual(JSON.parse(JSON.stringify(signals.map((item) => item.title))), ["Best", "Second", "Third"]);
-});
-
-test("Topic note renderer escapes copy and blocks unsafe support links", () => {
-    const app = loadTopics();
-    const html = app.renderTopicNote(
-        {
-            title: "Watch <topic>",
-            body: "Use \"signals\" carefully.",
-            readWhen: "Open & compare."
-        },
-        [
-            { title: "<bad>", module: "Repos", metric: "100 stars", url: "javascript:alert(1)" }
-        ]
-    );
-
-    assert.match(html, /Watch &lt;topic&gt;/);
-    assert.match(html, /Use &quot;signals&quot; carefully\./);
-    assert.match(html, /Open &amp; compare\./);
-    assert.match(html, /href="#"/);
-    assert.match(html, /&lt;bad&gt;/);
-    assert.match(html, /href="..\/..\/notes\/index\.html"/);
-    assert.match(html, /Open Notes/);
-});
-
-test("Topic dashboard why-now copy uses topic-specific meaning", () => {
-    const app = loadTopics();
-    const items = [
-        { module: "Repos", title: "modelcontextprotocol/python-sdk", category: "MCP", origin: "GitHub", metric: "23K stars", summary: "Python SDK.", url: "https://example.com/python", score: 87, updated: "2026-06-20" },
-        { module: "Packages", title: "@modelcontextprotocol/sdk", category: "MCP", origin: "npm", metric: "39M/week", summary: "TypeScript SDK.", url: "https://example.com/sdk", score: 70, updated: "2026-06-20" }
-    ];
-
-    const dashboard = app.topicDashboard(items, { sections: [] }, "MCP");
-
-    assert.match(dashboard.whyNow, /2 MCP signals across 2 source modules/);
-    assert.match(dashboard.whyNow, /Protocol and server adoption is moving/);
-    assert.match(dashboard.whyNow, /modelcontextprotocol\/python-sdk/);
-});
-
-test("Topic guidance renderer escapes copy", () => {
-    const app = loadTopics();
-    const html = app.renderTopicGuidance({
-        whatToWatch: "Watch <bad>",
-        whenToOpen: "Open \"now\"",
-        nextAction: "Save & compare"
-    });
-
-    assert.match(html, /Watch &lt;bad&gt;/);
-    assert.match(html, /Open &quot;now&quot;/);
-    assert.match(html, /Save &amp; compare/);
-    assert.match(html, /What to watch/);
-    assert.match(html, /When to open/);
-    assert.match(html, /Good next action/);
-});
-
-test("Topic actions use topic-specific routes", () => {
-    const app = loadTopics();
-    const ai = app.renderTopicActions("AI agents");
-    const mcp = app.renderTopicActions("MCP");
-    const skills = app.renderTopicActions("Agent skills");
-    const evals = app.renderTopicActions("AI evals");
-    const engineering = app.renderTopicActions("AI engineering");
-    const workflow = app.renderTopicActions("Workflow automation");
-    const security = app.renderTopicActions("Security");
-
-    assert.match(ai, /href="..\/..\/repos\/index\.html"/);
-    assert.match(ai, /href="..\/..\/packages\/index\.html"/);
-    assert.doesNotMatch(ai, /Open Review/);
-    assert.match(mcp, /href="..\/..\/packages\/index\.html"/);
-    assert.match(mcp, /href="..\/..\/links\/index\.html"/);
-    assert.match(skills, /href="..\/..\/links\/index\.html"/);
-    assert.match(skills, /href="..\/..\/review\/index\.html"/);
-    assert.match(evals, /href="..\/..\/links\/index\.html"/);
-    assert.match(evals, /href="..\/..\/status\/index\.html"/);
-    assert.match(engineering, /href="..\/..\/repos\/index\.html"/);
-    assert.match(engineering, /href="..\/..\/links\/index\.html"/);
-    assert.match(workflow, /href="..\/..\/packages\/index\.html"/);
-    assert.match(workflow, /href="..\/..\/repos\/index\.html"/);
-    assert.match(security, /href="..\/..\/status\/index\.html"/);
-    assert.match(security, /href="..\/..\/links\/index\.html"/);
-});
-
-test("Topic pinned store and renderer expose current topic state", () => {
-    const app = loadTopics();
-    const memory = new Map();
-    const storage = {
-        getItem(key) { return memory.get(key) || null; },
-        setItem(key, value) { memory.set(key, value); }
-    };
-    const store = app.createPinnedTopicStore(storage);
-
-    assert.deepEqual(JSON.parse(JSON.stringify(store.toggle("MCP"))), ["MCP"]);
-    assert.deepEqual(JSON.parse(JSON.stringify(store.toggle("MCP"))), []);
-    assert.deepEqual(JSON.parse(JSON.stringify(app.createPinnedTopicStore({ getItem() { throw new Error("blocked"); } }).read())), []);
-
-    const pinned = app.renderTopicPinAction("MCP", new Set(["MCP"]));
-    const unpinned = app.renderTopicPinAction("AI agents", new Set(["MCP"]));
-
-    assert.match(pinned, /data-pin-topic="MCP"/);
-    assert.match(pinned, /Pinned topic/);
-    assert.match(pinned, /aria-pressed="true"/);
-    assert.match(pinned, /aria-label="Unpin MCP topic"/);
-    assert.match(unpinned, /Pin topic/);
-    assert.match(unpinned, /aria-pressed="false"/);
-    assert.match(unpinned, /aria-label="Pin AI agents topic"/);
-});
-
-test("Topic dashboard renderers escape text and preserve safe topic routes", () => {
-    const app = loadTopics();
-    const dashboard = {
-        whyNow: "Top \"signal\" <now>",
-        topMovers: [
-            { title: "<bad>", module: "Repos", category: "AI agents", origin: "GitHub", metric: "92K stars", summary: "Bad \"summary\"", url: "javascript:alert(1)", score: 96 }
-        ],
-        relatedGroups: [
-            {
-                label: "Repos",
-                items: [
-                    { title: "openai/codex", module: "Repos", metric: "92K stars", url: "https://example.com/codex" }
-                ]
-            }
-        ],
-        crossLinks: [
-            { topic: "MCP", route: "../../topics/mcp/index.html", summary: "Protocol signals" }
-        ]
-    };
-
-    const why = app.renderWhyNow(dashboard.whyNow);
-    const movers = app.renderTopMovers(dashboard.topMovers);
-    const related = app.renderRelatedGroups(dashboard.relatedGroups);
-    const links = app.renderCrossLinks(dashboard.crossLinks);
-
-    assert.match(why, /Top &quot;signal&quot; &lt;now&gt;/);
-    assert.match(movers, /&lt;bad&gt;/);
-    assert.match(movers, /Bad &quot;summary&quot;/);
-    assert.match(movers, /href="#"/);
-    assert.match(related, /openai\/codex/);
-    assert.match(links, /href="..\/..\/topics\/mcp\/index\.html"/);
-});
-
-test("Topic rendering escapes text and blocks unsafe links", () => {
-    const app = loadTopics();
-    const html = app.renderTopicCards([
-        {
-            title: "<script>alert(1)</script>",
-            module: "Links",
-            category: "Agent skills",
-            origin: "Spec",
-            metric: "Reference",
-            summary: "Reusable \"skills\".",
-            url: "javascript:alert(1)",
-            updated: "2026-06-19"
-        }
-    ]);
-
-    assert.match(html, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
-    assert.match(html, /Reusable &quot;skills&quot;\./);
-    assert.match(html, /href="#"/);
-});
-
-test("Topic cards render stable score reasons", () => {
-    const app = loadTopics();
-    const html = app.renderTopicCards([
-        {
-            title: "mattpocock/skills",
-            module: "Repos",
-            category: "Agent skills",
-            origin: "GitHub",
-            metric: "12K stars",
-            summary: "Reusable skills.",
-            scoreReasons: ["12K stars from GitHub", "Agent skills reference for reusable tool instructions."],
-            url: "https://example.com/skills",
-            updated: "2026-06-19",
-            score: 88
-        }
-    ]);
-
-    assert.match(html, /Score reasons/);
-    assert.match(html, /12K stars from GitHub/);
-    assert.match(html, /Agent skills reference/);
-});
-
-test("Topic browser init renders stats and cards", async () => {
-    function createElement() {
-        return {
-            innerHTML: "",
-            textContent: "",
-            listeners: {},
-            addEventListener(type, listener) {
-                this.listeners[type] = listener;
-            }
-        };
-    }
-
-    const elements = Object.fromEntries([
-        "[data-topic-total]",
-        "[data-topic-modules]",
-        "[data-topic-updated]",
-        "[data-topic-lead]",
-        "[data-topic-guidance]",
-        "[data-topic-note]",
-        "[data-topic-why]",
-        "[data-topic-top-movers]",
-        "[data-topic-related]",
-        "[data-topic-cross-links]",
-        "[data-topic-source-mix]",
-        "[data-topic-pin]",
-        "[data-topic-actions-dynamic]",
-        "[data-topic-list]"
-    ].map((selector) => [selector, createElement()]));
-    let pinButton = null;
-
-    const sources = {
-        "../../data/trends.json": {
-            updated: "2026-06-19",
-            items: [{ title: "Agent runtime", category: "AI agents", source: "GitHub", score: 91, velocity: "+20%", url: "https://example.com/agent", summary: "Agent workflow." }]
-        },
-        "../../data/packages.json": { updated: "2026-06-18", packages: [] },
-        "../../data/repos.json": { updated: "2026-06-17", repos: [] },
-        "../../data/links.json": { updated: "2026-06-16", links: [] }
-        ,
-        "../../data/today.json": {
-            sections: [
-                {
-                    id: "start",
-                    items: [{ title: "Today agent", module: "Today", category: "AI agents", metric: "100 score", reason: "Open first.", url: "https://example.com/today", score: 100 }]
-                }
+test("Today and module-related groups preserve matching, order, limits, and omission", () => {
+    const currentToday = {
+        updated: "2026-07-12",
+        sections: [{
+            id: "start",
+            items: [
+                { title: "Lower MCP", category: "MCP", score: 80, url: "https://example.com/lower" },
+                { title: "Top MCP", category: "MCP", score: 99, reason: "Open first", url: "https://example.com/top" },
+                { title: "Other", category: "Security", score: 100, url: "https://example.com/other" }
             ]
-        }
+        }]
     };
+    const relatedItems = [
+        ...Array.from({ length: 4 }, (_, index) => ({ module: "Packages", title: `Package ${index}`, score: 90 - index })),
+        { module: "Repos", title: "Repo", score: 70 },
+        { module: "Trends", title: "Trend", score: 100 }
+    ];
 
-    const context = {
-        console,
-        URL,
-        document: {
-            currentScript: {
-                dataset: {
-                    topic: "AI agents",
-                    trends: "../../data/trends.json",
-                    packages: "../../data/packages.json",
-                    repos: "../../data/repos.json",
-                    links: "../../data/links.json",
-                    today: "../../data/today.json"
-                }
-            },
-            querySelector(selector) {
-                return elements[selector] || null;
-            },
-            querySelectorAll(selector) {
-                if (selector === "[data-pin-topic]") {
-                    pinButton = {
-                        dataset: { pinTopic: "AI agents" },
-                        addEventListener(type, listener) {
-                            this.listeners = { [type]: listener };
-                        }
-                    };
-                    return [pinButton];
-                }
-                return [];
-            }
-        },
-        localStorage: {
-            getItem() {
-                return JSON.stringify({ version: 1, topics: ["AI agents"] });
-            },
-            setItem() {}
-        },
-        fetch: async (path) => ({
-            ok: true,
-            json: async () => sources[path]
-        }),
-        setTimeout
-    };
-
-    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topics.js", "utf8"), context);
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    assert.equal(elements["[data-topic-total]"].textContent, "1");
-    assert.equal(elements["[data-topic-modules]"].textContent, "1");
-    assert.equal(elements["[data-topic-updated]"].textContent, "2026-06-19");
-    assert.match(elements["[data-topic-lead]"].textContent, /1 source module tracking 1 AI agent signal\./);
-    assert.match(elements["[data-topic-guidance]"].innerHTML, /What to watch/);
-    assert.match(elements["[data-topic-note]"].innerHTML, /Agent runtime/);
-    assert.match(elements["[data-topic-why]"].innerHTML, /Agent runtime/);
-    assert.match(elements["[data-topic-top-movers]"].innerHTML, /Agent runtime/);
-    assert.match(elements["[data-topic-related]"].innerHTML, /Today agent/);
-    assert.match(elements["[data-topic-cross-links]"].innerHTML, /MCP/);
-    assert.match(elements["[data-topic-source-mix]"].innerHTML, /Trends/);
-    assert.match(elements["[data-topic-pin]"].innerHTML, /Pinned topic/);
-    assert.match(elements["[data-topic-actions-dynamic]"].innerHTML, /Repos/);
-    assert.match(elements["[data-topic-list]"].innerHTML, /Agent runtime/);
+    assert.deepEqual(todayTopicItems(currentToday, "MCP").map(({ title }) => title), ["Top MCP", "Lower MCP"]);
+    const groups = topicRelatedGroups(relatedItems, currentToday, "MCP");
+    assert.deepEqual(groups.map(({ label }) => label), ["Today picks", "Packages", "Repos"]);
+    assert.equal(groups.find(({ label }) => label === "Packages").items.length, 3);
+    assert.equal(groups.some(({ label }) => label === "Trends"), false);
 });
 
-test("Topic pin click updates local storage and rerenders pin state", async () => {
-    function createElement() {
-        return {
-            innerHTML: "",
-            textContent: "",
-            addEventListener() {}
-        };
+test("topic page models contain complete static decision support for every route", () => {
+    for (const topic of topicPageLabels) {
+        const model = buildTopicPageModel(data, today, topic, { signalPolicy });
+        assert.equal(model.config.label, topic);
+        assert.equal(model.summary.total, model.items.length);
+        assert.deepEqual(model.topMovers, model.items.slice(0, 3));
+        assert.ok(model.items.length > 0, `${topic} signals`);
+        assert.ok(model.note.title && model.note.body && model.note.readWhen, `${topic} note`);
+        assert.ok(model.guidance.whatToWatch && model.guidance.whenToOpen && model.guidance.nextAction, `${topic} guidance`);
+        assert.ok(model.lead && model.whyNow, `${topic} context`);
+        assert.ok(model.supportingSignals.length <= 3, `${topic} supporting signals`);
+        assert.equal(model.relatedTopics.length, 6, `${topic} related topics`);
+        assert.ok(model.config.actions.every(([, href]) => href !== "#"), `${topic} actions`);
+        assert.doesNotMatch(JSON.stringify(model), /(?:^|[":\s])(undefined|null|NaN)(?:$|[",\s])/);
     }
+});
 
-    const elements = Object.fromEntries([
-        "[data-topic-total]",
-        "[data-topic-modules]",
-        "[data-topic-updated]",
-        "[data-topic-lead]",
-        "[data-topic-guidance]",
-        "[data-topic-note]",
-        "[data-topic-why]",
-        "[data-topic-top-movers]",
-        "[data-topic-related]",
-        "[data-topic-cross-links]",
-        "[data-topic-source-mix]",
-        "[data-topic-pin]",
-        "[data-topic-actions-dynamic]",
-        "[data-topic-list]"
-    ].map((selector) => [selector, createElement()]));
-    let pinButton = null;
-    const memory = new Map();
-    const sources = {
-        "../../data/trends.json": {
-            updated: "2026-06-19",
-            items: [{ title: "MCP server", category: "MCP", source: "GitHub", score: 91, velocity: "+20%", url: "https://example.com/mcp", summary: "MCP server." }]
-        },
-        "../../data/packages.json": { updated: "2026-06-18", packages: [] },
-        "../../data/repos.json": { updated: "2026-06-17", repos: [] },
-        "../../data/links.json": { updated: "2026-06-16", links: [] },
-        "../../data/today.json": { sections: [] }
+test("checked-in topic corpus stays within audited semantic goldens", () => {
+    const goldens = {
+        "Agent skills": { range: [5, 9], modules: 3, top: ["anthropics/skills", "JuliusBrussee/caveman", "mattpocock/skills"], purpose: ["anthropics/skills"] },
+        "AI agents": { range: [28, 38], modules: 4, top: ["activepieces/activepieces", "affaan-m/ECC", "AgentOps-AI/agentops"], purpose: ["anthropics/claude-code"] },
+        "AI engineering": { range: [18, 30], modules: 4, top: ["AgentOps-AI/agentops", "langfuse/langfuse", "promptfoo/promptfoo"], purpose: ["karpathy/nanoGPT", "karpathy/nanochat"] },
+        "AI evals": { range: [12, 21], modules: 4, top: ["affaan-m/ECC", "AgentOps-AI/agentops", "Arize-ai/phoenix"], purpose: ["promptfoo/promptfoo"] },
+        MCP: { range: [11, 18], modules: 3, top: ["activepieces/activepieces", "awslabs/mcp", "@modelcontextprotocol/sdk"], purpose: ["modelcontextprotocol/servers"] },
+        Security: { range: [2, 6], modules: 2, top: ["affaan-m/ECC", "promptfoo/promptfoo"], purpose: ["promptfoo/promptfoo"] },
+        "Workflow automation": { range: [11, 18], modules: 4, top: ["activepieces/activepieces", "enescingoz/awesome-n8n-templates", "n8n-io/n8n"], purpose: ["@temporalio/workflow"] }
     };
 
-    const context = {
-        console,
-        URL,
-        document: {
-            currentScript: {
-                dataset: {
-                    topic: "MCP",
-                    trends: "../../data/trends.json",
-                    packages: "../../data/packages.json",
-                    repos: "../../data/repos.json",
-                    links: "../../data/links.json",
-                    today: "../../data/today.json"
-                }
-            },
-            querySelector(selector) {
-                return elements[selector] || null;
-            },
-            querySelectorAll(selector) {
-                if (selector === "[data-pin-topic]") {
-                    pinButton = {
-                        dataset: { pinTopic: "MCP" },
-                        addEventListener(type, listener) {
-                            this.listeners = { [type]: listener };
-                        }
-                    };
-                    return [pinButton];
-                }
-                return [];
-            }
-        },
-        localStorage: {
-            getItem(key) {
-                return memory.get(key) || "[]";
-            },
-            setItem(key, value) {
-                memory.set(key, value);
-            }
-        },
-        fetch: async (path) => ({
-            ok: true,
-            json: async () => sources[path]
-        }),
-        setTimeout
-    };
+    for (const [topic, golden] of Object.entries(goldens)) {
+        const model = buildTopicPageModel(data, today, topic, { signalPolicy });
+        const titles = model.items.map(({ title }) => title);
+        const topTitles = titles.slice(0, golden.top.length);
 
-    vm.runInNewContext(readFileSync("js/local-state.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/safe-dom.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topic-taxonomy.js", "utf8"), context);
-    vm.runInNewContext(readFileSync("js/topics.js", "utf8"), context);
-    await new Promise((resolve) => setTimeout(resolve, 0));
+        assert.ok(model.items.length >= golden.range[0] && model.items.length <= golden.range[1], `${topic} count`);
+        assert.ok(model.summary.modules >= golden.modules, `${topic} source diversity`);
+        assert.deepEqual(topTitles.toSorted(), golden.top.toSorted(), `${topic} top-result set`);
+        for (const title of golden.purpose) assert.ok(titles.slice(0, 10).includes(title), `${topic} purpose: ${title}`);
+        assert.equal(new Set(model.items.map(({ canonicalKey }) => canonicalKey)).size, model.items.length, `${topic} duplicate URL`);
+        assert.ok(model.items.every(({ url }) => safeExternalUrl(url) !== "#"), `${topic} external URLs`);
+    }
+});
 
-    pinButton.listeners.click({ target: pinButton });
+test("topic definitions keep durable notes, guidance, actions, and related route order", () => {
+    for (const topic of topicDefinitions.filter(({ label }) => topicPageLabels.includes(label))) {
+        assert.ok(topic.note.title.length > 20, `${topic.label} note title`);
+        assert.ok(topic.note.body.length > 60, `${topic.label} note body`);
+        assert.ok(topic.note.readWhen.length > 40, `${topic.label} note readWhen`);
+        assert.ok(topic.guidance.whatToWatch.length > 40, `${topic.label} whatToWatch`);
+        assert.ok(topic.guidance.whenToOpen.length > 40, `${topic.label} whenToOpen`);
+        assert.ok(topic.guidance.nextAction.length > 40, `${topic.label} nextAction`);
+        assert.equal(topic.actions.length, 3, `${topic.label} actions`);
+        assert.equal(topic.actions[0][0], "Open focused Explore", `${topic.label} focused action`);
+    }
+    assert.deepEqual(relatedTopicLinks("MCP").map(({ topic }) => topic), topicPageLabels.filter((topic) => topic !== "MCP"));
+});
 
-    assert.match(memory.get("anothel.preferences.pinnedTopics.v1"), /MCP/);
-    assert.match(elements["[data-topic-pin]"].innerHTML, /Pinned topic/);
+test("topic link policies reject executable and off-site configuration URLs", () => {
+    assert.equal(safeExternalUrl("javascript:alert(1)"), "#");
+    assert.equal(safeExternalUrl("https://example.com/signal"), "https://example.com/signal");
+    assert.equal(safeTopicActionHref("../../explore/index.html?focus=MCP"), "../../explore/index.html?focus=MCP");
+    assert.equal(safeTopicActionHref("javascript:alert(1)"), "#");
+    assert.equal(safeTopicActionHref("https://evil.example/path"), "#");
+    assert.equal(safeTopicActionHref("//evil.example/path"), "#");
 });

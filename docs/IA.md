@@ -15,8 +15,10 @@ anothel.github.io is a personal signal dashboard for deciding what technical sig
 | `/packages/` | `src/pages/packages/index.astro` | npm watchlist movement and demand. |
 | `/repos/` | `src/pages/repos/index.astro` | GitHub repository traction and workflow relevance. |
 | `/links/` | `src/pages/links/index.astro` | Curated reference shelf. |
+| `/topics/<slug>/` | `src/pages/topics/[slug].astro` | Seven promoted static topic views: judgment, guidance, ranking context, related signals, and browser-local pinning. |
+| `/notes/` | `src/pages/[...legacy].ts` pass-through | Legacy index of topic judgment notes. |
 
-Existing `/notes/` and `/topics/*` routes remain useful judgment/context surfaces. Astro currently preserves their checked-in HTML through `src/pages/[...legacy].ts`; they are not direct Astro component routes yet.
+Topic pages are native Astro output built from checked-in JSON. All topic content is useful without JavaScript; only pin state uses a native client module. Notes is the only remaining legacy content route. The same pass-through also publishes the checked-in 404, robots, and sitemap assets.
 
 ## Route Groups and Navigation
 
@@ -41,14 +43,15 @@ Existing `/notes/` and `/topics/*` routes remain useful judgment/context surface
 - Legacy Trends exposed source, category, query, and sort controls. Legacy Links exposed category and query controls. The Astro source routes intentionally keep source-specific ordering and static inspection only. Explore is the one cross-source filtering surface, reachable from primary navigation.
 - Legacy Home topic-lens cards and pin-aware ordering are not rendered by Astro Home. Topic discovery and pinned lenses are centralized in Explore; Home remains the compact open-now board.
 - Browser-local saved/unread counts remain Home functionality and must use the existing Review localStorage contract.
+- Legacy topic ranking, matching, notes, guidance, actions, and public URLs are preserved in one shared Astro topic implementation. Runtime content fetches and global topic renderers are intentionally removed; only the existing browser-local pin contract remains interactive.
 
 ## State and Product Boundaries
 
 - `data/*.json` is shared build/data input; route code does not own alternate copies.
-- Review items, saved searches, defaults, and pins remain browser-local through `localStorage`.
+- Review items, saved searches, defaults, and topic pins remain browser-local through `localStorage`.
 - Export/import JSON is portability, not account sync.
 - No backend, database, login, account, server function, or cloud sync.
-- Useful static/no-JS output remains where practical; browser-local workflows require JavaScript.
+- Useful static/no-JS output remains where practical. Topic pages are complete without JavaScript and label pin state as browser-local/unavailable until it can be read.
 
 ## Terminology
 

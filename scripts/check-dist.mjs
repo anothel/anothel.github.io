@@ -31,7 +31,6 @@ const requiredAssets = [
     "js/dashboard.js",
     "js/data-health.js",
     "js/link-queue.js",
-    "js/local-state.js",
     "js/notes.js",
     "js/package-watchlist.js",
     "js/repo-watchlist.js",
@@ -39,10 +38,9 @@ const requiredAssets = [
     "js/signal-schema.js",
     "js/status.mjs",
     "js/today.mjs",
-    "js/topic-taxonomy.js",
-    "js/topics.js"
+    "js/topic-taxonomy.js"
 ];
-const retiredAssets = ["js/explore.js", "js/home.mjs", "js/review.js"];
+const retiredAssets = ["js/explore.js", "js/home.mjs", "js/local-state.js", "js/review.js", "js/topics.js"];
 
 function routeFile(route) {
     return route === "/" ? "index.html" : `${route.slice(1)}index.html`;
@@ -80,6 +78,7 @@ function checkSitemap(root, failures) {
                 failures.push(`unexpected sitemap origin: ${location}`);
                 continue;
             }
+            if (paths.has(url.pathname)) failures.push(`duplicate sitemap location: ${url.pathname}`);
             paths.add(url.pathname);
             if (!existsSync(resolve(root, routeFile(url.pathname)))) failures.push(`missing sitemap route: ${location}`);
         } catch {

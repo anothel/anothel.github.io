@@ -3,10 +3,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { validateWatchlistGovernance } from "../scripts/watchlist-governance.mjs";
+import topicTaxonomy from "../src/lib/topic-taxonomy.js";
 
 const require = createRequire(import.meta.url);
 const signalSchema = require("../js/signal-schema.js");
-const topicTaxonomy = require("../js/topic-taxonomy.js");
 
 function json(path) {
     return JSON.parse(readFileSync(path, "utf8"));

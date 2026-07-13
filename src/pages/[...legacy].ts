@@ -4,14 +4,7 @@ const htmlFiles = [
     "404.html",
     "robots.txt",
     "sitemap.xml",
-    "notes/index.html",
-    "topics/agent-skills/index.html",
-    "topics/ai-agents/index.html",
-    "topics/ai-engineering/index.html",
-    "topics/ai-evals/index.html",
-    "topics/mcp/index.html",
-    "topics/security/index.html",
-    "topics/workflow-automation/index.html"
+    "notes/index.html"
 ];
 
 export function getStaticPaths() {

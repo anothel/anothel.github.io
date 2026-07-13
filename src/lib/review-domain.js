@@ -1,4 +1,4 @@
-import { focusDefinitions, safeExternalUrl } from "./explore-domain.js";
+import { focusDefinitions, focusMatches, safeExternalUrl } from "./explore-domain.js";
 import { savedRecordsFromRaw } from "./explore-storage.js";
 
 const statuses = new Set(["unread", "read", "done"]);
@@ -63,18 +63,11 @@ export function selectedReviewItem(items = [], selectedId = "") {
     return items.find(({ id }) => id === selectedId) || items[0] || null;
 }
 
-function matchesReviewFocus(item, definition) {
-    const text = [item?.title, item?.name, item?.module, item?.origin, item?.category, item?.metric, item?.reason, item?.focus, item?.summary, item?.description, item?.source, item?.kind, item?.url, item?.sourceContext, ...(item?.sources || [])]
-        .filter(Boolean).join(" ").toLowerCase();
-    return String(item?.category || "").toLowerCase() === definition.focus.toLowerCase()
-        || (definition.pattern.test(text) && (!definition.requires || definition.requires.test(text)));
-}
-
 export function reviewFocus(item) {
     const security = focusDefinitions.find(({ focus }) => focus === "Security");
-    if (security && matchesReviewFocus(item, security)) return "Security";
+    if (security && focusMatches(item, security.focus)) return "Security";
     for (const definition of focusDefinitions) {
-        if (definition.focus !== "Security" && matchesReviewFocus(item, definition)) return definition.focus;
+        if (definition.focus !== "Security" && focusMatches(item, definition.focus)) return definition.focus;
     }
     return item?.module === "Packages" ? "Packages" : "all";
 }

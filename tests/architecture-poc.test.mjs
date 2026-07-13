@@ -62,9 +62,10 @@ test("package entry point exposes current Astro plus React-island toolchain", ()
     }
 });
 
-test("Review queue keeps public route and localStorage compatibility coverage", () => {
+test("Review queue keeps public route and the shared localStorage contract", () => {
     assert.match(read("sitemap.xml"), /https:\/\/anothel\.github\.io\/review\//);
     assert.match(read("dist/review/index.html"), /data-review-static-guidance/);
-    assert.match(read("tests/local-state.test.mjs"), /saved item store migrates v1 ids and normalizes missing fields/);
+    assert.equal(existsSync("js/local-state.js"), false);
+    assert.match(read("tests/explore-react-domain.test.mjs"), /saved item storage accepts legacy arrays and version 2 records/);
     assert.match(read("tests/review-ui.test.mjs"), /Review matches current and legacy ids and reports mixed stale records/);
 });

@@ -247,6 +247,8 @@
             input.source,
             input.kind,
             input.url,
+            input.sourceContext,
+            ...(Array.isArray(input.sources) ? input.sources : []),
             ...(Array.isArray(input.topics) ? input.topics : [])
         ].filter(Boolean).join(" ").toLowerCase();
     }

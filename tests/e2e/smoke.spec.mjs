@@ -11,7 +11,23 @@ const requiredRoutes = [
     "/trends/",
     "/packages/",
     "/repos/",
-    "/links/"
+    "/links/",
+    "/topics/agent-skills/",
+    "/topics/ai-agents/",
+    "/topics/ai-engineering/",
+    "/topics/ai-evals/",
+    "/topics/mcp/",
+    "/topics/security/",
+    "/topics/workflow-automation/"
+];
+const topicRoutes = [
+    ["Agent skills", "/topics/agent-skills/"],
+    ["AI agents", "/topics/ai-agents/"],
+    ["AI engineering", "/topics/ai-engineering/"],
+    ["AI evals", "/topics/ai-evals/"],
+    ["MCP", "/topics/mcp/"],
+    ["Security", "/topics/security/"],
+    ["Workflow automation", "/topics/workflow-automation/"]
 ];
 const reviewStorageKey = "anothel.explore.saved.v1";
 const exploreDefaultKey = "anothel.preferences.exploreState.v1";
@@ -261,6 +277,90 @@ test("JavaScript-disabled Home keeps honest saved placeholders at 390x844", asyn
     await expect(page.locator("[data-home-review-unread]")).toHaveText("??");
     await expect(page.locator("[data-home-review-status]")).toContainText("loads when JavaScript is available");
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+    await context.close();
+});
+
+test("all native Astro topic routes expose complete static decision context", async ({ page }) => {
+    for (const [topic, route] of topicRoutes) {
+        await page.goto(route);
+        await expect(page).toHaveTitle(`${topic} - anothel`);
+        await expect(page.locator("[data-topic-total]")).not.toHaveText("0");
+        await expect(page.locator("[data-topic-signal]").first()).toBeVisible();
+        await expect(page.locator("[data-topic-note]")).toContainText("Supporting signals");
+        await expect(page.locator("[data-topic-guidance]")).toContainText("Good next action");
+        await expect(page.locator("[data-topic-top-movers]")).toBeVisible();
+        await expect(page.locator("[data-topic-source-mix]")).toBeVisible();
+        await expect(page.locator("[data-topic-related]")).toBeVisible();
+        await expect(page.locator("[data-topic-cross-links] a")).toHaveCount(6);
+        await expect(page.getByRole("link", { name: /Open Notes/ })).toBeVisible();
+        await expect(page.locator("body")).not.toContainText(/\b(?:undefined|null|NaN)\b/);
+    }
+});
+
+test("topic pin state survives reload and stays compatible with Explore", async ({ page }) => {
+    await page.goto("/topics/mcp/");
+    const topicPin = page.locator("[data-topic-pin-button]");
+    await expect(topicPin).toHaveText("Pin topic");
+    await topicPin.click();
+    await expect(topicPin).toHaveAttribute("aria-pressed", "true");
+    await page.reload();
+    await expect(page.locator("[data-topic-pin-button]")).toHaveAttribute("aria-pressed", "true");
+
+    await page.goto("/explore/");
+    await expect(page.locator('[data-pin-topic="MCP"]')).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("[data-topic-lenses] .topic-lens-card").first()).toContainText("MCP");
+
+    await page.goto("/topics/mcp/");
+    await page.locator("[data-topic-pin-button]").click();
+    await expect(page.locator("[data-topic-pin-button]")).toHaveAttribute("aria-pressed", "false");
+});
+
+test("topic pages handle malformed and unavailable pin storage safely", async ({ browser }) => {
+    const malformed = await browser.newContext();
+    const malformedPage = await malformed.newPage();
+    const errors = [];
+    malformedPage.on("pageerror", (error) => errors.push(error.message));
+    await malformedPage.addInitScript(() => localStorage.setItem("anothel.preferences.pinnedTopics.v1", "{broken"));
+    await malformedPage.goto("/topics/ai-agents/");
+    await expect(malformedPage.locator("[data-topic-pin-button]")).toHaveText("Pin topic");
+    await expect(malformedPage.locator("[data-topic-signal]").first()).toBeVisible();
+    expect(errors).toEqual([]);
+    await malformed.close();
+
+    const unavailable = await browser.newContext();
+    const unavailablePage = await unavailable.newPage();
+    await unavailablePage.addInitScript(() => {
+        Storage.prototype.getItem = () => { throw new DOMException("blocked", "SecurityError"); };
+    });
+    await unavailablePage.goto("/topics/ai-agents/");
+    await expect(unavailablePage.locator("[data-topic-pin-button]")).toHaveText("Pin unavailable");
+    await expect(unavailablePage.locator("[data-topic-pin-status]")).toContainText("unavailable");
+    await unavailable.close();
+});
+
+test("topic Explore link and related-topic navigation preserve public routes", async ({ page }) => {
+    await page.goto("/topics/mcp/");
+    await page.getByRole("link", { name: /Open focused Explore/ }).click();
+    await expect(page).toHaveURL(/\/explore\/(?:index\.html)?\?focus=MCP$/);
+    await expect(page.locator('[data-focus-filter="MCP"]')).toHaveAttribute("aria-pressed", "true");
+
+    await page.goto("/topics/mcp/");
+    await page.locator("[data-topic-cross-links]").getByRole("link", { name: /AI agents/ }).click();
+    await expect(page).toHaveURL(/\/topics\/ai-agents\/(?:index\.html)?$/);
+});
+
+test("JavaScript-disabled topic routes retain all content except resolved pin state", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    for (const [, route] of topicRoutes) {
+        await page.goto(route);
+        await expect(page.locator("[data-topic-signal]").first()).toBeVisible();
+        await expect(page.locator("[data-topic-note]")).toBeVisible();
+        await expect(page.locator("[data-topic-guidance]")).toBeVisible();
+        await expect(page.locator("[data-topic-related]")).toBeVisible();
+        await expect(page.locator("[data-topic-pin-button]")).toHaveAttribute("aria-pressed", "mixed");
+        await expect(page.locator("[data-topic-pin-status]")).toContainText("State loads when JavaScript is available");
+    }
     await context.close();
 });
 

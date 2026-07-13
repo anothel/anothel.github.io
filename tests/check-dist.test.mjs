@@ -25,7 +25,17 @@ test("a missing Astro route fixture fails the pre-commit dist gate", async () =>
     }
 });
 
-for (const file of ["explore.js", "home.mjs", "review.js"]) {
+test("a missing Astro topic route fails the dist gate", async () => {
+    const root = await fixture();
+    try {
+        await rm(join(root, "topics", "mcp", "index.html"));
+        assert.throws(() => checkDist(root), /missing required route \/topics\/mcp\//);
+    } finally {
+        await rm(root, { recursive: true, force: true });
+    }
+});
+
+for (const file of ["explore.js", "home.mjs", "local-state.js", "review.js", "topics.js"]) {
     test(`dist check rejects retired ${file}`, async () => {
         const root = await fixture();
         try {
@@ -55,6 +65,30 @@ test("dist check rejects sitemap locations without generated routes", async () =
         const sitemap = await readFile(join(root, "sitemap.xml"), "utf8");
         await writeFile(join(root, "sitemap.xml"), sitemap.replace("https://anothel.github.io/today/", "https://anothel.github.io/missing/"), "utf8");
         assert.throws(() => checkDist(root), /missing sitemap route: https:\/\/anothel\.github\.io\/missing\//);
+    } finally {
+        await rm(root, { recursive: true, force: true });
+    }
+});
+
+test("dist check requires every public topic in the sitemap", async () => {
+    const root = await fixture();
+    try {
+        const sitemap = await readFile(join(root, "sitemap.xml"), "utf8");
+        const topic = /\s*<url>\s*<loc>https:\/\/anothel\.github\.io\/topics\/mcp\/<\/loc>[\s\S]*?<\/url>/;
+        await writeFile(join(root, "sitemap.xml"), sitemap.replace(topic, ""), "utf8");
+        assert.throws(() => checkDist(root), /missing required sitemap location: \/topics\/mcp\//);
+    } finally {
+        await rm(root, { recursive: true, force: true });
+    }
+});
+
+test("dist check rejects duplicate topic sitemap locations", async () => {
+    const root = await fixture();
+    try {
+        const sitemap = await readFile(join(root, "sitemap.xml"), "utf8");
+        const duplicate = "    <url><loc>https://anothel.github.io/topics/mcp/</loc><lastmod>2026-07-07</lastmod></url>\n";
+        await writeFile(join(root, "sitemap.xml"), sitemap.replace("</urlset>", `${duplicate}</urlset>`), "utf8");
+        assert.throws(() => checkDist(root), /duplicate sitemap location: \/topics\/mcp\//);
     } finally {
         await rm(root, { recursive: true, force: true });
     }

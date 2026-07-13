@@ -3,17 +3,22 @@
   "home": {
     "html": 11000,
     "routeJs": 1500,
-    "totalJs": 18000
+    "totalJs": 6000
+  },
+  "topics": {
+    "html": 48000,
+    "routeJs": 1500,
+    "totalJs": 6000
   },
   "explore": {
     "html": 65000,
     "islandJs": 40000,
-    "totalJs": 240000
+    "totalJs": 252000
   },
   "review": {
     "html": 15000,
     "islandJs": 25000,
-    "totalJs": 235000
+    "totalJs": 245000
   },
   "sharedReactClientJs": 210000
 }

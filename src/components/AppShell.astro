@@ -21,6 +21,7 @@ const canonicalUrl = `https://anothel.github.io${canonicalPath}`;
         <meta property="og:description" content={description}>
         <meta property="og:type" content="website">
         <meta property="og:url" content={canonicalUrl}>
+        <slot name="head" />
         <title>{title}</title>
         <link rel="stylesheet" href={stylesheetHref}>
     </head>

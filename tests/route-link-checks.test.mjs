@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import { topicByLabel, topicPageLabels } from "../src/lib/topic-taxonomy.js";
 
 const manifest = JSON.parse(readFileSync("data/manifest.json", "utf8"));
-const topicRoutes = readdirSync("topics", { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => `topics/${entry.name}/index.html`)
+const topicRoutes = topicPageLabels
+    .map((label) => topicByLabel(label).routePath)
     .sort();
 
 const coreRoutes = [
@@ -49,8 +49,14 @@ function localRouteTarget(pagePath, href) {
     if (existsSync(candidate)) return candidate;
 
     const directoryCandidate = resolve(dirname(pagePath), `${baseHref.replace(/\/+$/, "")}/index.html`);
-    return existsSync(directoryCandidate) ? directoryCandidate : null;
+    return directoryCandidate;
 }
+
+test("canonical taxonomy exposes exactly seven public topic routes", () => {
+    assert.equal(topicRoutes.length, 7);
+    assert.equal(new Set(topicRoutes).size, 7);
+    assert.ok(!topicRoutes.some((route) => route.includes("developer-tooling")));
+});
 
 test("public routes resolve to generated Astro HTML", () => {
     for (const route of artifactRoutes) {

@@ -1,7 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const criticalRoutes = ["/", "/today/", "/explore/", "/review/", "/status/"];
+const criticalRoutes = [
+    "/", "/today/", "/explore/", "/review/", "/status/",
+    "/topics/agent-skills/", "/topics/ai-agents/", "/topics/ai-engineering/",
+    "/topics/ai-evals/", "/topics/mcp/", "/topics/security/", "/topics/workflow-automation/"
+];
 const controlNameRules = ["aria-command-name", "button-name", "input-button-name", "label", "link-name", "select-name"];
 const summarize = (violations) => violations.map(({ id, impact, nodes }) => ({
     id,

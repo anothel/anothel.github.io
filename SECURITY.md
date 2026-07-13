@@ -6,12 +6,12 @@ This repository publishes a static GitHub Pages signal dashboard.
 
 Supported security scope:
 
-- Astro route/components, generated `dist/`, preserved legacy HTML, CSS, JavaScript, and checked-in JSON.
+- Astro route/components, generated `dist/`, preserved Notes/404 HTML, pass-through metadata assets, CSS, JavaScript, and checked-in JSON.
 - Data refresh scripts under `scripts/`.
 - GitHub Actions data refresh workflow.
 - npm build/test dependencies and lockfile.
 - Public rendering of external titles, summaries, URLs, source metadata, and watchlist entries.
-- Browser-only localStorage review state.
+- Browser-only localStorage Review, saved-search, and topic-pin state.
 
 Out of scope:
 
@@ -35,11 +35,12 @@ Use GitHub private vulnerability reporting if enabled for the repository. If it 
 
 - Static-first deployment: no server runtime, account system, sync service, or database.
 - Astro build-time escaping plus safe URL handling in data-driven components.
-- Safe rendering helpers in `js/safe-dom.js`.
+- Topic content uses Astro escaping and shared safe external-URL handling; its native pin module updates only text and ARIA state.
+- Safe rendering helpers in `js/safe-dom.js` remain for Notes and retained renderer modules. Notes is the only production HTML route that loads those helpers.
 - URL allowlist behavior for public links through `safeHref` and `setSafeLink`.
 - Source health metadata for `ok`, `partial`, `fallback`, and `error`.
 - Stale-but-safe fallback behavior for supported refresh failures.
-- localStorage state is browser-only and treated as user-controlled data.
+- localStorage state is browser-only and treated as user-controlled data; malformed or unavailable topic-pin storage must fail safely.
 - `npm run check` validates data, Astro output, repository tests/syntax, accessibility, and mobile behavior.
 
 ## Security Review Triggers
@@ -51,7 +52,7 @@ Run a focused security review when changing:
 - Watchlist ingestion.
 - Refresh scripts or workflow permissions.
 - Build dependencies, lockfile, or GitHub Pages publishing configuration.
-- localStorage schema or import/export.
+- localStorage schema, topic pinning, or import/export.
 - Any public route that renders generated text.
 
 ## Secrets

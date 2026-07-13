@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 import { dataUpdateScripts } from "../scripts/update-all.mjs";
 import { checkTargets, listTestFiles } from "../scripts/validate-data.mjs";
@@ -17,6 +17,8 @@ const primaryHtml = [
     "repos/index.html",
     "links/index.html"
 ];
+const topicHtml = ["agent-skills", "ai-agents", "ai-engineering", "ai-evals", "mcp", "security", "workflow-automation"]
+    .map((slug) => `topics/${slug}/index.html`);
 
 test("update-all owns the full data refresh order", () => {
     assert.deepEqual(dataUpdateScripts, [
@@ -57,35 +59,38 @@ test("validate-data syntax checks data workflow scripts and public JavaScript", 
         "scripts/update-static-fallbacks.mjs",
         "js/status.mjs",
         "js/today.mjs",
-        "js/topics.js",
+        "js/topic-taxonomy.js",
         "js/signal-schema.js"
     ]) {
         assert.ok(checkTargets.includes(target), `${target} should be syntax checked`);
     }
+    assert.ok(!checkTargets.includes("js/topics.js"));
 });
 
-test("legacy renderer loads shared DOM safety for topic and note output", () => {
+test("Notes-only fallback loads shared DOM safety without the retired topic runtime", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
-    assert.match(script, /vm\.runInNewContext\(await readFile\("js\/safe-dom\.js", "utf8"\), context\);[\s\S]*vm\.runInNewContext\(await readFile\("js\/topics\.js", "utf8"\), context\);/);
     assert.match(script, /vm\.runInNewContext\(await readFile\("js\/safe-dom\.js", "utf8"\), context\);[\s\S]*vm\.runInNewContext\(await readFile\("js\/notes\.js", "utf8"\), context\);/);
+    assert.doesNotMatch(script, /\bTopicApp\b|js\/topics\.js/);
 });
 
-test("legacy renderer derives topic pages from taxonomy", () => {
+test("fallback updater uses canonical topic routes only for sitemap metadata", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
-    assert.match(script, /topicPageLabels/);
-    assert.match(script, /function renderTopicPage/);
-    assert.doesNotMatch(script, /const topicPages = \[/);
+    assert.match(script, /import taxonomy from "\.\.\/src\/lib\/topic-taxonomy\.js"/);
+    assert.match(script, /taxonomy\.topicPageLabels/);
+    assert.match(script, /updateSitemapLastmod/);
+    assert.doesNotMatch(script, /function renderTopicPage|topicRuntime\s*\(/);
 });
 
-test("legacy renderer cannot recreate Astro-owned primary HTML", () => {
+test("legacy renderer cannot recreate Astro-owned primary or topic HTML", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
-    for (const path of primaryHtml) {
+    for (const path of [...primaryHtml, ...topicHtml]) {
         const escaped = path.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&");
         assert.doesNotMatch(script, new RegExp(`(?:readFile|writeIfChanged)\\(\"${escaped}\"`), path);
     }
     assert.match(script, /writeIfChanged\("notes\/index\.html"/);
-    assert.match(script, /writeIfChanged\(config\.routePath/);
+    assert.doesNotMatch(script, /writeIfChanged\(config\.routePath/);
+    for (const path of topicHtml) assert.equal(existsSync(path), false, path);
 });

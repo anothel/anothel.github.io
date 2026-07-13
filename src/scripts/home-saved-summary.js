@@ -1,4 +1,4 @@
-import { readSavedSummary } from "../lib/explore-storage.js";
+import { readSavedSummary } from "../lib/storage-contract.js";
 
 const copy = Object.freeze({
     available: "Saved queue loaded from this browser.",

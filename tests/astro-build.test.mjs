@@ -4,6 +4,16 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { sourceMetaForDatasets, trustState } from "../src/lib/site-data.js";
 
+const topicRoutes = [
+    ["agent-skills", "Agent skills", "Agent skills signals."],
+    ["ai-agents", "AI agents", "AI agent signals."],
+    ["ai-engineering", "AI engineering", "AI engineering signals."],
+    ["ai-evals", "AI evals", "AI eval signals."],
+    ["mcp", "MCP", "MCP signals."],
+    ["security", "Security", "Security signals."],
+    ["workflow-automation", "Workflow automation", "Workflow automation signals."]
+];
+
 function read(path) {
     return readFileSync(path, "utf8");
 }
@@ -67,7 +77,7 @@ test("Astro Today output includes the compact mobile layout contract", () => {
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.today-card-compact \.score-reasons\s*{[^}]*display: none/s);
 });
 
-test("Astro build output renders migrated static routes and preserves legacy routes", () => {
+test("Astro build output renders migrated static routes and preserves Notes", () => {
     ensureDist();
     const migratedRoutes = [
         ["dist/index.html", /What is worth opening now\?/],
@@ -80,11 +90,7 @@ test("Astro build output renders migrated static routes and preserves legacy rou
         ["dist/links/index.html", /References worth keeping close\./],
         ["dist/today/index.html", /Today&#39;s priority brief\./]
     ];
-    const preservedRoutes = [
-        "dist/notes/index.html",
-        "dist/topics/ai-agents/index.html",
-        "dist/topics/mcp/index.html"
-    ];
+    const preservedRoutes = ["dist/notes/index.html"];
 
     for (const [path, pattern] of migratedRoutes) {
         const html = read(path);
@@ -122,4 +128,41 @@ test("Astro build output renders migrated static routes and preserves legacy rou
     assert.match(statusHtml, /health-label health-stale/);
     assert.match(statusHtml, /health-label health-unknown/);
     assert.doesNotMatch(statusHtml, />\s*(?:undefined|null|NaN)\s*</);
+});
+
+test("Astro builds every topic route as useful static HTML with only a native pin module", () => {
+    ensureDist();
+
+    for (const [slug, label, heading] of topicRoutes) {
+        const path = `dist/topics/${slug}/index.html`;
+        const html = read(path);
+        const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+        const total = Number(html.match(/data-topic-total>(\d+)</)?.[1]);
+        const signalCount = [...html.matchAll(/\sdata-topic-signal(?:\s|>)/g)].length;
+
+        assert.match(html, new RegExp(`<title>${label} - anothel<\\/title>`), path);
+        assert.match(html, new RegExp(`<link rel="canonical" href="https://anothel\\.github\\.io/topics/${slug}/">`), path);
+        assert.match(html, new RegExp(`<meta property="og:url" content="https://anothel\\.github\\.io/topics/${slug}/">`), path);
+        assert.match(html, /<meta name="twitter:card" content="summary">/, path);
+        assert.match(html, new RegExp(`<meta name="twitter:title" content="${label} - anothel">`), path);
+        assert.match(html, new RegExp(`<h1>${heading.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&")}<\\/h1>`), path);
+        assert.ok(total > 0, `${path} should contain focused signals`);
+        assert.equal(signalCount, total, `${path} should render its complete focused signal list`);
+        for (const marker of [
+            "data-topic-note",
+            "data-topic-guidance",
+            "data-topic-top-movers",
+            "data-topic-source-mix",
+            "data-topic-related",
+            "data-topic-cross-links",
+            "data-topic-list",
+            "Open Notes",
+            "Open focused Explore"
+        ]) assert.ok(html.includes(marker), `${path}: ${marker}`);
+        assert.match(html, /Pinning is browser-local\. State loads when JavaScript is available\./, path);
+        assert.match(html, /<script type="module" src="\/_astro\/[^"]+\.js"><\/script>/, path);
+        assert.doesNotMatch(html, /js\/(?:topics|local-state)\.js|\bTopicApp\b|\bAnothelState\b|<astro-island\b|\bcomponent-url=|\brenderer-url=/i, path);
+        assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i, path);
+        assert.equal(new Set(ids).size, ids.length, `${path} should not contain duplicate ids`);
+    }
 });

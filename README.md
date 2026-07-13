@@ -27,16 +27,16 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd`, for example `npm.cmd run check`.
 
 ## Architecture
 
-- `src/pages/`: Astro route entry points. Nine primary routes are implemented directly in Astro.
+- `src/pages/`: Astro route entry points. Nine primary routes and seven promoted topic routes are implemented directly in Astro.
 - `src/components/`: shared Astro presentation plus direct React islands for Explore and Review.
-- `src/lib/explore-*.js` and `src/lib/review-domain.js`: framework-independent normalization, filtering, Review workflow, models, and shared storage compatibility.
-- `src/pages/[...legacy].ts`: build-time pass-through for existing Notes, topic, and 404 HTML routes not yet converted to Astro components.
+- `src/lib/explore-*.js`, `src/lib/review-domain.js`, `src/lib/topic-*.js`, and `src/lib/storage-contract.js`: framework-independent normalization, filtering, Review/topic models, taxonomy access, and shared storage compatibility.
+- `src/pages/[...legacy].ts`: build-time pass-through for Notes plus the 404, robots, and sitemap assets.
 - `data/*.json`: checked-in source snapshots, manifest, refresh report, watchlists, Today brief, and scoring policy.
-- `scripts/`: data generation, remaining Notes/topic HTML generation, and build-output checks.
-- `js/`: browser behavior retained for Notes/topics, generators, and legacy regression coverage.
+- `scripts/`: data generation, remaining Notes HTML generation, sitemap maintenance, and build-output checks.
+- `js/`: browser behavior retained for Notes, shared build/data helpers, and legacy renderer regression coverage.
 - `dist/`: ignored Astro build output.
 
-Only Explore and Review hydrate React, both with `client:load`. Home uses a small Astro-bundled native module for its browser-local saved summary; other primary routes need no client runtime. Useful initial Explore content, Review guidance, and honest Home saved-count placeholders exist before client behavior loads; legacy topic/Notes routes preserve checked-in no-JS HTML.
+Only Explore and Review hydrate React, both with `client:load`. Home uses a small Astro-bundled native module for its browser-local saved summary. Topic content is rendered statically by Astro; a small native module handles only browser-local pin state. Home uses honest saved-count placeholders, and every topic remains useful without JavaScript. Notes is the only checked-in legacy content route.
 
 See [Architecture](docs/ARCHITECTURE.md), [Deployment](docs/DEPLOYMENT.md), and [Contributing](CONTRIBUTING.md) for canonical details.
 
@@ -53,12 +53,14 @@ See [Architecture](docs/ARCHITECTURE.md), [Deployment](docs/DEPLOYMENT.md), and 
 | `/packages/` | npm package watchlist. |
 | `/repos/` | GitHub repository watchlist. |
 | `/links/` | Curated reference shelf. |
+| `/topics/<slug>/` | Seven promoted topic views with static judgment, ranking context, related signals, and browser-local pinning. |
+| `/notes/` | Legacy/pass-through index of topic judgment notes. |
 
 Route ownership and intentional overlaps are documented in [Information Architecture](docs/IA.md).
 
 ## Data
 
-`data/*.json` is the source contract consumed by Astro builds and browser behavior. `data/watchlists.json` owns refresh inputs; `npm run update:data` produces module snapshots and Today, updates manifest/report metadata, then refreshes the remaining Notes/topic HTML and sitemap. Primary-route HTML is generated only by Astro in `dist/`.
+`data/*.json` is the source contract consumed by Astro builds and browser behavior. `data/watchlists.json` owns refresh inputs; `npm run update:data` produces module snapshots and Today, updates manifest/report metadata, then refreshes the remaining Notes HTML and sitemap. Primary and topic HTML is generated only by Astro in `dist/`.
 
 ```powershell
 $env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
@@ -82,7 +84,7 @@ Timestamp, freshness, field, and score semantics are canonical in [Signal Schema
 ## Automation
 
 - `.github/workflows/ci.yml`: read-only CI on pull requests and pushes to `main`; installs Node/Chromium and runs `npm run check` plus `git diff --check`.
-- `.github/workflows/update-trends.yml`: scheduled/manual data refresh; validates output, then commits checked-in data and the remaining Notes/topic HTML.
+- `.github/workflows/update-trends.yml`: scheduled/manual data refresh; validates output, then commits checked-in data, Notes HTML, and sitemap metadata.
 - `.github/workflows/deploy-pages.yml`: builds and validates `dist/`, deploys only that artifact to GitHub Pages, and verifies production routes.
 
 Pages must use `Settings -> Pages -> Source -> GitHub Actions`. See [Deployment](docs/DEPLOYMENT.md).
@@ -91,7 +93,7 @@ Pages must use `Settings -> Pages -> Source -> GitHub Actions`. See [Deployment]
 
 - No backend or server runtime.
 - No database, account, login, or cloud sync.
-- Review and saved-search state stays in browser `localStorage`; JSON import/export provides local portability.
+- Review, saved-search, and topic-pin state stays in browser `localStorage`; JSON import/export provides local Review portability.
 - Keep useful static/no-JS output where practical.
 - Keep React limited to justified interactive islands; do not turn the site into a full React SPA.
 

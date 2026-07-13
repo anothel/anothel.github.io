@@ -18,8 +18,10 @@ import { activeSummary, buildTopicLenses, dataModeText, sourceHealthModel } from
 import {
     defaultExploreState,
     mergeSearches,
+    pinnedTopicsFromRaw,
     readExploreDefault,
     readPinnedTopics,
+    readPinnedTopicsState,
     readSavedRecords,
     readSavedSearches,
     removeSearch,
@@ -33,8 +35,10 @@ import {
     saveSearch,
     storageKeys,
     togglePinnedTopic,
+    togglePinnedTopicState,
     toggleSavedItem
 } from "../src/lib/explore-storage.js";
+import taxonomy, { trackedTopicLabels } from "../src/lib/topic-taxonomy.js";
 
 const json = (path) => JSON.parse(readFileSync(path, "utf8"));
 const datasets = {
@@ -116,6 +120,36 @@ test("search, module, category, focus, and every sort mode compose", () => {
     for (const mode of ["priority", "module", "category"]) assert.equal(sortItems(sample, mode).length, sample.length);
 });
 
+test("Explore focus definitions stay in parity with the canonical topic taxonomy", () => {
+    assert.deepEqual(focusDefinitions.map(({ focus }) => focus), trackedTopicLabels);
+    for (const definition of focusDefinitions) {
+        assert.equal(definition.route, taxonomy.routeForTopic(definition.focus, "../"), `${definition.focus} route`);
+        assert.equal(
+            definition.description,
+            taxonomy.topicByLabel(definition.focus).guidance?.whenToOpen
+                || taxonomy.topicByLabel(definition.focus).lensDescription
+                || taxonomy.topicByLabel(definition.focus).description,
+            `${definition.focus} description`
+        );
+    }
+    for (const sample of [
+        { title: "Claude Code coding agent", category: "AI agents" },
+        { title: "mattpocock/skills", category: "Agent skills" },
+        { title: "Model Context Protocol server", category: "MCP" },
+        { title: "LLM evaluation harness", category: "AI evals" },
+        { title: "nanoGPT model training", category: "AI engineering" },
+        { title: "n8n durable workflow", category: "Workflow automation" },
+        { title: "OAuth supply chain", category: "Security" },
+        { title: "TypeScript build tool", category: "Developer tooling" },
+        { title: "xmattpocock/skillsx", module: "Links", category: "x" },
+        { title: "Merged source", sourceContext: "Also in Packages", sources: ["Repos", "Packages"], category: "x" }
+    ]) {
+        for (const topic of trackedTopicLabels) {
+            assert.equal(focusMatches(sample, topic), taxonomy.matchesTopic(sample, topic), `${sample.title}: ${topic}`);
+        }
+    }
+});
+
 test("saved searches discard unavailable options without changing valid state", () => {
     const items = [{ module: "Trends", category: "MCP" }];
     assert.deepEqual(availableSearch({ focus: "MCP", module: "Old", category: "Old", query: "server", sort: "saved" }, items), { focus: "MCP", module: "all", category: "all", query: "server", sort: "saved" });
@@ -147,12 +181,36 @@ test("Explore defaults normalize, omit query, and reset through the shared store
     assert.equal(storage.value(storageKeys.exploreState), undefined);
 });
 
-test("pinned topics validate, cap, persist, and tolerate blocked storage", () => {
-    const valid = focusDefinitions.map(({ focus }) => focus);
+test("pinned topics keep legacy and v1 formats, cap at three, and report unavailable storage", () => {
+    const valid = trackedTopicLabels;
+    assert.deepEqual(pinnedTopicsFromRaw('["MCP","MCP","Security","unknown"]', valid), ["MCP", "Security"]);
+    assert.deepEqual(pinnedTopicsFromRaw('{"version":1,"topics":["AI agents","Developer tooling"]}', valid), ["AI agents", "Developer tooling"]);
+    assert.deepEqual(pinnedTopicsFromRaw("{broken", valid), []);
+
     const storage = memoryStorage();
     for (const topic of valid.slice(0, 4)) togglePinnedTopic(storage, topic, valid);
     assert.deepEqual(readPinnedTopics(storage, valid), valid.slice(1, 4));
-    assert.deepEqual(readPinnedTopics({ getItem() { throw new Error("blocked"); } }, valid), []);
+
+    const preserved = memoryStorage({
+        [storageKeys.pinnedTopics]: JSON.stringify({ version: 1, topics: ["Developer tooling"] })
+    });
+    assert.deepEqual(togglePinnedTopicState(preserved, "MCP", valid), {
+        available: true,
+        topics: ["Developer tooling", "MCP"]
+    });
+
+    const blockedRead = { getItem() { throw new Error("blocked"); } };
+    assert.deepEqual(readPinnedTopicsState(blockedRead, valid), { available: false, topics: [] });
+    assert.deepEqual(readPinnedTopics(blockedRead, valid), []);
+
+    const blockedWrite = {
+        getItem() { return JSON.stringify({ version: 1, topics: ["MCP"] }); },
+        setItem() { throw new Error("blocked"); }
+    };
+    assert.deepEqual(togglePinnedTopicState(blockedWrite, "Security", valid), {
+        available: false,
+        topics: ["MCP"]
+    });
 });
 
 test("saved searches normalize, cap, remove, merge, label, and round-trip", () => {
