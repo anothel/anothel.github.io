@@ -15,7 +15,7 @@ const links = data.links || [];
             <Fragment slot="stamp">Data date <span data-updated>{data.updated}</span></Fragment>
         </HeroHeader>
 
-        <main class="module-main">
+        <main id="main-content" class="module-main" tabindex="-1">
             <section class="module-overview-grid" aria-label="Module overview">
                 <section class="stats-grid" aria-label="Reference stats">
                     <StatCard label="References" value={links.length} />

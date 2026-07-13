@@ -59,23 +59,30 @@ test("Astro Home output uses shared trust data and an honest native-module saved
     assert.doesNotMatch(html, /data-home-freshness>Fresh</);
 });
 
-test("Astro Today output includes the compact mobile layout contract", () => {
+test("Astro Today output includes the shared shell and compact mobile contract", () => {
     ensureDist();
     const html = read("dist/today/index.html");
     const styles = read("css/site.css");
 
     assert.match(html, /class="shell hub-shell today-shell"/);
-    assert.match(html, /class="site-nav primary-nav"/);
-    assert.match(html, /class="source-nav"/);
+    assert.match(html, /class="hero-header"/);
+    assert.match(html, /class="route-nav primary-nav"/);
+    assert.match(html, /class="route-nav secondary-nav"/);
+    assert.match(html, /class="skip-link" href="#main-content"/);
+    assert.match(html, /<main(?=[^>]*id="main-content")(?=[^>]*tabindex="-1")[^>]*>/);
+    assert.doesNotMatch(html, /class="topbar"/);
     assert.match(html, /<section class="today-section" id="start" data-section-id="start">/);
     assert.match(html, /class="signal-card today-card today-card-compact"/);
+    const shellOrder = ["hero-header", "route-nav primary-nav", "route-nav secondary-nav", "id=\"main-content\""]
+        .map((marker) => html.indexOf(marker));
+    assert.ok(shellOrder.every((offset, index) => offset >= 0 && (index === 0 || offset > shellOrder[index - 1])), "hero, primary, secondary, and main should be siblings in document order");
 
     assert.match(styles, /html\s*{[^}]*scroll-padding-top:/s);
     assert.match(styles, /\.today-section\s*{[^}]*scroll-margin-top:/s);
     assert.match(styles, /\.today-card\s*{[^}]*scroll-margin-top:/s);
     assert.match(styles, /--type-hero-compact: 1\.45rem/);
-    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.today-shell \.topbar h1\s*{[^}]*font-size: var\(--type-hero-compact\)/s);
-    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.today-shell \.site-nav,[\s\S]*\.today-shell \.source-nav\s*{[^}]*flex-wrap: nowrap[^}]*overflow-x: auto/s);
+    assert.match(styles, /textarea:focus-visible/);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.today-shell \.hero-header h1\s*{[^}]*font-size: var\(--type-hero-compact\)/s);
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.today-card-compact \.score-reasons\s*{[^}]*display: none/s);
 });
 
@@ -98,8 +105,10 @@ test("Astro build output renders migrated static routes including Notes", () => 
         const html = read(path);
         assert.match(html, pattern, `${path} should render route content`);
         assert.match(html, /<html lang="en">/, `${path} should declare its English document language`);
-        assert.match(html, /class="site-nav primary-nav"/, `${path} should use shared primary nav`);
-        assert.match(html, /class="source-nav"/, `${path} should use shared source nav`);
+        assert.match(html, /class="route-nav primary-nav"/, `${path} should use shared primary nav`);
+        assert.match(html, /class="route-nav secondary-nav"/, `${path} should use shared secondary nav`);
+        assert.match(html, /class="skip-link" href="#main-content"/, `${path} should provide a skip link`);
+        assert.match(html, /<main(?=[^>]*id="main-content")(?=[^>]*tabindex="-1")[^>]*>/, `${path} should expose the skip target`);
     }
 
     assert.ok(existsSync("dist/css/site.css"), "Astro output should include shared CSS");

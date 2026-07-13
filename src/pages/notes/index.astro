@@ -20,11 +20,11 @@ const description = "Judgment notes from focused topic pages.";
     </Fragment>
 
     <div class="shell hub-shell">
-        <HeroHeader eyebrow="Notes" title="Topic notes." current="" prefix="../">
+        <HeroHeader eyebrow="Notes" title="Topic notes." current="Notes" prefix="../">
             <Fragment slot="stamp"><span data-notes-count>{notes.length}</span> notes</Fragment>
         </HeroHeader>
 
-        <main class="hub-main">
+        <main id="main-content" class="hub-main" tabindex="-1">
             <section class="module-detail">
                 <h2>Judgment notes from focused topic pages.</h2>
                 <p>Use this as the shortest path to saved context before opening a topic lens.</p>

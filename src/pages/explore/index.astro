@@ -35,7 +35,7 @@ const dataPaths = {
             <Fragment slot="stamp">Search, filter, save</Fragment>
         </HeroHeader>
 
-        <main class="explore-main">
+        <main id="main-content" class="explore-main" tabindex="-1">
             <ExploreIsland client:load prefix="../" fallback={fallback} dataPaths={dataPaths} />
         </main>
     </div>

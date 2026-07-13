@@ -156,11 +156,13 @@ test("documented repository paths exist", () => {
 });
 
 test("IA documents implemented page jobs, navigation, and intentional overlaps", () => {
-    for (const route of ["/today/", "/explore/", "/review/", "/status/", "/trends/", "/packages/", "/repos/", "/links/"]) {
+    for (const route of ["/today/", "/explore/", "/review/", "/status/", "/trends/", "/packages/", "/repos/", "/links/", "/notes/", "/404.html"]) {
         assert.ok(docs.ia.includes(`| \`${route}\``), route);
     }
-    assert.match(docs.ia, /Primary navigation: Home, Today, Explore, Review, Status/);
-    assert.match(docs.ia, /Source navigation: Trends, Packages, Repos, Reference shelf/);
+    assert.match(docs.ia, /Sticky primary navigation: Home, Today, Explore, Review/);
+    assert.match(docs.ia, /Nonsticky secondary navigation: Status, Trends, Packages, Repos, Reference shelf, Notes/);
+    assert.match(docs.ia, /Topic routes use a Notes -> current topic breadcrumb/);
+    assert.match(docs.ia, /404 route is a minimal, nonsticky exception/);
     assert.match(docs.ia, /## Intentional Overlaps/);
     assert.match(docs.ia, /Home and Today both show priority signals/);
     assert.match(docs.ia, /Explore and Review both show saved state/);

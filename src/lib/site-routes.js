@@ -5,15 +5,15 @@ export const siteOrigin = "https://anothel.github.io";
 // Routes not marked dataDriven keep their published lastmod until page content changes.
 export const siteRoutes = [
     { label: "Home", path: "/", nav: "primary", dataDriven: true },
-    { label: "Trends", path: "/trends/", nav: "source", dataDriven: true },
     { label: "Today", path: "/today/", nav: "primary", dataDriven: true },
     { label: "Explore", path: "/explore/", nav: "primary", dataDriven: true },
     { label: "Review", path: "/review/", nav: "primary", lastmod: "2026-06-20" },
-    { label: "Status", path: "/status/", nav: "primary", dataDriven: true },
-    { label: "Packages", path: "/packages/", nav: "source", dataDriven: true },
-    { label: "Repos", path: "/repos/", nav: "source", dataDriven: true },
-    { label: "Reference shelf", path: "/links/", nav: "source", dataDriven: true },
-    { label: "Notes", path: "/notes/", lastmod: "2026-06-25" }
+    { label: "Status", path: "/status/", nav: "secondary", dataDriven: true },
+    { label: "Trends", path: "/trends/", nav: "secondary", dataDriven: true },
+    { label: "Packages", path: "/packages/", nav: "secondary", dataDriven: true },
+    { label: "Repos", path: "/repos/", nav: "secondary", dataDriven: true },
+    { label: "Reference shelf", path: "/links/", nav: "secondary", dataDriven: true },
+    { label: "Notes", path: "/notes/", nav: "secondary", lastmod: "2026-06-25" }
 ];
 
 export const publicRoutes = [

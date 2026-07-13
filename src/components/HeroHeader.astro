@@ -8,11 +8,12 @@ const {
     prefix = "../"
 } = Astro.props;
 ---
-<header class="topbar">
+<header class="hero-header">
     <div>
         <p class="eyebrow">{eyebrow}</p>
         <h1>{title}</h1>
     </div>
     <p class="stamp"><slot name="stamp" /></p>
-    <RouteNav current={current} prefix={prefix} />
+    <slot name="context" />
 </header>
+<RouteNav current={current} prefix={prefix} />

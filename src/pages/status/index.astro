@@ -33,7 +33,7 @@ const displayTime = (value) => value && value !== "unknown" ? value : "unknown";
             <Fragment slot="stamp">Is today's data complete, current, and trustworthy?</Fragment>
         </HeroHeader>
 
-        <main class="hub-main status-dashboard">
+        <main id="main-content" class="hub-main status-dashboard" tabindex="-1">
             <section class={`status-overview health-${dashboard.overall}`} aria-labelledby="overall-health-title">
                 <div class="status-overview-heading">
                     <div>

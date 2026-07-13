@@ -17,13 +17,16 @@ anothel.github.io is a personal signal dashboard for deciding what technical sig
 | `/links/` | `src/pages/links/index.astro` | Curated reference shelf. |
 | `/topics/<slug>/` | `src/pages/topics/[slug].astro` | Seven promoted static topic views: judgment, guidance, ranking context, related signals, and browser-local pinning. |
 | `/notes/` | `src/pages/notes/index.astro` | Static index of the seven route-backed topic judgment notes. |
+| `/404.html` | `src/pages/404.astro` | Minimal recovery route back to Home. |
 
 Topic pages are native Astro output built from checked-in JSON. All topic content is useful without JavaScript; only pin state uses a native client module. Notes is native Astro output with no client script. The custom 404, robots, and sitemap are also native Astro output; `src/lib/site-routes.js` supplies their canonical origin/public route model, and no pass-through files remain.
 
 ## Route Groups and Navigation
 
-- Primary navigation: Home, Today, Explore, Review, Status.
-- Source navigation: Trends, Packages, Repos, Reference shelf.
+- Sticky primary navigation: Home, Today, Explore, Review.
+- Nonsticky secondary navigation: Status, Trends, Packages, Repos, Reference shelf, Notes.
+- Topic routes use a Notes -> current topic breadcrumb; no global route receives a false active state.
+- The 404 route is a minimal, nonsticky exception with no global navigation.
 - Decision flow: Home -> Today for prioritization; Home/Today -> Explore for broader discovery.
 - Save/return flow: Explore -> Review. Review never becomes a cloud or account surface.
 - Trust flow: compact health appears on decision/source pages; Status owns detailed evidence and recovery context.

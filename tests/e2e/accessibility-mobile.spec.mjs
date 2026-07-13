@@ -1,11 +1,28 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const criticalRoutes = [
-    "/", "/today/", "/explore/", "/review/", "/status/", "/notes/",
-    "/topics/agent-skills/", "/topics/ai-agents/", "/topics/ai-engineering/",
-    "/topics/ai-evals/", "/topics/mcp/", "/topics/security/", "/topics/workflow-automation/"
+const routeCases = [
+    { route: "/", current: "Home" },
+    { route: "/today/", current: "Today" },
+    { route: "/explore/", current: "Explore" },
+    { route: "/review/", current: "Review" },
+    { route: "/status/", current: "Status" },
+    { route: "/trends/", current: "Trends" },
+    { route: "/packages/", current: "Packages" },
+    { route: "/repos/", current: "Repos" },
+    { route: "/links/", current: "Reference shelf" },
+    { route: "/notes/", current: "Notes" },
+    { route: "/topics/agent-skills/", topic: "Agent skills" },
+    { route: "/topics/ai-agents/", topic: "AI agents" },
+    { route: "/topics/ai-engineering/", topic: "AI engineering" },
+    { route: "/topics/ai-evals/", topic: "AI evals" },
+    { route: "/topics/mcp/", topic: "MCP" },
+    { route: "/topics/security/", topic: "Security" },
+    { route: "/topics/workflow-automation/", topic: "Workflow automation" },
+    { route: "/404.html", noNavigation: true }
 ];
+const primaryLabels = ["Home", "Today", "Explore", "Review"];
+const secondaryLabels = ["Status", "Trends", "Packages", "Repos", "Reference shelf", "Notes"];
 const controlNameRules = ["aria-command-name", "button-name", "input-button-name", "label", "link-name", "select-name"];
 const summarize = (violations) => violations.map(({ id, impact, nodes }) => ({
     id,
@@ -13,21 +30,47 @@ const summarize = (violations) => violations.map(({ id, impact, nodes }) => ({
     targets: nodes.map(({ target }) => target.join(" "))
 }));
 
-test.describe("critical route accessibility", () => {
-    test.beforeEach(({ }, testInfo) => test.skip(testInfo.project.name !== "desktop-chromium", "Run one deterministic accessibility pass."));
-
-    for (const route of criticalRoutes) {
+test.describe("route accessibility", () => {
+    for (const { route, current, topic, noNavigation } of routeCases) {
         test(`${route} has no serious accessibility failures`, async ({ page }) => {
             await page.goto(route);
 
             await expect(page).toHaveTitle(/\S/);
             await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
             await expect(page.getByRole("main")).toHaveCount(1);
-            await expect(page.getByRole("navigation", { name: "Primary" })).toHaveCount(1);
+            await expect(page.locator("main#main-content[tabindex='-1']")).toHaveCount(1);
+
+            const primary = page.getByRole("navigation", { name: "Primary" });
+            const secondary = page.getByRole("navigation", { name: "Secondary" });
+            if (noNavigation) {
+                await expect(primary).toHaveCount(0);
+                await expect(secondary).toHaveCount(0);
+            } else {
+                await expect(primary).toHaveCount(1);
+                await expect(secondary).toHaveCount(1);
+                const currentLinks = page.locator(".primary-nav a[aria-current='page'], .secondary-nav a[aria-current='page']");
+                if (current) {
+                    await expect(currentLinks).toHaveCount(1);
+                    await expect(currentLinks).toHaveText(current);
+                } else {
+                    await expect(currentLinks).toHaveCount(0);
+                }
+            }
+
+            if (topic) {
+                const breadcrumb = page.getByRole("navigation", { name: "Breadcrumb" });
+                await expect(breadcrumb.getByRole("link", { name: "Notes" })).toHaveCount(1);
+                await expect(breadcrumb.locator("[aria-current='page']")).toHaveText(topic);
+            }
+
+            await page.keyboard.press("Tab");
+            await expect(page.locator(".skip-link")).toBeFocused();
+            await expect(page.locator(".skip-link")).toHaveAttribute("href", "#main-content");
+            await page.keyboard.press("Enter");
+            await expect(page.locator("main#main-content")).toBeFocused();
 
             const scan = await new AxeBuilder({ page }).analyze();
             expect(summarize(scan.violations.filter(({ impact }) => impact === "serious" || impact === "critical"))).toEqual([]);
-
             expect(summarize(scan.violations.filter(({ id }) => controlNameRules.includes(id)))).toEqual([]);
         });
     }
@@ -53,18 +96,16 @@ test.describe("critical route accessibility", () => {
 test.describe("mobile layout", () => {
     test.beforeEach(({ }, testInfo) => test.skip(testInfo.project.name !== "mobile-chromium", "Mobile viewport only."));
 
-    for (const route of criticalRoutes) {
+    for (const { route, noNavigation } of routeCases) {
         test(`${route} fits the mobile viewport`, async ({ page }) => {
             await page.goto(route);
 
             const layout = await page.evaluate(() => {
-                const nav = document.querySelector(".primary-nav");
-                const links = [...nav.querySelectorAll("a")];
-                const centers = links.map((link) => {
-                    const rect = link.getBoundingClientRect();
-                    return rect.top + rect.height / 2;
-                });
-                const targets = [...document.querySelectorAll(".primary-nav a, main button, main input:not([type=hidden]), main select")]
+                const primary = document.querySelector(".primary-nav");
+                const secondary = document.querySelector(".secondary-nav");
+                const hero = document.querySelector(".hero-header");
+                const primaryLinks = [...(primary?.querySelectorAll("a") || [])];
+                const targets = [...document.querySelectorAll("main button, main input:not([type=hidden]), main select, main textarea")]
                     .filter((element) => {
                         const style = getComputedStyle(element);
                         return style.display !== "none" && style.visibility !== "hidden";
@@ -87,18 +128,62 @@ test.describe("mobile layout", () => {
 
                 return {
                     overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-                    navRows: new Set(centers.map((center) => Math.round(center))).size,
-                    smallTargets: targets.filter(({ width, height }) => width < 24 || height < 24),
+                    heroPosition: hero && getComputedStyle(hero).position,
+                    primaryPosition: primary && getComputedStyle(primary).position,
+                    secondaryPosition: secondary && getComputedStyle(secondary).position,
+                    primaryHeight: primary?.getBoundingClientRect().height || 0,
+                    primaryLabels: primaryLinks.map((link) => link.textContent.trim()),
+                    secondaryLabels: [...(secondary?.querySelectorAll("a") || [])].map((link) => link.textContent.trim()),
+                    primaryRows: new Set(primaryLinks.map((link) => Math.round(link.getBoundingClientRect().top))).size,
+                    primaryOverflow: primary ? primary.scrollWidth - primary.clientWidth : 0,
+                    smallPrimaryTargets: primaryLinks.filter((link) => {
+                        const rect = link.getBoundingClientRect();
+                        return rect.width < 44 || rect.height < 44;
+                    }).map((link) => link.textContent.trim()),
+                    smallContentTargets: targets.filter(({ width, height }) => width < 24 || height < 24),
                     overflowingCardText
                 };
             });
 
             expect(layout.overflow, `${route} has horizontal document overflow`).toBeLessThanOrEqual(1);
-            expect(layout.navRows, `${route} primary navigation wrapped onto multiple rows`).toBe(1);
-            expect(layout.smallTargets, `${route} has primary controls smaller than 24px`).toEqual([]);
+            expect(layout.smallContentTargets, `${route} has content controls smaller than 24px`).toEqual([]);
             expect(layout.overflowingCardText, `${route} has card text outside its container`).toEqual([]);
+
+            if (noNavigation) {
+                expect(layout.primaryLabels).toEqual([]);
+                expect(layout.secondaryLabels).toEqual([]);
+                return;
+            }
+
+            expect(layout.primaryLabels).toEqual(primaryLabels);
+            expect(layout.secondaryLabels).toEqual(secondaryLabels);
+            expect(layout.primaryRows, `${route} primary navigation wrapped`).toBe(1);
+            expect(layout.primaryOverflow, `${route} primary navigation scrolls horizontally`).toBeLessThanOrEqual(1);
+            expect(layout.primaryHeight, `${route} primary rail height`).toBeGreaterThanOrEqual(44);
+            expect(layout.primaryHeight, `${route} primary rail height`).toBeLessThanOrEqual(52);
+            expect(layout.smallPrimaryTargets, `${route} primary links are smaller than 44px`).toEqual([]);
+            expect(layout.primaryPosition).toBe("sticky");
+            expect(["fixed", "sticky"]).not.toContain(layout.heroPosition);
+            expect(["fixed", "sticky"]).not.toContain(layout.secondaryPosition);
         });
     }
+
+    test("hero and secondary navigation scroll away while the primary rail stays", async ({ page }) => {
+        await page.goto("/today/");
+        const positions = await page.evaluate(async () => {
+            scrollTo(0, document.documentElement.scrollHeight);
+            await new Promise((resolve) => requestAnimationFrame(() => resolve()));
+            const hero = document.querySelector(".hero-header").getBoundingClientRect();
+            const primary = document.querySelector(".primary-nav").getBoundingClientRect();
+            const secondary = document.querySelector(".secondary-nav").getBoundingClientRect();
+            return { heroBottom: hero.bottom, primaryTop: primary.top, secondaryBottom: secondary.bottom };
+        });
+
+        expect(positions.heroBottom).toBeLessThanOrEqual(0);
+        expect(positions.secondaryBottom).toBeLessThanOrEqual(0);
+        expect(positions.primaryTop).toBeGreaterThanOrEqual(-1);
+        expect(positions.primaryTop).toBeLessThanOrEqual(1);
+    });
 
     test("Today shows an actionable, contained card near the initial viewport", async ({ page }) => {
         await page.goto("/today/");
@@ -108,28 +193,29 @@ test.describe("mobile layout", () => {
         await expect(firstCard.locator(".action-copy")).toContainText("Next action");
         const cardTop = await firstCard.evaluate((element) => element.getBoundingClientRect().top);
         expect(cardTop).toBeLessThan(844);
-
     });
+});
 
-    test("sticky navigation does not cover anchored or focused content", async ({ page }) => {
+test.describe("sticky offset", () => {
+    test("anchors and focused content clear the primary rail", async ({ page }) => {
         await page.goto("/today/#start");
         const section = page.locator("#start");
         await expect(section).toBeVisible();
 
         const anchorPosition = await section.evaluate((element) => {
-            const header = document.querySelector(".topbar").getBoundingClientRect();
-            return { targetTop: element.getBoundingClientRect().top, headerBottom: header.bottom };
+            const rail = document.querySelector(".primary-nav").getBoundingClientRect();
+            return { targetTop: element.getBoundingClientRect().top, railBottom: rail.bottom };
         });
-        expect(anchorPosition.targetTop).toBeGreaterThanOrEqual(anchorPosition.headerBottom - 1);
+        expect(anchorPosition.targetTop).toBeGreaterThanOrEqual(anchorPosition.railBottom + 7);
 
         const lastCard = page.locator("[data-signal-card]").last();
         await lastCard.focus();
         const focusPosition = await lastCard.evaluate((element) => {
-            const header = document.querySelector(".topbar").getBoundingClientRect();
+            const rail = document.querySelector(".primary-nav").getBoundingClientRect();
             const rect = element.getBoundingClientRect();
-            return { top: rect.top, bottom: rect.bottom, headerBottom: header.bottom, viewportHeight: innerHeight };
+            return { top: rect.top, bottom: rect.bottom, railBottom: rail.bottom, viewportHeight: innerHeight };
         });
-        expect(focusPosition.top).toBeGreaterThanOrEqual(focusPosition.headerBottom - 1);
+        expect(focusPosition.top).toBeGreaterThanOrEqual(focusPosition.railBottom + 7);
         expect(focusPosition.bottom).toBeLessThanOrEqual(focusPosition.viewportHeight + 1);
     });
 });

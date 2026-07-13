@@ -8,11 +8,11 @@ const read = (path) => readFileSync(path, "utf8");
 const manifest = JSON.parse(read("data/manifest.json"));
 const expectedPaths = [
     "/",
-    "/trends/",
     "/today/",
     "/explore/",
     "/review/",
     "/status/",
+    "/trends/",
     "/packages/",
     "/repos/",
     "/links/",
@@ -45,10 +45,13 @@ test("fresh Astro output preserves the 404 semantic contract", () => {
     assert.match(html, /<link rel="canonical" href="https:\/\/anothel\.github\.io\/404\.html">/);
     assert.match(html, /<p class="eyebrow">404<\/p>/);
     assert.match(html, /<h1>Nothing tracked here\.<\/h1>/);
-    assert.match(html, /<main class="error-main">/);
+    assert.match(html, /class="skip-link" href="#main-content"/);
+    assert.match(html, /<header class="hero-header">/);
+    assert.match(html, /<main(?=[^>]*class="error-main")(?=[^>]*id="main-content")(?=[^>]*tabindex="-1")[^>]*>/);
     assert.match(html, /<h2>This page is not part of the start page\.<\/h2>/);
     assert.match(html, /<p>Return home and choose a tracked area\.<\/p>/);
     assert.match(html, /<a class="home-link" href="\/">Open home<\/a>/);
+    assert.doesNotMatch(html, /class="route-nav (?:primary|secondary)-nav"/);
     assert.doesNotMatch(html, /<script\b/);
 });
 

@@ -3,15 +3,15 @@ import { routeFile, siteRoutes } from "../lib/site-routes.js";
 
 const { current, prefix = "../" } = Astro.props;
 const primaryRoutes = siteRoutes.filter(({ nav }) => nav === "primary");
-const sourceRoutes = siteRoutes.filter(({ nav }) => nav === "source");
+const secondaryRoutes = siteRoutes.filter(({ nav }) => nav === "secondary");
 ---
-<nav class="site-nav primary-nav" aria-label="Primary">
+<nav class="route-nav primary-nav" aria-label="Primary">
     {primaryRoutes.map(({ label, path }) => (
         <a href={`${prefix}${routeFile(path)}`} aria-current={label === current ? "page" : undefined}>{label}</a>
     ))}
 </nav>
-<nav class="source-nav" aria-label="Source pages">
-    {sourceRoutes.map(({ label, path }) => (
+<nav class="route-nav secondary-nav" aria-label="Secondary">
+    {secondaryRoutes.map(({ label, path }) => (
         <a href={`${prefix}${routeFile(path)}`} aria-current={label === current ? "page" : undefined}>{label}</a>
     ))}
 </nav>

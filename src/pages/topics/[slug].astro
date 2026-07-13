@@ -43,9 +43,15 @@ const externalHref = (value) => safeExternalUrl(value);
     <div class="shell hub-shell">
         <HeroHeader eyebrow="Topic focus" title={`${displayLabel} signals.`} current="" prefix="../../">
             <Fragment slot="stamp">tracked topic</Fragment>
+            <nav class="topic-context" slot="context" aria-label="Breadcrumb">
+                <ol>
+                    <li><a href="../../notes/index.html">Notes</a></li>
+                    <li aria-current="page">{config.label}</li>
+                </ol>
+            </nav>
         </HeroHeader>
 
-        <main class="hub-main">
+        <main id="main-content" class="hub-main" tabindex="-1">
             <section class="module-detail">
                 <h2>{displayLabel} signals across tracked sources.</h2>
                 <p data-topic-lead>{model.lead}</p>

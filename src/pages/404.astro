@@ -12,7 +12,7 @@ import AppShell from "../components/AppShell.astro";
     <meta slot="head" name="twitter:title" content="Page not found - anothel" />
     <meta slot="head" name="twitter:description" content="The requested page could not be found." />
     <div class="shell error-shell">
-        <header class="topbar">
+        <header class="hero-header">
             <div>
                 <p class="eyebrow">404</p>
                 <h1>Nothing tracked here.</h1>
@@ -20,7 +20,7 @@ import AppShell from "../components/AppShell.astro";
             <p class="stamp">static github pages</p>
         </header>
 
-        <main class="error-main">
+        <main id="main-content" class="error-main" tabindex="-1">
             <article class="trend-card error-card">
                 <div class="card-topline">
                     <span>Missing route</span>

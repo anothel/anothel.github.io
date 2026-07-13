@@ -37,10 +37,12 @@
     --surface-padding-lg: var(--space-7);
     --surface-min-card: 180px;
     --nav-gap: var(--space-2);
-    --nav-item-min: 34px;
-    --nav-item-padding: 7px 10px 0;
+    --nav-item-min: 44px;
+    --nav-item-padding: 0 10px;
     --nav-item-font: var(--type-ui);
-    --anchor-offset: 128px;
+    --primary-rail-height: 52px;
+    --anchor-gap: 8px;
+    --anchor-offset: calc(var(--primary-rail-height) + var(--anchor-gap) + env(safe-area-inset-top, 0px));
     --shell-gutter: 56px;
     --shell-gutter-mobile: 28px;
     --shell-max: 1440px;
@@ -76,6 +78,7 @@ a:hover {
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
+textarea:focus-visible,
 summary:focus-visible,
 button:focus-visible {
     outline: 3px solid var(--accent);
@@ -87,13 +90,38 @@ button:focus-visible {
     outline-offset: 3px;
 }
 
+.skip-link {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 4px);
+    left: max(8px, env(safe-area-inset-left, 0px));
+    z-index: 100;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 0 14px;
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--panel-strong);
+    color: var(--text);
+    font-weight: 900;
+    text-decoration: none;
+    transform: translateY(calc(-100% - 12px));
+}
+
+.skip-link:focus-visible {
+    transform: none;
+}
+
 .shell {
     display: grid;
     grid-template-columns: 300px minmax(0, 1fr);
     grid-template-areas:
-        "topbar topbar"
+        "hero hero"
+        "primary-nav primary-nav"
+        "secondary-nav secondary-nav"
         "sidebar main";
-    gap: var(--space-10);
+    column-gap: var(--space-10);
+    row-gap: 0;
     width: min(100% - var(--shell-gutter), var(--shell-max));
     margin: 0 auto;
     padding: var(--space-9) 0 44px;
@@ -102,37 +130,37 @@ button:focus-visible {
 .hub-shell {
     grid-template-columns: 1fr;
     grid-template-areas:
-        "topbar"
+        "hero"
+        "primary-nav"
+        "secondary-nav"
         "main";
 }
 
 .explore-shell {
     grid-template-columns: 1fr;
     grid-template-areas:
-        "topbar"
+        "hero"
+        "primary-nav"
+        "secondary-nav"
         "main";
 }
 
 .module-shell {
     grid-template-columns: 1fr;
     grid-template-areas:
-        "topbar"
+        "hero"
+        "primary-nav"
+        "secondary-nav"
         "main";
 }
 
-.topbar {
-    grid-area: topbar;
-    position: sticky;
-    top: 0;
-    z-index: 20;
+.hero-header {
+    grid-area: hero;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--space-7) var(--space-9);
+    gap: var(--space-3) var(--space-9);
     align-items: end;
-    padding: 0 0 var(--space-8);
-    border-bottom: 1px solid var(--line);
-    background: color-mix(in srgb, var(--bg) 94%, transparent);
-    backdrop-filter: blur(12px);
+    padding: 0 0 var(--space-6);
 }
 
 .eyebrow {
@@ -159,7 +187,7 @@ h1 {
     letter-spacing: 0;
 }
 
-.topbar h1 {
+.hero-header h1 {
     max-width: none;
     font-size: 2.4rem;
     line-height: 1.08;
@@ -175,26 +203,36 @@ h1 {
     white-space: nowrap;
 }
 
-.site-nav {
-    grid-column: 1 / -1;
+.route-nav {
     display: flex;
-    flex-wrap: wrap;
+    min-width: 0;
+    align-items: center;
     gap: var(--nav-gap);
-    overflow-x: auto;
-    padding-top: var(--space-1);
 }
 
-.source-nav {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--nav-gap);
-    overflow-x: auto;
+.primary-nav {
+    grid-area: primary-nav;
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    height: var(--primary-rail-height);
+    padding: 3px env(safe-area-inset-right, 0px) 3px env(safe-area-inset-left, 0px);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter: blur(12px);
 }
 
-.site-nav a,
-.source-nav a {
+.secondary-nav {
+    grid-area: secondary-nav;
+    padding-top: var(--space-2);
+}
+
+.route-nav a {
+    display: inline-flex;
     min-height: var(--nav-item-min);
+    align-items: center;
+    justify-content: center;
     padding: var(--nav-item-padding);
     border: var(--surface-border);
     border-radius: var(--radius);
@@ -205,18 +243,47 @@ h1 {
     text-decoration: none;
 }
 
-.source-nav a {
+.secondary-nav a {
     background: transparent;
     font-size: var(--type-small);
 }
 
-.site-nav a:hover,
-.site-nav a[aria-current="page"],
-.source-nav a:hover,
-.source-nav a[aria-current="page"] {
+.route-nav a:hover,
+.route-nav a[aria-current="page"] {
     border-color: var(--accent-soft);
     background: var(--panel-strong);
     color: var(--accent);
+}
+
+.route-nav a[aria-current="page"] {
+    box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.topic-context {
+    grid-column: 1 / -1;
+}
+
+.topic-context ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    color: var(--muted);
+    font-size: var(--type-small);
+    font-weight: 800;
+    list-style: none;
+}
+
+.topic-context li + li::before {
+    content: "/";
+    margin-right: var(--space-2);
+    color: var(--muted);
+}
+
+.topic-context [aria-current="page"] {
+    color: var(--text);
 }
 
 .sidebar {
@@ -227,6 +294,22 @@ main {
     grid-area: main;
     display: grid;
     gap: var(--space-8);
+}
+
+.shell > main,
+.shell > .sidebar {
+    margin-top: var(--space-10);
+}
+
+main,
+main [id],
+main :where(a, button, input, select, textarea, summary, [tabindex]) {
+    scroll-margin-top: var(--anchor-offset);
+}
+
+main:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
 }
 
 .hub-main {
@@ -1209,8 +1292,8 @@ main {
 }
 
 .sidebar .panel {
-    top: 148px;
-    max-height: calc(100vh - 172px);
+    top: var(--anchor-offset);
+    max-height: calc(100vh - var(--anchor-offset) - var(--space-9));
     overflow-y: auto;
 }
 
@@ -2360,7 +2443,7 @@ button {
 .error-shell {
     grid-template-columns: 1fr;
     grid-template-areas:
-        "topbar"
+        "hero"
         "main";
 }
 
@@ -2385,18 +2468,30 @@ button {
     .shell {
         grid-template-columns: 1fr;
         grid-template-areas:
-            "topbar"
+            "hero"
+            "primary-nav"
+            "secondary-nav"
             "sidebar"
             "main";
     }
 
-    .explore-shell {
+    .hub-shell,
+    .explore-shell,
+    .module-shell {
         grid-template-areas:
-            "topbar"
+            "hero"
+            "primary-nav"
+            "secondary-nav"
             "main";
     }
 
-    .topbar {
+    .error-shell {
+        grid-template-areas:
+            "hero"
+            "main";
+    }
+
+    .hero-header {
         grid-template-columns: minmax(0, 1fr);
     }
 
@@ -2462,11 +2557,12 @@ button {
 @media (max-width: 720px) {
     .shell {
         width: min(100% - var(--shell-gutter-mobile), var(--shell-max-mobile));
-        gap: var(--space-6);
+        column-gap: var(--space-6);
+        row-gap: 0;
         padding-top: var(--space-6);
     }
 
-    .topbar,
+    .hero-header,
     .home-command-board,
     .home-utility-strip,
     .module-filter-bar .panel,
@@ -2497,27 +2593,71 @@ button {
         grid-template-columns: 1fr;
     }
 
+    .shell > main,
+    .shell > .sidebar {
+        margin-top: var(--space-6);
+    }
+
+    .hero-header {
+        gap: 6px;
+        align-items: start;
+        padding-bottom: var(--space-4);
+    }
+
+    .hero-header .eyebrow {
+        margin-bottom: var(--space-1);
+    }
+
     .stamp {
         grid-column: auto;
+        font-size: var(--type-ui);
     }
 
     .utility-card-wide {
         grid-column: auto;
     }
 
-    .topbar h1 {
+    .hero-header h1 {
         font-size: var(--type-hero);
         white-space: normal;
         overflow: visible;
         text-overflow: clip;
     }
 
+    .primary-nav {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        overflow: visible;
+    }
+
+    .primary-nav a {
+        min-width: 0;
+        padding-right: var(--space-1);
+        padding-left: var(--space-1);
+        white-space: nowrap;
+    }
+
+    .secondary-nav {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        overflow: visible;
+    }
+
+    .secondary-nav a {
+        min-width: 0;
+        padding-right: var(--space-1);
+        padding-left: var(--space-1);
+        font-size: 0.72rem;
+        white-space: nowrap;
+    }
+
     .today-shell {
-        gap: var(--space-3);
+        column-gap: var(--space-3);
+        row-gap: 0;
         padding-top: var(--space-2);
     }
 
-    .today-shell .topbar {
+    .today-shell .hero-header {
         gap: 6px;
         align-items: start;
         padding-bottom: var(--space-2);
@@ -2528,44 +2668,13 @@ button {
         font-size: 0.68rem;
     }
 
-    .today-shell .topbar h1 {
+    .today-shell .hero-header h1 {
         font-size: var(--type-hero-compact);
         line-height: 1.04;
     }
 
     .today-shell .stamp {
         font-size: 0.72rem;
-    }
-
-    .today-shell .site-nav,
-    .today-shell .source-nav {
-        flex-wrap: nowrap;
-        gap: 6px;
-        overflow-x: auto;
-        padding-top: 0;
-        scrollbar-width: none;
-    }
-
-    .today-shell .site-nav::-webkit-scrollbar,
-    .today-shell .source-nav::-webkit-scrollbar {
-        display: none;
-    }
-
-    .today-shell .site-nav a,
-    .today-shell .source-nav a {
-        flex: 0 0 auto;
-        min-height: 30px;
-        padding: 5px 8px 0;
-        font-size: 0.74rem;
-        white-space: nowrap;
-    }
-
-    .today-shell .source-nav a {
-        min-height: 28px;
-        padding-right: 10px;
-        padding-left: 2px;
-        border-color: transparent;
-        background: transparent;
     }
 
     .today-shell .hub-main {
