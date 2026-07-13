@@ -9,12 +9,13 @@ Astro owns primary route generation and shared page structure:
 - Route entry points: `src/pages/`.
 - Shared document shell and navigation: `src/components/AppShell.astro`, `HeroHeader.astro`, and `RouteNav.astro`.
 - Shared presentation: `SignalCard.astro`, `StatCard.astro`, and `DataHealthPanel.astro`.
+- Canonical origin, navigation, public route, and sitemap model: `src/lib/site-routes.js`.
 - Build-time data: checked-in `data/*.json` imports.
-- Preserved assets/data: build-time endpoint routes under `src/pages/css/`, `src/pages/js/`, and `src/pages/data/`.
+- Published assets/data: build-time endpoint routes under `src/pages/css/`, `src/pages/js/`, and `src/pages/data/`.
 
-Nine primary routes are Astro pages: `/`, `/today/`, `/explore/`, `/review/`, `/status/`, `/trends/`, `/packages/`, `/repos/`, and `/links/`. `/notes/` is also a native Astro page. `src/pages/topics/[slug].astro` uses `getStaticPaths()` to generate the seven promoted topic routes from checked-in JSON and a shared topic model. `src/pages/[...legacy].ts` copies only the 404, robots, and sitemap assets into Astro output.
+Nine primary routes are Astro pages: `/`, `/today/`, `/explore/`, `/review/`, `/status/`, `/trends/`, `/packages/`, `/repos/`, and `/links/`. `/notes/` is also a native Astro page. `src/pages/topics/[slug].astro` uses `getStaticPaths()` to generate the seven promoted topic routes from checked-in JSON and a shared topic model. `src/pages/404.astro`, `src/pages/robots.txt.ts`, and `src/pages/sitemap.xml.ts` generate the custom 404 and crawler metadata directly through Astro.
 
-No checked-in HTML duplicates any Astro-owned content route. Their only generated HTML lives in `dist/` after `astro build`; `404.html` is the sole remaining checked-in content HTML file.
+No checked-in HTML or root metadata file duplicates Astro-owned output. Route artifacts, including `404.html`, `robots.txt`, and `sitemap.xml`, exist only in `dist/` after `astro build`.
 
 ## React Islands
 
@@ -33,15 +34,14 @@ Topic pages are also not React islands. `src/lib/topic-domain.js` uses the same 
 
 Notes is a static Astro page with no client script or React. It renders the route-backed notes from `src/lib/topic-taxonomy.js` through Astro templates and uses the same canonical Topic and encoded Explore routes as the Topic family.
 
-Retained legacy modules and consumers:
+Remaining published `js/` audit:
 
-- `js/signal-schema.js`: Today data generation and shared schema/ranking regression tests.
-- `js/safe-dom.js`: retained dashboard/source renderers and their escaping/link-safety regression tests. Native Astro routes do not load it.
-- `js/data-health.js`: Astro Home/Status build helpers, preserved health modules, and health regression tests.
-- `js/dashboard.js`, `link-queue.js`, `package-watchlist.js`, and `repo-watchlist.js`: retained renderer/security regression tests and fixed compatibility endpoints; no native route loads them.
-- `js/status.mjs` and `today.mjs`: retained renderer/data tests and fixed compatibility endpoints; no native route loads them.
+- Active internal modules: `js/data-health.js` supplies Astro Home/Status build helpers and health tests; `js/signal-schema.js` supplies Today generation plus schema/ranking tests.
+- Compatibility-only renderer set: `js/dashboard.js`, `link-queue.js`, `package-watchlist.js`, `repo-watchlist.js`, `safe-dom.js`, `status.mjs`, and `today.mjs` remain for renderer/security regression coverage and fixed public endpoints. No native route consumes them.
 
-`src/lib/topic-taxonomy.js` is the one canonical definition and matching source for Notes, Topics, Explore, data classification, sitemap metadata, and tests. The former Notes, taxonomy, Topic, and shared-state browser globals and their files are retired and blocked from `dist/`. `AnothelDom` remains only for the separately retained renderer modules above.
+All currently published `/js/*.js` and `/js/*.mjs` endpoints remain to avoid breaking public URLs, including endpoints for the two active internal modules. Remove the compatibility-only set only after a production reference/usage audit and explicit compatibility-breaking approval confirm that external consumers no longer depend on those URLs.
+
+`src/lib/topic-taxonomy.js` is the one canonical definition and matching source for Notes, Topics, Explore, data classification, sitemap route enumeration, and tests. The former Notes, taxonomy, Topic, and shared-state browser globals and their files are retired and blocked from `dist/`. `AnothelDom` remains only for the compatibility-only renderer set above.
 
 React is justified when a surface needs sustained client state or event-driven updates that cannot be completed at build time. Prefer an Astro component, semantic HTML, or native browser behavior when output is static or interaction is simple. Do not introduce a site-wide React root, client router, or SPA state layer.
 
@@ -57,9 +57,9 @@ React is justified when a surface needs sustained client state or event-driven u
 ```text
 data/watchlists.json + remote sources
     -> scripts/update-*.mjs
-    -> data/*.json + refresh report + sitemap metadata
-    -> Astro build imports checked-in JSON
-    -> dist/ static primary/Notes/topic HTML, CSS, JS, and JSON
+    -> data/*.json + refresh report
+    -> Astro build imports checked-in JSON + canonical site routes
+    -> dist/ static route HTML, native 404/robots/sitemap, CSS, JS, and JSON
 ```
 
 `data/*.json` is the source contract. Refresh scripts own data generation; Astro does not fetch remote sources during build. `scripts/data-contract.mjs` validates JSON shape, `scripts/validate-data.mjs` runs broader repository tests/syntax checks, and `scripts/check-dist.mjs` validates generated routes/assets/data/internal links. Field, timestamp, freshness, and scoring semantics live in `docs/SIGNAL_SCHEMA.md`.
@@ -73,7 +73,7 @@ data/watchlists.json + remote sources
 - Review renders honest browser-local guidance before hydration; it does not claim the inaccessible local queue is empty without JavaScript.
 - Every topic page keeps its summary, note, guidance, movers, source mix, related signals/topics, cards, and action links without JavaScript; only pin state is unavailable.
 - Notes renders all seven route-backed notes without JavaScript.
-- `scripts/update-static-fallbacks.mjs` is temporarily sitemap-only. Notes and Topic HTML are never written outside `dist/`.
+- The 404, robots, sitemap, Notes, and Topic artifacts are generated only by Astro and never written outside `dist/`.
 
 Useful static output is a constraint, not a promise that every browser-local workflow works without JavaScript.
 
@@ -88,7 +88,7 @@ Use Astro static output for routing and shared components. Allow React only as s
 - Produces static files compatible with GitHub Pages.
 - Supports build-time imports from checked-in JSON without a backend.
 - Removes duplicated route shell/navigation markup through Astro components.
-- Allows incremental preservation of existing assets and legacy routes.
+- Preserves stable public URLs while Astro owns their generated output.
 - Supports islands without forcing hydration onto static pages.
 
 ### Why not a full React SPA

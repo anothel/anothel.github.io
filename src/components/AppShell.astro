@@ -1,4 +1,6 @@
 ---
+import { siteOrigin } from "../lib/site-routes.js";
+
 const {
     title,
     description,
@@ -6,7 +8,7 @@ const {
     stylesheetHref,
     lang = "en"
 } = Astro.props;
-const canonicalUrl = `https://anothel.github.io${canonicalPath}`;
+const canonicalUrl = `${siteOrigin}${canonicalPath}`;
 ---
 <!DOCTYPE html>
 <html lang={lang}>

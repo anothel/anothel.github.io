@@ -32,6 +32,7 @@ git diff --check
 
 - `dist/` contains all required routes from `scripts/check-dist.mjs`.
 - Astro-owned routes use shared shell/navigation components.
+- `404.html`, `robots.txt`, and `sitemap.xml` come from their native Astro routes; no checked-in root copy or catch-all pass-through route exists.
 - Explore and Review render directly in React, retain useful static guidance/content, and share compatible localStorage records.
 - All seven topic routes render complete static content; only their native pin module depends on JavaScript, and no topic route loads React.
 - Notes renders all seven canonical notes without JavaScript; Notes/topic HTML must not exist as checked-in source.
@@ -44,7 +45,7 @@ git diff --check
 - `data/refresh-report.json` explains source health.
 - Today has expected sections and bounded scores.
 - Any `partial`, `fallback`, `staleButSafe`, or `rateLimited` state is visible and intentional.
-- Sitemap dates were regenerated after live data changes; no checked-in Notes or Topic HTML was recreated.
+- Built sitemap routes match `src/lib/site-routes.js`, and data-driven `lastmod` values match `data/manifest.json`; refresh stages no sitemap or checked-in HTML.
 - Timestamp/freshness interpretation matches `docs/SIGNAL_SCHEMA.md`.
 
 ## Security Review

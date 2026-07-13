@@ -14,8 +14,11 @@ test("today generator runs after links and before manifest", () => {
     assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-links\.mjs[\s\S]*scripts\/update-today\.mjs[\s\S]*scripts\/update-manifest\.mjs/);
 });
 
-test("refresh report is generated before sitemap metadata", () => {
-    assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-manifest\.mjs[\s\S]*scripts\/report-refresh\.mjs[\s\S]*scripts\/update-static-fallbacks\.mjs/);
+test("refresh report is generated after the manifest", () => {
+    const updateAll = readFileSync("scripts/update-all.mjs", "utf8");
+
+    assert.match(updateAll, /scripts\/update-manifest\.mjs[\s\S]*scripts\/report-refresh\.mjs/);
+    assert.doesNotMatch(updateAll, /update-static-fallbacks/);
 });
 
 test("data update workflow commits every generated data file", () => {
@@ -32,11 +35,12 @@ test("data update workflow commits every generated data file", () => {
     }
 });
 
-test("data update workflow commits sitemap but no Astro-owned HTML", () => {
-    assert.match(workflow, /sitemap\.xml/);
-
+test("data update workflow does not commit Astro-owned output", () => {
     const commitStep = workflow.slice(workflow.indexOf("name: Commit updated data"));
     for (const file of [
+        "404.html",
+        "robots.txt",
+        "sitemap.xml",
         "notes/index.html",
         "index.html",
         "today/index.html",
@@ -55,7 +59,7 @@ test("data update workflow commits sitemap but no Astro-owned HTML", () => {
         "topics/security/index.html",
         "topics/workflow-automation/index.html"
     ]) {
-        assert.doesNotMatch(commitStep, new RegExp(`(?:^|\\s)${file.replace("/", "\\/")}(?:\\s|$)`), file);
+        assert.equal(commitStep.includes(file), false, file);
     }
 });
 
@@ -93,7 +97,7 @@ test("data update workflow verifies generated data before committing", () => {
     assert.ok(uploadIndex > summaryIndex);
     assert.ok(commitIndex > uploadIndex);
     assert.match(workflow, /npm run validate:data[\s\S]*npm run build[\s\S]*npm run check:dist/);
-    assert.match(workflow, /node --test tests\/astro-build\.test\.mjs tests\/static-fallback\.test\.mjs tests\/status-data\.test\.mjs/);
+    assert.match(workflow, /node --test tests\/astro-build\.test\.mjs tests\/special-output\.test\.mjs tests\/status-data\.test\.mjs/);
     assert.equal(workflow.match(/node scripts\/update-all\.mjs/g)?.length, 1);
     assert.doesNotMatch(workflow.slice(validateIndex, commitIndex), /GITHUB_TOKEN|curl|node scripts\/update-all\.mjs/);
 });

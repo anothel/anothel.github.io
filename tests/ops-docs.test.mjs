@@ -35,13 +35,13 @@ test("architecture records current routes, island boundary, constraints, and rev
     for (const route of ["/", "/today/", "/explore/", "/review/", "/status/", "/trends/", "/packages/", "/repos/", "/links/"]) {
         assert.match(docs.architecture, new RegExp(route.replaceAll("/", "\\/")));
     }
-    for (const route of ["agent-skills", "ai-agents", "ai-engineering", "ai-evals", "mcp", "security", "workflow-automation"]) {
-        assert.match(read("sitemap.xml"), new RegExp(`https:\\/\\/anothel\\.github\\.io\\/topics\\/${route}\\/`));
+    for (const path of ["src/pages/404.astro", "src/pages/robots.txt.ts", "src/pages/sitemap.xml.ts", "src/lib/site-routes.js"]) {
+        assert.ok(docs.architecture.includes(path), path);
     }
-    assert.match(docs.architecture, /src\/pages\/\[\.\.\.legacy\]\.ts/);
+    assert.doesNotMatch(docs.architecture, /src\/pages\/\[\.\.\.legacy\]\.ts|scripts\/update-static-fallbacks\.mjs/);
     assert.match(docs.architecture, /src\/pages\/topics\/\[slug\]\.astro/);
     assert.match(docs.architecture, /\/notes\/.*native Astro page/);
-    assert.match(docs.architecture, /copies only the 404, robots, and sitemap assets/);
+    assert.match(docs.architecture, /404\.html.*robots\.txt.*sitemap\.xml.*only in `dist\/`/s);
     assert.match(docs.architecture, /src\/lib\/topic-taxonomy\.js.*one canonical definition/s);
     assert.match(docs.architecture, /src\/scripts\/topic-pin\.js/);
     assert.match(docs.architecture, /former Notes, taxonomy, Topic, and shared-state browser globals.*retired/s);
@@ -68,8 +68,8 @@ test("deployment docs match Astro config and checked-in workflows", () => {
     assert.match(docs.deployment, /ci\.yml.*does not deploy/s);
     assert.match(docs.deployment, /deploy-pages\.yml.*dedicated Pages workflow/s);
     assert.match(docs.deployment, /cutover was verified by a successful `Deploy Pages` run/);
-    assert.match(docs.deployment, /Notes-migration production deployment is not verified until.*real `Deploy Pages` run/s);
-    assert.match(docs.deployment, /Astro-owned HTML is never staged/);
+    assert.match(docs.deployment, /final ownership cleanup.*real `Deploy Pages` run/s);
+    assert.match(docs.deployment, /Astro-owned (?:HTML|route output) is never staged/);
     assert.match(docs.deployment, /Settings -> Pages -> Source -> GitHub Actions/);
     assert.match(docs.deployment, /workflow_run.*GITHUB_TOKEN/s);
     assert.match(ci, /npm run check/);
@@ -99,7 +99,9 @@ test("documented repository paths exist", () => {
         ".github/workflows/ci.yml",
         ".github/workflows/deploy-pages.yml",
         ".github/workflows/update-trends.yml",
-        "src/pages/[...legacy].ts",
+        "src/pages/404.astro",
+        "src/pages/robots.txt.ts",
+        "src/pages/sitemap.xml.ts",
         "src/pages/index.astro",
         "src/pages/today/index.astro",
         "src/pages/explore/index.astro",
@@ -122,13 +124,13 @@ test("documented repository paths exist", () => {
         "src/lib/review-domain.js",
         "src/lib/topic-domain.js",
         "src/lib/topic-taxonomy.js",
+        "src/lib/site-routes.js",
         "src/scripts/topic-pin.js",
         "asset-size-budgets.json",
         "scripts/data-contract.mjs",
         "scripts/validate-data.mjs",
         "scripts/check-dist.mjs",
         "scripts/check-size.mjs",
-        "scripts/update-static-fallbacks.mjs",
         "docs/ARCHITECTURE.md",
         "docs/DEPLOYMENT.md",
         "docs/IA.md",
@@ -196,8 +198,10 @@ test("roadmap separates completed migration, stabilization, and future work", ()
     assert.match(docs.roadmap, /Migration scaffold\/gate work is complete/);
     assert.match(docs.roadmap, /dedicated GitHub Pages workflow builds, validates, deploys only `dist\/`/);
     assert.match(docs.roadmap, /All seven promoted topic routes are native Astro static pages/);
-    assert.match(docs.roadmap, /### F1 - Retire the Final Pass-through Assets/);
-    assert.match(docs.roadmap, /404 first.*robots.*sitemap/s);
+    assert.match(docs.roadmap, /F1 final pass-through cleanup is complete:.*custom 404, robots, and sitemap.*native Astro/s);
+    assert.match(docs.roadmap, /### F2 - Retire Compatibility-Only JavaScript Endpoints/);
+    assert.match(docs.roadmap, /production reference\/usage audit.*owner explicitly approves/s);
+    assert.doesNotMatch(docs.roadmap, /### F1 - Retire the Final Pass-through Assets/);
     assert.doesNotMatch(docs.roadmap, /Convert Legacy Notes/);
     assert.doesNotMatch(docs.roadmap, /This feature does not exist today|no checked-in workflow deploys `dist\/`/);
     assert.doesNotMatch(docs.roadmap, /^### P\d - Astro Static Build Scaffold$/m);

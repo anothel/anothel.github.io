@@ -1,0 +1,35 @@
+---
+import AppShell from "../components/AppShell.astro";
+---
+<AppShell
+    title="Page not found - anothel"
+    description="The requested page could not be found."
+    canonicalPath="/404.html"
+    stylesheetHref="/css/site.css"
+>
+    <meta slot="head" name="robots" content="noindex" />
+    <meta slot="head" name="twitter:card" content="summary" />
+    <meta slot="head" name="twitter:title" content="Page not found - anothel" />
+    <meta slot="head" name="twitter:description" content="The requested page could not be found." />
+    <div class="shell error-shell">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">404</p>
+                <h1>Nothing tracked here.</h1>
+            </div>
+            <p class="stamp">static github pages</p>
+        </header>
+
+        <main class="error-main">
+            <article class="trend-card error-card">
+                <div class="card-topline">
+                    <span>Missing route</span>
+                    <span>Static site</span>
+                </div>
+                <h2>This page is not part of the start page.</h2>
+                <p>Return home and choose a tracked area.</p>
+                <a class="home-link" href="/">Open home</a>
+            </article>
+        </main>
+    </div>
+</AppShell>

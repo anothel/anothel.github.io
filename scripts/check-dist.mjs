@@ -2,26 +2,9 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { dataFiles } from "./data-contract.mjs";
+import { publicRoutes, routeFile, siteOrigin } from "../src/lib/site-routes.js";
 
-export const requiredRoutes = [
-    "/",
-    "/today/",
-    "/explore/",
-    "/review/",
-    "/status/",
-    "/trends/",
-    "/packages/",
-    "/repos/",
-    "/links/",
-    "/notes/",
-    "/topics/agent-skills/",
-    "/topics/ai-agents/",
-    "/topics/ai-engineering/",
-    "/topics/ai-evals/",
-    "/topics/mcp/",
-    "/topics/security/",
-    "/topics/workflow-automation/"
-];
+export const requiredRoutes = publicRoutes.map(({ path }) => path);
 
 const requiredAssets = [
     "404.html",
@@ -39,10 +22,6 @@ const requiredAssets = [
     "js/today.mjs"
 ];
 const retiredAssets = ["js/explore.js", "js/home.mjs", "js/local-state.js", "js/notes.js", "js/review.js", "js/topic-taxonomy.js", "js/topics.js"];
-
-function routeFile(route) {
-    return route === "/" ? "index.html" : `${route.slice(1)}index.html`;
-}
 
 function htmlFiles(root, relative = "") {
     return readdirSync(resolve(root, relative), { withFileTypes: true }).flatMap((entry) => {
@@ -72,7 +51,7 @@ function checkSitemap(root, failures) {
     for (const location of locations) {
         try {
             const url = new URL(location);
-            if (url.origin !== "https://anothel.github.io") {
+            if (url.origin !== siteOrigin) {
                 failures.push(`unexpected sitemap origin: ${location}`);
                 continue;
             }

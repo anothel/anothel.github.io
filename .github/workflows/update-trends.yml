@@ -49,7 +49,7 @@ jobs:
         run: npm run check:dist
 
       - name: Verify Astro output
-        run: node --test tests/astro-build.test.mjs tests/static-fallback.test.mjs tests/status-data.test.mjs
+        run: node --test tests/astro-build.test.mjs tests/special-output.test.mjs tests/status-data.test.mjs
 
       - name: Summarize refresh
         if: always()
@@ -73,7 +73,6 @@ jobs:
           files=(
             data/trends.json data/packages.json data/repos.json data/links.json
             data/today.json data/manifest.json data/refresh-report.json
-            sitemap.xml
           )
 
           if git diff --quiet -- "${files[@]}"; then

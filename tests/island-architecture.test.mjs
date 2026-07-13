@@ -7,6 +7,17 @@ const read = (path) => readFileSync(path, "utf8");
 const islands = ["src/components/ExploreIsland.jsx", "src/components/ReviewIsland.jsx"];
 const topicSlugs = ["agent-skills", "ai-agents", "ai-engineering", "ai-evals", "mcp", "security", "workflow-automation"];
 const retiredNotesGlobal = ["Notes", "App"].join("");
+const compatibilityAssets = [
+    "dashboard.js",
+    "data-health.js",
+    "link-queue.js",
+    "package-watchlist.js",
+    "repo-watchlist.js",
+    "safe-dom.js",
+    "signal-schema.js",
+    "status.mjs",
+    "today.mjs"
+];
 
 function topicSourcePages() {
     if (!existsSync("topics")) return [];
@@ -56,6 +67,20 @@ test("Astro browser-asset routes cannot republish retired bridge files", () => {
         assert.doesNotMatch(requiredAssets, new RegExp(`["']js/${name}\\.js["']`));
         assert.equal(existsSync(`js/${name}.js`), false);
         assert.equal(existsSync(`src/pages/js/${name}.js.ts`), false);
+    }
+});
+
+test("built HTML does not load published compatibility-only JavaScript", () => {
+    const htmlFiles = sourceFiles("dist").filter((path) => path.endsWith(".html"));
+
+    assert.ok(htmlFiles.length > 0);
+    for (const asset of compatibilityAssets) {
+        assert.equal(existsSync(`js/${asset}`), true, `js/${asset}`);
+        assert.equal(existsSync(`dist/js/${asset}`), true, `dist/js/${asset}`);
+    }
+    for (const path of htmlFiles) {
+        const html = read(path);
+        assert.deepEqual(compatibilityAssets.filter((asset) => html.includes(`js/${asset}`)), [], path);
     }
 });
 
@@ -151,9 +176,7 @@ test("Explore and Review use the canonical topic taxonomy", () => {
 });
 
 test("retired Notes and topic HTML or browser globals cannot return through build routes and workflows", () => {
-    const legacyRoute = read("src/pages/[...legacy].ts");
     const browserAssets = read("src/pages/js/[file].js.ts");
-    const updater = read("scripts/update-static-fallbacks.mjs");
     const workflow = read(".github/workflows/update-trends.yml");
     const checkDist = read("scripts/check-dist.mjs");
     const requiredAssets = checkDist.match(/const requiredAssets = \[([\s\S]*?)\];/)?.[1] || "";
@@ -161,15 +184,7 @@ test("retired Notes and topic HTML or browser globals cannot return through buil
 
     assert.equal(existsSync("notes/index.html"), false, "checked-in Notes HTML must stay retired");
     assert.deepEqual(topicSourcePages(), [], "checked-in topics/*/index.html must stay retired");
-    assert.doesNotMatch(legacyRoute, /["'](?:notes|topics)\//);
     assert.doesNotMatch(browserAssets, /^\s*["'](?:local-state|notes|topic-taxonomy|topics)["']\s*,?/m);
-    const writeTargets = [...updater.matchAll(/\bawait\s+writeIfChanged\(\s*([^,\n)]+)/g)]
-        .map((match) => match[1].trim())
-        .sort();
-    assert.deepEqual(writeTargets, ['"sitemap.xml"']);
-    assert.match(updater, /const generatedFiles = new Set\(\[["']sitemap\.xml["']\]\)/);
-    assert.doesNotMatch(updater, /notes\/index\.html|js\/notes\.js|js\/safe-dom\.js|node:vm|runInNewContext|\bTopicApp\b|js\/topics\.js|function renderTopicPage/);
-    assert.doesNotMatch(updater, new RegExp(`\\b${retiredNotesGlobal}\\b`));
     assert.doesNotMatch(workflow, /notes\/index\.html|topics\/[a-z-]+\/index\.html/);
 
     for (const asset of ["js/local-state.js", "js/notes.js", "js/topic-taxonomy.js", "js/topics.js"]) {

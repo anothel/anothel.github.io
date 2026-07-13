@@ -505,6 +505,15 @@ test("Status exposes overall and source-level data health", async ({ page }) => 
     await expect(page.locator(".source-health-table tbody tr").first()).toBeVisible();
 });
 
+test("unknown routes use the custom Astro 404", async ({ page }) => {
+    const response = await page.goto("/missing-route");
+
+    expect(response?.status()).toBe(404);
+    await expect(page).toHaveTitle("Page not found - anothel");
+    await expect(page.getByRole("heading", { name: "Nothing tracked here." })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Open home" })).toHaveAttribute("href", "/");
+});
+
 test("all required routes return a non-empty main region", async ({ page }) => {
     for (const route of requiredRoutes) {
         const response = await page.goto(route);

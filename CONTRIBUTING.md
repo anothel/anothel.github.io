@@ -41,11 +41,11 @@ npx playwright install chromium
 
 ## Adding a Route
 
-1. Add `src/pages/<route>/index.astro` (or `src/pages/index.astro` for `/`). New content routes must not extend `src/pages/[...legacy].ts`; that pass-through is limited to 404, robots, and sitemap.
+1. Add `src/pages/<route>/index.astro` (or `src/pages/index.astro` for `/`). Use an Astro endpoint route for non-HTML output.
 2. Reuse `AppShell.astro`, `HeroHeader.astro`, and existing presentation components.
 3. Import checked-in JSON in Astro frontmatter when the page is data-driven; do not fetch remote sources during build.
 4. Add navigation only when the route has an approved job in `docs/IA.md`.
-5. Update `scripts/check-dist.mjs`, sitemap/navigation, and route tests when the route belongs to the required public surface.
+5. Update `src/lib/site-routes.js`, `scripts/check-dist.mjs`, navigation, and route tests when the route belongs to the required public surface; the shared route model feeds sitemap generation.
 6. Run `npm run build`, `npm run check:dist`, relevant Playwright checks, and `npm run check`.
 
 ## Changing a Data Field Safely
@@ -77,7 +77,7 @@ npm run check
 
 Missing `GITHUB_TOKEN` can leave GitHub-backed sources `partial` or `rateLimited`. Run refresh only when fresh source evidence is part of the task.
 
-The refresh updates checked-in JSON and intentional sitemap dates. Notes and Topic HTML are produced only by the Astro build and must never be recreated or staged by the data updater.
+The refresh updates checked-in JSON only. Astro builds sitemap, Notes, Topic, and other route output into `dist/`; the data updater must never recreate or stage route artifacts.
 
 ## Change Rules
 

@@ -18,7 +18,7 @@ anothel.github.io is a personal signal dashboard for deciding what technical sig
 | `/topics/<slug>/` | `src/pages/topics/[slug].astro` | Seven promoted static topic views: judgment, guidance, ranking context, related signals, and browser-local pinning. |
 | `/notes/` | `src/pages/notes/index.astro` | Static index of the seven route-backed topic judgment notes. |
 
-Topic pages are native Astro output built from checked-in JSON. All topic content is useful without JavaScript; only pin state uses a native client module. Notes is native Astro output with no client script. Pass-through is limited to the checked-in 404, robots, and sitemap assets.
+Topic pages are native Astro output built from checked-in JSON. All topic content is useful without JavaScript; only pin state uses a native client module. Notes is native Astro output with no client script. The custom 404, robots, and sitemap are also native Astro output; `src/lib/site-routes.js` supplies their canonical origin/public route model, and no pass-through files remain.
 
 ## Route Groups and Navigation
 

@@ -27,16 +27,15 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd`, for example `npm.cmd run check`.
 
 ## Architecture
 
-- `src/pages/`: Astro route entry points. Nine primary routes, Notes, and seven promoted topic routes are implemented directly in Astro.
+- `src/pages/`: Astro route entry points. Nine primary routes, Notes, seven promoted topic routes, 404, robots, and sitemap output are implemented directly in Astro.
 - `src/components/`: shared Astro presentation plus direct React islands for Explore and Review.
-- `src/lib/explore-*.js`, `src/lib/review-domain.js`, `src/lib/topic-*.js`, and `src/lib/storage-contract.js`: framework-independent normalization, filtering, Review/topic models, taxonomy access, and shared storage compatibility.
-- `src/pages/[...legacy].ts`: build-time pass-through limited to the 404, robots, and sitemap assets.
+- `src/lib/explore-*.js`, `src/lib/review-domain.js`, `src/lib/topic-*.js`, `src/lib/site-routes.js`, and `src/lib/storage-contract.js`: framework-independent normalization, filtering, Review/topic models, canonical public routes, taxonomy access, and shared storage compatibility.
 - `data/*.json`: checked-in source snapshots, manifest, refresh report, watchlists, Today brief, and scoring policy.
-- `scripts/`: data generation, temporary sitemap metadata maintenance, and build-output checks.
-- `js/`: shared build/data helpers and retained renderer regression coverage; no Notes browser runtime remains.
+- `scripts/`: data generation and build-output checks.
+- `js/`: active build/data helpers plus published renderer endpoints retained for URL compatibility; no native route consumes the compatibility-only renderers.
 - `dist/`: ignored Astro build output.
 
-Only Explore and Review hydrate React, both with `client:load`. Home uses a small Astro-bundled native module for its browser-local saved summary. Topic content is rendered statically by Astro; a small native module handles only browser-local pin state. Notes is fully static Astro output with no client JavaScript. No checked-in legacy content HTML remains except the separate 404 page.
+Only Explore and Review hydrate React, both with `client:load`. Home uses a small Astro-bundled native module for its browser-local saved summary. Topic content is rendered statically by Astro; a small native module handles only browser-local pin state. Notes is fully static Astro output with no client JavaScript. Astro owns 404, robots, and sitemap generation; no checked-in source copy or catch-all route remains for those outputs.
 
 See [Architecture](docs/ARCHITECTURE.md), [Deployment](docs/DEPLOYMENT.md), and [Contributing](CONTRIBUTING.md) for canonical details.
 
@@ -60,7 +59,7 @@ Route ownership and intentional overlaps are documented in [Information Architec
 
 ## Data
 
-`data/*.json` is the source contract consumed by Astro builds and browser behavior. `data/watchlists.json` owns refresh inputs; `npm run update:data` produces module snapshots and Today, updates manifest/report metadata, then refreshes intentional sitemap metadata. All content-route HTML is generated only by Astro in `dist/`.
+`data/*.json` is the source contract consumed by Astro builds and browser behavior. `data/watchlists.json` owns refresh inputs; `npm run update:data` produces module snapshots and Today, then updates manifest/report metadata. Astro generates `sitemap.xml` during each build from the canonical public route model and manifest date. All route output exists only in `dist/`.
 
 ```powershell
 $env:GITHUB_TOKEN="optional-token-for-local-github-api-refresh"
@@ -84,7 +83,7 @@ Timestamp, freshness, field, and score semantics are canonical in [Signal Schema
 ## Automation
 
 - `.github/workflows/ci.yml`: read-only CI on pull requests and pushes to `main`; installs Node/Chromium and runs `npm run check` plus `git diff --check`.
-- `.github/workflows/update-trends.yml`: scheduled/manual data refresh; validates output, then commits checked-in data and sitemap metadata.
+- `.github/workflows/update-trends.yml`: scheduled/manual data refresh; validates output, then commits checked-in JSON only.
 - `.github/workflows/deploy-pages.yml`: builds and validates `dist/`, deploys only that artifact to GitHub Pages, and verifies production routes.
 
 Pages must use `Settings -> Pages -> Source -> GitHub Actions`. See [Deployment](docs/DEPLOYMENT.md).

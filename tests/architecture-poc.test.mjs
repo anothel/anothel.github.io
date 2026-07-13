@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
+import { publicRoutes } from "../src/lib/site-routes.js";
 
 function read(path) {
     return readFileSync(path, "utf8");
@@ -63,7 +64,7 @@ test("package entry point exposes current Astro plus React-island toolchain", ()
 });
 
 test("Review queue keeps public route and the shared localStorage contract", () => {
-    assert.match(read("sitemap.xml"), /https:\/\/anothel\.github\.io\/review\//);
+    assert.ok(publicRoutes.some(({ path }) => path === "/review/"));
     assert.match(read("dist/review/index.html"), /data-review-static-guidance/);
     assert.equal(existsSync("js/local-state.js"), false);
     assert.match(read("tests/explore-react-domain.test.mjs"), /saved item storage accepts legacy arrays and version 2 records/);
