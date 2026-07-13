@@ -40,9 +40,11 @@ test("architecture records current routes, island boundary, constraints, and rev
     }
     assert.match(docs.architecture, /src\/pages\/\[\.\.\.legacy\]\.ts/);
     assert.match(docs.architecture, /src\/pages\/topics\/\[slug\]\.astro/);
-    assert.match(docs.architecture, /Notes is the only checked-in legacy content route/);
+    assert.match(docs.architecture, /\/notes\/.*native Astro page/);
+    assert.match(docs.architecture, /copies only the 404, robots, and sitemap assets/);
+    assert.match(docs.architecture, /src\/lib\/topic-taxonomy\.js.*one canonical definition/s);
     assert.match(docs.architecture, /src\/scripts\/topic-pin\.js/);
-    assert.match(docs.architecture, /TopicApp.*AnothelState.*retired/s);
+    assert.match(docs.architecture, /former Notes, taxonomy, Topic, and shared-state browser globals.*retired/s);
     assert.match(docs.architecture, /data\/\*\.json.*source contract/s);
     assert.match(docs.architecture, /No backend, server function, database, account\/login, or cloud sync/s);
     assert.match(docs.architecture, /### Why Astro/);
@@ -66,8 +68,8 @@ test("deployment docs match Astro config and checked-in workflows", () => {
     assert.match(docs.deployment, /ci\.yml.*does not deploy/s);
     assert.match(docs.deployment, /deploy-pages\.yml.*dedicated Pages workflow/s);
     assert.match(docs.deployment, /cutover was verified by a successful `Deploy Pages` run/);
-    assert.match(docs.deployment, /topic-migration production deployment is not verified until.*real `Deploy Pages` run/s);
-    assert.match(docs.deployment, /Primary\/topic HTML is never staged/);
+    assert.match(docs.deployment, /Notes-migration production deployment is not verified until.*real `Deploy Pages` run/s);
+    assert.match(docs.deployment, /Astro-owned HTML is never staged/);
     assert.match(docs.deployment, /Settings -> Pages -> Source -> GitHub Actions/);
     assert.match(docs.deployment, /workflow_run.*GITHUB_TOKEN/s);
     assert.match(ci, /npm run check/);
@@ -107,6 +109,7 @@ test("documented repository paths exist", () => {
         "src/pages/packages/index.astro",
         "src/pages/repos/index.astro",
         "src/pages/links/index.astro",
+        "src/pages/notes/index.astro",
         "src/pages/topics/[slug].astro",
         "src/components/AppShell.astro",
         "src/components/HeroHeader.astro",
@@ -137,7 +140,15 @@ test("documented repository paths exist", () => {
         assert.equal(existsSync(path), true, path);
     }
 
-    for (const path of ["js/local-state.js", "js/topics.js", "topics/agent-skills/index.html", "topics/mcp/index.html"]) {
+    for (const path of [
+        "js/local-state.js",
+        "js/notes.js",
+        "js/topic-taxonomy.js",
+        "js/topics.js",
+        "notes/index.html",
+        "topics/agent-skills/index.html",
+        "topics/mcp/index.html"
+    ]) {
         assert.equal(existsSync(path), false, `${path} should stay retired`);
     }
 });
@@ -155,6 +166,7 @@ test("IA documents implemented page jobs, navigation, and intentional overlaps",
     assert.ok(docs.ia.includes("| `/topics/<slug>/`"));
     assert.ok(docs.ia.includes("| `/notes/`"));
     assert.match(docs.ia, /only pin state uses a native client module/);
+    assert.match(docs.ia, /Notes is native Astro output with no client script/);
 });
 
 test("IA records the migration parity decision for Trends and Links filters", () => {
@@ -184,8 +196,9 @@ test("roadmap separates completed migration, stabilization, and future work", ()
     assert.match(docs.roadmap, /Migration scaffold\/gate work is complete/);
     assert.match(docs.roadmap, /dedicated GitHub Pages workflow builds, validates, deploys only `dist\/`/);
     assert.match(docs.roadmap, /All seven promoted topic routes are native Astro static pages/);
-    assert.match(docs.roadmap, /### F1 - Convert Legacy Notes/);
-    assert.doesNotMatch(docs.roadmap, /Convert Legacy Notes and Topic Routes/);
+    assert.match(docs.roadmap, /### F1 - Retire the Final Pass-through Assets/);
+    assert.match(docs.roadmap, /404 first.*robots.*sitemap/s);
+    assert.doesNotMatch(docs.roadmap, /Convert Legacy Notes/);
     assert.doesNotMatch(docs.roadmap, /This feature does not exist today|no checked-in workflow deploys `dist\/`/);
     assert.doesNotMatch(docs.roadmap, /^### P\d - Astro Static Build Scaffold$/m);
 });
@@ -199,7 +212,8 @@ test("security and release docs reflect dependencies and Pages deployment", () =
     assert.match(docs.release, /npm run check/);
     assert.match(docs.release, /docs\/DEPLOYMENT\.md/);
     assert.match(docs.threat, /src\/pages\/topics\/\[slug\]\.astro/);
-    assert.match(docs.threat, /TopicTaxonomy.*AnothelDom.*NotesApp.*only for this route/s);
+    assert.match(docs.threat, /src\/pages\/notes\/index\.astro.*canonical ES Topic taxonomy/s);
+    assert.match(docs.threat, /no browser runtime/);
     assert.match(docs.release, /All seven topic routes render complete static content/);
     assert.doesNotMatch([docs.threat, docs.release].join("\n"), /dependency-free workflow posture|no package dependencies or lockfile/i);
 });

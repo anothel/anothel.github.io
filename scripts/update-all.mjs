@@ -9,7 +9,7 @@ export const dataUpdateScripts = [
     "scripts/update-today.mjs",
     "scripts/update-manifest.mjs",
     "scripts/report-refresh.mjs",
-    // Notes HTML and sitemap remain generated until the Notes Astro migration.
+    // Sitemap metadata remains checked in until its separate migration.
     "scripts/update-static-fallbacks.mjs"
 ];
 

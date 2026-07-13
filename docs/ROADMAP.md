@@ -8,7 +8,7 @@ Use this file for current stabilization and future trigger-based work. Detailed 
 - `astro.config.mjs` defines `site: "https://anothel.github.io"` and `output: "static"`.
 - Home, Today, Explore, Review, Status, Trends, Packages, Repos, and Links are Astro routes using shared components.
 - Explore and Review are `client:load` React islands; no full React SPA or client router exists.
-- CSS, checked-in JSON, browser modules, robots, sitemap, Notes, and 404 output are preserved in `dist/` through Astro build-time endpoints/pass-through routes.
+- CSS, checked-in JSON, browser modules, robots, sitemap, and 404 output are preserved in `dist/` through Astro build-time endpoints/pass-through routes.
 - CI builds and validates `dist/`, then runs Node and Playwright checks.
 - A dedicated GitHub Pages workflow builds, validates, deploys only `dist/`, and handles successful scheduled refresh runs.
 - Duplicate checked-in HTML for all nine Astro-owned primary routes has been removed.
@@ -16,7 +16,7 @@ Use this file for current stabilization and future trigger-based work. Detailed 
 - Obsolete Explore/Review bridge files and their global DOM tests are retired; scoped architecture and asset-size gates protect the island boundary.
 - Home reads the shared saved-record contract through a bundled native ES module; its obsolete `home.mjs` DOM runtime is retired without adding React.
 - All seven promoted topic routes are native Astro static pages. Complete content is built from checked-in JSON; only pin state uses a small native client module.
-- Checked-in topic HTML, `TopicApp`, `AnothelState`, `topics.js`, and `local-state.js` are retired. Data refresh now regenerates only Notes HTML and sitemap metadata outside JSON.
+- Notes and all seven Topic routes are native Astro output. Checked-in Notes/Topic HTML and their browser globals are retired; data refresh now updates only sitemap metadata outside JSON.
 - Accessibility and 390x844 mobile regression checks cover critical routes.
 
 Migration scaffold/gate work is complete. Do not queue “adopt Astro,” “add build chain,” or “start React islands” as future work.
@@ -37,19 +37,11 @@ Exit: generated state is explained and usable, or exact blocker/decision thresho
 
 ## Future Work
 
-### F1 - Convert Legacy Notes
+### F1 - Retire the Final Pass-through Assets
 
-Trigger: a Notes change needs shared Astro layout behavior, pass-through maintenance becomes fragile, or Notes-specific build tests expose drift.
+Trigger: 404 behavior, crawler metadata, or sitemap maintenance needs a change.
 
-Scope: migrate `/notes/` from checked-in HTML/pass-through to Astro while preserving its URL, content, sitemap entry, and useful no-JS output. Topic routes are already migrated and are not part of this bundle.
-
-Do not migrate solely for framework uniformity.
-
-### F2 - Retire Remaining Notes Globals by Consumer
-
-Trigger: Notes migration removes the final production route consumer, or Notes fallback maintenance exposes measurable duplication.
-
-Scope: retire `TopicTaxonomy`, `AnothelDom`, `NotesApp`, and their classic browser files only after Notes no longer needs them. Reassess `signal-schema.js`, `data-health.js`, and preserved renderer modules separately by proven build/test consumers. Do not delete modules merely for uniformity.
+Scope: migrate and verify 404 first, move robots ownership second, then generate sitemap from the canonical route model and retire `src/pages/[...legacy].ts` plus the temporary sitemap-only updater. Keep each deployment independently verifiable.
 
 ## Constraints
 

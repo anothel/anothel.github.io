@@ -4,12 +4,10 @@ const files = [
     "dashboard",
     "data-health",
     "link-queue",
-    "notes",
     "package-watchlist",
     "repo-watchlist",
     "safe-dom",
-    "signal-schema",
-    "topic-taxonomy"
+    "signal-schema"
 ];
 
 export function getStaticPaths() {

@@ -17,6 +17,7 @@ const primaryHtml = [
     "repos/index.html",
     "links/index.html"
 ];
+const retiredNotesGlobal = ["Notes", "App"].join("");
 const topicHtml = ["agent-skills", "ai-agents", "ai-engineering", "ai-evals", "mcp", "security", "workflow-automation"]
     .map((slug) => `topics/${slug}/index.html`);
 
@@ -59,19 +60,20 @@ test("validate-data syntax checks data workflow scripts and public JavaScript", 
         "scripts/update-static-fallbacks.mjs",
         "js/status.mjs",
         "js/today.mjs",
-        "js/topic-taxonomy.js",
+        "src/lib/topic-taxonomy.js",
         "js/signal-schema.js"
     ]) {
         assert.ok(checkTargets.includes(target), `${target} should be syntax checked`);
     }
+    assert.ok(!checkTargets.includes("js/topic-taxonomy.js"));
     assert.ok(!checkTargets.includes("js/topics.js"));
 });
 
-test("Notes-only fallback loads shared DOM safety without the retired topic runtime", () => {
+test("sitemap updater has no Notes browser or VM renderer", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
-    assert.match(script, /vm\.runInNewContext\(await readFile\("js\/safe-dom\.js", "utf8"\), context\);[\s\S]*vm\.runInNewContext\(await readFile\("js\/notes\.js", "utf8"\), context\);/);
-    assert.doesNotMatch(script, /\bTopicApp\b|js\/topics\.js/);
+    assert.doesNotMatch(script, /notes\/index\.html|js\/notes\.js|js\/safe-dom\.js|node:vm|runInNewContext/);
+    assert.doesNotMatch(script, new RegExp(`\\b${retiredNotesGlobal}\\b`));
 });
 
 test("fallback updater uses canonical topic routes only for sitemap metadata", () => {
@@ -83,14 +85,15 @@ test("fallback updater uses canonical topic routes only for sitemap metadata", (
     assert.doesNotMatch(script, /function renderTopicPage|topicRuntime\s*\(/);
 });
 
-test("legacy renderer cannot recreate Astro-owned primary or topic HTML", () => {
+test("sitemap updater cannot recreate Astro-owned Notes, primary, or topic HTML", () => {
     const script = readFileSync("scripts/update-static-fallbacks.mjs", "utf8");
 
-    for (const path of [...primaryHtml, ...topicHtml]) {
+    for (const path of ["notes/index.html", ...primaryHtml, ...topicHtml]) {
         const escaped = path.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&");
         assert.doesNotMatch(script, new RegExp(`(?:readFile|writeIfChanged)\\(\"${escaped}\"`), path);
     }
-    assert.match(script, /writeIfChanged\("notes\/index\.html"/);
+    assert.match(script, /writeIfChanged\("sitemap\.xml"/);
     assert.doesNotMatch(script, /writeIfChanged\(config\.routePath/);
+    assert.equal(existsSync("notes/index.html"), false);
     for (const path of topicHtml) assert.equal(existsSync(path), false, path);
 });

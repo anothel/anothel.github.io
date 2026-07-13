@@ -2,7 +2,7 @@
 
 ## Cutover Status
 
-The Astro Pages cutover is committed on `main`, GitHub Pages uses GitHub Actions, and the cutover was verified by a successful `Deploy Pages` run. Current source generates the nine primary routes and all seven topic routes only in `dist/`; checked-in HTML remains only for Notes and 404, while robots and sitemap are checked-in pass-through assets. A topic-migration production deployment is not verified until the commit containing it completes a real `Deploy Pages` run.
+The Astro Pages cutover is committed on `main`, GitHub Pages uses GitHub Actions, and the cutover was verified by a successful `Deploy Pages` run. Current source generates the nine primary routes, Notes, and all seven topic routes only in `dist/`; checked-in HTML remains only for 404, while robots and sitemap remain checked-in pass-through assets. A Notes-migration production deployment is not verified until the commit containing it completes a real `Deploy Pages` run.
 
 ## Target and Build
 
@@ -28,7 +28,7 @@ This repository is the user site `anothel.github.io`, so routes are rooted at `/
 
 `.github/workflows/ci.yml` validates pull requests and pushes to `main`. It installs dependencies and Chromium, runs `npm run check`, uploads Playwright failure artifacts, and runs `git diff --check`. It does not deploy.
 
-`.github/workflows/update-trends.yml` runs scheduled/manual data refreshes. Its only live source stage is `node scripts/update-all.mjs`. It then runs `npm run validate:data`, `npm run build`, `npm run check:dist`, and focused Astro/Notes/Status output tests before committing generated data, Notes HTML, and sitemap metadata. Primary/topic HTML is never staged. A failed data contract, build, route, asset, or rendered-output check skips the commit. The refresh report is still uploaded through `if: always()` steps.
+`.github/workflows/update-trends.yml` runs scheduled/manual data refreshes. Its only live source stage is `node scripts/update-all.mjs`. It then runs `npm run validate:data`, `npm run build`, `npm run check:dist`, and focused Astro/Status output tests before committing generated data and sitemap metadata. Astro-owned HTML is never staged. A failed data contract, build, route, asset, or rendered-output check skips the commit. The refresh report is still uploaded through `if: always()` steps.
 
 Valid partial/fallback output remains publishable only when the existing updater safety policy retains usable data and the data/artifact checks pass. Failed refresh workflows do not reach Pages; successful runs trigger the deployment workflow through `workflow_run`.
 

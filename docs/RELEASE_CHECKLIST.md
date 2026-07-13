@@ -26,7 +26,7 @@ git diff --check
 | Data contract | `npm run validate:data` plus focused schema/generator tests |
 | Data refresh | `npm run validate:data` and generated-data review below |
 | Native Astro topics | `node --test tests/topic-ui.test.mjs tests/astro-build.test.mjs tests/island-architecture.test.mjs` |
-| Legacy Notes | `node --test tests/notes-ui.test.mjs tests/static-fallback.test.mjs` |
+| Native Astro Notes | `node --test tests/notes-ui.test.mjs tests/astro-build.test.mjs tests/island-architecture.test.mjs` |
 
 ## Build and Route Review
 
@@ -34,9 +34,9 @@ git diff --check
 - Astro-owned routes use shared shell/navigation components.
 - Explore and Review render directly in React, retain useful static guidance/content, and share compatible localStorage records.
 - All seven topic routes render complete static content; only their native pin module depends on JavaScript, and no topic route loads React.
-- Notes remains available through the legacy pass-through when touched; topic HTML must not exist as checked-in source.
+- Notes renders all seven canonical notes without JavaScript; Notes/topic HTML must not exist as checked-in source.
 - Internal links and data/assets resolve under the configured root URL.
-- Home/topic raw HTML and native JavaScript plus Explore/Review raw HTML, island JavaScript, shared React client, and transitive route JavaScript stay within `asset-size-budgets.json`.
+- Home/topic raw HTML and native JavaScript, static Notes HTML/zero JavaScript, plus Explore/Review raw HTML, island JavaScript, shared React client, and transitive route JavaScript stay within `asset-size-budgets.json`.
 
 ## Generated Data Review
 
@@ -44,13 +44,13 @@ git diff --check
 - `data/refresh-report.json` explains source health.
 - Today has expected sections and bounded scores.
 - Any `partial`, `fallback`, `staleButSafe`, or `rateLimited` state is visible and intentional.
-- Remaining Notes HTML and sitemap dates were regenerated after live data changes; no checked-in topic HTML was recreated.
+- Sitemap dates were regenerated after live data changes; no checked-in Notes or Topic HTML was recreated.
 - Timestamp/freshness interpretation matches `docs/SIGNAL_SCHEMA.md`.
 
 ## Security Review
 
 - Astro-rendered external data uses Astro escaping and safe URL handling.
-- Notes/browser render helpers still escape text and block unsafe URLs.
+- Notes taxonomy text uses Astro escaping and canonical internal routes.
 - Topic source content is Astro-escaped, external URLs use the shared safe policy, and the pin module writes no HTML.
 - External links retain required `noopener noreferrer` behavior.
 - localStorage import/export remains untrusted input.

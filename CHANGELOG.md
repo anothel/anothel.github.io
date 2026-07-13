@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Migrated Notes to native, no-JavaScript Astro output backed by the canonical ES Topic taxonomy; removed checked-in Notes HTML, the Notes/taxonomy browser globals, and Notes VM generation while reducing the remaining updater to sitemap metadata maintenance.
 - Migrated all seven promoted topic routes to native Astro static generation with one shared topic model and a small non-React pin module; removed checked-in topic HTML, the `TopicApp`/`AnothelState` browser bridges, topic fallback generation, and obsolete workflow staging while keeping Notes as the sole legacy content route.
 - Aligned Topic results with Explore's canonical URL deduplication and priority ranking. Legacy raw counts are intentionally not preserved when duplicate source rows collapse: Agent skills 9→6, AI agents 43→33, AI engineering 28→23, AI evals 17→16, MCP 20→14, Security 2→2, and Workflow automation 15→14; audited golden tests now freeze count ranges, top-result sets, source diversity, purpose relevance, URL uniqueness, and URL safety.
 - Replaced Home's `local-state.js` global bridge with an Astro-bundled native saved-summary module using the shared Explore/Review storage contract, honest no-JS placeholders, unavailable-storage handling, and Home size/architecture gates; removed the obsolete Home DOM runtime.

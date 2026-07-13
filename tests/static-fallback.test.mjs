@@ -11,44 +11,26 @@ function topicPages() {
         .sort();
 }
 
-function read(path) {
-    return readFileSync(path, "utf8");
-}
+const read = (path) => readFileSync(path, "utf8");
+const retiredNotesGlobal = ["Notes", "App"].join("");
 
-test("remaining Notes fallback protects external links", () => {
-    const links = read("notes/index.html").match(/<a\b[^>]*href="https?:\/\/[^\"]+"[^>]*>/g) || [];
-    for (const link of links) {
-        assert.match(link, /\brel="[^"]*\bnoopener\b[^"]*\bnoreferrer\b[^"]*"/, link);
-    }
+test("checked-in Notes and topic HTML stay retired", () => {
+    assert.equal(existsSync("notes/index.html"), false);
+    assert.deepEqual(topicPages(), []);
 });
 
-test("Notes keeps checked-in topic judgment without JavaScript", () => {
-    const html = read("notes/index.html");
-
-    assert.match(html, /data-notes-list/);
-    assert.match(html, /Measurement decides which AI changes are safe to keep\./);
-    assert.match(html, /Implementation details make AI systems easier to judge\./);
-    assert.match(html, /Durable workflows matter when agents need repeatable execution\./);
-    assert.match(html, /Security signals decide where automation needs stronger guardrails\./);
-    assert.match(html, /href="\.\.\/topics\/ai-evals\/index\.html"/);
-    assert.match(html, /href="\.\.\/topics\/security\/index\.html"/);
-});
-
-test("topic source HTML is retired and the fallback updater cannot recreate it", () => {
+test("the remaining fallback updater writes only sitemap metadata", () => {
     const updater = read("scripts/update-static-fallbacks.mjs");
-
-    assert.deepEqual(topicPages(), [], "checked-in topics/*/index.html must stay retired");
-    assert.match(updater, /writeIfChanged\("notes\/index\.html"/);
     const writeTargets = [...updater.matchAll(/\bawait\s+writeIfChanged\(\s*([^,\n)]+)/g)]
         .map((match) => match[1].trim())
         .sort();
-    assert.deepEqual(writeTargets, ['"notes/index.html"', '"sitemap.xml"']);
-    assert.doesNotMatch(updater, /\bTopicApp\b|js\/topics\.js|function renderTopicPage/);
+
+    assert.deepEqual(writeTargets, ['"sitemap.xml"']);
+    assert.match(updater, /const generatedFiles = new Set\(\[["']sitemap\.xml["']\]\)/);
+    assert.doesNotMatch(updater, /notes\/index\.html|js\/notes\.js|js\/safe-dom\.js|node:vm|runInNewContext/);
+    assert.doesNotMatch(updater, new RegExp(`\\b${retiredNotesGlobal}\\b`));
 });
 
-test("remaining Notes copy avoids stale implementation language", () => {
-    const html = read("notes/index.html");
-    assert.doesNotMatch(html, /2026-06-14|2026-06-15|2026-06-19/);
-    assert.doesNotMatch(html, /Static fallback|fetch is available|checked-in JSON|checked-in data/i);
-    assert.doesNotMatch(html, /Data date is current/);
+test("the checked-in sitemap keeps the native Notes route", () => {
+    assert.match(read("sitemap.xml"), /<loc>https:\/\/anothel\.github\.io\/notes\/<\/loc>/);
 });

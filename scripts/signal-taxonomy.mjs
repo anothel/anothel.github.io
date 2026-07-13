@@ -1,7 +1,6 @@
-import "../js/topic-taxonomy.js";
 import { readFileSync } from "node:fs";
+import taxonomy from "../src/lib/topic-taxonomy.js";
 
-const taxonomy = globalThis.TopicTaxonomy;
 export const trackedTopicLabels = taxonomy.trackedTopicLabels;
 export const signalPolicy = JSON.parse(readFileSync(new URL("../data/signal-policy.json", import.meta.url), "utf8"));
 

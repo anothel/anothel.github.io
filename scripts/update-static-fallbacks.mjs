@@ -1,27 +1,8 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
-import vm from "node:vm";
+import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
-import "../js/safe-dom.js";
 import taxonomy from "../src/lib/topic-taxonomy.js";
 
-const { escapeHtml } = globalThis.AnothelDom;
-const generatedFiles = new Set(["notes/index.html", "sitemap.xml"]);
-
-function trimLineEnds(markup) {
-    return markup.split("\n").map((line) => line.trimEnd()).join("\n");
-}
-
-function replaceTaggedText(html, attr, value) {
-    const pattern = new RegExp(`(<(strong|span|p)[^>]*${attr}[^>]*>)[\\s\\S]*?(<\\/\\2>)`);
-    if (!pattern.test(html)) throw new Error(`Missing legacy HTML field: ${attr}`);
-    return html.replace(pattern, `$1${escapeHtml(value)}$3`);
-}
-
-function replacePattern(html, pattern, replacement, label) {
-    if (!pattern.test(html)) throw new Error(`Missing legacy HTML block: ${label}`);
-    return html.replace(pattern, replacement);
-}
+const generatedFiles = new Set(["sitemap.xml"]);
 
 function escapeRegExp(value) {
     return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -33,21 +14,8 @@ async function readJson(path) {
 
 async function writeIfChanged(path, content) {
     if (!generatedFiles.has(path)) throw new Error(`Unexpected generated file: ${path}`);
-    let current = "";
-    try {
-        current = await readFile(path, "utf8");
-    } catch (error) {
-        if (error.code !== "ENOENT") throw error;
-    }
-    await mkdir(dirname(path), { recursive: true });
+    const current = await readFile(path, "utf8");
     if (current !== content) await writeFile(path, content, "utf8");
-}
-
-async function notesApp() {
-    const context = { console, URL, TopicTaxonomy: taxonomy };
-    vm.runInNewContext(await readFile("js/safe-dom.js", "utf8"), context);
-    vm.runInNewContext(await readFile("js/notes.js", "utf8"), context);
-    return context.NotesApp;
 }
 
 function canonicalUrl(routePath) {
@@ -77,14 +45,6 @@ async function updateSitemapLastmod(manifest) {
 
 export async function updateStaticFallbacks() {
     const manifest = await readJson("data/manifest.json");
-    const notes = await notesApp();
-    const noteItems = notes.noteItems();
-    let notesHtml = await readFile("notes/index.html", "utf8");
-    notesHtml = replaceTaggedText(notesHtml, "data-notes-count", noteItems.length);
-    notesHtml = replacePattern(notesHtml, /(<section class="topic-note-panel" aria-label="Topic notes" data-notes-list>)[\s\S]*?(<\/section>)/, `$1
-${trimLineEnds(notes.renderNotes(noteItems))}
-            $2`, "notes list");
-    await writeIfChanged("notes/index.html", notesHtml);
     await updateSitemapLastmod(manifest);
 }
 

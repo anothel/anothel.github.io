@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { sourceMetaForDatasets, trustState } from "../src/lib/site-data.js";
+import { topicNotes } from "../src/lib/topic-taxonomy.js";
 
 const topicRoutes = [
     ["agent-skills", "Agent skills", "Agent skills signals."],
@@ -13,6 +14,7 @@ const topicRoutes = [
     ["security", "Security", "Security signals."],
     ["workflow-automation", "Workflow automation", "Workflow automation signals."]
 ];
+const retiredNotesGlobal = ["Notes", "App"].join("");
 
 function read(path) {
     return readFileSync(path, "utf8");
@@ -77,7 +79,7 @@ test("Astro Today output includes the compact mobile layout contract", () => {
     assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.today-card-compact \.score-reasons\s*{[^}]*display: none/s);
 });
 
-test("Astro build output renders migrated static routes and preserves Notes", () => {
+test("Astro build output renders migrated static routes including Notes", () => {
     ensureDist();
     const migratedRoutes = [
         ["dist/index.html", /What is worth opening now\?/],
@@ -88,9 +90,9 @@ test("Astro build output renders migrated static routes and preserves Notes", ()
         ["dist/packages/index.html", /npm packages worth watching\./],
         ["dist/repos/index.html", /Repos worth watching\./],
         ["dist/links/index.html", /References worth keeping close\./],
-        ["dist/today/index.html", /Today&#39;s priority brief\./]
+        ["dist/today/index.html", /Today&#39;s priority brief\./],
+        ["dist/notes/index.html", /Judgment notes from focused topic pages\./]
     ];
-    const preservedRoutes = ["dist/notes/index.html"];
 
     for (const [path, pattern] of migratedRoutes) {
         const html = read(path);
@@ -98,10 +100,6 @@ test("Astro build output renders migrated static routes and preserves Notes", ()
         assert.match(html, /<html lang="en">/, `${path} should declare its English document language`);
         assert.match(html, /class="site-nav primary-nav"/, `${path} should use shared primary nav`);
         assert.match(html, /class="source-nav"/, `${path} should use shared source nav`);
-    }
-
-    for (const path of preservedRoutes) {
-        assert.ok(existsSync(path), `${path} should remain available in Astro output`);
     }
 
     assert.ok(existsSync("dist/css/site.css"), "Astro output should include shared CSS");
@@ -128,6 +126,34 @@ test("Astro build output renders migrated static routes and preserves Notes", ()
     assert.match(statusHtml, /health-label health-stale/);
     assert.match(statusHtml, /health-label health-unknown/);
     assert.doesNotMatch(statusHtml, />\s*(?:undefined|null|NaN)\s*</);
+});
+
+test("Astro Notes output contains every canonical note without client JavaScript", () => {
+    ensureDist();
+    const html = read("dist/notes/index.html");
+    const notes = topicNotes("../");
+    const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+
+    assert.match(html, /<title>Topic notes - anothel<\/title>/);
+    assert.match(html, /<link rel="canonical" href="https:\/\/anothel\.github\.io\/notes\/">/);
+    assert.match(html, /<meta name="description" content="Judgment notes from focused topic pages\.">/);
+    assert.match(html, /<meta property="og:url" content="https:\/\/anothel\.github\.io\/notes\/">/);
+    assert.match(html, /<meta name="twitter:title" content="Topic notes - anothel">/);
+    assert.match(html, /<span data-notes-count>7<\/span> notes/);
+    assert.equal([...html.matchAll(/class="topic-note-card"/g)].length, 7);
+
+    for (const item of notes) {
+        assert.ok(html.includes(item.note.title), `${item.topic} title`);
+        assert.ok(html.includes(item.note.body), `${item.topic} body`);
+        assert.ok(html.includes(item.note.readWhen), `${item.topic} readWhen`);
+        assert.ok(html.includes(`href="${item.route}"`), `${item.topic} topic route`);
+        assert.ok(html.includes(`href="${item.exploreRoute}"`), `${item.topic} Explore route`);
+    }
+
+    assert.equal(new Set(ids).size, ids.length);
+    assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i);
+    assert.doesNotMatch(html, /<script\b|<astro-island\b|\b(?:component-url|renderer-url)=|js\/(?:notes|topic-taxonomy|safe-dom)\.js/i);
+    assert.doesNotMatch(html, new RegExp(`\\b${retiredNotesGlobal}\\b`));
 });
 
 test("Astro builds every topic route as useful static HTML with only a native pin module", () => {

@@ -48,7 +48,7 @@ jobs:
       - name: Validate generated artifact
         run: npm run check:dist
 
-      - name: Verify Astro and Notes output
+      - name: Verify Astro output
         run: node --test tests/astro-build.test.mjs tests/static-fallback.test.mjs tests/status-data.test.mjs
 
       - name: Summarize refresh
@@ -73,7 +73,7 @@ jobs:
           files=(
             data/trends.json data/packages.json data/repos.json data/links.json
             data/today.json data/manifest.json data/refresh-report.json
-            notes/index.html sitemap.xml
+            sitemap.xml
           )
 
           if git diff --quiet -- "${files[@]}"; then

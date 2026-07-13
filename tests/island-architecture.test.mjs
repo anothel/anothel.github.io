@@ -6,6 +6,7 @@ import { measureAssetSizes } from "../scripts/check-size.mjs";
 const read = (path) => readFileSync(path, "utf8");
 const islands = ["src/components/ExploreIsland.jsx", "src/components/ReviewIsland.jsx"];
 const topicSlugs = ["agent-skills", "ai-agents", "ai-engineering", "ai-evals", "mcp", "security", "workflow-automation"];
+const retiredNotesGlobal = ["Notes", "App"].join("");
 
 function topicSourcePages() {
     if (!existsSync("topics")) return [];
@@ -14,6 +15,13 @@ function topicSourcePages() {
         .map((entry) => `topics/${entry.name}/index.html`)
         .filter(existsSync)
         .sort();
+}
+
+function sourceFiles(directory) {
+    return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+        const path = `${directory}/${entry.name}`;
+        return entry.isDirectory() ? sourceFiles(path) : [path];
+    });
 }
 
 test("Explore and Review islands cannot reintroduce browser-global script bridges", () => {
@@ -108,6 +116,29 @@ test("topic routes use static Astro templates and only a native pin module", () 
     }
 });
 
+test("Notes is static Astro output with one canonical taxonomy and no browser runtime", () => {
+    const page = read("src/pages/notes/index.astro");
+    const html = read("dist/notes/index.html");
+    const forbiddenSource = /dangerouslySetInnerHTML|set:html|\.innerHTML\s*(?:\+?=)|\bclient:[a-z]+\b|from\s*["']react["']|\bfetch\s*\(|<script\b/i;
+    const forbiddenOutput = /js\/(?:notes|safe-dom|topic-taxonomy)\.js|<script\b|<astro-island\b|\bcomponent-url=|\brenderer-url=/i;
+
+    assert.doesNotMatch(page, forbiddenSource);
+    assert.doesNotMatch(html, forbiddenOutput);
+    assert.doesNotMatch(page, new RegExp(`\\b${retiredNotesGlobal}\\b`));
+    assert.doesNotMatch(html, new RegExp(`\\b${retiredNotesGlobal}\\b`));
+    assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i);
+
+    const definitionSources = ["src", "scripts", "js"]
+        .flatMap(sourceFiles)
+        .filter((path) => /\.(?:astro|js|jsx|mjs|ts)$/.test(path))
+        .filter((path) => /(?:export\s+)?const\s+topicDefinitions\s*=\s*\[/.test(read(path)));
+    assert.deepEqual(definitionSources, ["src/lib/topic-taxonomy.js"]);
+
+    const notes = measureAssetSizes().routes.notes;
+    assert.equal(notes.routeJs, 0);
+    assert.equal(notes.totalJs, 0);
+});
+
 test("Explore and Review use the canonical topic taxonomy", () => {
     const explore = read("src/lib/explore-domain.js");
     const review = read("src/lib/review-domain.js");
@@ -119,7 +150,7 @@ test("Explore and Review use the canonical topic taxonomy", () => {
     assert.doesNotMatch(review, /\.pattern\.test\(|\.requires\.test\(/);
 });
 
-test("retired topic HTML and browser globals cannot return through pass-through, updater, or workflow lists", () => {
+test("retired Notes and topic HTML or browser globals cannot return through build routes and workflows", () => {
     const legacyRoute = read("src/pages/[...legacy].ts");
     const browserAssets = read("src/pages/js/[file].js.ts");
     const updater = read("scripts/update-static-fallbacks.mjs");
@@ -128,18 +159,20 @@ test("retired topic HTML and browser globals cannot return through pass-through,
     const requiredAssets = checkDist.match(/const requiredAssets = \[([\s\S]*?)\];/)?.[1] || "";
     const retiredAssets = checkDist.match(/const retiredAssets = \[([\s\S]*?)\];/)?.[1] || "";
 
+    assert.equal(existsSync("notes/index.html"), false, "checked-in Notes HTML must stay retired");
     assert.deepEqual(topicSourcePages(), [], "checked-in topics/*/index.html must stay retired");
-    assert.doesNotMatch(legacyRoute, /["']topics\//);
-    assert.doesNotMatch(browserAssets, /^\s*["'](?:local-state|topics)["']\s*,?/m);
+    assert.doesNotMatch(legacyRoute, /["'](?:notes|topics)\//);
+    assert.doesNotMatch(browserAssets, /^\s*["'](?:local-state|notes|topic-taxonomy|topics)["']\s*,?/m);
     const writeTargets = [...updater.matchAll(/\bawait\s+writeIfChanged\(\s*([^,\n)]+)/g)]
         .map((match) => match[1].trim())
         .sort();
-    assert.deepEqual(writeTargets, ['"notes/index.html"', '"sitemap.xml"']);
-    assert.match(updater, /const generatedFiles = new Set\(\[["']notes\/index\.html["'], ["']sitemap\.xml["']\]\)/);
-    assert.doesNotMatch(updater, /\bTopicApp\b|js\/topics\.js|function renderTopicPage/);
-    assert.doesNotMatch(workflow, /topics\/[a-z-]+\/index\.html/);
+    assert.deepEqual(writeTargets, ['"sitemap.xml"']);
+    assert.match(updater, /const generatedFiles = new Set\(\[["']sitemap\.xml["']\]\)/);
+    assert.doesNotMatch(updater, /notes\/index\.html|js\/notes\.js|js\/safe-dom\.js|node:vm|runInNewContext|\bTopicApp\b|js\/topics\.js|function renderTopicPage/);
+    assert.doesNotMatch(updater, new RegExp(`\\b${retiredNotesGlobal}\\b`));
+    assert.doesNotMatch(workflow, /notes\/index\.html|topics\/[a-z-]+\/index\.html/);
 
-    for (const asset of ["js/local-state.js", "js/topics.js"]) {
+    for (const asset of ["js/local-state.js", "js/notes.js", "js/topic-taxonomy.js", "js/topics.js"]) {
         const escaped = asset.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&");
         assert.equal(existsSync(asset), false, asset);
         assert.equal(existsSync(`dist/${asset}`), false, `dist/${asset}`);

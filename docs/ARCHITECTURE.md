@@ -12,9 +12,9 @@ Astro owns primary route generation and shared page structure:
 - Build-time data: checked-in `data/*.json` imports.
 - Preserved assets/data: build-time endpoint routes under `src/pages/css/`, `src/pages/js/`, and `src/pages/data/`.
 
-Nine primary routes are Astro pages: `/`, `/today/`, `/explore/`, `/review/`, `/status/`, `/trends/`, `/packages/`, `/repos/`, and `/links/`. `src/pages/topics/[slug].astro` uses `getStaticPaths()` to generate the seven promoted topic routes from checked-in JSON and a shared topic model. `src/pages/[...legacy].ts` copies Notes plus the 404, robots, and sitemap assets into Astro output. Notes is the only checked-in legacy content route.
+Nine primary routes are Astro pages: `/`, `/today/`, `/explore/`, `/review/`, `/status/`, `/trends/`, `/packages/`, `/repos/`, and `/links/`. `/notes/` is also a native Astro page. `src/pages/topics/[slug].astro` uses `getStaticPaths()` to generate the seven promoted topic routes from checked-in JSON and a shared topic model. `src/pages/[...legacy].ts` copies only the 404, robots, and sitemap assets into Astro output.
 
-No checked-in HTML duplicates the primary or topic routes. Their only generated HTML lives in `dist/` after `astro build`.
+No checked-in HTML duplicates any Astro-owned content route. Their only generated HTML lives in `dist/` after `astro build`; `404.html` is the sole remaining checked-in content HTML file.
 
 ## React Islands
 
@@ -31,24 +31,24 @@ Home is not a React island. `src/scripts/home-saved-summary.js` is an Astro-bund
 
 Topic pages are also not React islands. `src/lib/topic-domain.js` uses the same `normalizeExploreData()` canonical URL deduplication and `sortItems(..., "priority")` ranking as Explore, then applies the shared topic matcher. Duplicate source rows collapse before matching and retain provenance through canonical/legacy ids, `sources`, and `sourceContext`; legacy raw counts are not preserved. `src/scripts/topic-pin.js` reads and toggles only the shared browser-local pin contract from `storage-contract.js`. Static topic output uses an honest loading label rather than claiming an unreadable pin state is false. The pin module updates text and accessibility attributes without globals, dynamic scripts, or HTML insertion.
 
+Notes is a static Astro page with no client script or React. It renders the route-backed notes from `src/lib/topic-taxonomy.js` through Astro templates and uses the same canonical Topic and encoded Explore routes as the Topic family.
+
 Retained legacy modules and consumers:
 
 - `js/signal-schema.js`: Today data generation and shared schema/ranking regression tests.
-- `js/topic-taxonomy.js`: canonical taxonomy definitions consumed by data classification, the Astro adapter in `src/lib/topic-taxonomy.js`, Notes generation, and Notes browser rendering.
-- `js/safe-dom.js`: Notes browser rendering/generation plus retained renderer modules and regression tests. Notes is the only production HTML route that loads it.
-- `js/notes.js`: the remaining Notes renderer and generator contract.
+- `js/safe-dom.js`: retained dashboard/source renderers and their escaping/link-safety regression tests. Native Astro routes do not load it.
 - `js/data-health.js`: Astro Home/Status build helpers, preserved health modules, and health regression tests.
+- `js/dashboard.js`, `link-queue.js`, `package-watchlist.js`, and `repo-watchlist.js`: retained renderer/security regression tests and fixed compatibility endpoints; no native route loads them.
+- `js/status.mjs` and `today.mjs`: retained renderer/data tests and fixed compatibility endpoints; no native route loads them.
 
-`TopicTaxonomy`, `AnothelDom`, and `NotesApp` remain browser globals only for the Notes route. The former `TopicApp` and `AnothelState` globals, their `topics.js` and `local-state.js` runtimes, the Explore/Review bridges, and the obsolete Home DOM runtime are retired and blocked from `dist/`.
-
-While Notes still needs the classic taxonomy file, Explore derives its lens labels, routes, descriptions, and matching behavior directly from that canonical source through `src/lib/topic-taxonomy.js`. The topic Astro model uses the same adapter at build time; neither surface maintains a second taxonomy copy.
+`src/lib/topic-taxonomy.js` is the one canonical definition and matching source for Notes, Topics, Explore, data classification, sitemap metadata, and tests. The former Notes, taxonomy, Topic, and shared-state browser globals and their files are retired and blocked from `dist/`. `AnothelDom` remains only for the separately retained renderer modules above.
 
 React is justified when a surface needs sustained client state or event-driven updates that cannot be completed at build time. Prefer an Astro component, semantic HTML, or native browser behavior when output is static or interaction is simple. Do not introduce a site-wide React root, client router, or SPA state layer.
 
 ## Architecture and Asset Gates
 
-- `tests/island-architecture.test.mjs` guards Explore/Review island boundaries plus Home/topic native-module boundaries, including retired bridge and checked-in topic HTML checks.
-- `scripts/check-size.mjs` resolves Home/topic native modules plus Explore/Review island and renderer files from generated HTML, follows their local JavaScript import graphs, and measures raw build bytes.
+- `tests/island-architecture.test.mjs` guards Explore/Review island boundaries plus Home/topic native-module and static Notes boundaries, including retired bridge and checked-in content HTML checks.
+- `scripts/check-size.mjs` resolves Home/topic native modules, static Notes output, and Explore/Review island files from generated HTML, follows local JavaScript import graphs, and measures raw build bytes.
 - Reviewed ceilings live only in `asset-size-budgets.json`; `npm run check:size` reports each route, asset, actual size, and budget.
 - `npm run check` runs the architecture tests and size gate in CI after building and validating `dist/`.
 
@@ -57,9 +57,9 @@ React is justified when a surface needs sustained client state or event-driven u
 ```text
 data/watchlists.json + remote sources
     -> scripts/update-*.mjs
-    -> data/*.json + refresh report + Notes HTML + sitemap metadata
+    -> data/*.json + refresh report + sitemap metadata
     -> Astro build imports checked-in JSON
-    -> dist/ static primary/topic HTML, CSS, JS, and JSON
+    -> dist/ static primary/Notes/topic HTML, CSS, JS, and JSON
 ```
 
 `data/*.json` is the source contract. Refresh scripts own data generation; Astro does not fetch remote sources during build. `scripts/data-contract.mjs` validates JSON shape, `scripts/validate-data.mjs` runs broader repository tests/syntax checks, and `scripts/check-dist.mjs` validates generated routes/assets/data/internal links. Field, timestamp, freshness, and scoring semantics live in `docs/SIGNAL_SCHEMA.md`.
@@ -72,8 +72,8 @@ data/watchlists.json + remote sources
 - Explore renders structured data through JSX; it does not inject source-provided HTML or load legacy global scripts.
 - Review renders honest browser-local guidance before hydration; it does not claim the inaccessible local queue is empty without JavaScript.
 - Every topic page keeps its summary, note, guidance, movers, source mix, related signals/topics, cards, and action links without JavaScript; only pin state is unavailable.
-- Notes keeps existing checked-in HTML through the legacy pass-through.
-- `scripts/update-static-fallbacks.mjs` updates only checked-in Notes HTML and sitemap dates. Topic HTML is never written outside `dist/`.
+- Notes renders all seven route-backed notes without JavaScript.
+- `scripts/update-static-fallbacks.mjs` is temporarily sitemap-only. Notes and Topic HTML are never written outside `dist/`.
 
 Useful static output is a constraint, not a promise that every browser-local workflow works without JavaScript.
 

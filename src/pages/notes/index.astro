@@ -1,0 +1,60 @@
+---
+import AppShell from "../../components/AppShell.astro";
+import HeroHeader from "../../components/HeroHeader.astro";
+import { topicNotes } from "../../lib/topic-taxonomy.js";
+
+const notes = topicNotes("../");
+const title = "Topic notes - anothel";
+const description = "Judgment notes from focused topic pages.";
+---
+<AppShell
+    title={title}
+    description={description}
+    canonicalPath="/notes/"
+    stylesheetHref="../css/site.css"
+>
+    <Fragment slot="head">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content={title}>
+        <meta name="twitter:description" content={description}>
+    </Fragment>
+
+    <div class="shell hub-shell">
+        <HeroHeader eyebrow="Notes" title="Topic notes." current="" prefix="../">
+            <Fragment slot="stamp"><span data-notes-count>{notes.length}</span> notes</Fragment>
+        </HeroHeader>
+
+        <main class="hub-main">
+            <section class="module-detail">
+                <h2>Judgment notes from focused topic pages.</h2>
+                <p>Use this as the shortest path to saved context before opening a topic lens.</p>
+            </section>
+
+            <section class="topic-note-panel" aria-label="Topic notes" data-notes-list>
+                {notes.map((item) => (
+                    <article class="topic-note-card">
+                        <div>
+                            <span>{item.topic}</span>
+                            <h2>{item.note.title}</h2>
+                            <p>{item.note.body}</p>
+                            <small>{item.note.readWhen}</small>
+                        </div>
+                        <aside>
+                            <span>{item.description}</span>
+                            <div class="topic-support-list">
+                                <a href={item.route}>
+                                    <strong>Open topic</strong>
+                                    <span>{item.topic}</span>
+                                </a>
+                                <a href={item.exploreRoute}>
+                                    <strong>Explore lens</strong>
+                                    <span>{item.topic}</span>
+                                </a>
+                            </div>
+                        </aside>
+                    </article>
+                ))}
+            </section>
+        </main>
+    </div>
+</AppShell>

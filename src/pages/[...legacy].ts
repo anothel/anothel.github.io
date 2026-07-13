@@ -3,8 +3,7 @@ import { readFile } from "node:fs/promises";
 const htmlFiles = [
     "404.html",
     "robots.txt",
-    "sitemap.xml",
-    "notes/index.html"
+    "sitemap.xml"
 ];
 
 export function getStaticPaths() {

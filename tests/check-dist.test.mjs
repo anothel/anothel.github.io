@@ -35,7 +35,7 @@ test("a missing Astro topic route fails the dist gate", async () => {
     }
 });
 
-for (const file of ["explore.js", "home.mjs", "local-state.js", "review.js", "topics.js"]) {
+for (const file of ["explore.js", "home.mjs", "local-state.js", "notes.js", "review.js", "topic-taxonomy.js", "topics.js"]) {
     test(`dist check rejects retired ${file}`, async () => {
         const root = await fixture();
         try {

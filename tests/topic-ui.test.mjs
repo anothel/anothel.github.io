@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
 import { normalizeExploreData, sortItems } from "../src/lib/explore-domain.js";
@@ -16,7 +17,7 @@ import {
     topicSummary,
     topicSupportingSignals
 } from "../src/lib/topic-domain.js";
-import taxonomy, { topicDefinitions, topicPageLabels } from "../src/lib/topic-taxonomy.js";
+import taxonomy, { topicDefinitions, topicNotes, topicPageLabels } from "../src/lib/topic-taxonomy.js";
 
 const json = (path) => JSON.parse(readFileSync(path, "utf8"));
 const data = {
@@ -42,6 +43,37 @@ test("topic slugs resolve exactly the seven public topic routes", () => {
     assert.equal(topicBySlug("developer-tooling"), null);
     assert.equal(topicBySlug("unknown"), null);
     assert.equal(topicBySlug(""), null);
+});
+
+test("canonical ES taxonomy preserves the pre-conversion definition fingerprint", () => {
+    const payload = JSON.stringify(topicDefinitions, (key, value) => (
+        value instanceof RegExp ? { source: value.source, flags: value.flags } : value
+    ));
+
+    assert.equal(createHash("sha256").update(payload).digest("hex"), "c522490b504b55bdb0488a1cd1ba3903e4ce1c671cea060813699b79ce5427a8");
+});
+
+test("canonical ES helpers preserve legacy classification, aliases, routes, and Notes order", () => {
+    const classifications = [
+        ["agent skills MCP", "Agent skills"],
+        ["MCP LLM evaluation benchmark", "MCP"],
+        ["LLM evaluation benchmark model training", "AI evals"],
+        ["nanoGPT model Claude Code", "AI engineering"],
+        ["Claude Code workflow automation", "AI agents"],
+        ["n8n security", "Workflow automation"],
+        ["security TypeScript", "Security"],
+        ["TypeScript", "Developer tooling"],
+        ["unclassified signal", ""]
+    ];
+
+    for (const [input, expected] of classifications) assert.equal(taxonomy.classifyTopic(input), expected, input);
+    assert.equal(taxonomy.topicByLabel("mcp")?.label, "MCP");
+    assert.equal(taxonomy.routeForTopic("AI agents", "../"), "../topics/ai-agents/index.html");
+    assert.equal(taxonomy.routeForTopic("Developer tooling", "../"), "../explore/index.html?focus=Developer%20tooling");
+    assert.equal(taxonomy.routeForTopic("unknown", "../"), "../explore/index.html");
+    assert.equal(taxonomy.exploreRouteForTopic("ai-evals", "../"), "../explore/index.html?focus=AI%20evals");
+    assert.equal(taxonomy.exploreRouteForTopic("", "../"), "../explore/index.html?focus=all");
+    assert.deepEqual(topicNotes("../").map(({ topic }) => topic), topicPageLabels);
 });
 
 test("topic matching preserves every pattern and requires-pattern rule", () => {

@@ -27,7 +27,7 @@ export const checkTargets = [
     "js/package-watchlist.js",
     "js/repo-watchlist.js",
     "js/link-queue.js",
-    "js/topic-taxonomy.js",
+    "src/lib/topic-taxonomy.js",
     "js/signal-schema.js",
     "js/data-health.js"
 ];

@@ -16,9 +16,9 @@ anothel.github.io is a personal signal dashboard for deciding what technical sig
 | `/repos/` | `src/pages/repos/index.astro` | GitHub repository traction and workflow relevance. |
 | `/links/` | `src/pages/links/index.astro` | Curated reference shelf. |
 | `/topics/<slug>/` | `src/pages/topics/[slug].astro` | Seven promoted static topic views: judgment, guidance, ranking context, related signals, and browser-local pinning. |
-| `/notes/` | `src/pages/[...legacy].ts` pass-through | Legacy index of topic judgment notes. |
+| `/notes/` | `src/pages/notes/index.astro` | Static index of the seven route-backed topic judgment notes. |
 
-Topic pages are native Astro output built from checked-in JSON. All topic content is useful without JavaScript; only pin state uses a native client module. Notes is the only remaining legacy content route. The same pass-through also publishes the checked-in 404, robots, and sitemap assets.
+Topic pages are native Astro output built from checked-in JSON. All topic content is useful without JavaScript; only pin state uses a native client module. Notes is native Astro output with no client script. Pass-through is limited to the checked-in 404, robots, and sitemap assets.
 
 ## Route Groups and Navigation
 

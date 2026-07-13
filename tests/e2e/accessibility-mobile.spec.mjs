@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const criticalRoutes = [
-    "/", "/today/", "/explore/", "/review/", "/status/",
+    "/", "/today/", "/explore/", "/review/", "/status/", "/notes/",
     "/topics/agent-skills/", "/topics/ai-agents/", "/topics/ai-engineering/",
     "/topics/ai-evals/", "/topics/mcp/", "/topics/security/", "/topics/workflow-automation/"
 ];
@@ -73,7 +73,7 @@ test.describe("mobile layout", () => {
                         const rect = element.getBoundingClientRect();
                         return { text: element.textContent?.trim() || element.getAttribute("aria-label") || element.tagName, width: rect.width, height: rect.height };
                     });
-                const overflowingCardText = [...document.querySelectorAll("[data-signal-card], .explore-card, .review-card, .stat-card, .utility-card, .source-health-table tbody tr")]
+                const overflowingCardText = [...document.querySelectorAll("[data-signal-card], .explore-card, .review-card, .topic-note-card, .stat-card, .utility-card, .source-health-table tbody tr")]
                     .flatMap((card) => {
                         const cardRect = card.getBoundingClientRect();
                         return [...card.querySelectorAll("strong, em, small, p, li, dt, dd")]

@@ -6,7 +6,7 @@ This repository publishes a static GitHub Pages signal dashboard.
 
 Supported security scope:
 
-- Astro route/components, generated `dist/`, preserved Notes/404 HTML, pass-through metadata assets, CSS, JavaScript, and checked-in JSON.
+- Astro route/components, generated `dist/`, preserved 404 HTML, pass-through metadata assets, CSS, JavaScript, and checked-in JSON.
 - Data refresh scripts under `scripts/`.
 - GitHub Actions data refresh workflow.
 - npm build/test dependencies and lockfile.
@@ -36,7 +36,8 @@ Use GitHub private vulnerability reporting if enabled for the repository. If it 
 - Static-first deployment: no server runtime, account system, sync service, or database.
 - Astro build-time escaping plus safe URL handling in data-driven components.
 - Topic content uses Astro escaping and shared safe external-URL handling; its native pin module updates only text and ARIA state.
-- Safe rendering helpers in `js/safe-dom.js` remain for Notes and retained renderer modules. Notes is the only production HTML route that loads those helpers.
+- Notes taxonomy text is escaped by Astro and its internal Topic/Explore links come only from the canonical route model.
+- Safe rendering helpers in `js/safe-dom.js` remain for retained renderer modules and their security regression tests; native Astro routes do not load them.
 - URL allowlist behavior for public links through `safeHref` and `setSafeLink`.
 - Source health metadata for `ok`, `partial`, `fallback`, and `error`.
 - Stale-but-safe fallback behavior for supported refresh failures.

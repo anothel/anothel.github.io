@@ -5,6 +5,11 @@
     "routeJs": 1500,
     "totalJs": 6000
   },
+  "notes": {
+    "html": 16000,
+    "routeJs": 0,
+    "totalJs": 0
+  },
   "topics": {
     "html": 48000,
     "routeJs": 1500,

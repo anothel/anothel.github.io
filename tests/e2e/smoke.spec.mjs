@@ -12,6 +12,7 @@ const requiredRoutes = [
     "/packages/",
     "/repos/",
     "/links/",
+    "/notes/",
     "/topics/agent-skills/",
     "/topics/ai-agents/",
     "/topics/ai-engineering/",
@@ -44,6 +45,39 @@ const seededReview = {
     version: 2,
     items: [recordFor(seededTrend)]
 };
+
+test("Notes exposes every topic and opens its Topic and Explore routes", async ({ page }) => {
+    await page.goto("/notes/");
+
+    await expect(page.getByRole("heading", { level: 1, name: "Topic notes." })).toBeVisible();
+    await expect(page.locator(".topic-note-card")).toHaveCount(7);
+    await expect(page.locator("[data-notes-count]")).toHaveText("7");
+    await expect(page.locator("body")).not.toContainText(/\b(?:undefined|null|NaN)\b/);
+
+    await page.getByRole("link", { name: "Open topic AI agents" }).click();
+    await expect(page).toHaveURL(/\/topics\/ai-agents\/(?:index\.html)?$/);
+    await expect(page.getByRole("heading", { level: 1, name: "AI agent signals." })).toBeVisible();
+
+    await page.goto("/notes/");
+    await page.getByRole("link", { name: "Explore lens AI agents" }).click();
+    await expect(page).toHaveURL(/\/explore\/(?:index\.html)?\?focus=AI%20agents$/);
+    await expect(page.locator('[data-focus-filter="AI agents"]')).toHaveAttribute("aria-pressed", "true");
+});
+
+test("Notes remains complete with JavaScript disabled", async ({ browser }, testInfo) => {
+    test.skip(testInfo.project.name !== "desktop-chromium", "Run one deterministic no-JS pass.");
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    try {
+        await page.goto("/notes/");
+        await expect(page.getByRole("heading", { level: 1, name: "Topic notes." })).toBeVisible();
+        await expect(page.locator(".topic-note-card")).toHaveCount(7);
+        await expect(page.getByText("Security signals decide where automation needs stronger guardrails.")).toBeVisible();
+        await expect(page.getByRole("link", { name: "Open topic Security" })).toHaveAttribute("href", "../topics/security/index.html");
+    } finally {
+        await context.close();
+    }
+});
 
 test("Today renders an actionable signal without invalid placeholder text", async ({ page }) => {
     await page.goto("/today/");

@@ -2,7 +2,7 @@
 
 ## System
 
-Astro builds a static GitHub Pages site from `src/`, checked-in `data/*.json`, shared CSS/browser modules, and the preserved Notes HTML route. Explore and Review hydrate React islands in the browser; topic pages are static Astro output with a native pin module. Data refresh runs through local scripts and `.github/workflows/update-trends.yml`.
+Astro builds a static GitHub Pages site from `src/`, checked-in `data/*.json`, shared CSS/browser modules, and three pass-through assets. Explore and Review hydrate React islands in the browser; Notes and topic pages are static Astro output, with only Topic pin state using a native module. Data refresh runs through local scripts and `.github/workflows/update-trends.yml`.
 
 There is no backend, server runtime, account system, sync service, or database.
 
@@ -19,7 +19,7 @@ There is no backend, server runtime, account system, sync service, or database.
 - Remote Hacker News, GitHub, and npm data.
 - Checked-in watchlists, policy, and generated JSON.
 - Astro build-time rendering.
-- React island hydration, native Home/topic modules, and preserved Notes browser modules.
+- React island hydration and the native Home/topic modules.
 - Browser `localStorage` and imported JSON.
 - GitHub Actions jobs with read or contents-write permission.
 - GitHub Pages repository settings, environment protections, and hosted deployment service.
@@ -29,7 +29,7 @@ There is no backend, server runtime, account system, sync service, or database.
 - Remote or localStorage data injects markup or unsafe URLs.
 - Watchlist mistakes create unsafe public links.
 - Rate-limited refreshes hide stale or missing data.
-- Generated data, manifest, Notes HTML, sitemap metadata, and Astro topic output drift apart.
+- Generated data, manifest, sitemap metadata, and Astro content output drift apart.
 - A workflow commits incomplete data or gains unnecessary permissions.
 - Dependency or lockfile changes alter build/test behavior unexpectedly.
 - Production Pages settings serve a different source than validated `dist/`.
@@ -41,10 +41,11 @@ There is no backend, server runtime, account system, sync service, or database.
 - Explore renders structured source data through JSX, validates external URL protocols, and validates imported saved-search JSON before storage.
 - Review renders source and localStorage data through JSX, validates imported records before versioned writes, and neutralizes unsafe Markdown URLs.
 - Topic content renders through Astro templates from normalized checked-in data; external URLs use the shared safe policy. The native pin module accepts only the shared validated topic list and updates text/ARIA attributes without HTML insertion.
+- Notes renders canonical taxonomy text and internal routes through Astro templates with no client runtime or HTML injection escape hatch.
 - External data links retain `rel="noopener noreferrer"`.
 - `scripts/data-contract.mjs` validates checked-in JSON; `scripts/check-dist.mjs` validates built routes/assets/data/internal links.
 - Node renderer/security tests and Playwright accessibility/mobile/smoke tests run through `npm run check`.
-- Scoped architecture tests block dynamic script/global bridges, checked-in topic HTML, React topic hydration, and retired topic assets. Raw-byte budgets cap generated Home/topic/Explore/Review JavaScript growth.
+- Scoped architecture tests block dynamic script/global bridges, checked-in Notes/Topic HTML, React hydration on static content routes, and retired assets. Raw-byte budgets cap generated Home/Notes/topic/Explore/Review growth.
 - Source metadata exposes `ok`, `partial`, `fallback`, `error`, rate limits, and stale-but-safe reuse.
 - Data refresh validates before commit; workflow concurrency prevents overlapping refresh commits.
 - CI has `contents: read`; data refresh has `contents: write` because it commits generated files.
@@ -60,7 +61,7 @@ There is no backend, server runtime, account system, sync service, or database.
 | Explore | Astro page + `ExploreIsland.jsx` + `src/lib/explore-*.js` | React renders structured data through JSX; external URLs and imported JSON are validated. |
 | Review | `ReviewIsland.jsx` + `src/lib/review-domain.js` + shared Explore ES modules | React JSX escaping, safe external URLs, normalized versioned records, validated imports, and controlled metadata fields. |
 | Topics | `src/pages/topics/[slug].astro` + `src/lib/topic-domain.js` + native pin module | Astro escaping, normalized build-time data, safe external URLs, validated browser-local pin values, and text/ARIA-only updates. |
-| Notes | `src/pages/[...legacy].ts` pass-through + classic Notes renderer | Checked-in no-JS content, shared DOM/link safety helpers, and Notes renderer tests. `TopicTaxonomy`, `AnothelDom`, and `NotesApp` exist in the browser only for this route. |
+| Notes | `src/pages/notes/index.astro` + canonical ES Topic taxonomy | Astro escaping, model-derived internal routes, complete no-JS output, and no browser runtime. |
 | 404, robots, sitemap | `src/pages/[...legacy].ts` pass-through | Fixed checked-in files and generated-artifact validation. |
 | Data/JS/CSS endpoints | Astro build-time endpoint routes | Fixed allowlists in route source; no request-time filesystem access after static build. |
 

@@ -31,16 +31,14 @@ const requiredAssets = [
     "js/dashboard.js",
     "js/data-health.js",
     "js/link-queue.js",
-    "js/notes.js",
     "js/package-watchlist.js",
     "js/repo-watchlist.js",
     "js/safe-dom.js",
     "js/signal-schema.js",
     "js/status.mjs",
-    "js/today.mjs",
-    "js/topic-taxonomy.js"
+    "js/today.mjs"
 ];
-const retiredAssets = ["js/explore.js", "js/home.mjs", "js/local-state.js", "js/review.js", "js/topics.js"];
+const retiredAssets = ["js/explore.js", "js/home.mjs", "js/local-state.js", "js/notes.js", "js/review.js", "js/topic-taxonomy.js", "js/topics.js"];
 
 function routeFile(route) {
     return route === "/" ? "index.html" : `${route.slice(1)}index.html`;

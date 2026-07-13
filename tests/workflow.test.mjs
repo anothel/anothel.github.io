@@ -14,7 +14,7 @@ test("today generator runs after links and before manifest", () => {
     assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-links\.mjs[\s\S]*scripts\/update-today\.mjs[\s\S]*scripts\/update-manifest\.mjs/);
 });
 
-test("refresh report is generated before remaining Notes HTML and sitemap", () => {
+test("refresh report is generated before sitemap metadata", () => {
     assert.match(readFileSync("scripts/update-all.mjs", "utf8"), /scripts\/update-manifest\.mjs[\s\S]*scripts\/report-refresh\.mjs[\s\S]*scripts\/update-static-fallbacks\.mjs/);
 });
 
@@ -32,13 +32,12 @@ test("data update workflow commits every generated data file", () => {
     }
 });
 
-test("data update workflow commits Notes and sitemap but no Astro-owned HTML", () => {
-    for (const file of ["notes/index.html", "sitemap.xml"]) {
-        assert.match(workflow, new RegExp(file.replace("/", "\\/")));
-    }
+test("data update workflow commits sitemap but no Astro-owned HTML", () => {
+    assert.match(workflow, /sitemap\.xml/);
 
     const commitStep = workflow.slice(workflow.indexOf("name: Commit updated data"));
     for (const file of [
+        "notes/index.html",
         "index.html",
         "today/index.html",
         "explore/index.html",
@@ -80,7 +79,7 @@ test("data update workflow verifies generated data before committing", () => {
     const validateIndex = workflow.indexOf("name: Validate generated data");
     const buildIndex = workflow.indexOf("name: Build generated site");
     const distIndex = workflow.indexOf("name: Validate generated artifact");
-    const renderedIndex = workflow.indexOf("name: Verify Astro and Notes output");
+    const renderedIndex = workflow.indexOf("name: Verify Astro output");
     const summaryIndex = workflow.indexOf("name: Summarize refresh");
     const uploadIndex = workflow.indexOf("name: Upload refresh report");
     const commitIndex = workflow.indexOf("name: Commit updated data");
