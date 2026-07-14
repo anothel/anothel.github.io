@@ -59,7 +59,7 @@ test("Astro Home output uses shared trust data and an honest native-module saved
     assert.doesNotMatch(html, /data-home-freshness>Fresh</);
 });
 
-test("Astro Today output includes the shared shell and compact mobile contract", () => {
+test("Astro Today output includes the shared shell and mobile density contract", () => {
     ensureDist();
     const html = read("dist/today/index.html");
     const styles = read("css/site.css");
@@ -73,6 +73,7 @@ test("Astro Today output includes the shared shell and compact mobile contract",
     assert.doesNotMatch(html, /class="topbar"/);
     assert.match(html, /<section class="today-section" id="start" data-section-id="start">/);
     assert.match(html, /class="signal-card today-card today-card-compact"/);
+    assert.match(html, /<h3 data-signal-title>/);
     const shellOrder = ["hero-header", "route-nav primary-nav", "route-nav secondary-nav", "id=\"main-content\""]
         .map((marker) => html.indexOf(marker));
     assert.ok(shellOrder.every((offset, index) => offset >= 0 && (index === 0 || offset > shellOrder[index - 1])), "hero, primary, secondary, and main should be siblings in document order");
@@ -80,10 +81,12 @@ test("Astro Today output includes the shared shell and compact mobile contract",
     assert.match(styles, /html\s*{[^}]*scroll-padding-top:/s);
     assert.match(styles, /\.today-section\s*{[^}]*scroll-margin-top:/s);
     assert.match(styles, /\.today-card\s*{[^}]*scroll-margin-top:/s);
-    assert.match(styles, /--type-hero-compact: 1\.45rem/);
+    assert.match(styles, /--type-hero-mobile: 1\.875rem/);
+    assert.match(styles, /--type-section-mobile: 1\.25rem/);
+    assert.match(styles, /--density-surface-padding: var\(--space-4\)/);
     assert.match(styles, /textarea:focus-visible/);
-    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.today-shell \.hero-header h1\s*{[^}]*font-size: var\(--type-hero-compact\)/s);
-    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.today-card-compact \.score-reasons\s*{[^}]*display: none/s);
+    assert.match(styles, /@media \(max-width: 720px\)\s*{[\s\S]*\.hero-header h1\s*{[^}]*font-size: var\(--type-hero-mobile\)/s);
+    assert.doesNotMatch(styles, /\.today-card-compact \.score-reasons\s*{[^}]*display: none/s);
 });
 
 test("Astro build output renders migrated static routes including Notes", () => {

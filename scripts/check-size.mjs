@@ -99,6 +99,8 @@ function maximum(routes, field) {
 
 export function measureAssetSizes(root = resolve(process.cwd(), "dist")) {
     if (!existsSync(root)) throw new Error(`dist directory is missing: ${root}`);
+    const sharedCssFile = resolve(root, "css", "site.css");
+    if (!existsSync(sharedCssFile)) throw new Error("shared CSS is missing: css/site.css");
     const home = measureModuleRoute(root, resolve(root, "index.html"), "home");
     const notes = measureStaticRoute(root, resolve(root, "notes", "index.html"));
     const topics = Object.fromEntries(topicSlugs.map((slug) => [
@@ -127,6 +129,10 @@ export function measureAssetSizes(root = resolve(process.cwd(), "dist")) {
         }))
     };
     return {
+        sharedCss: {
+            asset: relative(root, sharedCssFile).replaceAll("\\", "/"),
+            size: statSync(sharedCssFile).size
+        },
         routes,
         topics,
         topicMaximums: {
@@ -141,6 +147,7 @@ export function measureAssetSizes(root = resolve(process.cwd(), "dist")) {
 export function assertSizeBudgets(actual, budgets) {
     const topic = actual.topicMaximums;
     const checks = [
+        ["shared CSS", actual.sharedCss.asset, actual.sharedCss.size, budgets.sharedCss],
         ["home HTML", actual.routes.home.htmlAsset, actual.routes.home.html, budgets.home.html],
         ["home route JS", actual.routes.home.routeAssets.join(", "), actual.routes.home.routeJs, budgets.home.routeJs],
         ["home total referenced JS", actual.routes.home.jsAssets.join(", "), actual.routes.home.totalJs, budgets.home.totalJs],

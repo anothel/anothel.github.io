@@ -30,8 +30,15 @@
     --type-body: 1rem;
     --type-card-title: 1.16rem;
     --type-hero: clamp(1.85rem, 10vw, 2.4rem);
-    --type-hero-compact: 1.45rem;
+    --type-hero-mobile: 1.875rem;
+    --type-section-mobile: 1.25rem;
+    --type-card-mobile: 1.05rem;
     --type-display: clamp(2.2rem, 5vw, 4.2rem);
+    --density-section-gap: var(--space-4);
+    --density-surface-padding: var(--space-4);
+    --density-inline-gap: 6px;
+    --density-section-boundary: var(--space-6);
+    --density-control-gap: var(--space-2);
     --surface-border: 1px solid var(--line);
     --surface-padding: var(--space-6);
     --surface-padding-lg: var(--space-7);
@@ -157,10 +164,23 @@ button:focus-visible {
 .hero-header {
     grid-area: hero;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--space-3) var(--space-9);
-    align-items: end;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--density-inline-gap);
+    align-items: start;
     padding: 0 0 var(--space-6);
+}
+
+.hero-meta {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--density-inline-gap);
+}
+
+.hero-meta .eyebrow,
+.hero-meta .stamp {
+    margin: 0;
 }
 
 .eyebrow {
@@ -1229,12 +1249,13 @@ main:focus-visible {
     font-style: normal;
 }
 
-.signal-card strong {
+.signal-card h3 {
+    margin: 0;
     font-size: var(--type-body);
     line-height: 1.25;
 }
 
-.signal-card strong,
+.signal-card h3,
 .signal-card small,
 .signal-card p,
 .explore-card h3,
@@ -1313,6 +1334,7 @@ label {
 
 input,
 select,
+textarea,
 button {
     width: 100%;
     min-height: 42px;
@@ -1569,7 +1591,7 @@ button {
     border-radius: var(--radius);
     background: var(--panel);
     color: var(--text);
-    font-size: 0.82rem;
+    font-size: var(--type-body);
     font-family: inherit;
     line-height: 1.35;
 }
@@ -2011,6 +2033,28 @@ button {
 .empty-card {
     min-height: 180px;
     border-style: dashed;
+}
+
+.empty-card,
+.review-empty,
+.error-card {
+    align-content: start;
+    gap: var(--density-inline-gap);
+}
+
+.empty-card :is(h2, h3, p),
+.review-empty :is(h2, h3, p),
+.error-card :is(h2, h3, p) {
+    margin-bottom: 0;
+}
+
+.empty-card a,
+.review-empty a,
+.error-card a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
 }
 
 .rank-panel {
@@ -2555,11 +2599,17 @@ button {
 }
 
 @media (max-width: 720px) {
+    :root {
+        --surface-padding: var(--density-surface-padding);
+        --surface-padding-lg: var(--density-surface-padding);
+        --surface-min-card: 0px;
+    }
+
     .shell {
         width: min(100% - var(--shell-gutter-mobile), var(--shell-max-mobile));
         column-gap: var(--space-6);
         row-gap: 0;
-        padding-top: var(--space-6);
+        padding-top: var(--density-section-boundary);
     }
 
     .hero-header,
@@ -2595,17 +2645,13 @@ button {
 
     .shell > main,
     .shell > .sidebar {
-        margin-top: var(--space-6);
+        margin-top: var(--density-section-gap);
     }
 
     .hero-header {
-        gap: 6px;
+        gap: var(--density-inline-gap);
         align-items: start;
-        padding-bottom: var(--space-4);
-    }
-
-    .hero-header .eyebrow {
-        margin-bottom: var(--space-1);
+        padding-bottom: var(--density-inline-gap);
     }
 
     .stamp {
@@ -2617,11 +2663,127 @@ button {
         grid-column: auto;
     }
 
+    main,
+    .hub-main,
+    .module-main,
+    .explore-main,
+    .home-command-board,
+    .home-priority-panel,
+    .home-module-section,
+    .home-project-section,
+    .home-skim-panel,
+    .today-brief,
+    .today-section {
+        gap: var(--density-section-gap);
+    }
+
+    .section-heading,
+    .panel-heading,
+    .explore-command-header {
+        gap: var(--density-inline-gap);
+    }
+
+    .module-detail h2,
+    .section-heading h2 {
+        margin-bottom: 0;
+    }
+
+    .stats-grid,
+    .topic-stats,
+    .status-stats,
+    .review-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--density-control-gap);
+    }
+
+    .stat-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: var(--space-1) var(--density-inline-gap);
+        align-items: baseline;
+        padding: var(--density-surface-padding);
+    }
+
+    .stat-card span {
+        margin-bottom: 0;
+    }
+
+    .stat-card strong {
+        font-size: 1.25rem;
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
+
+    .stat-card p {
+        grid-column: 1 / -1;
+        margin: 0;
+    }
+
+    .topic-note-card {
+        padding: var(--density-surface-padding);
+    }
+
+    .trend-card,
+    .link-card,
+    .explore-card,
+    .topic-mover-card,
+    .topic-related-card,
+    .empty-card {
+        min-height: 0;
+    }
+
+    .signal-card,
+    .trend-card,
+    .link-card,
+    .explore-card {
+        gap: var(--density-inline-gap);
+    }
+
+    .panel-heading,
+    .explore-command-bar,
+    .review-detail > div:last-child,
+    .explore-results {
+        padding: var(--density-surface-padding);
+    }
+
+    input,
+    textarea,
+    .search-portability-text {
+        min-height: 44px;
+        font-size: var(--type-body);
+    }
+
+    .home-priority-panel .section-heading > a,
+    .explore-command-actions .ghost-button,
+    .explore-command-actions a,
+    .pin-topic-button,
+    .review-actions a,
+    .review-actions button,
+    .review-empty a {
+        min-height: 44px;
+    }
+
     .hero-header h1 {
-        font-size: var(--type-hero);
+        font-size: var(--type-hero-mobile);
+        line-height: 1.08;
         white-space: normal;
         overflow: visible;
         text-overflow: clip;
+    }
+
+    :root main h2 {
+        font-size: var(--type-section-mobile);
+        line-height: 1.2;
+    }
+
+    :root main h3 {
+        font-size: var(--type-card-mobile);
+        line-height: 1.25;
+    }
+
+    main :is(h1, h2, h3),
+    [data-signal-title] {
+        overflow-wrap: anywhere;
     }
 
     .primary-nav {
@@ -2640,11 +2802,14 @@ button {
     .secondary-nav {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0 var(--density-inline-gap);
         overflow: visible;
+        padding-top: 0;
     }
 
     .secondary-nav a {
         min-width: 0;
+        min-height: 24px;
         padding-right: var(--space-1);
         padding-left: var(--space-1);
         font-size: 0.72rem;
@@ -2652,83 +2817,20 @@ button {
     }
 
     .today-shell {
-        column-gap: var(--space-3);
-        row-gap: 0;
         padding-top: var(--space-2);
-    }
-
-    .today-shell .hero-header {
-        gap: 6px;
-        align-items: start;
-        padding-bottom: var(--space-2);
-    }
-
-    .today-shell .eyebrow {
-        margin-bottom: 2px;
-        font-size: 0.68rem;
-    }
-
-    .today-shell .hero-header h1 {
-        font-size: var(--type-hero-compact);
-        line-height: 1.04;
-    }
-
-    .today-shell .stamp {
-        font-size: 0.72rem;
-    }
-
-    .today-shell .hub-main {
-        gap: 12px;
-    }
-
-    .today-shell .module-detail h2 {
-        margin-bottom: 2px;
-        font-size: 0.9rem;
-    }
-
-    .today-shell .module-detail p {
-        font-size: 0.78rem;
-        line-height: 1.35;
     }
 
     .today-shell .today-stats {
         display: none;
     }
 
-    .today-shell .today-brief,
-    .today-shell .today-section,
     .today-shell .today-grid {
-        gap: 10px;
+        gap: var(--density-inline-gap);
     }
 
     .today-shell .today-section .section-heading {
         gap: 4px;
-        padding-bottom: 6px;
-    }
-
-    .today-shell .section-heading h2 {
-        font-size: 0.95rem;
-    }
-
-    .today-shell .section-heading p {
-        font-size: 0.78rem;
-    }
-
-    .today-card-compact {
-        min-height: 0;
-        gap: var(--space-2);
-        padding: var(--space-4);
-    }
-
-    .today-card-compact .today-card-context,
-    .today-card-compact .why-copy,
-    .today-card-compact .action-copy {
-        font-size: 0.78rem;
-        line-height: 1.35;
-    }
-
-    .today-card-compact .score-reasons {
-        display: none;
+        padding-bottom: 0;
     }
 
     .stamp {
@@ -2812,7 +2914,7 @@ button {
     .status-overview,
     .status-evidence,
     .source-health-section {
-        padding: var(--space-7) 0;
+        padding: var(--density-section-boundary) 0;
     }
 
     .status-overview-heading {
@@ -2821,7 +2923,10 @@ button {
         gap: var(--space-4);
     }
 
-    .status-metrics,
+    .status-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .evidence-list {
         grid-template-columns: 1fr;
     }

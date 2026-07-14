@@ -1,5 +1,6 @@
 {
   "measurement": "raw build bytes",
+  "sharedCss": 60000,
   "home": {
     "html": 11000,
     "routeJs": 1500,

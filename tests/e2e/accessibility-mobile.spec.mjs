@@ -39,6 +39,10 @@ test.describe("route accessibility", () => {
             await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
             await expect(page.getByRole("main")).toHaveCount(1);
             await expect(page.locator("main#main-content[tabindex='-1']")).toHaveCount(1);
+            const headingJumps = await page.locator("h1, h2, h3, h4, h5, h6").evaluateAll((headings) => headings
+                .map((heading) => Number(heading.tagName.slice(1)))
+                .filter((level, index, levels) => index > 0 && level > levels[index - 1] + 1));
+            expect(headingJumps, `${route} skips a heading level`).toEqual([]);
 
             const primary = page.getByRole("navigation", { name: "Primary" });
             const secondary = page.getByRole("navigation", { name: "Secondary" });
@@ -105,11 +109,13 @@ test.describe("mobile layout", () => {
                 const secondary = document.querySelector(".secondary-nav");
                 const hero = document.querySelector(".hero-header");
                 const primaryLinks = [...(primary?.querySelectorAll("a") || [])];
+                const secondaryLinks = [...(secondary?.querySelectorAll("a") || [])];
+                const visible = (element) => {
+                    const style = getComputedStyle(element);
+                    return style.display !== "none" && style.visibility !== "hidden";
+                };
                 const targets = [...document.querySelectorAll("main button, main input:not([type=hidden]), main select, main textarea")]
-                    .filter((element) => {
-                        const style = getComputedStyle(element);
-                        return style.display !== "none" && style.visibility !== "hidden";
-                    })
+                    .filter(visible)
                     .map((element) => {
                         const rect = element.getBoundingClientRect();
                         return { text: element.textContent?.trim() || element.getAttribute("aria-label") || element.tagName, width: rect.width, height: rect.height };
@@ -117,7 +123,7 @@ test.describe("mobile layout", () => {
                 const overflowingCardText = [...document.querySelectorAll("[data-signal-card], .explore-card, .review-card, .topic-note-card, .stat-card, .utility-card, .source-health-table tbody tr")]
                     .flatMap((card) => {
                         const cardRect = card.getBoundingClientRect();
-                        return [...card.querySelectorAll("strong, em, small, p, li, dt, dd")]
+                        return [...card.querySelectorAll("h2, h3, strong, em, small, p, li, dt, dd")]
                             .filter((element) => {
                                 const rect = element.getBoundingClientRect();
                                 const style = getComputedStyle(element);
@@ -132,13 +138,22 @@ test.describe("mobile layout", () => {
                     primaryPosition: primary && getComputedStyle(primary).position,
                     secondaryPosition: secondary && getComputedStyle(secondary).position,
                     primaryHeight: primary?.getBoundingClientRect().height || 0,
+                    heroHeight: hero?.getBoundingClientRect().height || 0,
+                    h1Size: parseFloat(getComputedStyle(document.querySelector("h1")).fontSize),
+                    h2Sizes: [...document.querySelectorAll("main h2")].filter(visible).map((heading) => parseFloat(getComputedStyle(heading).fontSize)),
+                    h3Sizes: [...document.querySelectorAll("main h3")].filter(visible).map((heading) => parseFloat(getComputedStyle(heading).fontSize)),
+                    textInputSizes: [...document.querySelectorAll("input:not([type=hidden]), textarea")].filter(visible).map((input) => parseFloat(getComputedStyle(input).fontSize)),
                     primaryLabels: primaryLinks.map((link) => link.textContent.trim()),
-                    secondaryLabels: [...(secondary?.querySelectorAll("a") || [])].map((link) => link.textContent.trim()),
+                    secondaryLabels: secondaryLinks.map((link) => link.textContent.trim()),
                     primaryRows: new Set(primaryLinks.map((link) => Math.round(link.getBoundingClientRect().top))).size,
                     primaryOverflow: primary ? primary.scrollWidth - primary.clientWidth : 0,
                     smallPrimaryTargets: primaryLinks.filter((link) => {
                         const rect = link.getBoundingClientRect();
                         return rect.width < 44 || rect.height < 44;
+                    }).map((link) => link.textContent.trim()),
+                    smallSecondaryTargets: secondaryLinks.filter((link) => {
+                        const rect = link.getBoundingClientRect();
+                        return rect.width < 24 || rect.height < 24;
                     }).map((link) => link.textContent.trim()),
                     smallContentTargets: targets.filter(({ width, height }) => width < 24 || height < 24),
                     overflowingCardText
@@ -148,6 +163,14 @@ test.describe("mobile layout", () => {
             expect(layout.overflow, `${route} has horizontal document overflow`).toBeLessThanOrEqual(1);
             expect(layout.smallContentTargets, `${route} has content controls smaller than 24px`).toEqual([]);
             expect(layout.overflowingCardText, `${route} has card text outside its container`).toEqual([]);
+            expect(layout.h1Size, `${route} mobile h1 size`).toBeGreaterThanOrEqual(28);
+            expect(layout.h1Size, `${route} mobile h1 size`).toBeLessThanOrEqual(32);
+            expect(layout.h2Sizes.every((size) => size >= 20 && size <= 24), `${route} mobile h2 sizes`).toBe(true);
+            expect(layout.h3Sizes.every((size) => size <= 20), `${route} mobile h3 hierarchy`).toBe(true);
+            expect(layout.textInputSizes.every((size) => size >= 16), `${route} mobile text input sizes`).toBe(true);
+            if (route !== "/topics/workflow-automation/") {
+                expect(layout.heroHeight, `${route} mobile hero height`).toBeLessThanOrEqual(112);
+            }
 
             if (noNavigation) {
                 expect(layout.primaryLabels).toEqual([]);
@@ -162,6 +185,7 @@ test.describe("mobile layout", () => {
             expect(layout.primaryHeight, `${route} primary rail height`).toBeGreaterThanOrEqual(44);
             expect(layout.primaryHeight, `${route} primary rail height`).toBeLessThanOrEqual(52);
             expect(layout.smallPrimaryTargets, `${route} primary links are smaller than 44px`).toEqual([]);
+            expect(layout.smallSecondaryTargets, `${route} secondary links are smaller than 24px`).toEqual([]);
             expect(layout.primaryPosition).toBe("sticky");
             expect(["fixed", "sticky"]).not.toContain(layout.heroPosition);
             expect(["fixed", "sticky"]).not.toContain(layout.secondaryPosition);
@@ -190,9 +214,22 @@ test.describe("mobile layout", () => {
 
         const firstCard = page.locator("[data-signal-card]").first();
         await expect(firstCard).toBeVisible();
+        await expect(firstCard.locator("h3[data-signal-title]")).toHaveCount(1);
         await expect(firstCard.locator(".action-copy")).toContainText("Next action");
         const cardTop = await firstCard.evaluate((element) => element.getBoundingClientRect().top);
-        expect(cardTop).toBeLessThan(844);
+        expect(cardTop).toBeLessThanOrEqual(330);
+    });
+
+    test("Home exposes its first signal by 450px", async ({ page }) => {
+        await page.goto("/");
+        const cardTop = await page.locator("[data-signal-card]").first().evaluate((element) => element.getBoundingClientRect().top);
+        expect(cardTop).toBeLessThanOrEqual(450);
+    });
+
+    test("Status summary uses two compact columns", async ({ page }) => {
+        await page.goto("/status/");
+        const columns = await page.locator(".status-metrics").evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length);
+        expect(columns).toBe(2);
     });
 });
 

@@ -42,13 +42,13 @@ const exploreLinks = [
     stylesheetHref="../css/site.css"
 >
     <div class="shell hub-shell today-shell">
-        <HeroHeader eyebrow="Priority brief" title="Today's priority brief." current="Today" prefix="../">
+        <HeroHeader eyebrow="Open first" title="Today's priority brief." current="Today" prefix="../">
             <Fragment slot="stamp">Generated at <span data-today-updated>{updated}</span></Fragment>
         </HeroHeader>
 
         <main id="main-content" class="hub-main" tabindex="-1">
             <section class="module-detail">
-                <h2>Thirteen generated picks from tracked signals.</h2>
+                <h2>{total} generated picks.</h2>
                 <p data-today-status>{statusText}</p>
             </section>
 
