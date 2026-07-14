@@ -1,7 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { buildStatusDashboard } from "../src/lib/status-data.mjs";
-import { todayTrustText } from "../src/lib/site-data.js";
 
 const now = "2026-06-24T00:00:00.000Z";
 
@@ -57,7 +56,7 @@ test("status dashboard uses safe unknowns for missing metadata and invalid data"
     assert.doesNotMatch(JSON.stringify(dashboard), /undefined|NaN/);
 });
 
-test("Today does not claim recovery is unnecessary when Status evaluates stale data", () => {
+test("canonical trust keeps pipeline and freshness independent for Home, Today, and Status", () => {
     const dashboard = buildStatusDashboard({
         now,
         manifest: { modules: [{ id: "trends", data: "data/trends.json" }] },
@@ -67,13 +66,38 @@ test("Today does not claim recovery is unnecessary when Status evaluates stale d
         report: { generatedAt: now, totals: { status: "ok" } },
         validation: { errors: [], warnings: [] }
     });
-    const todayText = todayTrustText({ total: 2, updated: "2026-06-19", trust: dashboard });
-
     assert.equal(dashboard.pipelineStatus, "ok");
     assert.equal(dashboard.freshness, "stale");
     assert.equal(dashboard.overall, "stale");
-    assert.match(todayText, /Pipeline status ok\. Freshness stale\./);
-    assert.doesNotMatch(todayText, /No recovery needed|current data/i);
+    assert.equal(dashboard.dataDate, "unknown");
+    assert.match(dashboard.overallSummary, /stale/);
+    assert.doesNotMatch(dashboard.overallSummary, /No recovery needed|current data/i);
+});
+
+test("canonical trust preserves partial, fallback, unavailable, unknown, and valid-empty meanings", () => {
+    const cases = [
+        ["partial", { status: "partial", count: 2, updatedAt: now }, ["partial", "fresh", "degraded", "available"]],
+        ["fallback", { status: "fallback", count: 2, previousUpdated: now, fallbackUsed: true }, ["fallback", "fresh", "degraded", "fallback"]],
+        ["unavailable", { status: "error", count: 0, error: "failed" }, ["error", "unavailable", "unavailable", "failed"]],
+        ["unknown", { status: "ok", count: 2 }, ["ok", "unknown", "unknown", "available"]],
+        ["valid empty", { status: "ok", count: 0, updatedAt: now }, ["ok", "fresh", "healthy", "empty"]]
+    ];
+
+    for (const [label, sourceMeta, expected] of cases) {
+        const dashboard = buildStatusDashboard({
+            now,
+            manifest: { updated: "2026-06-24", modules: [{ id: "repos", data: "data/repos.json" }] },
+            datasets: { repos: { sourceMeta } },
+            report: { generatedAt: now, totals: { status: sourceMeta.status } },
+            validation: { errors: [], warnings: [] }
+        });
+        assert.deepEqual(
+            [dashboard.pipelineStatus, dashboard.freshness, dashboard.overall, dashboard.rows[0].availability],
+            expected,
+            label
+        );
+        assert.equal(dashboard.dataDate, "2026-06-24");
+    }
 });
 
 test("Status keeps valid partial source output visible and degraded", () => {

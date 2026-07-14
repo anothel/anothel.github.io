@@ -15,16 +15,6 @@ export function sourceMetaForDatasets(datasets = {}) {
     return Object.values(datasets).flatMap((dataset) => sourceList(dataset?.sourceMeta));
 }
 
-export function todayTrustText({ total = 0, updated = "", trust = {} } = {}) {
-    const pipelineStatus = trust.pipelineStatus || "unknown";
-    const freshness = trust.freshness || "unknown";
-    const current = pipelineStatus === "ok" && freshness === "fresh";
-    const detail = current
-        ? `${updated ? ` Data date ${updated}.` : ""} No recovery needed.`
-        : " Check Status before trusting currentness.";
-    return `${total} generated picks. Pipeline status ${pipelineStatus}. Freshness ${freshness}.${detail}`;
-}
-
 export function statusLabel(statuses) {
     const counts = statuses.reduce((summary, status = "unknown") => {
         summary[status] = (summary[status] || 0) + 1;

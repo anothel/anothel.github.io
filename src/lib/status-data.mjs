@@ -129,6 +129,7 @@ export function buildStatusDashboard({ manifest = {}, datasets = {}, report = {}
     return {
         overall,
         overallSummary: healthSummary(overall, overallValidation),
+        dataDate: text(manifest.updated),
         generatedAt,
         dataAgeDays: generatedFreshness.ageDays,
         counts,

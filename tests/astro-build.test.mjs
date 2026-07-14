@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
-import { sourceMetaForDatasets, trustState, referenceList } from "../src/lib/site-data.js";
+import { referenceList } from "../src/lib/site-data.js";
+import { buildStatusDashboard } from "../src/lib/status-data.mjs";
 import { topicNotes } from "../src/lib/topic-taxonomy.js";
 
 const topicRoutes = [
@@ -30,33 +31,56 @@ test("Astro build output renders Today from checked-in data", () => {
     ensureDist();
     const html = read("dist/today/index.html");
     const today = JSON.parse(read("data/today.json"));
+    const total = today.sections.reduce((sum, section) => sum + section.items.length, 0);
 
     assert.match(html, /<title>Today - anothel<\/title>/);
     assert.match(html, /href="\.\.\/css\/site\.css"/);
     assert.match(html, /Today&#39;s priority brief\./);
-    assert.match(html, new RegExp(`<span data-today-updated>${today.updated}</span>`));
+    assert.match(html, new RegExp(`${total} checked-in picks`));
+    assert.match(html, /data-compact-trust/);
     assert.match(html, /anthropics\/skills/);
     assert.match(html, /Continue in Explore/);
     assert.match(html, /href="\.\.\/review\/index\.html"/);
 });
 
-test("Astro Home output uses shared trust data and an honest native-module saved summary", () => {
+test("Astro Home, Today, and Status output use one canonical trust interpretation", () => {
     ensureDist();
-    const html = read("dist/index.html");
+    const manifest = JSON.parse(read("data/manifest.json"));
     const datasets = Object.fromEntries(["trends", "packages", "repos", "links"]
         .map((name) => [name, JSON.parse(read(`data/${name}.json`))]));
-    const trust = trustState(sourceMetaForDatasets(datasets));
+    const trust = buildStatusDashboard({
+        manifest,
+        datasets,
+        report: JSON.parse(read("data/refresh-report.json")),
+        validation: { errors: [], warnings: [] }
+    });
 
-    assert.match(html, new RegExp(`data-home-freshness>${trust.freshness}<`));
-    assert.match(html, new RegExp(`data-home-live>${trust.pipelineStatus}<`));
+    for (const path of ["dist/index.html", "dist/today/index.html"]) {
+        const html = read(path);
+        assert.match(html, new RegExp(`data-pipeline-status="${trust.pipelineStatus}"`));
+        assert.match(html, new RegExp(`data-freshness="${trust.freshness}"`));
+        assert.match(html, new RegExp(`data-trust-state="${trust.overall}"`));
+        assert.match(html, new RegExp(`Data date <strong>${trust.dataDate}</strong>`));
+        assert.match(html, /View source evidence in Status/);
+        assert.equal(html.match(/data-compact-trust(?:\s|>)/g)?.length, 1);
+        assert.doesNotMatch(html, /<astro-island\b|\bcomponent-url=|\brenderer-url=/);
+        assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i);
+    }
+
+    const statusHtml = read("dist/status/index.html");
+    assert.match(statusHtml, new RegExp(`<dd>${trust.pipelineStatus}</dd>`));
+    assert.match(statusHtml, new RegExp(`<dd>${trust.freshness}</dd>`));
+});
+
+test("Astro Home keeps an honest native-module saved summary", () => {
+    ensureDist();
+    const html = read("dist/index.html");
+
     assert.match(html, /data-home-review-saved>\?\?</);
     assert.match(html, /data-home-review-unread>\?\?</);
     assert.match(html, /Browser-local state loads when JavaScript is available\./);
     assert.match(html, /<script type="module" src="\/_astro\/index\.[^"]+\.js"><\/script>/);
     assert.doesNotMatch(html, /js\/local-state\.js|AnothelState/);
-    assert.doesNotMatch(html, /<astro-island\b|\bcomponent-url=|\brenderer-url=/);
-    assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i);
-    assert.doesNotMatch(html, /data-home-freshness>Fresh</);
 });
 
 test("Astro Today output includes the shared shell and mobile density contract", () => {

@@ -399,12 +399,15 @@ main:focus-visible {
 }
 
 .home-priority-panel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
     padding: var(--space-7) 0;
     border-top: var(--surface-border);
     border-bottom: var(--surface-border);
 }
 
 .home-priority-panel .section-heading {
+    grid-column: 1 / -1;
     align-items: start;
 }
 
@@ -427,76 +430,61 @@ main:focus-visible {
     background: var(--panel-strong);
 }
 
-.home-priority-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+.home-priority-signal {
+    min-width: 0;
+    order: 1;
 }
 
-.home-priority-list .start-item {
-    grid-template-columns: 34px minmax(0, 1fr);
-    min-height: 220px;
+.home-priority-signal .signal-card {
+    height: 100%;
 }
 
-.home-priority-list .start-item em {
-    grid-column: 2;
-    align-self: end;
-}
-
-.home-utility-strip {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: var(--space-3);
-}
-
-.utility-card {
+.home-saved-summary,
+.compact-trust-summary {
     display: grid;
     gap: var(--space-2);
     min-width: 0;
-    padding: var(--space-5);
-    border: var(--surface-border);
-    border-radius: var(--radius);
-    background: var(--panel);
+    padding: var(--space-4) 0;
+    border-block: var(--surface-border);
 }
 
-.utility-card-wide {
+.home-saved-summary {
     grid-column: span 2;
+    order: 2;
 }
 
-.utility-card > span,
-.review-summary span {
+.home-priority-panel > .compact-trust-summary {
+    order: 2;
+}
+
+.home-saved-facts,
+.compact-trust-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+}
+
+.compact-trust-facts {
+    font-size: var(--type-caption);
+    line-height: 1.35;
+}
+
+.home-saved-facts span,
+.compact-trust-facts span {
     color: var(--muted);
     font-size: var(--type-caption);
     font-weight: 900;
     text-transform: uppercase;
 }
 
-.utility-card > strong,
-.review-summary strong {
-    font-size: 1.25rem;
-    line-height: 1.08;
+.home-saved-facts strong,
+.compact-trust-facts strong {
+    color: var(--text);
 }
 
-.review-summary {
-    display: grid;
-    gap: var(--space-3);
-}
-
-.review-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3);
-}
-
-.review-summary article,
-.utility-card-wide .review-summary-grid article {
-    display: grid;
-    gap: 2px;
-    min-width: 0;
-    padding: 10px 0;
-    border-top: var(--surface-border);
-    border-bottom: var(--surface-border);
-}
-
-.review-summary-note {
+.home-saved-summary p,
+.compact-trust-note {
     margin: 0;
     color: var(--muted);
     font-size: var(--type-small);
@@ -2574,10 +2562,8 @@ button {
     .topic-cross-link-grid,
     .topic-grid,
     .module-strip,
-    .home-priority-list,
     .home-module-board,
     .project-list,
-    .home-utility-strip,
     .explore-controls {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -2599,7 +2585,6 @@ button {
 
     .hero-header,
     .home-command-board,
-    .home-utility-strip,
     .module-filter-bar .panel,
     .stats-grid,
     .topic-movement-grid,
@@ -2618,7 +2603,7 @@ button {
     .today-grid,
     .topic-grid,
     .module-strip,
-    .home-priority-list,
+    .home-priority-panel,
     .home-module-board,
     .project-list,
     .explore-workbench,
@@ -2648,10 +2633,6 @@ button {
     .stamp {
         grid-column: auto;
         font-size: var(--type-ui);
-    }
-
-    .utility-card-wide {
-        grid-column: auto;
     }
 
     main,
@@ -2820,6 +2801,31 @@ button {
 
     .today-shell .today-grid {
         gap: var(--density-inline-gap);
+    }
+
+    .today-shell .hub-main {
+        gap: var(--space-2);
+    }
+
+    .today-shell .today-section {
+        gap: var(--space-1);
+    }
+
+    .today-shell .compact-trust-summary {
+        gap: var(--space-1);
+        padding: 0 0 var(--space-2);
+    }
+
+    .home-saved-summary {
+        grid-column: auto;
+    }
+
+    .home-priority-panel > .compact-trust-summary {
+        order: 3;
+    }
+
+    .home-priority-signal:not(.home-priority-signal-first) {
+        order: 4;
     }
 
     .today-shell .today-section .section-heading {

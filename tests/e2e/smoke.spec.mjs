@@ -767,6 +767,25 @@ test("Review previews imports and exports compatible JSON and safe Markdown", as
     await expect(page.locator("body")).not.toContainText(/\b(?:undefined|null|NaN)\b/);
 });
 
+test("Home and Today keep priority content and trust summaries without JavaScript", async ({ browser }, testInfo) => {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: testInfo.project.use.viewport });
+    const page = await context.newPage();
+    try {
+        await page.goto("/");
+        await expect(page.locator("[data-signal-card]").first()).toBeVisible();
+        await expect(page.locator("[data-home-review-saved]")).toHaveText("??");
+        await expect(page.locator("[data-home-review-unread]")).toHaveText("??");
+        await expect(page.locator("[data-home-review-status]")).toContainText("JavaScript is available");
+        await expect(page.locator("[data-compact-trust]")).toBeVisible();
+
+        await page.goto("/today/");
+        await expect(page.locator("[data-signal-card]")).not.toHaveCount(0);
+        await expect(page.locator("[data-compact-trust]")).toBeVisible();
+    } finally {
+        await context.close();
+    }
+});
+
 test("Review reports stale saved ids alongside current matches", async ({ page }) => {
     await page.addInitScript(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)), {
         key: reviewStorageKey,

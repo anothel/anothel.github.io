@@ -213,17 +213,35 @@ test.describe("mobile layout", () => {
         await page.goto("/today/");
 
         const firstCard = page.locator("[data-signal-card]").first();
+        const trust = page.locator("[data-compact-trust]");
         await expect(firstCard).toBeVisible();
+        await expect(trust).toBeVisible();
+        await expect(trust.getByRole("link", { name: "View source evidence in Status" })).toHaveAttribute("href", "../status/index.html");
         await expect(firstCard.locator("h3[data-signal-title]")).toHaveCount(1);
         await expect(firstCard.locator(".action-copy")).toContainText("Next action");
         const cardTop = await firstCard.evaluate((element) => element.getBoundingClientRect().top);
         expect(cardTop).toBeLessThanOrEqual(330);
     });
 
-    test("Home exposes its first signal by 450px", async ({ page }) => {
+    test("Home exposes its first signal, saved values, then trust handoff", async ({ page }) => {
         await page.goto("/");
-        const cardTop = await page.locator("[data-signal-card]").first().evaluate((element) => element.getBoundingClientRect().top);
-        expect(cardTop).toBeLessThanOrEqual(450);
+        const layout = await page.evaluate(() => {
+            const top = (selector) => document.querySelector(selector).getBoundingClientRect().top;
+            const bottom = (selector) => document.querySelector(selector).getBoundingClientRect().bottom;
+            return {
+                cardTop: top("[data-signal-card]"),
+                savedValuesBottom: bottom(".home-saved-facts"),
+                savedTop: top("[data-home-review-summary]"),
+                trustTop: top("[data-compact-trust]"),
+                secondaryTop: top(".home-module-section")
+            };
+        });
+        expect(layout.cardTop).toBeLessThanOrEqual(450);
+        expect(layout.savedValuesBottom).toBeLessThanOrEqual(844);
+        expect(layout.savedTop).toBeGreaterThan(layout.cardTop);
+        expect(layout.trustTop).toBeGreaterThan(layout.savedTop);
+        expect(layout.trustTop).toBeLessThan(layout.secondaryTop);
+        await expect(page.getByRole("link", { name: "View source evidence in Status" })).toHaveAttribute("href", "status/index.html");
     });
 
     test("Status leads with a compact summary and complete source evidence", async ({ page }) => {

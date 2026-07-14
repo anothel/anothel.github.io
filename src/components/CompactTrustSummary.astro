@@ -1,0 +1,26 @@
+---
+const {
+    trust,
+    statusHref
+} = Astro.props;
+
+const display = (value) => typeof value === "string" && value.trim() ? value : "unknown";
+---
+<section
+    class="compact-trust-summary"
+    aria-label="Data trust summary"
+    data-compact-trust
+    data-pipeline-status={display(trust?.pipelineStatus)}
+    data-freshness={display(trust?.freshness)}
+    data-trust-state={display(trust?.overall)}
+>
+    <p class="compact-trust-facts">
+        <span>Freshness <strong>{display(trust?.freshness)}</strong></span>
+        <span>Pipeline <strong>{display(trust?.pipelineStatus)}</strong></span>
+        <span>Data date <strong>{display(trust?.dataDate)}</strong></span>
+    </p>
+    <p class="compact-trust-note">
+        {display(trust?.overallSummary)}
+        <a href={statusHref}>View source evidence in Status</a>
+    </p>
+</section>

@@ -5,18 +5,31 @@ import trends from "../../data/trends.json";
 import packages from "../../data/packages.json";
 import repos from "../../data/repos.json";
 import links from "../../data/links.json";
+import report from "../../data/refresh-report.json";
+import { validateDataFiles } from "../../scripts/data-contract.mjs";
 import AppShell from "../components/AppShell.astro";
+import CompactTrustSummary from "../components/CompactTrustSummary.astro";
 import HeroHeader from "../components/HeroHeader.astro";
 import SignalCard from "../components/SignalCard.astro";
-import { dataModeText, sourceMetaForDatasets, trustState } from "../lib/site-data.js";
+import { buildStatusDashboard } from "../lib/status-data.mjs";
 
 const modules = manifest.modules || [];
 const startItems = today.sections?.find((section) => section.id === "start")?.items || [];
 const skimItems = today.sections?.find((section) => section.id === "skim")?.items || [];
 const total = modules.reduce((sum, module) => sum + (module.count || 0), 0);
 const updated = modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || manifest.updated || "-";
-const sourceMeta = sourceMetaForDatasets({ trends, packages, repos, links });
-const trust = trustState(sourceMeta);
+let validation = null;
+try {
+    validation = await validateDataFiles();
+} catch {
+    validation = null;
+}
+const trust = buildStatusDashboard({
+    manifest,
+    datasets: { trends, packages, repos, links },
+    report,
+    validation
+});
 const moduleRoutes = [
     { title: "Explore workspace", route: "explore/index.html", purpose: "Search and save across sources", count: total, updated, status: "ok" },
     { title: "Source status", route: "status/index.html", purpose: "Refresh health across sources", count: total, updated, status: "ok" },
@@ -38,7 +51,7 @@ const moduleRoutes = [
 >
     <div class="shell hub-shell">
         <HeroHeader eyebrow="Personal signal radar" title="What is worth opening now?" current="Home" prefix="">
-            <Fragment slot="stamp">Data date {updated}</Fragment>
+            <Fragment slot="stamp">Priority-ranked signals</Fragment>
         </HeroHeader>
 
         <main id="main-content" class="hub-main" tabindex="-1">
@@ -52,41 +65,23 @@ const moduleRoutes = [
                         </div>
                         <a href="today/index.html">Open priority brief</a>
                     </div>
-                    <div class="today-grid home-priority-list" data-home-start>
-                        {startItems.map((item) => <SignalCard item={item} variant="compact" />)}
-                    </div>
-                </div>
+                    {startItems.map((item, index) => (
+                        <div class:list={["home-priority-signal", { "home-priority-signal-first": index === 0 }]}>
+                            <SignalCard item={item} variant="compact" />
+                        </div>
+                    ))}
 
-                <aside class="home-utility-strip" aria-label="Local state">
-                    <article class="utility-card utility-card-wide">
-                        <span>Items tracked</span>
-                        <strong data-home-total>{total}</strong>
-                    </article>
-                    <article class="utility-card utility-card-wide">
-                        <span>Trust state</span>
-                        <strong data-home-freshness>{trust.freshness}</strong>
-                        <div class="review-summary-grid">
-                            <article>
-                                <span>Pipeline status</span>
-                                <strong data-home-live>{trust.pipelineStatus}</strong>
-                            </article>
-                            <article>
-                                <span>Data date</span>
-                                <strong data-home-updated>{updated}</strong>
-                            </article>
+                    <section class="home-saved-summary" aria-label="Local saved queue" data-home-review-summary>
+                        <div class="home-saved-facts">
+                            <span>Items tracked <strong data-home-total>{total}</strong></span>
+                            <span>Saved <strong data-home-review-saved>??</strong></span>
+                            <span>Unread <strong data-home-review-unread>??</strong></span>
                         </div>
-                        <p class="review-summary-note" data-home-recovery>{dataModeText(sourceMeta, updated)}</p>
-                    </article>
-                    <article class="utility-card utility-card-wide" data-home-review-summary>
-                        <span>Saved queue</span>
-                        <div class="review-summary-grid">
-                            <article><span>Saved items</span><strong data-home-review-saved>??</strong></article>
-                            <article><span>Unread</span><strong data-home-review-unread>??</strong></article>
-                        </div>
-                        <p class="review-summary-note" data-home-review-status aria-live="polite">Browser-local state loads when JavaScript is available.</p>
-                        <a href="review/index.html">Open Review</a>
-                    </article>
-                </aside>
+                        <p data-home-review-status aria-live="polite">Browser-local state loads when JavaScript is available. <a href="review/index.html">Open Review</a></p>
+                    </section>
+
+                    <CompactTrustSummary trust={trust} statusHref="status/index.html" />
+                </div>
             </section>
 
             <section class="home-module-section" aria-labelledby="home-modules-title">
