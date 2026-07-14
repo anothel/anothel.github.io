@@ -846,13 +846,10 @@ main:focus-visible {
     font-size: 0.8rem;
 }
 
-.topic-actions nav {
-    flex: 1 1 auto;
-}
-
 .topic-actions [data-topic-pin] {
     display: flex;
-    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--space-2);
 }
 
 .pin-topic-button {
@@ -874,10 +871,6 @@ main:focus-visible {
 .pin-topic-button:hover {
     border-color: var(--accent-soft);
     background: var(--accent-soft);
-}
-
-.topic-stats {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .topic-grid {
@@ -903,15 +896,17 @@ main:focus-visible {
     gap: 12px;
 }
 
-.topic-dashboard-grid,
-.topic-guidance-grid {
+.topic-dashboard-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.topic-guidance-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .topic-guidance-card {
     display: grid;
     gap: 8px;
-    min-height: 132px;
     padding: 16px;
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -933,10 +928,6 @@ main:focus-visible {
     overflow-wrap: anywhere;
 }
 
-.topic-note-panel {
-    display: grid;
-}
-
 .topic-note-card {
     display: grid;
     grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr);
@@ -946,6 +937,18 @@ main:focus-visible {
     border-radius: var(--radius);
     background: color-mix(in srgb, var(--panel) 72%, var(--bg));
     box-shadow: var(--shadow);
+}
+
+.topic-action-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.notes-card-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.notes-card-copy {
+    grid-column: 1 / -1;
 }
 
 .topic-note-card > div,
@@ -965,7 +968,7 @@ main:focus-visible {
     text-transform: uppercase;
 }
 
-.topic-note-card h2 {
+.topic-note-card :is(h2, h3) {
     margin: 0;
     font-size: clamp(1.35rem, 2vw, 2rem);
     line-height: 1.08;
@@ -1010,7 +1013,6 @@ main:focus-visible {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.topic-why-card,
 .topic-mover-card,
 .topic-related-card,
 .topic-cross-link {
@@ -1022,10 +1024,6 @@ main:focus-visible {
     border-radius: var(--radius);
     background: var(--panel);
     box-shadow: var(--shadow);
-}
-
-.topic-why-card {
-    min-height: 118px;
 }
 
 .topic-mover-card {
@@ -1049,7 +1047,6 @@ main:focus-visible {
     background: var(--panel-strong);
 }
 
-.topic-why-card span,
 .topic-related-card > span,
 .topic-cross-link strong {
     color: var(--accent);
@@ -1059,7 +1056,6 @@ main:focus-visible {
     text-transform: uppercase;
 }
 
-.topic-why-card p,
 .topic-mover-card p,
 .topic-cross-link span {
     margin: 0;
@@ -1102,7 +1098,6 @@ main:focus-visible {
     font-size: 0.78rem;
 }
 
-.topic-why-card p,
 .topic-mover-card h3,
 .topic-mover-card p,
 .topic-related-list strong,
@@ -2661,7 +2656,6 @@ button {
     }
 
     .stats-grid,
-    .topic-stats,
     .status-stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--density-control-gap);
@@ -2863,6 +2857,10 @@ button {
     .review-empty a,
     .review-empty button {
         width: 100%;
+    }
+
+    .topic-actions .pin-topic-button {
+        width: auto;
     }
 
     .start-item {

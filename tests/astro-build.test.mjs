@@ -245,7 +245,8 @@ test("Astro Notes output contains every canonical note without client JavaScript
     assert.match(html, /<meta property="og:url" content="https:\/\/anothel\.github\.io\/notes\/">/);
     assert.match(html, /<meta name="twitter:title" content="Topic notes - anothel">/);
     assert.match(html, /<span data-notes-count>7<\/span> notes/);
-    assert.equal([...html.matchAll(/class="topic-note-card"/g)].length, 7);
+    assert.equal([...html.matchAll(/class="topic-note-card notes-card"/g)].length, 7);
+    assert.doesNotMatch(html, /class="module-detail"/);
 
     for (const item of notes) {
         assert.ok(html.includes(item.note.title), `${item.topic} title`);
@@ -254,6 +255,8 @@ test("Astro Notes output contains every canonical note without client JavaScript
         assert.ok(html.includes(`href="${item.route}"`), `${item.topic} topic route`);
         assert.ok(html.includes(`href="${item.exploreRoute}"`), `${item.topic} Explore route`);
     }
+
+    assert.ok(html.indexOf(`href="${notes[0].route}"`) < html.indexOf(notes[0].note.body), "first note actions should precede long copy");
 
     assert.equal(new Set(ids).size, ids.length);
     assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i);
@@ -279,6 +282,18 @@ test("Astro builds every topic route as useful static HTML with only a native pi
         assert.match(html, new RegExp(`<h1>${heading.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&")}<\\/h1>`), path);
         assert.ok(total > 0, `${path} should contain focused signals`);
         assert.equal(signalCount, total, `${path} should render its complete focused signal list`);
+        const editorialOrder = [
+            "data-topic-lead",
+            "data-topic-note",
+            "data-topic-actions",
+            "data-topic-top-movers",
+            "data-topic-guidance",
+            "data-topic-source-mix",
+            "data-topic-related",
+            "data-topic-list",
+            "data-topic-cross-links"
+        ].map((marker) => html.indexOf(marker));
+        assert.ok(editorialOrder.every((offset, index) => offset >= 0 && (index === 0 || offset > editorialOrder[index - 1])), `${path}: editorial order`);
         for (const marker of [
             "data-topic-note",
             "data-topic-guidance",

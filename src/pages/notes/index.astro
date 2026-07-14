@@ -25,33 +25,29 @@ const description = "Judgment notes from focused topic pages.";
         </HeroHeader>
 
         <main id="main-content" class="hub-main" tabindex="-1">
-            <section class="module-detail">
-                <h2>Judgment notes from focused topic pages.</h2>
-                <p>Use this as the shortest path to saved context before opening a topic lens.</p>
-            </section>
-
-            <section class="topic-note-panel" aria-label="Topic notes" data-notes-list>
+            <section class="topic-note-panel topic-cross-link-grid notes-grid" aria-labelledby="notes-list-title" data-notes-list>
+                <h2 class="visually-hidden" id="notes-list-title">Topic notes</h2>
                 {notes.map((item) => (
-                    <article class="topic-note-card">
+                    <article class="topic-note-card notes-card">
                         <div>
                             <span>{item.topic}</span>
-                            <h2>{item.note.title}</h2>
+                            <h3>{item.note.title}</h3>
+                        </div>
+                        <nav class="topic-support-list notes-card-actions" aria-label={`${item.topic} note actions`}>
+                            <a href={item.route}>
+                                <strong>Open topic</strong>
+                                <span>{item.topic}</span>
+                            </a>
+                            <a href={item.exploreRoute}>
+                                <strong>Explore lens</strong>
+                                <span>{item.topic}</span>
+                            </a>
+                        </nav>
+                        <div class="notes-card-copy">
                             <p>{item.note.body}</p>
                             <small>{item.note.readWhen}</small>
+                            <p>{item.description}</p>
                         </div>
-                        <aside>
-                            <span>{item.description}</span>
-                            <div class="topic-support-list">
-                                <a href={item.route}>
-                                    <strong>Open topic</strong>
-                                    <span>{item.topic}</span>
-                                </a>
-                                <a href={item.exploreRoute}>
-                                    <strong>Explore lens</strong>
-                                    <span>{item.topic}</span>
-                                </a>
-                            </div>
-                        </aside>
                     </article>
                 ))}
             </section>

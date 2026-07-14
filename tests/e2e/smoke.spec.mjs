@@ -593,6 +593,45 @@ test("all native Astro topic routes expose complete static decision context", as
     }
 });
 
+test("Topic and Notes primary actions meet mobile editorial targets", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "mobile-chromium", "Mobile viewport only.");
+
+    for (const [, route] of topicRoutes) {
+        await page.goto(route);
+        const layout = await page.evaluate(() => {
+            const top = (selector) => document.querySelector(selector).getBoundingClientRect().top;
+            const horizontalScrollers = [...document.querySelectorAll("main *")].filter((element) => {
+                const overflow = getComputedStyle(element).overflowX;
+                return ["auto", "scroll"].includes(overflow) && element.scrollWidth > element.clientWidth + 1;
+            });
+            return {
+                pin: top("[data-topic-pin-button]"),
+                explore: top("[data-topic-actions] a"),
+                mover: top("[data-topic-top-movers] .topic-mover-card"),
+                overflow: document.documentElement.scrollWidth - innerWidth,
+                horizontalScrollers: horizontalScrollers.length
+            };
+        });
+        expect(layout.pin, `${route} pin`).toBeLessThanOrEqual(650);
+        expect(layout.explore, `${route} focused Explore`).toBeLessThanOrEqual(650);
+        expect(layout.mover, `${route} first top mover`).toBeLessThanOrEqual(1200);
+        expect(layout.overflow, `${route} document overflow`).toBeLessThanOrEqual(1);
+        expect(layout.horizontalScrollers, `${route} nested horizontal scrollers`).toBe(0);
+    }
+
+    await page.goto("/notes/");
+    const firstAction = page.locator(".notes-card-actions a").first();
+    expect(await firstAction.evaluate((element) => element.getBoundingClientRect().top)).toBeLessThanOrEqual(550);
+    await firstAction.focus();
+    const focus = await firstAction.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return { left: rect.left, right: rect.right, width: innerWidth, outline: getComputedStyle(element).outlineStyle };
+    });
+    expect(focus.left).toBeGreaterThanOrEqual(0);
+    expect(focus.right).toBeLessThanOrEqual(focus.width);
+    expect(focus.outline).not.toBe("none");
+});
+
 test("topic pin state survives reload and stays compatible with Explore", async ({ page }) => {
     await page.goto("/topics/mcp/");
     const topicPin = page.locator("[data-topic-pin-button]");

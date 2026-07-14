@@ -56,14 +56,22 @@ export function todayTopicItems(today, topic) {
 }
 
 export function topicRelatedGroups(items, today, topic) {
-    const group = (module) => items.filter((item) => item.module === module).slice(0, 3);
+    const group = (module) => items.filter((item) => item.module === module);
+    const seen = new Set();
     return [
         ["Today picks", todayTopicItems(today, topic).slice(0, 3)],
         ["Packages", group("Packages")],
         ["Repos", group("Repos")],
         ["Links", group("Links")]
-    ].filter(([, groupItems]) => groupItems.length)
-        .map(([label, groupItems]) => ({ label, items: groupItems }));
+    ].map(([label, groupItems]) => ({
+        label,
+        items: groupItems.filter((item) => {
+            const key = item.canonicalKey || item.url || `${item.module}:${item.title}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        }).slice(0, 3)
+    })).filter(({ items: groupItems }) => groupItems.length);
 }
 
 export function relatedTopicLinks(topic) {

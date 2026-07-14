@@ -150,7 +150,7 @@ test("Today and module-related groups preserve matching, order, limits, and omis
         }]
     };
     const relatedItems = [
-        ...Array.from({ length: 4 }, (_, index) => ({ module: "Packages", title: `Package ${index}`, score: 90 - index })),
+        ...Array.from({ length: 4 }, (_, index) => ({ module: "Packages", title: `Package ${index}`, url: index === 0 ? "https://example.com/top" : `https://example.com/package-${index}`, score: 90 - index })),
         { module: "Repos", title: "Repo", score: 70 },
         { module: "Trends", title: "Trend", score: 100 }
     ];
@@ -159,6 +159,7 @@ test("Today and module-related groups preserve matching, order, limits, and omis
     const groups = topicRelatedGroups(relatedItems, currentToday, "MCP");
     assert.deepEqual(groups.map(({ label }) => label), ["Today picks", "Packages", "Repos"]);
     assert.equal(groups.find(({ label }) => label === "Packages").items.length, 3);
+    assert.equal(new Set(groups.flatMap(({ items }) => items.map(({ url, module, title }) => url || `${module}:${title}`))).size, groups.flatMap(({ items }) => items).length);
     assert.equal(groups.some(({ label }) => label === "Trends"), false);
 });
 

@@ -26,6 +26,8 @@ const description = `Focused landing page for ${config.signalLabel || config.lab
 const displayLabel = config.label === "Agent skills"
     ? config.label
     : `${(config.signalLabel || config.label).charAt(0).toUpperCase()}${(config.signalLabel || config.label).slice(1)}`;
+const moduleWord = summary.modules === 1 ? "module" : "modules";
+const signalWord = summary.total === 1 ? "signal" : "signals";
 const externalHref = (value) => safeExternalUrl(value);
 ---
 <AppShell
@@ -52,9 +54,11 @@ const externalHref = (value) => safeExternalUrl(value);
         </HeroHeader>
 
         <main id="main-content" class="hub-main" tabindex="-1">
-            <section class="module-detail">
-                <h2>{displayLabel} signals across tracked sources.</h2>
-                <p data-topic-lead>{model.lead}</p>
+            <section class="module-detail topic-lead" aria-label={`${config.label} topic context`}>
+                <p data-topic-lead>
+                    <strong data-topic-modules>{summary.modules}</strong> source {moduleWord} tracking <strong data-topic-total>{summary.total}</strong> {config.signalLabel || config.label} {signalWord}.
+                    Data date <strong data-topic-updated>{summary.updated}</strong>.
+                </p>
             </section>
 
             <section class="topic-note-panel" aria-label={`${config.label} note`} data-topic-note>
@@ -64,6 +68,19 @@ const externalHref = (value) => safeExternalUrl(value);
                         <h2>{model.note.title}</h2>
                         <p>{model.note.body}</p>
                         <small>{model.note.readWhen}</small>
+                        <div class="topic-support-list topic-actions" aria-label={`${config.label} primary actions`}>
+                            <div
+                                data-topic-pin
+                                data-topic={config.label}
+                                data-valid-topics={JSON.stringify(trackedTopicLabels)}
+                            >
+                                <button class="pin-topic-button" type="button" data-topic-pin-button aria-pressed="mixed" aria-label={`Pin state loading for ${config.label}`} disabled>Pin state loading</button>
+                                <small data-topic-pin-status>Pinning is browser-local. State loads when JavaScript is available.</small>
+                            </div>
+                            <nav class="topic-support-list topic-action-list" aria-label={`${config.label} topic routes`} data-topic-actions>
+                                {config.actions.map(([label, href, copy]) => <a href={href}><strong>{label}</strong><span>{copy}</span></a>)}
+                            </nav>
+                        </div>
                     </div>
                     <aside>
                         <span>Supporting signals</span>
@@ -83,30 +100,8 @@ const externalHref = (value) => safeExternalUrl(value);
                 </article>
             </section>
 
-            <section class="stats-grid topic-stats" aria-label={`${config.label} topic summary`}>
-                <article class="stat-card"><span>Focused items</span><strong data-topic-total>{summary.total}</strong></article>
-                <article class="stat-card"><span>Modules</span><strong data-topic-modules>{summary.modules}</strong></article>
-                <article class="stat-card"><span>Data date</span><strong data-topic-updated>{summary.updated}</strong></article>
-            </section>
-
-            <section class="topic-dashboard-panel" aria-label={`${config.label} guidance`}>
-                <div class="section-heading"><div><h2>Topic context</h2><p>How to decide whether this topic is worth opening.</p></div></div>
-                <div class="topic-guidance-grid" data-topic-guidance>
-                    {[
-                        ["What to watch", model.guidance.whatToWatch],
-                        ["When to open", model.guidance.whenToOpen],
-                        ["Good next action", model.guidance.nextAction]
-                    ].map(([label, copy]) => <article class="topic-guidance-card"><span>{label}</span><p>{copy}</p></article>)}
-                </div>
-            </section>
-
-            <section class="topic-dashboard-panel" aria-label={`${config.label} now`}>
-                <div class="section-heading"><div><h2>Why this topic matters now</h2><p>Current signals condensed into one direct read.</p></div></div>
-                <div data-topic-why><article class="topic-why-card"><span>Why now</span><p>{model.whyNow}</p></article></div>
-            </section>
-
             <section class="topic-dashboard-panel" aria-label={`${config.label} top movers`}>
-                <div class="section-heading"><div><h2>Top movers</h2><p>The highest-fit signals for this topic.</p></div></div>
+                <div class="section-heading"><h2>Top movers</h2></div>
                 <div class="topic-dashboard-grid" data-topic-top-movers>
                     {model.topMovers.map((item, index) => (
                         <article class="topic-mover-card">
@@ -121,15 +116,27 @@ const externalHref = (value) => safeExternalUrl(value);
                 </div>
             </section>
 
+            <section class="topic-dashboard-panel" aria-label={`${config.label} guidance`}>
+                <div class="section-heading"><h2>Why this topic matters now</h2></div>
+                <div class="topic-guidance-grid" data-topic-guidance>
+                    <article class="topic-guidance-card" data-topic-why><span>Why now</span><p>{model.whyNow}</p></article>
+                    {[
+                        ["What to watch", model.guidance.whatToWatch],
+                        ["When to open", model.guidance.whenToOpen],
+                        ["Good next action", model.guidance.nextAction]
+                    ].map(([label, copy]) => <article class="topic-guidance-card"><span>{label}</span><p>{copy}</p></article>)}
+                </div>
+            </section>
+
             <section class="source-mix-panel" aria-label={`${config.label} source mix`}>
-                <div class="section-heading"><div><h2>Source mix</h2><p>Where this topic is currently appearing.</p></div></div>
+                <div class="section-heading"><h2>Source mix</h2></div>
                 <div class="source-mix-grid" data-topic-source-mix>
                     {model.sourceMix.map((entry) => <article class="source-mix-card"><span>{entry.module}</span><strong>{entry.count} items</strong></article>)}
                 </div>
             </section>
 
             <section class="topic-dashboard-panel" aria-label={`${config.label} related signals`}>
-                <div class="section-heading"><div><h2>Related signals</h2><p>Today picks, packages, repos, and references connected to this topic.</p></div></div>
+                <div class="section-heading"><h2>Related signals</h2></div>
                 <div class="topic-related-grid" data-topic-related>
                     {model.relatedGroups.map((group) => (
                         <article class="topic-related-card">
@@ -142,42 +149,30 @@ const externalHref = (value) => safeExternalUrl(value);
                 </div>
             </section>
 
+            <section class="topic-dashboard-panel" aria-label={`${config.label} topic items`}>
+                <div class="section-heading"><h2>Focused signals</h2></div>
+                <div class="topic-grid" data-topic-list>
+                    {items.length === 0 ? (
+                        <article class="explore-card empty-card"><h3>No focused items yet</h3><p>Open focused Explore to broaden this topic across all tracked signals.</p></article>
+                    ) : items.map((item) => (
+                        <article class="explore-card topic-card" data-topic-signal>
+                            <div class="card-topline"><span>{item.module}</span><span>{item.category}</span></div>
+                            <h3>{item.title}</h3>
+                            <p class="why-copy"><strong>Why this matters</strong> {item.summary}</p>
+                            {item.scoreReasons.length > 0 && <ul class="score-reasons" aria-label="Score reasons">{item.scoreReasons.slice(0, 3).map((reason) => <li>{reason}</li>)}</ul>}
+                            {item.sourceContext && <small>Source context: {item.sourceContext}</small>}
+                            <div class="card-meta"><span>{item.origin}</span><span>{item.metric}</span><span>{item.updated}</span><span class="quality-marker">Signal fit {item.score}</span></div>
+                            <div class="explore-card-actions"><a href={externalHref(item.url)} rel="noopener noreferrer">Open item</a></div>
+                        </article>
+                    ))}
+                </div>
+            </section>
+
             <section class="topic-dashboard-panel" aria-label="Related topics">
-                <div class="section-heading"><div><h2>Related topics</h2><p>Move sideways when the signal overlaps another lens.</p></div></div>
+                <div class="section-heading"><h2>Related topics</h2></div>
                 <nav class="topic-cross-link-grid" aria-label="Related topic routes" data-topic-cross-links>
                     {model.relatedTopics.map((related) => <a class="topic-cross-link" href={related.route}><strong>{related.topic}</strong><span>{related.summary}</span></a>)}
                 </nav>
-            </section>
-
-            <section class="explore-strip topic-actions" aria-label={`${config.label} topic actions`}>
-                <div><h2>Continue exploring {config.label}</h2><p>Open the filtered Explore view, or inspect supporting source modules directly.</p></div>
-                <div
-                    data-topic-pin
-                    data-topic={config.label}
-                    data-valid-topics={JSON.stringify(trackedTopicLabels)}
-                >
-                    <button class="pin-topic-button" type="button" data-topic-pin-button aria-pressed="mixed" aria-label={`Pin state loading for ${config.label}`} disabled>Pin state loading</button>
-                    <small data-topic-pin-status>Pinning is browser-local. State loads when JavaScript is available.</small>
-                </div>
-                <nav aria-label={`${config.label} topic routes`} data-topic-actions>
-                    {config.actions.map(([label, href, copy]) => <a href={href}><strong>{label}</strong><span>{copy}</span></a>)}
-                </nav>
-            </section>
-
-            <section class="topic-grid" aria-label={`${config.label} topic items`} data-topic-list>
-                {items.length === 0 ? (
-                    <article class="explore-card empty-card"><h3>No focused items yet</h3><p>Open focused Explore to broaden this topic across all tracked signals.</p></article>
-                ) : items.map((item) => (
-                    <article class="explore-card topic-card" data-topic-signal>
-                        <div class="card-topline"><span>{item.module}</span><span>{item.category}</span></div>
-                        <h3>{item.title}</h3>
-                        <p class="why-copy"><strong>Why this matters</strong> {item.summary}</p>
-                        {item.scoreReasons.length > 0 && <ul class="score-reasons" aria-label="Score reasons">{item.scoreReasons.slice(0, 3).map((reason) => <li>{reason}</li>)}</ul>}
-                        {item.sourceContext && <small>Source context: {item.sourceContext}</small>}
-                        <div class="card-meta"><span>{item.origin}</span><span>{item.metric}</span><span>{item.updated}</span><span class="quality-marker">Signal fit {item.score}</span></div>
-                        <div class="explore-card-actions"><a href={externalHref(item.url)} rel="noopener noreferrer">Open item</a></div>
-                    </article>
-                ))}
             </section>
         </main>
     </div>
