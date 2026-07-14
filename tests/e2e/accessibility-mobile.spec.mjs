@@ -226,10 +226,16 @@ test.describe("mobile layout", () => {
         expect(cardTop).toBeLessThanOrEqual(450);
     });
 
-    test("Status summary uses two compact columns", async ({ page }) => {
+    test("Status leads with a compact summary and complete source evidence", async ({ page }) => {
         await page.goto("/status/");
-        const columns = await page.locator(".status-metrics").evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length);
+        const columns = await page.locator(".status-overall-facts").evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length);
         expect(columns).toBe(2);
+        const positions = await page.evaluate(() => ({
+            summary: document.querySelector("[data-status-overall]").getBoundingClientRect().top + scrollY,
+            firstSource: document.querySelector("[data-status-source-row]").getBoundingClientRect().top + scrollY
+        }));
+        expect(positions.summary).toBeLessThanOrEqual(400);
+        expect(positions.firstSource).toBeLessThanOrEqual(700);
     });
 });
 

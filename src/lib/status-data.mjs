@@ -62,14 +62,13 @@ function overallHealth(rows, validation) {
     return "healthy";
 }
 
-function healthSummary(state, counts, validation) {
-    const evidence = `${counts.healthy} healthy, ${counts.stale} stale, ${counts.failed} failed, ${counts.unknown} unknown.`;
-    if (validation === "invalid") return `Checked-in data failed validation. ${evidence}`;
-    if (state === "unavailable") return `No source has usable current data. ${evidence}`;
-    if (state === "degraded") return `Pipeline output exists, but one or more sources are partial, failed, or using fallback data. ${evidence}`;
-    if (state === "stale") return `Pipeline output validates, but source data is stale. ${evidence}`;
-    if (state === "unknown") return `Pipeline output exists, but freshness cannot be proven for every source. ${evidence}`;
-    return `Pipeline output validates and all source data is current. ${evidence}`;
+function healthSummary(state, validation) {
+    if (validation === "invalid") return "Checked-in data failed validation.";
+    if (state === "unavailable") return "No source has usable current data.";
+    if (state === "degraded") return "Pipeline output exists, but one or more sources are partial, failed, or using fallback data.";
+    if (state === "stale") return "Pipeline output validates, but source data is stale.";
+    if (state === "unknown") return "Pipeline output exists, but freshness cannot be proven for every source.";
+    return "Pipeline output validates and all source data is current.";
 }
 
 export function buildStatusDashboard({ manifest = {}, datasets = {}, report = {}, validation = null, now = new Date() } = {}) {
@@ -119,7 +118,8 @@ export function buildStatusDashboard({ manifest = {}, datasets = {}, report = {}
         stale: rows.filter((row) => row.health === "stale").length,
         failed: rows.filter((row) => row.availability === "failed").length,
         empty: rows.filter((row) => row.availability === "empty").length,
-        unknown: rows.filter((row) => row.health === "unknown").length
+        unknown: rows.filter((row) => row.health === "unknown").length,
+        fallback: rows.filter((row) => row.fallback).length
     };
     const overall = overallHealth(rows, overallValidation);
     const generatedFreshness = freshnessForSource({ status: "ok", updatedAt: report.generatedAt }, now);
@@ -128,7 +128,7 @@ export function buildStatusDashboard({ manifest = {}, datasets = {}, report = {}
 
     return {
         overall,
-        overallSummary: healthSummary(overall, counts, overallValidation),
+        overallSummary: healthSummary(overall, overallValidation),
         generatedAt,
         dataAgeDays: generatedFreshness.ageDays,
         counts,

@@ -781,8 +781,50 @@ test("Status exposes overall and source-level data health", async ({ page }) => 
     await page.goto("/status/");
 
     await expect(page.getByText("Generated at", { exact: true })).toBeVisible();
-    await expect(page.getByText("Overall data health", { exact: true })).toBeVisible();
-    await expect(page.locator(".source-health-table tbody tr").first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^Overall health:/ })).toBeVisible();
+    const expectedSources = [trends, packages, repos, links].flatMap(({ sourceMeta }) => Array.isArray(sourceMeta) ? sourceMeta : [sourceMeta]);
+    const rows = page.locator("[data-status-source-row]");
+    await expect(rows).toHaveCount(expectedSources.length);
+    await expect(rows.first()).toBeVisible();
+
+    for (const [index, source] of expectedSources.entries()) {
+        await expect(rows.nth(index).locator("th[scope=row]")).toHaveText(source.name);
+    }
+
+    const layout = await page.evaluate(() => {
+        const top = (selector) => Math.round(document.querySelector(selector).getBoundingClientRect().top + scrollY);
+        const wrapper = document.querySelector(".source-health-table-wrap");
+        return {
+            order: ["[data-status-overall]", "[data-status-sources]", "[data-status-secondary]", "[data-status-evidence]"].map(top),
+            overallTop: top("[data-status-overall]"),
+            firstRowTop: top("[data-status-source-row]"),
+            documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            sourceOverflow: wrapper.scrollWidth - wrapper.clientWidth,
+            sourceOverflowStyle: getComputedStyle(wrapper).overflowX
+        };
+    });
+    expect(layout.order.every((offset, index) => index === 0 || offset > layout.order[index - 1])).toBe(true);
+    expect(layout.overallTop).toBeLessThanOrEqual(400);
+    expect(layout.documentOverflow).toBeLessThanOrEqual(1);
+    if (page.viewportSize().width <= 720) {
+        expect(layout.firstRowTop).toBeLessThanOrEqual(700);
+        expect(layout.sourceOverflow).toBeLessThanOrEqual(1);
+        expect(layout.sourceOverflowStyle).toBe("visible");
+    }
+    await expect(page.locator("body")).not.toContainText(/\b(?:undefined|null|NaN)\b/);
+});
+
+test("JavaScript-disabled Status keeps the complete evidence dashboard", async ({ browser }, testInfo) => {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: testInfo.project.use.viewport });
+    const page = await context.newPage();
+    await page.goto("/status/");
+    const expectedCount = [trends, packages, repos, links]
+        .reduce((total, { sourceMeta }) => total + (Array.isArray(sourceMeta) ? sourceMeta.length : 1), 0);
+
+    await expect(page.getByRole("heading", { name: /^Overall health:/ })).toBeVisible();
+    await expect(page.locator("[data-status-source-row]")).toHaveCount(expectedCount);
+    await expect(page.locator("[data-status-evidence]")).toBeVisible();
+    await context.close();
 });
 
 test("unknown routes use the custom Astro 404", async ({ page }) => {

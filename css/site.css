@@ -1767,22 +1767,20 @@ button {
 }
 
 .status-dashboard {
-    gap: var(--space-10);
+    gap: var(--space-4);
 }
 
 .status-overview,
 .status-evidence,
+.status-secondary,
 .source-health-section {
     padding: var(--space-9) 0;
     border-top: var(--surface-border);
     border-bottom: var(--surface-border);
 }
 
-.status-overview-heading {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-8);
-    align-items: end;
+.status-overview {
+    padding: var(--space-6) 0;
 }
 
 .status-overview h2 {
@@ -1793,7 +1791,7 @@ button {
 
 .status-overview > p {
     max-width: 74ch;
-    margin: var(--space-4) 0 var(--space-8);
+    margin: var(--space-3) 0 var(--space-4);
     color: var(--muted);
 }
 
@@ -1832,6 +1830,7 @@ button {
     color: var(--neutral);
 }
 
+.status-overall-facts,
 .status-metrics {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1839,12 +1838,14 @@ button {
     border-top: var(--surface-border);
 }
 
+.status-overall-facts > div,
 .status-metrics > div {
     min-width: 0;
     padding: var(--space-6) var(--space-5) var(--space-3) 0;
     border-bottom: var(--surface-border);
 }
 
+.status-overall-facts dt,
 .status-metrics dt,
 .evidence-list dt {
     color: var(--muted);
@@ -1854,6 +1855,7 @@ button {
     text-transform: uppercase;
 }
 
+.status-overall-facts dd,
 .status-metrics dd,
 .evidence-list dd {
     margin: var(--space-2) 0 0;
@@ -1861,11 +1863,21 @@ button {
     overflow-wrap: anywhere;
 }
 
+.status-overall-facts dd {
+    font-size: var(--type-ui);
+}
+
+.status-overall-facts > div {
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-2);
+}
+
 .status-metrics dd {
     font-size: var(--type-card-title);
 }
 
 .status-metrics small,
+.evidence-list small,
 .source-health-table small {
     display: block;
     margin-top: var(--space-1);
@@ -1886,7 +1898,7 @@ button {
 }
 
 .source-health-table-wrap {
-    margin-top: var(--space-6);
+    margin-top: 0;
     overflow-x: auto;
     border-top: var(--surface-border);
     border-bottom: var(--surface-border);
@@ -1925,8 +1937,8 @@ button {
     min-width: 110px;
 }
 
-.source-health-table td:nth-child(5),
-.source-health-table td:nth-child(8) {
+.source-health-table td:nth-child(6),
+.source-health-table td:nth-child(9) {
     min-width: 180px;
 }
 
@@ -2862,18 +2874,22 @@ button {
 
     .status-overview,
     .status-evidence,
+    .status-secondary,
     .source-health-section {
         padding: var(--density-section-boundary) 0;
     }
 
-    .status-overview-heading {
-        align-items: start;
-        flex-direction: column;
-        gap: var(--space-4);
+    .status-overview {
+        padding: var(--space-4) 0;
     }
 
+    .status-overall-facts,
     .status-metrics {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .source-health-section .panel-heading {
+        padding: 0 0 var(--space-3);
     }
 
     .evidence-list {
@@ -2900,6 +2916,8 @@ button {
     }
 
     .source-health-table caption {
+        display: block;
+        width: 100%;
         padding: 0 0 var(--space-4);
     }
 
@@ -2925,8 +2943,8 @@ button {
 
     .source-health-table th,
     .source-health-table td,
-    .source-health-table td:nth-child(5),
-    .source-health-table td:nth-child(8) {
+    .source-health-table td:nth-child(6),
+    .source-health-table td:nth-child(9) {
         display: grid;
         grid-template-columns: minmax(112px, 0.42fr) minmax(0, 1fr);
         gap: var(--space-3);

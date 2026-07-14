@@ -34,80 +34,44 @@ const displayTime = (value) => value && value !== "unknown" ? value : "unknown";
         </HeroHeader>
 
         <main id="main-content" class="hub-main status-dashboard" tabindex="-1">
-            <section class={`status-overview health-${dashboard.overall}`} aria-labelledby="overall-health-title">
-                <div class="status-overview-heading">
-                    <div>
-                        <p class="eyebrow">Overall data health</p>
-                        <h2 id="overall-health-title">{dashboard.overall}</h2>
-                    </div>
-                    <span class={`health-label health-${dashboard.overall}`} role="status">{dashboard.overall}</span>
-                </div>
+            <section class={`status-overview health-${dashboard.overall}`} aria-labelledby="overall-health-title" data-status-overall>
+                <p class="eyebrow">Current publish</p>
+                <h2 id="overall-health-title">Overall health: {dashboard.overall}</h2>
                 <p>{dashboard.overallSummary}</p>
 
-                <dl class="status-metrics" aria-label="Data health summary">
+                <dl class="status-overall-facts" aria-label="Current publish status">
+                    <div>
+                        <dt>Pipeline status</dt>
+                        <dd>{dashboard.pipelineStatus}</dd>
+                    </div>
+                    <div>
+                        <dt>Freshness</dt>
+                        <dd>{dashboard.freshness}</dd>
+                    </div>
                     <div>
                         <dt>Generated at</dt>
-                        <dd>
-                            <time datetime={dashboard.generatedAt !== "unknown" ? dashboard.generatedAt : undefined}>{displayTime(dashboard.generatedAt)}</time>
-                            <small>Checked-in pipeline snapshot assembly time, not source freshness.</small>
-                        </dd>
-                    </div>
-                    <div>
-                        <dt>Data age</dt>
-                        <dd>{dataAge}<small>Whole UTC days since pipeline generation.</small></dd>
-                    </div>
-                    <div>
-                        <dt>Total sources</dt>
-                        <dd>{dashboard.counts.total}</dd>
-                    </div>
-                    <div>
-                        <dt>Healthy sources</dt>
-                        <dd>{dashboard.counts.healthy}</dd>
-                    </div>
-                    <div>
-                        <dt>Stale sources</dt>
-                        <dd>{dashboard.counts.stale}</dd>
-                    </div>
-                    <div>
-                        <dt>Failed / unavailable</dt>
-                        <dd>{dashboard.counts.failed}</dd>
+                        <dd><time datetime={dashboard.generatedAt !== "unknown" ? dashboard.generatedAt : undefined}>{displayTime(dashboard.generatedAt)}</time></dd>
                     </div>
                     <div>
                         <dt>Validation</dt>
-                        <dd>{dashboard.validation}<small>{dashboard.validationDetail}</small></dd>
-                    </div>
-                    <div>
-                        <dt>Latest successful generation</dt>
-                        <dd><time datetime={dashboard.latestSuccessfulGeneration !== "unknown" ? dashboard.latestSuccessfulGeneration : undefined}>{displayTime(dashboard.latestSuccessfulGeneration)}</time></dd>
+                        <dd>{dashboard.validation}</dd>
                     </div>
                 </dl>
             </section>
 
-            <section class="status-evidence" aria-labelledby="pipeline-evidence-title">
+            <section class="source-health-section" aria-labelledby="source-health-title" data-status-sources>
                 <div class="panel-heading">
-                    <h2 id="pipeline-evidence-title">Pipeline evidence</h2>
-                    <p>Facts from checked-in JSON and build-time schema validation. No live monitoring.</p>
-                </div>
-                <dl class="evidence-list">
-                    <div><dt>Refresh report result</dt><dd>{dashboard.reportStatus}</dd></div>
-                    <div><dt>Manifest data date</dt><dd>{manifest.updated || "unknown"}</dd></div>
-                    <div><dt>Published items</dt><dd>{Number.isInteger(report.totals?.items) ? report.totals.items : "unknown"}</dd></div>
-                    <div><dt>Legitimate empty sources</dt><dd>{dashboard.counts.empty}</dd></div>
-                </dl>
-            </section>
-
-            <section class="source-health-section" aria-labelledby="source-health-title">
-                <div class="panel-heading">
-                    <h2 id="source-health-title">Source health</h2>
-                    <p>Last successful source update, current age, validation, and known recovery state.</p>
+                    <h2 id="source-health-title">Source health evidence</h2>
+                    <p>Complete checked-in source order. Open a source to inspect its published records.</p>
                 </div>
                 <div class="source-health-table-wrap">
-                    <table class="source-health-table">
+                    <table class="source-health-table source-record-table" data-status-source-table>
                         <caption>Health evidence for {dashboard.counts.total} checked-in data sources</caption>
                         <thead>
                             <tr>
                                 <th scope="col">Source</th>
                                 <th scope="col">Category</th>
+                                <th scope="col">Pipeline</th>
                                 <th scope="col">Health</th>
                                 <th scope="col">Freshness</th>
                                 <th scope="col">Last successful update</th>
@@ -119,9 +83,10 @@ const displayTime = (value) => value && value !== "unknown" ? value : "unknown";
                         </thead>
                         <tbody>
                             {dashboard.rows.map((row) => (
-                                <tr class={`health-${row.health}`}>
+                                <tr class={`health-${row.health}`} data-status-source-row>
                                     <th scope="row" data-label="Source"><a href={`../${row.route}`}>{row.name}</a></th>
                                     <td data-label="Category">{row.category}</td>
+                                    <td data-label="Pipeline"><strong>{row.pipelineStatus}</strong></td>
                                     <td data-label="Health"><span class={`health-label health-${row.health}`}>{row.health}</span><small>{row.availability}</small></td>
                                     <td data-label="Freshness"><strong>{row.freshness}</strong>{row.ageDays !== null && <small>{row.ageDays} {row.ageDays === 1 ? "day" : "days"} old</small>}</td>
                                     <td data-label="Last successful update"><time datetime={row.lastSuccessfulUpdate || undefined}>{displayTime(row.lastSuccessfulUpdate)}</time></td>
@@ -134,6 +99,40 @@ const displayTime = (value) => value && value !== "unknown" ? value : "unknown";
                         </tbody>
                     </table>
                 </div>
+            </section>
+
+            <section class="status-secondary" aria-labelledby="source-totals-title" data-status-secondary>
+                <div class="panel-heading">
+                    <h2 id="source-totals-title">Source totals</h2>
+                    <p>Roll-up counts from the same canonical source rows above.</p>
+                </div>
+                <dl class="status-metrics" aria-label="Source health totals">
+                    <div><dt>Total sources</dt><dd>{dashboard.counts.total}</dd></div>
+                    <div><dt>Healthy sources</dt><dd>{dashboard.counts.healthy}</dd></div>
+                    <div><dt>Stale sources</dt><dd>{dashboard.counts.stale}</dd></div>
+                    <div><dt>Failed / unavailable</dt><dd>{dashboard.counts.failed}</dd></div>
+                    <div><dt>Unknown health</dt><dd>{dashboard.counts.unknown}</dd></div>
+                    <div><dt>Legitimate empty sources</dt><dd>{dashboard.counts.empty}</dd></div>
+                    <div><dt>Fallback sources</dt><dd>{dashboard.counts.fallback}</dd></div>
+                    <div><dt>Published items</dt><dd>{Number.isInteger(report.totals?.items) ? report.totals.items : "unknown"}</dd></div>
+                </dl>
+            </section>
+
+            <section class="status-evidence" aria-labelledby="pipeline-evidence-title" data-status-evidence>
+                <div class="panel-heading">
+                    <h2 id="pipeline-evidence-title">Generation and recovery evidence</h2>
+                    <p>Checked-in JSON and build-time schema validation. No live monitoring.</p>
+                </div>
+                <dl class="evidence-list">
+                    <div><dt>Data age</dt><dd>{dataAge}<small>Whole UTC days since pipeline generation.</small></dd></div>
+                    <div><dt>Latest successful generation</dt><dd><time datetime={dashboard.latestSuccessfulGeneration !== "unknown" ? dashboard.latestSuccessfulGeneration : undefined}>{displayTime(dashboard.latestSuccessfulGeneration)}</time></dd></div>
+                    <div><dt>Refresh report result</dt><dd>{dashboard.reportStatus}</dd></div>
+                    <div><dt>Manifest data date</dt><dd>{manifest.updated || "unknown"}</dd></div>
+                    <div><dt>Validation evidence</dt><dd>{dashboard.validationDetail}</dd></div>
+                    <div><dt>Generated timestamp meaning</dt><dd>Checked-in pipeline snapshot assembly time, not source freshness.</dd></div>
+                    <div><dt>Health derivation</dt><dd>Each source evaluates validation, pipeline availability, and freshness independently. Overall reports all-unavailable first, then degraded, stale, unknown, or healthy.</dd></div>
+                    <div><dt>Recovery reading</dt><dd>Use the visible source warning and linked route. Fallback rows retain their last successful update and stay labelled fallback.</dd></div>
+                </dl>
             </section>
         </main>
     </div>

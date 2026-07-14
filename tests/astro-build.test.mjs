@@ -131,18 +131,34 @@ test("Astro build output renders migrated static routes including Notes", () => 
     assert.match(read("dist/index.html"), /href="today\/index\.html"/);
     const statusHtml = read("dist/status/index.html");
     assert.match(statusHtml, /href="\.\.\/trends\/index\.html"/);
-    assert.match(statusHtml, /Overall data health/);
+    assert.match(statusHtml, /Overall health:/);
+    assert.match(statusHtml, /Pipeline status/);
+    assert.match(statusHtml, /Freshness/);
     assert.match(statusHtml, /Generated at/);
     assert.match(statusHtml, /Data age/);
     assert.match(statusHtml, /Healthy sources/);
     assert.match(statusHtml, /Stale sources/);
     assert.match(statusHtml, /Failed \/ unavailable/);
     assert.match(statusHtml, /Latest successful generation/);
-    assert.match(statusHtml, /<table class="source-health-table">/);
+    assert.match(statusHtml, /<table class="source-health-table source-record-table" data-status-source-table>/);
+    assert.match(statusHtml, /<th scope="col">Pipeline<\/th>/);
     assert.match(statusHtml, /<th scope="col">Last successful update<\/th>/);
     assert.match(statusHtml, /health-label health-stale/);
     assert.match(statusHtml, /health-label health-unknown/);
     assert.doesNotMatch(statusHtml, />\s*(?:undefined|null|NaN)\s*</);
+
+    const statusSources = ["trends", "packages", "repos", "links"]
+        .flatMap((route) => {
+            const sourceMeta = JSON.parse(read(`data/${route}.json`)).sourceMeta;
+            return Array.isArray(sourceMeta) ? sourceMeta : [sourceMeta];
+        });
+    const statusRows = [...statusHtml.matchAll(/<tr class="health-[^"]+" data-status-source-row>([\s\S]*?)<\/tr>/g)].map((match) => match[1]);
+    const statusOrder = ["data-status-overall", "data-status-sources", "data-status-secondary", "data-status-evidence"]
+        .map((marker) => statusHtml.indexOf(marker));
+    assert.equal(statusRows.length, statusSources.length);
+    assert.ok(statusOrder.every((offset, index) => offset >= 0 && (index === 0 || offset > statusOrder[index - 1])));
+    statusSources.forEach((source, index) => assert.match(statusRows[index], new RegExp(`>${source.name}<`)));
+    assert.doesNotMatch(statusHtml, /<script\b|<astro-island\b|\b(?:component-url|renderer-url)=/i);
 });
 
 test("Astro source routes render complete ordered records before secondary evidence without client JavaScript", () => {

@@ -28,8 +28,11 @@ test("status dashboard distinguishes stale, failed, empty, fallback, and unknown
     assert.deepEqual(dashboard.rows.map((row) => row.health), ["stale", "unavailable", "healthy", "degraded"]);
     assert.equal(dashboard.counts.empty, 1);
     assert.equal(dashboard.counts.failed, 1);
+    assert.equal(dashboard.counts.unknown, 0);
+    assert.equal(dashboard.counts.fallback, 1);
     assert.equal(dashboard.overall, "degraded");
     assert.equal(dashboard.latestSuccessfulGeneration, "unknown");
+    assert.doesNotMatch(dashboard.overallSummary, /\d+ healthy/);
 });
 
 test("status dashboard uses safe unknowns for missing metadata and invalid data", () => {
@@ -46,6 +49,9 @@ test("status dashboard uses safe unknowns for missing metadata and invalid data"
     assert.equal(dashboard.validation, "invalid");
     assert.equal(dashboard.rows[0].name, "unknown");
     assert.equal(dashboard.rows[0].itemCount, null);
+    assert.equal(dashboard.rows[0].pipelineStatus, "unknown");
+    assert.equal(dashboard.rows[0].freshness, "unknown");
+    assert.equal(dashboard.rows[0].lastSuccessfulUpdate, null);
     assert.equal(dashboard.rows[0].issue, "Required source metadata missing.");
     assert.equal(dashboard.overall, "degraded");
     assert.doesNotMatch(JSON.stringify(dashboard), /undefined|NaN/);
