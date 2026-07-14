@@ -116,8 +116,13 @@ test("Astro build output renders migrated static routes including Notes", () => 
 
     assert.ok(existsSync("dist/css/site.css"), "Astro output should include shared CSS");
     assert.ok(existsSync("dist/data/today.json"), "Astro output should preserve data JSON URLs");
-    assert.match(read("dist/explore/index.html"), /data-explore-results/);
-    assert.match(read("dist/explore/index.html"), /astro-island/);
+    const exploreHtml = read("dist/explore/index.html");
+    assert.match(exploreHtml, /data-explore-results/);
+    assert.match(exploreHtml, /astro-island/);
+    assert.match(exploreHtml, /Browse current signals/);
+    const exploreOrder = ["data-explore-results", "data-explore-filter-shell", '<aside class="saved-panel"', "data-topic-lenses", "data-source-health"]
+        .map((marker) => exploreHtml.indexOf(marker));
+    assert.ok(exploreOrder.every((offset, index) => offset >= 0 && (index === 0 || offset > exploreOrder[index - 1])), "Explore static output should put results before secondary tools");
     assert.doesNotMatch(read("src/lib/explore-static.js"), /node:vm|runInNewContext/);
     const reviewHtml = read("dist/review/index.html");
     assert.match(reviewHtml, /data-review-static-guidance/);

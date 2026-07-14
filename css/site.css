@@ -119,6 +119,18 @@ button:focus-visible {
     transform: none;
 }
 
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 .shell {
     display: grid;
     grid-template-columns: 300px minmax(0, 1fr);
@@ -1540,7 +1552,33 @@ button {
 }
 
 .explore-filter-toggle {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 900;
+    list-style: none;
+}
+
+.explore-filter-toggle::-webkit-details-marker {
     display: none;
+}
+
+.explore-filter-toggle::after {
+    content: "Open";
+    color: var(--accent);
+    font-size: 0.82rem;
+}
+
+.explore-filter-shell[open] .explore-filter-toggle::after {
+    content: "Close";
 }
 
 .explore-workbench {
@@ -1555,10 +1593,6 @@ button {
     grid-template-columns: minmax(220px, 0.32fr) minmax(0, 1fr);
     gap: 12px;
     min-width: 0;
-}
-
-.explore-control-rail {
-    display: grid;
 }
 
 .explore-saved-tools {
@@ -1646,13 +1680,6 @@ button {
     grid-template-columns: minmax(260px, 1.35fr) minmax(160px, 0.75fr) minmax(150px, 0.65fr);
     gap: 12px;
     align-items: end;
-}
-
-.advanced-filter-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    align-items: start;
 }
 
 .explore-focus-chips {
@@ -2059,13 +2086,6 @@ button {
 
 .rank-panel {
     overflow: hidden;
-}
-
-.explore-workspace {
-    display: grid;
-    grid-template-columns: minmax(240px, 0.68fr) minmax(0, 1.6fr);
-    gap: 18px;
-    align-items: start;
 }
 
 .saved-panel {
@@ -2556,15 +2576,10 @@ button {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .explore-workspace {
-        grid-template-columns: 1fr;
-    }
-
     .home-command-board,
     .module-overview-grid,
     .explore-workbench,
-    .explore-filter-board,
-    .advanced-filter-grid {
+    .explore-filter-board {
         grid-template-columns: 1fr;
     }
 
@@ -2638,9 +2653,16 @@ button {
     .home-module-board,
     .project-list,
     .explore-workbench,
-    .explore-controls,
-    .advanced-filter-grid {
+    .explore-controls {
         grid-template-columns: 1fr;
+    }
+
+    .explore-essential-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .explore-essential-controls .explore-search-field {
+        grid-column: 1 / -1;
     }
 
     .shell > main,
@@ -2852,40 +2874,6 @@ button {
     .explore-command-actions .ghost-button,
     .explore-command-actions a {
         flex: 1 1 0;
-    }
-
-    .explore-filter-toggle {
-        display: flex;
-        min-height: 44px;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 10px 12px;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background: var(--panel);
-        color: var(--text);
-        cursor: pointer;
-        font-weight: 900;
-        list-style: none;
-    }
-
-    .explore-filter-toggle::-webkit-details-marker {
-        display: none;
-    }
-
-    .explore-filter-toggle::after {
-        content: "Open";
-        color: var(--accent);
-        font-size: 0.82rem;
-    }
-
-    .explore-filter-shell[open] .explore-filter-toggle::after {
-        content: "Close";
-    }
-
-    .explore-filter-shell:not([open]) .explore-workbench {
-        display: none;
     }
 
     .explore-strip nav,

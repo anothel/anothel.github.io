@@ -102,6 +102,7 @@ export default function ExploreIsland({ prefix = "../", fallback, dataPaths }) {
     const [defaultMessage, setDefaultMessage] = useState(defaultStatus(defaultExploreState));
     const [portabilityStatus, setPortabilityStatus] = useState("Saved searches stay local.");
     const [importText, setImportText] = useState("");
+    const [announcement, setAnnouncement] = useState("");
     const fileInput = useRef(null);
 
     useEffect(() => {
@@ -139,10 +140,8 @@ export default function ExploreIsland({ prefix = "../", fallback, dataPaths }) {
     const visible = useMemo(() => visibleItems(items, filters, saved), [items, filters, saved]);
     const modules = useMemo(() => uniqueValues(items, "module"), [items]);
     const categories = useMemo(() => uniqueValues(items, "category"), [items]);
-    const visibleCategories = useMemo(() => uniqueValues(visible, "category").length, [visible]);
     const initialView = !loaded && filters.focus === "all" && filters.module === "all" && filters.category === "all" && !filters.query && filters.sort === "priority";
     const visibleCount = initialView ? fallback.total : visible.length;
-    const categoryCount = initialView ? fallback.categories : visibleCategories;
     const lenses = useMemo(() => loaded ? buildTopicLenses(items, new Set(pinned)) : [...fallback.topicLenses].sort((a, b) => pinned.includes(a.focus) ? -1 : pinned.includes(b.focus) ? 1 : 0), [fallback.topicLenses, items, loaded, pinned]);
     const health = useMemo(() => loaded ? sourceHealthModel(sourceMeta) : fallback.sourceHealth, [fallback.sourceHealth, loaded, sourceMeta]);
     const savedItems = useMemo(() => items.filter((item) => savedIdForItem(item, saved)), [items, saved]);
@@ -156,7 +155,22 @@ export default function ExploreIsland({ prefix = "../", fallback, dataPaths }) {
     }
 
     function toggleSaved(item) {
+        const removing = Boolean(savedIdForItem(item, saved));
         setRecords(toggleSavedItem(browserStorage(), item));
+        setAnnouncement(`${removing ? "Removed" : "Saved"} ${item.title} ${removing ? "from" : "for"} Review later.`);
+    }
+
+    function removeSaved(id, title, event) {
+        const list = event.currentTarget.closest("[data-explore-saved]");
+        const buttons = [...(list?.querySelectorAll("[data-remove-id]") || [])];
+        const index = buttons.indexOf(event.currentTarget);
+        const target = buttons[index + 1]
+            || buttons[index - 1]
+            || [...document.querySelectorAll("[data-save-id]")].find((button) => button.dataset.saveId === id)
+            || document.querySelector("[data-explore-query]");
+        setRecords(removeSavedItem(browserStorage(), id));
+        setAnnouncement(`Removed ${title} from Review later.`);
+        requestAnimationFrame(() => target?.focus());
     }
 
     function saveCurrentSearch() {
@@ -168,6 +182,7 @@ export default function ExploreIsland({ prefix = "../", fallback, dataPaths }) {
     function applySearch(search) {
         setFilters({ ...defaultExploreState, ...availableSearch(search, items) });
         setSearchStatus("applied");
+        setAnnouncement(`Applied saved search: ${savedSearchLabel(search)}.`);
     }
 
     function renameSearch(search) {
@@ -208,52 +223,55 @@ export default function ExploreIsland({ prefix = "../", fallback, dataPaths }) {
             <section className="explore-command-bar" aria-labelledby="explore-command-title">
                 <div className="explore-command-header">
                     <div><h2 id="explore-command-title">Find signals</h2><p data-explore-summary>{activeSummary(filters, visibleCount, saved.size, sourceMeta, visible)}</p></div>
-                    <div className="explore-command-actions"><button className="ghost-button" type="button" data-clear-filters onClick={clearFilters}>Clear filters</button><a href={`${prefix}review/index.html`}>Review later</a></div>
+                    <div className="explore-command-actions"><button className="ghost-button" type="button" data-clear-filters onClick={clearFilters}>Clear filters</button><a href={`${prefix}review/index.html`}>Review later (<span data-explore-saved-count>{saved.size}</span>)</a></div>
                 </div>
-                <details className="explore-filter-shell" data-explore-filter-shell open>
-                    <summary className="explore-filter-toggle"><span>Filters and saved searches</span></summary>
-                    <div className="explore-workbench">
-                        <div className="explore-filter-board explore-control-rail">
-                            <div className="explore-controls">
-                                <label className="explore-search-field">Search<input data-explore-query type="search" placeholder="agent, skills, runtime" value={filters.query} onChange={(event) => updateFilter("query", event.target.value)} /></label>
-                                <label>Module<select data-explore-module value={filters.module} onChange={(event) => updateFilter("module", event.target.value)}><option value="all">All modules</option>{modules.map((value) => <option key={value}>{value}</option>)}</select></label>
-                                <label>Sort<select data-explore-sort value={filters.sort} onChange={(event) => updateFilter("sort", event.target.value)}><option value="priority">Priority</option><option value="saved">Saved first</option><option value="module">Module</option><option value="category">Category</option></select></label>
-                            </div>
-                            <div className="advanced-filter-grid" aria-label="Primary filters"><label>Category<select data-explore-category value={filters.category} onChange={(event) => updateFilter("category", event.target.value)}><option value="all">All categories</option>{categories.map((value) => <option key={value}>{value}</option>)}</select></label></div>
-                            <div className="quick-filter-group explore-focus-chips" aria-label="Signal focus"><span>Signal focus</span>{focusButtons.map((focus) => <button key={focus} type="button" data-focus-filter={focus} aria-pressed={filters.focus === focus} onClick={() => updateFilter("focus", focus)}>{focusLabels[focus] || focus}</button>)}</div>
-                        </div>
-                        <aside className="explore-saved-tools" aria-label="Saved explore tools">
-                            <div className="saved-searches" aria-label="Saved searches">
-                                <div className="saved-searches-header"><strong>Saved searches</strong><button type="button" data-save-search onClick={saveCurrentSearch}>Save search</button></div>
-                                <div data-saved-searches>{searches.length ? searches.map((search) => <article className="saved-search-item" key={search.id}><span className="saved-search-label">{savedSearchLabel(search)}</span><button type="button" data-apply-search-id={search.id} onClick={() => applySearch(search)}>Apply</button><button type="button" data-edit-search-id={search.id} onClick={() => renameSearch(search)}>Rename</button><button type="button" data-remove-search-id={search.id} onClick={() => deleteSearch(search.id)}>Delete</button></article>) : <p className="saved-search-empty">{savedStatusText(searchStatus)}</p>}</div>
-                                <p className="saved-search-status" data-saved-search-status>{savedStatusText(searchStatus, searches[0])}</p>
-                            </div>
-                            <div className="explore-defaults">
-                                <div className="preference-actions" aria-label="Explore defaults"><button type="button" data-save-explore-default onClick={() => { const savedDefault = saveExploreDefault(browserStorage(), filters); setDefaultMessage(defaultStatus(savedDefault, "Default saved")); }}>Set as default</button><button type="button" data-reset-explore-default onClick={() => { const reset = resetExploreDefault(browserStorage()); setFilters(reset); setDefaultMessage(defaultStatus(reset, "Default reset")); }}>Reset default</button></div>
-                                <p className="preference-status" data-explore-default-status>{defaultMessage}</p>
-                            </div>
-                            <div className="explore-search-portability" aria-label="Saved search portability">
-                                <div className="preference-actions"><button type="button" data-saved-search-export onClick={exportSearches}>Export JSON</button><button type="button" data-saved-search-import onClick={() => fileInput.current?.click()}>Import JSON</button></div>
-                                <textarea className="search-portability-text" data-saved-search-import-text placeholder="Paste saved-search JSON" value={importText} onChange={(event) => setImportText(event.target.value)} />
-                                <button type="button" data-saved-search-import-paste onClick={() => { if (!importText) return setPortabilityStatus("Paste Search JSON first."); importSearchText(importText); setImportText(""); }}>Import pasted JSON</button>
-                                <input ref={fileInput} type="file" accept="application/json,.json" data-saved-search-import-file hidden onChange={async (event) => { const file = event.target.files?.[0]; if (file) importSearchText(await file.text()); event.target.value = ""; }} />
-                                <p className="preference-status" data-saved-search-portability-status>{portabilityStatus}</p>
-                            </div>
-                        </aside>
-                    </div>
-                </details>
+                <div className="explore-controls explore-essential-controls">
+                    <label className="explore-search-field">Search<input data-explore-query type="search" placeholder="agent, skills, runtime" value={filters.query} onChange={(event) => updateFilter("query", event.target.value)} /></label>
+                    <label>Module<select data-explore-module value={filters.module} onChange={(event) => updateFilter("module", event.target.value)}><option value="all">All modules</option>{modules.map((value) => <option key={value}>{value}</option>)}</select></label>
+                    <label>Category<select data-explore-category value={filters.category} onChange={(event) => updateFilter("category", event.target.value)}><option value="all">All categories</option>{categories.map((value) => <option key={value}>{value}</option>)}</select></label>
+                </div>
             </section>
 
-            <section className="stats-grid" aria-label="Explore stats"><article className="stat-card"><span>Visible items</span><strong data-explore-total>{visibleCount}</strong></article><article className="stat-card"><span>Saved</span><strong data-explore-saved-count>{saved.size}</strong></article><article className="stat-card"><span>Categories</span><strong data-explore-categories>{categoryCount}</strong></article></section>
+            <section className="rank-panel" aria-labelledby="explore-results-title">
+                <div className="panel-heading"><h2 id="explore-results-title">Results</h2><p><strong data-explore-total>{visibleCount}</strong> items</p></div>
+                <div className="explore-results" data-explore-results>{visible.length ? visible.map((item) => <ItemCard key={item.id} item={item} saved={saved} onToggle={toggleSaved} />) : <article className="explore-card empty-card"><h3>{items.length ? "No matching items" : "No signals available"}</h3><p>{items.length ? "Try broader filters or clear them to see all signals." : "Checked-in sources contain no signals right now."}</p>{items.length > 0 && <button className="ghost-button" type="button" onClick={clearFilters}>Clear filters</button>}</article>}</div>
+            </section>
+
+            <details className="explore-command-bar explore-filter-shell" data-explore-filter-shell>
+                <summary className="explore-filter-toggle"><span>Advanced filters and saved searches</span></summary>
+                <div className="explore-workbench">
+                    <div className="explore-filter-board">
+                        <label>Sort<select data-explore-sort value={filters.sort} onChange={(event) => updateFilter("sort", event.target.value)}><option value="priority">Priority</option><option value="saved">Saved first</option><option value="module">Module</option><option value="category">Category</option></select></label>
+                        <div className="quick-filter-group explore-focus-chips" aria-label="Signal focus"><span>Signal focus</span>{focusButtons.map((focus) => <button key={focus} type="button" data-focus-filter={focus} aria-pressed={filters.focus === focus} onClick={() => updateFilter("focus", focus)}>{focusLabels[focus] || focus}</button>)}</div>
+                    </div>
+                    <aside className="explore-saved-tools" aria-label="Saved explore tools">
+                        <div className="saved-searches" aria-label="Saved searches">
+                            <div className="saved-searches-header"><strong>Saved searches</strong><button type="button" data-save-search onClick={saveCurrentSearch}>Save search</button></div>
+                            <div data-saved-searches>{searches.length ? searches.map((search) => <article className="saved-search-item" key={search.id}><span className="saved-search-label">{savedSearchLabel(search)}</span><button type="button" data-apply-search-id={search.id} onClick={() => applySearch(search)}>Apply</button><button type="button" data-edit-search-id={search.id} onClick={() => renameSearch(search)}>Rename</button><button type="button" data-remove-search-id={search.id} onClick={() => deleteSearch(search.id)}>Delete</button></article>) : <p className="saved-search-empty">{savedStatusText(searchStatus)}</p>}</div>
+                            <p className="saved-search-status" data-saved-search-status>{savedStatusText(searchStatus, searches[0])}</p>
+                        </div>
+                        <div className="explore-defaults">
+                            <div className="preference-actions" aria-label="Explore defaults"><button type="button" data-save-explore-default onClick={() => { const savedDefault = saveExploreDefault(browserStorage(), filters); setDefaultMessage(defaultStatus(savedDefault, "Default saved")); }}>Set as default</button><button type="button" data-reset-explore-default onClick={() => { const reset = resetExploreDefault(browserStorage()); setFilters(reset); setDefaultMessage(defaultStatus(reset, "Default reset")); }}>Reset default</button></div>
+                            <p className="preference-status" data-explore-default-status>{defaultMessage}</p>
+                        </div>
+                        <div className="explore-search-portability" aria-label="Saved search portability">
+                            <div className="preference-actions"><button type="button" data-saved-search-export onClick={exportSearches}>Export JSON</button><button type="button" data-saved-search-import onClick={() => fileInput.current?.click()}>Import JSON</button></div>
+                            <textarea className="search-portability-text" data-saved-search-import-text placeholder="Paste saved-search JSON" value={importText} onChange={(event) => setImportText(event.target.value)} />
+                            <button type="button" data-saved-search-import-paste onClick={() => { if (!importText) return setPortabilityStatus("Paste Search JSON first."); importSearchText(importText); setImportText(""); }}>Import pasted JSON</button>
+                            <input ref={fileInput} type="file" accept="application/json,.json" data-saved-search-import-file hidden onChange={async (event) => { const file = event.target.files?.[0]; if (file) importSearchText(await file.text()); event.target.value = ""; }} />
+                            <p className="preference-status" data-saved-search-portability-status>{portabilityStatus}</p>
+                        </div>
+                    </aside>
+                </div>
+            </details>
+
+            <aside className="saved-panel" aria-labelledby="saved-title"><div className="panel-heading"><h2 id="saved-title">Review later</h2><p><a href={`${prefix}review/index.html`}>Open Review</a></p></div><div className="saved-list" data-explore-saved>{savedItems.length ? savedItems.map((item) => { const id = savedIdForItem(item, saved); return <article className="saved-item" key={item.id}><div><strong>{item.title}</strong><span>{[item.module, item.metric, item.sourceContext].filter(Boolean).join(" / ")}</span></div><button type="button" data-remove-id={id} onClick={(event) => removeSaved(id, item.title, event)}>Remove</button></article>; }) : <p className="saved-empty">Save items to review later in this browser.</p>}</div></aside>
 
             <section className="health-panel topic-lens-panel" aria-labelledby="topic-lens-title"><div className="panel-heading"><h2 id="topic-lens-title">Topic lenses</h2><p>Apply a recurring theme, then open a focused page when it needs its own view.</p></div><div className="topic-lens-grid" data-topic-lenses>{lenses.map((lens) => <article className="topic-lens-card" key={lens.focus}><div><span>{lens.count} items / {lens.modules} modules</span><strong>{lens.label}</strong></div><p>{lens.description}</p><small>{lens.topItem ? `${lens.topItem.title} / ${lens.topItem.module}` : "No focused signal yet"}</small><div className="topic-lens-actions"><button type="button" data-focus-lens={lens.focus} aria-pressed={filters.focus === lens.focus} onClick={() => updateFilter("focus", lens.focus)}>Use lens</button><button className="pin-topic-button" type="button" data-pin-topic={lens.focus} aria-pressed={pinned.includes(lens.focus)} onClick={() => setPinned(togglePinnedTopic(browserStorage(), lens.focus, focusDefinitions.map(({ focus }) => focus)))}>{pinned.includes(lens.focus) ? "Pinned" : "Pin"}</button><a href={lens.route}>Open topic</a></div></article>)}</div></section>
 
             <section className="health-panel" aria-labelledby="explore-health-title"><div className="panel-heading"><h2 id="explore-health-title">Source health</h2><p data-data-mode>{loaded ? dataModeText(sourceMeta, updated) : fallback.dataMode}</p></div><div className="source-health-grid" data-source-health>{health.map((source, index) => <article className={`source-health-card status-${source.status}`} key={`${source.name}-${index}`}><div><strong>{source.name}</strong><span>{source.status}</span></div><p>{source.count} visible items</p><small>{source.detail}</small></article>)}</div></section>
 
-            <section className="explore-workspace" aria-label="Explore workspace">
-                <aside className="saved-panel" aria-labelledby="saved-title"><div className="panel-heading"><h2 id="saved-title">Review later</h2><p><a href={`${prefix}review/index.html`}>Open Review</a></p></div><div className="saved-list" data-explore-saved>{savedItems.length ? savedItems.map((item) => { const id = savedIdForItem(item, saved); return <article className="saved-item" key={item.id}><div><strong>{item.title}</strong><span>{[item.module, item.metric, item.sourceContext].filter(Boolean).join(" / ")}</span></div><button type="button" data-remove-id={id} onClick={() => setRecords(removeSavedItem(browserStorage(), id))}>Remove</button></article>; }) : <p className="saved-empty">Save items to review later in this browser.</p>}</div></aside>
-                <section className="rank-panel" aria-labelledby="explore-results-title"><div className="panel-heading"><h2 id="explore-results-title">Results</h2></div><div className="explore-results" data-explore-results>{visible.length ? visible.map((item) => <ItemCard key={item.id} item={item} saved={saved} onToggle={toggleSaved} />) : <article className="explore-card empty-card"><h3>No matching items</h3><p>Broaden the search, switch module, or clear current filters.</p></article>}</div></section>
-            </section>
+            <p className="visually-hidden" role="status" aria-live="polite" data-explore-announcement>{announcement}</p>
         </>
     );
 }

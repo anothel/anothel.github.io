@@ -36,6 +36,10 @@ const dataPaths = {
         </HeroHeader>
 
         <main id="main-content" class="explore-main" tabindex="-1">
+            <noscript>
+                <style>.explore-main astro-island .explore-command-bar,.explore-card-actions,.saved-panel,.topic-lens-actions button{display:none!important}</style>
+                <section class="explore-command-bar" aria-labelledby="explore-no-js-title"><h2 id="explore-no-js-title">Browse current signals</h2><p>Current checked-in results remain available. Filtering and browser-local saving require JavaScript.</p></section>
+            </noscript>
             <ExploreIsland client:load prefix="../" fallback={fallback} dataPaths={dataPaths} />
         </main>
     </div>

@@ -46,6 +46,11 @@ const seededReview = {
     items: [recordFor(seededTrend)]
 };
 
+async function openExploreAdvanced(page) {
+    const disclosure = page.locator("[data-explore-filter-shell]");
+    if ((await disclosure.getAttribute("open")) === null) await disclosure.locator("summary").click();
+}
+
 test("Notes exposes every topic and opens its Topic and Explore routes", async ({ page }) => {
     await page.goto("/notes/");
 
@@ -100,10 +105,7 @@ test("Explore search filters and restores checked-in results", async ({ page }) 
     const initialCount = await resultCards.count();
     expect(initialCount).toBeGreaterThan(0);
 
-    const filterShell = page.locator("[data-explore-filter-shell]");
-    if ((await filterShell.getAttribute("open")) === null) {
-        await page.getByText("Filters and saved searches", { exact: true }).click();
-    }
+    await expect(page.locator("[data-explore-filter-shell]")).not.toHaveAttribute("open", "");
     await page.locator("[data-explore-query]").fill("__no_such_signal__");
     await expect(page.getByRole("heading", { name: "No matching items" })).toBeVisible();
     await expect(resultCards).toHaveCount(0);
@@ -156,12 +158,24 @@ test("Explore React controls filter, save, and preserve Review-compatible state"
     await expect(page.locator("[data-explore-results] .explore-card:not(.empty-card)").first().locator(".card-topline span").nth(1)).toHaveText(category);
 
     await page.locator("[data-clear-filters]").click();
+    await openExploreAdvanced(page);
     await page.locator('[data-focus-filter="Agent skills"]').click();
     await expect(page.locator("[data-explore-results]")).toContainText(/skills/i);
 
+    await page.locator("[data-explore-sort]").selectOption("module");
+    const sortedModules = await page.locator("[data-explore-results] .card-topline span:first-child").allTextContents();
+    expect(sortedModules).toEqual([...sortedModules].sort());
+
     const save = page.locator("[data-explore-results] [data-save-id]").first();
     await save.click();
+    await expect(save).toBeFocused();
+    await expect(page.locator("[data-explore-announcement]")).toContainText(/^Saved .+ for Review later\.$/);
     await expect(page.locator("[data-explore-saved-count]")).toHaveText("1");
+
+    await page.locator("[data-explore-saved] [data-remove-id]").click();
+    await expect(save).toBeFocused();
+    await expect(page.locator("[data-explore-announcement]")).toContainText(/^Removed .+ from Review later\.$/);
+    await save.click();
     const stored = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)), reviewStorageKey);
     expect(stored.version).toBe(2);
     expect(stored.items).toHaveLength(1);
@@ -179,6 +193,7 @@ test("Explore React controls filter, save, and preserve Review-compatible state"
 test("Explore defaults and saved-search CRUD survive React rerenders", async ({ page }) => {
     await page.goto("/explore/");
     await expect.poll(() => page.locator("[data-explore-module] option").count()).toBeGreaterThan(1);
+    await openExploreAdvanced(page);
     await page.locator('[data-focus-filter="MCP"]').click();
     await page.locator("[data-save-explore-default]").click();
     await page.locator("[data-explore-query]").fill("server");
@@ -188,6 +203,7 @@ test("Explore defaults and saved-search CRUD survive React rerenders", async ({ 
     await page.locator("[data-clear-filters]").click();
     await page.locator("[data-apply-search-id]").click();
     await expect(page.locator("[data-explore-query]")).toHaveValue("server");
+    await expect(page.locator("[data-explore-announcement]")).toContainText("Applied saved search:");
     page.once("dialog", (dialog) => dialog.accept("MCP servers"));
     await page.locator("[data-edit-search-id]").click();
     await expect(page.locator(".saved-search-label")).toHaveText("MCP servers");
@@ -196,6 +212,7 @@ test("Explore defaults and saved-search CRUD survive React rerenders", async ({ 
     await expect(page.locator('[data-focus-filter="MCP"]')).toHaveAttribute("aria-pressed", "true");
     expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)).version, exploreDefaultKey)).toBe(1);
     expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)).items[0].label, savedSearchKey)).toBe("MCP servers");
+    await openExploreAdvanced(page);
     await page.locator("[data-remove-search-id]").click();
     await expect(page.locator("[data-saved-searches] .saved-search-item")).toHaveCount(0);
 });
@@ -206,6 +223,7 @@ test("Explore rejects malformed local state and imported JSON without crashing",
     await page.addInitScript((keys) => keys.forEach((key) => localStorage.setItem(key, "{broken")), [reviewStorageKey, exploreDefaultKey, savedSearchKey, "anothel.preferences.pinnedTopics.v1"]);
     await page.goto("/explore/");
     await expect(page.locator("[data-explore-results] .explore-card").first()).toBeVisible();
+    await openExploreAdvanced(page);
     await page.locator("[data-saved-search-import-text]").fill('{"version":1,"items":[{"bad":true}]}');
     await page.locator("[data-saved-search-import-paste]").click();
     await expect(page.locator("[data-saved-search-portability-status]")).toHaveText("No new saved searches to import.");
@@ -218,15 +236,52 @@ test("Explore rejects malformed local state and imported JSON without crashing",
     expect(errors).toEqual([]);
 });
 
-test("JavaScript-disabled Explore keeps useful controls, health, lenses, and results", async ({ browser }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false });
+test("Explore mobile order keeps search and hydrated results in the first viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/explore/");
+    await expect.poll(() => page.locator("[data-explore-module] option").count()).toBeGreaterThan(1);
+
+    const layout = await page.evaluate(() => {
+        const search = document.querySelector("[data-explore-query]");
+        const result = document.querySelector("[data-explore-results] .explore-card:not(.empty-card)");
+        const advanced = document.querySelector("[data-explore-filter-shell]");
+        const review = document.querySelector("[data-explore-saved]");
+        const lenses = document.querySelector("[data-topic-lenses]");
+        const health = document.querySelector("[data-source-health]");
+        return {
+            searchTop: search.getBoundingClientRect().top,
+            resultTop: result.getBoundingClientRect().top,
+            inputSize: parseFloat(getComputedStyle(search).fontSize),
+            overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            order: [advanced, review, lenses, health].every((section) => result.compareDocumentPosition(section) & Node.DOCUMENT_POSITION_FOLLOWING)
+        };
+    });
+
+    expect(layout.searchTop).toBeLessThanOrEqual(400);
+    expect(layout.resultTop).toBeLessThan(844);
+    expect(layout.inputSize).toBeGreaterThanOrEqual(16);
+    expect(layout.overflow).toBeLessThanOrEqual(1);
+    expect(layout.order).toBe(true);
+});
+
+test("JavaScript-disabled Explore keeps honest results-first output", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     const page = await context.newPage();
     await page.goto("/explore/");
-    await expect(page.locator("[data-explore-query]")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Browse current signals" })).toBeVisible();
+    await expect(page.locator("[data-explore-query]")).toBeHidden();
     await expect(page.locator("[data-source-health] .source-health-card").first()).toBeVisible();
     await expect(page.locator("[data-topic-lenses] .topic-lens-card").first()).toBeVisible();
     await expect(page.locator("[data-explore-results] .explore-card").first()).toBeVisible();
-    await expect(page.locator("[data-explore-saved]")).toContainText("Save items to review later");
+    await expect(page.locator("[data-explore-results] button").first()).toBeHidden();
+    const resultTop = await page.locator("[data-explore-results] .explore-card").first().evaluate((card) => card.getBoundingClientRect().top);
+    expect(resultTop).toBeLessThan(844);
+    const resultsBeforeSecondary = await page.evaluate(() => {
+        const results = document.querySelector("[data-explore-results]");
+        return [document.querySelector("[data-topic-lenses]"), document.querySelector("[data-source-health]")]
+            .every((section) => results.compareDocumentPosition(section) & Node.DOCUMENT_POSITION_FOLLOWING);
+    });
+    expect(resultsBeforeSecondary).toBe(true);
     await context.close();
 });
 
