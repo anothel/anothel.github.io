@@ -2077,6 +2077,7 @@ button {
 
 .empty-card a,
 .review-empty a,
+.review-empty button,
 .error-card a {
     display: inline-flex;
     min-height: 44px;
@@ -2171,13 +2172,7 @@ button {
 }
 
 .review-filters textarea {
-    min-height: 36px;
     width: min(100%, 280px);
-    padding: 8px 10px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--panel);
-    color: var(--text);
     resize: vertical;
 }
 
@@ -2186,6 +2181,23 @@ button {
     border-color: var(--accent-soft);
     background: var(--panel-strong);
     color: var(--accent);
+}
+
+[data-review-portability-status] {
+    flex: 1 0 100%;
+    color: var(--muted);
+    font-size: var(--type-ui);
+}
+
+.review-danger-zone {
+    flex: 1 0 100%;
+    padding-top: var(--space-2);
+    border-top: var(--surface-border);
+}
+
+.review-danger-zone button {
+    border-color: var(--danger);
+    color: var(--danger);
 }
 
 .review-workspace {
@@ -2208,6 +2220,11 @@ button {
     display: grid;
     gap: 1px;
     background: var(--line);
+}
+
+.review-queue > .review-empty {
+    padding: 14px;
+    background: var(--panel);
 }
 
 .review-queue-item {
@@ -2325,7 +2342,8 @@ button {
 
 .review-actions a,
 .review-actions button,
-.review-empty a {
+.review-empty a,
+.review-empty button {
     width: auto;
     min-height: 38px;
     padding: 8px 12px;
@@ -2340,7 +2358,8 @@ button {
 
 .review-actions a:hover,
 .review-actions button:hover,
-.review-empty a:hover {
+.review-empty a:hover,
+.review-empty button:hover {
     border-color: var(--accent-soft);
     background: var(--panel-strong);
 }
@@ -2712,9 +2731,13 @@ button {
 
     .stats-grid,
     .topic-stats,
-    .status-stats,
-    .review-stats {
+    .status-stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--density-control-gap);
+    }
+
+    .review-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: var(--density-control-gap);
     }
 
@@ -2781,7 +2804,8 @@ button {
     .pin-topic-button,
     .review-actions a,
     .review-actions button,
-    .review-empty a {
+    .review-empty a,
+    .review-empty button {
         min-height: 44px;
     }
 
@@ -2882,7 +2906,8 @@ button {
     .explore-strip a,
     .review-actions a,
     .review-actions button,
-    .review-empty a {
+    .review-empty a,
+    .review-empty button {
         width: 100%;
     }
 

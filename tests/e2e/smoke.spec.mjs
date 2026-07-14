@@ -51,6 +51,11 @@ async function openExploreAdvanced(page) {
     if ((await disclosure.getAttribute("open")) === null) await disclosure.locator("summary").click();
 }
 
+async function openReviewTools(page) {
+    const disclosure = page.locator("[data-review-tools]");
+    if ((await disclosure.getAttribute("open")) === null) await disclosure.locator("summary").click();
+}
+
 test("Notes exposes every topic and opens its Topic and Explore routes", async ({ page }) => {
     await page.goto("/notes/");
 
@@ -137,7 +142,7 @@ test("Review handles malformed localStorage without crashing", async ({ page }) 
 
     await expect(page.getByRole("heading", { name: "Review later." })).toBeVisible();
     await expect(page.locator("[data-review-total]")).toHaveText("0");
-    await expect(page.getByRole("heading", { name: "No saved items yet" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Malformed Review records ignored" })).toBeVisible();
     expect(pageErrors).toEqual([]);
 });
 
@@ -293,7 +298,89 @@ test("JavaScript-disabled Review gives honest browser-local guidance", async ({ 
     await expect(page.locator("[data-review-static-guidance]")).toContainText("JavaScript and localStorage");
     await expect(page.locator("[data-review-static-guidance]").getByRole("link", { name: "Explore" })).toBeVisible();
     await expect(page.getByText("No saved items yet")).toHaveCount(0);
+    await expect(page.locator("[data-review-filter], [data-review-total], [data-review-tools]")).toHaveCount(0);
     await context.close();
+});
+
+test("Review queue leads mobile and desktop while mobile selection reveals detail", async ({ page }) => {
+    await page.addInitScript(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)), {
+        key: reviewStorageKey,
+        value: { version: 2, items: [recordFor(seededTrend), recordFor(secondTrend, "done")] }
+    });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/review/");
+    await expect(page.locator("[data-review-queue] [data-review-select-id]").first()).toBeVisible();
+
+    const mobile = await page.evaluate(() => {
+        const filters = document.querySelector(".review-filters");
+        const queue = document.querySelector("[data-review-queue]");
+        const item = queue.querySelector("[data-review-select-id]");
+        const detail = document.querySelector("[data-review-detail]");
+        const stats = document.querySelector(".review-stats");
+        const tools = document.querySelector("[data-review-tools]");
+        return {
+            filtersTop: filters.getBoundingClientRect().top,
+            itemTop: item.getBoundingClientRect().top,
+            overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            order: [detail, stats, tools].every((section) => queue.compareDocumentPosition(section) & Node.DOCUMENT_POSITION_FOLLOWING),
+            toolsOpen: tools.open
+        };
+    });
+    expect(mobile.filtersTop).toBeLessThanOrEqual(650);
+    expect(mobile.itemTop).toBeLessThanOrEqual(650);
+    expect(mobile.overflow).toBeLessThanOrEqual(1);
+    expect(mobile.order).toBe(true);
+    expect(mobile.toolsOpen).toBe(false);
+
+    await page.locator(`[data-review-select-id="${recordFor(secondTrend).id}"]`).click();
+    await expect(page.locator("[data-review-detail-heading]")).toBeFocused();
+    const focused = await page.evaluate(() => ({
+        detailTop: document.querySelector("[data-review-detail-heading]").getBoundingClientRect().top,
+        railBottom: document.querySelector(".primary-nav").getBoundingClientRect().bottom
+    }));
+    expect(focused.detailTop).toBeGreaterThanOrEqual(focused.railBottom);
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/review/");
+    await expect(page.locator(".review-detail")).toBeVisible();
+    const desktop = await page.evaluate(() => {
+        const queue = document.querySelector(".review-queue-panel").getBoundingClientRect();
+        const detail = document.querySelector(".review-detail").getBoundingClientRect();
+        return {
+            aligned: Math.abs(queue.top - detail.top),
+            queueWidth: queue.width,
+            detailWidth: detail.width,
+            overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            toolsOpen: document.querySelector("[data-review-tools]").open
+        };
+    });
+    expect(desktop.aligned).toBeLessThanOrEqual(1);
+    expect(desktop.detailWidth).toBeGreaterThan(desktop.queueWidth);
+    expect(desktop.overflow).toBeLessThanOrEqual(1);
+    expect(desktop.toolsOpen).toBe(false);
+    const desktopSelection = page.locator(`[data-review-select-id="${recordFor(secondTrend).id}"]`);
+    await desktopSelection.click();
+    await expect(desktopSelection).toBeFocused();
+});
+
+test("Review distinguishes unavailable storage from an empty queue", async ({ page }) => {
+    await page.addInitScript(() => {
+        Storage.prototype.getItem = () => { throw new DOMException("blocked", "SecurityError"); };
+    });
+    await page.goto("/review/");
+    await expect(page.getByRole("heading", { name: "Review storage unavailable" })).toBeVisible();
+    await expect(page.locator("[data-review-total]")).toHaveText("—");
+    await openReviewTools(page);
+    await expect(page.locator("[data-review-export]")).toBeDisabled();
+});
+
+test("Review distinguishes current-data failure from stale and empty queues", async ({ page }) => {
+    await page.addInitScript(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)), { key: reviewStorageKey, value: seededReview });
+    await page.route("**/data/*.json", (route) => route.abort());
+    await page.goto("/review/");
+    await expect(page.getByRole("heading", { name: "Current signal data unavailable" })).toBeVisible();
+    await expect(page.locator("[data-review-unread]")).toHaveText("1");
+    await expect(page.getByRole("heading", { name: "Saved items not in current data" })).toHaveCount(0);
 });
 
 test("Home reads legacy saved ids from the shared localStorage contract", async ({ page }) => {
@@ -461,13 +548,18 @@ test("Review migrates legacy ids and persists workflow metadata", async ({ page 
     await page.goto("/review/");
 
     await expect(page.locator("[data-review-queue]")).toContainText(seededTrend.title);
-    await page.locator('[data-review-status="read"]').click();
+    const readButton = page.locator('[data-review-status="read"]');
+    await readButton.click();
+    await expect(readButton).toBeFocused();
+    await expect(page.locator("[data-review-announcement]")).toContainText("marked read");
     await expect(page.locator(".status-pill")).toHaveText("Read");
     await page.locator("[data-review-reason]").fill("Follow up");
     await page.locator("[data-review-tag]").fill("agents");
     await page.locator("[data-review-note]").fill("Compare implementations");
-    await page.locator("[data-review-meta-id]").click();
     await page.locator('[data-review-status="done"]').click();
+    await expect(page.locator("[data-review-reason]")).toHaveValue("Follow up");
+    await page.locator("[data-review-meta-id]").click();
+    await expect(page.locator("[data-review-announcement]")).toContainText("Metadata saved for");
     await page.reload();
 
     await expect(page.locator(".status-pill")).toHaveText("Done");
@@ -492,19 +584,28 @@ test("Review selection, filters, remove, and deliberate clear update compatible 
     await expect(page.locator("[data-review-detail] h2")).toHaveText(secondTrend.title);
     await page.locator('[data-review-filter="done"]').click();
     await expect(page.locator("[data-review-total]")).toHaveText("1");
+    await expect(page.locator("[data-review-unread]")).toHaveText("1");
+    await expect(page.locator("[data-review-done]")).toHaveText("1");
     await page.locator('[data-review-filter="unread"]').click();
     await expect(page.locator("[data-review-total]")).toHaveText("1");
     await page.locator('[data-review-filter="read"]').click();
     await expect(page.locator('[data-review-filter="read"]')).toHaveAttribute("aria-pressed", "true");
     await expect(page.getByRole("heading", { name: "No read items in Review" })).toBeVisible();
-    await page.locator('[data-review-filter="all"]').click();
+    await page.getByRole("button", { name: "Choose All" }).click();
+    await expect(page.locator('[data-review-filter="all"]')).toBeFocused();
+    const nextQueueItem = page.locator(`[data-review-select-id="${recordFor(secondTrend).id}"]`);
     await page.locator("[data-review-remove-id]").click();
+    await expect(nextQueueItem).toBeFocused();
+    await expect(page.locator("[data-review-announcement]")).toContainText("removed from Review");
     expect((await page.evaluate((key) => JSON.parse(localStorage.getItem(key)), reviewStorageKey)).items).toHaveLength(1);
 
+    await openReviewTools(page);
     await page.locator("[data-review-clear]").click();
     expect((await page.evaluate((key) => JSON.parse(localStorage.getItem(key)), reviewStorageKey)).items).toHaveLength(1);
     await expect(page.locator("[data-review-clear]")).toHaveText("Confirm clear");
     await page.locator("[data-review-clear]").click();
+    await expect(page.getByRole("heading", { name: "Queue" })).toBeFocused();
+    await expect(page.locator("[data-review-announcement]")).toHaveText("Review queue cleared.");
     expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)), reviewStorageKey)).toEqual({ version: 2, items: [] });
     await page.goto("/");
     await expect(page.locator("[data-home-review-saved]")).toHaveText("0");
@@ -515,6 +616,7 @@ test("Review selection, filters, remove, and deliberate clear update compatible 
 test("Review previews imports and exports compatible JSON and safe Markdown", async ({ page }) => {
     await page.addInitScript(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)), { key: reviewStorageKey, value: seededReview });
     await page.goto("/review/");
+    await openReviewTools(page);
 
     const jsonDownload = page.waitForEvent("download");
     await page.locator("[data-review-export]").click();
@@ -528,6 +630,7 @@ test("Review previews imports and exports compatible JSON and safe Markdown", as
     await expect(page.locator("[data-review-portability-status]")).toHaveText("Import preview: 1 new, 1 existing or duplicate.");
     await page.locator("[data-review-import-paste]").click();
     await expect(page.locator("[data-review-total]")).toHaveText("2");
+    await expect(page.locator("[data-review-announcement]")).toContainText("Import completed:");
 
     await page.locator("[data-review-import-file]").setInputFiles({
         name: "review.json",
@@ -539,6 +642,8 @@ test("Review previews imports and exports compatible JSON and safe Markdown", as
     await expect(page.locator("[data-review-total]")).toHaveText("3");
     await page.locator("[data-review-import-text]").fill("{broken");
     await expect(page.locator("[data-review-portability-status]")).toHaveText("No valid Review items to import.");
+    await page.locator("[data-review-import-paste]").click();
+    await expect(page.locator("[data-review-announcement]")).toContainText("Import rejected:");
     await expect(page.locator("body")).not.toContainText(/\b(?:undefined|null|NaN)\b/);
 });
 

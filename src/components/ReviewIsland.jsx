@@ -3,10 +3,11 @@ import { normalizeExploreData, safeExternalUrl } from "../lib/explore-domain.js"
 import {
     clearSavedItems,
     mergeSavedRecords,
-    readSavedRecords,
     removeSavedItem,
+    savedRecordsFromRaw,
     setSavedItemMeta,
-    setSavedItemStatus
+    setSavedItemStatus,
+    storageKeys
 } from "../lib/explore-storage.js";
 import {
     filterReviewItems,
@@ -26,6 +27,19 @@ const filters = ["all", "unread", "read", "done"];
 
 function browserStorage() {
     try { return globalThis.localStorage; } catch { return undefined; }
+}
+
+function reviewStorageState(storage) {
+    try {
+        if (!storage || typeof storage.getItem !== "function") return { issue: "unavailable", records: [] };
+        const raw = storage.getItem(storageKeys.savedItems) ?? "[]";
+        let parsed;
+        try { parsed = JSON.parse(raw); } catch { return { issue: "malformed", records: [] }; }
+        const valid = Array.isArray(parsed) || (parsed?.version === 2 && Array.isArray(parsed.items));
+        return { issue: valid ? "" : "malformed", records: valid ? savedRecordsFromRaw(raw) : [] };
+    } catch {
+        return { issue: "unavailable", records: [] };
+    }
 }
 
 function statusLabel(status) {
@@ -55,10 +69,13 @@ function download(text, type, filename) {
     URL.revokeObjectURL(url);
 }
 
-function EmptyReview({ prefix, staleCount, statusFilter }) {
-    if (staleCount) return <article className="review-empty"><h2>Saved items not in current data</h2><p>{staleSavedCopy(staleCount)}</p><a href={`${prefix}explore/index.html`}>Open Explore</a></article>;
-    if (statusFilter !== "all") return <article className="review-empty"><h2>No {statusFilter} items in Review</h2><p>Choose All or another status to keep working through saved local items.</p><a href={`${prefix}explore/index.html`}>Open Explore</a></article>;
-    return <article className="review-empty"><h2>No saved items yet</h2><p>Saved items are local to this browser. Open Explore and save useful signals to build this queue.</p><a href={`${prefix}explore/index.html`}>Open Explore</a></article>;
+function EmptyReview({ prefix, issue, loadError, staleCount, statusFilter, matchedCount, onShowAll, onRetry }) {
+    if (issue === "unavailable") return <article className="review-empty" data-review-empty><h3>Review storage unavailable</h3><p>This browser blocked localStorage, so Review cannot claim the queue is empty.</p><button type="button" onClick={onRetry}>Retry</button></article>;
+    if (issue === "malformed") return <article className="review-empty" data-review-empty><h3>Malformed Review records ignored</h3><p>Saved data could not be read safely. Import valid Review JSON or clear the malformed queue using queue tools below.</p><a href="#review-tools">Go to queue tools</a></article>;
+    if (loadError) return <article className="review-empty" data-review-empty><h3>Current signal data unavailable</h3><p>Local Review records remain preserved and exportable, but current items could not be matched.</p><button type="button" onClick={onRetry}>Retry</button></article>;
+    if (statusFilter !== "all" && matchedCount) return <article className="review-empty" data-review-empty><h3>No {statusFilter} items in Review</h3><p>Choose All or another status to continue through saved items.</p><button type="button" onClick={onShowAll}>Choose All</button></article>;
+    if (staleCount) return <article className="review-empty" data-review-empty data-review-stale-count={staleCount}><h3>Saved items not in current data</h3><p>{staleSavedCopy(staleCount)}</p><a href={`${prefix}explore/index.html`}>Open Explore</a></article>;
+    return <article className="review-empty" data-review-empty><h3>No saved items yet</h3><p>Saved items are local to this browser. Open Explore and save useful signals to build this queue.</p><a href={`${prefix}explore/index.html`}>Open Explore</a></article>;
 }
 
 function ReviewDetail({ item, editor, onEditorChange, onSaveMeta, onStatus, onRemove, prefix }) {
@@ -70,7 +87,7 @@ function ReviewDetail({ item, editor, onEditorChange, onSaveMeta, onStatus, onRe
     return (
         <article className="review-detail-card">
             <div className="card-topline"><span>{item.module}</span><span>{item.category}</span></div>
-            <h2>{item.title}</h2>
+            <h2 tabIndex="-1" data-review-detail-heading>{item.title}</h2>
             <p className="why-copy"><strong>Why this matters</strong> {item.summary}</p>
             <p className="source-context"><strong>Source context</strong> {context}</p>
             {item.scoreReasons?.length > 0 && <ul className="score-reasons" aria-label="Score reasons">{item.scoreReasons.slice(0, 3).map((reason) => <li key={reason}>{reason}</li>)}</ul>}
@@ -106,11 +123,16 @@ export default function ReviewIsland({ prefix = "../", dataPaths }) {
     const [importText, setImportText] = useState("");
     const [portabilityStatus, setPortabilityStatus] = useState("Review JSON stays local.");
     const [clearPending, setClearPending] = useState(false);
+    const [storageIssue, setStorageIssue] = useState("");
+    const [announcement, setAnnouncement] = useState("");
     const fileInput = useRef(null);
+    const queueHeading = useRef(null);
 
     useEffect(() => {
         setHydrated(true);
-        setRecords(readSavedRecords(browserStorage()));
+        const saved = reviewStorageState(browserStorage());
+        setStorageIssue(saved.issue);
+        setRecords(saved.records);
         let cancelled = false;
         Promise.all(Object.entries(dataPaths).map(async ([key, path]) => {
             const response = await fetch(path);
@@ -132,7 +154,7 @@ export default function ReviewIsland({ prefix = "../", dataPaths }) {
     const visible = useMemo(() => filterReviewItems(matched.items, statusFilter), [matched.items, statusFilter]);
     const selected = useMemo(() => selectedReviewItem(visible, selectedId), [selectedId, visible]);
     const stats = useMemo(() => reviewStats(visible), [visible]);
-    const workflow = useMemo(() => workflowStats(matched.items), [matched.items]);
+    const workflow = useMemo(() => workflowStats(records.map((record) => ({ savedStatus: record.status }))), [records]);
 
     useEffect(() => {
         setEditor({ reason: selected?.savedReason || "", tag: selected?.savedTag || "", note: selected?.savedNote || "" });
@@ -152,17 +174,29 @@ export default function ReviewIsland({ prefix = "../", dataPaths }) {
         if (!selected) return;
         setRecords(setSavedItemMeta(browserStorage(), selected.savedRecordId, editor));
         setPortabilityStatus("Metadata saved locally.");
+        setAnnouncement(`Metadata saved for ${selected.title}.`);
     }
 
     function setStatus(status) {
         if (!selected) return;
         setRecords(setSavedItemStatus(browserStorage(), selected.savedRecordId, status));
+        setAnnouncement(`${selected.title} marked ${status}.`);
+    }
+
+    function selectItem(id) {
+        setSelectedId(id);
+        if (globalThis.matchMedia?.("(max-width: 720px)").matches) requestAnimationFrame(() => document.querySelector("[data-review-detail-heading]")?.focus());
     }
 
     function removeSelected() {
         if (!selected) return;
+        const buttons = [...document.querySelectorAll("[data-review-select-id]")];
+        const index = buttons.findIndex((button) => button.dataset.reviewSelectId === selected.id);
+        const target = buttons[index + 1] || buttons[index - 1] || queueHeading.current;
         setRecords(removeSavedItem(browserStorage(), selected.savedRecordId));
-        setSelectedId("");
+        setSelectedId(target?.dataset.reviewSelectId || "");
+        setAnnouncement(`${selected.title} removed from Review.`);
+        requestAnimationFrame(() => target?.focus());
     }
 
     function previewText(text) {
@@ -173,13 +207,23 @@ export default function ReviewIsland({ prefix = "../", dataPaths }) {
     }
 
     function importPasted() {
-        if (!importText) return setPortabilityStatus("Paste Review JSON first.");
+        if (!importText) {
+            setPortabilityStatus("Paste Review JSON first.");
+            setAnnouncement("Import rejected: paste Review JSON first.");
+            return;
+        }
         const incoming = reviewImportRecords(importText);
-        if (!incoming.length) return setPortabilityStatus("No valid Review items to import.");
+        if (!incoming.length) {
+            setPortabilityStatus("No valid Review items to import.");
+            setAnnouncement("Import rejected: no valid Review items found.");
+            return;
+        }
         const result = mergeSavedRecords(browserStorage(), incoming);
         setRecords(result.records);
+        setStorageIssue("");
         setImportText("");
         setPortabilityStatus(`Imported ${result.added} items. Kept ${result.skipped} existing.`);
+        setAnnouncement(`Import completed: ${result.added} added, ${result.skipped} kept.`);
     }
 
     function clearReview() {
@@ -189,41 +233,56 @@ export default function ReviewIsland({ prefix = "../", dataPaths }) {
             return;
         }
         setRecords(clearSavedItems(browserStorage()));
+        setStorageIssue("");
         setSelectedId("");
         setStatusFilter("all");
         setClearPending(false);
         setPortabilityStatus("Review queue cleared.");
+        setAnnouncement("Review queue cleared.");
+        requestAnimationFrame(() => queueHeading.current?.focus());
+    }
+
+    function showAll() {
+        setStatusFilter("all");
+        setSelectedId("");
+        requestAnimationFrame(() => document.querySelector('[data-review-filter="all"]')?.focus());
     }
 
     return (
         <>
-            <section className="module-detail"><h2>Saved locally in this browser.</h2><p>Items saved from Explore appear here when they still exist in current data.</p>{loadError && <p role="status">Current signal data could not be loaded. Local records remain available for JSON export.</p>}{matched.staleRecords.length > 0 && <p role="status" data-review-stale-count={matched.staleRecords.length}>{staleSavedCopy(matched.staleRecords.length)}</p>}</section>
-
-            <section className="stats-grid review-stats" aria-label="Review stats">
-                <article className="stat-card"><span>Visible</span><strong data-review-total>{stats.visible}</strong></article>
-                <article className="stat-card"><span>Unread</span><strong data-review-unread>{workflow.unread}</strong></article>
-                <article className="stat-card"><span>Read</span><strong data-review-read>{workflow.read}</strong></article>
-                <article className="stat-card"><span>Done</span><strong data-review-done>{workflow.done}</strong></article>
-                <article className="stat-card"><span>Focus areas</span><strong data-review-focus-count>{stats.focusAreas}</strong></article>
-                <article className="stat-card"><span>Sources</span><strong data-review-source-count>{stats.sources}</strong></article>
-            </section>
-
             <section className="review-filters" aria-label="Review status filters">
                 {filters.map((filter) => <button type="button" key={filter} data-review-filter={filter} aria-pressed={statusFilter === filter} onClick={() => { setStatusFilter(filter); setSelectedId(""); }}>{filter[0].toUpperCase() + filter.slice(1)}</button>)}
-                <button type="button" data-review-export onClick={() => { download(reviewJsonPayload(records), "application/json", "anothel-review.json"); setPortabilityStatus("Review JSON exported."); }}>Export JSON</button>
-                <button type="button" data-review-export-markdown onClick={() => { download(reviewMarkdownPayload(matched.items), "text/markdown", "anothel-review.md"); setPortabilityStatus("Review Markdown exported."); }}>Export Markdown</button>
-                <button type="button" data-review-clear aria-pressed={clearPending} onClick={clearReview}>{clearPending ? "Confirm clear" : "Clear Review"}</button>
-                <button type="button" data-review-import onClick={() => fileInput.current?.click()}>Import JSON</button>
-                <textarea data-review-import-text aria-label="Review JSON to import" placeholder="Paste Review JSON" value={importText} onChange={(event) => { setImportText(event.target.value); setPortabilityStatus(event.target.value ? previewText(event.target.value) : "Review JSON stays local."); }} />
-                <button type="button" data-review-import-paste onClick={importPasted}>Import pasted JSON</button>
-                <input ref={fileInput} type="file" accept="application/json,.json" data-review-import-file hidden onChange={async (event) => { const file = event.target.files?.[0]; if (!file) return; try { const text = await file.text(); setImportText(text); setPortabilityStatus(previewText(text)); } catch { setPortabilityStatus("Review file could not be read."); } event.target.value = ""; }} />
-                <span data-review-portability-status role="status">{portabilityStatus}</span>
             </section>
 
             <section className="review-workspace" aria-label="Review workspace">
-                <aside className="review-queue-panel" aria-labelledby="review-queue-title"><div className="panel-heading"><h2 id="review-queue-title">Queue</h2><p>Unread first. Pick one saved signal, then open, annotate, mark done, or remove.</p></div><div className="review-queue" data-review-queue>{visible.length ? visible.map((item) => <button className="review-queue-item" type="button" key={item.id} data-review-select-id={item.id} aria-selected={selected?.id === item.id} aria-label={`Select ${item.title}`} onClick={() => setSelectedId(item.id)}><strong>{item.title}</strong><span>{[item.module, item.metric, item.category].filter(Boolean).join(" / ")}</span>{(item.savedReason || item.savedTag) && <span>{[item.savedTag, item.savedReason].filter(Boolean).join(" / ")}</span>}<small>{statusLabel(item.savedStatus)} / {savedDateLabel(item.savedAt)}</small></button>) : <p className="saved-empty">{matched.staleRecords.length ? staleSavedCopy(matched.staleRecords.length) : statusFilter !== "all" ? `No ${statusFilter} items match this filter.` : "No saved items in current data."}</p>}</div></aside>
-                <section className="review-detail" aria-labelledby="review-detail-title"><div className="panel-heading"><h2 id="review-detail-title">Selected item</h2><p>Next action changes with status.</p></div><div data-review-detail>{selected ? <ReviewDetail item={selected} editor={editor} prefix={prefix} onEditorChange={(field, value) => setEditor((current) => ({ ...current, [field]: value }))} onSaveMeta={saveMeta} onStatus={setStatus} onRemove={removeSelected} /> : <EmptyReview prefix={prefix} staleCount={matched.staleRecords.length} statusFilter={statusFilter} />}</div></section>
+                <aside className="review-queue-panel" aria-labelledby="review-queue-title"><div className="panel-heading"><h2 id="review-queue-title" ref={queueHeading} tabIndex="-1">Queue</h2><p>Unread first. Select one to open, annotate, mark done, or remove.</p></div><div className="review-queue" data-review-queue>{visible.length > 0 && !loadError && matched.staleRecords.length > 0 && <p className="saved-empty" data-review-stale-count={matched.staleRecords.length}>{staleSavedCopy(matched.staleRecords.length)}</p>}{visible.length ? visible.map((item) => <button className="review-queue-item" type="button" key={item.id} data-review-select-id={item.id} aria-selected={selected?.id === item.id} aria-label={`Select ${item.title}`} onClick={() => selectItem(item.id)}><strong>{item.title}</strong><span>{[item.module, item.metric, item.category].filter(Boolean).join(" / ")}</span>{(item.savedReason || item.savedTag) && <span>{[item.savedTag, item.savedReason].filter(Boolean).join(" / ")}</span>}<small>{statusLabel(item.savedStatus)} / {savedDateLabel(item.savedAt)}</small></button>) : <EmptyReview prefix={prefix} issue={storageIssue} loadError={loadError} staleCount={matched.staleRecords.length} statusFilter={statusFilter} matchedCount={matched.items.length} onShowAll={showAll} onRetry={() => globalThis.location?.reload()} />}</div></aside>
+                <section className="review-detail" aria-labelledby="review-detail-title"><div className="panel-heading"><h2 id="review-detail-title">Selected item</h2><p>Next action changes with status.</p></div><div data-review-detail>{selected ? <ReviewDetail item={selected} editor={editor} prefix={prefix} onEditorChange={(field, value) => setEditor((current) => ({ ...current, [field]: value }))} onSaveMeta={saveMeta} onStatus={setStatus} onRemove={removeSelected} /> : <p className="saved-empty">{visible.length ? "Select a queue item to inspect its workflow details." : "Queue actions appear in the Queue panel."}</p>}</div></section>
             </section>
+
+            <section className="stats-grid review-stats" aria-label="Review workflow summary">
+                <article className="stat-card"><span>Visible</span><strong data-review-total>{storageIssue === "unavailable" ? "—" : stats.visible}</strong></article>
+                <article className="stat-card"><span>Unread</span><strong data-review-unread>{storageIssue === "unavailable" ? "—" : workflow.unread}</strong></article>
+                <article className="stat-card"><span>Read</span><strong data-review-read>{storageIssue === "unavailable" ? "—" : workflow.read}</strong></article>
+                <article className="stat-card"><span>Done</span><strong data-review-done>{storageIssue === "unavailable" ? "—" : workflow.done}</strong></article>
+                <article className="stat-card"><span>Focus areas</span><strong data-review-focus-count>{storageIssue === "unavailable" ? "—" : stats.focusAreas}</strong></article>
+                <article className="stat-card"><span>Sources</span><strong data-review-source-count>{storageIssue === "unavailable" ? "—" : stats.sources}</strong></article>
+            </section>
+
+            <details className="explore-command-bar review-tools" id="review-tools" data-review-tools>
+                <summary className="explore-filter-toggle">Import, export, and queue tools</summary>
+                <div className="review-filters review-tool-grid">
+                    <button type="button" data-review-export disabled={storageIssue === "unavailable"} onClick={() => { download(reviewJsonPayload(records), "application/json", "anothel-review.json"); setPortabilityStatus("Review JSON exported."); }}>Export JSON</button>
+                    <button type="button" data-review-export-markdown disabled={storageIssue === "unavailable"} onClick={() => { download(reviewMarkdownPayload(matched.items), "text/markdown", "anothel-review.md"); setPortabilityStatus("Review Markdown exported."); }}>Export Markdown</button>
+                    <button type="button" data-review-import disabled={storageIssue === "unavailable"} onClick={() => fileInput.current?.click()}>Import JSON</button>
+                    <textarea data-review-import-text aria-label="Review JSON to import" placeholder="Paste Review JSON" disabled={storageIssue === "unavailable"} value={importText} onChange={(event) => { setImportText(event.target.value); setPortabilityStatus(event.target.value ? previewText(event.target.value) : "Review JSON stays local."); }} />
+                    <button type="button" data-review-import-paste disabled={storageIssue === "unavailable"} onClick={importPasted}>Import pasted JSON</button>
+                    <input ref={fileInput} type="file" accept="application/json,.json" data-review-import-file hidden onChange={async (event) => { const file = event.target.files?.[0]; if (!file) return; try { const text = await file.text(); setImportText(text); setPortabilityStatus(previewText(text)); } catch { setPortabilityStatus("Review file could not be read."); setAnnouncement("Import rejected: Review file could not be read."); } event.target.value = ""; }} />
+                    <span data-review-portability-status>{portabilityStatus}</span>
+                    <div className="review-danger-zone"><button type="button" data-review-clear disabled={storageIssue === "unavailable"} aria-pressed={clearPending} onClick={clearReview}>{clearPending ? "Confirm clear" : "Clear Review"}</button></div>
+                </div>
+            </details>
+
+            <p className="visually-hidden" role="status" aria-live="polite" data-review-announcement>{announcement}</p>
         </>
     );
 }
