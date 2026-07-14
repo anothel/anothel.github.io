@@ -375,8 +375,7 @@ main:focus-visible {
 .module-route,
 .project-card,
 .source-mix-card,
-.signal-card,
-.link-card {
+.signal-card {
     border: var(--surface-border);
     border-radius: var(--radius);
     background: var(--panel);
@@ -733,12 +732,6 @@ main:focus-visible {
 .module-route strong,
 .module-route small {
     overflow-wrap: anywhere;
-}
-
-.link-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-5);
 }
 
 .section-heading {
@@ -1272,46 +1265,9 @@ main:focus-visible {
 .signal-card p,
 .explore-card h3,
 .explore-card p,
-.link-card h2,
-.link-card p,
 .trend-card h3,
 .trend-card p {
     overflow-wrap: anywhere;
-}
-
-.link-card {
-    display: grid;
-    gap: var(--space-5);
-    min-height: 210px;
-    padding: var(--surface-padding-lg);
-    text-decoration: none;
-}
-
-.link-card div {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-}
-
-.link-card span {
-    min-height: 26px;
-    padding: 5px 8px 0;
-    border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: var(--type-small);
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.link-card h2 {
-    margin-bottom: 0;
-    font-size: 1.18rem;
-}
-
-.link-card p {
-    margin-bottom: 0;
-    color: var(--muted);
 }
 
 .panel {
@@ -2382,9 +2338,7 @@ button {
 }
 
 .explore-card:hover:not(:has(.explore-card-actions button:is(:hover, :focus-visible))),
-.explore-card:focus-visible,
-.link-card:hover,
-.link-card:focus-visible {
+.explore-card:focus-visible {
     border-color: var(--accent-soft);
     background: var(--panel-strong);
 }
@@ -2598,7 +2552,6 @@ button {
     .status-metrics,
     .evidence-list,
     .topic-movement-grid,
-    .link-grid,
     .today-grid,
     .topic-lens-grid,
     .source-mix-grid,
@@ -2647,7 +2600,6 @@ button {
     .topic-note-card,
     .topic-related-grid,
     .topic-cross-link-grid,
-    .link-grid,
     .dashboard-grid,
     .explore-results,
     .review-workspace,
@@ -2755,7 +2707,6 @@ button {
     }
 
     .trend-card,
-    .link-card,
     .explore-card,
     .topic-mover-card,
     .topic-related-card,
@@ -2765,7 +2716,6 @@ button {
 
     .signal-card,
     .trend-card,
-    .link-card,
     .explore-card {
         gap: var(--density-inline-gap);
     }

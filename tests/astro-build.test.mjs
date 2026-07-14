@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
-import { sourceMetaForDatasets, trustState } from "../src/lib/site-data.js";
+import { sourceMetaForDatasets, trustState, referenceList } from "../src/lib/site-data.js";
 import { topicNotes } from "../src/lib/topic-taxonomy.js";
 
 const topicRoutes = [
@@ -170,6 +170,27 @@ test("Astro source routes render complete ordered records before secondary evide
         assert.doesNotMatch(html, /<script\b|<astro-island\b|\b(?:component-url|renderer-url)=/i, `${route}: static HTML only`);
         assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i, `${route}: no invalid placeholders`);
     }
+});
+
+test("Astro Links renders one safe featured-first canonical reference list without client JavaScript", () => {
+    ensureDist();
+    const html = read("dist/links/index.html");
+    const data = JSON.parse(read("data/links.json"));
+    const links = referenceList(data.links);
+    const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/)?.[1] || "";
+    const order = ["data-source-summary", "data-source-record-list", "Reference stats", "data-source-health"].map((marker) => html.indexOf(marker));
+
+    assert.equal(links.length, data.links.length);
+    assert.equal([...body.matchAll(/<th scope="row"/g)].length, links.length);
+    assert.equal([...body.matchAll(/class="source-record-featured"/g)].length, 4);
+    assert.ok(order.every((offset, index) => offset >= 0 && (index === 0 || offset > order[index - 1])));
+    assert.doesNotMatch(html, /Reference highlights/);
+    for (const link of links) {
+        assert.equal(body.split(`href="${link.url}"`).length - 1, 1, link.url);
+        for (const field of ["title", "kind", "category", "summary"]) assert.ok(body.includes(link[field]), `${link.title}: ${field}`);
+    }
+    assert.doesNotMatch(html, /<script\b|<astro-island\b|\b(?:component-url|renderer-url)=/i);
+    assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i);
 });
 
 test("Astro Notes output contains every canonical note without client JavaScript", () => {

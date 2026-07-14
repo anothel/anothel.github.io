@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import trends from "../../data/trends.json" with { type: "json" };
 import packages from "../../data/packages.json" with { type: "json" };
 import repos from "../../data/repos.json" with { type: "json" };
+import links from "../../data/links.json" with { type: "json" };
 
 const requiredRoutes = [
     "/",
@@ -182,6 +183,61 @@ test("source routes lead with complete labelled records without mobile scrollers
         await expect(rows.first().getByRole("link")).toHaveAttribute("href", route.items[0].url);
         expect(await page.locator("body").innerText()).not.toMatch(/\b(?:undefined|null|NaN)\b/);
     }
+});
+
+test("Links renders one featured-first labelled reference list", async ({ page }) => {
+    await page.goto("/links/");
+    const table = page.locator("[data-link-list]");
+    const rows = table.locator("tbody tr");
+    const actions = rows.getByRole("link");
+    await expect(rows).toHaveCount(links.links.length);
+    await expect(actions).toHaveCount(links.links.length);
+    await expect(rows.locator(".eyebrow")).toHaveCount(4);
+    for (let index = 0; index < 4; index += 1) await expect(rows.nth(index)).toContainText("Featured");
+    await expect(rows.nth(4)).not.toContainText("Featured");
+    await expect(page.getByLabel("Reference highlights")).toHaveCount(0);
+    await expect(page.locator("h1")).toHaveCount(1);
+
+    const layout = await table.evaluate((records) => {
+        const row = records.querySelector("tbody tr").getBoundingClientRect();
+        const wrapper = records.closest(".source-record-table-wrap");
+        const urls = [...records.querySelectorAll("tbody a")].map((link) => link.href);
+        return {
+            firstRecord: row.top,
+            recordHeight: row.height,
+            uniqueUrls: new Set(urls).size,
+            documentOverflow: document.documentElement.scrollWidth - innerWidth,
+            nestedOverflow: wrapper.scrollWidth - wrapper.clientWidth,
+            wrapperOverflow: getComputedStyle(wrapper).overflowX,
+            contained: [...records.querySelectorAll("h3, small")].every((node) => node.scrollWidth <= node.clientWidth),
+            headings: [...records.querySelectorAll("thead th")].map((cell) => cell.textContent.trim())
+        };
+    });
+
+    expect(layout.firstRecord).toBeLessThanOrEqual(page.viewportSize().width <= 720 ? 600 : 700);
+    expect(layout.uniqueUrls).toBe(links.links.length);
+    expect(layout.documentOverflow).toBe(0);
+    expect(layout.nestedOverflow).toBe(0);
+    expect(layout.contained).toBe(true);
+    expect(layout.headings).toEqual(["Rank", "Reference", "Kind", "Category", "Action"]);
+    if (page.viewportSize().width <= 720) expect(layout.wrapperOverflow).toBe("visible");
+
+    await actions.first().focus();
+    const focus = await actions.first().evaluate((link) => ({ top: link.getBoundingClientRect().top, railBottom: document.querySelector(".primary-nav").getBoundingClientRect().bottom, outline: getComputedStyle(link).outlineStyle }));
+    expect(focus.top).toBeGreaterThanOrEqual(focus.railBottom);
+    expect(focus.outline).not.toBe("none");
+    await expect(actions.first()).toHaveAttribute("href", links.links[0].url);
+    expect(await page.locator("body").innerText()).not.toMatch(/\b(?:undefined|null|NaN)\b/);
+});
+
+test("JavaScript-disabled Links keeps the complete featured reference list", async ({ browser }, testInfo) => {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: testInfo.project.use.viewport });
+    const page = await context.newPage();
+    await page.goto("/links/");
+    await expect(page.locator("[data-link-list] tbody tr")).toHaveCount(links.links.length);
+    await expect(page.locator("[data-link-list] .eyebrow")).toHaveCount(4);
+    await expect(page.locator("[data-link-list] tbody tr").first().getByRole("link")).toBeVisible();
+    await context.close();
 });
 
 test("Review reads the existing version 2 localStorage contract", async ({ page }) => {

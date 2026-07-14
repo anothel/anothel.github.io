@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 
 import { buildLinkRows, linkDefinitions } from "../scripts/update-links.mjs";
 import { activeItems } from "../scripts/watchlist-governance.mjs";
+import { referenceList } from "../src/lib/site-data.js";
 
 function readJson(path) {
     return JSON.parse(readFileSync(path, "utf8"));
@@ -48,6 +49,24 @@ test("buildLinkRows sorts links by category and title", () => {
             url: "https://developer.mozilla.org/",
             summary: "Reference for web platform APIs."
         }
+    ]);
+});
+
+test("referenceList preserves source order, marks the first four, canonicalizes duplicate identity, and rejects unsafe URLs", () => {
+    const links = referenceList([
+        { title: "One", url: "https://EXAMPLE.com/docs/#intro" },
+        { title: "Duplicate title differs", url: "https://example.com/docs" },
+        { title: "One", url: "https://example.com/other" },
+        { title: "Three", url: "https://example.com/three" },
+        { title: "Unsafe", url: "javascript:alert(1)" },
+        { title: "Five", url: "https://example.com/five" }
+    ]);
+
+    assert.deepEqual(links.map(({ title, featured }) => [title, featured]), [
+        ["One", true],
+        ["One", true],
+        ["Three", true],
+        ["Five", false]
     ]);
 });
 

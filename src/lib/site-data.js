@@ -60,15 +60,20 @@ export function topCategory(items = []) {
     return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] || "-";
 }
 
-export function linkSignal(item) {
-    return {
-        module: "Links",
-        metric: item.kind,
-        origin: item.kind,
-        category: item.category,
-        title: item.title,
-        reason: item.summary,
-        action: "Open the reference and keep it nearby if useful.",
-        url: item.url
-    };
+export function referenceList(items = []) {
+    const seen = new Set();
+    return items.flatMap((item, index) => {
+        const href = String(item?.url || "").trim();
+        try {
+            const url = new URL(href);
+            if (url.protocol !== "http:" && url.protocol !== "https:") return [];
+            url.hash = "";
+            url.pathname = url.pathname.replace(/\/+$/, "") || "/";
+            if (seen.has(url.href)) return [];
+            seen.add(url.href);
+            return [{ ...item, url: href, featured: index < 4 }];
+        } catch {
+            return [];
+        }
+    });
 }
