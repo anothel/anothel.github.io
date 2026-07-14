@@ -145,6 +145,33 @@ test("Astro build output renders migrated static routes including Notes", () => 
     assert.doesNotMatch(statusHtml, />\s*(?:undefined|null|NaN)\s*</);
 });
 
+test("Astro source routes render complete ordered records before secondary evidence without client JavaScript", () => {
+    ensureDist();
+    const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+    const routes = [
+        ["trends", "items", "title", ["category", "source", "velocity", "signal", "summary"]],
+        ["packages", "packages", "name", ["category", "downloadsLabel", "focus", "period"]],
+        ["repos", "repos", "name", ["category", "starsLabel", "forksLabel", "focus", "pushedAt", "summary"]]
+    ];
+
+    for (const [route, collection, title, fields] of routes) {
+        const html = read(`dist/${route}/index.html`);
+        const data = JSON.parse(read(`data/${route}.json`));
+        const items = data[collection];
+        const summaryAt = html.indexOf("data-source-summary");
+        const recordsAt = html.indexOf("data-source-record-list");
+        const statsAt = html.indexOf(`${route === "trends" ? "Trend statistics" : route === "packages" ? "Package movement stats" : "Repo movement stats"}`);
+        const healthAt = html.indexOf("data-source-health");
+
+        assert.equal([...html.matchAll(/<th scope="row"/g)].length, items.length, `${route}: every record`);
+        assert.ok(summaryAt >= 0 && summaryAt < recordsAt && recordsAt < statsAt && statsAt < healthAt, `${route}: summary, records, stats, health order`);
+        assert.ok(html.indexOf(escapeHtml(items[0][title])) < html.indexOf(escapeHtml(items[1][title])), `${route}: source order`);
+        for (const item of items) for (const field of [title, ...fields]) assert.ok(html.includes(escapeHtml(item[field])), `${route}: ${item[title]} ${field}`);
+        assert.doesNotMatch(html, /<script\b|<astro-island\b|\b(?:component-url|renderer-url)=/i, `${route}: static HTML only`);
+        assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i, `${route}: no invalid placeholders`);
+    }
+});
+
 test("Astro Notes output contains every canonical note without client JavaScript", () => {
     ensureDist();
     const html = read("dist/notes/index.html");

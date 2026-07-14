@@ -60,45 +60,6 @@ export function topCategory(items = []) {
     return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] || "-";
 }
 
-export function trendSignal(item) {
-    return {
-        module: "Trends",
-        metric: item.velocity || `${item.score || 0} score`,
-        origin: item.source,
-        category: item.category,
-        title: item.title,
-        reason: item.summary,
-        action: "Open the source and decide whether it belongs in the saved queue.",
-        url: item.url
-    };
-}
-
-export function packageSignal(item) {
-    return {
-        module: "Packages",
-        metric: item.downloadsLabel,
-        origin: "npm",
-        category: item.category,
-        title: item.name,
-        reason: item.focus || item.period,
-        action: "Check package demand, then compare related repos.",
-        url: item.url
-    };
-}
-
-export function repoSignal(item) {
-    return {
-        module: "Repos",
-        metric: item.starsLabel ? `${item.starsLabel} stars` : `${item.stars || 0} stars`,
-        origin: "GitHub",
-        category: item.category,
-        title: item.name,
-        reason: item.summary || item.focus,
-        action: "Compare repo traction before saving.",
-        url: item.url
-    };
-}
-
 export function linkSignal(item) {
     return {
         module: "Links",

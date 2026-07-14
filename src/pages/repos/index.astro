@@ -2,13 +2,16 @@
 import data from "../../../data/repos.json";
 import AppShell from "../../components/AppShell.astro";
 import HeroHeader from "../../components/HeroHeader.astro";
-import SignalCard from "../../components/SignalCard.astro";
 import StatCard from "../../components/StatCard.astro";
 import DataHealthPanel from "../../components/DataHealthPanel.astro";
-import { repoSignal, externalRel } from "../../lib/site-data.js";
+import { trustState, externalRel } from "../../lib/site-data.js";
 
-const repos = data.repos || [];
+const validRepos = Array.isArray(data.repos);
+const repos = validRepos ? data.repos : [];
 const top = repos[0];
+const trust = trustState(data.sourceMeta);
+const emptyTitle = !validRepos ? "Repo data invalid" : trust.pipelineStatus === "error" ? "Repo source unavailable" : "No repo records";
+const emptyCopy = !validRepos ? "Generated repo data is missing or invalid." : trust.pipelineStatus === "error" ? "GitHub did not produce usable repo records." : "Current data is valid but contains no ranked repos.";
 ---
 <AppShell title="Repos - anothel" description="GitHub project traction for repos worth keeping an eye on." canonicalPath="/repos/" stylesheetHref="../css/site.css">
     <div class="shell module-shell">
@@ -17,17 +20,11 @@ const top = repos[0];
         </HeroHeader>
 
         <main id="main-content" class="module-main" tabindex="-1">
-            <section class="module-overview-grid" aria-label="Module overview">
-                <section class="stats-grid" aria-label="Repo movement stats">
-                    <StatCard label="Repos" value={repos.length} />
-                    <StatCard label="Top repo" value={top?.name || "-"} />
-                    <StatCard label="Data status" value={data.sourceMeta?.status || "unknown"} />
-                </section>
-                <DataHealthPanel id="repos" title="Data health" sourceMeta={data.sourceMeta} updated={data.updated} compact />
-            </section>
-
-            <section class="dashboard-grid module-primary-panel" aria-label="Repo highlights">
-                {repos.slice(0, 4).map((item) => <SignalCard item={repoSignal(item)} />)}
+            <section class="stats-grid source-summary" aria-label="Repo data summary" data-source-summary>
+                <StatCard label="Source status" value={trust.pipelineStatus} />
+                <StatCard label="Freshness" value={trust.freshness} />
+                <StatCard label="Data date" value={data.updated || "unknown"} />
+                <StatCard label="Records" value={repos.length} />
             </section>
 
             <section class="rank-panel module-primary-panel" aria-labelledby="repo-title">
@@ -35,21 +32,27 @@ const top = repos[0];
                     <h2 id="repo-title">Repo traction</h2>
                     <p>GitHub stars, focus area, and latest pushed date.</p>
                 </div>
-                <div class="watch-head" aria-hidden="true">
-                    <span>#</span><span>Repo</span><span>Category</span><span>Stars</span><span>Focus</span>
-                </div>
-                <div class="watch-list" data-repo-list>
-                    {repos.map((item) => (
-                        <a class="watch-row repo-row" href={item.url} rel={externalRel(item.url)}>
-                            <span>#{item.rank}</span>
-                            <strong>{item.name}</strong>
-                            <span>{item.category}</span>
-                            <span>{item.starsLabel} stars</span>
-                            <span>{item.focus}</span>
-                        </a>
-                    ))}
-                </div>
+                {repos.length ? <div class="source-health-table-wrap source-record-table-wrap">
+                    <table class="source-health-table source-record-table" aria-labelledby="repo-title" data-repo-list data-source-record-list>
+                        <thead><tr><th>Rank</th><th>Repo</th><th>Category</th><th>Stars</th><th>Focus</th></tr></thead>
+                        <tbody>{repos.map((item) => <tr>
+                            <td data-label="Rank"><span>#{item.rank}</span></td>
+                            <th scope="row" data-label="Repository"><div><h3>{item.name || "Unnamed repository"}</h3><small><strong>Updated</strong> {item.pushedAt || "Unknown"}</small><small><strong>Summary</strong> {item.summary || "No summary available."}</small></div></th>
+                            <td data-label="Category"><span>{item.category || "Unknown"}</span></td>
+                            <td data-label="Stars"><div><strong>{item.starsLabel ? `${item.starsLabel} stars` : "Unknown"}</strong><small><strong>Forks</strong> {item.forksLabel || "Unknown"}</small></div></td>
+                            <td data-label="Focus"><div><span>{item.focus || "Unknown"}</span><a href={item.url} rel={externalRel(item.url)} aria-label={`Open ${item.name || "repository"} on GitHub`}>Open repository</a></div></td>
+                        </tr>)}</tbody>
+                    </table>
+                </div> : <article class="rank-empty"><h3>{emptyTitle}</h3><p>{emptyCopy}</p><a href="../status/index.html">Open Status</a></article>}
             </section>
+
+            <section class="stats-grid" aria-label="Repo movement stats">
+                <StatCard label="Repos" value={repos.length} />
+                <StatCard label="Top repo" value={top?.name || "-"} />
+                <StatCard label="Data status" value={data.sourceMeta?.status || "unknown"} />
+            </section>
+
+            <DataHealthPanel id="repos" title="Data health" sourceMeta={data.sourceMeta} updated={data.updated} compact />
         </main>
     </div>
 </AppShell>

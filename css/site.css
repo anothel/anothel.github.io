@@ -1275,9 +1275,7 @@ main:focus-visible {
 .link-card h2,
 .link-card p,
 .trend-card h3,
-.trend-card p,
-.rank-row span,
-.watch-row span {
+.trend-card p {
     overflow-wrap: anywhere;
 }
 
@@ -1696,6 +1694,10 @@ button {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-5);
+}
+
+.source-summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .health-panel {
@@ -2475,52 +2477,36 @@ button {
     color: var(--muted);
 }
 
-.rank-head,
-.rank-row,
-.watch-head,
-.watch-row {
+.source-record-table-wrap {
+    margin-top: 0;
+    border: 0;
+}
+
+.source-health-table.source-record-table {
+    min-width: 680px;
+}
+
+.source-record-table h3 {
+    margin: 0;
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
+.source-record-table td > div {
     display: grid;
-    grid-template-columns: 48px minmax(180px, 1.5fr) minmax(100px, 0.8fr) minmax(110px, 0.8fr) 70px;
-    gap: 12px;
+    gap: 4px;
+}
+
+.source-record-table a {
+    display: inline-flex;
+    min-height: 44px;
     align-items: center;
-}
-
-.rank-head,
-.watch-head {
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 0.78rem;
     font-weight: 900;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-}
-
-.rank-row,
-.watch-row {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--line);
-    text-decoration: none;
-}
-
-.rank-row:last-child,
-.watch-row:last-child {
-    border-bottom: 0;
-}
-
-.rank-row span,
-.watch-row span {
-    color: var(--muted);
 }
 
 .rank-empty {
     padding: 18px;
     color: var(--muted);
-}
-
-.watch-head,
-.watch-row {
-    grid-template-columns: 48px minmax(140px, 1fr) minmax(100px, 0.8fr) minmax(120px, 0.9fr) minmax(160px, 1.1fr);
 }
 
 .error-shell {
@@ -3013,16 +2999,28 @@ button {
         text-transform: uppercase;
     }
 
-    .rank-panel {
-        overflow-x: auto;
+    .status-head,
+    .status-row {
+        min-width: 680px;
     }
 
-    .rank-head,
-    .rank-row,
-    .status-head,
-    .status-row,
-    .watch-head,
-    .watch-row {
-        min-width: 680px;
+    .source-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .source-health-table.source-record-table,
+    .rank-empty {
+        min-width: 0;
+    }
+
+    .source-health-table.source-record-table tr {
+        margin-bottom: var(--space-3);
+        padding: var(--space-2) var(--space-4);
+    }
+
+    .source-health-table.source-record-table th,
+    .source-health-table.source-record-table td {
+        grid-template-columns: minmax(88px, 0.32fr) minmax(0, 1fr);
+        padding: var(--space-2) 0;
     }
 }

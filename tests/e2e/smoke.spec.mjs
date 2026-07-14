@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import trends from "../../data/trends.json" with { type: "json" };
+import packages from "../../data/packages.json" with { type: "json" };
+import repos from "../../data/repos.json" with { type: "json" };
 
 const requiredRoutes = [
     "/",
@@ -118,6 +120,68 @@ test("Explore search filters and restores checked-in results", async ({ page }) 
     await page.locator("[data-clear-filters]").click();
     await expect.poll(() => resultCards.count()).toBeGreaterThan(0);
     await expect(page.getByRole("heading", { name: "No matching items" })).toHaveCount(0);
+});
+
+test("source routes lead with complete labelled records without mobile scrollers", async ({ page }) => {
+    const routes = [
+        { path: "/trends/", items: trends.items, title: "title", headers: ["Rank", "Signal", "Category", "Origin", "Score"], stats: "Trend statistics" },
+        { path: "/packages/", items: packages.packages, title: "name", headers: ["Rank", "Package", "Category", "Downloads", "Focus"], stats: "Package movement stats" },
+        { path: "/repos/", items: repos.repos, title: "name", headers: ["Rank", "Repo", "Category", "Stars", "Focus"], stats: "Repo movement stats" }
+    ];
+
+    for (const route of routes) {
+        await page.goto(route.path);
+        const table = page.locator("[data-source-record-list]");
+        const rows = table.locator("tbody tr");
+        await expect(rows).toHaveCount(route.items.length);
+        await expect(rows.first()).toContainText(route.items[0][route.title]);
+        await expect(rows.nth(1)).toContainText(route.items[1][route.title]);
+        await expect(page.locator("h1")).toHaveCount(1);
+
+        const layout = await page.evaluate(({ stats }) => {
+            const summary = document.querySelector("[data-source-summary]");
+            const records = document.querySelector("[data-source-record-list]");
+            const secondary = document.querySelector(`[aria-label="${stats}"]`);
+            const health = document.querySelector("[data-source-health]");
+            const row = records.querySelector("tbody tr").getBoundingClientRect();
+            const wrapper = records.closest(".source-record-table-wrap");
+            return {
+                firstRecord: row.top,
+                recordHeight: row.height,
+                order: [[summary, records], [records, secondary], [secondary, health]]
+                    .every(([before, after]) => before.compareDocumentPosition(after) & Node.DOCUMENT_POSITION_FOLLOWING),
+                documentOverflow: document.documentElement.scrollWidth - innerWidth,
+                nestedOverflow: wrapper.scrollWidth - wrapper.clientWidth,
+                wrapperOverflow: getComputedStyle(wrapper).overflowX,
+                labels: [...records.querySelectorAll("thead th")].map((cell) => cell.textContent.trim()),
+                longNamesContained: [...records.querySelectorAll("tbody h3")].every((title) => title.scrollWidth <= title.clientWidth)
+            };
+        }, { stats: route.stats });
+
+        expect(layout.order).toBe(true);
+        expect(layout.documentOverflow).toBe(0);
+        expect(layout.longNamesContained).toBe(true);
+        expect(layout.labels).toEqual(route.headers);
+
+        if (page.viewportSize().width <= 720) {
+            expect(layout.firstRecord).toBeLessThanOrEqual(700);
+            expect(layout.nestedOverflow).toBe(0);
+            expect(layout.wrapperOverflow).toBe("visible");
+            expect(await rows.first().locator("td").first().evaluate((cell) => getComputedStyle(cell, "::before").content)).toContain("Rank");
+            const action = rows.first().getByRole("link");
+            await action.focus();
+            const focused = await action.evaluate((link) => ({ top: link.getBoundingClientRect().top, railBottom: document.querySelector(".primary-nav").getBoundingClientRect().bottom, outline: getComputedStyle(link).outlineStyle }));
+            expect(focused.top).toBeGreaterThanOrEqual(focused.railBottom);
+            expect(focused.outline).not.toBe("none");
+        } else {
+            expect(layout.firstRecord).toBeLessThanOrEqual(700);
+            expect(layout.nestedOverflow).toBe(0);
+            await expect(table.locator("thead")).toBeVisible();
+        }
+
+        await expect(rows.first().getByRole("link")).toHaveAttribute("href", route.items[0].url);
+        expect(await page.locator("body").innerText()).not.toMatch(/\b(?:undefined|null|NaN)\b/);
+    }
 });
 
 test("Review reads the existing version 2 localStorage contract", async ({ page }) => {
