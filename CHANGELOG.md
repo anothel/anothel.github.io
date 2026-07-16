@@ -6,6 +6,7 @@ This repository does not yet use versioned releases. Use dated entries until a t
 
 ## Unreleased
 
+- Corrected the Home SecureKit card to the canonical public [AnoSecureKit Community repository](https://github.com/anothel/AnoSecureKit-Community) after confirming that the former `/securekit/` route and the repository README's declared project-site route both return 404; added a regression guard for missing internal project routes.
 - Migrated 404, `robots.txt`, and `sitemap.xml` to native Astro-owned output backed by the canonical site route model; removed their checked-in root files, the legacy catch-all route, the temporary sitemap updater, and sitemap staging from data refresh while preserving public URLs and behavior. Audited published `/js` endpoints: `data-health` and `signal-schema` remain active internal modules, while renderer endpoints remain compatibility-only until a public-URL removal trigger is met.
 - Migrated Notes to native, no-JavaScript Astro output backed by the canonical ES Topic taxonomy; removed checked-in Notes HTML, the Notes/taxonomy browser globals, and Notes VM generation.
 - Migrated all seven promoted topic routes to native Astro static generation with one shared topic model and a small non-React pin module; removed checked-in topic HTML, the `TopicApp`/`AnothelState` browser bridges, topic fallback generation, and obsolete workflow staging.

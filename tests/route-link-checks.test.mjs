@@ -20,6 +20,7 @@ const coreRoutes = [
 ];
 const publicRoutes = [...new Set([...coreRoutes, ...topicRoutes])];
 const artifactRoutes = publicRoutes.map((route) => resolve("dist", route));
+const canonicalSecureKitUrl = "https://github.com/anothel/AnoSecureKit-Community";
 
 function extractAnchors(html) {
     const anchorRegex = /<a\b[^>]*\shref=(["'])(.*?)\1/gis;
@@ -65,6 +66,27 @@ test("public routes resolve to generated Astro HTML", () => {
     }
 }
 );
+
+test("Home SecureKit card uses the verified public destination", () => {
+    const html = readFileSync(resolve("dist", "index.html"), "utf8");
+    const projectAnchor = html.match(/<a\b[^>]*\bclass="project-card"[^>]*>/i)?.[0];
+    assert.ok(projectAnchor, "Home should render the SecureKit project card");
+
+    const href = projectAnchor.match(/\bhref="([^"]+)"/i)?.[1];
+    assert.ok(href, "Home SecureKit card should have a destination");
+
+    const destination = new URL(href, "https://anothel.github.io/");
+    if (destination.origin === "https://anothel.github.io") {
+        const route = destination.pathname.replace(/^\/+|\/+$/g, "");
+        const artifact = route
+            ? resolve("dist", route, "index.html")
+            : resolve("dist", "index.html");
+        assert.ok(existsSync(artifact), `Home project route should exist: ${destination.pathname}`);
+    }
+
+    assert.equal(href, canonicalSecureKitUrl);
+    assert.match(projectAnchor, /\brel="noopener noreferrer"/i);
+});
 
 test("public anchors use resolvable local routes", () => {
     const missing = [];
