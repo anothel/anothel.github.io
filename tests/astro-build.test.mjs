@@ -83,6 +83,23 @@ test("Astro Home keeps an honest native-module saved summary", () => {
     assert.doesNotMatch(html, /js\/local-state\.js|AnothelState/);
 });
 
+test("Astro Home applies external rel policy without changing internal links", () => {
+    ensureDist();
+    const html = read("dist/index.html");
+    const anchors = [...html.matchAll(/<a\b[^>]*>/gi)].map((match) => match[0]);
+    const skimAnchors = anchors.filter((anchor) => /\bclass="skim-item"/i.test(anchor));
+
+    assert.equal(skimAnchors.length, 6);
+    for (const anchor of anchors) {
+        const href = anchor.match(/\bhref="([^"]+)"/i)?.[1];
+        assert.ok(href, `Home anchor should have an href: ${anchor}`);
+        const isExternal = new URL(href, "https://anothel.github.io/").origin !== "https://anothel.github.io";
+        if (isExternal) assert.match(anchor, /\brel="noopener noreferrer"/i, href);
+        else assert.doesNotMatch(anchor, /\brel=/i, href);
+    }
+    assert.doesNotMatch(html, /<a\b[^>]*\btarget=/i);
+});
+
 test("Astro Today output includes the shared shell and mobile density contract", () => {
     ensureDist();
     const html = read("dist/today/index.html");

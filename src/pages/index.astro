@@ -11,6 +11,7 @@ import AppShell from "../components/AppShell.astro";
 import CompactTrustSummary from "../components/CompactTrustSummary.astro";
 import HeroHeader from "../components/HeroHeader.astro";
 import SignalCard from "../components/SignalCard.astro";
+import { externalRel } from "../lib/site-data.js";
 import { buildStatusDashboard } from "../lib/status-data.mjs";
 
 const modules = manifest.modules || [];
@@ -127,7 +128,7 @@ const moduleRoutes = [
                 </div>
                 <div class="skim-list" data-home-skim>
                     {skimItems.slice(0, 8).map((item) => (
-                        <a class="skim-item" href={item.url}>
+                        <a class="skim-item" href={item.url} rel={externalRel(item.url)}>
                             <strong>{item.title}</strong>
                             <span>{item.module} / {item.metric}</span>
                         </a>
