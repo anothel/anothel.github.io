@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { devices, expect, test } from "@playwright/test";
 
 const routeCases = [
     { route: "/", current: "Home" },
@@ -241,6 +241,81 @@ test.describe("mobile layout", () => {
         await page.goto("/topics/workflow-automation/");
         await expect(page.locator("[data-topic-pin-button]")).toBeEnabled();
         expect(await page.locator("[data-topic-actions] a").first().evaluate((element) => element.getBoundingClientRect().top), "Workflow automation Explore safety margin").toBeLessThanOrEqual(640);
+    });
+
+    test("source summaries contain enlarged Android text", async ({ browser }) => {
+        test.setTimeout(60_000);
+        const context = await browser.newContext({ ...devices["Pixel 7"], viewport: { width: 412, height: 844 } });
+        const page = await context.newPage();
+        const routes = [
+            { path: "/links/", summary: ".source-summary", count: 4, columns: 2 },
+            { path: "/trends/", summary: ".source-summary", count: 4, columns: 2 },
+            { path: "/packages/", summary: ".source-summary", count: 4, columns: 2 },
+            { path: "/repos/", summary: ".source-summary", count: 4, columns: 2 },
+            { path: "/status/", summary: ".status-overall-facts", count: 4, columns: 2, status: true },
+            { path: "/review/", summary: ".review-stats", count: 6, columns: 3 }
+        ];
+
+        try {
+            for (const width of [360, 390, 412]) {
+                await page.setViewportSize({ width, height: 844 });
+                for (const route of routes) {
+                    await page.goto(route.path);
+                    await page.locator(route.summary).waitFor();
+                    const textSelector = route.status ? `${route.summary} dt, ${route.summary} dd` : `${route.summary} .stat-card > span, ${route.summary} .stat-card > strong`;
+                    const baseSizes = await page.locator(textSelector).evaluateAll((elements) => elements.map((element) => parseFloat(getComputedStyle(element).fontSize)));
+                    for (const scale of [1, 1.25, 1.5, 2]) {
+                        await page.locator(textSelector).evaluateAll((elements, values) => elements.forEach((element, index) => {
+                            element.style.fontSize = `${values.baseSizes[index] * values.scale}px`;
+                        }), { baseSizes, scale });
+                        const layout = await page.evaluate(({ isStatus, summarySelector }) => {
+                            const summary = document.querySelector(summarySelector);
+                            const cards = [...summary.children];
+                            const rect = (element) => element.getBoundingClientRect();
+                            const textRect = (element) => {
+                                const range = document.createRange();
+                                range.selectNodeContents(element);
+                                return range.getBoundingClientRect();
+                            };
+                            const overlaps = (a, b) => Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1
+                                && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1;
+                            const geometry = cards.map((card) => {
+                                const box = rect(card);
+                                const label = textRect(card.querySelector(isStatus ? "dt" : "span"));
+                                const value = textRect(card.querySelector(isStatus ? "dd" : "strong"));
+                                return {
+                                    box,
+                                    labelValueOverlap: overlaps(label, value),
+                                    textOutside: [label, value].some((text) => text.left < box.left - 1 || text.right > box.right + 1 || text.top < box.top - 1 || text.bottom > box.bottom + 1),
+                                    contentOverflow: card.scrollWidth - card.clientWidth > 1 || card.scrollHeight - card.clientHeight > 1
+                                };
+                            });
+                            return {
+                                itemCount: cards.length,
+                                columns: new Set(geometry.map(({ box }) => Math.round(box.left))).size,
+                                rows: new Set(geometry.map(({ box }) => Math.round(box.top))).size,
+                                labelValueOverlap: geometry.some((item) => item.labelValueOverlap),
+                                textOutside: geometry.some((item) => item.textOutside),
+                                contentOverflow: geometry.some((item) => item.contentOverflow),
+                                cardOverlap: geometry.some(({ box }, index) => geometry.slice(index + 1).some((other) => overlaps(box, other.box))),
+                                documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+                            };
+                        }, { isStatus: route.status, summarySelector: route.summary });
+                        const caseLabel = `${route.path} ${width}px ${scale * 100}% text`;
+                        expect(layout.itemCount, caseLabel).toBe(route.count);
+                        expect(layout.columns, caseLabel).toBe(route.columns);
+                        expect(layout.rows, caseLabel).toBe(Math.ceil(route.count / route.columns));
+                        expect(layout.labelValueOverlap, caseLabel).toBe(false);
+                        expect(layout.textOutside, caseLabel).toBe(false);
+                        expect(layout.contentOverflow, caseLabel).toBe(false);
+                        expect(layout.cardOverlap, caseLabel).toBe(false);
+                        expect(layout.documentOverflow, caseLabel).toBe(0);
+                    }
+                }
+            }
+        } finally {
+            await context.close();
+        }
     });
 
     test("Home exposes its first signal, saved values, then trust handoff", async ({ page }) => {

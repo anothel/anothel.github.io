@@ -2675,10 +2675,17 @@ button {
 
     .stat-card {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-columns: minmax(0, 1fr);
         gap: var(--space-1) var(--density-inline-gap);
-        align-items: baseline;
+        align-content: start;
+        align-items: start;
+        min-width: 0;
         padding: var(--density-surface-padding);
+    }
+
+    .stat-card > * {
+        min-width: 0;
+        overflow-wrap: anywhere;
     }
 
     .stat-card span {
@@ -2687,8 +2694,7 @@ button {
 
     .stat-card strong {
         font-size: 1.25rem;
-        text-align: right;
-        overflow-wrap: anywhere;
+        text-align: left;
     }
 
     .stat-card p {
@@ -2994,10 +3000,6 @@ button {
     .status-head,
     .status-row {
         min-width: 680px;
-    }
-
-    .source-summary {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .source-health-table.source-record-table,
