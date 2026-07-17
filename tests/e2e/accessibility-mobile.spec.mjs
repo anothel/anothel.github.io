@@ -223,6 +223,26 @@ test.describe("mobile layout", () => {
         expect(cardTop).toBeLessThanOrEqual(330);
     });
 
+    test("platform-sensitive mobile geometry keeps a safety margin", async ({ page }) => {
+        for (const [route, title] of [
+            ["/", "What is worth opening now?"],
+            ["/trends/", "What is moving across HN, GitHub, and npm."],
+            ["/topics/ai-engineering/", "AI engineering signals."]
+        ]) {
+            await page.goto(route);
+            const heading = page.locator(".hero-header h1");
+            await expect(heading).toHaveText(title);
+            expect(await page.locator(".hero-header").evaluate((element) => element.getBoundingClientRect().height), `${route} hero safety margin`).toBeLessThanOrEqual(108);
+        }
+
+        await page.goto("/today/");
+        expect(await page.locator("[data-signal-card]").first().evaluate((element) => element.getBoundingClientRect().top), "Today first card safety margin").toBeLessThanOrEqual(325);
+
+        await page.goto("/topics/workflow-automation/");
+        await expect(page.locator("[data-topic-pin-button]")).toBeEnabled();
+        expect(await page.locator("[data-topic-actions] a").first().evaluate((element) => element.getBoundingClientRect().top), "Workflow automation Explore safety margin").toBeLessThanOrEqual(640);
+    });
+
     test("Home exposes its first signal, saved values, then trust handoff", async ({ page }) => {
         await page.goto("/");
         const layout = await page.evaluate(() => {

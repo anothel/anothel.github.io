@@ -30,7 +30,7 @@
     --type-body: 1rem;
     --type-card-title: 1.16rem;
     --type-hero: clamp(1.85rem, 10vw, 2.4rem);
-    --type-hero-mobile: 1.875rem;
+    --type-hero-mobile: 1.75rem;
     --type-section-mobile: 1.25rem;
     --type-card-mobile: 1.05rem;
     --type-display: clamp(2.2rem, 5vw, 4.2rem);
@@ -2620,9 +2620,16 @@ button {
     }
 
     .hero-header {
-        gap: var(--density-inline-gap);
+        gap: var(--space-1);
         align-items: start;
-        padding-bottom: var(--density-inline-gap);
+        padding-bottom: var(--space-1);
+    }
+
+    .hero-meta .eyebrow,
+    .hero-meta .stamp {
+        font-size: 0.72rem;
+        line-height: 1.25;
+        white-space: nowrap;
     }
 
     .stamp {
@@ -2691,6 +2698,11 @@ button {
 
     .topic-note-card {
         padding: var(--density-surface-padding);
+    }
+
+    .topic-note-card > div,
+    .topic-note-card aside {
+        gap: var(--density-inline-gap);
     }
 
     .trend-card,
@@ -2808,6 +2820,14 @@ button {
     .today-shell .compact-trust-summary {
         gap: var(--space-1);
         padding: 0 0 var(--space-2);
+    }
+
+    .compact-trust-facts {
+        gap: var(--space-1);
+    }
+
+    .compact-trust-facts span {
+        font-size: 0.7rem;
     }
 
     .home-saved-summary {

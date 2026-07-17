@@ -122,7 +122,7 @@ test("Astro Today output includes the shared shell and mobile density contract",
     assert.match(styles, /html\s*{[^}]*scroll-padding-top:/s);
     assert.match(styles, /\.today-section\s*{[^}]*scroll-margin-top:/s);
     assert.match(styles, /\.today-card\s*{[^}]*scroll-margin-top:/s);
-    assert.match(styles, /--type-hero-mobile: 1\.875rem/);
+    assert.match(styles, /--type-hero-mobile: 1\.75rem/);
     assert.match(styles, /--type-section-mobile: 1\.25rem/);
     assert.match(styles, /--density-surface-padding: var\(--space-4\)/);
     assert.match(styles, /textarea:focus-visible/);
