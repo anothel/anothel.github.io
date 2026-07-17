@@ -21,7 +21,16 @@ Use this file for current stabilization and future trigger-based work. Detailed 
 - `js/data-health.js` and `js/signal-schema.js` remain active internal modules. Other published renderer endpoints have no native route consumers and remain compatibility-only to avoid breaking public URLs.
 - Accessibility and 390x844 mobile regression checks cover critical routes.
 
-Migration scaffold/gate work is complete, and Astro migration is complete. The automated mobile redesign milestone is reopened after a real Android in-app browser exposed overlapping source-summary text: `REAL_DEVICE_ANDROID_FAIL`. It must remain open until the fix is deployed and verified from a physical Android screenshot or device; automated emulation alone cannot close it.
+Migration scaffold/gate work is complete. Final closeout status:
+
+- `ASTRO_MIGRATION: COMPLETE`
+- `MOBILE_UI_UX_REDESIGN: COMPLETE`
+- `PAGES_DEPLOYMENT: PASS`
+- `REAL_DEVICE_ANDROID: PASS`
+- `REMOTE_CI: BLOCKED_EXTERNAL_BILLING`
+- `IOS_REAL_DEVICE: DEFERRED`
+
+The Android summary-card fix is deployed and passed physical-device verification without label/value overlap, escaped card text, or horizontal overflow. No iOS real-device validation is claimed.
 
 Do not queue “adopt Astro,” “add build chain,” or “start React islands” as future work.
 
@@ -38,18 +47,6 @@ Scope: use existing update, source-governance, signal-policy, and golden-test pa
 Verification: `npm run validate:data`, focused ranking/source tests, `npm run check`, `git diff --check`.
 
 Exit: generated state is explained and usable, or exact blocker/decision threshold is recorded.
-
-### S1 - Android Summary-Card Verification
-
-Status: `REAL_DEVICE_ANDROID_FAIL`.
-
-Trigger: a real Android in-app browser showed overlapping label/value text in the two-column source summary on Links.
-
-Scope: keep the outer 2x2 summary grid, stack content inside narrow cards, and preserve full wrapping at enlarged text sizes across Links, Trends, Packages, Repos, and Status.
-
-Verification: automated Pixel 7 Chromium geometry at 360px, 390px, and 412px with 100%, 125%, 150%, and 200% text, followed by the deployed site on a physical Android screenshot or device.
-
-Exit: deployed summary cards show no overlap, clipping, or horizontal overflow on physical Android. Only then close the automated mobile redesign milestone and clear `REAL_DEVICE_ANDROID_FAIL`.
 
 ## Future Work
 
