@@ -21,7 +21,9 @@ Use this file for current stabilization and future trigger-based work. Detailed 
 - `js/data-health.js` and `js/signal-schema.js` remain active internal modules. Other published renderer endpoints have no native route consumers and remain compatibility-only to avoid breaking public URLs.
 - Accessibility and 390x844 mobile regression checks cover critical routes.
 
-Migration scaffold/gate work is complete. Do not queue “adopt Astro,” “add build chain,” or “start React islands” as future work.
+Migration scaffold/gate work is complete. Astro migration and the automated mobile redesign milestone are complete. Remote closeout at revision `36da5fe3b207931e12dfe40cf3f11de81ec3e68c` confirmed successful CI, a same-revision GitHub Pages deployment, production route/link/accessibility checks, and browser-local workflows. Physical iOS and Android testing remains `REAL_DEVICE_DEFERRED`; no real-device validation is claimed.
+
+Do not queue “adopt Astro,” “add build chain,” or “start React islands” as future work.
 
 ## Current Stabilization
 
