@@ -9,6 +9,7 @@ const {
     lang = "en"
 } = Astro.props;
 const canonicalUrl = `${siteOrigin}${canonicalPath}`;
+const quietStylesheetHref = stylesheetHref.replace(/site\.css$/, "quiet-signal.css");
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -26,6 +27,7 @@ const canonicalUrl = `${siteOrigin}${canonicalPath}`;
         <slot name="head" />
         <title>{title}</title>
         <link rel="stylesheet" href={stylesheetHref}>
+        <link rel="stylesheet" href={quietStylesheetHref}>
     </head>
     <body>
         <a class="skip-link" href="#main-content">Skip to content</a>
