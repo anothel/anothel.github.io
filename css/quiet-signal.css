@@ -697,7 +697,7 @@ textarea {
         text-align: left;
     }
 }
-/* Quiet Signal ??final simplification */
+/* Quiet Signal final polish */
 
 .primary-nav {
     max-width: 560px;
@@ -717,24 +717,15 @@ textarea {
 }
 
 .home-saved-summary {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px 18px;
+    gap: 6px 0;
     padding-block: 12px;
 }
 
-.home-saved-summary > p {
-    margin: 0;
-    font-size: var(--type-small);
-    text-align: right;
-}
-
-.compact-trust-summary {
-    display: block;
-    padding-block: 10px;
-}
-
+.home-saved-facts,
+.home-status-actions,
 .compact-trust-facts {
     display: flex;
     flex-wrap: wrap;
@@ -743,15 +734,32 @@ textarea {
     margin: 0;
 }
 
+.home-saved-summary .compact-trust-summary {
+    display: contents;
+}
+
+.home-saved-facts,
+.home-status-actions,
+.compact-trust-facts,
+.compact-trust-facts a {
+    font-size: var(--type-small);
+}
+
+.home-saved-facts span + span::before,
+.home-status-actions::before,
+.home-status-actions a::before,
+.home-saved-summary .compact-trust-facts::before,
 .compact-trust-facts span + span::before,
-.compact-trust-facts a::before {
-    content: "쨌";
+.compact-trust-facts a::before,
+.today-summary-line span + span::before {
+    content: "\00b7";
     margin-inline: 8px;
     color: var(--line);
 }
 
-.compact-trust-facts a {
-    font-size: var(--type-small);
+.compact-trust-summary {
+    display: block;
+    padding-block: 10px;
 }
 
 .home-skim-panel {
@@ -770,6 +778,22 @@ textarea {
     background: transparent;
 }
 
+.today-summary-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0;
+    padding-block: 12px;
+    border-block: 1px solid var(--quiet-border);
+    color: var(--muted);
+    font-size: var(--type-small);
+}
+
+.today-summary-line strong {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+}
+
 .today-section:not(#start) .today-card-compact .today-card-context {
     display: none;
 }
@@ -784,16 +808,19 @@ textarea {
     }
 
     .home-saved-summary {
-        grid-template-columns: 1fr;
-        gap: 5px;
-    }
-
-    .home-saved-summary > p {
-        text-align: left;
+        align-items: flex-start;
     }
 }
 
 @media (max-width: 420px) {
+    .home-saved-summary .compact-trust-facts {
+        flex-basis: 100%;
+    }
+
+    .home-saved-summary .compact-trust-facts::before {
+        content: none;
+    }
+
     .today-section:not(#start) .today-card-compact {
         grid-template-areas:
             "title"

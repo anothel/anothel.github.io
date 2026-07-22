@@ -76,7 +76,7 @@ test("Home client module writes counts or a readable unavailable state without a
     updateHomeSavedSummary(available.document, storageWith('["a","b"]'));
     assert.equal(available.nodes["[data-home-review-saved]"].textContent, "2");
     assert.equal(available.nodes["[data-home-review-unread]"].textContent, "2");
-    assert.match(available.nodes["[data-home-review-status]"].textContent, /loaded from this browser/i);
+    assert.match(available.nodes["[data-home-review-status]"].textContent, /local queue/i);
     assert.equal(available.region.dataset.storageState, "available");
 
     const unavailable = homeDocument();

@@ -14,10 +14,8 @@ import SignalCard from "../components/SignalCard.astro";
 import { externalRel } from "../lib/site-data.js";
 import { buildStatusDashboard } from "../lib/status-data.mjs";
 
-const modules = manifest.modules || [];
 const startItems = today.sections?.find((section) => section.id === "start")?.items || [];
 const skimItems = today.sections?.find((section) => section.id === "skim")?.items || [];
-const total = modules.reduce((sum, module) => sum + (module.count || 0), 0);
 let validation = null;
 try {
     validation = await validateDataFiles();
@@ -39,9 +37,7 @@ const trust = buildStatusDashboard({
     stylesheetHref="css/site.css"
 >
     <div class="shell hub-shell">
-        <HeroHeader eyebrow="Personal signal radar" title="What is worth opening now?" current="Home" prefix="">
-            <Fragment slot="stamp">Priority-ranked signals</Fragment>
-        </HeroHeader>
+        <HeroHeader eyebrow="Personal signal radar" title="What is worth opening now?" current="Home" prefix="" />
 
         <main id="main-content" class="hub-main" tabindex="-1">
             <section class="home-command-board" aria-labelledby="home-priority-title">
@@ -59,16 +55,21 @@ const trust = buildStatusDashboard({
                         </div>
                     ))}
 
-                    <section class="home-saved-summary" aria-label="Local saved queue" data-home-review-summary>
-                        <div class="home-saved-facts">
-                            <span>Items tracked <strong data-home-total>{total}</strong></span>
+                    <section
+                        class="home-saved-summary"
+                        aria-label="Saved queue and data status"
+                        data-home-review-summary
+                    >
+                        <p class="home-saved-facts">
                             <span>Saved <strong data-home-review-saved>??</strong></span>
                             <span>Unread <strong data-home-review-unread>??</strong></span>
-                        </div>
-                        <p data-home-review-status aria-live="polite">Browser-local state loads when JavaScript is available. <a href="review/index.html">Open Review</a></p>
+                        </p>
+                        <p class="home-status-actions">
+                            <span data-home-review-status aria-live="polite">Local queue</span>
+                            <a href="review/index.html">Review</a>
+                        </p>
+                        <CompactTrustSummary trust={trust} statusHref="status/index.html" />
                     </section>
-
-                    <CompactTrustSummary trust={trust} statusHref="status/index.html" />
                 </div>
             </section>
 
@@ -77,7 +78,6 @@ const trust = buildStatusDashboard({
                 <div class="section-heading">
                     <div>
                         <h2 id="skim-title">Worth skimming</h2>
-                        <p>Useful signals that do not need first attention.</p>
                     </div>
                     <a href="today/index.html#skim">View all</a>
                 </div>

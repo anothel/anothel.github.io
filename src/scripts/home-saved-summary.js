@@ -1,8 +1,8 @@
 import { readSavedSummary } from "../lib/storage-contract.js";
 
 const copy = Object.freeze({
-    available: "Saved queue loaded from this browser.",
-    unavailable: "Browser-local saved state is unavailable in this browser."
+    available: "Local queue",
+    unavailable: "Local unavailable"
 });
 
 export function updateHomeSavedSummary(document, storage) {

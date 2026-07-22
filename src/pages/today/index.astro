@@ -14,7 +14,6 @@ import SignalCard from "../../components/SignalCard.astro";
 import { buildStatusDashboard } from "../../lib/status-data.mjs";
 
 const sections = Array.isArray(today.sections) ? today.sections : [];
-const total = sections.reduce((sum, section) => sum + (Array.isArray(section.items) ? section.items.length : 0), 0);
 let validation = null;
 try {
     validation = await validateDataFiles();
@@ -27,11 +26,10 @@ const trust = buildStatusDashboard({
     report,
     validation
 });
-const sectionStats = {
-    start: ["Start", "Open first"],
-    skim: ["Skim", "Scan next"],
-    reference: ["Reference", "Keep nearby"]
-};
+const sectionCounts = Object.fromEntries(sections.map((section) => [
+    section.id,
+    Array.isArray(section.items) ? section.items.length : 0
+]));
 const exploreLinks = [
     ["AI agents", "../explore/index.html?focus=AI%20agents", "Agent workflow signals"],
     ["MCP", "../explore/index.html?focus=MCP", "Protocol and server references"],
@@ -46,26 +44,16 @@ const exploreLinks = [
     stylesheetHref="../css/site.css"
 >
     <div class="shell hub-shell today-shell">
-        <HeroHeader eyebrow="Open first" title="Today's priority brief." current="Today" prefix="../">
-            <Fragment slot="stamp">{total} checked-in picks</Fragment>
-        </HeroHeader>
+        <HeroHeader eyebrow="Open first" title="Today's priority brief." current="Today" prefix="../" />
 
         <main id="main-content" class="hub-main" tabindex="-1">
             <CompactTrustSummary trust={trust} statusHref="../status/index.html" />
 
-            <section class="stats-grid today-stats" aria-label="Today section summary" data-today-stats>
-                {sections.map((section) => {
-                    const [label, purpose] = sectionStats[section.id] || [section.title || "Section", "Generated picks"];
-                    const count = Array.isArray(section.items) ? section.items.length : 0;
-                    return (
-                        <article class="stat-card">
-                            <span>{label}</span>
-                            <strong>{count}</strong>
-                            <p>{purpose}</p>
-                        </article>
-                    );
-                })}
-            </section>
+            <p class="today-summary-line" aria-label="Today section summary" data-today-summary>
+                <span><strong>{sectionCounts.start || 0}</strong> to open</span>
+                <span><strong>{sectionCounts.skim || 0}</strong> to skim</span>
+                <span><strong>{sectionCounts.reference || 0}</strong> references</span>
+            </p>
 
             <section class="today-brief" data-today-sections aria-label="Today priority sections">
                 {sections.map((section) => {
@@ -89,7 +77,6 @@ const exploreLinks = [
             <section class="explore-strip" data-today-explore aria-label="Explore full lists">
                 <div>
                     <h2>Continue in Explore</h2>
-                    <p>Search all tracked signals, then save useful items locally.</p>
                 </div>
                 <nav aria-label="Explore and full module pages">
                     {exploreLinks.map(([label, href, meta]) => (

@@ -31,16 +31,18 @@ test("Astro build output renders Today from checked-in data", () => {
     ensureDist();
     const html = read("dist/today/index.html");
     const today = JSON.parse(read("data/today.json"));
-    const total = today.sections.reduce((sum, section) => sum + section.items.length, 0);
+    const counts = Object.fromEntries(today.sections.map((section) => [section.id, section.items.length]));
 
     assert.match(html, /<title>Today - anothel<\/title>/);
     assert.match(html, /href="\.\.\/css\/site\.css"/);
     assert.match(html, /Today&#39;s priority brief\./);
-    assert.match(html, new RegExp(`${total} checked-in picks`));
+    assert.match(html, new RegExp(`<strong>${counts.start}<\/strong> to open`));
+    assert.match(html, new RegExp(`<strong>${counts.skim}<\/strong> to skim`));
+    assert.match(html, new RegExp(`<strong>${counts.reference}<\/strong> references`));
     assert.match(html, /data-compact-trust/);
     assert.match(html, /anthropics\/skills/);
     assert.match(html, /Continue in Explore/);
-    assert.match(html, /href="\.\.\/review\/index\.html"/);
+    assert.match(html, /href="\.\.\/explore\/index\.html"/);
 });
 
 test("Astro Home, Today, and Status output use one canonical trust interpretation", () => {
@@ -60,8 +62,9 @@ test("Astro Home, Today, and Status output use one canonical trust interpretatio
         assert.match(html, new RegExp(`data-pipeline-status="${trust.pipelineStatus}"`));
         assert.match(html, new RegExp(`data-freshness="${trust.freshness}"`));
         assert.match(html, new RegExp(`data-trust-state="${trust.overall}"`));
-        assert.match(html, new RegExp(`Data date <strong>${trust.dataDate}</strong>`));
-        assert.match(html, /View source evidence in Status/);
+        assert.match(html, new RegExp(`<strong>${trust.overall}</strong>`));
+        assert.match(html, new RegExp(`Updated <strong>${trust.dataDate}</strong>`));
+        assert.match(html, />Status<\/a>/);
         assert.equal(html.match(/data-compact-trust(?:\s|>)/g)?.length, 1);
         assert.doesNotMatch(html, /<astro-island\b|\bcomponent-url=|\brenderer-url=/);
         assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i);
@@ -78,7 +81,7 @@ test("Astro Home keeps an honest native-module saved summary", () => {
 
     assert.match(html, /data-home-review-saved>\?\?</);
     assert.match(html, /data-home-review-unread>\?\?</);
-    assert.match(html, /Browser-local state loads when JavaScript is available\./);
+    assert.match(html, /Local queue/);
     assert.match(html, /<script type="module" src="\/_astro\/index\.[^"]+\.js"><\/script>/);
     assert.doesNotMatch(html, /js\/local-state\.js|AnothelState/);
 });
@@ -108,16 +111,16 @@ test("Astro Today output includes the shared shell and mobile density contract",
     assert.match(html, /class="shell hub-shell today-shell"/);
     assert.match(html, /class="hero-header"/);
     assert.match(html, /class="route-nav primary-nav"/);
-    assert.match(html, /class="route-nav secondary-nav"/);
+    assert.doesNotMatch(html, /class="route-nav secondary-nav"/);
     assert.match(html, /class="skip-link" href="#main-content"/);
     assert.match(html, /<main(?=[^>]*id="main-content")(?=[^>]*tabindex="-1")[^>]*>/);
     assert.doesNotMatch(html, /class="topbar"/);
     assert.match(html, /<section class="today-section" id="start" data-section-id="start">/);
     assert.match(html, /class="signal-card today-card today-card-compact"/);
     assert.match(html, /<h3 data-signal-title>/);
-    const shellOrder = ["hero-header", "route-nav primary-nav", "route-nav secondary-nav", "id=\"main-content\""]
+    const shellOrder = ["hero-header", "route-nav primary-nav", "id=\"main-content\""]
         .map((marker) => html.indexOf(marker));
-    assert.ok(shellOrder.every((offset, index) => offset >= 0 && (index === 0 || offset > shellOrder[index - 1])), "hero, primary, secondary, and main should be siblings in document order");
+    assert.ok(shellOrder.every((offset, index) => offset >= 0 && (index === 0 || offset > shellOrder[index - 1])), "hero, primary, and main should be siblings in document order");
 
     assert.match(styles, /html\s*{[^}]*scroll-padding-top:/s);
     assert.match(styles, /\.today-section\s*{[^}]*scroll-margin-top:/s);
@@ -150,7 +153,7 @@ test("Astro build output renders migrated static routes including Notes", () => 
         assert.match(html, pattern, `${path} should render route content`);
         assert.match(html, /<html lang="en">/, `${path} should declare its English document language`);
         assert.match(html, /class="route-nav primary-nav"/, `${path} should use shared primary nav`);
-        assert.match(html, /class="route-nav secondary-nav"/, `${path} should use shared secondary nav`);
+        assert.doesNotMatch(html, /class="route-nav secondary-nav"/, `${path} should not render the retired secondary nav`);
         assert.match(html, /class="skip-link" href="#main-content"/, `${path} should provide a skip link`);
         assert.match(html, /<main(?=[^>]*id="main-content")(?=[^>]*tabindex="-1")[^>]*>/, `${path} should expose the skip target`);
     }
@@ -169,7 +172,7 @@ test("Astro build output renders migrated static routes including Notes", () => 
     assert.match(reviewHtml, /data-review-static-guidance/);
     assert.match(reviewHtml, /Review is browser-local/);
     assert.match(reviewHtml, /astro-island/);
-    assert.match(read("dist/index.html"), /href="today\/index\.html"/);
+    assert.match(read("dist/index.html"), /href="today\/index\.html#skim"/);
     const statusHtml = read("dist/status/index.html");
     assert.match(statusHtml, /href="\.\.\/trends\/index\.html"/);
     assert.match(statusHtml, /Overall health:/);

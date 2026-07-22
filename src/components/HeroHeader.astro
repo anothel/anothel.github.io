@@ -7,11 +7,12 @@ const {
     current,
     prefix = "../"
 } = Astro.props;
+const hasStamp = Astro.slots.has("stamp");
 ---
 <header class="hero-header">
     <div class="hero-meta">
         <p class="eyebrow">{eyebrow}</p>
-        <p class="stamp"><slot name="stamp" /></p>
+        {hasStamp && <p class="stamp"><slot name="stamp" /></p>}
     </div>
     <h1>{title}</h1>
     <slot name="context" />

@@ -571,7 +571,7 @@ test("JavaScript-disabled Home keeps honest saved placeholders at 390x844", asyn
 
     await expect(page.locator("[data-home-review-saved]")).toHaveText("??");
     await expect(page.locator("[data-home-review-unread]")).toHaveText("??");
-    await expect(page.locator("[data-home-review-status]")).toContainText("loads when JavaScript is available");
+    await expect(page.locator("[data-home-review-status]")).toContainText("Local queue");
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
     await context.close();
 });
@@ -814,7 +814,7 @@ test("Home and Today keep priority content and trust summaries without JavaScrip
         await expect(page.locator("[data-signal-card]").first()).toBeVisible();
         await expect(page.locator("[data-home-review-saved]")).toHaveText("??");
         await expect(page.locator("[data-home-review-unread]")).toHaveText("??");
-        await expect(page.locator("[data-home-review-status]")).toContainText("JavaScript is available");
+        await expect(page.locator("[data-home-review-status]")).toContainText("Local queue");
         await expect(page.locator("[data-compact-trust]")).toBeVisible();
 
         await page.goto("/today/");

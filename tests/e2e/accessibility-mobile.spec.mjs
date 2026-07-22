@@ -22,7 +22,6 @@ const routeCases = [
     { route: "/404.html", noNavigation: true }
 ];
 const primaryLabels = ["Home", "Today", "Explore", "Review"];
-const secondaryLabels = ["Status", "Trends", "Packages", "Repos", "Reference shelf", "Notes"];
 const controlNameRules = ["aria-command-name", "button-name", "input-button-name", "label", "link-name", "select-name"];
 const summarize = (violations) => violations.map(({ id, impact, nodes }) => ({
     id,
@@ -45,15 +44,12 @@ test.describe("route accessibility", () => {
             expect(headingJumps, `${route} skips a heading level`).toEqual([]);
 
             const primary = page.getByRole("navigation", { name: "Primary" });
-            const secondary = page.getByRole("navigation", { name: "Secondary" });
             if (noNavigation) {
                 await expect(primary).toHaveCount(0);
-                await expect(secondary).toHaveCount(0);
             } else {
                 await expect(primary).toHaveCount(1);
-                await expect(secondary).toHaveCount(1);
-                const currentLinks = page.locator(".primary-nav a[aria-current='page'], .secondary-nav a[aria-current='page']");
-                if (current) {
+                const currentLinks = page.locator(".primary-nav a[aria-current='page']");
+                if (primaryLabels.includes(current)) {
                     await expect(currentLinks).toHaveCount(1);
                     await expect(currentLinks).toHaveText(current);
                 } else {
@@ -106,10 +102,8 @@ test.describe("mobile layout", () => {
 
             const layout = await page.evaluate(() => {
                 const primary = document.querySelector(".primary-nav");
-                const secondary = document.querySelector(".secondary-nav");
                 const hero = document.querySelector(".hero-header");
                 const primaryLinks = [...(primary?.querySelectorAll("a") || [])];
-                const secondaryLinks = [...(secondary?.querySelectorAll("a") || [])];
                 const visible = (element) => {
                     const style = getComputedStyle(element);
                     return style.display !== "none" && style.visibility !== "hidden";
@@ -136,7 +130,6 @@ test.describe("mobile layout", () => {
                     overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
                     heroPosition: hero && getComputedStyle(hero).position,
                     primaryPosition: primary && getComputedStyle(primary).position,
-                    secondaryPosition: secondary && getComputedStyle(secondary).position,
                     primaryHeight: primary?.getBoundingClientRect().height || 0,
                     heroHeight: hero?.getBoundingClientRect().height || 0,
                     h1Size: parseFloat(getComputedStyle(document.querySelector("h1")).fontSize),
@@ -144,16 +137,11 @@ test.describe("mobile layout", () => {
                     h3Sizes: [...document.querySelectorAll("main h3")].filter(visible).map((heading) => parseFloat(getComputedStyle(heading).fontSize)),
                     textInputSizes: [...document.querySelectorAll("input:not([type=hidden]), textarea")].filter(visible).map((input) => parseFloat(getComputedStyle(input).fontSize)),
                     primaryLabels: primaryLinks.map((link) => link.textContent.trim()),
-                    secondaryLabels: secondaryLinks.map((link) => link.textContent.trim()),
                     primaryRows: new Set(primaryLinks.map((link) => Math.round(link.getBoundingClientRect().top))).size,
                     primaryOverflow: primary ? primary.scrollWidth - primary.clientWidth : 0,
                     smallPrimaryTargets: primaryLinks.filter((link) => {
                         const rect = link.getBoundingClientRect();
                         return rect.width < 44 || rect.height < 44;
-                    }).map((link) => link.textContent.trim()),
-                    smallSecondaryTargets: secondaryLinks.filter((link) => {
-                        const rect = link.getBoundingClientRect();
-                        return rect.width < 24 || rect.height < 24;
                     }).map((link) => link.textContent.trim()),
                     smallContentTargets: targets.filter(({ width, height }) => width < 24 || height < 24),
                     overflowingCardText
@@ -174,37 +162,31 @@ test.describe("mobile layout", () => {
 
             if (noNavigation) {
                 expect(layout.primaryLabels).toEqual([]);
-                expect(layout.secondaryLabels).toEqual([]);
                 return;
             }
 
             expect(layout.primaryLabels).toEqual(primaryLabels);
-            expect(layout.secondaryLabels).toEqual(secondaryLabels);
             expect(layout.primaryRows, `${route} primary navigation wrapped`).toBe(1);
             expect(layout.primaryOverflow, `${route} primary navigation scrolls horizontally`).toBeLessThanOrEqual(1);
             expect(layout.primaryHeight, `${route} primary rail height`).toBeGreaterThanOrEqual(44);
             expect(layout.primaryHeight, `${route} primary rail height`).toBeLessThanOrEqual(52);
             expect(layout.smallPrimaryTargets, `${route} primary links are smaller than 44px`).toEqual([]);
-            expect(layout.smallSecondaryTargets, `${route} secondary links are smaller than 24px`).toEqual([]);
             expect(layout.primaryPosition).toBe("sticky");
             expect(["fixed", "sticky"]).not.toContain(layout.heroPosition);
-            expect(["fixed", "sticky"]).not.toContain(layout.secondaryPosition);
         });
     }
 
-    test("hero and secondary navigation scroll away while the primary rail stays", async ({ page }) => {
+    test("hero scrolls away while the primary rail stays", async ({ page }) => {
         await page.goto("/today/");
         const positions = await page.evaluate(async () => {
             scrollTo(0, document.documentElement.scrollHeight);
             await new Promise((resolve) => requestAnimationFrame(() => resolve()));
             const hero = document.querySelector(".hero-header").getBoundingClientRect();
             const primary = document.querySelector(".primary-nav").getBoundingClientRect();
-            const secondary = document.querySelector(".secondary-nav").getBoundingClientRect();
-            return { heroBottom: hero.bottom, primaryTop: primary.top, secondaryBottom: secondary.bottom };
+            return { heroBottom: hero.bottom, primaryTop: primary.top };
         });
 
         expect(positions.heroBottom).toBeLessThanOrEqual(0);
-        expect(positions.secondaryBottom).toBeLessThanOrEqual(0);
         expect(positions.primaryTop).toBeGreaterThanOrEqual(-1);
         expect(positions.primaryTop).toBeLessThanOrEqual(1);
     });
@@ -216,7 +198,7 @@ test.describe("mobile layout", () => {
         const trust = page.locator("[data-compact-trust]");
         await expect(firstCard).toBeVisible();
         await expect(trust).toBeVisible();
-        await expect(trust.getByRole("link", { name: "View source evidence in Status" })).toHaveAttribute("href", "../status/index.html");
+        await expect(trust.getByRole("link", { name: "Status" })).toHaveAttribute("href", "../status/index.html");
         await expect(firstCard.locator("h3[data-signal-title]")).toHaveCount(1);
         await expect(firstCard.locator(".action-copy")).toContainText("Next action");
         const cardTop = await firstCard.evaluate((element) => element.getBoundingClientRect().top);
