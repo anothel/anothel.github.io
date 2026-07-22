@@ -95,10 +95,14 @@ const moduleRoutes = [
                 </div>
                 <section class="module-strip home-module-board" aria-label="Module routes" data-home-routes>
                     {moduleRoutes.map((route) => (
-                        <a class={`module-route status-${route.status || "unknown"}`} href={route.route}>
+                        <a
+                            class={`module-route status-${route.status || "unknown"}`}
+                            href={route.route}
+                            aria-label={`${route.title}: ${route.purpose}. ${route.count} items. Updated ${route.updated}. Status ${route.status}.`}
+                        >
                             <span>{route.title}</span>
                             <strong>{route.purpose}</strong>
-                            <small>{route.count} items / {route.updated} / Status {route.status}</small>
+                            <small>{route.count} items</small>
                         </a>
                     ))}
                 </section>
@@ -125,9 +129,10 @@ const moduleRoutes = [
                         <h2 id="skim-title">Worth skimming</h2>
                         <p>Useful signals that do not need first attention.</p>
                     </div>
+                    <a href="today/index.html#skim">View all</a>
                 </div>
                 <div class="skim-list" data-home-skim>
-                    {skimItems.slice(0, 8).map((item) => (
+                    {skimItems.slice(0, 3).map((item) => (
                         <a class="skim-item" href={item.url} rel={externalRel(item.url)}>
                             <strong>{item.title}</strong>
                             <span>{item.module} / {item.metric}</span>

@@ -89,7 +89,7 @@ test("Astro Home applies external rel policy without changing internal links", (
     const anchors = [...html.matchAll(/<a\b[^>]*>/gi)].map((match) => match[0]);
     const skimAnchors = anchors.filter((anchor) => /\bclass="skim-item"/i.test(anchor));
 
-    assert.equal(skimAnchors.length, 6);
+    assert.equal(skimAnchors.length, 3);
     for (const anchor of anchors) {
         const href = anchor.match(/\bhref="([^"]+)"/i)?.[1];
         assert.ok(href, `Home anchor should have an href: ${anchor}`);
