@@ -18,7 +18,6 @@ const modules = manifest.modules || [];
 const startItems = today.sections?.find((section) => section.id === "start")?.items || [];
 const skimItems = today.sections?.find((section) => section.id === "skim")?.items || [];
 const total = modules.reduce((sum, module) => sum + (module.count || 0), 0);
-const updated = modules.map((module) => module.updated).filter(Boolean).sort().at(-1) || manifest.updated || "-";
 let validation = null;
 try {
     validation = await validateDataFiles();
@@ -31,18 +30,7 @@ const trust = buildStatusDashboard({
     report,
     validation
 });
-const moduleRoutes = [
-    { title: "Explore workspace", route: "explore/index.html", purpose: "Search and save across sources", count: total, updated, status: "ok" },
-    { title: "Source status", route: "status/index.html", purpose: "Refresh health across sources", count: total, updated, status: "ok" },
-    ...modules.map((module) => ({
-        title: module.title,
-        route: module.route,
-        purpose: module.id === "trends" ? "Cross-source movement" : module.source,
-        count: module.count,
-        updated: module.updated,
-        status: module.status
-    }))
-];
+
 ---
 <AppShell
     title="anothel"
@@ -62,9 +50,8 @@ const moduleRoutes = [
                         <div>
                             <p class="eyebrow">Open first</p>
                             <h2 id="home-priority-title">Start with these signals.</h2>
-                            <p>A personal radar for AI engineering signals across HN, GitHub, npm, repos, packages, and references.</p>
+                            <p>Three signals worth opening before anything else.</p>
                         </div>
-                        <a href="today/index.html">Open priority brief</a>
                     </div>
                     {startItems.map((item, index) => (
                         <div class:list={["home-priority-signal", { "home-priority-signal-first": index === 0 }]}>
@@ -85,43 +72,6 @@ const moduleRoutes = [
                 </div>
             </section>
 
-            <section class="home-module-section" aria-labelledby="home-modules-title">
-                <div class="section-heading">
-                    <div>
-                        <h2 id="home-modules-title">Browse modules</h2>
-                        <p>Jump into the workspace when a source deserves deeper reading.</p>
-                    </div>
-                    <a href="explore/index.html">Search all tracked signals</a>
-                </div>
-                <section class="module-strip home-module-board" aria-label="Module routes" data-home-routes>
-                    {moduleRoutes.map((route) => (
-                        <a
-                            class={`module-route status-${route.status || "unknown"}`}
-                            href={route.route}
-                            aria-label={`${route.title}: ${route.purpose}. ${route.count} items. Updated ${route.updated}. Status ${route.status}.`}
-                        >
-                            <span>{route.title}</span>
-                            <strong>{route.purpose}</strong>
-                            <small>{route.count} items</small>
-                        </a>
-                    ))}
-                </section>
-            </section>
-
-            <section class="home-project-section" aria-labelledby="home-projects-title">
-                <div class="section-heading">
-                    <div>
-                        <h2 id="home-projects-title">Projects</h2>
-                        <p>Small things worth opening directly.</p>
-                    </div>
-                </div>
-                <div class="project-list">
-                    <a class="project-card" href="https://github.com/anothel/AnoSecureKit-Community" rel="noopener noreferrer">
-                        <strong>SecureKit</strong>
-                        <span>C++20 security utility library backed by OpenSSL 3.x</span>
-                    </a>
-                </div>
-            </section>
 
             <section class="home-skim-panel" aria-labelledby="skim-title">
                 <div class="section-heading">
