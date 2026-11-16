@@ -71,3 +71,23 @@ git diff --check
 `npm run check` validates data/docs, builds once, validates `dist/`, runs repository tests/syntax checks, and runs desktop/mobile Playwright checks. It makes no live source API calls.
 
 After deployment, the workflow probes every required primary, Notes, and topic route plus robots and sitemap. It also checks an Astro asset and direct navigation to key primary routes. A failed route, missing metadata file, missing Astro asset, or non-404 response for an unknown path fails the deployment job.
+
+## Refresh recovery (November 2026)
+
+The September 20 refresh [run 35543988579](https://github.com/anothel/anothel.github.io/actions/runs/35543988579) fetched, validated, built, and checked the artifact successfully. Two rendered-output assertions failed, so the guarded commit step was correctly skipped:
+
+- Status output was required to contain a stale source even after a successful refresh. Output checks now compare every source row with its data-derived health, freshness, and pipeline status. Fixed-time Status model tests retain coverage of stale, unknown, failed, partial, and fallback states.
+- Source records were compared using incomplete HTML escaping. Astro also escapes apostrophes as `&#39;`. Checks now cover that encoding and verify fields in every ordered row. An isolated fresh-data build with quotes, ampersands, and HTML-like external text exercises the actual workflow assertions without live API calls or modifying checked-in data.
+
+Full validation also exposed an obsolete assertion for the SecureKit Home project card removed in the July Home redesign. Home link checks now verify the generated Today priority destinations and external-link protection. The mobile Home layout assertion likewise follows the current skim panel, visible trust text (the wrapper uses `display: contents`), and Status link instead of retired markup.
+
+The public Actions workflow page reported `Update data` as `disabled_inactivity`, with GitHub's 60-day inactivity banner. The cron remains daily at **21:17 UTC**; editing tests does not establish that the schedule is enabled. The latest successful Pages run visible in history was [29919615684](https://github.com/anothel/anothel.github.io/actions/runs/29919615684), on July 22. Its source manifest is dated July 7. Direct production HTTP verification was blocked by the Cloud environment's network policy, so the currently served bytes still require verification.
+
+Maintainer recovery after reviewing and merging the fix:
+
+1. Open **Actions → Update data → Enable workflow** if the inactivity banner remains. Confirm the workflow is active; do not assume a branch push re-enabled it.
+2. Run **Update data → Run workflow** on `main`. Inspect all validation stages and confirm a generated-data commit was pushed. Existing validation and commit guards remain required.
+3. Confirm the successful refresh starts **Deploy Pages** through `workflow_run`, and that checkout includes the newly committed JSON. A `GITHUB_TOKEN` push alone does not start ordinary push workflows.
+4. Verify deployment probes, then compare the published `/data/manifest.json` and `/status/` with the new commit. Confirm the next scheduled run occurs. Check **Settings → Pages → Source → GitHub Actions** if deployment needs recovery.
+
+No automatic keepalive commits are added. Public repositories can have scheduled workflows disabled again after prolonged inactivity; monitor missed refreshes separately from individual source freshness. Workflow enablement and Pages settings are repository settings and are not changed by this patch.

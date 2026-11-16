@@ -20,7 +20,7 @@ const coreRoutes = [
 ];
 const publicRoutes = [...new Set([...coreRoutes, ...topicRoutes])];
 const artifactRoutes = publicRoutes.map((route) => resolve("dist", route));
-const canonicalSecureKitUrl = "https://github.com/anothel/AnoSecureKit-Community";
+
 
 function extractAnchors(html) {
     const anchorRegex = /<a\b[^>]*\shref=(["'])(.*?)\1/gis;
@@ -67,25 +67,22 @@ test("public routes resolve to generated Astro HTML", () => {
 }
 );
 
-test("Home SecureKit card uses the verified public destination", () => {
+test("Home priority cards use the generated Today destinations with safe external links", () => {
     const html = readFileSync(resolve("dist", "index.html"), "utf8");
-    const projectAnchor = html.match(/<a\b[^>]*\bclass="project-card"[^>]*>/i)?.[0];
-    assert.ok(projectAnchor, "Home should render the SecureKit project card");
+    const today = JSON.parse(readFileSync("data/today.json", "utf8"));
+    const items = today.sections.find((section) => section.id === "start").items;
+    const anchors = [...html.matchAll(/<a\b[^>]*\bdata-signal-card[^>]*>/gi)].map((match) => match[0]);
+    const escapeAttribute = (value) => value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("'", "&#39;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
-    const href = projectAnchor.match(/\bhref="([^"]+)"/i)?.[1];
-    assert.ok(href, "Home SecureKit card should have a destination");
-
-    const destination = new URL(href, "https://anothel.github.io/");
-    if (destination.origin === "https://anothel.github.io") {
-        const route = destination.pathname.replace(/^\/+|\/+$/g, "");
-        const artifact = route
-            ? resolve("dist", route, "index.html")
-            : resolve("dist", "index.html");
-        assert.ok(existsSync(artifact), `Home project route should exist: ${destination.pathname}`);
-    }
-
-    assert.equal(href, canonicalSecureKitUrl);
-    assert.match(projectAnchor, /\brel="noopener noreferrer"/i);
+    assert.equal(anchors.length, items.length, "Home should render every priority signal");
+    items.forEach((item, index) => {
+        assert.ok(anchors[index].includes(`href="${escapeAttribute(item.url)}"`), item.title);
+        const destination = new URL(item.url, "https://anothel.github.io/");
+        assert.ok(["http:", "https:"].includes(destination.protocol));
+        if (destination.origin !== "https://anothel.github.io") {
+            assert.match(anchors[index], /\brel="noopener noreferrer"/i);
+        }
+    });
 });
 
 test("public anchors use resolvable local routes", () => {
