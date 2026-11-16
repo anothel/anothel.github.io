@@ -21,6 +21,10 @@ function read(path) {
     return readFileSync(path, "utf8");
 }
 
+function escapeHtml(value) {
+    return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+}
+
 function ensureDist() {
     if (!existsSync("dist/index.html")) {
         execFileSync(process.execPath, ["node_modules/astro/bin/astro.mjs", "build"], { encoding: "utf8" });
@@ -40,7 +44,8 @@ test("Astro build output renders Today from checked-in data", () => {
     assert.match(html, new RegExp(`<strong>${counts.skim}<\/strong> to skim`));
     assert.match(html, new RegExp(`<strong>${counts.reference}<\/strong> references`));
     assert.match(html, /data-compact-trust/);
-    assert.match(html, /anthropics\/skills/);
+    const titles = [...html.matchAll(/<h3 data-signal-title>([\s\S]*?)<\/h3>/g)].map((match) => match[1]);
+    assert.deepEqual(titles, today.sections.flatMap((section) => section.items.map((item) => escapeHtml(item.title))), "Today renders every generated pick in section order");
     assert.match(html, /Continue in Explore/);
     assert.match(html, /href="\.\.\/explore\/index\.html"/);
 });
@@ -187,8 +192,13 @@ test("Astro build output renders migrated static routes including Notes", () => 
     assert.match(statusHtml, /<table class="source-health-table source-record-table" data-status-source-table>/);
     assert.match(statusHtml, /<th scope="col">Pipeline<\/th>/);
     assert.match(statusHtml, /<th scope="col">Last successful update<\/th>/);
-    assert.match(statusHtml, /health-label health-stale/);
-    assert.match(statusHtml, /health-label health-unknown/);
+    const dashboard = buildStatusDashboard({
+        manifest: JSON.parse(read("data/manifest.json")),
+        datasets: Object.fromEntries(["trends", "packages", "repos", "links"]
+            .map((name) => [name, JSON.parse(read(`data/${name}.json`))])),
+        report: JSON.parse(read("data/refresh-report.json")),
+        validation: { errors: [], warnings: [] }
+    });
     assert.doesNotMatch(statusHtml, />\s*(?:undefined|null|NaN)\s*</);
 
     const statusSources = ["trends", "packages", "repos", "links"]
@@ -201,13 +211,18 @@ test("Astro build output renders migrated static routes including Notes", () => 
         .map((marker) => statusHtml.indexOf(marker));
     assert.equal(statusRows.length, statusSources.length);
     assert.ok(statusOrder.every((offset, index) => offset >= 0 && (index === 0 || offset > statusOrder[index - 1])));
-    statusSources.forEach((source, index) => assert.match(statusRows[index], new RegExp(`>${source.name}<`)));
+    statusSources.forEach((source, index) => {
+        assert.match(statusRows[index], new RegExp(`>${source.name}<`));
+        const row = dashboard.rows[index];
+        assert.ok(statusRows[index].includes(`class="health-label health-${row.health}">${row.health}</span>`));
+        assert.ok(statusRows[index].includes(`<strong>${row.freshness}</strong>`));
+        assert.ok(statusRows[index].includes(`<strong>${row.pipelineStatus}</strong>`));
+    });
     assert.doesNotMatch(statusHtml, /<script\b|<astro-island\b|\b(?:component-url|renderer-url)=/i);
 });
 
 test("Astro source routes render complete ordered records before secondary evidence without client JavaScript", () => {
     ensureDist();
-    const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
     const routes = [
         ["trends", "items", "title", ["category", "source", "velocity", "signal", "summary"]],
         ["packages", "packages", "name", ["category", "downloadsLabel", "focus", "period"]],
@@ -225,8 +240,14 @@ test("Astro source routes render complete ordered records before secondary evide
 
         assert.equal([...html.matchAll(/<th scope="row"/g)].length, items.length, `${route}: every record`);
         assert.ok(summaryAt >= 0 && summaryAt < recordsAt && recordsAt < statsAt && statsAt < healthAt, `${route}: summary, records, stats, health order`);
-        assert.ok(html.indexOf(escapeHtml(items[0][title])) < html.indexOf(escapeHtml(items[1][title])), `${route}: source order`);
-        for (const item of items) for (const field of [title, ...fields]) assert.ok(html.includes(escapeHtml(item[field])), `${route}: ${item[title]} ${field}`);
+        const rows = [...html.matchAll(/<tbody>([\s\S]*?)<\/tbody>/g)]
+            .flatMap((body) => [...body[1].matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map((row) => row[1]));
+        assert.equal(rows.length, items.length, `${route}: complete ordered records`);
+        items.forEach((item, index) => {
+            for (const field of [title, ...fields]) {
+                assert.ok(rows[index].includes(escapeHtml(item[field])), `${route}: row ${index + 1} ${item[title]} ${field}`);
+            }
+        });
         assert.doesNotMatch(html, /<script\b|<astro-island\b|\b(?:component-url|renderer-url)=/i, `${route}: static HTML only`);
         assert.doesNotMatch(html, />\s*(?:undefined|null|NaN)\s*</i, `${route}: no invalid placeholders`);
     }

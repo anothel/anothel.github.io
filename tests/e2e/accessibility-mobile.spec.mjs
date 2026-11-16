@@ -239,9 +239,10 @@ test.describe("mobile layout", () => {
         ];
 
         try {
-            for (const width of [360, 390, 412]) {
-                await page.setViewportSize({ width, height: 844 });
-                for (const route of routes) {
+            for (const route of routes) {
+                // The narrower Status case also catches wider fallback-font metrics.
+                for (const width of route.status ? [320, 360, 390, 412] : [360, 390, 412]) {
+                    await page.setViewportSize({ width, height: 844 });
                     await page.goto(route.path);
                     await page.locator(route.summary).waitFor();
                     const textSelector = route.status ? `${route.summary} dt, ${route.summary} dd` : `${route.summary} .stat-card > span, ${route.summary} .stat-card > strong`;
@@ -309,8 +310,8 @@ test.describe("mobile layout", () => {
                 cardTop: top("[data-signal-card]"),
                 savedValuesBottom: bottom(".home-saved-facts"),
                 savedTop: top("[data-home-review-summary]"),
-                trustTop: top("[data-compact-trust]"),
-                secondaryTop: top(".home-module-section")
+                trustTop: top("[data-compact-trust] .compact-trust-facts"),
+                secondaryTop: top(".home-skim-panel")
             };
         });
         expect(layout.cardTop).toBeLessThanOrEqual(450);
@@ -318,7 +319,7 @@ test.describe("mobile layout", () => {
         expect(layout.savedTop).toBeGreaterThan(layout.cardTop);
         expect(layout.trustTop).toBeGreaterThan(layout.savedTop);
         expect(layout.trustTop).toBeLessThan(layout.secondaryTop);
-        await expect(page.getByRole("link", { name: "View source evidence in Status" })).toHaveAttribute("href", "status/index.html");
+        await expect(page.locator("[data-compact-trust]").getByRole("link", { name: /Status$/ })).toHaveAttribute("href", "status/index.html");
     });
 
     test("Status leads with a compact summary and complete source evidence", async ({ page }) => {
