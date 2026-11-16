@@ -212,3 +212,11 @@ test("refresh report resets consecutive 429 tracking when current run is not the
     assert.equal(report.modules[0].sources[0].consecutiveRateLimitedRuns, 0);
     assert.equal(report.modules[0].sources[0].safetyDetails.includes("consecutive 429"), false);
 });
+
+test("failure summary separates workflow failure from an old successful source snapshot", () => {
+    const report = buildRefreshReport(manifest, {}, "2026-11-16T12:00:00.000Z");
+    const markdown = renderRefreshMarkdown(report, { jobStatus: "failure", snapshotGeneratedAt: "2026-07-07T22:21:45.936Z" });
+    assert.match(markdown, /Workflow state before summary: failure/);
+    assert.match(markdown, /Pipeline snapshot generated: 2026-07-07T22:21:45.936Z/);
+    assert.match(markdown, /does not prove a successful refresh or commit/);
+});

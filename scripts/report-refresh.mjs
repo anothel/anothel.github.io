@@ -199,6 +199,9 @@ export function renderRefreshMarkdown(report, context = {}) {
         "# Data refresh report",
         "",
         `Generated: ${report.generatedAt}`,
+        `Workflow state before summary: ${context.jobStatus || "not recorded"}`,
+        `Pipeline snapshot generated: ${context.snapshotGeneratedAt || "unknown"}`,
+        "This summary does not prove a successful refresh or commit. Inspect all job steps; source rows may describe retained or previous output.",
         `Manifest updated: ${report.manifestUpdated}`,
         `Overall status: ${report.totals.status}`,
         `Modules: ${report.totals.modules}`,
@@ -276,7 +279,7 @@ async function main() {
     datasets.__runContext = runContext();
     const priorReport = await readPriorReport();
     const report = buildRefreshReport(manifest, datasets, new Date().toISOString(), priorReport);
-    const markdown = renderRefreshMarkdown(report, { reason: process.env.REFRESH_REASON });
+    const markdown = renderRefreshMarkdown(report, { reason: process.env.REFRESH_REASON, jobStatus: process.env.REFRESH_JOB_STATUS, snapshotGeneratedAt: manifest.generatedAt });
     const jsonOut = argValue("--json-out");
 
     await mkdir(outDir, { recursive: true });

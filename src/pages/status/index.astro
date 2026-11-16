@@ -38,6 +38,7 @@ const displayTime = (value) => value && value !== "unknown" ? value : "unknown";
                 <p class="eyebrow">Current publish</p>
                 <h2 id="overall-health-title">Overall health: {dashboard.overall}</h2>
                 <p>{dashboard.overallSummary}</p>
+                <p data-refresh-state={dashboard.refresh.state}><strong>Pipeline freshness: {dashboard.refresh.state}</strong> — assessed at build time, separately from source health.</p>
 
                 <dl class="status-overall-facts" aria-label="Current publish status">
                     <div>
@@ -121,7 +122,7 @@ const displayTime = (value) => value && value !== "unknown" ? value : "unknown";
             <section class="status-evidence" aria-labelledby="pipeline-evidence-title" data-status-evidence>
                 <div class="panel-heading">
                     <h2 id="pipeline-evidence-title">Generation and recovery evidence</h2>
-                    <p>Checked-in JSON and build-time schema validation. No live monitoring.</p>
+                    <p>Checked-in JSON and build-time schema validation. No live monitoring; check Actions for later failures or missed runs.</p>
                 </div>
                 <dl class="evidence-list">
                     <div><dt>Data age</dt><dd>{dataAge}<small>Whole UTC days since pipeline generation.</small></dd></div>
@@ -129,6 +130,9 @@ const displayTime = (value) => value && value !== "unknown" ? value : "unknown";
                     <div><dt>Refresh report result</dt><dd>{dashboard.reportStatus}</dd></div>
                     <div><dt>Manifest data date</dt><dd>{manifest.updated || "unknown"}</dd></div>
                     <div><dt>Validation evidence</dt><dd>{dashboard.validationDetail}</dd></div>
+                    <div><dt>Freshness assessment</dt><dd><time datetime={dashboard.assessedAt}>{dashboard.assessedAt}</time><small>{dashboard.refresh.detail} This static page does not update its clock or send alerts.</small></dd></div>
+                    <div><dt>Pipeline generation</dt><dd>{manifest.generatedAt || "unknown"}<small>Manifest assembly time; the refresh report timestamp cannot reset this clock. Daily schedule with a 36-hour maximum age.</small></dd></div>
+                    <div><dt>Monitoring limitation</dt><dd>A disabled scheduler cannot reliably detect its own absence. An independent monitor must evaluate the published JSON against its current clock.</dd></div>
                     <div><dt>Generated timestamp meaning</dt><dd>Checked-in pipeline snapshot assembly time, not source freshness.</dd></div>
                     <div><dt>Health derivation</dt><dd>Each source evaluates validation, pipeline availability, and freshness independently. Overall reports all-unavailable first, then degraded, stale, unknown, or healthy.</dd></div>
                     <div><dt>Recovery reading</dt><dd>Use the visible source warning and linked route. Fallback rows retain their last successful update and stay labelled fallback.</dd></div>

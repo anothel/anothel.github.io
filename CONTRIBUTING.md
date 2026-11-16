@@ -26,7 +26,9 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd`.
 | `npm run check:docs` | Check internal Markdown links, repository paths, npm script names, and canonical architecture statements. External links are skipped. |
 | `npm run validate` | Validate data, run all Node tests, and syntax-check listed scripts/browser modules. |
 | `npm test` | Run `tests/*.test.mjs` with Node's test runner. |
-| `npm run check:dist` | Validate required `dist/` routes, assets, JSON, and internal links. |
+| `npm run check:dist` | Validate required `dist/` routes, assets, JSON, internal links, and exact data identity against the checkout. |
+| `npm run check:refresh` | Evaluate current pipeline age and source health from local JSON; exits nonzero for overdue, unknown, stale, partial, failed, or fallback output. Use `-- --site-url https://anothel.github.io/` for published JSON. |
+| `npm run check:published` | Compare deployed data and Status bytes with a build expectation; see `docs/DEPLOYMENT.md` for required arguments. |
 | `npm run check:size` | Measure reviewed Home, Notes, topic, Explore, and Review HTML/JavaScript budgets from `asset-size-budgets.json`. |
 | `npm run test:e2e` | Build, then run Playwright desktop/mobile projects. |
 | `npm run test:e2e:run` | Run Playwright against current `dist/` via Astro preview. |

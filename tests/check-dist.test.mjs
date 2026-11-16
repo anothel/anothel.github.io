@@ -103,3 +103,16 @@ test("dist check fails on malformed generated data", async () => {
         await rm(root, { recursive: true, force: true });
     }
 });
+
+test("dist check rejects valid JSON that differs from the checked-out deployment source", async () => {
+    const root = await fixture();
+    try {
+        const file = join(root, "data", "today.json");
+        const data = JSON.parse(await readFile(file, "utf8"));
+        data.generatedAt = "2026-01-01T00:00:00.000Z";
+        await writeFile(file, JSON.stringify(data));
+        assert.throws(() => checkDist(root), /generated data differs from source: data\/today.json/);
+    } finally {
+        await rm(root, { recursive: true, force: true });
+    }
+});
