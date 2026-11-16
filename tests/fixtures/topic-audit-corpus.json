@@ -1,0 +1,1814 @@
+{
+  "sourceCommit": "b6146c24a5e5602cb7b8bcf172de7ac4a9e7fcd4",
+  "datasets": {
+    "trends": {
+      "updated": "2026-07-07",
+      "generatedAt": "2026-07-07T22:21:42.368Z",
+      "sources": [
+        "Hacker News",
+        "GitHub",
+        "npm"
+      ],
+      "sourceMeta": [
+        {
+          "name": "Hacker News",
+          "status": "ok",
+          "count": 4,
+          "tracked": 4,
+          "emitted": 4,
+          "coverage": "4/4",
+          "updatedAt": "2026-07-07T22:21:42.368Z"
+        },
+        {
+          "name": "GitHub",
+          "status": "ok",
+          "count": 12,
+          "tracked": 14,
+          "emitted": 12,
+          "coverage": "12/14",
+          "updatedAt": "2026-07-07T22:21:42.368Z"
+        },
+        {
+          "name": "npm",
+          "status": "ok",
+          "count": 8,
+          "tracked": 15,
+          "emitted": 8,
+          "coverage": "8/15",
+          "updatedAt": "2026-07-07T22:21:42.368Z"
+        }
+      ],
+      "items": [
+        {
+          "rank": 1,
+          "title": "activepieces/activepieces",
+          "source": "GitHub",
+          "category": "Workflow automation",
+          "score": 100,
+          "velocity": "23.2K stars",
+          "signal": "3.9K forks",
+          "url": "https://github.com/activepieces/activepieces",
+          "summary": "AI Agents & MCPs & AI Workflow Automation (~400 MCP servers for AI agents) AI Automation / AI Agent with MCPs AI Workflows & AI Agents MCPs for AI Agents"
+        },
+        {
+          "rank": 2,
+          "title": "affaan-m/ECC",
+          "source": "GitHub",
+          "category": "AI agents",
+          "score": 100,
+          "velocity": "227K stars",
+          "signal": "34.7K forks",
+          "url": "https://github.com/affaan-m/ECC",
+          "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
+        },
+        {
+          "rank": 3,
+          "title": "AgentOps-AI/agentops",
+          "source": "GitHub",
+          "category": "AI evals",
+          "score": 100,
+          "velocity": "5.7K stars",
+          "signal": "604 forks",
+          "url": "https://github.com/AgentOps-AI/agentops",
+          "summary": "Python SDK for AI agent monitoring, LLM cost tracking, benchmarking, and more. Integrates with most LLMs and agent frameworks including CrewAI, Agno, OpenAI Agents SDK, Langchain, Autogen, AG2, and CamelAI"
+        },
+        {
+          "rank": 4,
+          "title": "anomalyco/opencode",
+          "source": "GitHub",
+          "category": "AI agents",
+          "score": 100,
+          "velocity": "183.3K stars",
+          "signal": "22.7K forks",
+          "url": "https://github.com/anomalyco/opencode",
+          "summary": "The open source coding agent."
+        },
+        {
+          "rank": 5,
+          "title": "anthropics/claude-code",
+          "source": "GitHub",
+          "category": "AI agents",
+          "score": 100,
+          "velocity": "136.7K stars",
+          "signal": "22K forks",
+          "url": "https://github.com/anthropics/claude-code",
+          "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
+        },
+        {
+          "rank": 6,
+          "title": "anthropics/skills",
+          "source": "GitHub",
+          "category": "Agent skills",
+          "score": 100,
+          "velocity": "159.2K stars",
+          "signal": "18.8K forks",
+          "url": "https://github.com/anthropics/skills",
+          "summary": "Public repository for Agent Skills"
+        },
+        {
+          "rank": 7,
+          "title": "Arize-ai/phoenix",
+          "source": "GitHub",
+          "category": "AI evals",
+          "score": 100,
+          "velocity": "10.4K stars",
+          "signal": "960 forks",
+          "url": "https://github.com/Arize-ai/phoenix",
+          "summary": "AI Observability & Evaluation"
+        },
+        {
+          "rank": 8,
+          "title": "awslabs/mcp",
+          "source": "GitHub",
+          "category": "MCP",
+          "score": 100,
+          "velocity": "9.4K stars",
+          "signal": "1.6K forks",
+          "url": "https://github.com/awslabs/mcp",
+          "summary": "Open source MCP Servers for AWS"
+        },
+        {
+          "rank": 9,
+          "title": "enescingoz/awesome-n8n-templates",
+          "source": "GitHub",
+          "category": "Workflow automation",
+          "score": 100,
+          "velocity": "23.7K stars",
+          "signal": "6.2K forks",
+          "url": "https://github.com/enescingoz/awesome-n8n-templates",
+          "summary": "280+ free n8n automation templates ready-to-use workflows for Gmail, Telegram, Slack, Discord, WhatsApp, Google Drive, Notion, OpenAI, and more. AI agents, RAG chatbots, email automation, social media, DevOps, and document processing. The largest open-source n8n template collection."
+        },
+        {
+          "rank": 10,
+          "title": "farion1231/cc-switch",
+          "source": "GitHub",
+          "category": "AI agents",
+          "score": 100,
+          "velocity": "114.4K stars",
+          "signal": "7.6K forks",
+          "url": "https://github.com/farion1231/cc-switch",
+          "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
+        },
+        {
+          "rank": 11,
+          "title": "github/awesome-copilot",
+          "source": "GitHub",
+          "category": "AI agents",
+          "score": 100,
+          "velocity": "36.3K stars",
+          "signal": "4.5K forks",
+          "url": "https://github.com/github/awesome-copilot",
+          "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot."
+        },
+        {
+          "rank": 12,
+          "title": "JuliusBrussee/caveman",
+          "source": "GitHub",
+          "category": "Agent skills",
+          "score": 100,
+          "velocity": "86.2K stars",
+          "signal": "4.8K forks",
+          "url": "https://github.com/JuliusBrussee/caveman",
+          "summary": "why use many token when few token do trick Claude Code skill that cuts 65% of tokens by talking like caveman"
+        },
+        {
+          "rank": 13,
+          "title": "@modelcontextprotocol/sdk",
+          "source": "npm",
+          "category": "MCP",
+          "score": 92,
+          "velocity": "42.8M/week",
+          "signal": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
+          "summary": "42.8M downloads over the last available week."
+        },
+        {
+          "rank": 14,
+          "title": "@ai-sdk/provider",
+          "source": "npm",
+          "category": "AI",
+          "score": 89,
+          "velocity": "24.3M/week",
+          "signal": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider",
+          "summary": "24.3M downloads over the last available week."
+        },
+        {
+          "rank": 15,
+          "title": "openai",
+          "source": "npm",
+          "category": "AI",
+          "score": 89,
+          "velocity": "25.4M/week",
+          "signal": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/openai",
+          "summary": "25.4M downloads over the last available week."
+        },
+        {
+          "rank": 16,
+          "title": "@anthropic-ai/sdk",
+          "source": "npm",
+          "category": "AI",
+          "score": 88,
+          "velocity": "23.1M/week",
+          "signal": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk",
+          "summary": "23.1M downloads over the last available week."
+        },
+        {
+          "rank": 17,
+          "title": "ai",
+          "source": "npm",
+          "category": "AI",
+          "score": 86,
+          "velocity": "15.1M/week",
+          "signal": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/ai",
+          "summary": "15.1M downloads over the last available week."
+        },
+        {
+          "rank": 18,
+          "title": "@ai-sdk/openai",
+          "source": "npm",
+          "category": "AI",
+          "score": 83,
+          "velocity": "7.7M/week",
+          "signal": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai",
+          "summary": "7.7M downloads over the last available week."
+        },
+        {
+          "rank": 19,
+          "title": "Microsoft fire idTech team at Id software",
+          "source": "Hacker News",
+          "category": "Developer tools",
+          "score": 78,
+          "velocity": "440 comments",
+          "signal": "465 points",
+          "url": "https://gamefromscratch.com/microsoft-fire-idtech-team-at-id-software/",
+          "summary": "HN story by bauc with 440 comments."
+        },
+        {
+          "rank": 20,
+          "title": "@temporalio/client",
+          "source": "npm",
+          "category": "Workflow automation",
+          "score": 76,
+          "velocity": "2.3M/week",
+          "signal": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
+          "summary": "2.3M downloads over the last available week."
+        },
+        {
+          "rank": 21,
+          "title": "langfuse",
+          "source": "npm",
+          "category": "AI evals",
+          "score": 74,
+          "velocity": "1.5M/week",
+          "signal": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/langfuse",
+          "summary": "1.5M downloads over the last available week."
+        },
+        {
+          "rank": 22,
+          "title": "OpenWrt One Open Hardware Router",
+          "source": "Hacker News",
+          "category": "Developer tools",
+          "score": 60,
+          "velocity": "301 comments",
+          "signal": "793 points",
+          "url": "https://openwrt.org/toh/openwrt/one",
+          "summary": "HN story by peter_d_sherman with 301 comments."
+        },
+        {
+          "rank": 23,
+          "title": "The Art of Computer Programming by Donald E. Knuth",
+          "source": "Hacker News",
+          "category": "Developer tools",
+          "score": 48,
+          "velocity": "52 comments",
+          "signal": "197 points",
+          "url": "https://www-cs-faculty.stanford.edu/~knuth/taocp.html",
+          "summary": "HN story by archargelod with 52 comments."
+        },
+        {
+          "rank": 24,
+          "title": "StreetComplete: Fixing OpenStreetMap, one tiny quest at a time",
+          "source": "Hacker News",
+          "category": "Developer tools",
+          "score": 45,
+          "velocity": "153 comments",
+          "signal": "634 points",
+          "url": "https://streetcomplete.app/",
+          "summary": "HN story by kls0e with 153 comments."
+        }
+      ]
+    },
+    "packages": {
+      "updated": "2026-07-07",
+      "generatedAt": "2026-07-07T22:21:42.405Z",
+      "sourceMeta": {
+        "name": "npm",
+        "status": "ok",
+        "count": 24,
+        "tracked": 24,
+        "emitted": 24,
+        "coverage": "24/24",
+        "updatedAt": "2026-07-07T22:21:42.405Z"
+      },
+      "packages": [
+        {
+          "rank": 1,
+          "name": "@modelcontextprotocol/sdk",
+          "category": "MCP",
+          "focus": "Model Context Protocol SDK",
+          "downloads": 42848083,
+          "downloadsLabel": "42.8M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk"
+        },
+        {
+          "rank": 2,
+          "name": "openai",
+          "category": "AI SDK",
+          "focus": "OpenAI API SDK",
+          "downloads": 25353504,
+          "downloadsLabel": "25.4M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/openai"
+        },
+        {
+          "rank": 3,
+          "name": "@ai-sdk/provider",
+          "category": "AI SDK",
+          "focus": "AI SDK provider interface",
+          "downloads": 24327930,
+          "downloadsLabel": "24.3M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider"
+        },
+        {
+          "rank": 4,
+          "name": "@anthropic-ai/sdk",
+          "category": "AI SDK",
+          "focus": "Anthropic API SDK",
+          "downloads": 23102442,
+          "downloadsLabel": "23.1M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk"
+        },
+        {
+          "rank": 5,
+          "name": "ai",
+          "category": "AI SDK",
+          "focus": "Vercel AI SDK",
+          "downloads": 15141589,
+          "downloadsLabel": "15.1M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/ai"
+        },
+        {
+          "rank": 6,
+          "name": "@ai-sdk/openai",
+          "category": "AI SDK",
+          "focus": "OpenAI provider for AI SDK",
+          "downloads": 7718465,
+          "downloadsLabel": "7.7M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai"
+        },
+        {
+          "rank": 7,
+          "name": "@langchain/core",
+          "category": "AI agents",
+          "focus": "LangChain core primitives",
+          "downloads": 4578586,
+          "downloadsLabel": "4.6M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40langchain%2Fcore"
+        },
+        {
+          "rank": 8,
+          "name": "langchain",
+          "category": "AI agents",
+          "focus": "LLM and agent orchestration",
+          "downloads": 2379301,
+          "downloadsLabel": "2.4M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/langchain"
+        },
+        {
+          "rank": 9,
+          "name": "@temporalio/client",
+          "category": "Workflow automation",
+          "focus": "Temporal workflow client",
+          "downloads": 2327910,
+          "downloadsLabel": "2.3M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40temporalio%2Fclient"
+        },
+        {
+          "rank": 10,
+          "name": "@temporalio/workflow",
+          "category": "Workflow automation",
+          "focus": "Temporal workflow runtime",
+          "downloads": 2122375,
+          "downloadsLabel": "2.1M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40temporalio%2Fworkflow"
+        },
+        {
+          "rank": 11,
+          "name": "opencode-ai",
+          "category": "AI agents",
+          "focus": "OpenCode terminal agent package",
+          "downloads": 1864928,
+          "downloadsLabel": "1.9M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/opencode-ai"
+        },
+        {
+          "rank": 12,
+          "name": "langfuse",
+          "category": "AI evals",
+          "focus": "LLM observability and evals",
+          "downloads": 1522610,
+          "downloadsLabel": "1.5M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/langfuse"
+        },
+        {
+          "rank": 13,
+          "name": "inngest",
+          "category": "Workflow automation",
+          "focus": "durable workflow runtime",
+          "downloads": 1122083,
+          "downloadsLabel": "1.1M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/inngest"
+        },
+        {
+          "rank": 14,
+          "name": "@openai/agents",
+          "category": "AI agents",
+          "focus": "OpenAI Agents SDK for JavaScript",
+          "downloads": 1106931,
+          "downloadsLabel": "1.1M/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40openai%2Fagents"
+        },
+        {
+          "rank": 15,
+          "name": "braintrust",
+          "category": "AI evals",
+          "focus": "AI evals and observability",
+          "downloads": 964530,
+          "downloadsLabel": "964.5K/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/braintrust"
+        },
+        {
+          "rank": 16,
+          "name": "@trigger.dev/sdk",
+          "category": "Workflow automation",
+          "focus": "durable workflow SDK",
+          "downloads": 590321,
+          "downloadsLabel": "590.3K/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40trigger.dev%2Fsdk"
+        },
+        {
+          "rank": 17,
+          "name": "autoevals",
+          "category": "AI evals",
+          "focus": "AI eval scoring helpers",
+          "downloads": 520332,
+          "downloadsLabel": "520.3K/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/autoevals"
+        },
+        {
+          "rank": 18,
+          "name": "@modelcontextprotocol/server-filesystem",
+          "category": "MCP",
+          "focus": "MCP filesystem server",
+          "downloads": 504593,
+          "downloadsLabel": "504.6K/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-filesystem"
+        },
+        {
+          "rank": 19,
+          "name": "mastra",
+          "category": "AI agents",
+          "focus": "TypeScript agent framework",
+          "downloads": 441583,
+          "downloadsLabel": "441.6K/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/mastra"
+        },
+        {
+          "rank": 20,
+          "name": "fastmcp",
+          "category": "MCP",
+          "focus": "MCP server framework",
+          "downloads": 414680,
+          "downloadsLabel": "414.7K/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/fastmcp"
+        },
+        {
+          "rank": 21,
+          "name": "promptfoo",
+          "category": "AI evals",
+          "focus": "LLM evals and prompt testing",
+          "downloads": 349585,
+          "downloadsLabel": "349.6K/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/promptfoo"
+        },
+        {
+          "rank": 22,
+          "name": "evalite",
+          "category": "AI evals",
+          "focus": "LLM evaluation toolkit",
+          "downloads": 250243,
+          "downloadsLabel": "250.2K/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/evalite"
+        },
+        {
+          "rank": 23,
+          "name": "@modelcontextprotocol/server-github",
+          "category": "MCP",
+          "focus": "MCP GitHub server",
+          "downloads": 131723,
+          "downloadsLabel": "131.7K/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fserver-github"
+        },
+        {
+          "rank": 24,
+          "name": "mcp-agent",
+          "category": "MCP",
+          "focus": "MCP agent helper package",
+          "downloads": 3,
+          "downloadsLabel": "3/week",
+          "period": "2026-06-29 to 2026-07-05",
+          "url": "https://www.npmjs.com/package/mcp-agent"
+        }
+      ]
+    },
+    "repos": {
+      "updated": "2026-07-07",
+      "generatedAt": "2026-07-07T22:21:45.290Z",
+      "sourceMeta": {
+        "name": "GitHub",
+        "status": "ok",
+        "count": 30,
+        "tracked": 30,
+        "emitted": 30,
+        "coverage": "30/30",
+        "updatedAt": "2026-07-07T22:21:45.290Z"
+      },
+      "repos": [
+        {
+          "rank": 1,
+          "name": "n8n-io/n8n",
+          "category": "Workflow automation",
+          "focus": "workflow automation",
+          "stars": 195558,
+          "starsLabel": "195.6K",
+          "forksLabel": "59.2K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/n8n-io/n8n",
+          "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+          "topics": [
+            "ai",
+            "apis",
+            "automation",
+            "cli",
+            "data-flow",
+            "development",
+            "integration-framework",
+            "integrations",
+            "ipaas",
+            "low-code",
+            "low-code-platform",
+            "mcp",
+            "mcp-client",
+            "mcp-server",
+            "n8n",
+            "no-code",
+            "self-hosted",
+            "typescript",
+            "workflow",
+            "workflow-automation"
+          ]
+        },
+        {
+          "rank": 2,
+          "name": "anomalyco/opencode",
+          "category": "AI agents",
+          "focus": "open source coding agent",
+          "stars": 183345,
+          "starsLabel": "183.3K",
+          "forksLabel": "22.7K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/anomalyco/opencode",
+          "summary": "The open source coding agent.",
+          "topics": []
+        },
+        {
+          "rank": 3,
+          "name": "mattpocock/skills",
+          "category": "Agent skills",
+          "focus": "engineering workflow skills",
+          "stars": 159762,
+          "starsLabel": "159.8K",
+          "forksLabel": "13.7K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/mattpocock/skills",
+          "summary": "Skills for Real Engineers. Straight from my .claude directory.",
+          "topics": []
+        },
+        {
+          "rank": 4,
+          "name": "anthropics/skills",
+          "category": "Agent skills",
+          "focus": "official Agent Skills examples",
+          "stars": 159170,
+          "starsLabel": "159.2K",
+          "forksLabel": "18.8K",
+          "pushedAt": "2026-07-01",
+          "url": "https://github.com/anthropics/skills",
+          "summary": "Public repository for Agent Skills",
+          "topics": [
+            "agent-skills"
+          ]
+        },
+        {
+          "rank": 5,
+          "name": "google-gemini/gemini-cli",
+          "category": "AI agents",
+          "focus": "Gemini terminal coding agent",
+          "stars": 105830,
+          "starsLabel": "105.8K",
+          "forksLabel": "14.2K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/google-gemini/gemini-cli",
+          "summary": "An open-source AI agent that brings the power of Gemini directly into your terminal.",
+          "topics": [
+            "ai",
+            "ai-agents",
+            "cli",
+            "gemini",
+            "gemini-api",
+            "mcp-client",
+            "mcp-server"
+          ]
+        },
+        {
+          "rank": 6,
+          "name": "openai/codex",
+          "category": "AI agents",
+          "focus": "terminal coding agent",
+          "stars": 96068,
+          "starsLabel": "96.1K",
+          "forksLabel": "14.3K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/openai/codex",
+          "summary": "Lightweight coding agent that runs in your terminal",
+          "topics": []
+        },
+        {
+          "rank": 7,
+          "name": "punkpeye/awesome-mcp-servers",
+          "category": "MCP",
+          "focus": "curated MCP server directory",
+          "stars": 90423,
+          "starsLabel": "90.4K",
+          "forksLabel": "12.6K",
+          "pushedAt": "2026-07-04",
+          "url": "https://github.com/punkpeye/awesome-mcp-servers",
+          "summary": "A collection of MCP servers.",
+          "topics": [
+            "ai",
+            "mcp"
+          ]
+        },
+        {
+          "rank": 8,
+          "name": "modelcontextprotocol/servers",
+          "category": "MCP",
+          "focus": "MCP reference servers",
+          "stars": 88169,
+          "starsLabel": "88.2K",
+          "forksLabel": "11.2K",
+          "pushedAt": "2026-07-06",
+          "url": "https://github.com/modelcontextprotocol/servers",
+          "summary": "Model Context Protocol Servers",
+          "topics": []
+        },
+        {
+          "rank": 9,
+          "name": "karpathy/nanoGPT",
+          "category": "AI engineering",
+          "focus": "small GPT training",
+          "stars": 60907,
+          "starsLabel": "60.9K",
+          "forksLabel": "10.5K",
+          "pushedAt": "2025-11-12",
+          "url": "https://github.com/karpathy/nanoGPT",
+          "summary": "The simplest, fastest repository for training/finetuning medium-sized GPTs.",
+          "topics": []
+        },
+        {
+          "rank": 10,
+          "name": "karpathy/nanochat",
+          "category": "AI engineering",
+          "focus": "minimal ChatGPT stack",
+          "stars": 56012,
+          "starsLabel": "56K",
+          "forksLabel": "7.7K",
+          "pushedAt": "2026-07-04",
+          "url": "https://github.com/karpathy/nanochat",
+          "summary": "The best ChatGPT that $100 can buy.",
+          "topics": []
+        },
+        {
+          "rank": 11,
+          "name": "aaif-goose/goose",
+          "category": "AI agents",
+          "focus": "local extensible AI agent",
+          "stars": 50791,
+          "starsLabel": "50.8K",
+          "forksLabel": "5.5K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/aaif-goose/goose",
+          "summary": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
+          "topics": [
+            "acp",
+            "ai",
+            "ai-agents",
+            "mcp"
+          ]
+        },
+        {
+          "rank": 12,
+          "name": "Aider-AI/aider",
+          "category": "AI agents",
+          "focus": "terminal AI pair programming",
+          "stars": 47151,
+          "starsLabel": "47.2K",
+          "forksLabel": "4.7K",
+          "pushedAt": "2026-05-22",
+          "url": "https://github.com/Aider-AI/aider",
+          "summary": "aider is AI pair programming in your terminal",
+          "topics": [
+            "anthropic",
+            "chatgpt",
+            "claude-3",
+            "cli",
+            "command-line",
+            "gemini",
+            "gpt-3",
+            "gpt-35-turbo",
+            "gpt-4",
+            "gpt-4o",
+            "llama",
+            "openai",
+            "sonnet"
+          ]
+        },
+        {
+          "rank": 13,
+          "name": "github/awesome-copilot",
+          "category": "AI agents",
+          "focus": "Copilot agents and skills",
+          "stars": 36288,
+          "starsLabel": "36.3K",
+          "forksLabel": "4.5K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/github/awesome-copilot",
+          "summary": "Community-contributed instructions, agents, skills, and configurations to help you make the most of GitHub Copilot.",
+          "topics": [
+            "agent-skills",
+            "agents",
+            "ai",
+            "awesome",
+            "custom-agents",
+            "github-copilot",
+            "hacktoberfest",
+            "prompt-engineering"
+          ]
+        },
+        {
+          "rank": 14,
+          "name": "langfuse/langfuse",
+          "category": "AI evals",
+          "focus": "LLM observability and evals",
+          "stars": 30634,
+          "starsLabel": "30.6K",
+          "forksLabel": "3.2K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/langfuse/langfuse",
+          "summary": "🪢 Open source AI engineering platform: LLM evals, observability, metrics, prompt management, playground, datasets. Integrates with OpenTelemetry, LangChain, OpenAI SDK, LiteLLM, and more. 🍊YC W23 ",
+          "topics": [
+            "analytics",
+            "autogen",
+            "evaluation",
+            "langchain",
+            "large-language-models",
+            "llama-index",
+            "llm",
+            "llm-evaluation",
+            "llm-observability",
+            "llmops",
+            "monitoring",
+            "observability",
+            "open-source",
+            "openai",
+            "playground",
+            "prompt-engineering",
+            "prompt-management",
+            "self-hosted",
+            "ycombinator"
+          ]
+        },
+        {
+          "rank": 15,
+          "name": "karpathy/llm.c",
+          "category": "AI engineering",
+          "focus": "LLM training in C/CUDA",
+          "stars": 30491,
+          "starsLabel": "30.5K",
+          "forksLabel": "3.7K",
+          "pushedAt": "2025-06-26",
+          "url": "https://github.com/karpathy/llm.c",
+          "summary": "LLM training in simple, raw C/CUDA",
+          "topics": []
+        },
+        {
+          "rank": 16,
+          "name": "openai/openai-agents-python",
+          "category": "AI agents",
+          "focus": "Python multi-agent framework",
+          "stars": 27715,
+          "starsLabel": "27.7K",
+          "forksLabel": "4.3K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/openai/openai-agents-python",
+          "summary": "A lightweight, powerful framework for multi-agent workflows",
+          "topics": [
+            "agents",
+            "ai",
+            "framework",
+            "harness",
+            "llm",
+            "openai",
+            "python"
+          ]
+        },
+        {
+          "rank": 17,
+          "name": "modelcontextprotocol/python-sdk",
+          "category": "MCP",
+          "focus": "MCP Python SDK",
+          "stars": 23554,
+          "starsLabel": "23.6K",
+          "forksLabel": "3.6K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/modelcontextprotocol/python-sdk",
+          "summary": "The official Python SDK for Model Context Protocol servers and clients",
+          "topics": []
+        },
+        {
+          "rank": 18,
+          "name": "promptfoo/promptfoo",
+          "category": "AI evals",
+          "focus": "LLM evals and prompt testing",
+          "stars": 23008,
+          "starsLabel": "23K",
+          "forksLabel": "2.1K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/promptfoo/promptfoo",
+          "summary": "Test your prompts, agents, and RAGs. Red teaming/pentesting/vulnerability scanning for AI. Compare performance of GPT, Claude, Gemini, DeepSeek, and more. Simple declarative configs with command line and CI/CD integration.  Used by OpenAI and Anthropic.",
+          "topics": [
+            "ci",
+            "ci-cd",
+            "cicd",
+            "evaluation",
+            "evaluation-framework",
+            "llm",
+            "llm-eval",
+            "llm-evaluation",
+            "llm-evaluation-framework",
+            "llmops",
+            "pentesting",
+            "prompt-engineering",
+            "prompt-testing",
+            "prompts",
+            "rag",
+            "red-teaming",
+            "testing",
+            "vulnerability-scanners"
+          ]
+        },
+        {
+          "rank": 19,
+          "name": "karpathy/llama2.c",
+          "category": "AI engineering",
+          "focus": "single-file Llama inference",
+          "stars": 19704,
+          "starsLabel": "19.7K",
+          "forksLabel": "2.6K",
+          "pushedAt": "2024-08-06",
+          "url": "https://github.com/karpathy/llama2.c",
+          "summary": "Inference Llama 2 in one file of pure C",
+          "topics": []
+        },
+        {
+          "rank": 20,
+          "name": "confident-ai/deepeval",
+          "category": "AI evals",
+          "focus": "LLM evaluation framework",
+          "stars": 16708,
+          "starsLabel": "16.7K",
+          "forksLabel": "1.6K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/confident-ai/deepeval",
+          "summary": "The LLM Evaluation Framework",
+          "topics": [
+            "evaluation-framework",
+            "evaluation-metrics",
+            "llm-evaluation",
+            "llm-evaluation-framework",
+            "llm-evaluation-metrics",
+            "python"
+          ]
+        },
+        {
+          "rank": 21,
+          "name": "triggerdotdev/trigger.dev",
+          "category": "Workflow automation",
+          "focus": "durable workflow platform",
+          "stars": 15596,
+          "starsLabel": "15.6K",
+          "forksLabel": "1.3K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/triggerdotdev/trigger.dev",
+          "summary": "Trigger.dev – build and deploy fully‑managed AI agents and workflows",
+          "topics": [
+            "ai",
+            "ai-agent-framework",
+            "ai-agents",
+            "automation",
+            "background-jobs",
+            "mcp",
+            "mcp-server",
+            "nextjs",
+            "orchestration",
+            "scheduler",
+            "serverless",
+            "workflow-automation",
+            "workflows"
+          ]
+        },
+        {
+          "rank": 22,
+          "name": "modelcontextprotocol/typescript-sdk",
+          "category": "MCP",
+          "focus": "MCP TypeScript SDK",
+          "stars": 12815,
+          "starsLabel": "12.8K",
+          "forksLabel": "2K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/modelcontextprotocol/typescript-sdk",
+          "summary": "The official TypeScript SDK for Model Context Protocol servers and clients",
+          "topics": []
+        },
+        {
+          "rank": 23,
+          "name": "contains-studio/agents",
+          "category": "AI agents",
+          "focus": "Claude Code agent packs",
+          "stars": 12395,
+          "starsLabel": "12.4K",
+          "forksLabel": "2.5K",
+          "pushedAt": "2025-07-28",
+          "url": "https://github.com/contains-studio/agents",
+          "summary": "sharing current agents in use",
+          "topics": []
+        },
+        {
+          "rank": 24,
+          "name": "pipedreamhq/pipedream",
+          "category": "Workflow automation",
+          "focus": "integration and workflow automation",
+          "stars": 11533,
+          "starsLabel": "11.5K",
+          "forksLabel": "5.7K",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/PipedreamHQ/pipedream",
+          "summary": "Connect APIs, remarkably fast.  Free for developers.",
+          "topics": [
+            "apis",
+            "automation",
+            "bash",
+            "cli",
+            "data-flow",
+            "event-sourcing",
+            "eventsourcing",
+            "golang",
+            "integration-flow",
+            "integrations",
+            "ipaas",
+            "low-code",
+            "low-code-development-platform",
+            "nodejs",
+            "python",
+            "serverless",
+            "typescript",
+            "workflow",
+            "workflows"
+          ]
+        },
+        {
+          "rank": 25,
+          "name": "microsoft/promptflow",
+          "category": "AI evals",
+          "focus": "LLM app evaluation workflows",
+          "stars": 11176,
+          "starsLabel": "11.2K",
+          "forksLabel": "1.1K",
+          "pushedAt": "2026-06-18",
+          "url": "https://github.com/microsoft/promptflow",
+          "summary": "Build high-quality LLM apps - from prototyping, testing to production deployment and monitoring.",
+          "topics": [
+            "ai",
+            "ai-application-development",
+            "ai-applications",
+            "chatgpt",
+            "gpt",
+            "llm",
+            "prompt",
+            "prompt-engineering"
+          ]
+        },
+        {
+          "rank": 26,
+          "name": "modelcontextprotocol/inspector",
+          "category": "MCP",
+          "focus": "MCP debugging and inspection",
+          "stars": 10300,
+          "starsLabel": "10.3K",
+          "forksLabel": "1.4K",
+          "pushedAt": "2026-07-06",
+          "url": "https://github.com/modelcontextprotocol/inspector",
+          "summary": "Visual testing tool for MCP servers",
+          "topics": []
+        },
+        {
+          "rank": 27,
+          "name": "lastmile-ai/mcp-agent",
+          "category": "MCP",
+          "focus": "MCP agent workflow framework",
+          "stars": 8412,
+          "starsLabel": "8.4K",
+          "forksLabel": "856",
+          "pushedAt": "2026-01-25",
+          "url": "https://github.com/lastmile-ai/mcp-agent",
+          "summary": "Build effective agents using Model Context Protocol and simple workflow patterns",
+          "topics": [
+            "agents",
+            "ai",
+            "ai-agents",
+            "llm",
+            "llms",
+            "mcp",
+            "model-context-protocol",
+            "python"
+          ]
+        },
+        {
+          "rank": 28,
+          "name": "modelcontextprotocol/registry",
+          "category": "MCP",
+          "focus": "MCP server registry",
+          "stars": 6995,
+          "starsLabel": "7K",
+          "forksLabel": "894",
+          "pushedAt": "2026-07-01",
+          "url": "https://github.com/modelcontextprotocol/registry",
+          "summary": "A community driven registry service for Model Context Protocol (MCP) servers.",
+          "topics": [
+            "mcp",
+            "mcp-servers"
+          ]
+        },
+        {
+          "rank": 29,
+          "name": "openai/openai-agents-js",
+          "category": "AI agents",
+          "focus": "TypeScript multi-agent framework",
+          "stars": 3344,
+          "starsLabel": "3.3K",
+          "forksLabel": "837",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/openai/openai-agents-js",
+          "summary": "A lightweight, powerful framework for multi-agent workflows and voice agents",
+          "topics": [
+            "agents",
+            "openai",
+            "openai-api",
+            "realtime-api",
+            "typescript"
+          ]
+        },
+        {
+          "rank": 30,
+          "name": "temporalio/sdk-typescript",
+          "category": "Workflow automation",
+          "focus": "TypeScript workflow SDK",
+          "stars": 871,
+          "starsLabel": "871",
+          "forksLabel": "195",
+          "pushedAt": "2026-07-07",
+          "url": "https://github.com/temporalio/sdk-typescript",
+          "summary": "Temporal TypeScript SDK",
+          "topics": [
+            "durable-execution",
+            "microservices",
+            "open-source",
+            "orchestration",
+            "temporal-sdk",
+            "typescript"
+          ]
+        }
+      ]
+    },
+    "links": {
+      "updated": "2026-07-07",
+      "generatedAt": "2026-07-07T22:21:45.833Z",
+      "sourceMeta": {
+        "name": "manual",
+        "status": "ok",
+        "count": 29,
+        "tracked": 29,
+        "emitted": 29,
+        "coverage": "29/29"
+      },
+      "links": [
+        {
+          "rank": 1,
+          "title": "Agent Skills standard",
+          "category": "Agent skills",
+          "kind": "Spec",
+          "url": "https://agentskills.io/",
+          "summary": "Open specification for packaging reusable instructions, scripts, and resources for agents."
+        },
+        {
+          "rank": 2,
+          "title": "Anthropic Agent Skills",
+          "category": "Agent skills",
+          "kind": "Repo",
+          "url": "https://github.com/anthropics/skills",
+          "summary": "Official examples, spec, templates, and install paths for Claude Agent Skills."
+        },
+        {
+          "rank": 3,
+          "title": "Claude API Skills overview",
+          "category": "Agent skills",
+          "kind": "Docs",
+          "url": "https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
+          "summary": "Developer overview for using skills through the Claude API."
+        },
+        {
+          "rank": 4,
+          "title": "Claude Skills docs",
+          "category": "Agent skills",
+          "kind": "Docs",
+          "url": "https://support.claude.com/en/articles/11144907-what-are-skills",
+          "summary": "User-facing guide to what skills are and how Claude loads them for repeatable work."
+        },
+        {
+          "rank": 5,
+          "title": "mattpocock/skills",
+          "category": "Agent skills",
+          "kind": "Repo",
+          "url": "https://github.com/mattpocock/skills",
+          "summary": "Practical engineering skills for agent work: grilling, TDD, diagnosis, handoff, and architecture review."
+        },
+        {
+          "rank": 6,
+          "title": "Aider",
+          "category": "AI agents",
+          "kind": "Repo",
+          "url": "https://github.com/Aider-AI/aider",
+          "summary": "Terminal AI pair programming tool for editing code in existing repositories."
+        },
+        {
+          "rank": 7,
+          "title": "contains-studio/agents",
+          "category": "AI agents",
+          "kind": "Repo",
+          "url": "https://github.com/contains-studio/agents",
+          "summary": "Specialized Claude Code agent files grouped by engineering, design, product, testing, and operations."
+        },
+        {
+          "rank": 8,
+          "title": "Gemini CLI",
+          "category": "AI agents",
+          "kind": "Repo",
+          "url": "https://github.com/google-gemini/gemini-cli",
+          "summary": "Open source Gemini terminal agent for coding and developer workflows."
+        },
+        {
+          "rank": 9,
+          "title": "GitHub Awesome Copilot",
+          "category": "AI agents",
+          "kind": "Repo",
+          "url": "https://github.com/github/awesome-copilot",
+          "summary": "Community agents, instructions, skills, hooks, workflows, and plugins for GitHub Copilot."
+        },
+        {
+          "rank": 10,
+          "title": "Goose",
+          "category": "AI agents",
+          "kind": "Repo",
+          "url": "https://github.com/aaif-goose/goose",
+          "summary": "Local, extensible AI agent for installing, executing, editing, and testing with LLMs."
+        },
+        {
+          "rank": 11,
+          "title": "OpenAI Agents SDK",
+          "category": "AI agents",
+          "kind": "Docs",
+          "url": "https://openai.github.io/openai-agents-js/",
+          "summary": "JavaScript/TypeScript SDK documentation for building OpenAI agent workflows."
+        },
+        {
+          "rank": 12,
+          "title": "OpenAI Codex",
+          "category": "AI agents",
+          "kind": "Repo",
+          "url": "https://github.com/openai/codex",
+          "summary": "Lightweight coding agent that runs in the terminal."
+        },
+        {
+          "rank": 13,
+          "title": "OpenCode",
+          "category": "AI agents",
+          "kind": "Repo",
+          "url": "https://github.com/anomalyco/opencode",
+          "summary": "Open source terminal coding agent with npm, desktop, and package-manager installs."
+        },
+        {
+          "rank": 14,
+          "title": "Karpathy GitHub",
+          "category": "AI engineering",
+          "kind": "Profile",
+          "url": "https://github.com/karpathy",
+          "summary": "High-signal AI engineering repos including nanoGPT, nanochat, llm.c, and llama2.c."
+        },
+        {
+          "rank": 15,
+          "title": "DeepEval",
+          "category": "AI evals",
+          "kind": "Docs",
+          "url": "https://docs.confident-ai.com/",
+          "summary": "LLM evaluation framework for test cases, metrics, and regression checks."
+        },
+        {
+          "rank": 16,
+          "title": "Evalite",
+          "category": "AI evals",
+          "kind": "Docs",
+          "url": "https://www.evalite.dev/",
+          "summary": "Evaluation toolkit for measuring LLM and agent behavior in TypeScript workflows."
+        },
+        {
+          "rank": 17,
+          "title": "Langfuse",
+          "category": "AI evals",
+          "kind": "Docs",
+          "url": "https://langfuse.com/docs",
+          "summary": "LLM observability and eval platform for tracing and measuring AI apps."
+        },
+        {
+          "rank": 18,
+          "title": "Promptfoo",
+          "category": "AI evals",
+          "kind": "Docs",
+          "url": "https://www.promptfoo.dev/",
+          "summary": "Prompt and model eval framework for testing LLM app behavior."
+        },
+        {
+          "rank": 19,
+          "title": "GitHub REST API",
+          "category": "API",
+          "kind": "Docs",
+          "url": "https://docs.github.com/en/rest",
+          "summary": "Reference for GitHub REST endpoints used by repo data scripts."
+        },
+        {
+          "rank": 20,
+          "title": "Hacker News API",
+          "category": "API",
+          "kind": "Docs",
+          "url": "https://github.com/HackerNews/API",
+          "summary": "Official public API for Hacker News stories and metadata."
+        },
+        {
+          "rank": 21,
+          "title": "npm Download Counts",
+          "category": "API",
+          "kind": "Docs",
+          "url": "https://github.com/npm/registry/blob/main/docs/download-counts.md",
+          "summary": "Registry download-count API used by package watchlists."
+        },
+        {
+          "rank": 22,
+          "title": "Awesome MCP Servers",
+          "category": "MCP",
+          "kind": "Repo",
+          "url": "https://github.com/punkpeye/awesome-mcp-servers",
+          "summary": "Curated directory of MCP servers across files, databases, APIs, and developer tools."
+        },
+        {
+          "rank": 23,
+          "title": "MCP Python SDK",
+          "category": "MCP",
+          "kind": "Repo",
+          "url": "https://github.com/modelcontextprotocol/python-sdk",
+          "summary": "Official Python SDK for building Model Context Protocol clients and servers."
+        },
+        {
+          "rank": 24,
+          "title": "MCP Registry",
+          "category": "MCP",
+          "kind": "Repo",
+          "url": "https://github.com/modelcontextprotocol/registry",
+          "summary": "Community-driven registry service for discovering and managing MCP servers."
+        },
+        {
+          "rank": 25,
+          "title": "MCP TypeScript SDK",
+          "category": "MCP",
+          "kind": "Repo",
+          "url": "https://github.com/modelcontextprotocol/typescript-sdk",
+          "summary": "Official TypeScript SDK for building Model Context Protocol clients and servers."
+        },
+        {
+          "rank": 26,
+          "title": "Model Context Protocol servers",
+          "category": "MCP",
+          "kind": "Repo",
+          "url": "https://github.com/modelcontextprotocol/servers",
+          "summary": "Reference MCP servers for connecting agents to tools and data sources."
+        },
+        {
+          "rank": 27,
+          "title": "Pipedream",
+          "category": "Workflow automation",
+          "kind": "Docs",
+          "url": "https://pipedream.com/docs",
+          "summary": "Workflow automation and integration platform for APIs, events, and scripts."
+        },
+        {
+          "rank": 28,
+          "title": "Temporal TypeScript SDK",
+          "category": "Workflow automation",
+          "kind": "Docs",
+          "url": "https://docs.temporal.io/develop/typescript",
+          "summary": "Durable workflow runtime and TypeScript SDK for reliable async processes."
+        },
+        {
+          "rank": 29,
+          "title": "Trigger.dev",
+          "category": "Workflow automation",
+          "kind": "Docs",
+          "url": "https://trigger.dev/docs",
+          "summary": "Durable background jobs and workflow automation for TypeScript apps."
+        }
+      ]
+    }
+  },
+  "today": {
+    "updated": "2026-07-07",
+    "generatedAt": "2026-07-07T22:21:45.879Z",
+    "sourceMeta": {
+      "name": "generated",
+      "status": "ok",
+      "count": 13,
+      "updatedAt": "2026-07-07T22:21:45.879Z"
+    },
+    "sections": [
+      {
+        "id": "start",
+        "title": "Start here",
+        "summary": "Three signals worth opening first.",
+        "items": [
+          {
+            "schemaVersion": 2,
+            "id": "url:https://github.com/anthropics/skills",
+            "sourceModule": "trends",
+            "sourceKind": "trend",
+            "title": "anthropics/skills",
+            "module": "Trends",
+            "origin": "GitHub",
+            "category": "Agent skills",
+            "metric": "100 score",
+            "reason": "Agent skills reference for reusable tool instructions.",
+            "scoreReasons": [
+              "Agent skills reference for reusable tool instructions.",
+              "159.2K stars from GitHub",
+              "159.2K stars / 18.8K forks"
+            ],
+            "action": "Open the source now, then decide whether to save it.",
+            "url": "https://github.com/anthropics/skills",
+            "rawScore": 100,
+            "qualityScore": 100,
+            "score": 100,
+            "sources": [
+              "Trends"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://github.com/anthropics/skills",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://github.com/activepieces/activepieces",
+            "sourceModule": "trends",
+            "sourceKind": "trend",
+            "title": "activepieces/activepieces",
+            "module": "Trends",
+            "origin": "GitHub",
+            "category": "Workflow automation",
+            "metric": "100 score",
+            "reason": "Coding-agent ecosystem signal with practical workflow value.",
+            "scoreReasons": [
+              "Coding-agent ecosystem signal with practical workflow value.",
+              "23.2K stars from GitHub",
+              "23.2K stars / 3.9K forks"
+            ],
+            "action": "Open the source now, then decide whether to save it.",
+            "url": "https://github.com/activepieces/activepieces",
+            "rawScore": 100,
+            "qualityScore": 100,
+            "score": 100,
+            "sources": [
+              "Trends"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://github.com/activepieces/activepieces",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://github.com/awslabs/mcp",
+            "sourceModule": "trends",
+            "sourceKind": "trend",
+            "title": "awslabs/mcp",
+            "module": "Trends",
+            "origin": "GitHub",
+            "category": "MCP",
+            "metric": "100 score",
+            "reason": "MCP infrastructure worth tracking for agent workflows.",
+            "scoreReasons": [
+              "MCP infrastructure worth tracking for agent workflows.",
+              "9.4K stars from GitHub",
+              "9.4K stars / 1.6K forks"
+            ],
+            "action": "Open the source now, then decide whether to save it.",
+            "url": "https://github.com/awslabs/mcp",
+            "rawScore": 100,
+            "qualityScore": 100,
+            "score": 100,
+            "sources": [
+              "Trends"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://github.com/awslabs/mcp",
+            "updated": "2026-07-07"
+          }
+        ]
+      },
+      {
+        "id": "skim",
+        "title": "Worth skimming",
+        "summary": "Useful movement that does not need first attention.",
+        "items": [
+          {
+            "schemaVersion": 2,
+            "id": "url:https://github.com/enescingoz/awesome-n8n-templates",
+            "sourceModule": "trends",
+            "sourceKind": "trend",
+            "title": "enescingoz/awesome-n8n-templates",
+            "module": "Trends",
+            "origin": "GitHub",
+            "category": "Workflow automation",
+            "metric": "100 score",
+            "reason": "Coding-agent ecosystem signal with practical workflow value.",
+            "scoreReasons": [
+              "Coding-agent ecosystem signal with practical workflow value.",
+              "23.7K stars from GitHub",
+              "23.7K stars / 6.2K forks"
+            ],
+            "action": "Skim the source and save it only if it changes what to watch next.",
+            "url": "https://github.com/enescingoz/awesome-n8n-templates",
+            "rawScore": 100,
+            "qualityScore": 100,
+            "score": 100,
+            "sources": [
+              "Trends"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://github.com/enescingoz/awesome-n8n-templates",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://github.com/juliusbrussee/caveman",
+            "sourceModule": "trends",
+            "sourceKind": "trend",
+            "title": "JuliusBrussee/caveman",
+            "module": "Trends",
+            "origin": "GitHub",
+            "category": "Agent skills",
+            "metric": "100 score",
+            "reason": "Agent skills reference for reusable tool instructions.",
+            "scoreReasons": [
+              "Agent skills reference for reusable tool instructions.",
+              "86.2K stars from GitHub",
+              "86.2K stars / 4.8K forks"
+            ],
+            "action": "Skim the source and save it only if it changes what to watch next.",
+            "url": "https://github.com/JuliusBrussee/caveman",
+            "rawScore": 100,
+            "qualityScore": 100,
+            "score": 100,
+            "sources": [
+              "Trends"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://github.com/juliusbrussee/caveman",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://github.com/mattpocock/skills",
+            "sourceModule": "repos",
+            "sourceKind": "repo",
+            "title": "mattpocock/skills",
+            "module": "Repos",
+            "origin": "GitHub",
+            "category": "Agent skills",
+            "metric": "159.8K stars",
+            "reason": "Agent skills reference for reusable tool instructions.",
+            "scoreReasons": [
+              "Agent skills reference for reusable tool instructions.",
+              "159.8K stars from GitHub",
+              "engineering workflow skills"
+            ],
+            "action": "Skim the source and save it only if it changes what to watch next.",
+            "url": "https://github.com/mattpocock/skills",
+            "rawScore": 159762,
+            "qualityScore": 100,
+            "score": 83,
+            "sources": [
+              "Repos"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://github.com/mattpocock/skills",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://www.npmjs.com/package/%40modelcontextprotocol%2fsdk",
+            "sourceModule": "packages",
+            "sourceKind": "package",
+            "title": "@modelcontextprotocol/sdk",
+            "module": "Packages",
+            "origin": "npm",
+            "category": "MCP",
+            "metric": "42.8M/week",
+            "reason": "MCP infrastructure worth tracking for agent workflows.",
+            "scoreReasons": [
+              "MCP infrastructure worth tracking for agent workflows.",
+              "42.8M/week from npm",
+              "Model Context Protocol SDK"
+            ],
+            "action": "Skim the source and save it only if it changes what to watch next.",
+            "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
+            "rawScore": 42848083,
+            "qualityScore": 93,
+            "score": 75,
+            "sources": [
+              "Packages"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://www.npmjs.com/package/%40modelcontextprotocol%2fsdk",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://github.com/affaan-m/ecc",
+            "sourceModule": "trends",
+            "sourceKind": "trend",
+            "title": "affaan-m/ECC",
+            "module": "Trends",
+            "origin": "GitHub",
+            "category": "AI agents",
+            "metric": "100 score",
+            "reason": "Coding-agent ecosystem signal with practical workflow value.",
+            "scoreReasons": [
+              "Coding-agent ecosystem signal with practical workflow value.",
+              "227K stars from GitHub",
+              "227K stars / 34.7K forks"
+            ],
+            "action": "Skim the source and save it only if it changes what to watch next.",
+            "url": "https://github.com/affaan-m/ECC",
+            "rawScore": 100,
+            "qualityScore": 100,
+            "score": 100,
+            "sources": [
+              "Trends"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://github.com/affaan-m/ecc",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://github.com/n8n-io/n8n",
+            "sourceModule": "repos",
+            "sourceKind": "repo",
+            "title": "n8n-io/n8n",
+            "module": "Repos",
+            "origin": "GitHub",
+            "category": "Workflow automation",
+            "metric": "195.6K stars",
+            "reason": "Coding-agent ecosystem signal with practical workflow value.",
+            "scoreReasons": [
+              "Coding-agent ecosystem signal with practical workflow value.",
+              "195.6K stars from GitHub",
+              "workflow automation"
+            ],
+            "action": "Skim the source and save it only if it changes what to watch next.",
+            "url": "https://github.com/n8n-io/n8n",
+            "rawScore": 195558,
+            "qualityScore": 100,
+            "score": 85,
+            "sources": [
+              "Repos"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://github.com/n8n-io/n8n",
+            "updated": "2026-07-07"
+          }
+        ]
+      },
+      {
+        "id": "reference",
+        "title": "Reference shelf",
+        "summary": "Stable references and projects worth keeping nearby.",
+        "items": [
+          {
+            "schemaVersion": 2,
+            "id": "url:https://agentskills.io",
+            "sourceModule": "links",
+            "sourceKind": "reference",
+            "title": "Agent Skills standard",
+            "module": "Links",
+            "origin": "Spec",
+            "category": "Agent skills",
+            "metric": "Spec",
+            "reason": "Agent skills reference for reusable tool instructions.",
+            "scoreReasons": [
+              "Agent skills reference for reusable tool instructions.",
+              "Spec from Spec",
+              "Open specification for packaging reusable instructions, scripts, and resources for agents."
+            ],
+            "action": "Keep as a reference when working on related agent workflows.",
+            "url": "https://agentskills.io/",
+            "rawScore": 99,
+            "qualityScore": 100,
+            "score": 65,
+            "sources": [
+              "Links"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://agentskills.io",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
+            "sourceModule": "links",
+            "sourceKind": "reference",
+            "title": "Claude API Skills overview",
+            "module": "Links",
+            "origin": "Docs",
+            "category": "Agent skills",
+            "metric": "Docs",
+            "reason": "Agent skills reference for reusable tool instructions.",
+            "scoreReasons": [
+              "Agent skills reference for reusable tool instructions.",
+              "Docs from Docs",
+              "Developer overview for using skills through the Claude API."
+            ],
+            "action": "Keep as a reference when working on related agent workflows.",
+            "url": "https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
+            "rawScore": 97,
+            "qualityScore": 100,
+            "score": 63,
+            "sources": [
+              "Links"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://support.claude.com/en/articles/11144907-what-are-skills",
+            "sourceModule": "links",
+            "sourceKind": "reference",
+            "title": "Claude Skills docs",
+            "module": "Links",
+            "origin": "Docs",
+            "category": "Agent skills",
+            "metric": "Docs",
+            "reason": "Agent skills reference for reusable tool instructions.",
+            "scoreReasons": [
+              "Agent skills reference for reusable tool instructions.",
+              "Docs from Docs",
+              "User-facing guide to what skills are and how Claude loads them for repeatable work."
+            ],
+            "action": "Keep as a reference when working on related agent workflows.",
+            "url": "https://support.claude.com/en/articles/11144907-what-are-skills",
+            "rawScore": 96,
+            "qualityScore": 100,
+            "score": 62,
+            "sources": [
+              "Links"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://support.claude.com/en/articles/11144907-what-are-skills",
+            "updated": "2026-07-07"
+          },
+          {
+            "schemaVersion": 2,
+            "id": "url:https://github.com/aider-ai/aider",
+            "sourceModule": "links",
+            "sourceKind": "reference",
+            "title": "Aider",
+            "module": "Links",
+            "origin": "Repo",
+            "category": "AI agents",
+            "metric": "Repo",
+            "reason": "Coding-agent ecosystem signal with practical workflow value.",
+            "scoreReasons": [
+              "Coding-agent ecosystem signal with practical workflow value.",
+              "Repo from Repo",
+              "Terminal AI pair programming tool for editing code in existing repositories."
+            ],
+            "action": "Keep as a reference when working on related agent workflows.",
+            "url": "https://github.com/Aider-AI/aider",
+            "rawScore": 94,
+            "qualityScore": 86,
+            "score": 60,
+            "sources": [
+              "Links"
+            ],
+            "sourceContext": "",
+            "canonicalKey": "url:https://github.com/aider-ai/aider",
+            "updated": "2026-07-07"
+          }
+        ]
+      }
+    ]
+  },
+  "signalPolicy": {
+    "baselinePenalty": -26,
+    "intentThreshold": 20,
+    "baselineTitles": [
+      "typescript",
+      "eslint",
+      "prettier",
+      "react",
+      "react/react",
+      "zod",
+      "tailwindcss",
+      "vite",
+      "vitejs/vite",
+      "next",
+      "next.js",
+      "vercel/next.js"
+    ]
+  }
+}

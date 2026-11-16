@@ -127,12 +127,14 @@
         }
 
         const age = validSourceTimestamp(lastSuccessfulUpdate) ? ageDays(lastSuccessfulUpdate, today) : null;
-        if (age === null) {
+        if (age === null || Date.parse(lastSuccessfulUpdate) > new Date(today).getTime() + 300000) {
             return {
                 state: "unknown",
                 lastSuccessfulUpdate: null,
                 ageDays: null,
-                staleReason: "last successful source update is missing or ambiguous"
+                staleReason: Date.parse(lastSuccessfulUpdate) > new Date(today).getTime() + 300000
+                    ? "last successful source update is in the future"
+                    : "last successful source update is missing or ambiguous"
             };
         }
 

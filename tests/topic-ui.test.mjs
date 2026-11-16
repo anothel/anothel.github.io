@@ -180,7 +180,10 @@ test("topic page models contain complete static decision support for every route
     }
 });
 
-test("checked-in topic corpus stays within audited semantic goldens", () => {
+test("fixed topic audit corpus stays within audited semantic goldens", () => {
+    // Rankings intentionally change after refresh. Freeze the audited inputs,
+    // retaining exact semantic/ranking assertions independently of live data.
+    const audit = json("tests/fixtures/topic-audit-corpus.json");
     const goldens = {
         "Agent skills": { range: [5, 9], modules: 3, top: ["anthropics/skills", "JuliusBrussee/caveman", "mattpocock/skills"], purpose: ["anthropics/skills"] },
         "AI agents": { range: [28, 38], modules: 4, top: ["activepieces/activepieces", "affaan-m/ECC", "AgentOps-AI/agentops"], purpose: ["anthropics/claude-code"] },
@@ -192,7 +195,7 @@ test("checked-in topic corpus stays within audited semantic goldens", () => {
     };
 
     for (const [topic, golden] of Object.entries(goldens)) {
-        const model = buildTopicPageModel(data, today, topic, { signalPolicy });
+        const model = buildTopicPageModel(audit.datasets, audit.today, topic, { signalPolicy: audit.signalPolicy });
         const titles = model.items.map(({ title }) => title);
         const topTitles = titles.slice(0, golden.top.length);
 

@@ -840,6 +840,9 @@ test("Status exposes overall and source-level data health", async ({ page }) => 
 
     await expect(page.getByText("Generated at", { exact: true })).toBeVisible();
     await expect(page.getByRole("heading", { name: /^Overall health:/ })).toBeVisible();
+    await expect(page.locator("[data-refresh-state]")).toContainText("Pipeline freshness:");
+    await expect(page.locator("[data-refresh-state]")).toHaveAttribute("data-refresh-state", /^(current|overdue|unknown)$/);
+    await expect(page.getByText("Freshness assessment", { exact: true })).toBeVisible();
     const expectedSources = [trends, packages, repos, links].flatMap(({ sourceMeta }) => Array.isArray(sourceMeta) ? sourceMeta : [sourceMeta]);
     const rows = page.locator("[data-status-source-row]");
     await expect(rows).toHaveCount(expectedSources.length);
@@ -880,6 +883,9 @@ test("JavaScript-disabled Status keeps the complete evidence dashboard", async (
         .reduce((total, { sourceMeta }) => total + (Array.isArray(sourceMeta) ? sourceMeta.length : 1), 0);
 
     await expect(page.getByRole("heading", { name: /^Overall health:/ })).toBeVisible();
+    await expect(page.locator("[data-refresh-state]")).toContainText("Pipeline freshness:");
+    await expect(page.locator("[data-refresh-state]")).toHaveAttribute("data-refresh-state", /^(current|overdue|unknown)$/);
+    await expect(page.getByText("Freshness assessment", { exact: true })).toBeVisible();
     await expect(page.locator("[data-status-source-row]")).toHaveCount(expectedCount);
     await expect(page.locator("[data-status-evidence]")).toBeVisible();
     await context.close();

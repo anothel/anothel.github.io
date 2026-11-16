@@ -22,6 +22,8 @@ jobs:
   build:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    outputs:
+      source_sha: ${{ steps.expectation.outputs.source_sha }}
 
     steps:
       - name: Check out repository
@@ -44,6 +46,21 @@ jobs:
       - name: Validate artifact
         run: npm run check:dist
 
+      - name: Record expected published data
+        id: expectation
+        run: |
+          source_sha="$(git rev-parse HEAD)"
+          echo "source_sha=${source_sha}" >> "${GITHUB_OUTPUT}"
+          node scripts/verify-published.mjs --write-expectation "${RUNNER_TEMP}/deployment-expectation.json" --source-sha "${source_sha}"
+
+      - name: Upload deployment expectation
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-expectation
+          path: ${{ runner.temp }}/deployment-expectation.json
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
@@ -60,9 +77,44 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      - name: Check out exact build source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.source_sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+
+      - name: Download deployment expectation
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-expectation
+          path: ${{ runner.temp }}/deployment-expectation
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify published data identity
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          node scripts/verify-published.mjs --expectation "${RUNNER_TEMP}/deployment-expectation/deployment-expectation.json" --site-url "${SITE_URL}"
+          echo "Published data and Status match source ${{ needs.build.outputs.source_sha }}. This proves identity, not freshness." >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Assess published refresh health
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          if node scripts/check-refresh.mjs --site-url "${SITE_URL}" > "${RUNNER_TEMP}/published-refresh-health.json"; then
+            echo "Published refresh health is current." >> "${GITHUB_STEP_SUMMARY}"
+          else
+            echo "::warning::Published refresh health needs attention. Deployment identity alone does not prove a fresh or fully successful refresh."
+            echo "Published refresh health needs attention; inspect the assessment and Update data history." >> "${GITHUB_STEP_SUMMARY}"
+          fi
+          cat "${RUNNER_TEMP}/published-refresh-health.json"
 
       - name: Verify deployed site
         env:
@@ -70,12 +122,12 @@ jobs:
         run: |
           base="${SITE_URL%/}"
           for route in "" today/ explore/ review/ status/ trends/ packages/ repos/ links/ notes/ topics/agent-skills/ topics/ai-agents/ topics/ai-engineering/ topics/ai-evals/ topics/mcp/ topics/security/ topics/workflow-automation/ robots.txt sitemap.xml; do
-            curl --fail --silent --show-error --location "${base}/${route}" > /dev/null
+            curl --connect-timeout 5 --max-time 15 --fail --silent --show-error --location "${base}/${route}" > /dev/null
           done
 
-          asset="$(curl --fail --silent --show-error --location "${base}/explore/" | grep -oE '/_astro/[^" ]+\.js' | head -n 1)"
+          asset="$(curl --connect-timeout 5 --max-time 15 --fail --silent --show-error --location "${base}/explore/" | grep -oE '/_astro/[^" ]+\.js' | head -n 1)"
           test -n "${asset}"
-          curl --fail --silent --show-error --location "${base}${asset}" > /dev/null
+          curl --connect-timeout 5 --max-time 15 --fail --silent --show-error --location "${base}${asset}" > /dev/null
 
-          status="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' "${base}/__deployment_probe_missing__")"
+          status="$(curl --connect-timeout 5 --max-time 15 --silent --show-error --output /dev/null --write-out '%{http_code}' "${base}/__deployment_probe_missing__")"
           test "${status}" = "404"

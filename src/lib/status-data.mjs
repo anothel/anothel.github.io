@@ -1,3 +1,4 @@
+import { pipelineFreshness } from "./refresh-health.mjs";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
@@ -128,6 +129,8 @@ export function buildStatusDashboard({ manifest = {}, datasets = {}, report = {}
 
     return {
         overall,
+        refresh: pipelineFreshness(manifest.generatedAt, now),
+        assessedAt: new Date(now).toISOString(),
         overallSummary: healthSummary(overall, overallValidation),
         dataDate: text(manifest.updated),
         generatedAt,

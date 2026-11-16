@@ -81,7 +81,11 @@ export function checkDist(root = resolve(process.cwd(), "dist")) {
         const outputFile = dataFile.replace(/^data\//, "data/");
         assertFile(root, outputFile, "missing generated data", failures);
         try {
-            JSON.parse(readFileSync(resolve(root, outputFile), "utf8"));
+            const published = readFileSync(resolve(root, outputFile));
+            JSON.parse(published.toString("utf8"));
+            if (!published.equals(readFileSync(resolve(process.cwd(), dataFile)))) {
+                failures.push(`generated data differs from source: ${outputFile}`);
+            }
         } catch {
             failures.push(`malformed generated data: ${outputFile}`);
         }

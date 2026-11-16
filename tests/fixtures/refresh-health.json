@@ -1,0 +1,22 @@
+{
+  "now": "2026-11-16T12:00:00.000Z",
+  "timestamps": [
+    { "label": "recent generation", "value": "2026-11-16T06:00:00.000Z", "state": "current" },
+    { "label": "36 hour boundary", "value": "2026-11-15T00:00:00.000Z", "state": "current" },
+    { "label": "missed daily refresh", "value": "2026-11-14T23:59:59.999Z", "state": "overdue" },
+    { "label": "old generation", "value": "2026-07-07T22:21:45.936Z", "state": "overdue" },
+    { "label": "missing generation", "state": "unknown" },
+    { "label": "invalid generation", "value": "yesterday", "state": "unknown" },
+    { "label": "ambiguous date", "value": "2026-11-16", "state": "unknown" },
+    { "label": "future generation", "value": "2026-11-17T12:00:00.000Z", "state": "unknown" }
+  ],
+  "sources": [
+    { "label": "partial failure", "source": { "name": "npm", "status": "partial", "count": 2, "updatedAt": "2026-11-16T06:00:00.000Z", "errors": [{"name":"example", "error":"503 unavailable"}] }, "health": "degraded", "availability": "available" },
+    { "label": "failed empty", "source": { "name": "GitHub", "status": "error", "count": 0, "error": "503 unavailable" }, "health": "unavailable", "availability": "failed" },
+    { "label": "legitimate empty", "source": { "name": "GitHub", "status": "ok", "count": 0, "updatedAt": "2026-11-16T06:00:00.000Z" }, "health": "healthy", "availability": "empty" },
+    { "label": "stale source in new generation", "source": { "name": "GitHub", "status": "ok", "count": 3, "updatedAt": "2026-11-01T06:00:00.000Z" }, "health": "stale", "availability": "available" },
+    { "label": "missing source timestamp", "source": { "name": "GitHub", "status": "ok", "count": 3 }, "health": "unknown", "availability": "available" },
+    { "label": "future source timestamp", "source": { "name": "GitHub", "status": "ok", "count": 3, "updatedAt": "2026-11-17T06:00:00.000Z" }, "health": "unknown", "availability": "available" },
+    { "label": "retained fallback", "source": { "name": "GitHub", "status": "fallback", "count": 3, "previousUpdated": "2026-11-01T06:00:00.000Z", "fallbackUsed": true }, "health": "degraded", "availability": "fallback" }
+  ]
+}

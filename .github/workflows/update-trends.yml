@@ -56,6 +56,7 @@ jobs:
         run: |
           node scripts/report-refresh.mjs --out-dir "${RUNNER_TEMP}/refresh-report" --stdout >> "${GITHUB_STEP_SUMMARY}"
         env:
+          REFRESH_JOB_STATUS: ${{ job.status }}
           REFRESH_REASON: ${{ github.event_name == 'workflow_dispatch' && inputs.reason || github.event_name }}
 
       - name: Upload refresh report
