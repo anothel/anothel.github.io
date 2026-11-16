@@ -239,9 +239,10 @@ test.describe("mobile layout", () => {
         ];
 
         try {
-            for (const width of [360, 390, 412]) {
-                await page.setViewportSize({ width, height: 844 });
-                for (const route of routes) {
+            for (const route of routes) {
+                // The narrower Status case also catches wider fallback-font metrics.
+                for (const width of route.status ? [320, 360, 390, 412] : [360, 390, 412]) {
+                    await page.setViewportSize({ width, height: 844 });
                     await page.goto(route.path);
                     await page.locator(route.summary).waitFor();
                     const textSelector = route.status ? `${route.summary} dt, ${route.summary} dd` : `${route.summary} .stat-card > span, ${route.summary} .stat-card > strong`;

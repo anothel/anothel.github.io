@@ -1836,6 +1836,7 @@ button {
     font-weight: 900;
     letter-spacing: 0.06em;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
 }
 
 .status-overall-facts dd,

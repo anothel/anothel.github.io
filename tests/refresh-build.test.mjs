@@ -29,11 +29,13 @@ test("refresh output checks accept fresh sources and safely escaped external tex
             }
             writeFileSync(path, JSON.stringify(data));
         }
+        const todayPath = join(root, "data/today.json");
+        writeFileSync(todayPath, readFileSync(todayPath, "utf8").replaceAll("anthropics/skills", "example/refreshed-signal"));
         execFileSync(process.execPath, [resolve("node_modules/astro/bin/astro.mjs"), "build"], { cwd: root, env, stdio: "pipe" });
         // Exercise the actual scheduled-workflow assertions, not a duplicate of them.
         let output;
         try {
-            output = execFileSync(process.execPath, ["--test", "--test-reporter=tap", "--test-name-pattern=Astro build output renders migrated|Astro source routes render complete", "tests/astro-build.test.mjs"], { cwd: root, env, encoding: "utf8" });
+            output = execFileSync(process.execPath, ["--test", "--test-reporter=tap", "--test-name-pattern=Astro build output renders Today|Astro build output renders migrated|Astro source routes render complete", "tests/astro-build.test.mjs"], { cwd: root, env, encoding: "utf8" });
         } catch (error) {
             assert.fail(error.stdout?.toString() || error.message);
         }

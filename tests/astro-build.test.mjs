@@ -21,6 +21,10 @@ function read(path) {
     return readFileSync(path, "utf8");
 }
 
+function escapeHtml(value) {
+    return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+}
+
 function ensureDist() {
     if (!existsSync("dist/index.html")) {
         execFileSync(process.execPath, ["node_modules/astro/bin/astro.mjs", "build"], { encoding: "utf8" });
@@ -40,7 +44,8 @@ test("Astro build output renders Today from checked-in data", () => {
     assert.match(html, new RegExp(`<strong>${counts.skim}<\/strong> to skim`));
     assert.match(html, new RegExp(`<strong>${counts.reference}<\/strong> references`));
     assert.match(html, /data-compact-trust/);
-    assert.match(html, /anthropics\/skills/);
+    const titles = [...html.matchAll(/<h3 data-signal-title>([\s\S]*?)<\/h3>/g)].map((match) => match[1]);
+    assert.deepEqual(titles, today.sections.flatMap((section) => section.items.map((item) => escapeHtml(item.title))), "Today renders every generated pick in section order");
     assert.match(html, /Continue in Explore/);
     assert.match(html, /href="\.\.\/explore\/index\.html"/);
 });
@@ -218,7 +223,6 @@ test("Astro build output renders migrated static routes including Notes", () => 
 
 test("Astro source routes render complete ordered records before secondary evidence without client JavaScript", () => {
     ensureDist();
-    const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
     const routes = [
         ["trends", "items", "title", ["category", "source", "velocity", "signal", "summary"]],
         ["packages", "packages", "name", ["category", "downloadsLabel", "focus", "period"]],
