@@ -1,3 +1,7 @@
+import { createRequire } from "node:module";
+
+const { validSourceTimestamp } = createRequire(import.meta.url)("../../js/data-health.js");
+
 // Daily generation plus twelve hours of scheduler/processing grace. This is a
 // published-output clock, not evidence that GitHub's scheduler is enabled.
 export const refreshMaxAgeHours = 36;
@@ -5,8 +9,7 @@ const futureToleranceMs = 5 * 60 * 1000;
 
 export function pipelineFreshness(generatedAt, now = new Date()) {
     const nowMs = new Date(now).getTime();
-    const valid = typeof generatedAt === "string"
-        && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(generatedAt);
+    const valid = validSourceTimestamp(generatedAt);
     const generatedMs = valid ? Date.parse(generatedAt) : NaN;
     const age = nowMs - generatedMs;
     if (!Number.isFinite(age) || age < -futureToleranceMs) {

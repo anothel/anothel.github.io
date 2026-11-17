@@ -108,7 +108,7 @@ function summarizeSources(module, dataset, priorReport = {}) {
             source: source.name || "unknown",
             status: source.status || "unknown",
             count: source.count || 0,
-            updatedAt: source.updatedAt || source.updated || "-",
+            updatedAt: (source.name?.toLowerCase() === "manual" ? source.reviewedAt : source.updatedAt || source.updated) || "-",
             coverage: source.coverage || "",
             fallbackUsed: Boolean(source.fallbackUsed),
             staleButSafe: Boolean(source.staleButSafe),

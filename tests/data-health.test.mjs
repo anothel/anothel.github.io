@@ -109,7 +109,7 @@ test("DataHealth labels source freshness by age and status", () => {
         { state: "unknown", lastSuccessfulUpdate: null, ageDays: null, staleReason: "last successful source update is missing or ambiguous" }
     );
     assert.equal(
-        DataHealth.freshnessForSource({ name: "manual", status: "ok", updatedAt: "2026-05-01T00:00:00.000Z" }, "2026-06-15").state,
+        DataHealth.freshnessForSource({ name: "manual", status: "ok", reviewedAt: "2026-05-01T00:00:00.000Z" }, "2026-06-15").state,
         "aging"
     );
 });

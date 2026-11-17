@@ -91,7 +91,7 @@ export function buildStatusDashboard({ manifest = {}, datasets = {}, report = {}
             const status = validStatuses.has(source.status) ? source.status : "unknown";
             const itemCount = count(source.count);
             const freshness = freshnessForSource({ ...source, status, count: itemCount }, now);
-            const retainedUpdate = freshness.lastSuccessfulUpdate || freshnessForSource({ status: "fallback", previousUpdated: source.previousUpdated }, now).lastSuccessfulUpdate;
+            const retainedUpdate = freshness.lastSuccessfulUpdate || (source.name?.toLowerCase() === "manual" ? null : freshnessForSource({ status: "fallback", previousUpdated: source.previousUpdated }, now).lastSuccessfulUpdate);
             const availability = sourceAvailability(status, itemCount);
             return {
                 name: text(source.name || module.source),

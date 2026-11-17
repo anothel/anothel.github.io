@@ -18,11 +18,17 @@ function ageDays(value, today = new Date()) {
 
 function freshness(source, today) {
     const status = source?.status || "unknown";
-    const updated = status === "fallback" ? source.previousUpdated : status === "error" ? "" : source.updatedAt || source.lastSuccessfulUpdate;
+    const manual = String(source?.name || source?.source || "").toLowerCase() === "manual";
+    const updated = manual ? source.reviewedAt : status === "fallback" ? source.previousUpdated : status === "error" ? "" : source.updatedAt || source.lastSuccessfulUpdate;
     if (status === "error" && Number(source?.count || 0) === 0) return { state: "unavailable", age: null, updated: "" };
     const age = ageDays(updated, today);
     if (age === null) return { state: "unknown", age, updated: "" };
-    const manual = String(source?.name || source?.source || "").toLowerCase() === "manual";
+    // Manual freshness requires a full, real calendar timestamp at or before now.
+    if (manual && (typeof updated !== "string"
+        || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(updated)
+        || !Number.isFinite(Date.parse(updated))
+        || new Date(Date.parse(updated.slice(0, 10))).toISOString().slice(0, 10) !== updated.slice(0, 10)
+        || Date.parse(updated) > new Date(today ?? new Date()).getTime())) return { state: "unknown", age: null, updated: "" };
     const state = age <= (manual ? 30 : 1) ? "fresh" : age <= (manual ? 90 : 3) ? "aging" : "stale";
     return { state, age, updated: datePart(updated) };
 }
@@ -30,7 +36,7 @@ function freshness(source, today) {
 export function sourceHealthModel(sourceMeta, today) {
     return sourceList(sourceMeta).map((source) => {
         const current = freshness(source, today);
-        const detail = current.state === "fresh" ? `Fresh - updated ${current.updated}`
+        const detail = current.state === "fresh" ? `Fresh - ${String(source?.name || source?.source).toLowerCase() === "manual" ? "reviewed" : "updated"} ${current.updated}`
             : current.state === "aging" || current.state === "stale" ? `${current.state[0].toUpperCase()}${current.state.slice(1)} - ${current.age} days old`
                 : current.state === "unavailable" ? "Unavailable - no usable source data" : "Unknown - no reliable source timestamp";
         const safety = [source.fallbackUsed && "using fallback", source.staleButSafe && "previous data kept", source.rateLimited && "rate limited"].filter(Boolean);
