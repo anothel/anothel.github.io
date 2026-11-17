@@ -145,7 +145,7 @@ test("Astro build output renders migrated static routes including Notes", () => 
         ["dist/explore/index.html", /Explore tracked signals\./],
         ["dist/review/index.html", /Review later\./],
         ["dist/status/index.html", /Source status\./],
-        ["dist/trends/index.html", /What is moving across HN, GitHub, and npm\./],
+        ["dist/trends/index.html", /Signals from HN, GitHub, and npm\./],
         ["dist/packages/index.html", /npm packages worth watching\./],
         ["dist/repos/index.html", /Repos worth watching\./],
         ["dist/links/index.html", /References worth keeping close\./],
@@ -235,7 +235,7 @@ test("Astro source routes render complete ordered records before secondary evide
         const items = data[collection];
         const summaryAt = html.indexOf("data-source-summary");
         const recordsAt = html.indexOf("data-source-record-list");
-        const statsAt = html.indexOf(`${route === "trends" ? "Trend statistics" : route === "packages" ? "Package movement stats" : "Repo movement stats"}`);
+        const statsAt = html.indexOf(`${route === "trends" ? "Trend statistics" : route === "packages" ? "Package download stats" : "Repo snapshot stats"}`);
         const healthAt = html.indexOf("data-source-health");
 
         assert.equal([...html.matchAll(/<th scope="row"/g)].length, items.length, `${route}: every record`);

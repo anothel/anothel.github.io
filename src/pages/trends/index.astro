@@ -13,9 +13,9 @@ const trust = trustState(data.sourceMeta);
 const emptyTitle = !validItems ? "Trend data invalid" : trust.pipelineStatus === "error" ? "Trend sources unavailable" : "No trend records";
 const emptyCopy = !validItems ? "Generated trend data is missing or invalid." : trust.pipelineStatus === "error" ? "Current sources did not produce usable trend records." : "Current data is valid but contains no ranked trends.";
 ---
-<AppShell title="Tech Trends - anothel" description="Ranked movement with origin, category, and momentum." canonicalPath="/trends/" stylesheetHref="../css/site.css">
+<AppShell title="Tech Trends - anothel" description="Ranked source observations with category and relevance scores." canonicalPath="/trends/" stylesheetHref="../css/site.css">
     <div class="shell module-shell">
-        <HeroHeader eyebrow="Cross-source movement" title="What is moving across HN, GitHub, and npm." current="Trends" prefix="../">
+        <HeroHeader eyebrow="Cross-source signals" title="Signals from HN, GitHub, and npm." current="Trends" prefix="../">
             <Fragment slot="stamp">Data date <span data-updated>{data.updated}</span></Fragment>
         </HeroHeader>
 
@@ -30,17 +30,17 @@ const emptyCopy = !validItems ? "Generated trend data is missing or invalid." : 
             <section class="rank-panel module-primary-panel" aria-labelledby="rank-title">
                 <div class="panel-heading">
                     <h2 id="rank-title">Signal table</h2>
-                    <p>Ranked movement across source, category, score, and momentum.</p>
+                    <p>Scores combine source counts and relevance. GitHub stars and forks are cumulative; npm downloads cover one week; HN counts are observations. Growth and velocity are not measured.</p>
                 </div>
                 {items.length ? <div class="source-health-table-wrap source-record-table-wrap">
                     <table class="source-health-table source-record-table" aria-labelledby="rank-title" data-source-record-list>
                         <thead><tr><th>Rank</th><th>Signal</th><th>Category</th><th>Origin</th><th>Score</th></tr></thead>
                         <tbody>{items.map((item) => <tr>
                             <td data-label="Rank"><span>{item.rank}</span></td>
-                            <th scope="row" data-label="Signal"><div><h3>{item.title || "Untitled signal"}</h3><small><strong>Velocity</strong> {item.velocity || "Unknown"}</small><small><strong>Summary</strong> {item.summary || "No summary available."}</small></div></th>
+                            <th scope="row" data-label="Signal"><div><h3>{item.title || "Untitled signal"}</h3><small><strong>Observed metric</strong> {item.velocity || "Unknown"}</small><small><strong>Summary</strong> {item.summary || "No summary available."}</small></div></th>
                             <td data-label="Category"><span>{item.category || "Unknown"}</span></td>
                             <td data-label="Origin"><span>{item.source || "Unknown"}</span></td>
-                            <td data-label="Score"><div><strong>{item.score ?? "Unknown"}</strong><small><strong>Signal fit</strong> {item.signal || "Unknown"}</small><small><strong>Updated</strong> {data.updated || "Unknown"}</small><a href={item.url} rel={externalRel(item.url)} aria-label={`Open ${item.title || "signal"} source`}>Open signal</a></div></td>
+                            <td data-label="Score"><div><strong>{item.score ?? "Unknown"}</strong><small><strong>Source context</strong> {item.signal || "Unknown"}</small><small><strong>Updated</strong> {data.updated || "Unknown"}</small><a href={item.url} rel={externalRel(item.url)} aria-label={`Open ${item.title || "signal"} source`}>Open signal</a></div></td>
                         </tr>)}</tbody>
                     </table>
                 </div> : <article class="rank-empty"><h3>{emptyTitle}</h3><p>{emptyCopy}</p><a href="../status/index.html">Open Status</a></article>}

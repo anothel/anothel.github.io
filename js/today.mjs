@@ -13,7 +13,7 @@ const fallbackData = {
     },
     sections: [
         { id: "start", title: "Start here", summary: "Three signals worth opening first.", items: [] },
-        { id: "skim", title: "Worth skimming", summary: "Useful movement that does not need first attention.", items: [] },
+        { id: "skim", title: "Worth skimming", summary: "Useful signals that do not need first attention.", items: [] },
         { id: "reference", title: "Reference shelf", summary: "Stable references and projects worth keeping nearby.", items: [] }
     ]
 };
@@ -27,9 +27,9 @@ const exploreLinks = [
     ["AI agents", "../topics/ai-agents/index.html", "Focused landing page"],
     ["MCP", "../topics/mcp/index.html", "Focused landing page"],
     ["Agent skills", "../topics/agent-skills/index.html", "Focused landing page"],
-    ["Trends", "../trends/index.html", "Ranked movement"],
+    ["Trends", "../trends/index.html", "Ranked source observations"],
     ["Repos", "../repos/index.html", "GitHub traction"],
-    ["Packages", "../packages/index.html", "npm movement"],
+    ["Packages", "../packages/index.html", "npm download totals"],
     ["Reference shelf", "../links/index.html", "Curated references"]
 ];
 

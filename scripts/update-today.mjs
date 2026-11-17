@@ -3,6 +3,8 @@ import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
 import { classifySignal, isBaselineSignal, qualityBoost, signalPolicy, signalReason, trackedTopicLabels } from "./signal-taxonomy.mjs";
 
+import taxonomy from "../src/lib/topic-taxonomy.js";
+
 const OUT_FILE = new URL("../data/today.json", import.meta.url);
 const require = createRequire(import.meta.url);
 const signalSchema = require("../js/signal-schema.js");
@@ -22,7 +24,7 @@ export const sectionCounts = {
 
 const sectionSummaries = {
     start: "Three signals worth opening first.",
-    skim: "Useful movement that does not need first attention.",
+    skim: "Useful signals that do not need first attention.",
     reference: "Stable references and projects worth keeping nearby."
 };
 
@@ -86,7 +88,7 @@ function matchesBaseline(item) {
 }
 
 function intentReason(item) {
-    return signalReason(candidateText(item));
+    return taxonomy.topicByLabel(item.category)?.reason || signalReason(candidateText(item));
 }
 
 function scoreReasons(reason, item) {
@@ -123,7 +125,7 @@ function enrichCandidate(item) {
         isIntentMatch,
         isBaseline
     };
-    const reason = isIntentMatch ? intentReason(enriched) : item.reason;
+    const reason = [item.scoreReasons?.[0], isIntentMatch ? intentReason(enriched) : item.reason].filter(Boolean).join(". ");
 
     return {
         ...enriched,
@@ -233,15 +235,18 @@ function pickStartItems(picker, intentPool, primaryPool, fallbackPool, expandedP
 }
 
 function actionFor(sectionId, item) {
-    if (sectionId === "start") {
-        if (item.module === "Repos") return "Compare repo traction before saving.";
-        if (item.module === "Packages") return "Check package demand, then compare related repos.";
-        if (item.module === "Links") return "Open the reference and keep it nearby if useful.";
-        return "Open the source now, then decide whether to save it.";
-    }
-    if (sectionId === "skim") return "Skim the source and save it only if it changes what to watch next.";
-    if (sectionId === "reference") return "Keep as a reference when working on related agent workflows.";
-    return "Open the source and decide whether it belongs in the saved queue.";
+    const topicActions = {
+        "MCP": "Check integration requirements and tool permissions before trying it.",
+        "AI evals": "Compare supported eval datasets and CI integration with your test workflow.",
+        "Workflow automation": "Check retry, scheduling, and failure-recovery support for your workflow.",
+        "Agent skills": "Read the skill instructions and required tool access before installing.",
+        "AI agents": "Check runtime requirements and repository access before a small trial."
+    };
+    if (sectionId === "reference") return "Consult the reference for API details and verify it against the version you use.";
+    return topicActions[item.category]
+        || (item.origin === "GitHub" ? "Read the README, license, and recent commits before a small trial."
+            : item.origin === "npm" ? "Check package API compatibility and dependencies before installing."
+                : "Read the source and verify its claims before saving it.");
 }
 
 function stripItem(item, sectionId) {
@@ -301,7 +306,7 @@ export function normalizeCandidates({ trends = {}, repos = {}, packages = {}, li
         .map((item) => ({
             ...item,
             category: item.category || `${item.module} signal`,
-            metric: item.sourceModule === "trends" ? `${item.rawScore ?? 0} score` : item.metric,
+            metric: item.metric,
             reason: item.reason || item.summary || item.metric,
             score: todayScore(item)
         }))

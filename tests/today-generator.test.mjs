@@ -110,9 +110,9 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 module: "Trends",
                 origin: "Hacker News",
                 category: "Developer tools",
-                metric: "96 score",
+                metric: "267 comments",
                 reason: "267 comments / 852 points",
-                firstScoreReason: "267 comments from Hacker News",
+                firstScoreReason: "267 comments observed; change not measured",
                 scoreReasonCount: 3,
                 url: "https://www.iroh.computer/blog/v1",
                 scoreInRange: true,
@@ -128,7 +128,7 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 category: "UI",
                 metric: "245.9K stars",
                 reason: "frontend runtime",
-                firstScoreReason: "245.9K stars from GitHub",
+                firstScoreReason: "245.9K stars cumulative; growth not measured",
                 scoreReasonCount: 2,
                 url: "https://github.com/react/react",
                 scoreInRange: true,
@@ -144,7 +144,7 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 category: "Language",
                 metric: "217.3M/week",
                 reason: "typed JavaScript",
-                firstScoreReason: "217.3M/week from npm",
+                firstScoreReason: "217.3M/week downloads; change not measured",
                 scoreReasonCount: 2,
                 url: "https://www.npmjs.com/package/typescript",
                 scoreInRange: true,
@@ -160,7 +160,7 @@ test("normalizeCandidates maps source data into shared card shape", () => {
                 category: "Frontend",
                 metric: "Docs",
                 reason: "Reference for web platform APIs.",
-                firstScoreReason: "Docs from Docs",
+                firstScoreReason: "Docs reference; enduring relevance, change not measured",
                 scoreReasonCount: 3,
                 url: "https://developer.mozilla.org/",
                 scoreInRange: true,
@@ -179,7 +179,7 @@ test("buildTodayBrief creates fixed sections from checked-in data", () => {
         brief.sections.map((section) => [section.id, section.title, section.summary, section.items.length]),
         [
             ["start", "Start here", "Three signals worth opening first.", 3],
-            ["skim", "Worth skimming", "Useful movement that does not need first attention.", 6],
+            ["skim", "Worth skimming", "Useful signals that do not need first attention.", 6],
             ["reference", "Reference shelf", "Stable references and projects worth keeping nearby.", 4]
         ]
     );

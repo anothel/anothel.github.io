@@ -13,9 +13,9 @@ const trust = trustState(data.sourceMeta);
 const emptyTitle = !validPackages ? "Package data invalid" : trust.pipelineStatus === "error" ? "Package source unavailable" : "No package records";
 const emptyCopy = !validPackages ? "Generated package data is missing or invalid." : trust.pipelineStatus === "error" ? "npm did not produce usable package records." : "Current data is valid but contains no ranked packages.";
 ---
-<AppShell title="Packages - anothel" description="Weekly npm download movement for tools worth keeping an eye on." canonicalPath="/packages/" stylesheetHref="../css/site.css">
+<AppShell title="Packages - anothel" description="Weekly npm download totals for tools worth keeping an eye on." canonicalPath="/packages/" stylesheetHref="../css/site.css">
     <div class="shell module-shell">
-        <HeroHeader eyebrow="npm movement" title="npm packages worth watching." current="Packages" prefix="../">
+        <HeroHeader eyebrow="npm download totals" title="npm packages worth watching." current="Packages" prefix="../">
             <Fragment slot="stamp">Data date <span data-updated>{data.updated}</span></Fragment>
         </HeroHeader>
 
@@ -30,7 +30,7 @@ const emptyCopy = !validPackages ? "Generated package data is missing or invalid
             <section class="rank-panel module-primary-panel" aria-labelledby="package-title">
                 <div class="panel-heading">
                     <h2 id="package-title">Weekly downloads</h2>
-                    <p>Weekly download movement for tools that may be useful later.</p>
+                    <p>Weekly download totals (change not measured) for tools that may be useful later.</p>
                 </div>
                 {packages.length ? <div class="source-health-table-wrap source-record-table-wrap">
                     <table class="source-health-table source-record-table" aria-labelledby="package-title" data-package-list data-source-record-list>
@@ -46,7 +46,7 @@ const emptyCopy = !validPackages ? "Generated package data is missing or invalid
                 </div> : <article class="rank-empty"><h3>{emptyTitle}</h3><p>{emptyCopy}</p><a href="../status/index.html">Open Status</a></article>}
             </section>
 
-            <section class="stats-grid" aria-label="Package movement stats">
+            <section class="stats-grid" aria-label="Package download stats">
                 <StatCard label="Packages" value={packages.length} />
                 <StatCard label="Most downloaded" value={top?.name || "-"} />
                 <StatCard label="Data status" value={data.sourceMeta?.status || "unknown"} />

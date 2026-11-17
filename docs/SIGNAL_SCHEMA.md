@@ -56,7 +56,7 @@ Scores are bounded `0..100` ranking heuristics, not probabilities, percentages, 
 Raw trend scores are source-specific:
 
 - Hacker News: story points and comment count, plus a technical-title boost and a general-news penalty.
-- GitHub trend search: logarithmic stars plus category-specific relevance boosts.
+- GitHub trend search: `10 * log10(max(stars, 1)) + 0.6 * categoryBoost + max(0, taxonomyBoost) / 4`, rounded and bounded to 1..100. Stars are cumulative; recent push is an eligibility filter, not measured growth.
 - npm trend input: logarithmic weekly downloads.
 
 Signal Schema v2 computes `qualityScore` and sets Explore `score` to the same value:
@@ -65,11 +65,12 @@ Signal Schema v2 computes `qualityScore` and sets Explore `score` to the same va
 - Packages use `log10(downloads + 1) / 9 * 100`.
 - Repos use `log10(stars + 1) / 6 * 100`.
 - Links use `max(35, 92 - rank * 3)`.
-- Matching AI/agent terms add up to 20 points: 12 for AI/LLM/agent terms, 8 for skill/MCP/vendor/framework terms, and 4 for coding/workflow terms.
+- Matching AI/agent terms supply a bonus of up to 20 points: 12 for AI/LLM/agent terms, 8 for skill/MCP/vendor/framework terms, and 4 for coding/workflow terms.
 - Broad baseline package, repo, and npm signals with weak intent are capped at 76.
+- The text bonus is multiplied by `min(1, (100 - boundedBase) / 50)`: full below the midpoint, attenuated in the upper half. This avoids adding the full bonus onto already strong counts.
 - Final values are rounded and clamped to `0..100`.
 
-Today preserves `qualityScore` but uses a section-selection score: trends keep their raw score; repos use `max(65, 86 - sourceRank)`; packages use `max(60, 76 - sourceRank)`; links use `max(50, 66 - sourceRank)`. This behavior is unchanged.
+Today preserves `qualityScore` but uses a section-selection score: trends keep their raw score; repos use `max(65, 86 - sourceRank)`; packages use `max(60, 76 - sourceRank)`; links use `max(50, 66 - sourceRank)`. Section selection and topic reservations are unchanged; trend metrics retain the observed counts instead of replacing them with the heuristic score.
 
 Scores can rank items within the same view. Cross-source comparison is approximate because each source begins with a different measurement and scale. Use `scoreReasons`, source metric, source rank, and category alongside the number; do not interpret a package 80 and a repo 80 as equal real-world impact.
 
@@ -172,3 +173,11 @@ Use `npm run validate:data` for source contract changes and `npm run check` befo
 ## Manual Reference provenance
 
 The optional `linksReview` watchlist record and generated `sourceMeta.reviewedAt` are documented in the [Reference review contract](REFERENCE_MONITORING.md). Generation fields never certify human review. Older data without this optional evidence remains valid with unknown manual freshness.
+
+## Observation labels and Phase 4 audit
+
+The legacy Trends `velocity` string remains published for compatibility. It contains cumulative GitHub stars, one-week npm download totals, or an observed HN comment count. It is **not a measured rate of change**. `signal` holds forks, a download interval, or HN points, not a fit score. The Trends UI labels these Observed metric and Source context.
+
+`scoreReasons` name the observation and explicitly say growth/change is not measured. Reference relevance is enduring; neither pipeline generation time nor a recent push proves momentum. Today retains numeric evidence and gives category-specific verification actions; these are checks to perform, not claims that a tool supports those capabilities. Saved records keep their original stored text until resaved; no storage migration is introduced.
+
+See [the reproducible Phase 4 audit](RANKING_AUDIT.md) for frozen-input examples, calibration limits, and rollback.

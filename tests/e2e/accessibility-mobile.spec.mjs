@@ -208,7 +208,7 @@ test.describe("mobile layout", () => {
     test("platform-sensitive mobile geometry keeps a safety margin", async ({ page }) => {
         for (const [route, title] of [
             ["/", "What is worth opening now?"],
-            ["/trends/", "What is moving across HN, GitHub, and npm."],
+            ["/trends/", "Signals from HN, GitHub, and npm."],
             ["/topics/ai-engineering/", "AI engineering signals."]
         ]) {
             await page.goto(route);

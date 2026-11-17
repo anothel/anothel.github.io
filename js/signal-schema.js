@@ -93,7 +93,8 @@
             score = Math.max(35, 92 - Number(item.rank || 0) * 3);
         }
 
-        score += textBoost(text);
+        // Relevance consumes remaining headroom instead of flattening strong signals.
+        score += textBoost(text) * Math.min(1, (100 - clamp(score, 0, 100)) / 50);
         const isNpmTrend = moduleKey === "trends" && String(item.source || "").toLowerCase() === "npm";
         if ((moduleKey === "packages" || moduleKey === "repos" || isNpmTrend) && isBroadBaselineSignal(item, options) && textBoost(text) < 8) {
             score = Math.min(score, 76);
@@ -106,9 +107,17 @@
         return [item.velocity, item.signal].filter(Boolean).join(" / ") || item.summary || "Ranked trend signal";
     }
 
-    function scoreReasons(fields, qualityScore) {
+    function metricEvidence(fields, moduleKey) {
+        if (moduleKey === "links") return `${fields.metric} reference; enduring relevance, change not measured`;
+        if (fields.origin === "GitHub") return `${fields.metric} cumulative; growth not measured`;
+        if (fields.origin === "npm") return `${fields.metric} downloads; change not measured`;
+        if (fields.origin === "Hacker News") return `${fields.metric} observed; change not measured`;
+        return `${fields.metric} observed; change not measured`;
+    }
+
+    function scoreReasons(fields, qualityScore, moduleKey) {
         const reasons = [
-            fields.metric && fields.origin ? `${fields.metric} from ${fields.origin}` : fields.metric,
+            metricEvidence(fields, moduleKey),
             fields.reason && fields.reason !== fields.metric ? fields.reason : "",
             qualityScore >= 80 ? `Signal fit ${qualityScore}/100` : ""
         ].filter(Boolean);
@@ -193,7 +202,7 @@
             sourceRank: Number(item.rank || 0),
             qualityScore,
             score: qualityScore,
-            scoreReasons: scoreReasons(fields, qualityScore),
+            scoreReasons: scoreReasons(fields, qualityScore, moduleKey),
             sources: [moduleName],
             sourceContext: "",
             canonicalKey,
