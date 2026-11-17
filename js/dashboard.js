@@ -43,7 +43,7 @@ const fallbackData = {
             source: "GitHub",
             category: "AI",
             score: 98,
-            velocity: "+24%",
+            velocity: "Change not measured",
             signal: "repos, issues, release notes",
             url: "https://github.com/topics/ai-agents",
             summary: "Tools and patterns around coding agents, task delegation, and repository automation."
@@ -54,7 +54,7 @@ const fallbackData = {
             source: "Hacker News",
             category: "Architecture",
             score: 91,
-            velocity: "+18%",
+            velocity: "Change not measured",
             signal: "discussion volume",
             url: "https://news.ycombinator.com/",
             summary: "Sync, offline-first data, CRDTs, and small personal software patterns."
@@ -65,7 +65,7 @@ const fallbackData = {
             source: "npm",
             category: "JavaScript",
             score: 88,
-            velocity: "+15%",
+            velocity: "Change not measured",
             signal: "package activity",
             url: "https://bun.sh/",
             summary: "Runtime and toolchain work around fast installs, bundling, and test execution."
@@ -76,7 +76,7 @@ const fallbackData = {
             source: "Hacker News",
             category: "Database",
             score: 84,
-            velocity: "+12%",
+            velocity: "Change not measured",
             signal: "docs, blog posts",
             url: "https://www.sqlite.org/",
             summary: "Embedded databases, edge deployments, and simple durable app storage."
@@ -87,7 +87,7 @@ const fallbackData = {
             source: "GitHub",
             category: "Frontend",
             score: 79,
-            velocity: "+9%",
+            velocity: "Change not measured",
             signal: "stars, demos",
             url: "https://github.com/topics/design-systems",
             summary: "Component libraries and CSS patterns that keep interface code small."
@@ -98,7 +98,7 @@ const fallbackData = {
             source: "Hacker News",
             category: "Runtime",
             score: 74,
-            velocity: "+7%",
+            velocity: "Change not measured",
             signal: "launch threads",
             url: "https://webassembly.org/",
             summary: "WASM packaging, sandboxing, and browser/server runtime experiments."
@@ -109,7 +109,7 @@ const fallbackData = {
             source: "GitHub",
             category: "Ops",
             score: 69,
-            velocity: "+5%",
+            velocity: "Change not measured",
             signal: "tool releases",
             url: "https://opentelemetry.io/",
             summary: "Tracing, logs, metrics, and lightweight incident visibility."
@@ -120,7 +120,7 @@ const fallbackData = {
             source: "npm",
             category: "TypeScript",
             score: 64,
-            velocity: "+3%",
+            velocity: "Change not measured",
             signal: "downloads",
             url: "https://www.npmjs.com/search?q=typescript%20api%20client",
             summary: "Generated clients, schema-driven APIs, and end-to-end types."
@@ -169,7 +169,8 @@ function getFilteredItems() {
         })
         .sort((a, b) => {
             if (state.sort === "score") return b.score - a.score;
-            if (state.sort === "velocity") return parseFloat(b.velocity) - parseFloat(a.velocity);
+            // Legacy sort option cannot compare rates that were never measured.
+            if (state.sort === "velocity") return a.rank - b.rank;
             return a.rank - b.rank;
         });
 }

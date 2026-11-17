@@ -140,7 +140,7 @@ test("signal priority uses source rank before title when scores saturate", () =>
 
     assert.equal(sorted[0].title, "activepieces/activepieces");
     assert.equal(sorted[1].title, "@ai-sdk/provider");
-    assert.equal(sorted[0].score, sorted[1].score);
+    assert.ok(sorted[0].score > sorted[1].score);
 });
 
 test("shared signal normalization caps broad repo short names", () => {

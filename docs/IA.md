@@ -11,8 +11,8 @@ anothel.github.io is a personal signal dashboard for deciding what technical sig
 | `/explore/` | `src/pages/explore/index.astro` + `ExploreIsland.jsx` | Cross-module discovery: search, filter, topic lenses, saved searches, and saving items. |
 | `/review/` | `src/pages/review/index.astro` + `ReviewIsland.jsx` | Return workflow for browser-local saved items: annotate, change status, export/import, or remove. |
 | `/status/` | `src/pages/status/index.astro` | Trust evidence: completeness, freshness, validation, partial/fallback state, and recovery clues. |
-| `/trends/` | `src/pages/trends/index.astro` | Ranked movement across Hacker News, GitHub search, and npm trend inputs. |
-| `/packages/` | `src/pages/packages/index.astro` | npm watchlist movement and demand. |
+| `/trends/` | `src/pages/trends/index.astro` | Ranked source observations across Hacker News, GitHub search, and npm trend inputs. |
+| `/packages/` | `src/pages/packages/index.astro` | npm watchlist weekly download totals. |
 | `/repos/` | `src/pages/repos/index.astro` | GitHub repository traction and workflow relevance. |
 | `/links/` | `src/pages/links/index.astro` | Curated reference shelf. |
 | `/topics/<slug>/` | `src/pages/topics/[slug].astro` | Seven promoted static topic views: judgment, guidance, ranking context, related signals, and browser-local pinning. |

@@ -1,91 +1,91 @@
 {
   "explore": [
     {
-      "title": "openai/codex",
-      "module": "Repos",
-      "category": "AI agents",
-      "score": 100,
-      "reasons": [
-        "92K stars from GitHub",
-        "terminal coding agent",
-        "Signal fit 100/100"
-      ]
-    },
-    {
       "title": "Agents SDK docs",
       "module": "Links",
       "category": "AI agents",
-      "score": 100,
+      "score": 93,
       "reasons": [
-        "Docs from Docs",
+        "Docs reference; enduring relevance, change not measured",
         "Agent workflow reference.",
-        "Signal fit 100/100"
+        "Signal fit 93/100"
       ]
     },
     {
-      "title": "Evalite docs",
-      "module": "Links",
-      "category": "AI evals",
-      "score": 99,
+      "title": "openai/codex",
+      "module": "Repos",
+      "category": "AI agents",
+      "score": 90,
       "reasons": [
-        "Docs from Docs",
-        "Evaluation workflow docs.",
-        "Signal fit 99/100"
-      ]
-    },
-    {
-      "title": "Zero-Touch OAuth for MCP",
-      "module": "Trends",
-      "category": "MCP",
-      "score": 94,
-      "reasons": [
-        "120 comments from Hacker News",
-        "120 comments / 420 points",
-        "Signal fit 94/100"
+        "92K stars cumulative; growth not measured",
+        "terminal coding agent",
+        "Signal fit 90/100"
       ]
     },
     {
       "title": "MCP TypeScript SDK",
       "module": "Links",
       "category": "MCP",
-      "score": 94,
+      "score": 88,
       "reasons": [
-        "Docs from Docs",
+        "Docs reference; enduring relevance, change not measured",
         "Protocol SDK reference.",
-        "Signal fit 94/100"
+        "Signal fit 88/100"
+      ]
+    },
+    {
+      "title": "Evalite docs",
+      "module": "Links",
+      "category": "AI evals",
+      "score": 88,
+      "reasons": [
+        "Docs reference; enduring relevance, change not measured",
+        "Evaluation workflow docs.",
+        "Signal fit 88/100"
+      ]
+    },
+    {
+      "title": "Zero-Touch OAuth for MCP",
+      "module": "Trends",
+      "category": "MCP",
+      "score": 84,
+      "reasons": [
+        "120 comments observed; change not measured",
+        "120 comments / 420 points",
+        "Signal fit 84/100"
       ]
     },
     {
       "title": "promptfoo eval workflow",
       "module": "Trends",
       "category": "AI evals",
-      "score": 89,
+      "score": 82,
       "reasons": [
-        "8K stars from GitHub",
+        "8K stars cumulative; growth not measured",
         "8K stars / 1K forks",
-        "Signal fit 89/100"
+        "Signal fit 82/100"
       ]
     },
     {
       "title": "trigger.dev durable workflow",
       "module": "Trends",
       "category": "Workflow automation",
-      "score": 88,
+      "score": 81,
       "reasons": [
-        "10K stars from GitHub",
+        "10K stars cumulative; growth not measured",
         "10K stars / 900 forks",
-        "Signal fit 88/100"
+        "Signal fit 81/100"
       ]
     },
     {
       "title": "mattpocock/skills",
       "module": "Repos",
       "category": "Agent skills",
-      "score": 88,
+      "score": 81,
       "reasons": [
-        "12K stars from GitHub",
+        "12K stars cumulative; growth not measured",
         "coding agent skills",
-        "Signal fit 88/100"
+        "Signal fit 81/100"
       ]
     }
   ],
@@ -95,8 +95,8 @@
       "module": "Repos",
       "category": "Agent skills",
       "reasons": [
-        "Agent skills reference for reusable tool instructions.",
-        "12K stars from GitHub",
+        "12K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
+        "12K stars cumulative; growth not measured",
         "coding agent skills"
       ]
     },
@@ -105,8 +105,8 @@
       "module": "Repos",
       "category": "AI evals",
       "reasons": [
-        "Evaluation signal for measuring agent and model behavior.",
-        "15K stars from GitHub",
+        "15K stars cumulative; growth not measured. Evaluation signal for measuring agent and model behavior.",
+        "15K stars cumulative; growth not measured",
         "LLM observability and evals"
       ]
     },
@@ -115,8 +115,8 @@
       "module": "Repos",
       "category": "AI agents",
       "reasons": [
-        "Coding-agent ecosystem signal with practical workflow value.",
-        "92K stars from GitHub",
+        "92K stars cumulative; growth not measured. Coding-agent ecosystem signal with practical workflow value.",
+        "92K stars cumulative; growth not measured",
         "terminal coding agent"
       ]
     }

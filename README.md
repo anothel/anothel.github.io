@@ -48,7 +48,7 @@ See [Architecture](docs/ARCHITECTURE.md), [Deployment](docs/DEPLOYMENT.md), and 
 | `/explore/` | Cross-source search, filters, saved searches, and save actions. |
 | `/review/` | Browser-local saved queue and workflow state. |
 | `/status/` | Data completeness, freshness, validation, and recovery evidence. |
-| `/trends/` | Ranked movement across Hacker News, GitHub, and npm. |
+| `/trends/` | Ranked source observations across Hacker News, GitHub, and npm. |
 | `/packages/` | npm package watchlist. |
 | `/repos/` | GitHub repository watchlist. |
 | `/links/` | Curated reference shelf. |

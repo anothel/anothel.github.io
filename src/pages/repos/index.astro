@@ -46,7 +46,7 @@ const emptyCopy = !validRepos ? "Generated repo data is missing or invalid." : t
                 </div> : <article class="rank-empty"><h3>{emptyTitle}</h3><p>{emptyCopy}</p><a href="../status/index.html">Open Status</a></article>}
             </section>
 
-            <section class="stats-grid" aria-label="Repo movement stats">
+            <section class="stats-grid" aria-label="Repo snapshot stats">
                 <StatCard label="Repos" value={repos.length} />
                 <StatCard label="Top repo" value={top?.name || "-"} />
                 <StatCard label="Data status" value={data.sourceMeta?.status || "unknown"} />

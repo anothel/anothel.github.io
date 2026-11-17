@@ -97,7 +97,7 @@ function hasAny(text, patterns) {
 
 export function githubRepoQuality(repo, category) {
     const text = textForRepo(repo);
-    const stars = Math.log10(Math.max(repo.stargazers_count || 0, 1)) * 14;
+    const stars = Math.log10(Math.max(repo.stargazers_count || 0, 1)) * 10;
     let boost = 0;
     let required = [];
     const broadFrontend = /\b(frontend|front-end|checklist|css)\b/.test(text);
@@ -128,7 +128,7 @@ export function githubRepoQuality(repo, category) {
     }
 
     if (!hasAny(text, required)) return 0;
-    return clampScore(stars + boost + Math.max(0, qualityBoost(text)) / 2);
+    return clampScore(stars + boost * 0.6 + Math.max(0, qualityBoost(text)) / 4);
 }
 
 function trendSort(a, b) {

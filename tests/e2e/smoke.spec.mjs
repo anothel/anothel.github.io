@@ -126,8 +126,8 @@ test("Explore search filters and restores checked-in results", async ({ page }) 
 test("source routes lead with complete labelled records without mobile scrollers", async ({ page }) => {
     const routes = [
         { path: "/trends/", items: trends.items, title: "title", headers: ["Rank", "Signal", "Category", "Origin", "Score"], stats: "Trend statistics" },
-        { path: "/packages/", items: packages.packages, title: "name", headers: ["Rank", "Package", "Category", "Downloads", "Focus"], stats: "Package movement stats" },
-        { path: "/repos/", items: repos.repos, title: "name", headers: ["Rank", "Repo", "Category", "Stars", "Focus"], stats: "Repo movement stats" }
+        { path: "/packages/", items: packages.packages, title: "name", headers: ["Rank", "Package", "Category", "Downloads", "Focus"], stats: "Package download stats" },
+        { path: "/repos/", items: repos.repos, title: "name", headers: ["Rank", "Repo", "Category", "Stars", "Focus"], stats: "Repo snapshot stats" }
     ];
 
     for (const route of routes) {
@@ -908,4 +908,16 @@ test("all required routes return a non-empty main region", async ({ page }) => {
         await expect(main, `${route} should have a visible main region`).toBeVisible();
         await expect.poll(async () => (await main.innerText()).trim().length).toBeGreaterThan(0);
     }
+});
+
+test("ranking copy distinguishes observations from measured change", async ({ page }) => {
+    await page.goto("/trends/");
+    await expect(page.getByRole("main")).toContainText("Growth and velocity are not measured");
+    await expect(page.getByRole("main")).toContainText("Observed metric");
+    await expect(page.getByRole("main")).not.toContainText("Velocity");
+    await page.goto("/today/");
+    await expect(page.locator(".why-copy").first()).toContainText("not measured");
+    await expect(page.locator(".action-copy").first()).not.toContainText("Open the source now");
+    await page.goto("/explore/");
+    await expect(page.locator(".score-reasons").first()).toContainText("not measured");
 });

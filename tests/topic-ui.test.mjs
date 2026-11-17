@@ -185,9 +185,9 @@ test("fixed topic audit corpus stays within audited semantic goldens", () => {
     // retaining exact semantic/ranking assertions independently of live data.
     const audit = json("tests/fixtures/topic-audit-corpus.json");
     const goldens = {
-        "Agent skills": { range: [5, 9], modules: 3, top: ["anthropics/skills", "JuliusBrussee/caveman", "mattpocock/skills"], purpose: ["anthropics/skills"] },
+        "Agent skills": { range: [5, 9], modules: 3, top: ["anthropics/skills", "JuliusBrussee/caveman", "Agent Skills standard"], purpose: ["anthropics/skills"] },
         "AI agents": { range: [28, 38], modules: 4, top: ["activepieces/activepieces", "affaan-m/ECC", "AgentOps-AI/agentops"], purpose: ["anthropics/claude-code"] },
-        "AI engineering": { range: [18, 30], modules: 4, top: ["AgentOps-AI/agentops", "langfuse/langfuse", "promptfoo/promptfoo"], purpose: ["karpathy/nanoGPT", "karpathy/nanochat"] },
+        "AI engineering": { range: [18, 30], modules: 4, top: ["AgentOps-AI/agentops", "modelcontextprotocol/servers", "karpathy/nanoGPT"], purpose: ["karpathy/nanoGPT", "karpathy/nanochat"] },
         "AI evals": { range: [12, 21], modules: 4, top: ["affaan-m/ECC", "AgentOps-AI/agentops", "Arize-ai/phoenix"], purpose: ["promptfoo/promptfoo"] },
         MCP: { range: [11, 18], modules: 3, top: ["activepieces/activepieces", "awslabs/mcp", "@modelcontextprotocol/sdk"], purpose: ["modelcontextprotocol/servers"] },
         Security: { range: [2, 6], modules: 2, top: ["affaan-m/ECC", "promptfoo/promptfoo"], purpose: ["promptfoo/promptfoo"] },

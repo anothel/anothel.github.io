@@ -45,7 +45,8 @@ function qualityScore(moduleKey, item, signalPolicy = fallbackSignalPolicy) {
     if (moduleKey === "packages") score = logScore(item.downloads, 9);
     if (moduleKey === "repos") score = logScore(item.stars, 6);
     if (moduleKey === "links") score = Math.max(35, 92 - Number(item.rank || 0) * 3);
-    score += textBoost(text);
+    // Relevance consumes remaining headroom instead of flattening strong signals.
+    score += textBoost(text) * Math.min(1, (100 - clamp(score, 0, 100)) / 50);
 
     const name = String(item.name || item.title || "").toLowerCase();
     const repoName = name.includes("/") ? name.split("/").at(-1) : name;
@@ -89,9 +90,17 @@ export function comparePriority(a, b) {
         || String(a?.title || "").localeCompare(String(b?.title || ""));
 }
 
-function scoreReasons(fields, score) {
+function metricEvidence(fields, moduleKey) {
+    if (moduleKey === "links") return `${fields.metric} reference; enduring relevance, change not measured`;
+    if (fields.origin === "GitHub") return `${fields.metric} cumulative; growth not measured`;
+    if (fields.origin === "npm") return `${fields.metric} downloads; change not measured`;
+    if (fields.origin === "Hacker News") return `${fields.metric} observed; change not measured`;
+    return `${fields.metric} observed; change not measured`;
+}
+
+function scoreReasons(fields, score, moduleKey) {
     return [...new Set([
-        fields.metric && fields.origin ? `${fields.metric} from ${fields.origin}` : fields.metric,
+        metricEvidence(fields, moduleKey),
         fields.reason && fields.reason !== fields.metric ? fields.reason : "",
         score >= 80 ? `Signal fit ${score}/100` : ""
     ].filter(Boolean))].slice(0, 3);
@@ -119,7 +128,7 @@ function signalItem(moduleKey, item, data, fields, signalPolicy) {
         sourceRank: Number(item.rank || 0),
         qualityScore: score,
         score,
-        scoreReasons: scoreReasons(fields, score),
+        scoreReasons: scoreReasons(fields, score, moduleKey),
         sources: [module],
         sourceContext: "",
         canonicalKey: id,
