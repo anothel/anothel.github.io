@@ -253,3 +253,41 @@ test("malformed or unavailable storage falls back without throwing", () => {
     assert.deepEqual(readSavedSearches(blocked), []);
     assert.deepEqual(readExploreDefault(blocked), { ...defaultExploreState });
 });
+
+test("saved-search imports report only persisted additions within the five-search limit", () => {
+    const storage = memoryStorage();
+    for (const query of ["one", "two", "three", "four"]) saveSearch(storage, { query });
+    const before = readSavedSearches(storage);
+    const partial = mergeSearches(storage, [{ query: "one" }, { query: "five" }, { query: "six" }]);
+    assert.equal(partial.status, "partial-import");
+    assert.equal(partial.added, 1);
+    assert.equal(partial.items.length, 5);
+    assert.deepEqual(partial.items.slice(0, 4), before);
+    assert.equal(readSavedSearches(storage).at(-1).query, "five");
+
+    const full = mergeSearches(storage, [{ query: "six" }]);
+    assert.equal(full.status, "full");
+    assert.equal(full.added, 0);
+    assert.deepEqual(full.items, readSavedSearches(storage));
+    assert.equal(mergeSearches(storage, [{ query: "five" }]).status, "not-imported");
+});
+
+test("saved-search imports preserve the visible persisted state when writes fail", () => {
+    const storage = memoryStorage();
+    saveSearch(storage, { query: "existing" });
+    const current = readSavedSearches(storage);
+    const blocked = { getItem: storage.getItem, setItem() { throw new Error("quota exceeded"); } };
+    const result = mergeSearches(blocked, [{ query: "new" }]);
+    assert.equal(result.status, "blocked");
+    assert.equal(result.added, 0);
+    assert.deepEqual(result.items, current);
+});
+
+test("oversized saved-search imports disclose truncation after deduplication", () => {
+    const storage = memoryStorage();
+    const incoming = savedSearchesFromRaw('["a","b","c","d","e","f"]', { limit: Infinity });
+    const result = mergeSearches(storage, incoming);
+    assert.equal(result.status, "partial-import");
+    assert.equal(result.added, 5);
+    assert.deepEqual(readSavedSearches(storage).map(item => item.query), ["a", "b", "c", "d", "e"]);
+});

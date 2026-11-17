@@ -28,19 +28,19 @@ function validImportEntry(value) {
     return value && typeof value === "object" && ["focus", "module", "category", "query", "sort", "label"].some((key) => typeof value[key] === "string");
 }
 
-function normalizeSearches(items) {
+function normalizeSearches(items, limit = maxSavedSearches) {
     const seen = new Set();
     return (items || []).filter(validImportEntry).map((value) => {
         const search = normalizeSearch(value);
         return { id: savedSearchId(search), ...search };
-    }).filter((search) => !seen.has(search.id) && seen.add(search.id)).slice(0, maxSavedSearches);
+    }).filter((search) => !seen.has(search.id) && seen.add(search.id)).slice(0, limit);
 }
 
-export function savedSearchesFromRaw(raw) {
+export function savedSearchesFromRaw(raw, { limit = maxSavedSearches } = {}) {
     try {
         const parsed = JSON.parse(raw || "[]");
-        if (Array.isArray(parsed)) return normalizeSearches(parsed);
-        if (parsed?.version === 1 && Array.isArray(parsed.items)) return normalizeSearches(parsed.items);
+        if (Array.isArray(parsed)) return normalizeSearches(parsed, limit);
+        if (parsed?.version === 1 && Array.isArray(parsed.items)) return normalizeSearches(parsed.items, limit);
     } catch { return []; }
     return [];
 }
@@ -71,9 +71,13 @@ export function removeSearch(storage, id) {
 export function mergeSearches(storage, incoming) {
     const current = readSavedSearches(storage);
     const ids = new Set(current.map(({ id }) => id));
-    const added = normalizeSearches(incoming).filter(({ id }) => !ids.has(id));
-    const written = writeSavedSearches(storage, [...current, ...added]);
-    return { status: written.ok ? (added.length ? "imported" : "not-imported") : "blocked", items: written.items, added: added.length };
+    const added = normalizeSearches(incoming, Infinity).filter(({ id }) => !ids.has(id));
+    const accepted = added.slice(0, maxSavedSearches - current.length);
+    if (!added.length) return { status: "not-imported", items: current, added: 0 };
+    if (!accepted.length) return { status: "full", items: current, added: 0 };
+    const written = writeSavedSearches(storage, [...current, ...accepted]);
+    if (!written.ok) return { status: "blocked", items: current, added: 0 };
+    return { status: accepted.length < added.length ? "partial-import" : "imported", items: written.items, added: accepted.length };
 }
 
 export function savedSearchLabel(value) {

@@ -59,6 +59,7 @@ function savedStatusText(status, search) {
     if (status === "renamed") return "Saved search renamed.";
     if (status === "removed") return "Saved search removed.";
     if (status === "imported") return "Saved searches imported.";
+    if (status === "partial-import") return "Some searches imported. Five-search limit reached; remove one to import more.";
     if (status === "not-imported") return "No new saved searches to import.";
     if (status === "full") return "Remove one to save another.";
     if (status === "blocked") return "Saved searches are unavailable in this browser.";
@@ -200,7 +201,7 @@ export default function ExploreIsland({ prefix = "../", fallback, dataPaths }) {
     }
 
     function importSearchText(text) {
-        const incoming = savedSearchesFromRaw(text);
+        const incoming = savedSearchesFromRaw(text, { limit: Infinity });
         const result = mergeSearches(browserStorage(), incoming);
         setSearches(result.items);
         setSearchStatus(result.status);
