@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-16",
-  "generatedAt": "2026-11-16T06:43:13.429Z",
+  "updated": "2026-11-17",
+  "generatedAt": "2026-11-17T03:52:25.806Z",
   "sourceMeta": {
     "name": "npm",
     "status": "ok",
@@ -8,7 +8,7 @@
     "tracked": 24,
     "emitted": 24,
     "coverage": "24/24",
-    "updatedAt": "2026-11-16T06:43:13.429Z"
+    "updatedAt": "2026-11-17T03:52:25.806Z"
   },
   "packages": [
     {

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-16",
-  "generatedAt": "2026-11-16T06:43:13.393Z",
+  "updated": "2026-11-17",
+  "generatedAt": "2026-11-17T03:52:25.773Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-11-16T06:43:13.393Z"
+      "updatedAt": "2026-11-17T03:52:25.773Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-11-16T06:43:13.393Z"
+      "updatedAt": "2026-11-17T03:52:25.773Z"
     },
     {
       "name": "npm",
@@ -32,7 +32,7 @@
       "tracked": 15,
       "emitted": 8,
       "coverage": "8/15",
-      "updatedAt": "2026-11-16T06:43:13.393Z"
+      "updatedAt": "2026-11-17T03:52:25.773Z"
     }
   ],
   "items": [
@@ -53,8 +53,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "304K stars",
-      "signal": "44.8K forks",
+      "velocity": "304.7K stars",
+      "signal": "44.9K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
@@ -64,7 +64,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "227.1K stars",
+      "velocity": "227.4K stars",
       "signal": "30.8K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
@@ -75,7 +75,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "155.8K stars",
+      "velocity": "155.9K stars",
       "signal": "25K forks",
       "url": "https://github.com/anthropics/claude-code",
       "summary": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
@@ -86,7 +86,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "195.5K stars",
+      "velocity": "196.1K stars",
       "signal": "23K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
@@ -119,8 +119,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "82.8K stars",
-      "signal": "15.2K forks",
+      "velocity": "83.1K stars",
+      "signal": "15.3K forks",
       "url": "https://github.com/career-ops-hq/career-ops",
       "summary": "Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and an application tracker. It helps you fill in each application; you press Submit. Runs locally in Codex, OpenCode and other AI CLIs, or as a Claude Code plugin."
     },
@@ -130,7 +130,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "77.7K stars",
+      "velocity": "77.8K stars",
       "signal": "5.2K forks",
       "url": "https://github.com/colbymchenry/codegraph",
       "summary": "Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent fewer tokens, fewer tool calls, 100% local"
@@ -141,8 +141,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 100,
-      "velocity": "191.6K stars",
-      "signal": "10.7K forks",
+      "velocity": "192.3K stars",
+      "signal": "10.8K forks",
       "url": "https://github.com/DietrichGebert/ponytail",
       "summary": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote."
     },
@@ -152,8 +152,8 @@
       "source": "GitHub",
       "category": "AI evals",
       "score": 100,
-      "velocity": "9.1K stars",
-      "signal": "576 forks",
+      "velocity": "9.3K stars",
+      "signal": "578 forks",
       "url": "https://github.com/FailproofAI/failproofai",
       "summary": "Observability and enforcement for AI agent harnesses. Capture every run and runtime reliability with policy enforcement."
     },
@@ -163,35 +163,13 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 100,
-      "velocity": "154.8K stars",
+      "velocity": "155K stars",
       "signal": "10.1K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io"
     },
     {
       "rank": 13,
-      "title": "All AI-generated code should be Open Source",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 100,
-      "velocity": "610 comments",
-      "signal": "1132 points",
-      "url": "https://jakub.jankiewicz.org/blog/ai-code-open-source/",
-      "summary": "HN story by jcubic with 610 comments."
-    },
-    {
-      "rank": 14,
-      "title": "SpaceX catches the Starship to end Flight 15",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 100,
-      "velocity": "1254 comments",
-      "signal": "1669 points",
-      "url": "https://www.spacex.com/launches/starship-flight-15",
-      "summary": "HN story by ls612 with 1254 comments."
-    },
-    {
-      "rank": 15,
       "title": "@ai-sdk/provider",
       "source": "npm",
       "category": "AI",
@@ -202,7 +180,7 @@
       "summary": "107.1M downloads over the last available week."
     },
     {
-      "rank": 16,
+      "rank": 14,
       "title": "@modelcontextprotocol/sdk",
       "source": "npm",
       "category": "MCP",
@@ -213,7 +191,7 @@
       "summary": "89.5M downloads over the last available week."
     },
     {
-      "rank": 17,
+      "rank": 15,
       "title": "@anthropic-ai/sdk",
       "source": "npm",
       "category": "AI",
@@ -224,7 +202,7 @@
       "summary": "70.7M downloads over the last available week."
     },
     {
-      "rank": 18,
+      "rank": 16,
       "title": "openai",
       "source": "npm",
       "category": "AI",
@@ -235,7 +213,7 @@
       "summary": "58.8M downloads over the last available week."
     },
     {
-      "rank": 19,
+      "rank": 17,
       "title": "ai",
       "source": "npm",
       "category": "AI",
@@ -246,7 +224,7 @@
       "summary": "45.8M downloads over the last available week."
     },
     {
-      "rank": 20,
+      "rank": 18,
       "title": "@ai-sdk/openai",
       "source": "npm",
       "category": "AI",
@@ -257,7 +235,7 @@
       "summary": "23.6M downloads over the last available week."
     },
     {
-      "rank": 21,
+      "rank": 19,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",
@@ -268,7 +246,7 @@
       "summary": "6.8M downloads over the last available week."
     },
     {
-      "rank": 22,
+      "rank": 20,
       "title": "langfuse",
       "source": "npm",
       "category": "AI evals",
@@ -279,26 +257,48 @@
       "summary": "2.5M downloads over the last available week."
     },
     {
-      "rank": 23,
-      "title": "Lovable apps expose passport details and more than 200K private messages",
+      "rank": 21,
+      "title": "Many of Amazons Black Friday and Cyber Monday deals offered no savings",
       "source": "Hacker News",
       "category": "Developer tools",
-      "score": 74,
-      "velocity": "372 comments",
-      "signal": "980 points",
-      "url": "https://www.crissyfield.de/research/lovable-en/",
-      "summary": "HN story by armcat with 372 comments."
+      "score": 71,
+      "velocity": "517 comments",
+      "signal": "860 points",
+      "url": "http://groundworkcollaborative.org/news/amazons-decoy-deals-groundwork-investigation-reveals-nearly-1-in-3-black-friday-and-cyber-monday-deals-advertised-by-amazon-offered-no-savings-to-shoppers-nearly-1-in-10-w/",
+      "summary": "HN story by DeepLogin with 517 comments."
+    },
+    {
+      "rank": 22,
+      "title": "Technical issue at JPMorgan Chase triggers online banking delays for US banks",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 66,
+      "velocity": "609 comments",
+      "signal": "734 points",
+      "url": "https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda",
+      "summary": "HN story by samk3nny with 609 comments."
+    },
+    {
+      "rank": 23,
+      "title": "Carnegie Mellon is putting computer science courses on YouTube for free",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 61,
+      "velocity": "144 comments",
+      "signal": "900 points",
+      "url": "https://www.cs.cmu.edu/learn/",
+      "summary": "HN story by pcompeau with 144 comments."
     },
     {
       "rank": 24,
-      "title": "Claude Code and Codex reverse engineered my 1994 Jeep's ECU over a $3 Arduino [video]",
+      "title": "Windows 11 Is Collecting Data on Which Coding Agents and Developer Tools You Use",
       "source": "Hacker News",
       "category": "AI",
-      "score": 66,
-      "velocity": "196 comments",
-      "signal": "406 points",
-      "url": "https://www.youtube.com/watch?v=WPj3aQ-xxpI",
-      "summary": "HN story by envoked with 196 comments."
+      "score": 61,
+      "velocity": "197 comments",
+      "signal": "328 points",
+      "url": "https://xusheng.dev/posts/windows-coding-agent-telemetry/",
+      "summary": "HN story by cwaffles with 197 comments."
     }
   ]
 }
