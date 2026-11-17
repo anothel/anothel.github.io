@@ -27,7 +27,7 @@ Migration scaffold/gate work is complete. Final closeout status:
 - `MOBILE_UI_UX_REDESIGN: COMPLETE`
 - `PAGES_DEPLOYMENT: PASS`
 - `REAL_DEVICE_ANDROID: PASS`
-- `REMOTE_CI: PASS_ON_PHASE3_MAIN` (historical main evidence from Issue #6; each new PR still requires its own CI)
+- `REMOTE_CI: PASS_ON_PHASE4_MAIN` (CI 44056831841; each new PR still requires its own CI)
 - `IOS_REAL_DEVICE: DEFERRED`
 
 The Android summary-card fix is deployed and passed physical-device verification without label/value overlap, escaped card text, or horizontal overflow. No iOS real-device validation is claimed.
@@ -38,7 +38,7 @@ Do not queue “adopt Astro,” “add build chain,” or “start React islands
 
 ### S0 - Data Health and Ranking Regression Watch
 
-Phase 4 baseline: Trends generated `2026-11-17T03:52:25.773Z`, 24 records, source statuses `ok`; 12 raw scores at 100. See `docs/RANKING_AUDIT.md` for frozen observations and current limitations. Retired `n8n-workflow` remains excluded after repeated npm 429s.
+Phase 4 baseline: Trends generated `2026-11-17T03:52:25.773Z`, 24 records, source statuses `ok`; 12 raw scores at 100. See `docs/RANKING_AUDIT.md` for frozen observations and `docs/PHASE5_AUDIT.md` for verified deployment evidence and pending post-Phase-4 refresh acceptance. Retired `n8n-workflow` remains excluded after repeated npm 429s.
 
 Trigger: source health changes, checked-in data becomes stale, top results drift toward broad/duplicate signals, or owner requests a fresh publish-health confirmation.
 

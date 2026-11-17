@@ -921,3 +921,35 @@ test("ranking copy distinguishes observations from measured change", async ({ pa
     await page.goto("/explore/");
     await expect(page.locator(".score-reasons").first()).toContainText("not measured");
 });
+
+test("Explore saved-search imports disclose partial and full capacity without false success", async ({ page }) => {
+    await page.addInitScript(({ key }) => {
+        if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ version: 1, items: ["one", "two", "three", "four"].map(query => ({ query })) }));
+    }, { key: savedSearchKey });
+    await page.goto("/explore/");
+    await openExploreAdvanced(page);
+    await expect(page.locator(".saved-search-item")).toHaveCount(4);
+    await page.locator("[data-saved-search-import-text]").fill(JSON.stringify(["one", "five", "six"]));
+    await page.locator("[data-saved-search-import-paste]").click();
+    await expect(page.locator("[data-saved-search-portability-status]")).toContainText("Some searches imported. Five-search limit reached");
+    await expect(page.locator(".saved-search-item")).toHaveCount(5);
+    await page.locator("[data-saved-search-import-text]").fill(JSON.stringify(["six"]));
+    await page.locator("[data-saved-search-import-paste]").click();
+    await expect(page.locator("[data-saved-search-portability-status]")).toHaveText("Remove one to save another.");
+    await page.reload();
+    await openExploreAdvanced(page);
+    await expect(page.locator(".saved-search-item")).toHaveCount(5);
+    expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).items.map(item => item.query), savedSearchKey)).toEqual(["one", "two", "three", "four", "five"]);
+});
+
+test("Explore discloses oversized file imports into an empty saved-search list", async ({ page }) => {
+    await page.goto("/explore/");
+    await openExploreAdvanced(page);
+    await expect(page.locator(".saved-search-item")).toHaveCount(0);
+    await page.locator("[data-saved-search-import-file]").setInputFiles({
+        name: "searches.json", mimeType: "application/json",
+        buffer: Buffer.from(JSON.stringify(["a", "b", "c", "d", "e", "f"]))
+    });
+    await expect(page.locator("[data-saved-search-portability-status]")).toContainText("Some searches imported. Five-search limit reached");
+    await expect(page.locator(".saved-search-item")).toHaveCount(5);
+});
