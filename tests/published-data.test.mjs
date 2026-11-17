@@ -117,3 +117,37 @@ test("refresh CLI reports source uncertainty as nonzero, independently of fresh 
     assert.equal(result.pipeline.state, "current");
     assert.equal(result.sources.find(({ name }) => name === "manual").health, "unknown");
 });
+
+test("independent generation CLI failure and recovery drill over HTTP", async (t) => {
+    let unavailable = false;
+    const f = await fixture(t, async (_req, res) => {
+        if (unavailable) { res.writeHead(503).end(); return true; }
+        return false;
+    });
+    const manifestPath = join(f.root, "data/manifest.json");
+    const manifest = JSON.parse(await readFile(manifestPath));
+    async function run() {
+        const child = spawn(process.execPath, ["scripts/check-refresh.mjs", "--generation-only", "--site-url", f.url], { stdio: ["ignore", "pipe", "pipe"] });
+        let stdout = "", stderr = "";
+        child.stdout.on("data", chunk => { stdout += chunk; });
+        child.stderr.on("data", chunk => { stderr += chunk; });
+        const [code] = await once(child, "close");
+        return { code, stdout, stderr };
+    }
+    manifest.generatedAt = new Date(Date.now() - 37 * 3600000).toISOString();
+    await writeFile(manifestPath, JSON.stringify(manifest));
+    const stale = await run();
+    assert.equal(stale.code, 1);
+    assert.equal(JSON.parse(stale.stdout).pipeline.state, "overdue");
+    manifest.generatedAt = new Date().toISOString();
+    await writeFile(manifestPath, JSON.stringify(manifest));
+    const recovered = await run();
+    assert.equal(recovered.code, 0);
+    assert.equal(JSON.parse(recovered.stdout).manualSources[0].freshness, "unknown");
+    unavailable = true;
+    const failed = await run();
+    assert.equal(failed.code, 1);
+    assert.match(failed.stderr, /HTTP 503/);
+    unavailable = false;
+    assert.equal((await run()).code, 0);
+});

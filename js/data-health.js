@@ -103,7 +103,8 @@
     function validSourceTimestamp(value) {
         return typeof value === "string"
             && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value)
-            && Number.isFinite(Date.parse(value));
+            && Number.isFinite(Date.parse(value))
+            && new Date(Date.parse(value.slice(0, 10))).toISOString().slice(0, 10) === value.slice(0, 10);
     }
 
     function thresholdFor(source) {
@@ -113,7 +114,8 @@
 
     function freshnessForSource(source = {}, today = new Date()) {
         const status = source.status || "unknown";
-        const lastSuccessfulUpdate = status === "fallback"
+        const manual = String(source.name || source.source || "").toLowerCase() === "manual";
+        const lastSuccessfulUpdate = manual ? source.reviewedAt : status === "fallback"
             ? source.previousUpdated
             : status === "error" ? "" : source.updatedAt || source.lastSuccessfulUpdate;
 
@@ -126,13 +128,14 @@
             };
         }
 
+        const futureLimit = new Date(today).getTime() + (manual ? 0 : 300000);
         const age = validSourceTimestamp(lastSuccessfulUpdate) ? ageDays(lastSuccessfulUpdate, today) : null;
-        if (age === null || Date.parse(lastSuccessfulUpdate) > new Date(today).getTime() + 300000) {
+        if (age === null || Date.parse(lastSuccessfulUpdate) > futureLimit) {
             return {
                 state: "unknown",
                 lastSuccessfulUpdate: null,
                 ageDays: null,
-                staleReason: Date.parse(lastSuccessfulUpdate) > new Date(today).getTime() + 300000
+                staleReason: Date.parse(lastSuccessfulUpdate) > futureLimit
                     ? "last successful source update is in the future"
                     : "last successful source update is missing or ambiguous"
             };
@@ -199,7 +202,7 @@
         if (freshness.state === "unavailable") return "Unavailable - no usable source data";
         if (freshness.state === "unknown") return "Unknown - no reliable source timestamp";
         const prefix = status === "partial" ? "Partial" : freshness.state[0].toUpperCase() + freshness.state.slice(1);
-        if (freshness.state === "fresh") return `${prefix} - updated ${updatedDate}`;
+        if (freshness.state === "fresh") return `${prefix} - ${String(source?.name).toLowerCase() === "manual" ? "reviewed" : "updated"} ${updatedDate}`;
         return `${prefix} - ${freshness.ageDays} days old`;
     }
 
@@ -264,7 +267,7 @@
         }
         if ((source?.status === "partial" || source?.status === "error") && safety.length > 0) safety.push("retry data refresh");
         if (safety.length > 0) return `${freshness} / ${safety.join(" / ")}`;
-        if (freshnessForSource(source, today).state === "stale") return `${freshness} / retry data refresh`;
+        if (freshnessForSource(source, today).state === "stale") return `${freshness} / ${String(source?.name).toLowerCase() === "manual" ? "review Reference shelf and record evidence" : "retry data refresh"}`;
         return freshness;
     }
 
@@ -282,6 +285,7 @@
     }
 
     return {
+        validSourceTimestamp,
         aggregateSourceStatus,
         dataModeText,
         freshnessForSource,

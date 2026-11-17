@@ -86,3 +86,16 @@ test("valid partial source data remains publishable", () => {
 
     assert.deepEqual(result.errors, []);
 });
+
+test("optional manual review evidence is backward compatible and validated", () => {
+    const data = checkedInData();
+    const review = { reviewedAt: "2026-11-16T00:00:00Z", reviewedBy: "fixture reviewer", evidence: "Fixture whole-shelf review", contentHash: "a".repeat(64) };
+    data["data/watchlists.json"].linksReview = review;
+    data["data/links.json"].sourceMeta.reviewedAt = review.reviewedAt;
+    assert.deepEqual(validateDataMap(data).errors, []);
+    review.contentHash = "wrong";
+    review.reviewedBy = "";
+    review.reviewedAt = "yesterday";
+    const result = validateDataMap(data);
+    for (const field of ["contentHash", "reviewedBy", "reviewedAt"]) assert.ok(result.errors.some(item => item.field === field));
+});

@@ -254,6 +254,7 @@ function validateSourceMeta(out, file, sourceMeta, record = "sourceMeta") {
             "tracked",
             "emitted",
             "coverage",
+            "reviewedAt",
             "updatedAt",
             "updated",
             "errors",
@@ -271,6 +272,7 @@ function validateSourceMeta(out, file, sourceMeta, record = "sourceMeta") {
         integerRange(out, file, path, source, "emitted", 0, Infinity, false);
         optionalString(out, file, path, source, "coverage");
         timestampField(out, file, path, source, "updatedAt", false);
+        timestampField(out, file, path, source, "reviewedAt", false);
         dateField(out, file, path, source, "updated", false);
         optionalString(out, file, path, source, "error");
         boolField(out, file, path, source, "fallbackUsed", false);
@@ -663,7 +665,14 @@ function validateHistory(out, file, record, item) {
 }
 
 function validateWatchlists(out, file, data, ctx) {
-    checkKeys(out, file, "(top-level)", data, new Set(["trends", "packages", "repos", "links"]));
+    if (data.linksReview !== undefined && checkObject(out, file, "linksReview", data.linksReview)) {
+        const review = data.linksReview;
+        checkKeys(out, file, "linksReview", review, new Set(["reviewedAt", "reviewedBy", "evidence", "contentHash"]));
+        timestampField(out, file, "linksReview", review, "reviewedAt");
+        for (const key of ["reviewedBy", "evidence", "contentHash"]) nonEmptyString(out, file, "linksReview", review, key);
+        if (!/^[a-f0-9]{64}$/.test(review.contentHash || "")) error(out, file, "linksReview", "contentHash", "SHA-256 lowercase hex", review.contentHash, "invalid content hash");
+    }
+    checkKeys(out, file, "(top-level)", data, new Set(["trends", "packages", "repos", "links", "linksReview"]));
     if (checkObject(out, file, "trends", data.trends)) {
         checkKeys(out, file, "trends", data.trends, new Set(["npmPackages", "githubQueries"]));
         validateWatchlistNpmPackages(out, file, data.trends.npmPackages);

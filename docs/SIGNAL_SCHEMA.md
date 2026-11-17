@@ -168,3 +168,7 @@ Current validation lives in:
 - `scripts/validate-data.mjs`
 
 Use `npm run validate:data` for source contract changes and `npm run check` before accepting generated output.
+
+## Manual Reference provenance
+
+The optional `linksReview` watchlist record and generated `sourceMeta.reviewedAt` are documented in the [Reference review contract](REFERENCE_MONITORING.md). Generation fields never certify human review. Older data without this optional evidence remains valid with unknown manual freshness.

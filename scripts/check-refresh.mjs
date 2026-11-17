@@ -15,7 +15,10 @@ export function assessRefresh({ manifest = {}, datasets = {}, report = {} } = {}
     const complete = observedModules.length === moduleIds.length && moduleIds.every((id) => observedModules.includes(id));
     const ok = complete && pipeline.state === "current" && sources.length > 0
         && sources.every((source) => source.health === "healthy") && report.totals?.status === "ok";
-    return { ok, moduleCoverage: { complete, expected: moduleIds, observed: observedModules }, assessedAt: new Date(now).toISOString(), pipeline, reportStatus: dashboard.reportStatus, sources };
+    const generationOk = complete && pipeline.state === "current";
+    const manualSources = sources.filter((source) => source.name.toLowerCase() === "manual");
+    const automatedSources = sources.filter((source) => source.name.toLowerCase() !== "manual");
+    return { ok, generationOk, manualSources, automatedSources, moduleCoverage: { complete, expected: moduleIds, observed: observedModules }, assessedAt: new Date(now).toISOString(), pipeline, reportStatus: dashboard.reportStatus, sources };
 }
 
 export async function readRefreshInput(siteUrl, options = {}) {
@@ -39,7 +42,7 @@ async function main() {
     if (index >= 0 && !process.argv[index + 1]) throw new Error("--site-url requires a URL");
     const result = assessRefresh(await readRefreshInput(index >= 0 ? process.argv[index + 1] : null));
     console.log(JSON.stringify(result, null, 2));
-    if (!result.ok) process.exitCode = 1;
+    if (!(process.argv.includes("--generation-only") ? result.generationOk : result.ok)) process.exitCode = 1;
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
     main().catch((error) => { console.error(`Refresh check failed: ${error.message}`); process.exitCode = 1; });

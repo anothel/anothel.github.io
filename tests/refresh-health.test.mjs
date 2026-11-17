@@ -18,7 +18,7 @@ for (const item of fixture.sources) {
             manifest: { generatedAt: "2026-11-16T06:00:00.000Z", modules: ["repos", "trends", "packages", "links"].map((id) => ({ id, data: `data/${id}.json` })) },
             datasets: {
                 repos: { sourceMeta: item.source },
-                ...Object.fromEntries(["trends", "packages", "links"].map((id) => [id, { sourceMeta: { name: "manual", status: "ok", count: 1, updatedAt: now } }]))
+                ...Object.fromEntries(["trends", "packages", "links"].map((id) => [id, { sourceMeta: { name: "manual", status: "ok", count: 1, reviewedAt: now } }]))
             },
             report: { generatedAt: "2026-11-16T06:00:00.100Z", totals: { status: item.source.status } }
         };
@@ -50,5 +50,10 @@ test("omitting a module cannot hide unhealthy source evidence", () => {
         datasets: Object.fromEntries(["trends", "packages", "repos"].map((id) => [id, { sourceMeta: source }])),
         report: { generatedAt: now, totals: { status: "ok" } }
     };
+    assert.equal(assessRefresh(input, now).sources.every(row => row.health === "healthy"), true);
     assert.equal(assessRefresh(input, now).ok, false);
+});
+
+test("impossible generation dates cannot appear current after Date.parse normalization", () => {
+    assert.equal(pipelineFreshness("2026-02-30T00:00:00Z", "2026-03-02T01:00:00Z").state, "unknown");
 });
