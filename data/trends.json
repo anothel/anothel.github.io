@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-20",
-  "generatedAt": "2026-11-20T02:19:04.735Z",
+  "updated": "2026-11-21",
+  "generatedAt": "2026-11-21T02:12:44.004Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-11-20T02:19:04.735Z"
+      "updatedAt": "2026-11-21T02:12:44.004Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-11-20T02:19:04.735Z"
+      "updatedAt": "2026-11-21T02:12:44.004Z"
     },
     {
       "name": "npm",
@@ -32,31 +32,31 @@
       "tracked": 15,
       "emitted": 8,
       "coverage": "8/15",
-      "updatedAt": "2026-11-20T02:19:04.735Z"
+      "updatedAt": "2026-11-21T02:12:44.004Z"
     }
   ],
   "items": [
     {
       "rank": 1,
-      "title": "Anthropics Nasdaq debut",
+      "title": "Hurried Announcement: Alessandro Masullo GRH",
       "source": "Hacker News",
-      "category": "AI",
+      "category": "Developer tools",
       "score": 100,
-      "velocity": "1826 comments",
-      "signal": "924 points",
-      "url": "https://www.reuters.com/business/finance/anthropics-historic-debut-put-ais-promise-peril-wall-st-test-2026-11-19/",
-      "summary": "HN story by wslh with 1826 comments."
+      "velocity": "723 comments",
+      "signal": "1593 points",
+      "url": "https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/",
+      "summary": "HN story by jasondavies with 723 comments."
     },
     {
       "rank": 2,
-      "title": "Unauthenticated remote code execution in Nginx",
+      "title": "Levent Alpge claims proof of the Generalized Riemann Hypothesis [pdf]",
       "source": "Hacker News",
-      "category": "Security",
+      "category": "Developer tools",
       "score": 100,
-      "velocity": "637 comments",
-      "signal": "1484 points",
-      "url": "https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities",
-      "summary": "HN story by speedping with 637 comments."
+      "velocity": "1609 comments",
+      "signal": "2382 points",
+      "url": "https://alpo.ge/remark.pdf",
+      "summary": "HN story by iamronaldo with 1609 comments."
     },
     {
       "rank": 3,
@@ -65,7 +65,7 @@
       "category": "AI",
       "score": 97,
       "velocity": "111.9M/week",
-      "signal": "2026-11-12 to 2026-11-18",
+      "signal": "2026-11-13 to 2026-11-19",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider",
       "summary": "111.9M downloads over the last available week."
     },
@@ -75,8 +75,8 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 96,
-      "velocity": "307.3K stars",
-      "signal": "45.2K forks",
+      "velocity": "307.9K stars",
+      "signal": "45.3K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
@@ -86,10 +86,10 @@
       "source": "npm",
       "category": "MCP",
       "score": 96,
-      "velocity": "93.3M/week",
-      "signal": "2026-11-12 to 2026-11-18",
+      "velocity": "94.1M/week",
+      "signal": "2026-11-13 to 2026-11-19",
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-      "summary": "93.3M downloads over the last available week."
+      "summary": "94.1M downloads over the last available week."
     },
     {
       "rank": 6,
@@ -97,7 +97,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 95,
-      "velocity": "197.7K stars",
+      "velocity": "198.1K stars",
       "signal": "23.2K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
@@ -108,10 +108,10 @@
       "source": "npm",
       "category": "AI",
       "score": 94,
-      "velocity": "74.3M/week",
-      "signal": "2026-11-12 to 2026-11-18",
+      "velocity": "74.8M/week",
+      "signal": "2026-11-13 to 2026-11-19",
       "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk",
-      "summary": "74.3M downloads over the last available week."
+      "summary": "74.8M downloads over the last available week."
     },
     {
       "rank": 8,
@@ -119,7 +119,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 93,
-      "velocity": "155.8K stars",
+      "velocity": "156K stars",
       "signal": "10.2K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io"
@@ -130,7 +130,7 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 93,
-      "velocity": "150.7K stars",
+      "velocity": "151.2K stars",
       "signal": "14.5K forks",
       "url": "https://github.com/Graphify-Labs/graphify",
       "summary": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store."
@@ -141,10 +141,10 @@
       "source": "npm",
       "category": "AI",
       "score": 93,
-      "velocity": "61.5M/week",
-      "signal": "2026-11-12 to 2026-11-18",
+      "velocity": "61.9M/week",
+      "signal": "2026-11-13 to 2026-11-19",
       "url": "https://www.npmjs.com/package/openai",
-      "summary": "61.5M downloads over the last available week."
+      "summary": "61.9M downloads over the last available week."
     },
     {
       "rank": 11,
@@ -152,8 +152,8 @@
       "source": "GitHub",
       "category": "MCP",
       "score": 92,
-      "velocity": "470.1K stars",
-      "signal": "114.8K forks",
+      "velocity": "471.6K stars",
+      "signal": "115.1K forks",
       "url": "https://github.com/morluto/rea",
       "summary": "Reverse engineer anything with agents, from app behavior down to native binaries."
     },
@@ -163,8 +163,8 @@
       "source": "GitHub",
       "category": "Agent skills",
       "score": 92,
-      "velocity": "151.8K stars",
-      "signal": "16K forks",
+      "velocity": "152.2K stars",
+      "signal": "16.1K forks",
       "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
       "summary": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms."
     },
@@ -174,10 +174,10 @@
       "source": "npm",
       "category": "AI",
       "score": 92,
-      "velocity": "48.3M/week",
-      "signal": "2026-11-12 to 2026-11-18",
+      "velocity": "48.7M/week",
+      "signal": "2026-11-13 to 2026-11-19",
       "url": "https://www.npmjs.com/package/ai",
-      "summary": "48.3M downloads over the last available week."
+      "summary": "48.7M downloads over the last available week."
     },
     {
       "rank": 14,
@@ -185,7 +185,7 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 91,
-      "velocity": "228.1K stars",
+      "velocity": "228.3K stars",
       "signal": "31K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
@@ -196,8 +196,8 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 90,
-      "velocity": "264.8K stars",
-      "signal": "59.8K forks",
+      "velocity": "265K stars",
+      "signal": "59.9K forks",
       "url": "https://github.com/NousResearch/hermes-agent",
       "summary": "The agent that grows with you"
     },
@@ -207,54 +207,54 @@
       "source": "GitHub",
       "category": "AI agents",
       "score": 89,
-      "velocity": "98.1K stars",
+      "velocity": "98.4K stars",
       "signal": "6.7K forks",
       "url": "https://github.com/tt-a1i/archify",
       "summary": "Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more."
     },
     {
       "rank": 17,
-      "title": "Gemini 4 Neon",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 89,
-      "velocity": "761 comments",
-      "signal": "1017 points",
-      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/",
-      "summary": "HN story by yigitdemirag with 761 comments."
-    },
-    {
-      "rank": 18,
       "title": "@ai-sdk/openai",
       "source": "npm",
       "category": "AI",
       "score": 89,
-      "velocity": "25.4M/week",
-      "signal": "2026-11-12 to 2026-11-18",
+      "velocity": "25.8M/week",
+      "signal": "2026-11-13 to 2026-11-19",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai",
-      "summary": "25.4M downloads over the last available week."
+      "summary": "25.8M downloads over the last available week."
     },
     {
-      "rank": 19,
+      "rank": 18,
       "title": "n8n-io/n8n",
       "source": "GitHub",
       "category": "MCP",
       "score": 88,
-      "velocity": "211.4K stars",
+      "velocity": "211.6K stars",
       "signal": "61.6K forks",
       "url": "https://github.com/n8n-io/n8n",
       "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations."
+    },
+    {
+      "rank": 19,
+      "title": "Frostbite: A new CPU architecture discovered, designed and verified by AI",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 84,
+      "velocity": "328 comments",
+      "signal": "629 points",
+      "url": "https://architectlabs.com/blog/frostbite",
+      "summary": "HN story by shioyama with 328 comments."
     },
     {
       "rank": 20,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",
-      "score": 82,
-      "velocity": "7.4M/week",
-      "signal": "2026-11-12 to 2026-11-18",
+      "score": 83,
+      "velocity": "7.5M/week",
+      "signal": "2026-11-13 to 2026-11-19",
       "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
-      "summary": "7.4M downloads over the last available week."
+      "summary": "7.5M downloads over the last available week."
     },
     {
       "rank": 21,
@@ -262,7 +262,7 @@
       "source": "GitHub",
       "category": "Workflow automation",
       "score": 79,
-      "velocity": "161.5K stars",
+      "velocity": "161.6K stars",
       "signal": "25.5K forks",
       "url": "https://github.com/langgenius/dify",
       "summary": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack."
@@ -274,12 +274,23 @@
       "category": "AI evals",
       "score": 77,
       "velocity": "2.4M/week",
-      "signal": "2026-11-12 to 2026-11-18",
+      "signal": "2026-11-13 to 2026-11-19",
       "url": "https://www.npmjs.com/package/langfuse",
       "summary": "2.4M downloads over the last available week."
     },
     {
       "rank": 23,
+      "title": "Restricting AI agents in mobile operating systems platforms from capturing data",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 76,
+      "velocity": "306 comments",
+      "signal": "512 points",
+      "url": "https://signal.org/blog/protecting-your-privacy/",
+      "summary": "HN story by dotcoma with 306 comments."
+    },
+    {
+      "rank": 24,
       "title": "mastra-ai/mastra",
       "source": "GitHub",
       "category": "AI evals",
@@ -288,17 +299,6 @@
       "signal": "3.1K forks",
       "url": "https://github.com/mastra-ai/mastra",
       "summary": "Mastra is the modern TypeScript framework for AI-powered applications and agents."
-    },
-    {
-      "rank": 24,
-      "title": "Fuck Your AI Safeguards",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 71,
-      "velocity": "194 comments",
-      "signal": "482 points",
-      "url": "https://ounapuu.ee/posts/2026/11/19/unsafeguards/",
-      "summary": "HN story by speckx with 194 comments."
     }
   ]
 }
