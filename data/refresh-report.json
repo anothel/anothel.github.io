@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-21T02:12:46.245Z",
-  "manifestUpdated": "2026-11-21",
+  "generatedAt": "2026-11-22T01:17:53.581Z",
+  "manifestUpdated": "2026-11-22",
   "runContext": {
     "reason": "",
     "eventName": "schedule",
-    "runId": "44854577268",
+    "runId": "44970757791",
     "refName": "main"
   },
   "changedModules": [
@@ -12,25 +12,25 @@
       "id": "trends",
       "title": "Tech trends",
       "count": 24,
-      "updated": "2026-11-21"
+      "updated": "2026-11-22"
     },
     {
       "id": "packages",
       "title": "Package watchlist",
       "count": 24,
-      "updated": "2026-11-21"
+      "updated": "2026-11-22"
     },
     {
       "id": "repos",
       "title": "Repo watchlist",
       "count": 30,
-      "updated": "2026-11-21"
+      "updated": "2026-11-22"
     },
     {
       "id": "links",
       "title": "Reference shelf",
       "count": 29,
-      "updated": "2026-11-21"
+      "updated": "2026-11-22"
     }
   ],
   "modules": [
@@ -39,16 +39,16 @@
       "title": "Tech trends",
       "status": "ok",
       "count": 24,
-      "updated": "2026-11-21",
+      "updated": "2026-11-22",
       "changed": true,
       "sources": [
         {
           "module": "trends",
           "source": "Hacker News",
           "status": "ok",
-          "count": 4,
-          "updatedAt": "2026-11-21T02:12:44.004Z",
-          "coverage": "4/4",
+          "count": 5,
+          "updatedAt": "2026-11-22T01:17:51.755Z",
+          "coverage": "5/5",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -62,9 +62,9 @@
           "module": "trends",
           "source": "GitHub",
           "status": "ok",
-          "count": 12,
-          "updatedAt": "2026-11-21T02:12:44.004Z",
-          "coverage": "12/14",
+          "count": 11,
+          "updatedAt": "2026-11-22T01:17:51.755Z",
+          "coverage": "11/14",
           "fallbackUsed": false,
           "staleButSafe": false,
           "rateLimited": false,
@@ -79,7 +79,7 @@
           "source": "npm",
           "status": "ok",
           "count": 8,
-          "updatedAt": "2026-11-21T02:12:44.004Z",
+          "updatedAt": "2026-11-22T01:17:51.755Z",
           "coverage": "8/15",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -97,7 +97,7 @@
       "title": "Package watchlist",
       "status": "ok",
       "count": 24,
-      "updated": "2026-11-21",
+      "updated": "2026-11-22",
       "changed": true,
       "sources": [
         {
@@ -105,7 +105,7 @@
           "source": "npm",
           "status": "ok",
           "count": 24,
-          "updatedAt": "2026-11-21T02:12:44.036Z",
+          "updatedAt": "2026-11-22T01:17:51.779Z",
           "coverage": "24/24",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -123,7 +123,7 @@
       "title": "Repo watchlist",
       "status": "ok",
       "count": 30,
-      "updated": "2026-11-21",
+      "updated": "2026-11-22",
       "changed": true,
       "sources": [
         {
@@ -131,7 +131,7 @@
           "source": "GitHub",
           "status": "ok",
           "count": 30,
-          "updatedAt": "2026-11-21T02:12:45.611Z",
+          "updatedAt": "2026-11-22T01:17:53.068Z",
           "coverage": "30/30",
           "fallbackUsed": false,
           "staleButSafe": false,
@@ -149,7 +149,7 @@
       "title": "Reference shelf",
       "status": "ok",
       "count": 29,
-      "updated": "2026-11-21",
+      "updated": "2026-11-22",
       "changed": true,
       "sources": [
         {
