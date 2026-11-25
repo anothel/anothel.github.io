@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-24",
-  "generatedAt": "2026-11-24T05:19:46.866Z",
+  "updated": "2026-11-25",
+  "generatedAt": "2026-11-25T04:11:17.862Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-11-24T05:19:46.866Z"
+      "updatedAt": "2026-11-25T04:11:17.862Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-11-24T05:19:46.866Z"
+      "updatedAt": "2026-11-25T04:11:17.862Z"
     },
     {
       "name": "npm",
@@ -32,265 +32,254 @@
       "tracked": 15,
       "emitted": 8,
       "coverage": "8/15",
-      "updatedAt": "2026-11-24T05:19:46.866Z"
+      "updatedAt": "2026-11-25T04:11:17.862Z"
     }
   ],
   "items": [
     {
       "rank": 1,
-      "title": "\"Dario is hyping the dangers so OSS models are illegal and he stays in control\"",
+      "title": "LLM agents work for their parent companies, not for you",
       "source": "Hacker News",
-      "category": "Developer tools",
+      "category": "AI",
       "score": 100,
-      "velocity": "787 comments",
-      "signal": "1411 points",
-      "url": "https://twitter.com/ylecun/status/2124550037912920090",
-      "summary": "HN story by MrBuddyCasino with 787 comments."
+      "velocity": "392 comments",
+      "signal": "945 points",
+      "url": "https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/",
+      "summary": "HN story by surprisetalk with 392 comments."
     },
     {
       "rank": 2,
-      "title": "Ladybird is now in alpha",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 100,
-      "velocity": "377 comments",
-      "signal": "1620 points",
-      "url": "https://ladybird.org/posts/alpha/",
-      "summary": "HN story by janvdberg with 377 comments."
-    },
-    {
-      "rank": 3,
       "title": "Nvidia Reinstates Jensen Huang as CEO",
       "source": "Hacker News",
       "category": "Developer tools",
       "score": 100,
-      "velocity": "3331 comments",
-      "signal": "2348 points",
+      "velocity": "3744 comments",
+      "signal": "2801 points",
       "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html",
-      "summary": "HN story by jaz with 3331 comments."
+      "summary": "HN story by jaz with 3744 comments."
     },
     {
-      "rank": 4,
+      "rank": 3,
       "title": "affaan-m/ECC",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 96,
-      "velocity": "309.7K stars",
+      "velocity": "310.3K stars",
       "signal": "45.6K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
     {
-      "rank": 5,
+      "rank": 4,
       "title": "@ai-sdk/provider",
       "source": "npm",
       "category": "AI",
       "score": 96,
-      "velocity": "107.4M/week",
-      "signal": "2026-11-16 to 2026-11-22",
+      "velocity": "107.1M/week",
+      "signal": "2026-11-17 to 2026-11-23",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider",
-      "summary": "107.4M downloads over the last available week."
+      "summary": "107.1M downloads over the last available week."
     },
     {
-      "rank": 6,
+      "rank": 5,
       "title": "@modelcontextprotocol/sdk",
       "source": "npm",
       "category": "MCP",
       "score": 96,
-      "velocity": "93.8M/week",
-      "signal": "2026-11-16 to 2026-11-22",
+      "velocity": "93.2M/week",
+      "signal": "2026-11-17 to 2026-11-23",
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-      "summary": "93.8M downloads over the last available week."
+      "summary": "93.2M downloads over the last available week."
     },
     {
-      "rank": 7,
+      "rank": 6,
       "title": "anthropics/skills",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 95,
-      "velocity": "199.6K stars",
+      "velocity": "200.1K stars",
       "signal": "23.4K forks",
       "url": "https://github.com/anthropics/skills",
       "summary": "Public repository for Agent Skills"
     },
     {
-      "rank": 8,
+      "rank": 7,
       "title": "@anthropic-ai/sdk",
       "source": "npm",
       "category": "AI",
       "score": 94,
-      "velocity": "75M/week",
-      "signal": "2026-11-16 to 2026-11-22",
+      "velocity": "74.7M/week",
+      "signal": "2026-11-17 to 2026-11-23",
       "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk",
-      "summary": "75M downloads over the last available week."
+      "summary": "74.7M downloads over the last available week."
     },
     {
-      "rank": 9,
+      "rank": 8,
       "title": "openai",
       "source": "npm",
       "category": "AI",
       "score": 94,
-      "velocity": "62.5M/week",
-      "signal": "2026-11-16 to 2026-11-22",
+      "velocity": "62.3M/week",
+      "signal": "2026-11-17 to 2026-11-23",
       "url": "https://www.npmjs.com/package/openai",
-      "summary": "62.5M downloads over the last available week."
+      "summary": "62.3M downloads over the last available week."
     },
     {
-      "rank": 10,
+      "rank": 9,
       "title": "farion1231/cc-switch",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 93,
-      "velocity": "156.7K stars",
+      "velocity": "157K stars",
       "signal": "10.2K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io"
     },
     {
-      "rank": 11,
+      "rank": 10,
       "title": "Graphify-Labs/graphify",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 93,
-      "velocity": "152.6K stars",
+      "velocity": "153K stars",
       "signal": "14.7K forks",
       "url": "https://github.com/Graphify-Labs/graphify",
       "summary": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store."
     },
     {
-      "rank": 12,
+      "rank": 11,
       "title": "morluto/rea",
       "source": "GitHub",
       "category": "MCP",
       "score": 92,
-      "velocity": "475.9K stars",
-      "signal": "115.9K forks",
+      "velocity": "477.4K stars",
+      "signal": "116.2K forks",
       "url": "https://github.com/morluto/rea",
       "summary": "Reverse engineer anything with agents, from app behavior down to native binaries."
     },
     {
-      "rank": 13,
+      "rank": 12,
       "title": "nextlevelbuilder/ui-ux-pro-max-skill",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 92,
-      "velocity": "153.4K stars",
+      "velocity": "153.8K stars",
       "signal": "16.2K forks",
       "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
       "summary": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms."
     },
     {
-      "rank": 14,
+      "rank": 13,
       "title": "ai",
       "source": "npm",
       "category": "AI",
       "score": 92,
-      "velocity": "48.5M/week",
-      "signal": "2026-11-16 to 2026-11-22",
+      "velocity": "48.2M/week",
+      "signal": "2026-11-17 to 2026-11-23",
       "url": "https://www.npmjs.com/package/ai",
-      "summary": "48.5M downloads over the last available week."
+      "summary": "48.2M downloads over the last available week."
     },
     {
-      "rank": 15,
+      "rank": 14,
       "title": "anomalyco/opencode",
       "source": "GitHub",
       "category": "AI agents",
       "score": 91,
-      "velocity": "228.8K stars",
-      "signal": "31.1K forks",
+      "velocity": "229K stars",
+      "signal": "31.2K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
     },
     {
-      "rank": 16,
+      "rank": 15,
       "title": "NousResearch/hermes-agent",
       "source": "GitHub",
       "category": "AI agents",
       "score": 90,
-      "velocity": "265.7K stars",
-      "signal": "60.1K forks",
+      "velocity": "265.9K stars",
+      "signal": "60.3K forks",
       "url": "https://github.com/NousResearch/hermes-agent",
       "summary": "The agent that grows with you"
     },
     {
-      "rank": 17,
+      "rank": 16,
       "title": "tt-a1i/archify",
       "source": "GitHub",
       "category": "AI agents",
       "score": 89,
-      "velocity": "99.2K stars",
+      "velocity": "99.6K stars",
       "signal": "6.8K forks",
       "url": "https://github.com/tt-a1i/archify",
       "summary": "Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more."
     },
     {
-      "rank": 18,
+      "rank": 17,
       "title": "@ai-sdk/openai",
       "source": "npm",
       "category": "AI",
       "score": 89,
-      "velocity": "25.8M/week",
-      "signal": "2026-11-16 to 2026-11-22",
+      "velocity": "25.7M/week",
+      "signal": "2026-11-17 to 2026-11-23",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai",
-      "summary": "25.8M downloads over the last available week."
+      "summary": "25.7M downloads over the last available week."
     },
     {
-      "rank": 19,
+      "rank": 18,
       "title": "n8n-io/n8n",
       "source": "GitHub",
       "category": "MCP",
       "score": 88,
-      "velocity": "211.9K stars",
-      "signal": "61.6K forks",
+      "velocity": "212.1K stars",
+      "signal": "61.7K forks",
       "url": "https://github.com/n8n-io/n8n",
       "summary": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations."
     },
     {
-      "rank": 20,
+      "rank": 19,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",
       "score": 83,
       "velocity": "7.5M/week",
-      "signal": "2026-11-16 to 2026-11-22",
+      "signal": "2026-11-17 to 2026-11-23",
       "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
       "summary": "7.5M downloads over the last available week."
     },
     {
-      "rank": 21,
-      "title": "GLM-5.4: Toward generalized coding with our first loop transformer",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 80,
-      "velocity": "355 comments",
-      "signal": "1087 points",
-      "url": "https://z.ai/blog/glm-5.4",
-      "summary": "HN story by foohis with 355 comments."
-    },
-    {
-      "rank": 22,
+      "rank": 20,
       "title": "langgenius/dify",
       "source": "GitHub",
       "category": "Workflow automation",
       "score": 79,
-      "velocity": "161.8K stars",
-      "signal": "25.5K forks",
+      "velocity": "161.9K stars",
+      "signal": "25.6K forks",
       "url": "https://github.com/langgenius/dify",
       "summary": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack."
     },
     {
-      "rank": 23,
+      "rank": 21,
+      "title": "GTA 6 Recomp (Leonida) banned from GitHub while lead dev was in school",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 77,
+      "velocity": "627 comments",
+      "signal": "352 points",
+      "url": "https://github.com/ItsNotRexed/Leonida/issues",
+      "summary": "HN story by smuhakg with 627 comments."
+    },
+    {
+      "rank": 22,
       "title": "langfuse",
       "source": "npm",
       "category": "AI evals",
       "score": 76,
-      "velocity": "2.3M/week",
-      "signal": "2026-11-16 to 2026-11-22",
+      "velocity": "2.2M/week",
+      "signal": "2026-11-17 to 2026-11-23",
       "url": "https://www.npmjs.com/package/langfuse",
-      "summary": "2.3M downloads over the last available week."
+      "summary": "2.2M downloads over the last available week."
     },
     {
-      "rank": 24,
+      "rank": 23,
       "title": "mastra-ai/mastra",
       "source": "GitHub",
       "category": "AI evals",
@@ -299,6 +288,17 @@
       "signal": "3.1K forks",
       "url": "https://github.com/mastra-ai/mastra",
       "summary": "Mastra is the modern TypeScript framework for AI-powered applications and agents."
+    },
+    {
+      "rank": 24,
+      "title": "2035 came early",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 74,
+      "velocity": "370 comments",
+      "signal": "979 points",
+      "url": "https://fzakaria.com/2026/11/23/2035-came-early",
+      "summary": "HN story by setheron with 370 comments."
     }
   ]
 }
