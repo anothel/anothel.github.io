@@ -1,11 +1,11 @@
 {
-  "updated": "2026-11-26",
-  "generatedAt": "2026-11-26T03:33:34.827Z",
+  "updated": "2026-11-27",
+  "generatedAt": "2026-11-27T03:38:58.439Z",
   "sourceMeta": {
     "name": "generated",
     "status": "ok",
     "count": 13,
-    "updatedAt": "2026-11-26T03:33:34.827Z"
+    "updatedAt": "2026-11-27T03:38:58.439Z"
   },
   "sections": [
     {
@@ -22,12 +22,12 @@
           "module": "Trends",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "310.8K stars",
-          "reason": "310.8K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
+          "metric": "311.4K stars",
+          "reason": "311.4K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
-            "310.8K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
-            "310.8K stars cumulative; growth not measured",
-            "310.8K stars / 45.7K forks"
+            "311.4K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
+            "311.4K stars cumulative; growth not measured",
+            "311.4K stars / 45.7K forks"
           ],
           "action": "Read the skill instructions and required tool access before installing.",
           "url": "https://github.com/affaan-m/ECC",
@@ -39,7 +39,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/affaan-m/ecc",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -50,16 +50,16 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Workflow automation",
-          "metric": "212.2K stars",
-          "reason": "212.2K stars cumulative; growth not measured. Workflow automation signal connected to agent-style work.",
+          "metric": "212.3K stars",
+          "reason": "212.3K stars cumulative; growth not measured. Workflow automation signal connected to agent-style work.",
           "scoreReasons": [
-            "212.2K stars cumulative; growth not measured. Workflow automation signal connected to agent-style work.",
-            "212.2K stars cumulative; growth not measured",
+            "212.3K stars cumulative; growth not measured. Workflow automation signal connected to agent-style work.",
+            "212.3K stars cumulative; growth not measured",
             "workflow automation"
           ],
           "action": "Check retry, scheduling, and failure-recovery support for your workflow.",
           "url": "https://github.com/n8n-io/n8n",
-          "rawScore": 212162,
+          "rawScore": 212341,
           "qualityScore": 92,
           "score": 83,
           "sources": [
@@ -67,7 +67,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/n8n-io/n8n",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -78,12 +78,12 @@
           "module": "Trends",
           "origin": "npm",
           "category": "MCP",
-          "metric": "92.9M/week",
-          "reason": "92.9M/week downloads; change not measured. MCP infrastructure worth tracking for agent workflows.",
+          "metric": "91.3M/week",
+          "reason": "91.3M/week downloads; change not measured. MCP infrastructure worth tracking for agent workflows.",
           "scoreReasons": [
-            "92.9M/week downloads; change not measured. MCP infrastructure worth tracking for agent workflows.",
-            "92.9M/week downloads; change not measured",
-            "92.9M/week / 2026-11-18 to 2026-11-24"
+            "91.3M/week downloads; change not measured. MCP infrastructure worth tracking for agent workflows.",
+            "91.3M/week downloads; change not measured",
+            "91.3M/week / 2026-11-19 to 2026-11-25"
           ],
           "action": "Check integration requirements and tool permissions before trying it.",
           "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
@@ -95,7 +95,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://www.npmjs.com/package/%40modelcontextprotocol%2fsdk",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         }
       ]
     },
@@ -113,12 +113,12 @@
           "module": "Trends",
           "origin": "npm",
           "category": "Workflow automation",
-          "metric": "7.5M/week",
-          "reason": "7.5M/week downloads; change not measured. Workflow automation signal connected to agent-style work.",
+          "metric": "7.3M/week",
+          "reason": "7.3M/week downloads; change not measured. Workflow automation signal connected to agent-style work.",
           "scoreReasons": [
-            "7.5M/week downloads; change not measured. Workflow automation signal connected to agent-style work.",
-            "7.5M/week downloads; change not measured",
-            "7.5M/week / 2026-11-18 to 2026-11-24"
+            "7.3M/week downloads; change not measured. Workflow automation signal connected to agent-style work.",
+            "7.3M/week downloads; change not measured",
+            "7.3M/week / 2026-11-19 to 2026-11-25"
           ],
           "action": "Check retry, scheduling, and failure-recovery support for your workflow.",
           "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
@@ -130,7 +130,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://www.npmjs.com/package/%40temporalio%2fclient",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -141,12 +141,12 @@
           "module": "Trends",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "200.6K stars",
-          "reason": "200.6K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
+          "metric": "201.1K stars",
+          "reason": "201.1K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
-            "200.6K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
-            "200.6K stars cumulative; growth not measured",
-            "200.6K stars / 23.5K forks"
+            "201.1K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
+            "201.1K stars cumulative; growth not measured",
+            "201.1K stars / 23.5K forks"
           ],
           "action": "Read the skill instructions and required tool access before installing.",
           "url": "https://github.com/anthropics/skills",
@@ -158,7 +158,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/anthropics/skills",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -169,16 +169,16 @@
           "module": "Repos",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "333K stars",
-          "reason": "333K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
+          "metric": "333.7K stars",
+          "reason": "333.7K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
-            "333K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
-            "333K stars cumulative; growth not measured",
+            "333.7K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
+            "333.7K stars cumulative; growth not measured",
             "engineering workflow skills"
           ],
           "action": "Read the skill instructions and required tool access before installing.",
           "url": "https://github.com/mattpocock/skills",
-          "rawScore": 332990,
+          "rawScore": 333680,
           "qualityScore": 95,
           "score": 85,
           "sources": [
@@ -186,7 +186,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/mattpocock/skills",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -197,16 +197,16 @@
           "module": "Packages",
           "origin": "npm",
           "category": "AI agents",
-          "metric": "8.7M/week",
-          "reason": "8.7M/week downloads; change not measured. Coding-agent ecosystem signal with practical workflow value.",
+          "metric": "8.6M/week",
+          "reason": "8.6M/week downloads; change not measured. Coding-agent ecosystem signal with practical workflow value.",
           "scoreReasons": [
-            "8.7M/week downloads; change not measured. Coding-agent ecosystem signal with practical workflow value.",
-            "8.7M/week downloads; change not measured",
+            "8.6M/week downloads; change not measured. Coding-agent ecosystem signal with practical workflow value.",
+            "8.6M/week downloads; change not measured",
             "LangChain core primitives"
           ],
           "action": "Check runtime requirements and repository access before a small trial.",
           "url": "https://www.npmjs.com/package/%40langchain%2Fcore",
-          "rawScore": 8653884,
+          "rawScore": 8566507,
           "qualityScore": 86,
           "score": 69,
           "sources": [
@@ -214,7 +214,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://www.npmjs.com/package/%40langchain%2fcore",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -225,12 +225,12 @@
           "module": "Trends",
           "origin": "GitHub",
           "category": "Agent skills",
-          "metric": "157.2K stars",
-          "reason": "157.2K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
+          "metric": "157.5K stars",
+          "reason": "157.5K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
           "scoreReasons": [
-            "157.2K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
-            "157.2K stars cumulative; growth not measured",
-            "157.2K stars / 10.3K forks"
+            "157.5K stars cumulative; growth not measured. Agent skills reference for reusable tool instructions.",
+            "157.5K stars cumulative; growth not measured",
+            "157.5K stars / 10.3K forks"
           ],
           "action": "Read the skill instructions and required tool access before installing.",
           "url": "https://github.com/farion1231/cc-switch",
@@ -242,7 +242,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/farion1231/cc-switch",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -262,7 +262,7 @@
           ],
           "action": "Check integration requirements and tool permissions before trying it.",
           "url": "https://github.com/punkpeye/awesome-mcp-servers",
-          "rawScore": 98516,
+          "rawScore": 98545,
           "qualityScore": 86,
           "score": 79,
           "sources": [
@@ -270,7 +270,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/punkpeye/awesome-mcp-servers",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         }
       ]
     },
@@ -305,7 +305,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://agentskills.io",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -333,7 +333,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://docs.claude.com/en/docs/agents-and-tools/skills/overview",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -361,7 +361,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://support.claude.com/en/articles/11144907-what-are-skills",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         },
         {
           "schemaVersion": 2,
@@ -389,7 +389,7 @@
           ],
           "sourceContext": "",
           "canonicalKey": "url:https://github.com/aider-ai/aider",
-          "updated": "2026-11-26"
+          "updated": "2026-11-27"
         }
       ]
     }
