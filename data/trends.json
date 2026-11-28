@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-27",
-  "generatedAt": "2026-11-27T03:38:56.705Z",
+  "updated": "2026-11-28",
+  "generatedAt": "2026-11-28T03:19:08.257Z",
   "sources": [
     "Hacker News",
     "GitHub",
@@ -14,7 +14,7 @@
       "tracked": 4,
       "emitted": 4,
       "coverage": "4/4",
-      "updatedAt": "2026-11-27T03:38:56.705Z"
+      "updatedAt": "2026-11-28T03:19:08.257Z"
     },
     {
       "name": "GitHub",
@@ -23,7 +23,7 @@
       "tracked": 14,
       "emitted": 12,
       "coverage": "12/14",
-      "updatedAt": "2026-11-27T03:38:56.705Z"
+      "updatedAt": "2026-11-28T03:19:08.257Z"
     },
     {
       "name": "npm",
@@ -32,232 +32,221 @@
       "tracked": 15,
       "emitted": 8,
       "coverage": "8/15",
-      "updatedAt": "2026-11-27T03:38:56.705Z"
+      "updatedAt": "2026-11-28T03:19:08.257Z"
     }
   ],
   "items": [
     {
       "rank": 1,
-      "title": "1Password Security Incident",
+      "title": "AI made self-hosting fun again",
       "source": "Hacker News",
-      "category": "Security",
+      "category": "AI",
       "score": 100,
-      "velocity": "706 comments",
-      "signal": "1636 points",
-      "url": "https://1password.com/blog/update-on-nov-2026-security-incident",
-      "summary": "HN story by lxhrstn with 706 comments."
+      "velocity": "509 comments",
+      "signal": "1105 points",
+      "url": "https://janlukas.blog/posts/ai-self-hosting",
+      "summary": "HN story by jlelse with 509 comments."
     },
     {
       "rank": 2,
-      "title": "Holy shit holy shit holy shit holy shit: The magnitude of whats now happening",
-      "source": "Hacker News",
-      "category": "Developer tools",
-      "score": 100,
-      "velocity": "1823 comments",
-      "signal": "2001 points",
-      "url": "https://scottaaronson.blog/?p=10379",
-      "summary": "HN story by Kotlopou with 1823 comments."
-    },
-    {
-      "rank": 3,
       "title": "affaan-m/ECC",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 96,
-      "velocity": "311.4K stars",
-      "signal": "45.7K forks",
+      "velocity": "311.9K stars",
+      "signal": "45.8K forks",
       "url": "https://github.com/affaan-m/ECC",
       "summary": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
     },
     {
-      "rank": 4,
+      "rank": 3,
       "title": "@ai-sdk/provider",
       "source": "npm",
       "category": "AI",
       "score": 96,
-      "velocity": "105.4M/week",
-      "signal": "2026-11-19 to 2026-11-25",
+      "velocity": "103.1M/week",
+      "signal": "2026-11-20 to 2026-11-26",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fprovider",
-      "summary": "105.4M downloads over the last available week."
+      "summary": "103.1M downloads over the last available week."
+    },
+    {
+      "rank": 4,
+      "title": "anthropics/skills",
+      "source": "GitHub",
+      "category": "Agent skills",
+      "score": 95,
+      "velocity": "201.6K stars",
+      "signal": "23.6K forks",
+      "url": "https://github.com/anthropics/skills",
+      "summary": "Public repository for Agent Skills"
     },
     {
       "rank": 5,
       "title": "@modelcontextprotocol/sdk",
       "source": "npm",
       "category": "MCP",
-      "score": 96,
-      "velocity": "91.3M/week",
-      "signal": "2026-11-19 to 2026-11-25",
+      "score": 95,
+      "velocity": "87.8M/week",
+      "signal": "2026-11-20 to 2026-11-26",
       "url": "https://www.npmjs.com/package/%40modelcontextprotocol%2Fsdk",
-      "summary": "91.3M downloads over the last available week."
+      "summary": "87.8M downloads over the last available week."
     },
     {
       "rank": 6,
-      "title": "anthropics/skills",
-      "source": "GitHub",
-      "category": "Agent skills",
-      "score": 95,
-      "velocity": "201.1K stars",
-      "signal": "23.5K forks",
-      "url": "https://github.com/anthropics/skills",
-      "summary": "Public repository for Agent Skills"
-    },
-    {
-      "rank": 7,
       "title": "@anthropic-ai/sdk",
       "source": "npm",
       "category": "AI",
       "score": 94,
-      "velocity": "73.7M/week",
-      "signal": "2026-11-19 to 2026-11-25",
+      "velocity": "71.4M/week",
+      "signal": "2026-11-20 to 2026-11-26",
       "url": "https://www.npmjs.com/package/%40anthropic-ai%2Fsdk",
-      "summary": "73.7M downloads over the last available week."
+      "summary": "71.4M downloads over the last available week."
     },
     {
-      "rank": 8,
+      "rank": 7,
       "title": "farion1231/cc-switch",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 93,
-      "velocity": "157.5K stars",
+      "velocity": "157.7K stars",
       "signal": "10.3K forks",
       "url": "https://github.com/farion1231/cc-switch",
       "summary": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io"
     },
     {
-      "rank": 9,
+      "rank": 8,
       "title": "Graphify-Labs/graphify",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 93,
-      "velocity": "153.9K stars",
+      "velocity": "154.3K stars",
       "signal": "14.8K forks",
       "url": "https://github.com/Graphify-Labs/graphify",
       "summary": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store."
     },
     {
-      "rank": 10,
+      "rank": 9,
       "title": "openai",
       "source": "npm",
       "category": "AI",
       "score": 93,
-      "velocity": "61.5M/week",
-      "signal": "2026-11-19 to 2026-11-25",
+      "velocity": "59.7M/week",
+      "signal": "2026-11-20 to 2026-11-26",
       "url": "https://www.npmjs.com/package/openai",
-      "summary": "61.5M downloads over the last available week."
+      "summary": "59.7M downloads over the last available week."
     },
     {
-      "rank": 11,
+      "rank": 10,
       "title": "morluto/rea",
       "source": "GitHub",
       "category": "MCP",
       "score": 92,
-      "velocity": "480K stars",
-      "signal": "116.7K forks",
+      "velocity": "481.3K stars",
+      "signal": "116.9K forks",
       "url": "https://github.com/morluto/rea",
       "summary": "Reverse engineer anything with agents, from app behavior down to native binaries."
     },
     {
-      "rank": 12,
+      "rank": 11,
       "title": "nextlevelbuilder/ui-ux-pro-max-skill",
       "source": "GitHub",
       "category": "Agent skills",
       "score": 92,
-      "velocity": "154.7K stars",
-      "signal": "16.3K forks",
+      "velocity": "155.2K stars",
+      "signal": "16.4K forks",
       "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
       "summary": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms."
     },
     {
-      "rank": 13,
-      "title": "The New York Times warns photographers not to update Photoshop over AI features",
-      "source": "Hacker News",
-      "category": "AI",
-      "score": 92,
-      "velocity": "523 comments",
-      "signal": "657 points",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features",
-      "summary": "HN story by rmason with 523 comments."
-    },
-    {
-      "rank": 14,
+      "rank": 12,
       "title": "ai",
       "source": "npm",
       "category": "AI",
       "score": 92,
-      "velocity": "46.7M/week",
-      "signal": "2026-11-19 to 2026-11-25",
+      "velocity": "44.8M/week",
+      "signal": "2026-11-20 to 2026-11-26",
       "url": "https://www.npmjs.com/package/ai",
-      "summary": "46.7M downloads over the last available week."
+      "summary": "44.8M downloads over the last available week."
     },
     {
-      "rank": 15,
+      "rank": 13,
       "title": "anomalyco/opencode",
       "source": "GitHub",
       "category": "AI agents",
       "score": 91,
-      "velocity": "229.4K stars",
-      "signal": "31.2K forks",
+      "velocity": "229.6K stars",
+      "signal": "31.3K forks",
       "url": "https://github.com/anomalyco/opencode",
       "summary": "The open source coding agent."
     },
     {
-      "rank": 16,
+      "rank": 14,
       "title": "NousResearch/hermes-agent",
       "source": "GitHub",
       "category": "AI agents",
       "score": 90,
-      "velocity": "266.4K stars",
-      "signal": "60.4K forks",
+      "velocity": "266.6K stars",
+      "signal": "60.5K forks",
       "url": "https://github.com/NousResearch/hermes-agent",
       "summary": "The agent that grows with you"
     },
     {
-      "rank": 17,
+      "rank": 15,
       "title": "OpenMontageInc/OpenMontage",
       "source": "GitHub",
       "category": "AI agents",
       "score": 89,
-      "velocity": "83.7K stars",
+      "velocity": "83.9K stars",
       "signal": "11.4K forks",
       "url": "https://github.com/OpenMontageInc/OpenMontage",
       "summary": "World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio."
     },
     {
-      "rank": 18,
+      "rank": 16,
       "title": "tt-a1i/archify",
       "source": "GitHub",
       "category": "AI agents",
       "score": 89,
-      "velocity": "100.6K stars",
+      "velocity": "101K stars",
       "signal": "6.9K forks",
       "url": "https://github.com/tt-a1i/archify",
       "summary": "Turn any idea, plan, or codebase into an interactive diagram or one-page answer: 10 diagram types, Architecture Diagnosis, Story video and PR walkthroughs. An Agent Skill for Claude Code, Codex, Cursor and more."
     },
     {
-      "rank": 19,
+      "rank": 17,
       "title": "@ai-sdk/openai",
       "source": "npm",
       "category": "AI",
       "score": 89,
-      "velocity": "25.1M/week",
-      "signal": "2026-11-19 to 2026-11-25",
+      "velocity": "24.1M/week",
+      "signal": "2026-11-20 to 2026-11-26",
       "url": "https://www.npmjs.com/package/%40ai-sdk%2Fopenai",
-      "summary": "25.1M downloads over the last available week."
+      "summary": "24.1M downloads over the last available week."
     },
     {
-      "rank": 20,
+      "rank": 18,
+      "title": "Group chat where your AI talks behind your back",
+      "source": "Hacker News",
+      "category": "AI",
+      "score": 86,
+      "velocity": "286 comments",
+      "signal": "687 points",
+      "url": "https://construct22.com/",
+      "summary": "HN story by utiiiD with 286 comments."
+    },
+    {
+      "rank": 19,
       "title": "@temporalio/client",
       "source": "npm",
       "category": "Workflow automation",
       "score": 82,
-      "velocity": "7.3M/week",
-      "signal": "2026-11-19 to 2026-11-25",
+      "velocity": "6.9M/week",
+      "signal": "2026-11-20 to 2026-11-26",
       "url": "https://www.npmjs.com/package/%40temporalio%2Fclient",
-      "summary": "7.3M downloads over the last available week."
+      "summary": "6.9M downloads over the last available week."
     },
     {
-      "rank": 21,
+      "rank": 20,
       "title": "langgenius/dify",
       "source": "GitHub",
       "category": "Workflow automation",
@@ -268,37 +257,48 @@
       "summary": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack."
     },
     {
-      "rank": 22,
+      "rank": 21,
       "title": "langfuse",
       "source": "npm",
       "category": "AI evals",
       "score": 76,
-      "velocity": "2.1M/week",
-      "signal": "2026-11-19 to 2026-11-25",
+      "velocity": "2M/week",
+      "signal": "2026-11-20 to 2026-11-26",
       "url": "https://www.npmjs.com/package/langfuse",
-      "summary": "2.1M downloads over the last available week."
+      "summary": "2M downloads over the last available week."
     },
     {
-      "rank": 23,
+      "rank": 22,
       "title": "mastra-ai/mastra",
       "source": "GitHub",
       "category": "AI evals",
       "score": 74,
-      "velocity": "29.8K stars",
-      "signal": "3.1K forks",
+      "velocity": "29.9K stars",
+      "signal": "3.2K forks",
       "url": "https://github.com/mastra-ai/mastra",
       "summary": "Mastra is the modern TypeScript framework for AI-powered applications and agents."
     },
     {
-      "rank": 24,
-      "title": "AI made self-hosting fun again",
+      "rank": 23,
+      "title": "The need for a formally verifiable mainstream programming language",
       "source": "Hacker News",
-      "category": "AI",
-      "score": 66,
-      "velocity": "214 comments",
-      "signal": "394 points",
-      "url": "https://janlukas.blog/posts/ai-self-hosting",
-      "summary": "HN story by jlelse with 214 comments."
+      "category": "Developer tools",
+      "score": 64,
+      "velocity": "300 comments",
+      "signal": "318 points",
+      "url": "https://blainehansen.me/post/mainstream-verifiable-language/",
+      "summary": "HN story by todsacerdoti with 300 comments."
+    },
+    {
+      "rank": 24,
+      "title": "Convex skills send the user's app idea to a remote server without telling them",
+      "source": "Hacker News",
+      "category": "Developer tools",
+      "score": 52,
+      "velocity": "76 comments",
+      "signal": "244 points",
+      "url": "https://github.com/convex/convex-backend-skill/issues/64",
+      "summary": "HN story by MickyTheMouse with 76 comments."
     }
   ]
 }
